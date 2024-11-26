@@ -1,0 +1,388 @@
+
+<div class="container-fluid">
+
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+
+        <div class="card-body border-bottom">
+          <div class="d-flex align-items-center">
+            <h5 class="mb-0 card-title flex-grow-1">Pedidos de Unidades</h5>
+            <div class="flex-shrink-0 d-flex gap-1">
+              <a href="javascript:void(0);" class="btn btn-primary btn-sm" (click)="openModal(content)">Nuevo</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body border-bottom">
+          <!--div class="d-flex justify-content-center" >
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div-->
+          <table class="table table-striped table-hover table-sm table-bordered" >
+            <thead class="table-light">
+              <tr>
+                <th>Folio</th>
+                <th>Nombre/Razón Social</th>
+                <th>Contacto</th>
+                <th>APV</th>
+                <th>Fecha</th>
+                <th>Unidad</th>
+              </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+          </table>
+        </div><!--div.card-body-->
+    </div>
+    </div>
+  </div>
+
+</div> <!-- container-fluid -->
+
+<!-- Order Create Model -->
+<ng-template #content role="document" let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Nuevo Pedido</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef?.hide()"></button>
+  </div>
+  <div class="modal-body">
+
+    <!-- Start Form Wizard Basic row -->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div id="basic-example">
+              <ng-stepper #cdkStepper [linear]="true" class="wizard">
+
+                <cdk-step [optional]="false">
+                  <ng-template cdkStepLabel>
+                    <span class="number">1.</span>
+                    <span>Datos Cliente</span>
+                  </ng-template>
+                  @if(cdkStepper.selectedIndex === 0){
+                  <section>
+
+                    <form class="row g-2">
+                      <div class="col-md-6">
+                        <label for="nombre_razon_social" class="form-label">Nombre o Razón Social: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="nombre_razon_social" id="nombre_razon_social" name="nombre_razon_social" aria-label="nombre_razon_social">
+                      </div>
+                      <div class="col-md-6">
+                        <label for="rfc" class="form-label form-label-sm">RFC: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="rfc" id="rfc" name="rfc" aria-label="rfc">
+                      </div>
+
+                      <div class="col-md-3">
+                        <label for="curp" class="form-label">CURP: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="curp" id="curp" name="curp" aria-label="curp">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="tel_casa" class="form-label">Tel. Casa: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="tel_casa" id="tel_casa" name="tel_casa" aria-label="tel_casa">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="tel_oficina" class="form-label">Tel. Oficina: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="tel_oficina" id="tel_oficina" name="tel_oficina" aria-label="tel_oficina">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="tel_movil" class="form-label"> Tel. Movil: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="tel_movil" id="tel_movil" name="tel_movil" aria-label="tel_movil">
+                      </div>
+
+                      <div class="col-md-3">
+                        <label for="calle" class="form-label">Calle: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="calle" id="calle" name="calle" aria-label="calle">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="num_interior" class="form-label">Núm. Interior: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="num_interior" id="num_interior" name="num_interior" aria-label="num_interior">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="num_exterior" class="form-label">Núm. Exterior: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="num_exterior" id="num_exterior" name="num_exterior" aria-label="num_exterior">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="cp" class="form-label">C.P.: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="cp" id="cp" name="cp" aria-label="cp">
+                      </div>
+
+                      <div class="col-md-3">
+                        <label for="colonia" class="form-label">Colonia: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="colonia" id="colonia" name="colonia" aria-label="colonia">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="ciudad" class="form-label">Ciudad: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="ciudad" id="ciudad" name="ciudad" aria-label="ciudad">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="estado" class="form-label">Estado: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="estado" id="estado" name="estado" aria-label="estado">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="delegacion_municipio" class="form-label">Delegación/Municipio: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="delegacion_municipio" id="delegacion_municipio" name="delegacion_municipio" aria-label="delegacion_municipio">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="email_1" class="form-label">Email: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="email_1" id="email_1" name="email_1" aria-label="email_1">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="email_1" class="form-label">Escolaridad: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="email_1" id="email_1" name="email_1" aria-label="email_1">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="email_1" class="form-label">Estado Civil: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="email_1" id="email_1" name="email_1" aria-label="email_1">
+                      </div>
+
+                    </form>
+
+                    <ul class="list-inline wizard d-flex justify-content-end mb-0 mt-4">
+                      <li class="next list-inline-item" aria-disabled="false"><button class="btn btn-primary btn-sm" cdkStepperNext>Siguiente</button></li>
+                    </ul>
+                  </section>
+                  }
+                </cdk-step>
+
+                <cdk-step [optional]="true">
+                  <ng-template cdkStepLabel>
+                    <span class="number">2.</span>
+                    <span>Datos Facturación</span>
+                  </ng-template>
+                  @if(cdkStepper.selectedIndex === 1){
+                  <section>
+
+                    <form class="row g-2">
+                      <div class="col-md-6">
+                        <label for="nombre_razon_social" class="form-label">Nombre o Razón Social: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="nombre_razon_social" id="nombre_razon_social" name="nombre_razon_social" aria-label="nombre_razon_social">
+                      </div>
+                      <div class="col-md-6">
+                        <label for="rfc" class="form-label form-label-sm">RFC: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="rfc" id="rfc" name="rfc" aria-label="rfc">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="calle" class="form-label">Calle: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="calle" id="calle" name="calle" aria-label="calle">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="num_interior" class="form-label">Núm. Interior: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="num_interior" id="num_interior" name="num_interior" aria-label="num_interior">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="num_exterior" class="form-label">Núm. Exterior: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="num_exterior" id="num_exterior" name="num_exterior" aria-label="num_exterior">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="cp" class="form-label">C.P.: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="cp" id="cp" name="cp" aria-label="cp">
+                      </div>
+
+                      <div class="col-md-3">
+                        <label for="colonia" class="form-label">Colonia: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="colonia" id="colonia" name="colonia" aria-label="colonia">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="ciudad" class="form-label">Ciudad: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="ciudad" id="ciudad" name="ciudad" aria-label="ciudad">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="estado" class="form-label">Estado: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="estado" id="estado" name="estado" aria-label="estado">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="delegacion_municipio" class="form-label">Delegación/Municipio: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="delegacion_municipio" id="delegacion_municipio" name="delegacion_municipio" aria-label="delegacion_municipio">
+                      </div>
+
+                      <div class="col-md-3">
+                        <label for="forma_pago" class="form-label">Forma de Pago: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="forma_pago" id="forma_pago" name="forma_pago" aria-label="forma_pago">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="numero_cuenta" class="form-label">Número de Cuenta: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="numero_cuenta" id="numero_cuenta" name="numero_cuenta" aria-label="numero_cuenta">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="uso_cfdi" class="form-label">Uso de CFDI: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="uso_cfdi" id="uso_cfdi" name="uso_cfdi" aria-label="uso_cfdi">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="metodo_pago" class="form-label">Metodo de Pago: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="metodo_pago" id="metodo_pago" name="metodo_pago" aria-label="metodo_pago">
+                      </div>
+
+                      <div class="col-md-3">
+                        <label for="email_1" class="form-label">Email 1: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="email_1" id="email_1" name="email_1" aria-label="email_1">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="email_2" class="form-label">Email 2: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="email_2" id="email_2" name="email_2" aria-label="email_2">
+                      </div>
+                      <div class="col-md-3 form-check mt-4">
+                        <input class="form-check-input" type="checkbox" value="" id="comprobante_domicilio" formControlName="comprobante_domicilio">
+                        <label class="form-check-label" for="comprobante_domicilio">
+                          Comprobante Domicilio
+                        </label>
+                      </div>
+                      <div class="col-md-3 form-check  mt-4">
+                        <input class="form-check-input" type="checkbox" value="" id="identificacion" formControlName="identificacion">
+                        <label class="form-check-label" for="identificacion">
+                          Identificación
+                        </label>
+                      </div>
+
+                      <div class="col-md-3">
+                        <label for="" class="form-label">Auto Actual: *</label>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" value="true" name="auto_actual" id="auto_actual_si" (change)="changeAutoActual($event)" formControlName="auto_actual">
+                          <label class="form-check-label" for="auto_actual_si">
+                            Si
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" value="false" name="auto_actual" id="auto_actual_no" checked (change)="changeAutoActual($event)" formControlName="auto_actual">
+                          <label class="form-check-label" for="auto_actual_no">
+                            No
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <label for="tipo_unidad" class="form-label">Tipo de Unidad: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="tipo_unidad" id="tipo_unidad" name="tipo_unidad" aria-label="tipo_unidad">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="anio_modelo" class="form-label">Año y Modelo: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="anio_modelo" id="anio_modelo" name="anio_modelo" aria-label="anio_modelo">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="color" class="form-label">Color: *</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="color" id="color" name="color" aria-label="color">
+                      </div>
+                    </form>
+
+                    <ul class="list-inline wizard d-flex justify-content-end mb-0 mt-4">
+                      <li class="previous list-inline-item" aria-disabled="true"><button class="btn btn-primary btn-sm" cdkStepperPrevious>Anterior</button></li>
+                      <li class="next list-inline-item" aria-disabled="false"><button class="btn btn-primary btn-sm" cdkStepperNext>Siguiente</button></li>
+                    </ul>
+                  </section>
+                  }
+                </cdk-step>
+
+                <cdk-step [optional]="true">
+                  <ng-template cdkStepLabel>
+                    <span class="number">3.</span>
+                    <span>Financiamiento (NR Finance)</span>
+                  </ng-template>
+                  @if(cdkStepper.selectedIndex === 2){
+                  <section>
+                    <div>
+                      <form class="row g-2">
+                        <div class="col-md-6">
+                          <label for="nombre_razon_social" class="form-label">Producto Financiero: *</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="nombre_razon_social" id="nombre_razon_social" name="nombre_razon_social" aria-label="nombre_razon_social">
+                        </div>
+                        <div class="col-md-6">
+                          <label for="rfc" class="form-label form-label-sm">Mensualidades: *</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="rfc" id="rfc" name="rfc" aria-label="rfc">
+                        </div>
+
+                        <div class="col-md-3">
+                          <label for="curp" class="form-label">CURP: *</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="curp" id="curp" name="curp" aria-label="curp">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="tel_casa" class="form-label">Tel. Casa: *</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="tel_casa" id="tel_casa" name="tel_casa" aria-label="tel_casa">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="tel_oficina" class="form-label">Garantia Extendida: *</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="tel_oficina" id="tel_oficina" name="tel_oficina" aria-label="tel_oficina">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="tel_movil" class="form-label"> Nissanconnect finder (satf): *</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="tel_movil" id="tel_movil" name="tel_movil" aria-label="tel_movil">
+                        </div>
+
+                        <div class="col-md-3">
+                          <label for="calle" class="form-label">Nota de Credito: *</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="calle" id="calle" name="calle" aria-label="calle">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="num_interior" class="form-label">Accesorios Adicionales: *</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="num_interior" id="num_interior" name="num_interior" aria-label="num_interior">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="num_exterior" class="form-label">Núm. Exterior: *</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="num_exterior" id="num_exterior" name="num_exterior" aria-label="num_exterior">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="cp" class="form-label">C.P.: *</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="cp" id="cp" name="cp" aria-label="cp">
+                        </div>
+
+
+
+                      </form>
+                    </div>
+
+                    <ul class="list-inline wizard d-flex justify-content-end mb-0 mt-4">
+                      <li class="previous list-inline-item" aria-disabled="true"><button class="btn btn-primary btn-sm" cdkStepperPrevious>Anterior</button></li>
+                      <li class="next list-inline-item" aria-disabled="false"><button class="btn btn-primary btn-sm" cdkStepperNext>Siguiente</button></li>
+                    </ul>
+                  </section>}
+                </cdk-step>
+
+                <cdk-step [optional]="true">
+                  <ng-template cdkStepLabel>
+                    <span class="number">4.</span>
+                    <span>Detalle Auto</span>
+                  </ng-template>
+                  @if(cdkStepper.selectedIndex === 3){
+                  <section>
+                    <div class="row justify-content-center">
+                      <div class="col-lg-6">
+                        <div class="text-center">
+                          <div class="mb-4">
+                            <i class="mdi mdi-check-circle-outline text-success display-4"></i>
+                          </div>
+                          <div>
+                            <h5>Confirm Detail</h5>
+                            <p class="text-muted">If several languages coalesce, the grammar of the resulting</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <ul class="list-inline wizard d-flex justify-content-end mb-0 mt-4">
+                      <li class="previous list-inline-item" aria-disabled="true"><button class="btn btn-primary btn-sm" cdkStepperPrevious>Anterior</button></li>
+                      <li class="next list-inline-item" aria-disabled="false"><button class="btn btn-primary btn-sm" cdkStepperNext>Finalizar</button></li>
+                    </ul>
+                  </section>
+                  }
+                </cdk-step>
+
+              </ng-stepper>
+            </div>
+
+          </div>
+          <!-- end card body -->
+        </div>
+        <!-- end card -->
+      </div>
+      <!-- end col -->
+    </div>
+    <!-- end row -->
+
+  </div>
+  <!--div class="modal-footer">
+    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="modalRef?.hide()">Cerrar</button>
+    <button type="button" class="btn btn-primary btn-sm" (click)="save()">Guardar</button>
+  </div-->
+</ng-template>
+<!--End Modal -->

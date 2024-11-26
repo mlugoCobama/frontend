@@ -1,0 +1,129 @@
+<div class="container-fluid">
+
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+
+        <div class="card-body border-bottom border-primary border-2">
+          <div class="d-flex align-items-center">
+            <h5 class="mb-0 card-title flex-grow-1">Sabana de Control</h5>
+          </div>
+        </div>
+
+        <div class="card-body border-bottom">
+
+          <div class="d-flex justify-content-center" *ngIf="isLoad">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+
+            <table class="table table-striped table-bordered table-sm " *ngIf="!isLoad">
+              <thead class="table-light">
+                <tr class="text-center">
+                  <th scope="col" colspan="13">CITAS</th>
+                  <th scope="col" ></th>
+                  <th scope="col" colspan="8">Mecanica</th>
+                  <th scope="col"></th>
+                  <th scope="col" colspan="4">T.O.T</th>
+                  <th scope="col"></th>
+                  <th scope="col" colspan="4">Lavado</th>
+                </tr>
+                <tr class="text-center">
+                  <th scope="col">#</th>
+                  <th scope="col">Núm. Orden</th>
+                  <th scope="col">Torre</th>
+                  <th scope="col">Tipo</th>
+                  <th scope="col">APS</th>
+                  <th scope="col">Placas</th>
+                  <th scope="col">Modelo</th>
+                  <th scope="col">Año</th>
+                  <th scope="col">Cliente</th>
+                  <th scope="col">Servicio Requerido</th>
+                  <th scope="col">Fecha Cita</th>
+                  <th scope="col">Entrada</th>
+                  <th scope="col">Promesa</th>
+                  <th scope="col">Facturado</th>
+                  <th scope="col"></th>
+                  <th scope="col">Téc.</th>
+                  <th scope="col">Tiempo Req.</th>
+                  <th scope="col">Tiempo Est.</th>
+                  <th scope="col">Inicio</th>
+                  <th scope="col">Fin</th>
+                  <th scope="col">Tiempo Trabajado</th>
+                  <th scope="col">Tiempo Desp</th>
+                  <th scope="col">Pend. Oper.</th>
+                  <th scope="col"></th>
+                  <th scope="col">PA</th>
+                  <th scope="col">P</th>
+                  <th scope="col">Fecha</th>
+                  <th scope="col">Hora</th>
+                  <th scope="col"></th>
+                  <th scope="col">Fecha</th>
+                  <th scope="col">Inicio</th>
+                  <th scope="col">Fin</th>
+                  <th scope="col">Terminada Tiempo</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of DataCitas; index as i" (dblclick)="openModal(item)">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ item.folio }}</td>
+                  <td></td>
+                  <td>
+                    <div [ngSwitch]="item.tipoCita">
+                      <div *ngSwitchCase="2">F</div>
+                      <div *ngSwitchCase="3">G</div>
+                      <div *ngSwitchDefault>P</div>
+                    </div>
+                  </td>
+                  <td>{{ item.nombre_empl }}</td>
+                  <td>{{ item.placas }}</td>
+                  <td>{{ item.modelo }}</td>
+                  <td>{{ item.anio }}</td>
+                  <td>{{ item.nombre + " " + item.apaterno + " " + item.amaterno }}</td>
+                  <td>{{ item.observaciones }}</td>
+                  <td>
+                    {{ item.fecha_cita | date:'dd/MMM/YYYY' }} <br>
+                    {{ item.fecha_cita | date:'hh:mm' }}
+                  </td>
+                  <td></td>
+                  <td>
+                    {{ item.fecha_cita | date:'dd/MMM/YYYY' }} <br>
+                    {{ item.fecha_cita | date:'hh:mm' }}
+                  </td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>

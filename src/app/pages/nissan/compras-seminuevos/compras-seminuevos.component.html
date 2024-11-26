@@ -1,0 +1,521 @@
+<app-loader></app-loader>
+<div class="container-fluid">
+
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+
+        <div class="card-body border-bottom">
+          <div class="d-flex align-items-center">
+            <h5 class="mb-0 card-title flex-grow-1">Contratos Compra Seminuevos</h5>
+            <div class="flex-shrink-0 d-flex gap-1">
+              <a href="javascript:void(0);" class="btn btn-primary btn-sm" (click)="openModal(content)">Nuevo</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body border-bottom">
+          <!--div class="d-flex justify-content-center" >
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div-->
+          <table class="table table-striped table-hover table-sm table-bordered" >
+            <thead class="table-light">
+              <tr>
+                <th>Folio</th>
+                <th>Proveedor</th>
+                <th>RFC</th>
+                <th>Vehiculo</th>
+                <th>No. Serie</th>
+                <th>Agencia</th>
+              </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+          </table>
+        </div><!--div.card-body-->
+    </div>
+    </div>
+  </div>
+
+</div> <!-- container-fluid -->
+
+<!-- Order Create Model -->
+<ng-template #content role="document" let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Nueva Compra</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef?.hide()"></button>
+  </div>
+  <div class="modal-body">
+
+    <!-- Start Form Wizard Basic row -->
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div id="basic-example">
+              <ng-stepper #cdkStepper [linear]="true" class="wizard">
+
+                <cdk-step [optional]="false">
+                  <ng-template cdkStepLabel>
+                    <span class="number">1.</span>
+                    <span>Datos Proveedor</span>
+                  </ng-template>
+                  @if(cdkStepper.selectedIndex === 0){
+                  <section>
+
+                    <form class="row g-2" [formGroup]="formDatosProveedor">
+                      <div class="col-md-4">
+                        <label for="nombre" class="form-label">Nombre (s):</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="nombre" id="nombre" name="nombre" aria-label="nombre">
+                      </div>
+                      <div class="col-md-4">
+                        <label for="apellido_paterno" class="form-label form-label-sm">Apellido Paterno:</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="apellido_paterno" id="apellido_paterno" name="apellido_paterno" aria-label="apellido_paterno">
+                      </div>
+                      <div class="col-md-4">
+                        <label for="apellido_materno" class="form-label form-label-sm">Apellido Materno:</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="apellido_materno" id="apellido_materno" name="apellido_materno" aria-label="apellido_materno">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="calle" class="form-label">Calle:</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="calle" id="calle" name="calle" aria-label="calle">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="num_interior" class="form-label">Núm. Interior:</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="num_interior" id="num_interior" name="num_interior" aria-label="num_interior">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="num_exterior" class="form-label">Núm. Exterior:</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="num_exterior" id="num_exterior" name="num_exterior" aria-label="num_exterior">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="cp" class="form-label">C.P.:</label>
+                        <div class="input-group">
+                          <input type="text" class="form-control form-control-sm" formControlName="cp" id="cp" name="cp" aria-label="cp" maxlength="5" (change)="onChange($event)">
+                          <button class="btn btn-outline-secondary btn-sm btn-primary text-bg-primary"
+                                  type="button"
+                                  (click)="searchCodigoPostal($event)"
+                                  [disabled]="isDisabled">
+
+                                  <div *ngIf="!isDisabled">
+                                    <i class='bx bx-search-alt-2'></i> Buscar
+                                  </div>
+
+                                  <div *ngIf="isDisabled">
+                                    <div class="spinner-grow spinner-grow-sm" role="status">
+                                      <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    Buscando
+                                  </div>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="col-md-3">
+                        <label for="colonia" class="form-label">Colonia:</label>
+                        <select class="form-select form-select-sm" formControlName="colonia" id="colonia" name="colonia" aria-label="colonia" aria-label="colonia">
+                          <option selected>Selecciona una colonia</option>
+                          <option *ngFor="let item of colonia" value="item">{{item}}</option>
+                        </select>
+                      </div>
+                      <div class="col-md-3">
+                        <label for="ciudad" class="form-label">Ciudad:</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="ciudad" id="ciudad" name="ciudad" aria-label="ciudad" value="{{ciudad}}">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="delegacion_municipio" class="form-label">Delegación/Municipio:</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="delegacion_municipio" id="delegacion_municipio" name="delegacion_municipio" aria-label="delegacion_municipio" value="{{delegacion}}">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="estado" class="form-label">Estado:</label>
+                        <select class="form-select form-select-sm" formControlName="estado" id="estado" name="estado" aria-label="estado" aria-label="estado">
+                          <option selected>Selecciona un estado</option>
+                          <option *ngFor="let item of CatEstados" value="item.clave">{{item.nombre}}</option>
+                        </select>
+                      </div>
+
+                      <div class="col-md-3">
+                        <label for="tipo_identificacion" class="form-label">Tipo de Identificación:</label>
+                        <select class="form-select form-select-sm" formControlName="tipo_identificacion" id="tipo_identificacion" name="tipo_identificacion" aria-label="tipo_identificacion" aria-label="tipo_identificacion">
+                          <option selected>Selecciona una opción</option>
+                          <option value="1">INE</option>
+                          <option value="2">Pasaporte</option>
+                        </select>
+                      </div>
+                      <div class="col-md-3">
+                        <label for="num_identificacion" class="form-label">Número de Identificación:</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="num_identificacion" id="num_identificacion" name="num_identificacion" aria-label="num_identificacion">
+                      </div>
+                      <div class="col-md-3">
+                        <label for="mes_comprobante" class="form-label"> Mes de Comprobante Domicilio:</label>
+                        <select class="form-control form-control-sm" formControlName="mes_comprobante">
+                          <option value="" default>Selecciona un mes</option>
+                          <option value="{{mes.mes}}" *ngFor="let mes of CatMeses">{{mes.nombre}}</option>
+                        </select>
+                      </div>
+
+                    </form>
+
+                    <ul class="list-inline wizard d-flex justify-content-end mb-0 mt-4">
+                      <!--li class="previous list-inline-item" aria-disabled="true"><button class="btn btn-primary" cdkStepperPrevious>Anterior</button></li-->
+                      <li class="next list-inline-item" aria-disabled="false"><button class="btn btn-primary btn-sm" [disabled]="!formDatosProveedor.valid" cdkStepperNext>Siguiente</button></li>
+                    </ul>
+                  </section>
+                  }
+                </cdk-step>
+
+                <cdk-step [optional]="false">
+                  <ng-template cdkStepLabel>
+                    <span class="number">2.</span>
+                    <span>Solicitud CFDI</span>
+                  </ng-template>
+                  @if(cdkStepper.selectedIndex === 1){
+                  <section>
+
+                    <form class="row g-2" [formGroup]="formSolicitudCFDI">
+
+                      <div class="col-md-6">
+                        <label for="regimen_fiscal" class="form-label">Régimen de Persona:</label>
+                        <select class="form-select form-select-sm" formControlName="regimen_fiscal" name="regimen_fiscal" id="regimen_fiscal">
+                          <option selected>Selecciona una opción</option>
+                          <option value="1">Persona fisica sin actividad empresarial</option>
+                          <option value="2">Persona fisica con actividad empresarial</option>
+                          <option value="3">Persona Moral</option>
+                        </select>
+                      </div>
+
+                      <div class="col-md-6">
+                        <label for="rfc" class="form-label form-label-sm">RFC:</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="rfc" id="rfc" name="rfc" aria-label="rfc">
+                      </div>
+
+                      <div class="col-md-4">
+                        <label for="nombre" class="form-label">Nombre(s):</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="nombre" id="nombre" name="nombre" aria-label="nombre">
+                      </div>
+                      <div class="col-md-4">
+                        <label for="apellido_paterno" class="form-label form-label-sm">Apellido Paterno:</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="apellido_paterno" id="apellido_paterno" name="apellido_paterno" aria-label="apellido_paterno">
+                      </div>
+                      <div class="col-md-4">
+                        <label for="apellido_materno" class="form-label form-label-sm">Apellido Materno:</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="apellido_materno" id="apellido_materno" name="apellido_materno" aria-label="apellido_materno">
+                      </div>
+                      <div class="col-md-4">
+                        <label for="correo" class="form-label">Correo Electronico:</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="correo" id="correo" name="correo" aria-label="correo">
+                      </div>
+                      <div class="col-md-4">
+                        <label for="telefono_fijo" class="form-label">Teléfono Fijo:</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="telefono_fijo" id="telefono_fijo" name="telefono_fijo" aria-label="telefono_fijo">
+                      </div>
+                      <div class="col-md-4">
+                        <label for="telefono_movil" class="form-label">Teléfono Movil:</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="telefono_movil" id="telefono_movil" name="telefono_movil" aria-label="telefono_movil">
+                      </div>
+                      <div class="col-md-4">
+                        <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento:</label>
+                        <input type="date" class="form-control form-control-sm" formControlName="fecha_nacimiento" id="fecha_nacimiento" name="fecha_nacimiento" aria-label="fecha_nacimiento">
+                      </div>
+                      <div class="col-md-4">
+                        <label for="entidad_nacimiento" class="form-label">Entidad donde Nació:</label>
+                        <select class="form-select form-select-sm" formControlName="entidad_nacimiento" id="entidad_nacimiento" name="entidad_nacimiento" aria-label="entidad_nacimiento">
+                          <option selected>Selecciona un estado</option>
+                          <option *ngFor="let item of CatEstados" value="item.clave">{{item.nombre}}</option>
+                        </select>
+                      </div>
+                      <div class="col-md-4">
+                        <label for="curp" class="form-label">CURP:</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="curp" id="curp" name="curp" aria-label="curp">
+                      </div>
+                      <div class="col-md-4">
+                        <label for="pais" class="form-label">Pais:</label>
+                        <input type="text" class="form-control form-control-sm" formControlName="pais" id="pais" name="pais" aria-label="pais">
+                      </div>
+                      <div class="col-md-4">
+                        <label for="actividad_prepoderante" class="form-label">Actividad Preponderante:</label>
+                        <select class="form-select form-select-sm" formControlName="actividad_prepoderante" id="actividad_prepoderante" name="actividad_prepoderante" aria-label="actividad_prepoderante">
+                          <option selected>Selecciona una opción</option>
+                          <option value="1">Empleado</option>
+                          <option value="2">Suspendido</option>
+                          <option value="3">Régimen de Actividades Agrícolas Ganaderas Silvicolas y Pesqueras PF y PM</option>
+                          <option value="3">Ingresos por Dividendos </option>
+                          <option value="3">Sin Actividad Empresarial o Régimen de Incorporación</option>
+                          <option value="3">Arrendamiento</option>
+                        </select>
+                      </div>
+
+                    </form>
+
+                    <ul class="list-inline wizard d-flex justify-content-end mb-0 mt-4">
+                      <li class="previous list-inline-item" aria-disabled="true"><button class="btn btn-primary btn-sm" cdkStepperPrevious>Anterior</button></li>
+                      <li class="next list-inline-item" aria-disabled="false"><button class="btn btn-primary btn-sm" [disabled]="!formSolicitudCFDI.valid" cdkStepperNext>Siguiente</button></li>
+                    </ul>
+                  </section>
+                  }
+                </cdk-step>
+
+                <cdk-step [optional]="false">
+                  <ng-template cdkStepLabel>
+                    <span class="number">3.</span>
+                    <span>Datos Vehículo</span>
+                  </ng-template>
+                  @if(cdkStepper.selectedIndex === 2){
+                  <section>
+                    <div>
+                      <form class="row g-2" [formGroup]="formDatosVehiculo">
+
+                        <div class="col-md-4">
+                          <label for="factura_ampara" class="form-label">Factura que ampara el vehículo:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="factura_ampara" id="factura_ampara" name="factura_ampara" aria-label="factura_ampara">
+                        </div>
+                        <div class="col-md-4">
+                          <label for="expedida" class="form-label form-label-sm">Expedida por:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="expedida" id="expedida" name="expedida" aria-label="expedida">
+                        </div>
+                        <div class="col-md-4">
+                          <label for="fecha_factura" class="form-label">Fecha de Factura:</label>
+                          <input type="date" class="form-control form-control-sm" formControlName="fecha_factura" id="fecha_factura" name="fecha_factura" aria-label="fecha_factura">
+                        </div>
+
+                        <div class="col-md-3">
+                          <label for="marca" class="form-label">Marca:</label>
+                          <select class="form-select form-select-sm" formControlName="marca" id="marca" name="marca" aria-label="marca">
+                            <option selected>Selecciona una marca</option>
+                            <option *ngFor="let item of CatMarcas" value="item.marca">{{item.marca}}</option>
+                          </select>
+                        </div>
+                        <div class="col-md-3">
+                          <label for="anio_modelo" class="form-label">Año modelo:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="anio_modelo" id="anio_modelo" name="anio_modelo" aria-label="anio_modelo">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="color_exterior" class="form-label">Color Exterior:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="color_exterior" id="color_exterior" name="color_exterior" aria-label="color_exterior">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="color_interior" class="form-label">Color Interior:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="color_interior" id="color_interior" name="color_interior" aria-label="color_interior">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="tipo_version" class="form-label">Tipo o Version:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="tipo_version" id="tipo_version" name="tipo_version" aria-label="tipo_version">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="clase_vehicular" class="form-label">Clase Vehicular:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="clase_vehicular" id="clase_vehicularr" name="clase_vehicular" aria-label="clase_vehicular">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="no_serie" class="form-label">No. Serie:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="no_serie" id="no_serie" name="no_serie" aria-label="no_serie">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="no_motor" class="form-label">No. Motor:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="no_motor" id="no_motor" name="no_motor" aria-label="no_motor">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="kilometraje" class="form-label">Kilometraje:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="kilometraje" id="kilometraje" name="kilometraje" aria-label="kilometraje">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="no_baja_vehicular" class="form-label">No. de Baja Vehícular:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="no_baja_vehicular" id="no_baja_vehicular" name="no_baja_vehicular" aria-label="no_baja_vehicular">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="estado_baja" class="form-label">Estado que emite la baja:</label>
+                          <select class="form-select form-select-sm" formControlName="estado_baja" id="estado_baja" name="estado_baja" aria-label="estado_baja">
+                            <option selected>Selecciona un estado</option>
+                            <option *ngFor="let item of CatEstados" value="item.clave">{{item.nombre}}</option>
+                          </select>
+                        </div>
+                        <div class="col-md-3">
+                          <label for="fecha_baja" class="form-label">Fecha de baja:</label>
+                          <input type="date" class="form-control form-control-sm" formControlName="fecha_baja" id="fecha_baja" name="fecha_baja" aria-label="fecha_baja">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="anio_tenencia" class="form-label">Años de Tenencia:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="anio_tenencia" id="anio_tenencia" name="anio_tenencia" aria-label="anio_tenencia">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="placas_baja" class="form-label">Placas dadas de baja:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="placas_baja" id="placas_baja" name="placas_baja" aria-label="placas_baja">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="no_verificacion" class="form-label">No. de Verificación:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="no_verificacion" id="no_verificacion" name="no_verificacion" aria-label="no_verificacion">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="valor_compra" class="form-label">Valor de compra (enajenación):</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="valor_compra" id="valor_compra" name="valor_compra" aria-label="valor_compra">
+                        </div>
+                        <div class="col-md-4">
+                          <label for="valor_guia" class="form-label">Valor Guía Autométrica:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="valor_guia" id="valor_guia" name="valor_guia" aria-label="valor_guia">
+                        </div>
+                        <div class="col-md-4">
+                          <label for="nombre_a_quien_vende" class="form-label">Nombre a quién se vende la unidad:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="nombre_a_quien_vende" id="nombre_a_quien_vende" name="nombre_a_quien_vende" aria-label="nombre_a_quien_vende">
+                        </div>
+                        <div class="col-md-4">
+                          <label for="fecha_factura_final" class="form-label">Fecha de factura final (cálculo de retención):</label>
+                          <input type="date" class="form-control form-control-sm" formControlName="fecha_factura_final" id="fecha_factura_final" name="fecha_factura_final" aria-label="fecha_factura_final">
+                        </div>
+
+                      </form>
+                    </div>
+
+                    <ul class="list-inline wizard d-flex justify-content-end mb-0 mt-4">
+                      <li class="previous list-inline-item" aria-disabled="true"><button class="btn btn-primary btn-sm" cdkStepperPrevious>Anterior</button></li>
+                      <li class="next list-inline-item" aria-disabled="false"><button class="btn btn-primary btn-sm" [disabled]="!formDatosVehiculo.valid" cdkStepperNext>Siguiente</button></li>
+                    </ul>
+                  </section>}
+                </cdk-step>
+
+                <cdk-step [optional]="false">
+                  <ng-template cdkStepLabel>
+                    <span class="number">4.</span>
+                    <span>Datos Bancarios</span>
+                  </ng-template>
+                  @if(cdkStepper.selectedIndex === 3){
+                  <section>
+                    <div>
+                      <form class="row g-2" [formGroup]="formDatosBancarios">
+
+                        <div class="alert alert-info mt-3" role="alert">
+                          Carta de No Retención (Último valor en factura)
+                        </div>
+
+                        <div class="col-md-12">
+                          <label for="costo_adquisicion" class="form-label">Costo de Adquisición:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="costo_adquisicion" id="costo_adquisicion" name="costo_adquisicion" aria-label="costo_adquisicion">
+                        </div>
+
+                        <div class="alert alert-info mt-3 mb-3" role="alert">
+                          Solicitud de Cheque
+                        </div>
+
+                        <div class="col-md-3">
+                          <label for="banco" class="form-label">Banco:</label>
+                          <select class="form-select form-select-sm" formControlName="banco" id="banco" name="banco" aria-label="banco">
+                            <option selected>Selecciona un banco</option>
+                            <option *ngFor="let item of CatBancos" value="item.banco">{{item.banco}}</option>
+                          </select>
+                        </div>
+                        <div class="col-md-3">
+                          <label for="cuenta" class="form-label">Cuenta:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="cuenta" id="cuenta" name="cuenta" aria-label="cuenta">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="clabe" class="form-label">CLABE:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="clabe" id="clabe" name="clabe" aria-label="clabe">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="sucursal" class="form-label">Sucursal:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="sucursal" id="sucursal" name="sucursal" aria-label="sucursal">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="convenio" class="form-label">Convenio:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="convenio" id="convenio" name="convenio" aria-label="convenio">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="referencia" class="form-label">Referencia:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="referencia" id="referencia" name="referencia" aria-label="referencia">
+                        </div>
+
+                      </form>
+                    </div>
+
+                    <ul class="list-inline wizard d-flex justify-content-end mb-0 mt-4">
+                      <li class="previous list-inline-item" aria-disabled="true"><button class="btn btn-primary btn-sm" cdkStepperPrevious>Anterior</button></li>
+                      <li class="next list-inline-item" aria-disabled="false"><button class="btn btn-primary btn-sm" [disabled]="!formDatosBancarios.valid" cdkStepperNext>Siguiente</button></li>
+                    </ul>
+                  </section>}
+                </cdk-step>
+
+                <cdk-step [optional]="false">
+                  <ng-template cdkStepLabel>
+                    <span class="number">5.</span>
+                    <span>Datos Agencia</span>
+                  </ng-template>
+                  @if(cdkStepper.selectedIndex === 4){
+                  <section>
+                    <div class="row justify-content-center">
+
+                      <form class="row g-2" [formGroup]="formDatosAngecia">
+
+                        <div class="col-md-12">
+                          <label for="agencia" class="form-label">Agencia:</label>
+                          <select class="form-select form-select-sm" formControlName="agencia" id="agencia" name="agencia" aria-label="agencia">
+                            <option selected>Selecciona una opción</option>
+                            <option value="1">Persona fisica sin actividad empresarial</option>
+                            <option value="2">Persona fisica con actividad empresarial</option>
+                            <option value="3">Persona Moral</option>
+                          </select>
+                        </div>
+
+                        <div class="col-md-3">
+                          <label for="razon_social" class="form-label">Razón Social:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="razon_social" id="razon_social" name="razon_social" aria-label="razon_social">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="rfc" class="form-label form-label-sm">RFC:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="rfc" id="rfc" name="rfc" aria-label="rfc">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="domicilio_calle" class="form-label">Domicilio y Calle:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="domicilio_calle" id="domicilio_calle" name="domicilio_calle" aria-label="domicilio_calle">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="colonia_cp" class="form-label">Colonia y C.P.:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="colonia_cp" id="colonia_cp" name="colonia_cp" aria-label="colonia_cp">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="ciudad_estado" class="form-label">Cuidad / Estado:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="ciudad_estado" id="ciudad_estado" name="ciudad_estado" aria-label="ciudad_estado">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="gerente_general" class="form-label">Gerente General:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="gerente_general" id="gerente_general" name="gerente_general" aria-label="gerente_general">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="gerente_seminuevos" class="form-label">Gerente Seminuevos:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="gerente_seminuevos" id="gerente_seminuevos" name="gerente_seminuevos" aria-label="gerente_seminuevos">
+                        </div>
+                        <div class="col-md-3">
+                          <label for="gerente_administrativo" class="form-label">Gereten Administrativo:</label>
+                          <input type="text" class="form-control form-control-sm" formControlName="gerente_administrativo" id="gerente_administrativo" name="gerente_administrativo" aria-label="gerente_administrativo">
+                        </div>
+
+                      </form>
+
+                    </div>
+
+                    <ul class="list-inline wizard d-flex justify-content-end mb-0 mt-4">
+                      <li class="previous list-inline-item" aria-disabled="true"><button class="btn btn-primary btn-sm" cdkStepperPrevious>Anterior</button></li>
+                      <li class="next list-inline-item" aria-disabled="false"><button class="btn btn-primary btn-sm" [disabled]="!formDatosAngecia.valid" (click)="save()" cdkStepperNext>Finalizar</button></li>
+                    </ul>
+                  </section>
+                  }
+                </cdk-step>
+
+              </ng-stepper>
+            </div>
+
+          </div>
+          <!-- end card body -->
+        </div>
+        <!-- end card -->
+      </div>
+      <!-- end col -->
+    </div>
+    <!-- end row -->
+
+  </div>
+  <!--div class="modal-footer">
+    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="modalRef?.hide()">Cerrar</button>
+    <button type="button" class="btn btn-primary btn-sm" (click)="save()">Guardar</button>
+  </div-->
+</ng-template>
+<!--End Modal -->
