@@ -46,6 +46,9 @@ if (environment.defaultauth === 'firebase') {
 
 import { DataTablesModule } from "angular-datatables";
 
+
+
+
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }
@@ -54,6 +57,8 @@ export function createTranslateLoader(http: HttpClient): any {
   declarations: [
     AppComponent,
     CyptolandingComponent,
+  
+
   ],
   imports: [
     BrowserModule,

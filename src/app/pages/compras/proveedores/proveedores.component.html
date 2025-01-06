@@ -1,25 +1,55 @@
 <div class="container-fluid">
-
   <div class="row">
     <div class="col-xl-12">
       <div class="card">
-
         <div class="card-body border-bottom">
           <div class="d-flex align-items-center">
             <h5 class="mb-0 card-title flex-grow-1">Proveedores</h5>
+            <!-- botones de acciones  -->
             <div class="flex-shrink-0 d-flex gap-1">
-              <a href="javascript:void(0);" class="btn btn-primary btn-sm" (click)="openModal(content)">Nuevo</a>
+              <a
+                href="javascript:void(0);"
+                class="btn btn-success btn-sm"
+                (click)="openModalExpediente(expediente)"
+                *ngIf="mostrar"
+                >Expediente</a
+              >
+              <a
+                href="javascript:void(0);"
+                class="btn btn-danger btn-sm"
+                (click)="destroy()"
+                *ngIf="mostrar"
+                >Eliminar</a
+              >
+              <a
+                href="javascript:void(0);"
+                class="btn btn-warning btn-sm"
+                (click)="openModalupdate(update)"
+                *ngIf="mostrar"
+                >Actualizar</a
+              >
+              <a
+                href="javascript:void(0);"
+                class="btn btn-primary btn-sm"
+                (click)="openModal(content)"
+                >Nuevo</a
+              >
             </div>
           </div>
         </div>
 
         <div class="card-body border-bottom">
-          <!--div class="d-flex justify-content-center" >
+          <div class="d-flex justify-content-center" *ngIf="isLoad">
             <div class="spinner-border" role="status">
               <span class="visually-hidden">Loading...</span>
             </div>
-          </div-->
-          <table class="table table-striped table-hover table-sm table-bordered" >
+          </div>
+
+          <table
+            
+            class="table  table-hover table-sm table-bordered"
+            *ngIf="!isLoad"
+          >
             <thead class="table-light">
               <tr>
                 <th>Nombre</th>
@@ -30,117 +60,755 @@
               </tr>
             </thead>
             <tbody>
-
+              <tr *ngFor="let item of data" (click)="seleccionar(item, $event)">
+                <td>{{ item.nombre }}</td>
+                <td>{{ item.contacto }}</td>
+                <td>{{ item.telefono }}</td>
+                <td>{{ item.localidad }}</td>
+                <td>{{ item.condiciones }} {{ item.dias_credito}} Dias</td>
+              </tr>
             </tbody>
           </table>
-        </div><!--div.card-body-->
-    </div>
+        </div>
+        <!--div.card-body-->
+      </div>
     </div>
   </div>
+</div>
+<!-- container-fluid -->
 
-</div> <!-- container-fluid -->
-
-<!-- Order Create Model -->
+<!-- Order Create Model MODAL NUEVO PROVEEDOR-->
 <ng-template #content role="document" let-modal>
-    <div class="modal-header">
-      <h5 class="modal-title" id="exampleModalLabel">Nuevo Proveedor</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef?.hide()"></button>
-    </div>
-    <div class="modal-body">
-      <form class="row g-2" [formGroup]="formProveedores">
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Nuevo Proveedor</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="modalRef?.hide()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form class="row g-2" [formGroup]="formProveedores" enctype="multipart/form-data">
+      <div class="col-md-6">
+        <label for="nombre" class="form-label">Nombre: *</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          formControlName="nombre"
+          id="nombre"
+          name="nombre"
+          aria-label="Nombre"
+        />
+        <div *ngIf="proveedoresFormControl.nombre.touched || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="proveedoresFormControl.nombre.errors?.['required']"
+          >
+            Nombre es requerido.
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="contacto" class="form-label form-label-sm"
+          >Contacto: *</label
+        >
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          formControlName="contacto"
+          id="contacto"
+          name="contacto"
+          aria-label="Contacto"
+        />
+        <div *ngIf="proveedoresFormControl.contacto.touched || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="proveedoresFormControl.contacto.errors?.['required']"
+          >
+            Contacto es requerido.
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="telefono" class="form-label">Teléfono: *</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          formControlName="telefono"
+          id="telefono"
+          name="telefono"
+          aria-label="Teléfono"
+        />
+        <div *ngIf="proveedoresFormControl.telefono.touched || proveedoresFormControl.telefono.dirty || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="proveedoresFormControl.telefono.errors?.['required']"
+          >
+            Teléfono es requerido.
+          </div>
+          <div 
+            class="text-danger form-text" 
+            *ngIf="proveedoresFormControl.telefono.errors?.['pattern']"> 
+               El campo solo acepta números. 
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="correo" class="form-label">Correo de contacto: *</label>
+        <input
+          type="email"
+          class="form-control form-control-sm"
+          formControlName="correo"
+          id="correo"
+          name="correo"
+          aria-label="Teléfono"
+        />
+        <div *ngIf="proveedoresFormControl.correo.touched || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="proveedoresFormControl.correo.errors?.['required']"
+          >
+            Correo es requerido.
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="localidad" class="form-label">Localidad: *</label>
+        <select
+                class="form-select form-select-sm"
+                type="text"
+                formControlName="localidad"
+                id="localidad"
+                name="localidad"
+                aria-label="localidad"
+              >
+                <option selected>Selecciona una localidad</option>
+                <option *ngFor="let item of estados" value="{{ item.clave }}">
+                  {{ item.nombre }}
+                </option>
+              </select>
+        <div *ngIf="proveedoresFormControl.localidad.touched || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="proveedoresFormControl.localidad.errors?.['required']"
+          >
+            Localidad es requerido.
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="condiciones" class="form-label form-label-sm">Condiciones: *</label
+        >
+        <select
+          class="form-select form-select-sm"
+          formControlName="condiciones"
+          id="condiciones"
+          name="condiciones"
+          aria-label="condiciones"
+          #selectElement (change)="onChange(selectElement)"
+          >
+          <option value="">Selecciona uno</option>
+          <option value="Contado">Contado</option>
+          <option value="Credito">Credito</option>
+        </select>
+        <div *ngIf="proveedoresFormControl.condiciones.touched || submitted || proveedoresFormControl.condiciones.value === 'Selecciona uno'">
+          <div
+            class="text-danger form-text"
+            *ngIf="proveedoresFormControl.condiciones.errors?.['required']"
+          >
+            Condiciones es requerido.
+          </div>
+        </div>
+      </div>
 
-        <div class="col-md-6">
-          <label for="nombre" class="form-label">Nombre: *</label>
-          <input type="text" class="form-control form-control-sm is-invalid" formControlName="nombre" id="nombre" name="nombre"  aria-label="Nombre">
-          <div *ngIf=" (proveedoresFormControl.nombre.touched  || submitted)">
-            <div class="text-danger form-text" *ngIf="proveedoresFormControl.nombre.errors?.['required']">Nombre es requerido.</div>
+      <div class="col-md-6" *ngIf="isCredit">
+        <label for="dias_credito" class="form-label">Dias de credito: *</label>
+        <input
+          type="number"
+          value="0"
+          min="1"
+          class="form-control form-control-sm"
+          formControlName="dias_credito"
+          id="dias_credito"
+          name="dias_credito"
+          aria-label="dias_credito"
+        />
+        <div *ngIf="proveedoresFormControl.dias_credito.touched || submitted || proveedoresFormControl.dias_credito.dirty">
+          <div 
+            class="text-danger form-text" 
+            *ngIf="proveedoresFormControl.dias_credito.errors?.['pattern']"> 
+               El campo solo acepta números. 
           </div>
         </div>
-        <div class="col-md-6">
-          <label for="contacto" class="form-label form-label-sm">Contacto: *</label>
-          <input type="text" class="form-control form-control-sm" formControlName="contacto" id="contacto" name="contacto" aria-label="Contacto">
-          <div *ngIf=" (proveedoresFormControl.contacto.touched  || submitted)">
-            <div class="text-danger form-text" *ngIf="proveedoresFormControl.contacto.errors?.['required']">Contacto es requerido.</div>
+      </div>
+      <div class="col-md-6">
+        <label for="horario_atencion" class="form-label">Horario de Atención: *</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          formControlName="horario_atencion"
+          id="horario_atencion"
+          name="horario_atencion"
+          aria-label="horario_atencion"
+        />
+        <div *ngIf="proveedoresFormControl.horario_atencion.touched || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="proveedoresFormControl.horario_atencion.errors?.['required']"
+          >
+            Horario de atencion es requerido.
           </div>
         </div>
+      </div>
+      <div class="col-md-6">
+        <label for="tiempo_entrega" class="form-label">Tiempo de entrega: *</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          formControlName="tiempo_entrega"
+          id="tiempo_entrega"
+          name="tiempo_entrega"
+          aria-label="tiempo_entrega"
+        />
+        <div *ngIf="proveedoresFormControl.tiempo_entrega.touched || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="proveedoresFormControl.tiempo_entrega.errors?.['required']"
+          >
+            Tiempo de entrega es requerido.
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="servicios" class="form-label">Servicios: *</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          formControlName="servicios"
+          id="servicios"
+          name="servicios"
+          aria-label="Servicios"
+        />
+        <div *ngIf="proveedoresFormControl.servicios.touched || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="proveedoresFormControl.servicios.errors?.['required']"
+          >
+            Servicios es requerido.
+          </div>
+        </div>
+      </div>
 
-        <div class="col-md-6">
-          <label for="telefono" class="form-label">Teléfono: *</label>
-          <input type="text" class="form-control form-control-sm" formControlName="telefono" id="telefono" name="telefono" aria-label="Teléfono">
-          <div *ngIf=" (proveedoresFormControl.telefono.touched  || submitted)">
-            <div class="text-danger form-text" *ngIf="proveedoresFormControl.telefono.errors?.['required']">Teléfono es requerido.</div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <label for="localidad" class="form-label">Localidad: *</label>
-          <input type="text" class="form-control form-control-sm" formControlName="localidad" id="localidad" name="localidad" aria-label="Localidad">
-          <div *ngIf=" (proveedoresFormControl.localidad.touched  || submitted)">
-            <div class="text-danger form-text" *ngIf="proveedoresFormControl.localidad.errors?.['required']">Localidad es requerido.</div>
-          </div>
-        </div>
+      <div class="alert alert-info mt-4" role="alert">Expendiente</div>
 
-        <div class="col-md-6">
-          <label for="condiciones" class="form-label">Condiciones: *</label>
-          <input type="text" class="form-control form-control-sm" formControlName="condiciones" id="condiciones" name="condiciones" aria-label="Condiciones">
-          <div *ngIf=" (proveedoresFormControl.condiciones.touched  || submitted)">
-            <div class="text-danger form-text" *ngIf="proveedoresFormControl.condiciones.errors?.['required']">Condiciones es requerido.</div>
+      <div class="col-md-6">
+        <div class="mb-2">
+          <label for="constancia_fiscal" class="form-label"
+            >Constancia de Situacion Fiscal</label
+          >
+          <input
+            class="form-control form-control-sm"
+            type="file"
+            (change)="onFileChange($event, 'constancia_fiscal')"
+            formControlName="constancia_fiscal"
+            id="constancia_fiscal"
+          />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-2">
+          <label for="ine" class="form-label">INE</label>
+          <input
+            class="form-control form-control-sm"
+            type="file"
+            (change)="onFileChange($event,'ine')"
+            formControlName="ine"
+            id="ine"
+          />
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="mb-2">
+          <label for="comprobante_domicilio" class="form-label"
+            >Comprobante de Domicilio</label
+          >
+          <input
+            class="form-control form-control-sm"
+            type="file"
+            (change)="onFileChange($event,'comprobante_domicilio')"
+            formControlName="comprobante_domicilio"
+            id="comprobante_domicilio"
+          />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-2">
+          <label for="estado_cuenta" class="form-label">Estado de Cuenta</label>
+          <input
+            class="form-control form-control-sm"
+            type="file"
+            (change)="onFileChange($event, 'estado_cuenta')"
+            formControlName="estado_cuenta"
+            id="estado_cuenta"
+          />
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="mb-2">
+          <label for="acta_constitutiva" class="form-label"
+            >Acta Constitutiva</label
+          >
+          <input
+            class="form-control form-control-sm"
+            type="file"
+            (change)="onFileChange($event, 'acta_constitutiva')"
+            formControlName="acta_constitutiva"
+            id="acta_constitutiva"
+          />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-2">
+          <label for="poder_notarial" class="form-label">Poder Notarial</label>
+          <input
+            class="form-control form-control-sm"
+            type="file"
+            (change)="onFileChange($event,'poder_notarial')"
+            formControlName="poder_notarial"
+            id="poder_notarial"
+          />
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      data-bs-dismiss="modal"
+      (click)="modalRef?.hide()"
+    >
+      Cerrar
+    </button>
+    <button type="button" class="btn btn-primary btn-sm" (click)="save()">
+      Guardar
+    </button>
+  </div>
+</ng-template>
+<!--End Modal -->
+
+<!-- Order Update Model MODAL ACTUALIZAR PROVEEDOR -->
+<ng-template #update role="document" let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Actualizar Proveedor</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="modalRef?.hide()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form class="row g-2" [formGroup]="formUpdateProveedores" enctype="multipart/form-data">
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        formControlName="id"
+        id="id"
+        name="id"
+        aria-label="id"
+        hidden
+      />
+      <div class="col-md-6">
+        <label for="nombre" class="form-label">Nombre: *</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          formControlName="nombre"
+          id="nombre"
+          name="nombre"
+          aria-label="Nombre"
+        />
+        <div *ngIf="proveedoresFormControlUpdate.nombre.touched || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="proveedoresFormControlUpdate.nombre.errors?.['required']"
+          >
+            Nombre es requerido.
           </div>
         </div>
-        <div class="col-md-6">
-          <label for="servicios" class="form-label">Servicios: *</label>
-          <input type="text" class="form-control form-control-sm" formControlName="servicios" id="servicios" name="servicios" aria-label="Servicios">
-          <div *ngIf=" (proveedoresFormControl.servicios.touched  || submitted)">
-            <div class="text-danger form-text" *ngIf="proveedoresFormControl.servicios.errors?.['required']">Servicios es requerido.</div>
+      </div>
+      <div class="col-md-6">
+        <label for="contacto" class="form-label form-label-sm"
+          >Contacto: *</label
+        >
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          formControlName="contacto"
+          id="contacto"
+          name="contacto"
+          aria-label="Contacto"
+        />
+        <div *ngIf="proveedoresFormControlUpdate.contacto.touched || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="proveedoresFormControlUpdate.contacto.errors?.['required']"
+          >
+            Contacto es requerido.
           </div>
         </div>
+      </div>
 
-        <div class="alert alert-info mt-4" role="alert">
-          Expendiente
+      <div class="col-md-6">
+        <label for="telefono" class="form-label">Teléfono: *</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          formControlName="telefono"
+          id="telefono"
+          name="telefono"
+          aria-label="Teléfono"
+          
+        />
+        <div *ngIf="proveedoresFormControlUpdate.telefono.touched || proveedoresFormControlUpdate.telefono.dirty || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="proveedoresFormControlUpdate.telefono.errors?.['required']"
+          >
+            Teléfono es requerido.
+          </div>
+          <div 
+            class="text-danger form-text" 
+            *ngIf="proveedoresFormControlUpdate.telefono.errors?.['pattern']"> 
+               El campo solo acepta números. 
+          </div>
         </div>
+      </div>
 
+      <div class="col-md-6">
+        <label for="correo" class="form-label">Correo de contacto: *</label>
+        <input
+          type="email"
+          class="form-control form-control-sm"
+          formControlName="correo"
+          id="correo"
+          name="correo"
+          aria-label="correo"
+        />
+        <div *ngIf="proveedoresFormControlUpdate.correo.touched || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="proveedoresFormControlUpdate.correo.errors?.['required']"
+          >
+            Correo es requerido.
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label for="localidad" class="form-label">Localidad: *</label>
+        <select
+        class="form-select form-select-sm"
+        type="text"
+        formControlName="localidad"
+        id="localidad"
+        name="localidad"
+        aria-label="localidad"
+        aria-label="Default select example"
+      >
+        <option selected>Selecciona una localidad</option>
+        <option *ngFor="let item of estados" value="{{ item.clave }}">
+          {{ item.nombre }}
+        </option>
+      </select>
+        <div
+          *ngIf="proveedoresFormControlUpdate.localidad.touched || submitted"
+        >
+          <div
+            class="text-danger form-text"
+            *ngIf="proveedoresFormControlUpdate.localidad.errors?.['required']"
+          >
+            Localidad es requerido.
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <label for="condiciones" class="form-label form-label-sm">Condiciones: *</label
+        >
+        <select
+          class="form-select form-select-sm"
+          aria-label="Default select example"
+          formControlName="condiciones"
+          id="condiciones"
+          name="condiciones"
+          aria-label="condiciones"
+          #selectElement (change)="onChange(selectElement)"
+        >
+          <option selected>Selecciona uno</option>
+          <option value="Contado">Contado</option>
+          <option value="Credito">Credito</option>
+        </select>
+        <div *ngIf="proveedoresFormControlUpdate.condiciones.touched || submitted || proveedoresFormControlUpdate.condiciones.value === 'Selecciona uno'">
+          <div
+            class="text-danger form-text"
+            *ngIf="proveedoresFormControlUpdate.condiciones.errors?.['required']"
+          >
+            Condiciones es requerido.
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6" *ngIf="isCredit">
+        <label for="dias_credito" class="form-label">Dias de credito: *</label>
+        <input
+          type="number"
+          value="0"
+          min="1"
+          class="form-control form-control-sm"
+          formControlName="dias_credito"
+          id="dias_credito"
+          name="dias_credito"
+          aria-label="dias_credito"
+        />
+        <div *ngIf="proveedoresFormControlUpdate.dias_credito.touched || submitted || proveedoresFormControlUpdate.dias_credito.dirty">
+          <div 
+            class="text-danger form-text" 
+            *ngIf="proveedoresFormControlUpdate.dias_credito.errors?.['pattern']"> 
+               El campo solo acepta números. 
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="horario_atencion" class="form-label">Horario de Atención: *</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          formControlName="horario_atencion"
+          id="horario_atencion"
+          name="horario_atencion"
+          aria-label="horario_atencion"
+        />
+        <div *ngIf="proveedoresFormControlUpdate.horario_atencion.touched || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="proveedoresFormControlUpdate.horario_atencion.errors?.['required']"
+          >
+            Horario de atencion es requerido.
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="tiempo_entrega" class="form-label">Tiempo de entrega: *</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          formControlName="tiempo_entrega"
+          id="tiempo_entrega"
+          name="tiempo_entrega"
+          aria-label="tiempo_entrega"
+        />
+        <div *ngIf="proveedoresFormControlUpdate.tiempo_entrega.touched || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="proveedoresFormControlUpdate.tiempo_entrega.errors?.['required']"
+          >
+            Tiempo de entrega es requerido.
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="servicios" class="form-label">Servicios: *</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          formControlName="servicios"
+          id="servicios"
+          name="servicios"
+          aria-label="Servicios"
+        />
+        <div *ngIf="proveedoresFormControlUpdate.servicios.touched || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="proveedoresFormControlUpdate.servicios.errors?.['required']"
+          >
+            Servicios es requerido.
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-info mt-4" role="alert">Expendiente</div>
+      
         <div class="col-md-6">
           <div class="mb-2">
-            <label for="constancia_fiscal" class="form-label">Constancia de Situacion Fiscal</label>
-            <input class="form-control form-control-sm" type="file" formControlName="constancia_fiscal" id="constancia_fiscal">
+            <label for="constancia_fiscal" class="form-label"
+              >Constancia de Situacion Fiscal</label
+            >
+            <input
+              class="form-control form-control-sm"
+              type="file"
+              formControlName="constancia_fiscal"
+              (change)="onFileChange($event,'constancia_fiscal')"
+              id="constancia_fiscal"
+            />
           </div>
         </div>
         <div class="col-md-6">
           <div class="mb-2">
             <label for="ine" class="form-label">INE</label>
-            <input class="form-control form-control-sm" type="file" formControlName="ine" id="ine">
+            <input
+              class="form-control form-control-sm"
+              type="file"
+              formControlName="ine"
+              (change)="onFileChange($event,'ine')"
+              id="ine"
+            />
           </div>
         </div>
+      
+      
 
-        <div class="col-md-6">
-          <div class="mb-2">
-            <label for="comprobante_domicilio" class="form-label">Comprobante de Domicilio</label>
-            <input class="form-control form-control-sm" type="file" formControlName="comprobante_domicilio" id="comprobante_domicilio">
-          </div>
+      <div class="col-md-6">
+        <div class="mb-2">
+          <label for="comprobante_domicilio" class="form-label"
+            >Comprobante de Domicilio</label
+          >
+          <input
+            class="form-control form-control-sm"
+            type="file"
+            formControlName="comprobante_domicilio"
+            id="comprobante_domicilio"
+            (change)="onFileChange($event,'comprobante_domicilio')"
+          />
         </div>
-        <div class="col-md-6">
-          <div class="mb-2">
-            <label for="estado_cuenta" class="form-label">Estado de Cuenta</label>
-            <input class="form-control form-control-sm" type="file" formControlName="estado_cuenta" id="estado_cuenta">
-          </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-2">
+          <label for="estado_cuenta" class="form-label">Estado de Cuenta</label>
+          <input
+            class="form-control form-control-sm"
+            type="file"
+            formControlName="estado_cuenta"
+            (change)="onFileChange($event,'estado_cuenta')"
+            id="estado_cuenta"
+          />
         </div>
+      </div>
 
-        <div class="col-md-6">
-          <div class="mb-2">
-            <label for="acta_constitutiva" class="form-label">Acta Constitutiva</label>
-            <input class="form-control form-control-sm" type="file" formControlName="acta_constitutiva" id="acta_constitutiva">
-          </div>
+      <div class="col-md-6">
+        <div class="mb-2">
+          <label for="acta_constitutiva" class="form-label"
+            >Acta Constitutiva</label
+          >
+          <input
+            class="form-control form-control-sm"
+            type="file"
+            formControlName="acta_constitutiva"
+            (change)="onFileChange($event,'acta_constitutiva')"
+            id="acta_constitutiva"
+          />
         </div>
-        <div class="col-md-6">
-          <div class="mb-2">
-            <label for="poder_notarial" class="form-label">Poder Notarial</label>
-            <input class="form-control form-control-sm" type="file" formControlName="poder_notarial" id="poder_notarial">
-          </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-2">
+          <label for="poder_notarial" class="form-label">Poder Notarial</label>
+          <input
+            class="form-control form-control-sm"
+            type="file"
+            (change)="onFileChange($event,'poder_notarial')"
+            formControlName="poder_notarial"
+            id="poder_notarial"
+          />
         </div>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="modalRef?.hide()">Cerrar</button>
-      <button type="button" class="btn btn-primary btn-sm" (click)="save()">Guardar</button>
-    </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      data-bs-dismiss="modal"
+      (click)="modalRef?.hide()"
+    >
+      Cerrar
+    </button>
+    <button type="button" class="btn btn-primary btn-sm" (click)="edit()">
+      Actualizar
+    </button>
+  </div>
 </ng-template>
+<!--End Modal -->
+<!-- MODAL EXPEDIENTE PROVEEDOR -->
+<ng-template #expediente role="document" let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Expediente del Proveedor: {{proveedor.nombre}}</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="modalRef?.hide()"
+    ></button>
+  </div>
+  <div class="modal-body">
+
+    <table class="table  table-hover table-sm table-bordered">
+    <thead class="table-light">
+      <tr>
+        <th>Documeto</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Constancia de situacion fiscal</td>
+        <td *ngIf="archivos.constancia_fiscal; else noArchivo"> <a class="btn btn-sm btn-info"  href="javascript:void(0)" (click)="openFile(archivos.constancia_fiscal)">Abrir</a></td>
+      </tr>
+      <tr>
+        <td>Comprobante de domicilio</td>
+        <td *ngIf="archivos.comprobante_domicilio; else noArchivo"> <a class="btn btn-sm btn-info" href="javascript:void(0)" (click)="openFile(archivos.comprobante_domicilio)">Abrir</a></td>
+      </tr>
+      <tr>
+        <td>INE</td>
+        <td *ngIf="archivos.ine; else noArchivo"> <a class="btn btn-sm btn-info" href="javascript:void(0)" (click)="openFile(archivos.ine)">Abrir</a></td>
+      </tr>
+      <tr>
+        <td>Estado de Cuenta</td>
+        <td *ngIf="archivos.estado_cuenta; else noArchivo"> <a class="btn btn-sm btn-info" href="javascript:void(0)" (click)="openFile(archivos.estado_cuenta)">Abrir</a></td>
+      </tr>
+      <tr>
+        <td>Acta Constitutiva</td>
+        <td *ngIf="archivos.acta_constitutiva; else noArchivo"> <a class="btn btn-sm btn-info" href="javascript:void(0)" (click)="openFile(archivos.acta_constitutiva)">Abrir</a></td>
+      </tr>
+      <tr>
+        <td>Poder Notarial</td>
+        <td *ngIf="archivos.poder_notarial; else noArchivo"> <a class="btn btn-sm btn-info" href="javascript:void(0)" (click)="openFile(archivos.poder_notarial)">Abrir</a></td>
+      </tr>
+    </tbody>
+  </table>
+    <p>Ultima actualizacion: {{archivos.updated_at}}</p>
+    </div>  
+  <div class="modal-footer">
+    
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      data-bs-dismiss="modal"
+      (click)="modalRef?.hide()"
+    >
+      Cerrar
+    </button>
+  </div>
+  <ng-template #noArchivo> Archivo no cargado </ng-template>
+</ng-template>
+
 <!--End Modal -->

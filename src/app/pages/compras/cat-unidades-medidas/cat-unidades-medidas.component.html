@@ -1,0 +1,214 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-body border-bottom">
+          <div class="d-flex align-items-center">
+            <h5 class="mb-0 card-title flex-grow-1">
+              Catalogo de Unidades de Medidas
+            </h5>
+            <div class="flex-shrink-0 d-flex gap-1">
+              <a
+                href="javascript:void(0);"
+                class="btn btn-danger btn-sm"
+                (click)="destroy()"
+                *ngIf="mostrar"
+                >Eliminar</a
+              >
+              <a
+                href="javascript:void(0);"
+                class="btn btn-warning btn-sm"
+                (click)="openModalupdate(update)"
+                *ngIf="mostrar"
+                >Actualizar</a
+              >
+              <a
+                href="javascript:void(0);"
+                class="btn btn-primary btn-sm"
+                (click)="openModal(content)"
+                >Nuevo</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body border-bottom">
+          <div class="d-flex justify-content-center" *ngIf="isLoad">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+
+          <table
+          *ngIf="!isLoad"
+            
+            class="table table-hover table-sm table-bordered"
+          >
+            <thead class="table-light">
+              <tr>
+                <th>Unidad de Medida</th>
+                <th>Abreviatura</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of data" (click)="seleccionar(item, $event)">
+                <td>{{ item.nombre }}</td>
+                <td>{{ item.abreviatura }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!--div.card-body-->
+      </div>
+    </div>
+  </div>
+</div>
+<!-- container-fluid -->
+
+<!-- Order Create Model -->
+<ng-template #content role="document" let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Nueva Unidad de Medida</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="modalRef?.hide()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form class="row g-2" [formGroup]="formUnidades">
+      <div class="col-md-6">
+        <label for="nombre" class="form-label">Nombre: *</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          formControlName="nombre"
+          id="nombre"
+          name="nombre"
+          aria-label="Nombre"
+        />
+        <div *ngIf="unidadesFormControl.nombre.touched || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="unidadesFormControl.nombre.errors?.['required']"
+          >
+            Nombre es requerido.
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="abreviatura" class="form-label form-label-sm"
+          >Abreviatura: *</label
+        >
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          formControlName="abreviatura"
+          id="abreviatura"
+          name="abreviatura"
+          aria-label="abreviatura"
+        />
+        <div *ngIf="unidadesFormControl.abreviatura.touched || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="unidadesFormControl.abreviatura.errors?.['required']"
+          >
+            abreviatura es requerido.
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      data-bs-dismiss="modal"
+      (click)="modalRef?.hide()"
+    >
+      Cerrar
+    </button>
+    <button type="button" class="btn btn-primary btn-sm" (click)="save()">
+      Guardar
+    </button>
+  </div>
+</ng-template>
+<!--End Modal -->
+
+<!-- Order Create Model -->
+<ng-template #update role="document" let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">
+      Actualizar Unidad de Medida
+    </h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="modalRef?.hide()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form class="row g-2" [formGroup]="formUpdateUnidades">
+      <div class="col-md-6">
+        <label for="nombre" class="form-label">Nombre: *</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          formControlName="nombre"
+          id="nombre"
+          name="nombre"
+          aria-label="Nombre"
+        />
+        <div *ngIf="unidadesFormControlUpdate.nombre.touched || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="unidadesFormControlUpdate.nombre.errors?.['required']"
+          >
+            Nombre es requerido.
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="abreviatura" class="form-label form-label-sm"
+          >Abreviatura: *</label
+        >
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          formControlName="abreviatura"
+          id="abreviatura"
+          name="abreviatura"
+          aria-label="abreviatura"
+        />
+        <div *ngIf="unidadesFormControlUpdate.abreviatura.touched || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="unidadesFormControlUpdate.abreviatura.errors?.['required']"
+          >
+            abreviatura es requerido.
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      data-bs-dismiss="modal"
+      (click)="modalRef?.hide()"
+    >
+      Cerrar
+    </button>
+    <button type="button" class="btn btn-primary btn-sm" (click)="edit()">
+      Actualizar
+    </button>
+  </div>
+</ng-template>
+<!--End Modal -->
