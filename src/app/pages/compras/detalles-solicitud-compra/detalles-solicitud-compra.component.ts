@@ -43,7 +43,8 @@ export class DetallesSolicitudCompraComponent implements OnInit {
   public cotProv: any[] = [];
   public detalles: any[] = [];
   public formData = new FormData();
-  proveedoresSeleccionados: any[] = [];
+  public proveedoresSeleccionados: any[] = [];
+  public selectedFiles: { [key: number]: File } = {};
 
   constructor(
     private modalService: BsModalService,
@@ -244,12 +245,12 @@ export class DetallesSolicitudCompraComponent implements OnInit {
    * Open modal
    * @param content modal content
    */
-  public openModal(content: any, imgReferencia: string) {
+  public openModal(content: any, imgReferencia: string) { //Abre el modal de im ref
     this.selectedImage = imgReferencia;
     this.modalRef = this.modalService.show(content, { class: "modal-sm" });
   }
 
-  private getDetalle(): Promise<any> {
+  private getDetalle(): Promise<any> { //Recupera el detalle y agrega columnas a la tabla
     return new Promise((resolve, reject) => {
       this.comprasService.getOne(this.solicitudCompra.id).subscribe(
         (response) => {
@@ -261,7 +262,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
               this.addProveedorColumns();
               this.mostrarTotal = true;
             }
-            this.updateTotals();
+
             resolve(this.detalles);
             this.isLoad = false;
           } else {
@@ -284,7 +285,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
         if (response) {
           this.cotProv = response.data;
           this.cotizacion = response.dataCotizacion;
-          console.log(response)
+          console.log(response);
           this.addProveedorColumns();
           this.isLoad = false;
         } else {
@@ -341,9 +342,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     });
   }
 
-  public selectedFiles: { [key: number]: File } = {};
-
-  onFileChange(event: Event, proveedorId: number) {
+  onFileChange(event: Event, proveedorId: number) { //Recupera los archivos de los input file
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.selectedFiles[proveedorId] = input.files[0];
@@ -370,12 +369,14 @@ export class DetallesSolicitudCompraComponent implements OnInit {
           `files[${proveedor.id}]`,
           this.selectedFiles[proveedor.id]
         );
+      this.getDetalle();
       }
     });
 
     this.cotizacionesService.save(formData).subscribe(
       (response) => {
         if (response.status === "success") {
+
           Swal.fire({
             title: "Enviado",
             text: "Tu cotización se ha guardado correctamente",
@@ -386,6 +387,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
               cancelButton: "btn btn-secondary ms-2 px-4",
             },
           });
+          this.getDetalle();
           this.isLoad = false;
         } else {
           console.log(response.message);
@@ -397,11 +399,11 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     );
   }
 
-  verArchivos(prov: any) {
+  verArchivos(prov: any) { //llama el service para abrir el archivo
     this.proveedoresService.abrirArchivo(prov);
   }
 
-  public generarOrden() {
+  public generarOrden() { //Actualiza el registro seleccionado de cot-prov y el status de la solicitud
     this.submitted = true;
     // this.isLoad = true;
     if (this.formSeleccionarProveedor.invalid) {
@@ -453,6 +455,6 @@ export class DetallesSolicitudCompraComponent implements OnInit {
           console.error("Error fetching data:", error);
         }
       );
-      this.submitted = false;
+    this.submitted = false;
   }
 }

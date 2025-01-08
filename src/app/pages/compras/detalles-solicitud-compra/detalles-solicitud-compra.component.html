@@ -103,6 +103,7 @@
           >Cotización de: {{ prov.proveedores_id[0].nombre }}</label
         >
         <input
+        *ngIf="!prov.ruta"
           (change)="onFileChange($event, prov.id)"
           class="form-control form-control-sm"
           id="prov.id"

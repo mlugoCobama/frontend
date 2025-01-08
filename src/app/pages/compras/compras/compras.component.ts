@@ -294,6 +294,7 @@ export class ComprasComponent implements OnInit {
               registro.estado = 'APROBADA';
               registro.claseEstado = 'bg-success';
                break;
+              
               case 5: 
               registro.estado = 'CANCELADA';
               registro.claseEstado = 'bg-danger';
