@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { BehaviorSubject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,12 @@ import { BehaviorSubject } from 'rxjs';
 export class ComprasService {
   public mostrarCotizacionSource = new BehaviorSubject<boolean>(false); 
   mostrarCotizacion$ = this.mostrarCotizacionSource.asObservable();
+
+  private generateOrderSubject = new Subject<void>();
+  generateOrder$ = this.generateOrderSubject.asObservable();
+
+  private mostrarBotonSource = new BehaviorSubject<boolean>(false); 
+  mostrarBoton$ = this.mostrarBotonSource.asObservable();
 
   constructor(private http: HttpClient) { }
 
@@ -40,4 +47,12 @@ export class ComprasService {
  cambiarEstadoCotizacion(mostrar: boolean) { 
     this.mostrarCotizacionSource.next(mostrar);
   }
+
+  public descargarOrdenCompra(data: any){
+    return this.http.post(environment.apiUrl + 'compras/descargar-pdf', data ,{responseType:'blob'});
+  }
+
+  triggerGenerateOrder() { this.generateOrderSubject.next(); }
+  setMostrarBoton(mostrar: boolean) { this.mostrarBotonSource.next(mostrar); }
+
 }

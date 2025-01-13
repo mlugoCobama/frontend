@@ -38,6 +38,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
   public selectedImage: any;
   public correosProv: any;
   public data: any;
+  public proveedorSelec: any;
 
   public totals: any = {};
   public cotProv: any[] = [];
@@ -58,6 +59,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     this.comprasService.mostrarCotizacion$.subscribe((mostrar) => {
       this.mostrarCotizacionFlag = mostrar;
     });
+    this.comprasService.generateOrder$.subscribe(() => { this.generarOrden(); });
     this.buildForm();
     this.getDetalle();
     this.getProveedores();
@@ -285,7 +287,6 @@ export class DetallesSolicitudCompraComponent implements OnInit {
         if (response) {
           this.cotProv = response.data;
           this.cotizacion = response.dataCotizacion;
-          console.log(response);
           this.addProveedorColumns();
           this.isLoad = false;
         } else {
@@ -297,7 +298,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
       }
     );
   }
-
+  public totalMasBajo:any;
   public updateTotals() {
     this.totals = {};
     this.cotProv.forEach((cotizacion) => {
@@ -312,6 +313,9 @@ export class DetallesSolicitudCompraComponent implements OnInit {
 
       this.totals["precio_" + proveedorId] = total;
     });
+      this.totalMasBajo = this.getTotalMasBajo();
+
+
   }
 
   validateNumberInput(event: any) {
@@ -351,6 +355,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
 
   public guardarPrecios() {
     const formData = new FormData();
+    let allFilesUploaded = true;
     this.cotProv.forEach((proveedor) => {
       this.detalles.forEach((detalle) => {
         const proveedorId = proveedor.proveedores_id[0].id;
@@ -364,13 +369,13 @@ export class DetallesSolicitudCompraComponent implements OnInit {
         }
       });
 
-      if (this.selectedFiles[proveedor.id]) {
-        formData.append(
-          `files[${proveedor.id}]`,
-          this.selectedFiles[proveedor.id]
-        );
-      this.getDetalle();
-      }
+      
+        if (this.selectedFiles[proveedor.id]) {
+          formData.append(
+            `files[${proveedor.id}]`,
+            this.selectedFiles[proveedor.id]
+          );
+        }
     });
 
     this.cotizacionesService.save(formData).subscribe(
@@ -399,31 +404,49 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     );
   }
 
+  getTotalMasBajo(): number {
+    let tmasBajo = Number.MAX_VALUE;
+    for (let prov of this.cotProv) {
+      let total = this.totals["precio_" + prov.proveedores_id[0].id];
+      if (total < tmasBajo) {
+        tmasBajo = total;
+      }
+    }
+    if(tmasBajo != 0){
+      return tmasBajo;
+    }
+    
+  }
+
   verArchivos(prov: any) { //llama el service para abrir el archivo
     this.proveedoresService.abrirArchivo(prov);
   }
 
   public generarOrden() { //Actualiza el registro seleccionado de cot-prov y el status de la solicitud
-    this.submitted = true;
-    // this.isLoad = true;
-    if (this.formSeleccionarProveedor.invalid) {
-      this.isLoad = false;
-      Swal.fire({
-        title: "Alerta",
-        text: "Debes seleccionar un proveedor",
-        buttonsStyling: false,
-        icon: "warning",
-        customClass: {
-          confirmButton: "btn btn-warning px-4",
-          cancelButton: "btn btn- ms-2 px-4",
-        },
-      });
-      return;
-    }
-    const formValues = this.formSeleccionarProveedor.value;
-    const idProveedor = formValues.proveedorSelecionado;
+    // console.log(this.proveedorSelec);
+    
+    // this.submitted = true;
+    //  this.isLoad = true;
+      if (this.proveedorSelec === undefined) {
+        this.isLoad = false;
+        Swal.fire({
+          title: "Alerta",
+          text: "Debes seleccionar un proveedor",
+          buttonsStyling: false,
+          icon: "warning",
+          customClass: {
+            confirmButton: "btn btn-warning px-4",
+            cancelButton: "btn btn- ms-2 px-4",
+          },
+        });
+        console.log('aquí se debe de haber detenido')
+        return;
+      }
+      console.log('aquí le valió y continuo')
+    // const formValues = this.formSeleccionarProveedor.value;
+    // const idProveedor = formValues.proveedorSelecionado;
     this.cotizacionesService
-      .edit(idProveedor, this.solicitudCompra.id)
+      .edit(this.proveedorSelec.id, this.solicitudCompra.id)
       .subscribe(
         (response) => {
           if (response.status === "success") {
@@ -437,6 +460,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
                 cancelButton: "btn btn- ms-2 px-4",
               },
             });
+            
           } else {
             Swal.fire({
               title: "Error",
@@ -455,6 +479,29 @@ export class DetallesSolicitudCompraComponent implements OnInit {
           console.error("Error fetching data:", error);
         }
       );
+      this.getDetalle();
     this.submitted = false;
+  }
+
+
+  public manejoCheck(prov:any){ //recupera la cotización seleccionada y muestra el botón de generar orden de compra
+    const proveedorSleccionado  = prov;
+    console.log(proveedorSleccionado);
+    this.proveedorSelec = proveedorSleccionado;
+    this.comprasService.setMostrarBoton(true);
+
+
+  }
+
+  public descargarOrden(){
+    const data = {...this.solicitudCompra, detalles: this.detalles}
+    this.comprasService.descargarOrdenCompra(data).subscribe((response: Blob)=>{
+       const url = window.URL.createObjectURL(response);
+       const link = document.createElement('a');
+       link.href = url;
+       link.download = 'formatoOrdenCompra.pdf';
+       link.click();
+       window.URL.revokeObjectURL(url);
+    })
   }
 }

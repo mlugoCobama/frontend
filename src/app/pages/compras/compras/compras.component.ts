@@ -16,7 +16,6 @@ import Swal from "sweetalert2";
 import { ComprasService } from "src/app/core/services/compras/compras.service";
 import { CatUnidadesMedidasService } from "src/app/core/services/compras/unidadesMedidas/cat-unidades-medidas.service";
 
-
 @Component({
   selector: "app-compras",
   templateUrl: "./compras.component.html",
@@ -26,6 +25,7 @@ export class ComprasComponent implements OnInit {
   public dtOptions: Config = {};
   public showTable: boolean = false;
   public modalRef?: BsModalRef;
+  mostrarBoton = false;
 
   public solicitudSelecionada: boolean = false;
 
@@ -36,11 +36,10 @@ export class ComprasComponent implements OnInit {
   public formSolicitudCompra: FormGroup;
   public formDetalleSolicitud: FormGroup;
 
-  
   public solicitudCompra: any; // Objeto que envió al componente detallesSolicitudCompra
 
   public data: any;
-  public unidades: any; 
+  public unidades: any;
   unidad: any;
   detalles: any;
 
@@ -54,6 +53,7 @@ export class ComprasComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
+    this.comprasService.mostrarBoton$.subscribe(mostrar => { this.mostrarBoton = mostrar; });
     this.dtOptions = environment.dataTables;
     this.buildForm();
     this.getAll();
@@ -95,13 +95,13 @@ export class ComprasComponent implements OnInit {
     return this.formDetalleSolicitud.controls;
   }
 
-  
-  public onChange(selectElement: any) { // metodo que obtiene el texto del select unidad
+  public onChange(selectElement: any) {
+    // metodo que obtiene el texto del select unidad
     const selectedText =
       selectElement.options[selectElement.selectedIndex].text;
     this.unidad = selectedText;
   }
-  
+
   detalle = {
     cantidad: "",
     cat_unidades_medida_id: "",
@@ -119,7 +119,7 @@ export class ComprasComponent implements OnInit {
       return;
     }
     const valores = this.formDetalleSolicitud.value;
-    
+
     const newDetalle = {
       ...this.formDetalleSolicitud.value,
       cat_unidades_medida_id1: this.unidad,
@@ -145,8 +145,8 @@ export class ComprasComponent implements OnInit {
     // this.formDetalleSolicitud.reset();
   }
 
-  
-  onFileChange(event: any, fieldName: string) { // Funcion que captura el archivo en el input
+  onFileChange(event: any, fieldName: string) {
+    // Funcion que captura el archivo en el input
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
       this.formData.append(fieldName, file);
@@ -157,14 +157,14 @@ export class ComprasComponent implements OnInit {
     this.tableData.splice(index, 1);
   }
 
-  
-  private generateFolio(): string { // Metodo para generar el folio de solicitud de compras
+  private generateFolio(): string {
+    // Método para generar el folio de solicitud de compras
     return `SC-${Math.floor(Math.random() * 100000)}`;
   }
 
-  
-  public fecha() { // Metodo para asignar una fecha
-    // obtener la fecha en el fomrato correcto para la bd
+  public fecha() {
+    // Método para asignar una fecha
+    // obtener la fecha en el formato correcto para la bd
     const fecha = new Date();
     const anio = fecha.getFullYear();
     const mes = ("0" + (fecha.getMonth() + 1)).slice(-2);
@@ -192,8 +192,9 @@ export class ComprasComponent implements OnInit {
       });
       return;
     }
-    
-    if (this.tableData.length === 0) { // Valida que el usuario ingrese por lo menos un detalle
+
+    if (this.tableData.length === 0) {
+      // Valida que el usuario ingrese por lo menos un detalle
       this.isLoad = false;
       Swal.fire({
         title: "Alerta",
@@ -208,7 +209,8 @@ export class ComprasComponent implements OnInit {
       return;
     }
 
-    const data = { //Datos del form solicitud
+    const data = {
+      //Datos del form solicitud
       ...this.formSolicitudCompra.value,
       usuario_solicita: "1",
       users_id: "1",
@@ -218,7 +220,8 @@ export class ComprasComponent implements OnInit {
     };
     const formDataToSend = new FormData();
     formDataToSend.append("data", JSON.stringify(data));
-    this.tableData.forEach((detalle, index) => { //agrega los detalles al form data para enviarlos
+    this.tableData.forEach((detalle, index) => {
+      //agrega los detalles al form data para enviarlos
       if (detalle.img_referencia) {
         formDataToSend.append(
           `img_referencia_${index}`,
@@ -273,37 +276,36 @@ export class ComprasComponent implements OnInit {
           this.data = response.data;
           this.data.forEach((registro: any) => {
             registro.fecha = new Date(registro.fecha).toLocaleString();
-            switch (registro.estatus) 
-            { 
-              case 1: 
-              registro.estado = 'SOLICITADO';
-              registro.claseEstado = 'bg-primary';
-               break;
+            switch (registro.estatus) {
+              case 1:
+                registro.estado = "SOLICITADO";
+                registro.claseEstado = "bg-primary";
+                break;
 
-              case 2: 
-              registro.estado = 'EN COTIZACIÓN';
-              registro.claseEstado = 'bg-info';
-               break;
+              case 2:
+                registro.estado = "EN COTIZACIÓN";
+                registro.claseEstado = "bg-info";
+                break;
 
-              case 3: 
-              registro.estado = 'ORDEN DE COMPRA';
-              registro.claseEstado = 'bg-warning';
-               break;
+              case 3:
+                registro.estado = "ORDEN DE COMPRA";
+                registro.claseEstado = "bg-warning";
+                break;
 
-              case 4: 
-              registro.estado = 'APROBADA';
-              registro.claseEstado = 'bg-success';
-               break;
-              
-              case 5: 
-              registro.estado = 'CANCELADA';
-              registro.claseEstado = 'bg-danger';
-               break;
+              case 4:
+                registro.estado = "APROBADA";
+                registro.claseEstado = "bg-success";
+                break;
 
-              default: 
-              registro.estado = 'DESCONOCIDO'; 
-              registro.claseEstado = 'badge-soft-dark';
-              break; 
+              case 5:
+                registro.estado = "CANCELADA";
+                registro.claseEstado = "bg-danger";
+                break;
+
+              default:
+                registro.estado = "DESCONOCIDO";
+                registro.claseEstado = "badge-soft-dark";
+                break;
             }
           });
 
@@ -334,8 +336,9 @@ export class ComprasComponent implements OnInit {
       }
     );
   }
-  public status:any;
-  public openModal1(dato: any, evento: any) { // Funcion para llenar la vista con el detalle component
+  public status: any;
+  public openModal1(dato: any, evento: any) {
+    // Funcion para llenar la vista con el detalle component
     this.solicitudSelecionada = true;
     // Verifica si hay un elemento seleccionado (evento del doble click)
     if (evento.currentTarget.classList.contains("table-primary")) {
@@ -347,75 +350,77 @@ export class ComprasComponent implements OnInit {
       filas.forEach((fila) => fila.classList.remove("table-primary"));
       evento.currentTarget.classList.add("table-primary");
       this.solicitudSelecionada = true;
-      this.solicitudCompra = dato; // Castea el objeto que se envia al detalleSolicitudCompra 
+      this.solicitudCompra = dato; // Castea el objeto que se envia al detalleSolicitudCompra
       this.status = this.solicitudCompra.estatus;
     }
   }
-  
-  public regresar() { // Muestra la vista de la tabla
-    this.comprasService.cambiarEstadoCotizacion(false); 
+
+  public regresar() {
+    // Muestra la vista de la tabla
+    this.comprasService.cambiarEstadoCotizacion(false);
     this.solicitudSelecionada = false;
     this.status = 0;
+    this.mostrarBoton = false;
     this.getAll();
   }
-  
-  mostrarCotizacion() { 
-    this.comprasService.cambiarEstadoCotizacion(true); 
+
+  mostrarCotizacion() {
+    this.comprasService.cambiarEstadoCotizacion(true);
   }
 
-  public cancelarSolicitud(){
+  public cancelarSolicitud() {
     this.isLoad = true;
-        Swal.fire({
-          title: "¿Estas seguro?",
-          text: "La solicitud será marcada como cancelada",
-          icon: "error",
-          confirmButtonText: " SI ",
-          showCancelButton: true,
-          cancelButtonText: " NO ",
-          customClass: {
-            confirmButton: "btn btn-danger px-4",
-            cancelButton: "btn btn-primary ms-2 px-4",
+    Swal.fire({
+      title: "¿Estas seguro?",
+      text: "La solicitud será marcada como cancelada",
+      icon: "error",
+      confirmButtonText: " SI ",
+      showCancelButton: true,
+      cancelButtonText: " NO ",
+      customClass: {
+        confirmButton: "btn btn-danger px-4",
+        cancelButton: "btn btn-primary ms-2 px-4",
+      },
+      buttonsStyling: false,
+    }).then((result) => {
+      if (result.value) {
+        this.comprasService.destroy(this.solicitudCompra.id).subscribe(
+          (response) => {
+            if (response.status === "success") {
+              console.log(response.message);
+              this.getAll();
+              Swal.fire({
+                title: "Cancelada!",
+                text: "La solicitud ha sido cancelada.",
+                buttonsStyling: false,
+                icon: "success",
+                customClass: {
+                  confirmButton: "btn btn-danger px-4",
+                  cancelButton: "btn btn- ms-2 px-4",
+                },
+              });
+            } else {
+              console.log(response.message);
+              Swal.fire({
+                title: "Error!",
+                text: "Your file has been deleted.",
+                buttonsStyling: false,
+                icon: "success",
+                customClass: {
+                  confirmButton: "btn btn-danger px-4",
+                  cancelButton: "btn btn- ms-2 px-4",
+                },
+              });
+            }
           },
-          buttonsStyling: false,
-        }).then((result) => {
-          if (result.value) {
-            this.comprasService.destroy(this.solicitudCompra.id).subscribe(
-              (response) => {
-                if (response.status === "success") {
-                  console.log(response.message);
-                  this.getAll();
-                  Swal.fire({
-                    title: "Cancelada!",
-                    text: "La solicitud ha sido cancelada.",
-                    buttonsStyling: false,
-                    icon: "success",
-                    customClass: {
-                      confirmButton: "btn btn-danger px-4",
-                      cancelButton: "btn btn- ms-2 px-4",
-                    },
-                  });
-                } else {
-                  console.log(response.message);
-                  Swal.fire({
-                    title: "Error!",
-                    text: "Your file has been deleted.",
-                    buttonsStyling: false,
-                    icon: "success",
-                    customClass: {
-                      confirmButton: "btn btn-danger px-4",
-                      cancelButton: "btn btn- ms-2 px-4",
-                    },
-                  });
-                }
-              },
-              (error) => {
-                console.error("Error fetching data:", error);
-              }
-            );
+          (error) => {
+            console.error("Error fetching data:", error);
           }
-          this.isLoad = false;
-        });
-
+        );
+      }
+      this.isLoad = false;
+    });
   }
 
+  btnGenerarOC() { this.comprasService.triggerGenerateOrder(); }
 }

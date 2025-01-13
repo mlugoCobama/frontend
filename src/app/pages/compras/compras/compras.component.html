@@ -7,6 +7,13 @@
             <h5 class="mb-0 card-title flex-grow-1">Solicitudes de Compra</h5>
             <div class="flex-shrink-0 d-flex gap-1">
               <a
+                *ngIf="status === 2 && mostrarBoton"
+                href="javascript:void(0);"
+                class="btn btn-primary btn-sm"
+                (click)="btnGenerarOC()"
+                >Generar Orden de Compra</a
+              >
+              <a
                 *ngIf="!solicitudSelecionada"
                 href="javascript:void(0);"
                 class="btn btn-primary btn-sm"
@@ -21,14 +28,20 @@
                 >Volver</a
               >
               <a
-                *ngIf="status === 1 && !comprasService.mostrarCotizacionSource.value"
+                *ngIf="
+                  status === 1 && !comprasService.mostrarCotizacionSource.value
+                "
                 href="javascript:void(0);"
                 class="btn btn-info btn-sm"
                 (click)="mostrarCotizacion()"
                 >Cotizar</a
               >
               <a
-              *ngIf="status >= 2 && status != 5 && !comprasService.mostrarCotizacionSource.value"
+                *ngIf="
+                  status >= 2 &&
+                  status != 5 &&
+                  !comprasService.mostrarCotizacionSource.value
+                "
                 href="javascript:void(0);"
                 class="btn btn-danger btn-sm"
                 (click)="cancelarSolicitud()"
@@ -39,7 +52,6 @@
         </div>
 
         <div *ngIf="!solicitudSelecionada" class="card-body border-bottom">
-
           <div>
             <div class="d-flex justify-content-center" *ngIf="isLoad">
               <div class="spinner-border" role="status">
@@ -62,7 +74,10 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let item of data"  (dblclick) = "openModal1(item, $event)">
+                  <tr
+                    *ngFor="let item of data"
+                    (dblclick)="openModal1(item, $event)"
+                  >
                     <td>{{ item.folio }}</td>
                     <td>CAS</td>
                     <td>{{ item.usuario_solicita }}</td>
@@ -70,7 +85,14 @@
                     <td>{{ item.fecha }}</td>
                     <td>
                       <div class="text-center">
-                        <span [ngClass]="'badge rounded-pill font-size-11 ' + item.claseEstado"> {{ item.estado }} </span> 
+                        <span
+                          [ngClass]="
+                            'badge rounded-pill font-size-11 ' +
+                            item.claseEstado
+                          "
+                        >
+                          {{ item.estado }}
+                        </span>
                       </div>
                     </td>
                   </tr>
@@ -78,9 +100,11 @@
               </table>
             </div>
           </div>
-
         </div>
-         <app-detalles-solicitud-compra [solicitudCompra]="solicitudCompra" *ngIf="solicitudSelecionada"></app-detalles-solicitud-compra>
+        <app-detalles-solicitud-compra
+          [solicitudCompra]="solicitudCompra"
+          *ngIf="solicitudSelecionada"
+        ></app-detalles-solicitud-compra>
         <!-- <app-cotizaciones [solicitudCompra]="solicitudCompra" *ngIf="solicitudSelecionada"></app-cotizaciones> -->
         <!--div.card-body-->
       </div>
@@ -88,9 +112,6 @@
   </div>
 </div>
 <!-- container-fluid -->
-
-
-
 
 <!-- Order Create Model -->
 <ng-template #content role="document" let-modal>
@@ -126,7 +147,13 @@
           <option value="2">Empresa 2</option>
           <option value="3">Empresa 3</option>
         </select>
-        <div *ngIf="solicitudCompraFormControl.usuario.touched || submitted || solicitudCompraFormControl.usuario.value === 'Selecciona uno'">
+        <div
+          *ngIf="
+            solicitudCompraFormControl.usuario.touched ||
+            submitted ||
+            solicitudCompraFormControl.usuario.value === 'Selecciona uno'
+          "
+        >
           <div
             class="text-danger form-text"
             *ngIf="solicitudCompraFormControl.usuario.errors?.['required']"
@@ -151,7 +178,11 @@
           <option value="2">Usuario 2</option>
           <option value="3">Usuario 3</option>
         </select>
-        <div *ngIf="solicitudCompraFormControl.usuario_destino.touched || submitted">
+        <div
+          *ngIf="
+            solicitudCompraFormControl.usuario_destino.touched || submitted
+          "
+        >
           <div
             class="text-danger form-text"
             *ngIf="solicitudCompraFormControl.usuario_destino.errors?.['required']"
@@ -182,154 +213,194 @@
       </div>
       <!-- fin primer from -->
     </form>
-      <hr>
-      <h5 class="mb-0 card-title flex-grow-1">Detalle de la Solicitud</h5>
-      <form [formGroup]="formDetalleSolicitud" enctype="multipart/form-data" >
-        <div class="row align-items-center">
-          <div class="col-sm-2 my-1">
-            <label class="sr-only" for="inlineFormInputName">cantidad</label>
-            <input
-                min="1"
-                type="number"
-                formControlName="cantidad"
-                id="cantidad"
-                name="cantidad"
-                aria-label="cantidad"
-                class="form-control form-control-sm"
-                size="4"
-                placeholder="Cantidad"
-              />
-              <div *ngIf="detalleSolicitudFormControl.cantidad.touched || submittedDetail">
-                <div
-                  class="text-danger form-text"
-                  *ngIf="detalleSolicitudFormControl.cantidad.errors?.['required']"
-                >
-                  Cantidad es requerido.
-                </div>
-              </div>
-          </div>
-          <div class="col-sm-2 my-1">
-            <select
-                class="form-select form-select-sm"
-                type="text"
-                formControlName="cat_unidades_medida_id"
-                #selectElement (change)="onChange(selectElement)"
-                id="cat_unidades_medida_id"
-                name="cat_unidades_medida_id"
-                aria-label="cat_unidades_medida_id"
-              >
-                <option selected>Selecciona una unidad</option>
-                <option *ngFor="let item of unidades" value="{{ item.id }}">
-                  {{ item.nombre }} ({{ item.abreviatura }})
-                </option>
-              </select>
-              <div *ngIf="detalleSolicitudFormControl.cat_unidades_medida_id.touched || submittedDetail">
-                <div
-                  class="text-danger form-text"
-                  *ngIf="detalleSolicitudFormControl.cat_unidades_medida_id.errors?.['required']"
-                >
-                  Unidad es requerido.
-                </div>
-              </div>
-          </div>
-          <div class="col-sm-4 my-1">
-            <input
-                type="text"
-                formControlName="descripcion"
-                id="descripcion"
-                name="descripcion"
-                aria-label="descripcion"
-                class="form-control form-control-sm"
-                size=""
-                placeholder="Descripción"	
-              />
-              <div *ngIf="detalleSolicitudFormControl.descripcion.touched || submittedDetail">
-                <div
-                  class="text-danger form-text"
-                  *ngIf="detalleSolicitudFormControl.descripcion.errors?.['required']"
-                >
-                  Descripción es requerido.
-                </div>
-              </div>
-          </div>
-          <div class="col-sm-4 my-1">
-            <input
-                type="text"
-                formControlName="observaciones"
-                id="observaciones"
-                name="observaciones"
-                aria-label="observaciones"
-                class="form-control form-control-sm"
-                size=""
-                placeholder="Observaciones"	
-              />
-              <div *ngIf="detalleSolicitudFormControl.observaciones.touched || submittedDetail">
-                <div
-                  class="text-danger form-text"
-                  *ngIf="detalleSolicitudFormControl.observaciones.errors?.['required']"
-                >
-                  Observaciones es requerido.
-                </div>
-              </div>
-          </div>
-          
-          <div class="col-sm-10 my-1">
-            <label for="img_referencia" class="form-label">Referencia fotografica: </label>
-            <input  
-            type="file" 
-            id="img_referencia" 
-            name="img_referencia" 
-            aria-label="img_referencia" 
-            class="form-control form-control-sm" 
-            (change)="onFileChange($event, 'img_referencia')"
-            formControlName="img_referencia"
-             />
-            <div *ngIf="detalleSolicitudFormControl.img_referencia.touched || submittedDetail">
-              <div
-                class="text-danger form-text"
-                *ngIf="detalleSolicitudFormControl.img_referencia.errors?.['required']"
-              >
-                Imagen de referencia es requerido.
-              </div>
+    <hr />
+    <h5 class="mb-0 card-title flex-grow-1">Detalle de la Solicitud</h5>
+    <form [formGroup]="formDetalleSolicitud" enctype="multipart/form-data">
+      <div class="row align-items-center">
+        <div class="col-sm-2 my-1">
+          <label class="sr-only" for="inlineFormInputName">cantidad</label>
+          <input
+            min="1"
+            type="number"
+            formControlName="cantidad"
+            id="cantidad"
+            name="cantidad"
+            aria-label="cantidad"
+            class="form-control form-control-sm"
+            size="4"
+            placeholder="Cantidad"
+          />
+          <div
+            *ngIf="
+              detalleSolicitudFormControl.cantidad.touched || submittedDetail
+            "
+          >
+            <div
+              class="text-danger form-text"
+              *ngIf="detalleSolicitudFormControl.cantidad.errors?.['required']"
+            >
+              Cantidad es requerido.
             </div>
           </div>
-          <div class="col-auto my-1">
-            <button type="submit" class="btn btn-primary btn-sm float-end" (click)="addDetalle()">Agregar</button>
+        </div>
+        <div class="col-sm-2 my-1">
+          <select
+            class="form-select form-select-sm"
+            type="text"
+            formControlName="cat_unidades_medida_id"
+            #selectElement
+            (change)="onChange(selectElement)"
+            id="cat_unidades_medida_id"
+            name="cat_unidades_medida_id"
+            aria-label="cat_unidades_medida_id"
+          >
+            <option selected>Selecciona una unidad</option>
+            <option *ngFor="let item of unidades" value="{{ item.id }}">
+              {{ item.nombre }} ({{ item.abreviatura }})
+            </option>
+          </select>
+          <div
+            *ngIf="
+              detalleSolicitudFormControl.cat_unidades_medida_id.touched ||
+              submittedDetail
+            "
+          >
+            <div
+              class="text-danger form-text"
+              *ngIf="detalleSolicitudFormControl.cat_unidades_medida_id.errors?.['required']"
+            >
+              Unidad es requerido.
+            </div>
           </div>
         </div>
-      </form>
-      <br>
-      <table
-        class="table table-striped table-hover table-sm table-bordered"
-        id="tableCompraInsumos"
-      >
-        <thead class="table-light">
-          <tr>
-            <th>Cantidad</th>
-            <th>Unidad de Medida</th>
-            <th>Descripción</th>
-            <th>Observaciones</th>
-            <th>Imagen</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- datos de la tabla detalle -->
-          <tr *ngFor="let row of tableData; let i = index">
-            <td>{{ row.cantidad }}</td>
-            <td>{{ row.cat_unidades_medida_id1 }}</td>
-            <td>{{ row.descripcion }}</td>
-            <td>{{ row.observaciones }}</td>
-            <td>
-                <img  src="{{ row.img_referencia1 }}" alt="Sin imagen de referencia" width="100">
-            </td>
-            <td>
-              <button type="button" class="btn btn-danger btn-sm"
-              (click)="removeDetalle(i)"> Quitar </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    
+        <div class="col-sm-4 my-1">
+          <input
+            type="text"
+            formControlName="descripcion"
+            id="descripcion"
+            name="descripcion"
+            aria-label="descripcion"
+            class="form-control form-control-sm"
+            size=""
+            placeholder="Descripción"
+          />
+          <div
+            *ngIf="
+              detalleSolicitudFormControl.descripcion.touched || submittedDetail
+            "
+          >
+            <div
+              class="text-danger form-text"
+              *ngIf="detalleSolicitudFormControl.descripcion.errors?.['required']"
+            >
+              Descripción es requerido.
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4 my-1">
+          <input
+            type="text"
+            formControlName="observaciones"
+            id="observaciones"
+            name="observaciones"
+            aria-label="observaciones"
+            class="form-control form-control-sm"
+            size=""
+            placeholder="Observaciones"
+          />
+          <div
+            *ngIf="
+              detalleSolicitudFormControl.observaciones.touched ||
+              submittedDetail
+            "
+          >
+            <div
+              class="text-danger form-text"
+              *ngIf="detalleSolicitudFormControl.observaciones.errors?.['required']"
+            >
+              Observaciones es requerido.
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-10 my-1">
+          <label for="img_referencia" class="form-label"
+            >Referencia fotografica:
+          </label>
+          <input
+            type="file"
+            id="img_referencia"
+            name="img_referencia"
+            aria-label="img_referencia"
+            class="form-control form-control-sm"
+            (change)="onFileChange($event, 'img_referencia')"
+            formControlName="img_referencia"
+          />
+          <div
+            *ngIf="
+              detalleSolicitudFormControl.img_referencia.touched ||
+              submittedDetail
+            "
+          >
+            <div
+              class="text-danger form-text"
+              *ngIf="detalleSolicitudFormControl.img_referencia.errors?.['required']"
+            >
+              Imagen de referencia es requerido.
+            </div>
+          </div>
+        </div>
+        <div class="col-auto my-1">
+          <button
+            type="submit"
+            class="btn btn-primary btn-sm float-end"
+            (click)="addDetalle()"
+          >
+            Agregar
+          </button>
+        </div>
+      </div>
+    </form>
+    <br />
+    <table
+      class="table table-striped table-hover table-sm table-bordered"
+      id="tableCompraInsumos"
+    >
+      <thead class="table-light">
+        <tr>
+          <th>Cantidad</th>
+          <th>Unidad de Medida</th>
+          <th>Descripción</th>
+          <th>Observaciones</th>
+          <th>Imagen</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- datos de la tabla detalle -->
+        <tr *ngFor="let row of tableData; let i = index">
+          <td>{{ row.cantidad }}</td>
+          <td>{{ row.cat_unidades_medida_id1 }}</td>
+          <td>{{ row.descripcion }}</td>
+          <td>{{ row.observaciones }}</td>
+          <td>
+            <img
+              src="{{ row.img_referencia1 }}"
+              alt="Sin imagen de referencia"
+              width="100"
+            />
+          </td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-danger btn-sm"
+              (click)="removeDetalle(i)"
+            >
+              Quitar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
   <div class="modal-footer">
     <button
@@ -346,4 +417,3 @@
   </div>
 </ng-template>
 <!--End Modal -->
-

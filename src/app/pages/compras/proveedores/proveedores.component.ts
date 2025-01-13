@@ -404,4 +404,13 @@ export class ProveedoresComponent implements OnInit {
       this.isCredit = false;
     }
   }
+
+  validateNumberInput(event: any) {
+    const inputValue = event.target.value;
+    const validNumber = /^[0-9]*\.?[0-9]{0,2}$/.test(inputValue);
+
+    if (!validNumber) {
+      event.target.value = inputValue.slice(0, -1);
+    }
+  }
 }
