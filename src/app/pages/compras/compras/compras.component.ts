@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 //services
 import { ComprasService } from "src/app/core/services/compras/compras.service";
 import { CatUnidadesMedidasService } from "src/app/core/services/compras/unidadesMedidas/cat-unidades-medidas.service";
+import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompra/ordenes-compra.service";
 
 @Component({
   selector: "app-compras",
@@ -47,6 +48,7 @@ export class ComprasComponent implements OnInit {
 
   constructor(
     private catUnidadesMedidasService: CatUnidadesMedidasService,
+    public ordenesComprasService: OrdenesCompraService,
     public comprasService: ComprasService,
     private modalService: BsModalService,
     public formBuilder: FormBuilder
@@ -157,9 +159,12 @@ export class ComprasComponent implements OnInit {
     this.tableData.splice(index, 1);
   }
 
-  private generateFolio(): string {
+  private async generateFolio(): Promise<string>  {
     // Método para generar el folio de solicitud de compras
-    return `SC-${Math.floor(Math.random() * 100000)}`;
+    const response = await this.comprasService
+      .obtenerFolio()
+      .toPromise();
+    return response.nuevoFolio;
   }
 
   public fecha() {
@@ -208,65 +213,67 @@ export class ComprasComponent implements OnInit {
       });
       return;
     }
-
-    const data = {
-      //Datos del form solicitud
-      ...this.formSolicitudCompra.value,
-      usuario_solicita: "1",
-      users_id: "1",
-      fecha: this.fecha(),
-      folio: this.generateFolio(),
-      detalles: this.tableData,
-    };
-    const formDataToSend = new FormData();
-    formDataToSend.append("data", JSON.stringify(data));
-    this.tableData.forEach((detalle, index) => {
-      //agrega los detalles al form data para enviarlos
-      if (detalle.img_referencia) {
-        formDataToSend.append(
-          `img_referencia_${index}`,
-          detalle.img_referencia
-        );
-      }
-    });
-    this.comprasService.save(formDataToSend).subscribe(
-      (response) => {
-        if (response.status === "success") {
-          this.getAll();
-          this.showTable = true;
-          Swal.fire({
-            title: "Guardado",
-            text: "Solicitud registrada correctamente",
-            buttonsStyling: false,
-            icon: "success",
-            customClass: {
-              confirmButton: "btn btn-success px-4",
-              cancelButton: "btn btn- ms-2 px-4",
-            },
-          });
-        } else {
-          Swal.fire({
-            title: "Error",
-            text: "Hubo un error al guardar la solicitud",
-            buttonsStyling: false,
-            icon: "warning",
-            customClass: {
-              confirmButton: "btn btn-warning px-4",
-              cancelButton: "btn btn- ms-2 px-4",
-            },
-          });
-          this.getAll();
-          console.log(response.message);
+    this.generateFolio().then((folio) =>{
+      const data = {
+        //Datos del form solicitud
+        ...this.formSolicitudCompra.value,
+        usuario_solicita: "1",
+        users_id: "1",
+        fecha: this.fecha(),
+        folio: folio,
+        detalles: this.tableData,
+      };
+      const formDataToSend = new FormData();
+      formDataToSend.append("data", JSON.stringify(data));
+      this.tableData.forEach((detalle, index) => {
+        //agrega los detalles al form data para enviarlos
+        if (detalle.img_referencia) {
+          formDataToSend.append(
+            `img_referencia_${index}`,
+            detalle.img_referencia
+          );
         }
-      },
-      (error) => {
-        console.error("Error fetching data:", error);
-      }
-    );
-    this.tableData = [];
-    this.modalRef.hide();
-    this.submitted = false;
-    this.formSolicitudCompra.reset();
+      });
+      this.comprasService.save(formDataToSend).subscribe(
+        (response) => {
+          if (response.status === "success") {
+            this.getAll();
+            this.showTable = true;
+            Swal.fire({
+              title: "Guardado",
+              text: "Solicitud registrada correctamente",
+              buttonsStyling: false,
+              icon: "success",
+              customClass: {
+                confirmButton: "btn btn-success px-4",
+                cancelButton: "btn btn- ms-2 px-4",
+              },
+            });
+          } else {
+            Swal.fire({
+              title: "Error",
+              text: "Hubo un error al guardar la solicitud",
+              buttonsStyling: false,
+              icon: "warning",
+              customClass: {
+                confirmButton: "btn btn-warning px-4",
+                cancelButton: "btn btn- ms-2 px-4",
+              },
+            });
+            this.getAll();
+            console.log(response.message);
+          }
+        },
+        (error) => {
+          console.error("Error fetching data:", error);
+        }
+      );
+      this.tableData = [];
+      this.modalRef.hide();
+      this.submitted = false;
+      this.formSolicitudCompra.reset();
+    })
+    
   }
 
   private getAll() {
@@ -293,13 +300,23 @@ export class ComprasComponent implements OnInit {
                 break;
 
               case 4:
-                registro.estado = "APROBADA";
+                registro.estado = "AUTORIZADA";
                 registro.claseEstado = "bg-success";
                 break;
 
               case 5:
                 registro.estado = "CANCELADA";
                 registro.claseEstado = "bg-danger";
+                break;
+                
+              case 6:
+                registro.estado = "EN SURTIDO";
+                registro.claseEstado = "badge-soft-warning";
+                break;
+
+              case 7:
+                registro.estado = "RECIBIDO";
+                registro.claseEstado = "badge-soft-info";
                 break;
 
               default:
@@ -422,5 +439,23 @@ export class ComprasComponent implements OnInit {
     });
   }
 
-  btnGenerarOC() { this.comprasService.triggerGenerateOrder(); }
+  btnGenerarOC() {
+     this.comprasService.triggerGenerateOrder(); 
+  }
+
+  btnDescargarOC(){
+    this.ordenesComprasService
+      .pdfOrdenCompra(this.solicitudCompra.id)
+      .subscribe((response) => {
+        const blob = new Blob([response], { type: "application/pdf"});
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "orden_compra.pdf";
+        link.click();
+        window.URL.revokeObjectURL(url);
+      });
+      console.log('se ejecuto esta funcion');
+  }
+  
 }

@@ -32,4 +32,8 @@ export class CotizacionesService {
     const url =  (environment.apiUrl + `compras/${rutaArchivo}`);
      window.open(url , '_blank')
   }
+
+  public obtenerFolio(){
+    return this.http.get<{ nuevoFolio: string }>(environment.apiUrl + `compras/generar-folio-co`);
+  }
 }

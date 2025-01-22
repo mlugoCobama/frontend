@@ -7,6 +7,14 @@
             <h5 class="mb-0 card-title flex-grow-1">Solicitudes de Compra</h5>
             <div class="flex-shrink-0 d-flex gap-1">
               <a
+                *ngIf="status >= 3"
+                href="javascript:void(0);"
+                class="btn btn-sm btn-primary"
+                (click)="btnDescargarOC()"
+              >
+              <i class="fas fa-file-download"></i> Descargar Orden de Compra
+              </a>
+              <a
                 *ngIf="status === 2 && mostrarBoton"
                 href="javascript:void(0);"
                 class="btn btn-primary btn-sm"
