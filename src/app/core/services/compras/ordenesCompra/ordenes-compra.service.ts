@@ -21,6 +21,10 @@ export class OrdenesCompraService {
     return this.http.post(environment.apiUrl + 'compras/OrdenesCompras', data);
   }
 
+  public saveDocs(id:number, data:any): Observable<any> {
+    return this.http.post(environment.apiUrl + `compras/DocumentosOrdenesCompras/${id}`, data);
+  }
+
   public edit(id:number, data:any): Observable<any> {
     return this.http.put(environment.apiUrl + `compras/OrdenesCompras/${id}`, data);
   }
@@ -40,9 +44,22 @@ export class OrdenesCompraService {
 
   public enviarSolicitudSurtido(data: any): Observable<any> {
     return this.http.post(
-      environment.apiUrl + "compras/enviar-solicitud-surtido",
-      data
+      environment.apiUrl + "compras/enviar-solicitud-surtido", data
     );
+  }
+
+  public autorizarOrdenCompra(data: any): Observable<any> {
+    return this.http.post(
+      environment.apiUrl + "compras/autorizar-orden-compra", data
+    );
+  }
+
+  public getContenidoXML(id:number): Observable<any> {
+    return this.http.get(environment.apiUrl + `compras/leer-xml/${id}`,{ responseType: 'text' });
+  }
+
+  public descargarFacturas(id:number): Observable<any> {
+    return this.http.get(environment.apiUrl + `compras/descargar-facturas/${id}`,{ responseType: 'blob' });
   }
 
 }

@@ -72,7 +72,7 @@
                 class="table table-striped table-hover table-sm table-bordered"
               >
                 <thead class="table-light">
-                  <tr>
+                  <tr class="text-center">
                     <th>Folio</th>
                     <th>Empresa</th>
                     <th>Solicita</th>
@@ -83,6 +83,7 @@
                 </thead>
                 <tbody>
                   <tr
+                    class="text-center"
                     *ngFor="let item of data"
                     (dblclick)="openModal1(item, $event)"
                   >
@@ -203,6 +204,10 @@
       <div class="col-md-12">
         <label for="motivo" class="form-label">Motivo de la compra: *</label>
         <textarea
+          [(ngModel)] = "text"
+          [maxlength] = "longitudMaxima"
+          (input) = "contarCaracteres()"
+
           class="form-control"
           formControlName="motivo"
           id="motivo"
@@ -210,6 +215,9 @@
           rows="3"
         ></textarea>
 
+        <p [class] = "caracteresRestantes === 0 ? 'text-danger form-text' : 'form-text'">
+          {{longitudMaxima}}/{{caracteresRestantes}}
+        </p>
         <div *ngIf="solicitudCompraFormControl.motivo.touched || submitted">
           <div
             class="text-danger form-text"
@@ -221,7 +229,7 @@
       </div>
       <!-- fin primer from -->
     </form>
-    <hr />
+    
     <h5 class="mb-0 card-title flex-grow-1">Detalle de la Solicitud</h5>
     <form [formGroup]="formDetalleSolicitud" enctype="multipart/form-data">
       <div class="row align-items-center">

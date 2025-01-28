@@ -71,6 +71,13 @@ export class ComprasComponent implements OnInit {
     this.getUnidades();
   }
 
+  text: string = '';
+  longitudMaxima: number = 150;
+  caracteresRestantes: number = this.longitudMaxima;
+  public contarCaracteres(){
+    this.caracteresRestantes = this.longitudMaxima - this.text.length;
+  }
+
   private buildForm() {
     return new Promise((resolve, reject) => {
       this.formSolicitudCompra = this.formBuilder.group({
@@ -136,15 +143,10 @@ export class ComprasComponent implements OnInit {
     if (this.formData.has("img_referencia")) {
       newDetalle.img_referencia = this.formData.get("img_referencia") as File;
     }
-
     this.tableData.push(newDetalle);
     this.formDetalleSolicitud.reset();
     this.formData.delete("img_referencia");
-    // this.detalle = this.formDetalleSolicitud.value;
-    // this.detalle.cat_unidades_medida_id1 = this.unidad;
-    // this.tableData.push({ ...this.detalle});
     this.submittedDetail = false;
-    // this.formDetalleSolicitud.reset();
   }
 
   onFileChange(event: any, fieldName: string) {
@@ -276,6 +278,16 @@ export class ComprasComponent implements OnInit {
     
   }
 
+  public solictado:any = 1;
+  public enCotizacion:any = 2;
+  public enOrdenCompra:any = 3;
+  public autorizada:any = 4;
+  public cancelada:any = 5;
+  public enSurtido:any = 6;
+  public pagada:any = 7;
+
+  
+
   private getAll() {
     this.comprasService.getAll().subscribe(
       (response) => {
@@ -284,37 +296,37 @@ export class ComprasComponent implements OnInit {
           this.data.forEach((registro: any) => {
             registro.fecha = new Date(registro.fecha).toLocaleString();
             switch (registro.estatus) {
-              case 1:
+              case this.solictado:
                 registro.estado = "SOLICITADO";
                 registro.claseEstado = "bg-primary";
                 break;
 
-              case 2:
+              case this.enCotizacion:
                 registro.estado = "EN COTIZACIÓN";
                 registro.claseEstado = "bg-info";
                 break;
 
-              case 3:
+              case this.enOrdenCompra:
                 registro.estado = "ORDEN DE COMPRA";
                 registro.claseEstado = "bg-warning";
                 break;
 
-              case 4:
+              case this.autorizada:
                 registro.estado = "AUTORIZADA";
                 registro.claseEstado = "bg-success";
                 break;
 
-              case 5:
+              case this.cancelada:
                 registro.estado = "CANCELADA";
                 registro.claseEstado = "bg-danger";
                 break;
                 
-              case 6:
+              case this.enSurtido:
                 registro.estado = "EN SURTIDO";
                 registro.claseEstado = "badge-soft-warning";
                 break;
 
-              case 7:
+              case this.pagada:
                 registro.estado = "RECIBIDO";
                 registro.claseEstado = "badge-soft-info";
                 break;

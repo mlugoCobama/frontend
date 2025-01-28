@@ -51,7 +51,7 @@
             *ngIf="!isLoad"
           >
             <thead class="table-light">
-              <tr>
+              <tr class="text-center">
                 <th>Nombre</th>
                 <th>Contacto</th>
                 <th>Telefono</th>
@@ -59,7 +59,7 @@
                 <th>Condiciones</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="text-center">
               <tr *ngFor="let item of data" (click)="seleccionar(item, $event)">
                 <td>{{ item.nombre }}</td>
                 <td>{{ item.contacto }}</td>
@@ -800,6 +800,13 @@
     <p>Ultima actualizacion: {{archivos.updated_at}}</p>
     </div>  
   <div class="modal-footer">
+    <a
+            class="btn btn-sm btn-info"
+            (click)="descargarExpediente()"
+            >
+            <i class="fas fa-cloud-download-alt "></i>
+             Descargar Expediente
+            </a>
     
     <button
       type="button"

@@ -45,12 +45,12 @@
             class="table table-hover table-sm table-bordered"
           >
             <thead class="table-light">
-              <tr>
+              <tr class="text-center">
                 <th>Unidad de Medida</th>
                 <th>Abreviatura</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody class="text-center">
               <tr *ngFor="let item of data" (click)="seleccionar(item, $event)">
                 <td>{{ item.nombre }}</td>
                 <td>{{ item.abreviatura }}</td>

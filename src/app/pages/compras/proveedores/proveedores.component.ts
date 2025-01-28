@@ -171,7 +171,8 @@ export class ProveedoresComponent implements OnInit {
     });
   }
 
-  onFileChange(event: any, fieldName: string) { // Obtiene el archivo del select
+  onFileChange(event: any, fieldName: string) { // Obtiene el archivo del input
+    this.formData.delete(fieldName);
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
       this.formData.append(fieldName, file);
@@ -412,5 +413,20 @@ export class ProveedoresComponent implements OnInit {
     if (!validNumber) {
       event.target.value = inputValue.slice(0, -1);
     }
+  }
+
+  public descargarExpediente(){
+
+    this.proveedoresService.descargarExpediente(this.proveedor.id).subscribe((response)=>{
+      const blob = new Blob([response], {type: 'application/zip'});
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+
+      link.href = url;
+      link.download = `Expediente_${this.proveedor.nombre}.zip`;
+      link.click();
+      window.URL.revokeObjectURL(url);
+
+    })
   }
 }

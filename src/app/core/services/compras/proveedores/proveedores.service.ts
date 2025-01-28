@@ -33,4 +33,8 @@ export class ProveedoresService {
   public destroy(id:number): Observable<any> {
     return this.http.delete(environment.apiUrl + `compras/Proveedores/${id}`);
   }
+
+  public descargarExpediente(id:number): Observable<any> {
+    return this.http.get(environment.apiUrl + `compras/descargar-expediente/${id}`,{ responseType: 'blob' });
+  }
 }

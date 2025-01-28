@@ -13,6 +13,9 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ModalComprasComponent } from './compras/modal-compras/modal-compras.component';
 import { DetallesSolicitudCompraComponent } from './detalles-solicitud-compra/detalles-solicitud-compra.component';
 import { CotizacionesComponent } from './cotizacion/cotizaciones/cotizaciones.component';
+import { DatosSolicitudCompraComponent } from './detalles-solicitud-compra/datos-solicitud-compra/datos-solicitud-compra.component';
+import { TablaDetallesSolicitudComponent } from './detalles-solicitud-compra/tabla-detalles-solicitud/tabla-detalles-solicitud.component';
+
 
 
 
@@ -24,7 +27,9 @@ import { CotizacionesComponent } from './cotizacion/cotizaciones/cotizaciones.co
     ProveedoresComponent,
     ModalComprasComponent,
     DetallesSolicitudCompraComponent,
-    CotizacionesComponent
+    CotizacionesComponent,
+    DatosSolicitudCompraComponent,
+    TablaDetallesSolicitudComponent,
   ],
   imports: [
     CommonModule,

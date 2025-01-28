@@ -32,10 +32,12 @@ export class DetallesSolicitudCompraComponent implements OnInit {
   public isLoad: boolean = true;
   public isDisabled: boolean = false;
   public mostrarObs: boolean = false;
+  public mostrarDtsFac: boolean = false;
 
   public formSolicitudCotizacion: FormGroup;
   public formSeleccionarProveedor: FormGroup;
   public formOrdenCompra: FormGroup;
+  public formDocsOrdenCompra: FormGroup;
 
   public proveedores: any;
   public ordenCompra: any;
@@ -70,16 +72,22 @@ export class DetallesSolicitudCompraComponent implements OnInit {
       this.generarOrden();
     });
 
+    
     this.buildForm();
     this.getDetalle();
 
     if (this.solicitudCompra.estatus === 1) {
       this.getProveedores();
     }
-    if (this.solicitudCompra.estatus === 3) {
-      this.getOrdenCompra()
+
+    if (
+      this.solicitudCompra.estatus === 3 ||
+      this.solicitudCompra.estatus === 4 ||
+      this.solicitudCompra.estatus > 5
+    ) {
+      this.getOrdenCompra();
+      
     }
-    
   }
 
   private buildForm() {
@@ -95,6 +103,12 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     this.formOrdenCompra = this.formBuilder.group({
       observaciones: new FormControl(null, Validators.required),
     });
+
+    this.formDocsOrdenCompra = this.formBuilder.group({
+      factura_xml: new FormControl(null, Validators.required),
+      factura_pdf: new FormControl(null, Validators.required),
+      comprobante_pago: new FormControl(null, Validators.required),
+    });
   }
 
   get solicitudCotizacionFormControl() {
@@ -105,7 +119,10 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     return this.formSeleccionarProveedor.controls;
   }
 
-  
+  get ordenDocsCompraFormControl() {
+    return this.formDocsOrdenCompra.controls;
+  }
+
   get ordenCompraFormControl() {
     return this.formOrdenCompra.controls;
   }
@@ -213,8 +230,8 @@ export class DetallesSolicitudCompraComponent implements OnInit {
       (response) => {
         if (response) {
           this.ordenCompra = response;
-          console.log(this.ordenCompra);
           this.isLoad = false;
+          console.log(this.ordenCompra);
         } else {
           console.log(response.message);
         }
@@ -310,48 +327,6 @@ export class DetallesSolicitudCompraComponent implements OnInit {
               this.mostrarTotal = true;
             }
 
-            switch (this.solicitudCompra.estatus) {
-              case 1:
-                this.solicitudCompra.estado = "SOLICITADO";
-                this.solicitudCompra.claseEstado = "bg-primary";
-                break;
-
-              case 2:
-                this.solicitudCompra.estado = "EN COTIZACIÓN";
-                this.solicitudCompra.claseEstado = "bg-info";
-                break;
-
-              case 3:
-                this.solicitudCompra.estado = "ORDEN DE COMPRA";
-                this.solicitudCompra.claseEstado = "bg-warning";
-                break;
-
-              case 4:
-                this.solicitudCompra.estado = "AUTORIZADA";
-                this.solicitudCompra.claseEstado = "bg-success";
-                break;
-
-              case 5:
-                this.solicitudCompra.estado = "CANCELADA";
-                this.solicitudCompra.claseEstado = "bg-danger";
-                break;
-
-              case 6:
-                this.solicitudCompra.estado = "EN SURTIDO";
-                this.solicitudCompra.claseEstado = "badge-soft-warning";
-                break;
-  
-              case 7:
-                this.solicitudCompra.estado = "RECIBIDO";
-                this.solicitudCompra.claseEstado = "badge-soft-info";
-                break;
-  
-              default:
-                this.solicitudCompra.estado = "DESCONOCIDO";
-                this.solicitudCompra.claseEstado = "badge-soft-dark";
-                break;
-            }
-
             resolve(this.detalles);
             this.isLoad = false;
           } else {
@@ -431,11 +406,12 @@ export class DetallesSolicitudCompraComponent implements OnInit {
   }
 
   onFileChange(event: Event, proveedorId: number) {
-    //Recupera los archivos de los input file
+    //Recupera los archivos de los input file de la tabla proveedores
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.selectedFiles[proveedorId] = input.files[0];
     }
+    console.log(this.selectedFiles);
   }
 
   public guardarPrecios() {
@@ -504,7 +480,6 @@ export class DetallesSolicitudCompraComponent implements OnInit {
         console.error("Error guardando los datos:", error);
       }
     );
-    
   }
 
   getTotalMasBajo(): number {
@@ -576,7 +551,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
           console.error("Error enviando datos:", error);
         }
       );
-      
+
       this.submitted = false;
     });
   }
@@ -597,140 +572,252 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     return response.nuevoFolio;
   }
 
-  public cancelarOrden(){
-     Swal.fire({
-          title: "¿Estas seguro?",
-          text: "La orden será cancelada",
-          icon: "error",
-          confirmButtonText: " SI ",
-          showCancelButton: true,
-          cancelButtonText: " NO ",
-          customClass: {
-            confirmButton: "btn btn-danger px-4",
-            cancelButton: "btn btn-primary ms-2 px-4",
+  public cancelarOrden() {
+    Swal.fire({
+      title: "¿Estas seguro?",
+      text: "La orden será cancelada",
+      icon: "error",
+      confirmButtonText: " SI ",
+      showCancelButton: true,
+      cancelButtonText: " NO ",
+      customClass: {
+        confirmButton: "btn btn-danger px-4",
+        cancelButton: "btn btn-primary ms-2 px-4",
+      },
+      buttonsStyling: false,
+    }).then((result) => {
+      if (result.value) {
+        this.ordenesComprasService.destroy(this.solicitudCompra.id).subscribe(
+          (response) => {
+            if (response.status === "success") {
+              console.log(response.message);
+              Swal.fire({
+                title: "Cancelada!",
+                text: "La orden ha sido cancelada.",
+                buttonsStyling: false,
+                icon: "success",
+                customClass: {
+                  confirmButton: "btn btn-danger px-4",
+                  cancelButton: "btn btn- ms-2 px-4",
+                },
+              });
+            } else {
+              console.log(response.message);
+              Swal.fire({
+                title: "Error!",
+                text: "Your file has been deleted.",
+                buttonsStyling: false,
+                icon: "success",
+                customClass: {
+                  confirmButton: "btn btn-danger px-4",
+                  cancelButton: "btn btn- ms-2 px-4",
+                },
+              });
+            }
           },
-          buttonsStyling: false,
-        }).then((result) => {
-          if (result.value) {
-            this.ordenesComprasService.destroy(this.solicitudCompra.id).subscribe(
-              (response) => {
-                if (response.status === "success") {
-                  console.log(response.message);
-                  Swal.fire({
-                    title: "Cancelada!",
-                    text: "La orden ha sido cancelada.",
-                    buttonsStyling: false,
-                    icon: "success",
-                    customClass: {
-                      confirmButton: "btn btn-danger px-4",
-                      cancelButton: "btn btn- ms-2 px-4",
-                    },
-                  });
-                } else {
-                  console.log(response.message);
-                  Swal.fire({
-                    title: "Error!",
-                    text: "Your file has been deleted.",
-                    buttonsStyling: false,
-                    icon: "success",
-                    customClass: {
-                      confirmButton: "btn btn-danger px-4",
-                      cancelButton: "btn btn- ms-2 px-4",
-                    },
-                  });
-                }
-              },
-              (error) => {
-                console.error("Error fetching data:", error);
-              }
-            );
+          (error) => {
+            console.error("Error fetching data:", error);
           }
-          this.isLoad = false;
-        });
+        );
+      }
+      this.isLoad = false;
+    });
   }
 
-  public autorizarOrden(){
-     Swal.fire({
-          title: "Ya casi!!",
-          text: "Deseas enviar la solicitud de surtido al proveedor?",
-          icon: "info",
-          showDenyButton: true,
-          confirmButtonText: " SI ",
-          denyButtonText: `NO`,
-          customClass: {
-            confirmButton: "btn btn-success px-4",
-            denyButton: "btn btn-danger ms-2 px-4",
+  public autorizarOrden() {
+    const data = {
+      idSolicituCompra: this.solicitudCompra.id,
+      idOrdenCompra: this.ordenCompra.id,
+    };
+    Swal.fire({
+      title: "Ya casi!!",
+      text: "Deseas enviar la solicitud de surtido al proveedor?",
+      icon: "info",
+      showDenyButton: true,
+      confirmButtonText: " SI ",
+      denyButtonText: `NO`,
+      customClass: {
+        confirmButton: "btn btn-success px-4",
+        denyButton: "btn btn-danger ms-2 px-4",
+      },
+      buttonsStyling: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.ordenesComprasService.enviarSolicitudSurtido(data).subscribe(
+          (response) => {
+            if (response.status === "success") {
+              console.log(response.data);
+              Swal.fire({
+                title: "Enviada!!",
+                text: "La orden de compra ha sido autorizada y enviada al proveedor.",
+                buttonsStyling: false,
+                icon: "success",
+                customClass: {
+                  confirmButton: "btn btn-success px-4",
+                  cancelButton: "btn btn- ms-2 px-4",
+                },
+              });
+            } else {
+              console.log(response.message);
+              Swal.fire({
+                title: "Error!",
+                text: "Your file has been deleted.",
+                buttonsStyling: false,
+                icon: "success",
+                customClass: {
+                  confirmButton: "btn btn-danger px-4",
+                  cancelButton: "btn btn- ms-2 px-4",
+                },
+              });
+            }
           },
-          buttonsStyling: false,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.ordenesComprasService.enviarSolicitudSurtido(this.solicitudCompra.id).subscribe(
-              (response) => {
-                if (response.status === "success") {
-                  console.log(response.data);
-                  Swal.fire({
-                    title: "Enviada!!",
-                    text: "La orden de compra ha sido autorizada y enviada al proveedor.",
-                    buttonsStyling: false,
-                    icon: "success",
-                    customClass: {
-                      confirmButton: "btn btn-success px-4",
-                      cancelButton: "btn btn- ms-2 px-4",
-                    },
-                  });
-                } else {
-                  console.log(response.message);
-                  Swal.fire({
-                    title: "Error!",
-                    text: "Your file has been deleted.",
-                    buttonsStyling: false,
-                    icon: "success",
-                    customClass: {
-                      confirmButton: "btn btn-danger px-4",
-                      cancelButton: "btn btn- ms-2 px-4",
-                    },
-                  });
-                }
-              },
-              (error) => {
-                console.error("Error fetching data:", error);
-              }
-            );
-          } else if (result.isDenied) {
-            this.ordenesComprasService.edit(this.solicitudCompra.id, this.ordenCompra.id).subscribe(
-              (response) => {
-                if (response.status === "success") {
-                  console.log(response.data);
-                  Swal.fire({
-                    title: "Orden autorizada!!",
-                    text: "La orden sera marcada como autorizada",
-                    buttonsStyling: false,
-                    icon: "success",
-                    customClass: {
-                      confirmButton: "btn btn-success px-4",
-                      cancelButton: "btn btn- ms-2 px-4",
-                    },
-                  });
-                } else {
-                  console.log(response.message);
-                  Swal.fire({
-                    title: "Error!",
-                    text: "Your file has been deleted.",
-                    buttonsStyling: false,
-                    icon: "success",
-                    customClass: {
-                      confirmButton: "btn btn-danger px-4",
-                      cancelButton: "btn btn- ms-2 px-4",
-                    },
-                  });
-                }
-              },
-              (error) => {
-                console.error("Error fetching data:", error);
-              }
-            );
+          (error) => {
+            console.error("Error fetching data:", error);
           }
+        );
+      } else if (result.isDenied) {
+        this.ordenesComprasService.autorizarOrdenCompra(data).subscribe(
+          (response) => {
+            if (response.status === "success") {
+              console.log(response.data);
+              Swal.fire({
+                title: "Orden autorizada!!",
+                text: "La orden sera marcada como autorizada",
+                buttonsStyling: false,
+                icon: "success",
+                customClass: {
+                  confirmButton: "btn btn-success px-4",
+                  cancelButton: "btn btn- ms-2 px-4",
+                },
+              });
+            } else {
+              console.log(response.message);
+              Swal.fire({
+                title: "Error!",
+                text: "Your file has been deleted.",
+                buttonsStyling: false,
+                icon: "success",
+                customClass: {
+                  confirmButton: "btn btn-danger px-4",
+                  cancelButton: "btn btn- ms-2 px-4",
+                },
+              });
+            }
+          },
+          (error) => {
+            console.error("Error fetching data:", error);
+          }
+        );
+      }
+      this.isLoad = false;
+    });
+  }
+
+  onFileChange1(event: any, fieldName: string) {
+    // Obtiene el archivo del input
+    this.formData.delete(fieldName);
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.formData.append(fieldName, file);
+      console.log(this.formData);
+    }
+  }
+
+  public guardarArchivos() {
+    const id = this.ordenCompra.id;
+    this.formData.append("_method", "PUT");
+    this.formData.append("orden_compra_id", id);
+    this.ordenesComprasService.saveDocs(id, this.formData).subscribe(
+      (response) => {
+        if (response.status === "success") {
+          this.getOrdenCompra();
+          console.log(response.message);
+          Swal.fire({
+            title: "Guardado",
+            text: "Documentos guardados correctamente",
+            buttonsStyling: false,
+            icon: "success",
+            customClass: {
+              confirmButton: "btn btn-success px-4",
+              cancelButton: "btn btn- ms-2 px-4",
+            },
+          });
           this.isLoad = false;
-        });
+        } else {
+          console.log(response.message);
+        }
+      },
+      (error) => {
+        console.error("Error fetching data:", error);
+      }
+    );
+  }
+
+  public leerXML(){
+    this.ordenesComprasService.getContenidoXML(this.ordenCompra.id).subscribe({
+      next: (data) => this.parseXml(data),
+      error: (err) => console.error('error al obtener el xml: ', err),
+
+    })
+    this.mostrarDtsFac = true;
+  }
+
+  text: string = "";
+  longitudMaxima: number = 150;
+  caracteresRestantes: number = this.longitudMaxima;
+  public contarCaracteres() { // Valida la longitud de los text area  
+    this.caracteresRestantes = this.longitudMaxima - this.text.length;
+  }
+
+
+  factura: any = {};
+  parseXml(xml: string){
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xml, 'application/xml');
+
+    const ns = 'http://www.sat.gob.mx/cfd/4';
+
+    const comprobante = xmlDoc.getElementsByTagNameNS(ns, 'Comprobante')[0];
+    this.factura.comprobante ={
+      fecha : comprobante?.getAttribute('Fecha'),
+      folio : comprobante?.getAttribute('Folio'),
+      serie : comprobante?.getAttribute('Serie'),
+      subTotal: comprobante?.getAttribute('SubTotal'),
+      moneda: comprobante?.getAttribute('Moneda'),
+      total: comprobante?.getAttribute('Total'),
+      metodoPago: comprobante?.getAttribute('MetodoPago'),
+    }
+
+    
+    const emisor = xmlDoc.getElementsByTagNameNS(ns, 'Emisor')[0];
+    this.factura.emisor = {
+      rfc : emisor?.getAttribute('Rfc'),
+      nombre : emisor?.getAttribute('Nombre'),
+      regimenFiscal : emisor?.getAttribute('RegimenFiscal'),
+    }
+
+    const receptor = xmlDoc.getElementsByTagNameNS(ns, 'Receptor')[0];
+    this.factura.receptor = {
+      rfc : receptor?.getAttribute('Rfc'),
+      nombre : receptor?.getAttribute('Nombre'),
+      usoCFDI : receptor?.getAttribute('UsoCFDI'),
+      domicilioFiscalReceptor : receptor?.getAttribute('DomicilioFiscalReceptor'),
+    }
+    
+  }
+
+  public descargarFacturas(){
+
+    this.ordenesComprasService.descargarFacturas(this.ordenCompra.id).subscribe((response)=>{
+      const blob = new Blob([response], {type: 'application/zip'});
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+
+      link.href = url;
+      link.download = `Facturas_${this.ordenCompra.folio_oc}.zip`;
+      link.click();
+      window.URL.revokeObjectURL(url);
+
+    })
   }
 }
