@@ -16,6 +16,7 @@
 
   <!-- componente datos solictud compra -->
   <app-tabla-detalles-solicitud
+    [solicitudCompra]="solicitudCompra"
     [detalles]="detalles"
     [cotProv]="cotProv"
     [totals]="totals"
@@ -46,7 +47,6 @@
             <th>Archivo cotización</th>
           </tr>
         </thead>
-
         <tbody>
           <tr *ngFor="let prov of cotProv; let i = index" class="text-center">
             <td *ngIf="solicitudCompra.estatus === 2">
@@ -74,6 +74,7 @@
               <div>
                 <input
                   *ngIf="!prov.ruta"
+                  accept="application/pdf"
                   (change)="onFileChange($event, prov.id)"
                   class="form-control form-control-sm"
                   id="prov.id"
@@ -156,7 +157,7 @@
     </div>
     <div class="col-2 d-flex align-items-start">
       <button
-        *ngIf="solicitudCompra.estatus === 2"
+        *ngIf="solicitudCompra.estatus === 2 && !mostrarObs"
         type="submit"
         class="btn btn-sm btn-success"
         (click)="guardarPrecios()"
@@ -312,159 +313,199 @@
     <div class="col-md-1"></div>
     <div class="col-md-10" *ngIf="ordenCompra">
       <div class="alert alert-primary text-center" role="alert">
-        Adjunta los siguientes archivos
+        Adjunta los siguientes archivos para la orden de compra:
+        <strong>{{ ordenCompra.folio_oc }}</strong>
       </div>
       <table class="table table-sm table-borderless table-responsive">
         <thead class="table-light">
           <tr class="text-center">
             <th>Documento</th>
-            <th>Archivo</th>
+            <th >Subir archivo</th>
+            <th >Ver</th>
           </tr>
         </thead>
 
         <tbody class="text-center">
           <tr>
             <td>Factura <strong>.XML</strong> *</td>
-            <td>
+            <td >
               <input
-                *ngIf="!ordenCompra.documentos.ruta_xml_factura"
+              *ngIf="hasComprobantePago && habilitado"
                 class="form-control form-control-sm"
                 id="factura_xml"
                 type="file"
                 (change)="onFileChange1($event, 'factura_xml')"
                 formControlName="factura_xml"
+                accept="text/xml"
               />
+            </td>
+            <!-- <td>
               <a
                 class="btn btn-sm btn-warning"
-                *ngIf="ordenCompra.documentos.ruta_xml_factura"
+                *ngIf="ordenCompra.documentos[0].ruta_xml_factura"
                 (click)="leerXML()"
               >
-                <i class="fas fa-file-invoice-dollar "></i>
-                Ver datos de facturación
+                <i class="fas fa-file-invoice-dollar"></i>
               </a>
-            </td>
+            </td> -->
           </tr>
           <tr>
             <td>Factura <strong>.PDF</strong> *</td>
             <td>
               <input
-                *ngIf="!ordenCompra.documentos.ruta_pdf_factura"
+                *ngIf="hasComprobantePago && habilitado "
                 class="form-control form-control-sm"
                 id="factura_pdf"
                 type="file"
+                accept="application/pdf"
                 (change)="onFileChange1($event, 'factura_pdf')"
                 formControlName="factura_pdf"
               />
+            </td>
+            <td>
               <a
+                *ngFor="let documento of ordenCompra.documentos; let idx = $index"
                 class="btn btn-sm btn-danger"
-                *ngIf="ordenCompra.documentos.ruta_pdf_factura"
-                (click)="verArchivos(ordenCompra.documentos.ruta_pdf_factura)"
+                (click)="verArchivos(documento.ruta_pdf_factura)"
               >
                 <i class="fas fa-file-pdf"></i>
               </a>
             </td>
           </tr>
-          <tr
-            *ngIf="
-              ordenCompra.documentos.ruta_pdf_factura &&
-              ordenCompra.documentos.ruta_xml_factura
-            "
-          >
+          <tr>
             <td>
               <strong> Comprobante de pago * </strong>
             </td>
-            <td>
+            <td >
               <input
-                *ngIf="!ordenCompra.documentos.comprobante_pago"
+                *ngIf="!hasComprobantePago"
                 class="form-control form-control-sm"
                 id="comprobante_pago"
                 type="file"
+                accept="application/pdf"
                 (change)="onFileChange1($event, 'comprobante_pago')"
                 formControlName="comprobante_pago"
               />
+            </td>
+            <td>
               <a
                 class="btn btn-sm btn-danger"
-                *ngIf="ordenCompra.documentos.comprobante_pago"
-                (click)="verArchivos(ordenCompra.documentos.comprobante_pago)"
+                *ngFor="let documento of ordenCompra.documentos"
+                (click)="verArchivos(documento.comprobante_pago)"
               >
+                
                 <i class="fas fa-file-pdf"></i>
               </a>
             </td>
           </tr>
         </tbody>
       </table>
-      <div class="col-2"  >
-        <button
-          *ngIf="!ordenCompra.documentos.comprobante_pago"
-          type="submit"
-          (click)="guardarArchivos()"
-          class="btn btn-success btn-sm"
-        >
-          <i class="fas fa-file-upload"></i>
-          Guardar Archivos
-        </button>
-      </div>
-      <div class="row ">
-        <div class="col-6 d-flex gap-2" >
+      <div class="col-2"></div>
+      <div class="row">
+        <div class="col-10 d-flex gap-2">
           <button
+            *ngIf="habilitado && hasComprobantePago && solicitudCompra.estatus < 7"
             type="submit"
-            *ngIf="ordenCompra.documentos.comprobante_pago"
-            (click)="leerXML()"
+            (click)="guardarArchivos()"
+            class="btn btn-success btn-sm"
+          >
+            <i class="fas fa-file-upload"></i>
+            Guardar Archivos
+          </button>
+          <button
+            *ngIf="!hasComprobantePago"
+            type="submit"
+            (click)="guardarComPago()"
+            class="btn btn-warning btn-sm"
+          >
+            <i class="fas fa-file-upload"></i>
+            Guardar Archivos
+          </button>
+          <button
+            *ngIf="ordenCompra?.documentos[0]?.comprobante_pago && solicitudCompra.estatus < 7"
+            type="submit"
+            (click)="marcarComoPagada()"
             class="btn btn-primary btn-sm"
           >
             <i class="fas fa-check"></i>
             Marcar como pagada
           </button>
           <a
-              *ngIf="
-              ordenCompra.documentos.ruta_pdf_factura &&
-              ordenCompra.documentos.ruta_xml_factura
-            "
+            *ngIf="hasFiles"
             class="btn btn-sm btn-info"
             (click)="descargarFacturas()"
-            >
-            <i class="fas fa-cloud-download-alt "></i>
-             Descargar Facturas
-            </a>
+          >
+            <i class="fas fa-cloud-download-alt"></i>
+            Descargar Facturas
+          </a>
         </div>
       </div>
-      
+
       <hr />
-      <div *ngIf = "mostrarDtsFac">
-        <div class="row" *ngIf="ordenCompra.documentos.ruta_xml_factura">
+      <!-- Datos de facturas -->
+      <div *ngIf="mostrarDtsFac">
+        <div class="row" *ngIf="ordenCompra.documentos[0].ruta_xml_factura">
           <h5>Datos de facturación</h5>
+
           <div class="col-6">
-            <p><strong>Fecha: </strong> {{ factura.comprobante?.fecha }}</p>
-            <p><strong>Folio: </strong> {{ factura.comprobante?.folio}}</p>
-            <p><strong>Serie: </strong> {{ factura.comprobante?.serie }}</p>
-          </div>
-          <div class="col-6">
-            <p><strong>Método de pago: </strong> {{ factura.comprobante?.metodoPago }}</p>
-            <p><strong>Sub Total: </strong> {{ factura.comprobante?.subTotal }}</p>
-            <p><strong>Total: </strong> {{ factura.comprobante?.total}}</p>
-            <p><strong>Moneda: </strong> {{ factura.comprobante?.moneda }}</p>
-          </div>
-          <div class="col-6">
-            <h6><strong>RECEPTOR</strong></h6>
-            <p><strong>Rfc</strong> {{ factura.receptor?.rfc }}</p>
-            <p><strong>Nombre</strong> {{ factura.receptor?.nombre }}</p>
-            <p><strong>Uso CFDI</strong> {{ factura.receptor?.usoCFDI }}</p>
+            <h5><strong>RECEPTOR</strong></h5>
+            <p><strong>RFC:</strong> {{ factura.receptor?.rfc }}</p>
+            <p><strong>NOMBRE: </strong> {{ factura.receptor?.nombre }}</p>
+            <p><strong>USO CFDI: </strong> {{ factura.receptor?.usoCFDI }}</p>
             <p>
-              <strong>Domicilio Fiscal</strong>
+              <strong>DOMICILIO FISCAL</strong>
               {{ factura.receptor?.domicilioFiscalReceptor }}
             </p>
           </div>
           <div class="col-6">
-            <h6><strong>EMISOR</strong></h6>
-            <p><strong>Rfc</strong> {{ factura.emisor?.rfc }}</p>
-            <p><strong>Nombre</strong> {{ factura.emisor?.nombre }}</p>
+            <h5><strong>EMISOR: </strong></h5>
+            <p><strong>RFC: </strong> {{ factura.emisor?.rfc }}</p>
+            <p><strong>NOMBRE: </strong> {{ factura.emisor?.nombre }}</p>
             <p>
-              <strong>RegimenFiscal</strong> {{ factura.emisor?.regimenFiscal }}
+              <strong>REGIMEN FISCAL: </strong>
+              {{ factura.emisor?.regimenFiscal }}
+            </p>
+            <p>
+              <strong>MET. PAGO: </strong> {{ factura.metodoPago?.metodoPago }}
             </p>
           </div>
+          <table
+            class="text-center table table-sm table-borderless table-responsive"
+          >
+            <thead class="table-light">
+              <tr>
+                <th>FECHA</th>
+                <th>FOLIO</th>
+                <th>SERIE</th>
+                <th>SUB TOTAL</th>
+                <th>TOTAL</th>
+                <th>MONEDA</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let comprobante of factura.comprobantes">
+                <td>{{ comprobante.fecha }}</td>
+                <td>{{ comprobante.folio }}</td>
+                <td>{{ comprobante.serie }}</td>
+                <td>$ {{ comprobante.subTotal }}</td>
+                <td>$ {{ comprobante.total }}</td>
+                <td>{{ comprobante.moneda }}</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <td colspan="3" class="text-end"><strong> Totales: </strong></td>
+              <td>
+                <strong>$ {{ factura.sumaSubTotal }}</strong>
+              </td>
+              <td>
+                <strong>$ {{ factura.sumaTotal }} </strong>
+              </td>
+            </tfoot>
+          </table>
+          <br />
+          <hr />
         </div>
       </div>
-      
     </div>
   </form>
 </div>

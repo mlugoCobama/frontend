@@ -7,6 +7,7 @@ import {
 } from "@angular/forms";
 import Swal from "sweetalert2";
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
+import { Subscription } from "rxjs";
 
 //services
 import { ComprasService } from "src/app/core/services/compras/compras.service";
@@ -24,21 +25,38 @@ export class DetallesSolicitudCompraComponent implements OnInit {
 
   @Input() solicitudCompra: any;
 
+  text: string = "";
+  longitudMaxima: number = 150;
+  caracteresRestantes: number = this.longitudMaxima;
+  factura: any = {
+    comprobantes: [],
+    impuestos:[],
+    emisor: {},
+    receptor: {},
+    sumaSubTotal : 0,
+    sumaTotal : 0,
+    metodoPago : {}
+  };
+  metodoPago: string;
+
+  // banderas
+  public hasFiles: boolean = false;
   mostrarCotizacionFlag: boolean = false;
-
   public mostrarTotal: boolean = false;
-
   public submitted: boolean = false;
   public isLoad: boolean = true;
   public isDisabled: boolean = false;
   public mostrarObs: boolean = false;
   public mostrarDtsFac: boolean = false;
+  public habilitado: boolean = true;
 
+  //Formularios
   public formSolicitudCotizacion: FormGroup;
   public formSeleccionarProveedor: FormGroup;
   public formOrdenCompra: FormGroup;
   public formDocsOrdenCompra: FormGroup;
 
+  //Objetos
   public proveedores: any;
   public ordenCompra: any;
   public selectedImage: any;
@@ -48,12 +66,15 @@ export class DetallesSolicitudCompraComponent implements OnInit {
   public cotizacion: any;
   public totalMasBajo: any;
 
+  //Arrays de objetos
   public totals: any = {};
   public cotProv: any[] = [];
   public detalles: any[] = [];
   public formData = new FormData();
   public proveedoresSeleccionados: any[] = [];
   public selectedFiles: { [key: number]: File } = {};
+
+  private generarOrdenSubscripcion: Subscription;
 
   constructor(
     private modalService: BsModalService,
@@ -68,25 +89,31 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     this.comprasService.mostrarCotizacion$.subscribe((mostrar) => {
       this.mostrarCotizacionFlag = mostrar;
     });
-    this.comprasService.generateOrder$.subscribe(() => {
+
+    this.generarOrdenSubscripcion = this.comprasService.generateOrder$.subscribe(() => {
       this.generarOrden();
     });
 
-    
     this.buildForm();
     this.getDetalle();
-
+    
+    // Valida el estatus de la solcitud para recuperar datos
     if (this.solicitudCompra.estatus === 1) {
       this.getProveedores();
     }
-
+    // Valida el estatus de la solcitud para mostrar datos
     if (
       this.solicitudCompra.estatus === 3 ||
       this.solicitudCompra.estatus === 4 ||
       this.solicitudCompra.estatus > 5
     ) {
       this.getOrdenCompra();
-      
+    }
+  }
+
+  ngOnDestroy() : void {
+    if(this.generarOrdenSubscripcion){
+      this.generarOrdenSubscripcion.unsubscribe();
     }
   }
 
@@ -126,7 +153,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
   get ordenCompraFormControl() {
     return this.formOrdenCompra.controls;
   }
-
+  //Envía la solicitud de cotización a los proveedores
   public async enviarSolicitudCotizacion() {
     this.submitted = true;
     this.isDisabled = true;
@@ -197,6 +224,8 @@ export class DetallesSolicitudCompraComponent implements OnInit {
             this.mostrarCotizacionFlag = false;
             this.isLoad = false;
             this.isDisabled = false;
+            this.solicitudCompra.estatus = 2;
+            this.getDetalle();
           } else {
             console.log(response.message);
             this.isDisabled = false;
@@ -213,7 +242,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     this.submitted = false;
     this.formSolicitudCotizacion.reset();
   }
-
+  // Recupera los contenidos de los selects
   onSelectChange(selectedId: string, index: number) {
     // obtiene el objeto por medio del id y lo agrega al array
     const selectedItem = this.proveedores.find(
@@ -222,16 +251,42 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     if (selectedItem) {
       this.proveedoresSeleccionados[index] = selectedItem;
     }
-    console.log(selectedItem);
   }
 
+  
+  public hasFacturas: boolean = false;
+  public hasComprobantePago: boolean = false;
+  public idDocOrdC: any;
+  // recupera los datos de la orden de compra
   private getOrdenCompra() {
     this.ordenesComprasService.getOne(this.solicitudCompra.id).subscribe(
       (response) => {
         if (response) {
           this.ordenCompra = response;
           this.isLoad = false;
-          console.log(this.ordenCompra);
+
+          if(this.ordenCompra.documentos.length > 0){
+            this.hasFiles = true;
+
+            this.leerXML();
+
+            this.hasFacturas = true;
+            const ultimoIndex =  this.ordenCompra.documentos.length;
+            const comprobantePago = this.ordenCompra.documentos[ultimoIndex-1].comprobante_pago;
+            const ultimoId =  this.ordenCompra.documentos[ultimoIndex-1].id;
+            if(comprobantePago){
+              this.hasComprobantePago = true;
+            }else{
+              this.hasComprobantePago = false;
+              this.idDocOrdC = ultimoId;
+            }
+          }
+          if(this.ordenCompra.documentos.length === 0){
+            this.habilitado = true;
+            this.hasFacturas = false;
+            this.hasComprobantePago = true;
+          }
+
         } else {
           console.log(response.message);
         }
@@ -242,6 +297,29 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     );
   }
 
+  public leerXML() {
+    this.ordenesComprasService.getContenidoXML(this.ordenCompra.id).subscribe({
+      next: (data) => {
+        this.parseVariosXml(data.contenidos);
+        this.calcularSumas();
+        this.checkMetodoPago();
+      },
+      error: (err) => console.error("error al obtener los xml: ", err),
+    });
+    this.mostrarDtsFac = true;
+  }
+
+  checkMetodoPago() {
+    this.metodoPago = this.factura.metodoPago?.metodoPago;
+    if (this.metodoPago === 'PPD') {
+      this.habilitado = true;
+    } else {
+      this.habilitado = false;
+    }
+  }
+
+  
+  //Recupera todos los registros de los proveedores
   private getProveedores() {
     this.proveedoresService.getAll().subscribe(
       (response) => {
@@ -275,14 +353,12 @@ export class DetallesSolicitudCompraComponent implements OnInit {
       }
     );
   }
-
+  //Genera el folio de las cotizaciones
   private async generarFolioCo(): Promise<string> {
-    //Genera el folio de las cotizaciones
-    // Metodo para generar el folio
     const response = await this.cotizacionesService.obtenerFolio().toPromise();
     return response.nuevoFolio;
   }
-
+  // Método para asignar una fecha
   public fecha() {
     // Método para asignar una fecha
     // obtener la fecha en el formato correcto para la bd
@@ -377,15 +453,6 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     this.totalMasBajo = this.getTotalMasBajo();
   }
 
-  validateNumberInput(event: any) {
-    const inputValue = event.target.value;
-    const validNumber = /^[0-9]*\.?[0-9]{0,2}$/.test(inputValue);
-
-    if (!validNumber) {
-      event.target.value = inputValue.slice(0, -1);
-    }
-  }
-
   private addProveedorColumns() {
     this.cotProv.forEach((cotizacion) => {
       const proveedorId = cotizacion.proveedores_id[0].id;
@@ -411,7 +478,6 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     if (input.files && input.files.length > 0) {
       this.selectedFiles[proveedorId] = input.files[0];
     }
-    console.log(this.selectedFiles);
   }
 
   public guardarPrecios() {
@@ -502,12 +568,19 @@ export class DetallesSolicitudCompraComponent implements OnInit {
 
   public generarOrden() {
     this.comprasService.setMostrarBoton(false);
+
     this.generarFolioOc().then((folio_oc) => {
+
       const fecha = this.fecha();
+
       const observacion = this.formOrdenCompra.value;
       const observaciones = observacion.observaciones;
+      
       const cotizaciones_id = this.proveedorSelec.cotizaciones_id;
       const cotizacionProveedor = this.proveedorSelec.id;
+
+      
+
       const solicitudCompra = this.solicitudCompra.id;
 
       const datos = {
@@ -533,6 +606,8 @@ export class DetallesSolicitudCompraComponent implements OnInit {
               },
             });
             this.getDetalle();
+            this.solicitudCompra.estatus = 3;
+            this.mostrarObs = false;
           } else {
             Swal.fire({
               title: "Error",
@@ -561,6 +636,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     const proveedorSleccionado = prov;
     // console.log(proveedorSleccionado.cotizaciones_id);
     this.proveedorSelec = proveedorSleccionado;
+    console.log(this.proveedorSelec);
     this.comprasService.setMostrarBoton(true);
     this.mostrarObs = true;
   }
@@ -601,6 +677,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
                   cancelButton: "btn btn- ms-2 px-4",
                 },
               });
+              this.solicitudCompra.estatus = 5;
             } else {
               console.log(response.message);
               Swal.fire({
@@ -657,6 +734,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
                   cancelButton: "btn btn- ms-2 px-4",
                 },
               });
+              this.solicitudCompra.estatus = 6;
             } else {
               console.log(response.message);
               Swal.fire({
@@ -690,6 +768,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
                   cancelButton: "btn btn- ms-2 px-4",
                 },
               });
+              this.solicitudCompra.estatus = 4;
             } else {
               console.log(response.message);
               Swal.fire({
@@ -713,6 +792,11 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     });
   }
 
+  public contarCaracteres() {
+    // Valida la longitud de los text area
+    this.caracteresRestantes = this.longitudMaxima - this.text.length;
+  }
+
   onFileChange1(event: any, fieldName: string) {
     // Obtiene el archivo del input
     this.formData.delete(fieldName);
@@ -724,14 +808,14 @@ export class DetallesSolicitudCompraComponent implements OnInit {
   }
 
   public guardarArchivos() {
-    const id = this.ordenCompra.id;
-    this.formData.append("_method", "PUT");
-    this.formData.append("orden_compra_id", id);
-    this.ordenesComprasService.saveDocs(id, this.formData).subscribe(
+    const idOrdenCompra = this.ordenCompra.id;
+    // this.formData.append("_method", "PUT");
+    this.formData.append("orden_compra_id", idOrdenCompra);
+    this.formData.append("fecha", this.fecha());
+    this.ordenesComprasService.saveDocs(this.formData).subscribe(
       (response) => {
         if (response.status === "success") {
           this.getOrdenCompra();
-          console.log(response.message);
           Swal.fire({
             title: "Guardado",
             text: "Documentos guardados correctamente",
@@ -742,7 +826,10 @@ export class DetallesSolicitudCompraComponent implements OnInit {
               cancelButton: "btn btn- ms-2 px-4",
             },
           });
+
           this.isLoad = false;
+          this.formData = new FormData();
+          this.formDocsOrdenCompra.reset();
         } else {
           console.log(response.message);
         }
@@ -753,71 +840,165 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     );
   }
 
-  public leerXML(){
-    this.ordenesComprasService.getContenidoXML(this.ordenCompra.id).subscribe({
-      next: (data) => this.parseXml(data),
-      error: (err) => console.error('error al obtener el xml: ', err),
+  public guardarComPago() {
+    const idOrdenCompra = this.ordenCompra.id;
+    const idDocOC = this.idDocOrdC;
+    this.formData.append("_method", "PUT");
+    this.formData.append("orden_compra_id", idOrdenCompra);
+    this.formData.append("fecha", this.fecha());
 
-    })
-    this.mostrarDtsFac = true;
+     this.ordenesComprasService.saveDocs1( idDocOC, this.formData).subscribe(
+       (response) => {
+         if (response.status === "success") {
+           this.getOrdenCompra();
+           Swal.fire({
+             title: "Guardado",
+             text: "Documentos guardados correctamente",
+             buttonsStyling: false,
+             icon: "success",
+             customClass: {
+               confirmButton: "btn btn-success px-4",
+               cancelButton: "btn btn- ms-2 px-4",
+             },
+           });
+
+           this.isLoad = false;
+           this.formData = new FormData();
+           this.formDocsOrdenCompra.reset();
+         } else {
+           console.log(response.message);
+         }
+       },
+       (error) => {
+         console.error("Error fetching data:", error);
+       }
+     );
   }
 
-  text: string = "";
-  longitudMaxima: number = 150;
-  caracteresRestantes: number = this.longitudMaxima;
-  public contarCaracteres() { // Valida la longitud de los text area  
-    this.caracteresRestantes = this.longitudMaxima - this.text.length;
-  }
-
-
-  factura: any = {};
-  parseXml(xml: string){
+  parseVariosXml(xmls: string[]) {
     const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xml, 'application/xml');
+    const ns = "http://www.sat.gob.mx/cfd/4";
 
-    const ns = 'http://www.sat.gob.mx/cfd/4';
+    this.factura = {
+      comprobantes: [],
+      impuestos: [],
+      emisor: {},
+      receptor: {},
+      metodoPago: {},
+    };
 
-    const comprobante = xmlDoc.getElementsByTagNameNS(ns, 'Comprobante')[0];
-    this.factura.comprobante ={
-      fecha : comprobante?.getAttribute('Fecha'),
-      folio : comprobante?.getAttribute('Folio'),
-      serie : comprobante?.getAttribute('Serie'),
-      subTotal: comprobante?.getAttribute('SubTotal'),
-      moneda: comprobante?.getAttribute('Moneda'),
-      total: comprobante?.getAttribute('Total'),
-      metodoPago: comprobante?.getAttribute('MetodoPago'),
-    }
+    xmls.forEach((xml, index) => {
+      const xmlDoc = parser.parseFromString(xml, "application/xml");
 
-    
-    const emisor = xmlDoc.getElementsByTagNameNS(ns, 'Emisor')[0];
-    this.factura.emisor = {
-      rfc : emisor?.getAttribute('Rfc'),
-      nombre : emisor?.getAttribute('Nombre'),
-      regimenFiscal : emisor?.getAttribute('RegimenFiscal'),
-    }
+      const comprobante = xmlDoc.getElementsByTagNameNS(ns, "Comprobante")[0];
+      if (comprobante) {
+        this.factura.comprobantes.push({
+          fecha: comprobante?.getAttribute("Fecha"),
+          folio: comprobante?.getAttribute("Folio"),
+          serie: comprobante?.getAttribute("Serie"),
+          subTotal: parseFloat(comprobante?.getAttribute("SubTotal") || '0'),
+          moneda: comprobante?.getAttribute("Moneda"),
+          total: parseFloat(comprobante?.getAttribute("Total") || '0'),
+          
+        });
+      }
 
-    const receptor = xmlDoc.getElementsByTagNameNS(ns, 'Receptor')[0];
-    this.factura.receptor = {
-      rfc : receptor?.getAttribute('Rfc'),
-      nombre : receptor?.getAttribute('Nombre'),
-      usoCFDI : receptor?.getAttribute('UsoCFDI'),
-      domicilioFiscalReceptor : receptor?.getAttribute('DomicilioFiscalReceptor'),
-    }
-    
+      const impuestos = xmlDoc.getElementsByTagNameNS(ns, "Impuestos")[0];
+      if(impuestos){
+        this.factura.impuestos.push({
+          totalImpuestosTrasladados: impuestos?.getAttribute("TotalImpuestosTrasladados") || '0.00',
+        })
+      }
+      
+      if (index === 0) {
+        const emisor = xmlDoc.getElementsByTagNameNS(ns, "Emisor")[0];
+        if (emisor) {
+          this.factura.emisor = {
+            rfc: emisor?.getAttribute("Rfc"),
+            nombre: emisor?.getAttribute("Nombre"),
+            regimenFiscal: emisor?.getAttribute("RegimenFiscal"),
+          };
+        }
+
+        const metodoPago = xmlDoc.getElementsByTagNameNS(ns, "Comprobante")[0];
+        if(metodoPago){
+          this.factura.metodoPago = {
+            metodoPago: metodoPago?.getAttribute("MetodoPago"),
+          }
+        }
+        const receptor = xmlDoc.getElementsByTagNameNS(ns, "Receptor")[0];
+        if (receptor) {
+          this.factura.receptor = {
+            rfc: receptor?.getAttribute("Rfc"),
+            nombre: receptor?.getAttribute("Nombre"),
+            usoCFDI: receptor?.getAttribute("UsoCFDI"),
+            domicilioFiscalReceptor: receptor?.getAttribute(
+              "DomicilioFiscalReceptor"
+            ),
+          };
+        }
+      }
+    });
   }
 
-  public descargarFacturas(){
+  calcularSumas(){
+    this.factura.sumaSubTotal = this.factura.comprobantes.reduce((sum, comprobante) => sum +  comprobante.subTotal, 0);
+    this.factura.sumaTotal = this.factura.comprobantes.reduce((sum, comprobante) => sum +  comprobante.total, 0)
+  }
 
-    this.ordenesComprasService.descargarFacturas(this.ordenCompra.id).subscribe((response)=>{
-      const blob = new Blob([response], {type: 'application/zip'});
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
+  public descargarFacturas() {
+    this.ordenesComprasService
+      .descargarFacturas(this.ordenCompra.id)
+      .subscribe((response) => {
+        const blob = new Blob([response], { type: "application/zip" });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
 
-      link.href = url;
-      link.download = `Facturas_${this.ordenCompra.folio_oc}.zip`;
-      link.click();
-      window.URL.revokeObjectURL(url);
+        link.href = url;
+        link.download = `Facturas_${this.ordenCompra.folio_oc}.zip`;
+        link.click();
+        window.URL.revokeObjectURL(url);
+      });
+  }
 
-    })
+  public marcarComoPagada() {
+    this.ordenesComprasService
+      .edit(this.ordenCompra.id, this.solicitudCompra.id)
+      .subscribe(
+        (response) => {
+          if (response.status === "success") {
+            this.getDetalle();
+            console.log(response.message);
+            Swal.fire({
+              title: "Listo",
+              text: "Se ha marcado como pagada",
+              buttonsStyling: false,
+              icon: "success",
+              customClass: {
+                confirmButton: "btn btn-success px-4",
+                cancelButton: "btn btn- ms-2 px-4",
+              },
+            });
+            
+            this.isLoad = false;
+            this.solicitudCompra.estatus = 8;
+
+          } else {
+            console.log(response.message);
+          }
+        },
+        (error) => {
+          console.error("Error fetching data:", error);
+        }
+      );
+  }
+
+  validateNumberInput(event: any) {
+    const inputValue = event.target.value;
+    const validNumber = /^[0-9]*\.?[0-9]{0,2}$/.test(inputValue);
+  
+    if (!validNumber) {
+      event.target.value = inputValue.slice(0, -1);
+    }
   }
 }
