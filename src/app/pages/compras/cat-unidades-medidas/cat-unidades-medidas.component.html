@@ -39,24 +39,21 @@
             </div>
           </div>
 
-          <table
-          *ngIf="!isLoad"
-            
-            class="table table-hover table-sm table-bordered"
-          >
+          <table *ngIf="!isLoad" class="table table-hover table-sm table-bordered">
             <thead class="table-light">
-              <tr class="text-center">
+              <tr>
                 <th>Unidad de Medida</th>
                 <th>Abreviatura</th>
               </tr>
             </thead>
-            <tbody class="text-center">
+            <tbody>
               <tr *ngFor="let item of data" (click)="seleccionar(item, $event)">
                 <td>{{ item.nombre }}</td>
                 <td>{{ item.abreviatura }}</td>
               </tr>
             </tbody>
           </table>
+
         </div>
         <!--div.card-body-->
       </div>
@@ -138,7 +135,7 @@
 </ng-template>
 <!--End Modal -->
 
-<!-- Order Create Model -->
+<!-- Order Update Model -->
 <ng-template #update role="document" let-modal>
   <div class="modal-header">
     <h5 class="modal-title" id="exampleModalLabel">

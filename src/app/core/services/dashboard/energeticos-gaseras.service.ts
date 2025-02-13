@@ -18,4 +18,12 @@ export class EnergeticosGaserasService {
   public get(mes: number, anio: number) : Observable<ResponseEnergeticosGaseras> {
     return this.http.get<ResponseEnergeticosGaseras>(environment.apiUrl + 'energeticos-gaseras/' + mes + '/' + anio);
   }
+
+  public getGasolinerias(mes: number, anio: number) : Observable<ResponseEnergeticosGaseras> {
+    return this.http.get<ResponseEnergeticosGaseras>(environment.apiUrl + 'energeticos-gasolineras/' + mes + '/' + anio);
+  }
+
+  public save(data: any): Observable<any> {
+    return this.http.post(environment.apiUrl + "dashboard/gasolinerias", data);
+  }
 }

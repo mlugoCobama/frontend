@@ -338,16 +338,15 @@
                 formControlName="factura_xml"
                 accept="text/xml"
               />
+              <div *ngIf="ordenDocsCompraFormControl.factura_xml.touched || submitted">
+                <div
+                  class="text-danger form-text"
+                  *ngIf="ordenDocsCompraFormControl.factura_xml.errors?.['required']"
+                >
+                Ingresa la factura XML.
+                </div>
+              </div>
             </td>
-            <!-- <td>
-              <a
-                class="btn btn-sm btn-warning"
-                *ngIf="ordenCompra.documentos[0].ruta_xml_factura"
-                (click)="leerXML()"
-              >
-                <i class="fas fa-file-invoice-dollar"></i>
-              </a>
-            </td> -->
           </tr>
           <tr>
             <td>Factura <strong>.PDF</strong> *</td>
@@ -361,6 +360,14 @@
                 (change)="onFileChange1($event, 'factura_pdf')"
                 formControlName="factura_pdf"
               />
+              <div *ngIf="ordenDocsCompraFormControl.factura_pdf.touched || submitted">
+                <div
+                  class="text-danger form-text"
+                  *ngIf="ordenDocsCompraFormControl.factura_pdf.errors?.['required']"
+                >
+                Ingresa la factura XML.
+                </div>
+              </div>
             </td>
             <td>
               <a

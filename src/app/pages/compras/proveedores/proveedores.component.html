@@ -46,12 +46,11 @@
           </div>
 
           <table
-            
-            class="table  table-hover table-sm table-bordered"
+            class="table table-hover table-sm table-bordered"
             *ngIf="!isLoad"
           >
             <thead class="table-light">
-              <tr class="text-center">
+              <tr>
                 <th>Nombre</th>
                 <th>Contacto</th>
                 <th>Telefono</th>
@@ -59,13 +58,13 @@
                 <th>Condiciones</th>
               </tr>
             </thead>
-            <tbody class="text-center">
+            <tbody>
               <tr *ngFor="let item of data" (click)="seleccionar(item, $event)">
                 <td>{{ item.nombre }}</td>
                 <td>{{ item.contacto }}</td>
                 <td>{{ item.telefono }}</td>
                 <td>{{ item.localidad }}</td>
-                <td>{{ item.condiciones }} {{ item.dias_credito}} Dias</td>
+                <td>{{ item.condiciones }} {{ item.dias_credito }} Dias</td>
               </tr>
             </tbody>
           </table>
@@ -90,8 +89,12 @@
       (click)="modalRef?.hide()"
     ></button>
   </div>
-  <div class="modal-body">
-    <form class="row g-2" [formGroup]="formProveedores" enctype="multipart/form-data">
+  <div class="modal-body ">
+    <form
+      class="row g-2"
+      [formGroup]="formProveedores"
+      enctype="multipart/form-data"
+    >
       <div class="col-md-6">
         <label for="nombre" class="form-label">Nombre: *</label>
         <input
@@ -143,17 +146,24 @@
           name="telefono"
           aria-label="Teléfono"
         />
-        <div *ngIf="proveedoresFormControl.telefono.touched || proveedoresFormControl.telefono.dirty || submitted">
+        <div
+          *ngIf="
+            proveedoresFormControl.telefono.touched ||
+            proveedoresFormControl.telefono.dirty ||
+            submitted
+          "
+        >
           <div
             class="text-danger form-text"
             *ngIf="proveedoresFormControl.telefono.errors?.['required']"
           >
             Teléfono es requerido.
           </div>
-          <div 
-            class="text-danger form-text" 
-            *ngIf="proveedoresFormControl.telefono.errors?.['pattern']"> 
-               El campo solo acepta números. 
+          <div
+            class="text-danger form-text"
+            *ngIf="proveedoresFormControl.telefono.errors?.['pattern']"
+          >
+            El campo solo acepta números.
           </div>
         </div>
       </div>
@@ -174,23 +184,29 @@
           >
             Correo es requerido.
           </div>
+          <div
+            class="text-danger form-text"
+            *ngIf="proveedoresFormControl.correo.errors?.['email']"
+          >
+            Introduce un correo valido.
+          </div>
         </div>
       </div>
       <div class="col-md-6">
         <label for="localidad" class="form-label">Localidad: *</label>
         <select
-                class="form-select form-select-sm"
-                type="text"
-                formControlName="localidad"
-                id="localidad"
-                name="localidad"
-                aria-label="localidad"
-              >
-                <option selected>Selecciona una localidad</option>
-                <option *ngFor="let item of estados" value="{{ item.clave }}">
-                  {{ item.nombre }}
-                </option>
-              </select>
+          class="form-select form-select-sm"
+          type="text"
+          formControlName="localidad"
+          id="localidad"
+          name="localidad"
+          aria-label="localidad"
+        >
+          <option selected>Selecciona una localidad</option>
+          <option *ngFor="let item of estados" value="{{ item.clave }}">
+            {{ item.nombre }}
+          </option>
+        </select>
         <div *ngIf="proveedoresFormControl.localidad.touched || submitted">
           <div
             class="text-danger form-text"
@@ -201,7 +217,8 @@
         </div>
       </div>
       <div class="col-md-6">
-        <label for="condiciones" class="form-label form-label-sm">Condiciones: *</label
+        <label for="condiciones" class="form-label form-label-sm"
+          >Condiciones: *</label
         >
         <select
           class="form-select form-select-sm"
@@ -209,13 +226,20 @@
           id="condiciones"
           name="condiciones"
           aria-label="condiciones"
-          #selectElement (change)="onChange(selectElement)"
-          >
+          #selectElement
+          (change)="onChange(selectElement)"
+        >
           <option value="">Selecciona uno</option>
           <option value="Contado">Contado</option>
           <option value="Credito">Credito</option>
         </select>
-        <div *ngIf="proveedoresFormControl.condiciones.touched || submitted || proveedoresFormControl.condiciones.value === 'Selecciona uno'">
+        <div
+          *ngIf="
+            proveedoresFormControl.condiciones.touched ||
+            submitted ||
+            proveedoresFormControl.condiciones.value === 'Selecciona uno'
+          "
+        >
           <div
             class="text-danger form-text"
             *ngIf="proveedoresFormControl.condiciones.errors?.['required']"
@@ -237,16 +261,25 @@
           name="dias_credito"
           aria-label="dias_credito"
         />
-        <div *ngIf="proveedoresFormControl.dias_credito.touched || submitted || proveedoresFormControl.dias_credito.dirty">
-          <div 
-            class="text-danger form-text" 
-            *ngIf="proveedoresFormControl.dias_credito.errors?.['pattern']"> 
-               El campo solo acepta números. 
+        <div
+          *ngIf="
+            proveedoresFormControl.dias_credito.touched ||
+            submitted ||
+            proveedoresFormControl.dias_credito.dirty
+          "
+        >
+          <div
+            class="text-danger form-text"
+            *ngIf="proveedoresFormControl.dias_credito.errors?.['pattern']"
+          >
+            El campo solo acepta números.
           </div>
         </div>
       </div>
       <div class="col-md-6">
-        <label for="horario_atencion" class="form-label">Horario de Atención: *</label>
+        <label for="horario_atencion" class="form-label"
+          >Horario de Atención: *</label
+        >
         <input
           type="text"
           class="form-control form-control-sm"
@@ -255,7 +288,9 @@
           name="horario_atencion"
           aria-label="horario_atencion"
         />
-        <div *ngIf="proveedoresFormControl.horario_atencion.touched || submitted">
+        <div
+          *ngIf="proveedoresFormControl.horario_atencion.touched || submitted"
+        >
           <div
             class="text-danger form-text"
             *ngIf="proveedoresFormControl.horario_atencion.errors?.['required']"
@@ -265,7 +300,9 @@
         </div>
       </div>
       <div class="col-md-6">
-        <label for="tiempo_entrega" class="form-label">Tiempo de entrega: *</label>
+        <label for="tiempo_entrega" class="form-label"
+          >Tiempo de entrega: *</label
+        >
         <input
           type="text"
           class="form-control form-control-sm"
@@ -313,6 +350,7 @@
           <input
             class="form-control form-control-sm"
             type="file"
+            accept="application/pdf"
             (change)="onFileChange($event, 'constancia_fiscal')"
             formControlName="constancia_fiscal"
             id="constancia_fiscal"
@@ -325,9 +363,10 @@
           <input
             class="form-control form-control-sm"
             type="file"
-            (change)="onFileChange($event,'ine')"
+            (change)="onFileChange($event, 'ine')"
             formControlName="ine"
             id="ine"
+            accept="application/pdf"
           />
         </div>
       </div>
@@ -338,9 +377,10 @@
             >Comprobante de Domicilio</label
           >
           <input
+            accept="application/pdf"
             class="form-control form-control-sm"
             type="file"
-            (change)="onFileChange($event,'comprobante_domicilio')"
+            (change)="onFileChange($event, 'comprobante_domicilio')"
             formControlName="comprobante_domicilio"
             id="comprobante_domicilio"
           />
@@ -350,6 +390,7 @@
         <div class="mb-2">
           <label for="estado_cuenta" class="form-label">Estado de Cuenta</label>
           <input
+            accept="application/pdf"
             class="form-control form-control-sm"
             type="file"
             (change)="onFileChange($event, 'estado_cuenta')"
@@ -367,6 +408,7 @@
           <input
             class="form-control form-control-sm"
             type="file"
+            accept="application/pdf"
             (change)="onFileChange($event, 'acta_constitutiva')"
             formControlName="acta_constitutiva"
             id="acta_constitutiva"
@@ -379,7 +421,8 @@
           <input
             class="form-control form-control-sm"
             type="file"
-            (change)="onFileChange($event,'poder_notarial')"
+            accept="application/pdf"
+            (change)="onFileChange($event, 'poder_notarial')"
             formControlName="poder_notarial"
             id="poder_notarial"
           />
@@ -417,7 +460,11 @@
     ></button>
   </div>
   <div class="modal-body">
-    <form class="row g-2" [formGroup]="formUpdateProveedores" enctype="multipart/form-data">
+    <form
+      class="row g-2"
+      [formGroup]="formUpdateProveedores"
+      enctype="multipart/form-data"
+    >
       <input
         type="text"
         class="form-control form-control-sm"
@@ -478,19 +525,25 @@
           id="telefono"
           name="telefono"
           aria-label="Teléfono"
-          
         />
-        <div *ngIf="proveedoresFormControlUpdate.telefono.touched || proveedoresFormControlUpdate.telefono.dirty || submitted">
+        <div
+          *ngIf="
+            proveedoresFormControlUpdate.telefono.touched ||
+            proveedoresFormControlUpdate.telefono.dirty ||
+            submitted
+          "
+        >
           <div
             class="text-danger form-text"
             *ngIf="proveedoresFormControlUpdate.telefono.errors?.['required']"
           >
             Teléfono es requerido.
           </div>
-          <div 
-            class="text-danger form-text" 
-            *ngIf="proveedoresFormControlUpdate.telefono.errors?.['pattern']"> 
-               El campo solo acepta números. 
+          <div
+            class="text-danger form-text"
+            *ngIf="proveedoresFormControlUpdate.telefono.errors?.['pattern']"
+          >
+            El campo solo acepta números.
           </div>
         </div>
       </div>
@@ -518,19 +571,19 @@
       <div class="col-md-6">
         <label for="localidad" class="form-label">Localidad: *</label>
         <select
-        class="form-select form-select-sm"
-        type="text"
-        formControlName="localidad"
-        id="localidad"
-        name="localidad"
-        aria-label="localidad"
-        aria-label="Default select example"
-      >
-        <option selected>Selecciona una localidad</option>
-        <option *ngFor="let item of estados" value="{{ item.clave }}">
-          {{ item.nombre }}
-        </option>
-      </select>
+          class="form-select form-select-sm"
+          type="text"
+          formControlName="localidad"
+          id="localidad"
+          name="localidad"
+          aria-label="localidad"
+          aria-label="Default select example"
+        >
+          <option selected>Selecciona una localidad</option>
+          <option *ngFor="let item of estados" value="{{ item.clave }}">
+            {{ item.nombre }}
+          </option>
+        </select>
         <div
           *ngIf="proveedoresFormControlUpdate.localidad.touched || submitted"
         >
@@ -544,7 +597,8 @@
       </div>
 
       <div class="col-md-6">
-        <label for="condiciones" class="form-label form-label-sm">Condiciones: *</label
+        <label for="condiciones" class="form-label form-label-sm"
+          >Condiciones: *</label
         >
         <select
           class="form-select form-select-sm"
@@ -553,13 +607,20 @@
           id="condiciones"
           name="condiciones"
           aria-label="condiciones"
-          #selectElement (change)="onChange(selectElement)"
+          #selectElement
+          (change)="onChange(selectElement)"
         >
           <option selected>Selecciona uno</option>
           <option value="Contado">Contado</option>
           <option value="Credito">Credito</option>
         </select>
-        <div *ngIf="proveedoresFormControlUpdate.condiciones.touched || submitted || proveedoresFormControlUpdate.condiciones.value === 'Selecciona uno'">
+        <div
+          *ngIf="
+            proveedoresFormControlUpdate.condiciones.touched ||
+            submitted ||
+            proveedoresFormControlUpdate.condiciones.value === 'Selecciona uno'
+          "
+        >
           <div
             class="text-danger form-text"
             *ngIf="proveedoresFormControlUpdate.condiciones.errors?.['required']"
@@ -581,16 +642,25 @@
           name="dias_credito"
           aria-label="dias_credito"
         />
-        <div *ngIf="proveedoresFormControlUpdate.dias_credito.touched || submitted || proveedoresFormControlUpdate.dias_credito.dirty">
-          <div 
-            class="text-danger form-text" 
-            *ngIf="proveedoresFormControlUpdate.dias_credito.errors?.['pattern']"> 
-               El campo solo acepta números. 
+        <div
+          *ngIf="
+            proveedoresFormControlUpdate.dias_credito.touched ||
+            submitted ||
+            proveedoresFormControlUpdate.dias_credito.dirty
+          "
+        >
+          <div
+            class="text-danger form-text"
+            *ngIf="proveedoresFormControlUpdate.dias_credito.errors?.['pattern']"
+          >
+            El campo solo acepta números.
           </div>
         </div>
       </div>
       <div class="col-md-6">
-        <label for="horario_atencion" class="form-label">Horario de Atención: *</label>
+        <label for="horario_atencion" class="form-label"
+          >Horario de Atención: *</label
+        >
         <input
           type="text"
           class="form-control form-control-sm"
@@ -599,7 +669,11 @@
           name="horario_atencion"
           aria-label="horario_atencion"
         />
-        <div *ngIf="proveedoresFormControlUpdate.horario_atencion.touched || submitted">
+        <div
+          *ngIf="
+            proveedoresFormControlUpdate.horario_atencion.touched || submitted
+          "
+        >
           <div
             class="text-danger form-text"
             *ngIf="proveedoresFormControlUpdate.horario_atencion.errors?.['required']"
@@ -609,7 +683,9 @@
         </div>
       </div>
       <div class="col-md-6">
-        <label for="tiempo_entrega" class="form-label">Tiempo de entrega: *</label>
+        <label for="tiempo_entrega" class="form-label"
+          >Tiempo de entrega: *</label
+        >
         <input
           type="text"
           class="form-control form-control-sm"
@@ -618,7 +694,11 @@
           name="tiempo_entrega"
           aria-label="tiempo_entrega"
         />
-        <div *ngIf="proveedoresFormControlUpdate.tiempo_entrega.touched || submitted">
+        <div
+          *ngIf="
+            proveedoresFormControlUpdate.tiempo_entrega.touched || submitted
+          "
+        >
           <div
             class="text-danger form-text"
             *ngIf="proveedoresFormControlUpdate.tiempo_entrega.errors?.['required']"
@@ -637,7 +717,9 @@
           name="servicios"
           aria-label="Servicios"
         />
-        <div *ngIf="proveedoresFormControlUpdate.servicios.touched || submitted">
+        <div
+          *ngIf="proveedoresFormControlUpdate.servicios.touched || submitted"
+        >
           <div
             class="text-danger form-text"
             *ngIf="proveedoresFormControlUpdate.servicios.errors?.['required']"
@@ -648,35 +730,35 @@
       </div>
 
       <div class="alert alert-info mt-4" role="alert">Expendiente</div>
-      
-        <div class="col-md-6">
-          <div class="mb-2">
-            <label for="constancia_fiscal" class="form-label"
-              >Constancia de Situacion Fiscal</label
-            >
-            <input
-              class="form-control form-control-sm"
-              type="file"
-              formControlName="constancia_fiscal"
-              (change)="onFileChange($event,'constancia_fiscal')"
-              id="constancia_fiscal"
-            />
-          </div>
+
+      <div class="col-md-6">
+        <div class="mb-2">
+          <label for="constancia_fiscal" class="form-label"
+            >Constancia de Situacion Fiscal</label
+          >
+          <input
+            class="form-control form-control-sm"
+            type="file"
+            accept="application/pdf"
+            formControlName="constancia_fiscal"
+            (change)="onFileChange($event, 'constancia_fiscal')"
+            id="constancia_fiscal"
+          />
         </div>
-        <div class="col-md-6">
-          <div class="mb-2">
-            <label for="ine" class="form-label">INE</label>
-            <input
-              class="form-control form-control-sm"
-              type="file"
-              formControlName="ine"
-              (change)="onFileChange($event,'ine')"
-              id="ine"
-            />
-          </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-2">
+          <label for="ine" class="form-label">INE</label>
+          <input
+            class="form-control form-control-sm"
+            type="file"
+            accept="application/pdf"
+            formControlName="ine"
+            (change)="onFileChange($event, 'ine')"
+            id="ine"
+          />
         </div>
-      
-      
+      </div>
 
       <div class="col-md-6">
         <div class="mb-2">
@@ -686,9 +768,10 @@
           <input
             class="form-control form-control-sm"
             type="file"
+            accept="application/pdf"
             formControlName="comprobante_domicilio"
             id="comprobante_domicilio"
-            (change)="onFileChange($event,'comprobante_domicilio')"
+            (change)="onFileChange($event, 'comprobante_domicilio')"
           />
         </div>
       </div>
@@ -698,8 +781,9 @@
           <input
             class="form-control form-control-sm"
             type="file"
+            accept="application/pdf"
             formControlName="estado_cuenta"
-            (change)="onFileChange($event,'estado_cuenta')"
+            (change)="onFileChange($event, 'estado_cuenta')"
             id="estado_cuenta"
           />
         </div>
@@ -713,8 +797,9 @@
           <input
             class="form-control form-control-sm"
             type="file"
+            accept="application/pdf"
             formControlName="acta_constitutiva"
-            (change)="onFileChange($event,'acta_constitutiva')"
+            (change)="onFileChange($event, 'acta_constitutiva')"
             id="acta_constitutiva"
           />
         </div>
@@ -725,7 +810,8 @@
           <input
             class="form-control form-control-sm"
             type="file"
-            (change)="onFileChange($event,'poder_notarial')"
+            accept="application/pdf"
+            (change)="onFileChange($event, 'poder_notarial')"
             formControlName="poder_notarial"
             id="poder_notarial"
           />
@@ -751,7 +837,9 @@
 <!-- MODAL EXPEDIENTE PROVEEDOR -->
 <ng-template #expediente role="document" let-modal>
   <div class="modal-header">
-    <h5 class="modal-title" id="exampleModalLabel">Expediente del Proveedor: {{proveedor.nombre}}</h5>
+    <h5 class="modal-title" id="exampleModalLabel">
+      Expediente del Proveedor: {{ proveedor.nombre }}
+    </h5>
     <button
       type="button"
       class="btn-close"
@@ -762,52 +850,93 @@
     ></button>
   </div>
   <div class="modal-body">
-
-    <table class="table  table-hover table-sm table-bordered">
-    <thead class="table-light">
-      <tr>
-        <th>Documeto</th>
-        <th>Acción</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Constancia de situacion fiscal</td>
-        <td *ngIf="archivos.constancia_fiscal; else noArchivo"> <a class="btn btn-sm btn-info"  href="javascript:void(0)" (click)="openFile(archivos.constancia_fiscal)">Abrir</a></td>
-      </tr>
-      <tr>
-        <td>Comprobante de domicilio</td>
-        <td *ngIf="archivos.comprobante_domicilio; else noArchivo"> <a class="btn btn-sm btn-info" href="javascript:void(0)" (click)="openFile(archivos.comprobante_domicilio)">Abrir</a></td>
-      </tr>
-      <tr>
-        <td>INE</td>
-        <td *ngIf="archivos.ine; else noArchivo"> <a class="btn btn-sm btn-info" href="javascript:void(0)" (click)="openFile(archivos.ine)">Abrir</a></td>
-      </tr>
-      <tr>
-        <td>Estado de Cuenta</td>
-        <td *ngIf="archivos.estado_cuenta; else noArchivo"> <a class="btn btn-sm btn-info" href="javascript:void(0)" (click)="openFile(archivos.estado_cuenta)">Abrir</a></td>
-      </tr>
-      <tr>
-        <td>Acta Constitutiva</td>
-        <td *ngIf="archivos.acta_constitutiva; else noArchivo"> <a class="btn btn-sm btn-info" href="javascript:void(0)" (click)="openFile(archivos.acta_constitutiva)">Abrir</a></td>
-      </tr>
-      <tr>
-        <td>Poder Notarial</td>
-        <td *ngIf="archivos.poder_notarial; else noArchivo"> <a class="btn btn-sm btn-info" href="javascript:void(0)" (click)="openFile(archivos.poder_notarial)">Abrir</a></td>
-      </tr>
-    </tbody>
-  </table>
-    <p>Ultima actualizacion: {{archivos.updated_at}}</p>
-    </div>  
-  <div class="modal-footer">
-    <a
-            class="btn btn-sm btn-info"
-            (click)="descargarExpediente()"
+    <table class="table table-hover table-sm table-bordered text-center">
+      <thead class="table-light">
+        <tr>
+          <th>Documeto</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Constancia de situacion fiscal</td>
+          <td *ngIf="archivos.constancia_fiscal; else noArchivo">
+            <a
+              class="btn btn-sm btn-info"
+              href="javascript:void(0)"
+              (click)="openFile(archivos.constancia_fiscal)"
+              >Abrir</a
             >
-            <i class="fas fa-cloud-download-alt "></i>
-             Descargar Expediente
-            </a>
-    
+          </td>
+        </tr>
+        <tr>
+          <td>Comprobante de domicilio</td>
+          <td *ngIf="archivos.comprobante_domicilio; else noArchivo">
+            <a
+              class="btn btn-sm btn-info"
+              href="javascript:void(0)"
+              (click)="openFile(archivos.comprobante_domicilio)"
+              >Abrir</a
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>INE</td>
+          <td *ngIf="archivos.ine; else noArchivo">
+            <a
+              class="btn btn-sm btn-info"
+              href="javascript:void(0)"
+              (click)="openFile(archivos.ine)"
+              >Abrir</a
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>Estado de Cuenta</td>
+          <td *ngIf="archivos.estado_cuenta; else noArchivo">
+            <a
+              class="btn btn-sm btn-info"
+              href="javascript:void(0)"
+              (click)="openFile(archivos.estado_cuenta)"
+              >Abrir</a
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>Acta Constitutiva</td>
+          <td *ngIf="archivos.acta_constitutiva; else noArchivo">
+            <a
+              class="btn btn-sm btn-info"
+              href="javascript:void(0)"
+              (click)="openFile(archivos.acta_constitutiva)"
+              >Abrir</a
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>Poder Notarial</td>
+          <td *ngIf="archivos.poder_notarial; else noArchivo">
+            <a
+              class="btn btn-sm btn-info"
+              href="javascript:void(0)"
+              (click)="openFile(archivos.poder_notarial)"
+              >Abrir</a
+            >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>Ultima actualizacion: {{ archivos.updated_at }}</p>
+  </div>
+  <div class="modal-footer">
+    <a 
+      *ngIf=" tamanioExp > 1 "
+      class="btn btn-sm btn-info"
+      (click)="descargarExpediente()">
+      <i class="fas fa-cloud-download-alt"></i>
+      Descargar Expediente 
+    </a>
+
     <button
       type="button"
       class="btn btn-secondary btn-sm"

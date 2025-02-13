@@ -41,10 +41,12 @@
               <option value="2022">2022</option>
               <option value="2023">2023</option>
               <option value="2024">2024</option>
+              <option value="2025">2025</option>
             </select>
           </div>
           <div class="col-3 mt-4">
             <button
+            *ngIf="selecAnio && selecMes"
               type="submit"
               class="btn btn-info btn-sm me-1"
               (click)="getInfoMes()"
@@ -82,9 +84,9 @@
                     <th>UNO</th>
                   </tr>
                 </thead>
-                <tbody>
 
-                  <tr *ngFor="let item of dataEmpresas; index as i">
+                <tbody>
+                  <tr *ngFor="let item of catEmpresas; index as i">
                     <td>{{item.nombre}}</td>
                     <td>
                       <input
@@ -93,27 +95,29 @@
                         mask="separator"
                         thousandSeparator=","
                         formControlName="venta_litros_{{item.id}}"
+                        [allowNegativeNumbers]="true"
                       >
                     </td>
-                    <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," formControlName="ventas_{{item.id}}"></td>
-                    <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," formControlName="eficiencia_{{item.id}}"></td>
-                    <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," formControlName="gasto_{{item.id}}"></td>
-                    <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," formControlName="utilidad_bruta_{{item.id}}"></td>
-                    <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," formControlName="ubo_{{item.id}}"></td>
-                    <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," formControlName="personal_{{item.id}}"></td>
-                    <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," formControlName="uno_{{item.id}}"></td>
+                    <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," [allowNegativeNumbers]="true" formControlName="ventas_{{item.id}}"></td>
+                    <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," [allowNegativeNumbers]="true" formControlName="eficiencia_{{item.id}}"></td>
+                    <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," [allowNegativeNumbers]="true" formControlName="gasto_{{item.id}}"></td>
+                    <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," [allowNegativeNumbers]="true" formControlName="utilidad_bruta_{{item.id}}"></td>
+                    <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," [allowNegativeNumbers]="true" formControlName="ubo_{{item.id}}"></td>
+                    <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," [allowNegativeNumbers]="true" formControlName="personal_{{item.id}}"></td>
+                    <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," [allowNegativeNumbers]="true" formControlName="uno_{{item.id}}"></td>
                   </tr>
                 </tbody>
-                <tfoot>
-                  <tr>
-                    <th>Totales</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                <tfoot *ngIf="existInfo" >
+                  <tr >
+                    <th class="text-end">Totales</th>
+                    <th class="text-end">{{dataEmpresas[indexTotals].venta_litros}}</th>
+                    <th class="text-end">{{dataEmpresas[indexTotals].ventas}}</th>
+                    <th class="text-end">{{dataEmpresas[indexTotals].eficiencia}}</th>
+                    <th class="text-end">{{dataEmpresas[indexTotals].gasto}}</th>
+                    <th class="text-end">{{dataEmpresas[indexTotals].utilidad_bruta}}</th>
+                    <th class="text-end">{{dataEmpresas[indexTotals].ubo}}</th>
+                    <th class="text-end">{{dataEmpresas[indexTotals].personal}}</th>
+                    <th class="text-end">{{dataEmpresas[indexTotals].uno}}</th>
                   </tr>
                 </tfoot>
               </table>

@@ -66,7 +66,7 @@ export class ProveedoresComponent implements OnInit {
     this.mostrar = false;
   }
 
-  public openModalupdate(update: any) {
+  public openModalupdate(update: any) {//abre el modal actualizar registro
     this.mostrar = false;
     this.submitted = false;
     this.modalRef = this.modalService.show(update, { class: "modal-lg" });
@@ -93,6 +93,7 @@ export class ProveedoresComponent implements OnInit {
       this.estados = data;
     });
   }
+  public tamanioExp:any;
   
   public openModalExpediente(ModalExpediente: any) { //Abre el modal expediente
     this.mostrar = false;
@@ -100,8 +101,13 @@ export class ProveedoresComponent implements OnInit {
     this.modalRef = this.modalService.show(ModalExpediente, {
       class: "modal-lg",
     });
+
     this.expediente.updated_at = new Date(this.expediente.updated_at).toLocaleString();
-    this.archivos = this.expediente; //El elemento sleccionado se convierte en las rutas de los archivos
+    this.archivos = this.expediente; //El elemento seleccionado se convierte en las rutas de los archivos
+
+    this.tamanioExp = Object.keys(this.archivos).length;
+    console.log(this.tamanioExp);
+
   }
 
   openFile(rutaArchivo: string) { // Funcion para abrir pdfs
@@ -135,7 +141,7 @@ export class ProveedoresComponent implements OnInit {
         localidad: new FormControl(null, Validators.required),
         condiciones: new FormControl(null, Validators.required),
         servicios: new FormControl(null, Validators.required),
-        correo: new FormControl(null, Validators.required),
+        correo: new FormControl(null, [Validators.required, Validators.email]),
         horario_atencion: new FormControl(null, Validators.required),
         tiempo_entrega: new FormControl(null, Validators.required),
         dias_credito: new FormControl(null, [Validators.pattern("^[0-9]*$"),]),
@@ -252,7 +258,7 @@ export class ProveedoresComponent implements OnInit {
     return this.formUpdateProveedores.controls;
   }
 
-  private getAll() {
+  private getAll() { //Recupera todos los registros de los proveedores
     this.proveedoresService.getAll().subscribe(
       (response) => {
         if (response) {
@@ -269,7 +275,7 @@ export class ProveedoresComponent implements OnInit {
     );
   }
 
-  public edit() {
+  public edit() { //Actualiza los valores del registro
     this.isLoad = true;
     this.submitted = true;
     if (this.formUpdateProveedores.invalid) {
@@ -293,7 +299,7 @@ export class ProveedoresComponent implements OnInit {
     }
 
     
-    this.formData.append('_method', 'PUT'); // Ajusto el metodo de la solictud para trabajar con form data
+    this.formData.append('_method', 'PUT'); // Ajusto el método de la solicitud para trabajar con form data
 
      this.proveedoresService.edit(id, this.formData).subscribe(
        (response) => {
@@ -326,7 +332,7 @@ export class ProveedoresComponent implements OnInit {
     this.formData = new FormData();
   }
 
-  public destroy() {
+  public destroy() { //Actualiza el estatus del registro a 0
     this.mostrar = false;
     this.isLoad = true;
     Swal.fire({
@@ -406,7 +412,7 @@ export class ProveedoresComponent implements OnInit {
     }
   }
 
-  validateNumberInput(event: any) {
+  validateNumberInput(event: any) {// Valida que unicamente se tecleen números sobre el campo
     const inputValue = event.target.value;
     const validNumber = /^[0-9]*\.?[0-9]{0,2}$/.test(inputValue);
 
@@ -415,7 +421,7 @@ export class ProveedoresComponent implements OnInit {
     }
   }
 
-  public descargarExpediente(){
+  public descargarExpediente(){ //Recupera un archivo zip con el expediente y lo descarga 
 
     this.proveedoresService.descargarExpediente(this.proveedor.id).subscribe((response)=>{
       const blob = new Blob([response], {type: 'application/zip'});

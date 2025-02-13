@@ -30,12 +30,12 @@ export class DetallesSolicitudCompraComponent implements OnInit {
   caracteresRestantes: number = this.longitudMaxima;
   factura: any = {
     comprobantes: [],
-    impuestos:[],
+    impuestos: [],
     emisor: {},
     receptor: {},
-    sumaSubTotal : 0,
-    sumaTotal : 0,
-    metodoPago : {}
+    sumaSubTotal: 0,
+    sumaTotal: 0,
+    metodoPago: {},
   };
   metodoPago: string;
 
@@ -90,13 +90,14 @@ export class DetallesSolicitudCompraComponent implements OnInit {
       this.mostrarCotizacionFlag = mostrar;
     });
 
-    this.generarOrdenSubscripcion = this.comprasService.generateOrder$.subscribe(() => {
-      this.generarOrden();
-    });
+    this.generarOrdenSubscripcion =
+      this.comprasService.generateOrder$.subscribe(() => {
+        this.generarOrden();
+      });
 
     this.buildForm();
     this.getDetalle();
-    
+
     // Valida el estatus de la solcitud para recuperar datos
     if (this.solicitudCompra.estatus === 1) {
       this.getProveedores();
@@ -111,8 +112,8 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     }
   }
 
-  ngOnDestroy() : void {
-    if(this.generarOrdenSubscripcion){
+  ngOnDestroy(): void {
+    if (this.generarOrdenSubscripcion) {
       this.generarOrdenSubscripcion.unsubscribe();
     }
   }
@@ -134,7 +135,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     this.formDocsOrdenCompra = this.formBuilder.group({
       factura_xml: new FormControl(null, Validators.required),
       factura_pdf: new FormControl(null, Validators.required),
-      comprobante_pago: new FormControl(null, Validators.required),
+      comprobante_pago: new FormControl(null),
     });
   }
 
@@ -200,7 +201,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
       const proveedores = this.proveedoresSeleccionados;
       const consideraciones = this.correosProv.consideraciones;
       this.data = {
-        ...proveedores,
+        proveedores:proveedores,
         detalles,
         fecha: this.fecha(),
         solicitudes_compra_id: idSolicitud,
@@ -227,7 +228,17 @@ export class DetallesSolicitudCompraComponent implements OnInit {
             this.solicitudCompra.estatus = 2;
             this.getDetalle();
           } else {
-            console.log(response.message);
+            Swal.fire({
+              title: response.message,
+              text: 'Revisa que el proveedor tenga un correo asignado',
+              buttonsStyling: false,
+              icon: "error",
+              customClass: {
+                confirmButton: "btn btn-success px-4",
+                cancelButton: "btn btn- ms-2 px-4",
+              },
+            });
+            console.log(response.errors);
             this.isDisabled = false;
           }
         },
@@ -253,7 +264,6 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     }
   }
 
-  
   public hasFacturas: boolean = false;
   public hasComprobantePago: boolean = false;
   public idDocOrdC: any;
@@ -265,28 +275,28 @@ export class DetallesSolicitudCompraComponent implements OnInit {
           this.ordenCompra = response;
           this.isLoad = false;
 
-          if(this.ordenCompra.documentos.length > 0){
+          if (this.ordenCompra.documentos.length > 0) {
             this.hasFiles = true;
 
             this.leerXML();
 
             this.hasFacturas = true;
-            const ultimoIndex =  this.ordenCompra.documentos.length;
-            const comprobantePago = this.ordenCompra.documentos[ultimoIndex-1].comprobante_pago;
-            const ultimoId =  this.ordenCompra.documentos[ultimoIndex-1].id;
-            if(comprobantePago){
+            const ultimoIndex = this.ordenCompra.documentos.length;
+            const comprobantePago =
+              this.ordenCompra.documentos[ultimoIndex - 1].comprobante_pago;
+            const ultimoId = this.ordenCompra.documentos[ultimoIndex - 1].id;
+            if (comprobantePago) {
               this.hasComprobantePago = true;
-            }else{
+            } else {
               this.hasComprobantePago = false;
               this.idDocOrdC = ultimoId;
             }
           }
-          if(this.ordenCompra.documentos.length === 0){
+          if (this.ordenCompra.documentos.length === 0) {
             this.habilitado = true;
             this.hasFacturas = false;
             this.hasComprobantePago = true;
           }
-
         } else {
           console.log(response.message);
         }
@@ -311,14 +321,13 @@ export class DetallesSolicitudCompraComponent implements OnInit {
 
   checkMetodoPago() {
     this.metodoPago = this.factura.metodoPago?.metodoPago;
-    if (this.metodoPago === 'PPD') {
+    if (this.metodoPago === "PPD") {
       this.habilitado = true;
     } else {
       this.habilitado = false;
     }
   }
 
-  
   //Recupera todos los registros de los proveedores
   private getProveedores() {
     this.proveedoresService.getAll().subscribe(
@@ -570,16 +579,13 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     this.comprasService.setMostrarBoton(false);
 
     this.generarFolioOc().then((folio_oc) => {
-
       const fecha = this.fecha();
 
       const observacion = this.formOrdenCompra.value;
       const observaciones = observacion.observaciones;
-      
+
       const cotizaciones_id = this.proveedorSelec.cotizaciones_id;
       const cotizacionProveedor = this.proveedorSelec.id;
-
-      
 
       const solicitudCompra = this.solicitudCompra.id;
 
@@ -808,6 +814,23 @@ export class DetallesSolicitudCompraComponent implements OnInit {
   }
 
   public guardarArchivos() {
+    this.submitted = true;
+    this.isLoad = true;
+    if (this.formDocsOrdenCompra.invalid) {
+      Swal.fire({
+        title: "Alerta",
+        text: "Debes adjuntar la factura en ambos formatos",
+        buttonsStyling: false,
+        icon: "warning",
+        customClass: {
+          confirmButton: "btn btn-warning px-4",
+          cancelButton: "btn btn- ms-2 px-4",
+        },
+      });
+      this.isLoad = false;
+      return;
+    }
+
     const idOrdenCompra = this.ordenCompra.id;
     // this.formData.append("_method", "PUT");
     this.formData.append("orden_compra_id", idOrdenCompra);
@@ -829,6 +852,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
 
           this.isLoad = false;
           this.formData = new FormData();
+          this.submitted = false;
           this.formDocsOrdenCompra.reset();
         } else {
           console.log(response.message);
@@ -841,38 +865,55 @@ export class DetallesSolicitudCompraComponent implements OnInit {
   }
 
   public guardarComPago() {
-    const idOrdenCompra = this.ordenCompra.id;
-    const idDocOC = this.idDocOrdC;
-    this.formData.append("_method", "PUT");
-    this.formData.append("orden_compra_id", idOrdenCompra);
-    this.formData.append("fecha", this.fecha());
 
-     this.ordenesComprasService.saveDocs1( idDocOC, this.formData).subscribe(
-       (response) => {
-         if (response.status === "success") {
-           this.getOrdenCompra();
-           Swal.fire({
-             title: "Guardado",
-             text: "Documentos guardados correctamente",
-             buttonsStyling: false,
-             icon: "success",
-             customClass: {
-               confirmButton: "btn btn-success px-4",
-               cancelButton: "btn btn- ms-2 px-4",
-             },
-           });
+    if(this.formData.has('comprobante_pago')){
+      const idOrdenCompra = this.ordenCompra.id;
+      const idDocOC = this.idDocOrdC;
+      this.formData.append("_method", "PUT");
+      this.formData.append("orden_compra_id", idOrdenCompra);
+      this.formData.append("fecha", this.fecha());
+  
+      this.ordenesComprasService.saveDocs1(idDocOC, this.formData).subscribe(
+        (response) => {
+          if (response.status === "success") {
+            this.getOrdenCompra();
+            Swal.fire({
+              title: "Guardado",
+              text: "Documentos guardados correctamente",
+              buttonsStyling: false,
+              icon: "success",
+              customClass: {
+                confirmButton: "btn btn-success px-4",
+                cancelButton: "btn btn- ms-2 px-4",
+              },
+            });
+  
+            this.isLoad = false;
+            this.formData = new FormData();
+            this.formDocsOrdenCompra.reset();
+          } else {
+            console.log(response.message);
+          }
+        },
+        (error) => {
+          console.error("Error fetching data:", error);
+        }
+      );
+    }else{
+      Swal.fire({
+        title: "Alerta",
+        text: "Debes adjuntar el comprobante pago",
+        buttonsStyling: false,
+        icon: "warning",
+        customClass: {
+          confirmButton: "btn btn-warning px-4",
+          cancelButton: "btn btn- ms-2 px-4",
+        },
+      });
+      this.isLoad = false;
+      return;
+    }
 
-           this.isLoad = false;
-           this.formData = new FormData();
-           this.formDocsOrdenCompra.reset();
-         } else {
-           console.log(response.message);
-         }
-       },
-       (error) => {
-         console.error("Error fetching data:", error);
-       }
-     );
   }
 
   parseVariosXml(xmls: string[]) {
@@ -896,20 +937,20 @@ export class DetallesSolicitudCompraComponent implements OnInit {
           fecha: comprobante?.getAttribute("Fecha"),
           folio: comprobante?.getAttribute("Folio"),
           serie: comprobante?.getAttribute("Serie"),
-          subTotal: parseFloat(comprobante?.getAttribute("SubTotal") || '0'),
+          subTotal: parseFloat(comprobante?.getAttribute("SubTotal") || "0"),
           moneda: comprobante?.getAttribute("Moneda"),
-          total: parseFloat(comprobante?.getAttribute("Total") || '0'),
-          
+          total: parseFloat(comprobante?.getAttribute("Total") || "0"),
         });
       }
 
       const impuestos = xmlDoc.getElementsByTagNameNS(ns, "Impuestos")[0];
-      if(impuestos){
+      if (impuestos) {
         this.factura.impuestos.push({
-          totalImpuestosTrasladados: impuestos?.getAttribute("TotalImpuestosTrasladados") || '0.00',
-        })
+          totalImpuestosTrasladados:
+            impuestos?.getAttribute("TotalImpuestosTrasladados") || "0.00",
+        });
       }
-      
+
       if (index === 0) {
         const emisor = xmlDoc.getElementsByTagNameNS(ns, "Emisor")[0];
         if (emisor) {
@@ -921,10 +962,10 @@ export class DetallesSolicitudCompraComponent implements OnInit {
         }
 
         const metodoPago = xmlDoc.getElementsByTagNameNS(ns, "Comprobante")[0];
-        if(metodoPago){
+        if (metodoPago) {
           this.factura.metodoPago = {
             metodoPago: metodoPago?.getAttribute("MetodoPago"),
-          }
+          };
         }
         const receptor = xmlDoc.getElementsByTagNameNS(ns, "Receptor")[0];
         if (receptor) {
@@ -941,9 +982,15 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     });
   }
 
-  calcularSumas(){
-    this.factura.sumaSubTotal = this.factura.comprobantes.reduce((sum, comprobante) => sum +  comprobante.subTotal, 0);
-    this.factura.sumaTotal = this.factura.comprobantes.reduce((sum, comprobante) => sum +  comprobante.total, 0)
+  calcularSumas() {
+    this.factura.sumaSubTotal = this.factura.comprobantes.reduce(
+      (sum, comprobante) => sum + comprobante.subTotal,
+      0
+    );
+    this.factura.sumaTotal = this.factura.comprobantes.reduce(
+      (sum, comprobante) => sum + comprobante.total,
+      0
+    );
   }
 
   public descargarFacturas() {
@@ -979,10 +1026,9 @@ export class DetallesSolicitudCompraComponent implements OnInit {
                 cancelButton: "btn btn- ms-2 px-4",
               },
             });
-            
+
             this.isLoad = false;
             this.solicitudCompra.estatus = 8;
-
           } else {
             console.log(response.message);
           }
@@ -996,7 +1042,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
   validateNumberInput(event: any) {
     const inputValue = event.target.value;
     const validNumber = /^[0-9]*\.?[0-9]{0,2}$/.test(inputValue);
-  
+
     if (!validNumber) {
       event.target.value = inputValue.slice(0, -1);
     }

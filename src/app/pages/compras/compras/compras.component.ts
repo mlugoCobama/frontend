@@ -46,6 +46,12 @@ export class ComprasComponent implements OnInit {
 
   public formData = new FormData();
 
+  public usuarioActivo = {
+    claveEmpresa: 333,
+    nombreEmpresa: "CAS",
+    idUsuario: 1
+  };
+
   constructor(
     private catUnidadesMedidasService: CatUnidadesMedidasService,
     public ordenesComprasService: OrdenesCompraService,
@@ -68,6 +74,7 @@ export class ComprasComponent implements OnInit {
   public openModal(content: any) {
     this.submitted = false;
     this.modalRef = this.modalService.show(content, { class: "modal-lg" });
+    console.log(this.usuarioActivo.claveEmpresa);
     this.getUnidades();
   }
 
@@ -88,8 +95,8 @@ export class ComprasComponent implements OnInit {
       this.formDetalleSolicitud = this.formBuilder.group({
         cantidad: new FormControl(null, Validators.required),
         cat_unidades_medida_id: new FormControl(null, Validators.required),
-        descripcion: new FormControl(null, Validators.required),
-        observaciones: new FormControl(null, Validators.required),
+        descripcion: new FormControl(null, [Validators.required, Validators.maxLength(150)]),
+        observaciones: new FormControl(null, [Validators.required, Validators.maxLength(45)]),
         img_referencia: new FormControl(null),
       });
       resolve(true);
@@ -236,6 +243,9 @@ export class ComprasComponent implements OnInit {
           );
         }
       });
+
+      console.log(formDataToSend);
+
       this.comprasService.save(formDataToSend).subscribe(
         (response) => {
           if (response.status === "success") {
@@ -313,7 +323,8 @@ export class ComprasComponent implements OnInit {
 
               case this.autorizada:
                 registro.estado = "AUTORIZADA";
-                registro.claseEstado = "bg-success";
+                
+                registro.claseEstado = "badge-soft-success";
                 break;
 
               case this.cancelada:
@@ -327,8 +338,8 @@ export class ComprasComponent implements OnInit {
                 break;
 
               case this.pagada:
-                registro.estado = "RECIBIDO";
-                registro.claseEstado = "badge-soft-info";
+                registro.estado = "PAGADA";
+                registro.claseEstado = "bg-success";
                 break;
 
               default:
@@ -459,6 +470,8 @@ export class ComprasComponent implements OnInit {
     this.ordenesComprasService
       .pdfOrdenCompra(this.solicitudCompra.id)
       .subscribe((response) => {
+        if(response){
+        console.log("Respuesta: ",response);
         const blob = new Blob([response], { type: "application/pdf"});
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
@@ -466,8 +479,11 @@ export class ComprasComponent implements OnInit {
         link.download = "orden_compra.pdf";
         link.click();
         window.URL.revokeObjectURL(url);
+        }else{
+          console.log('No existe la orden de compra');
+        }
+        
       });
-      console.log('se ejecuto esta funcion');
   }
   
 }

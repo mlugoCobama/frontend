@@ -4,6 +4,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { environment } from '../environments/environment';
 
+//Material tables
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatSortModule} from '@angular/material/sort';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+
+
 // Swiper Slider
 import { SlickCarouselModule } from 'ngx-slick-carousel';
 // bootstrap component
@@ -91,7 +99,13 @@ export function createTranslateLoader(http: HttpClient): any {
     EffectsModule.forRoot([
       AuthenticationEffects,
     ]),
-    DataTablesModule
+    DataTablesModule,
+    //Angular Material Tables
+    MatTableModule,
+    MatPaginatorModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSortModule
   ],
   bootstrap: [AppComponent],
   providers: [

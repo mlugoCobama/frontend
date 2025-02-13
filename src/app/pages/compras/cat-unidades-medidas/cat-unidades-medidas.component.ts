@@ -1,4 +1,7 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit} from '@angular/core';
+
+
+import { environment } from 'src/environments/environment';
 
 import {
   FormBuilder,
@@ -7,31 +10,31 @@ import {
   Validators,
 } from "@angular/forms";
 
-import { CatUnidadesMedidasService } from "src/app/core/services/compras/unidadesMedidas/cat-unidades-medidas.service";
-
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { Config } from "datatables.net";
 import Swal from "sweetalert2";
+import { Config } from 'datatables.net';
+import { CatUnidadesMedidasService } from "src/app/core/services/compras/unidadesMedidas/cat-unidades-medidas.service";
 
 @Component({
   selector: "app-cat-unidades-medidas",
   templateUrl: "./cat-unidades-medidas.component.html",
   styleUrls: ["./cat-unidades-medidas.component.css"],
 })
-export class CatUnidadesMedidasComponent implements OnInit {
-  public data: any;
+
+export class CatUnidadesMedidasComponent implements OnInit{  
   public showTable: boolean = false;
   public isLoad: boolean = true;
   public mostrar: boolean = false;
 
-  dtOptions: Config = {};
-
+  public data: any;
+  
   public modalRef?: BsModalRef;
   public submitted: boolean = false;
   public formUnidades: FormGroup;
   public formUpdateUnidades: FormGroup;
 
   public unidad: any;
+  dtOptions: Config = {};
 
   constructor(
     private catUnidadesMedidasService: CatUnidadesMedidasService,
@@ -42,7 +45,10 @@ export class CatUnidadesMedidasComponent implements OnInit {
   public ngOnInit(): void {
     this.getAll();
     this.buildForm();
+    this.dtOptions = environment.dataTables;
   }
+
+
 
   /**
    * Open modal
@@ -85,6 +91,37 @@ export class CatUnidadesMedidasComponent implements OnInit {
 
   get unidadesFormControlUpdate() {
     return this.formUpdateUnidades.controls;
+  }
+
+
+  private getAll() {
+    this.catUnidadesMedidasService.getAll().subscribe(
+      (response) => {
+        if (response) {
+          this.data = response.data;
+          this.isLoad = false;
+          this.showTable = true;
+        } else {
+          console.log(response.message);
+        }
+      },
+      (error) => {
+        console.error("Error fetching data:", error);
+      }
+    );
+  }
+
+  public seleccionar(dato: any, evento: any) {
+    this.mostrar = true;
+    this.unidad = dato;
+    if (evento.currentTarget.classList.contains("table-primary")) {
+      evento.currentTarget.classList.remove("table-primary");
+      this.mostrar = false;
+    } else {
+      const filas = document.querySelectorAll("tbody tr");
+      filas.forEach((fila) => fila.classList.remove("table-primary"));
+      evento.currentTarget.classList.add("table-primary");
+    }
   }
 
   public save() {
@@ -136,36 +173,6 @@ export class CatUnidadesMedidasComponent implements OnInit {
     this.formUnidades.reset();
   }
 
-  private getAll() {
-    this.catUnidadesMedidasService.getAll().subscribe(
-      (response) => {
-        if (response) {
-          this.data = response.data;
-          this.isLoad = false;
-          this.showTable = true;
-          // console.log(this.data);
-        } else {
-          console.log(response.message);
-        }
-      },
-      (error) => {
-        console.error("Error fetching data:", error);
-      }
-    );
-  }
-
-  public seleccionar(dato: any, evento: any) {
-    this.mostrar = true;
-    this.unidad = dato;
-    if (evento.currentTarget.classList.contains("table-primary")) {
-      evento.currentTarget.classList.remove("table-primary");
-      this.mostrar = false;
-    } else {
-      const filas = document.querySelectorAll("tbody tr");
-      filas.forEach((fila) => fila.classList.remove("table-primary"));
-      evento.currentTarget.classList.add("table-primary");
-    }
-  }
 
   public destroy() {
     this.isLoad = true;

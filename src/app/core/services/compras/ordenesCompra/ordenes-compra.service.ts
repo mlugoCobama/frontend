@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -21,8 +21,12 @@ export class OrdenesCompraService {
     return this.http.post(environment.apiUrl + 'compras/OrdenesCompras', data);
   }
 
-  public saveDocs(id:number, data:any): Observable<any> {
+  public saveDocs1(id:number, data:any): Observable<any> {
     return this.http.post(environment.apiUrl + `compras/DocumentosOrdenesCompras/${id}`, data);
+  }
+
+  public saveDocs(data:any): Observable<any> {
+    return this.http.post(environment.apiUrl + `compras/DocumentosOrdenesCompras/`, data);
   }
 
   public edit(id:number, data:any): Observable<any> {
@@ -55,12 +59,18 @@ export class OrdenesCompraService {
   }
 
   public getContenidoXML(id:number): Observable<any> {
-    return this.http.get(environment.apiUrl + `compras/leer-xml/${id}`,{ responseType: 'text' });
+    return this.http.get(environment.apiUrl + `compras/leer-xml/${id}`, { responseType: 'json' });
   }
 
   public descargarFacturas(id:number): Observable<any> {
-    return this.http.get(environment.apiUrl + `compras/descargar-facturas/${id}`,{ responseType: 'blob' });
+    return this.http.get(environment.apiUrl + `compras/descargar-facturas/${id}`, { responseType: 'blob' });
   }
+
+  // private handleError(error:HttpErrorResponse){
+  //   if(error.error instanceof ErrorEvent){
+  //     console.error('Erro')
+  //   }
+  // }
 
 }
 
