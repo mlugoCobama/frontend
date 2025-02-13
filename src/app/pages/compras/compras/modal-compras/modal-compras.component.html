@@ -1,0 +1,67 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Detalle de solicitud de compra component</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="modalRef?.hide()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-6">
+        <p><strong>Folio: </strong>{{ folio }}</p>
+        <p><strong>Usuario solicita: </strong>{{ usuario_solicita }}</p>
+        <p><strong>Empresa: </strong>CAS</p>
+      </div>
+      <div class="col-md-6">
+        <p><strong>Fecha: </strong>{{ fecha }}</p>
+        <p><strong>Uusario Destino: </strong>{{ usuario_destino }}</p>
+        <p><strong>Motivo: </strong>{{ motivo }}</p>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center" *ngIf="isLoad">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    <table
+        class="table table-striped table-hover table-sm table-bordered table-responsive"
+        id="tableCompraInsumos"
+        *ngIf="!isLoad"
+      >
+        <thead class="table-light">
+          <tr>
+            <th>Cantidad</th>
+            <th>Unidad de Medida</th>
+            <th>Descripción</th>
+            <th>Observaciones</th>
+            <th>Ref. fotografica</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- datos de la tabla detalle -->
+          <tr *ngFor="let row of detalles; let i = index">
+            <td>{{ row.cantidad }}</td>
+            <td>{{ row.unidadMedida.nombre}} ({{ row.unidadMedida.abreviatura}})</td>
+            <td>{{ row.descripcion }}</td>
+            <td>{{ row.observaciones }}</td>
+            <td> <img *ngIf="row.img_referencia" [src]="row.img_referencia" alt="Sin referencia" width="100"> </td>
+          </tr>
+        </tbody>
+      </table>
+      <hr>
+      <div class="alert alert-primary" role="alert">STATUS</div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      data-bs-dismiss="modal"
+      (click)="modalRef?.hide()"
+    >
+      Cerrar
+    </button>
+  </div>

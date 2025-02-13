@@ -26,4 +26,12 @@ export class EnergeticosGaserasService {
   public getAnualSubDivision(id_subdivision: number, anio: number) : Observable<ResponseEnergeticosGaseras> {
     return this.http.get<ResponseEnergeticosGaseras>(environment.apiUrl + 'energeticos-anual/' + id_subdivision + '/' + anio);
   }
+  
+  public getGasolinerias(mes: number, anio: number) : Observable<ResponseEnergeticosGaseras> {
+    return this.http.get<ResponseEnergeticosGaseras>(environment.apiUrl + 'energeticos-gasolineras/' + mes + '/' + anio);
+  }
+
+  public save(data: any): Observable<any> {
+    return this.http.post(environment.apiUrl + "dashboard/gasolinerias", data);
+  }
 }

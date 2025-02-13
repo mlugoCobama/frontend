@@ -50,7 +50,13 @@ export const MENU: MenuItem[] = [
           label: 'Proveedores',
           link: '/compras/proveedores',
           parentId: 7
-        }
+        },
+        {
+          id: 10,
+          label: 'Unidades de Medida',
+          link: '/compras/cat-unidades-medidas',
+          parentId: 7
+        },
       ]
     },
     {
