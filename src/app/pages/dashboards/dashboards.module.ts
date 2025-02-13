@@ -6,8 +6,6 @@ import { DashboardsRoutingModule } from './dashboards-routing.module';
 import { UIModule } from '../../shared/ui/ui.module';
 import { WidgetModule } from '../../shared/widget/widget.module';
 
-import { NgApexchartsModule } from 'ng-apexcharts';
-
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { BsDropdownModule, BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
@@ -31,9 +29,8 @@ import { DefaultComponent } from './default/default.component';
     TabsModule.forRoot(),
     CarouselModule.forRoot(),
     WidgetModule,
-    NgApexchartsModule,
     SimplebarAngularModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
   ],
   providers: [BsDropdownConfig],
 })

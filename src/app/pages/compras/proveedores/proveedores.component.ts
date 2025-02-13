@@ -15,6 +15,12 @@ export class ProveedoresComponent implements OnInit {
 
   public formProveedores: FormGroup;
 
+  public mostrar:boolean = false;
+
+  public data:any ;
+
+  public proveedor: any;
+
   constructor(
     private modalService: BsModalService,
     public formBuilder: FormBuilder,
@@ -31,6 +37,12 @@ export class ProveedoresComponent implements OnInit {
   public openModal(content: any) {
     this.submitted = false;
     this.modalRef = this.modalService.show(content, { class: 'modal-lg' });
+  }
+
+  public seleccionar(id: number) {
+    this.proveedor = id;
+    console.log(`Se seleccionó el proveedor con ID: ${id}`);
+    this.mostrar = true;
   }
 
   public save() {
@@ -66,6 +78,11 @@ export class ProveedoresComponent implements OnInit {
 
   get proveedoresFormControl() {
     return this.formProveedores.controls;
+  }
+
+  public eliminar() {
+    console.log(this.proveedor);
+
   }
 
 }

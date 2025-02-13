@@ -1,0 +1,28 @@
+
+<div class="card" *ngIf="!isLoad">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-sm table-striped-columns">
+                    <thead>
+                        <tr >
+                            <th scope="col">Empresa</th>
+                            <th scope="col" class="text-center">Mes Anterior</th>
+                            <th scope="col" class="text-center">Mes Actual</th>
+                            <th scope="col" class="text-center">Mes Año Anterior</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        <tr *ngFor="let item of dataEnergeticos.mes; let i = index">
+                            <td scope="row"> <b>{{ dataEnergeticos.mes[i]['entidad'] }}</b> </td>
+                            <td class="text-end" >{{ dataEnergeticos.mesAnt[i][concepto] | number }}</td>
+                            <td class="text-end" >{{ dataEnergeticos.mes[i][concepto] | number }}</td>
+                            <td class="text-end" >{{ dataEnergeticos.anioAnt[i][concepto] | number }}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot></tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

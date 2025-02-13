@@ -1,0 +1,28 @@
+<div class="card">
+    <div class="card-body">
+        <h4 class="text-muted mb-4"> <i class="mdi mdi-cash h2 text-warning align-middle mb-0 me-1"></i> {{title}}</h4>
+        <div class="row">
+            <div class="col-6">
+                <div>
+                    <h5> {{money}} {{ dataMes[16][concepto] | number }} </h5>
+
+                    <ng-container *ngIf="diferencia > 0; else elseTemplate">
+                        <p class="text-truncate mb-0 text-success"> 
+                            {{money}} {{ diferencia | number }} 
+                            <i class="mdi mdi-arrow-up ms-1 text-success"></i>
+                        </p>
+                    </ng-container>
+                    <ng-template #elseTemplate>
+                        <p class="text-truncate mb-0 text-danger"> 
+                            {{money}} {{ diferencia | number }} 
+                            <i class="mdi mdi-arrow-down ms-1 text-danger"></i>
+                        </p>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="col-6">
+                <div id="chart_{{concepto}}"></div>
+            </div>
+        </div>
+    </div>
+</div>

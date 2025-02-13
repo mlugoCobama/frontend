@@ -18,4 +18,12 @@ export class EnergeticosGaserasService {
   public get(mes: number, anio: number) : Observable<ResponseEnergeticosGaseras> {
     return this.http.get<ResponseEnergeticosGaseras>(environment.apiUrl + 'energeticos-gaseras/' + mes + '/' + anio);
   }
+
+  public getAnual(id_subdivision: number) : Observable<ResponseEnergeticosGaseras> {
+    return this.http.get<ResponseEnergeticosGaseras>(environment.apiUrl + 'energeticos/' + id_subdivision);
+  }
+
+  public getAnualSubDivision(id_subdivision: number, anio: number) : Observable<ResponseEnergeticosGaseras> {
+    return this.http.get<ResponseEnergeticosGaseras>(environment.apiUrl + 'energeticos-anual/' + id_subdivision + '/' + anio);
+  }
 }

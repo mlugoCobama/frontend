@@ -8,6 +8,8 @@
           <div class="d-flex align-items-center">
             <h5 class="mb-0 card-title flex-grow-1">Proveedores</h5>
             <div class="flex-shrink-0 d-flex gap-1">
+              <a href="javascript:void(0);" class="btn btn-primary btn-sm" *ngIf="mostrar" (click)="openModal(content)">Editar</a>
+              <a href="javascript:void(0);" class="btn btn-primary btn-sm" *ngIf="mostrar" (click)="eliminar()">Eliminar</a>
               <a href="javascript:void(0);" class="btn btn-primary btn-sm" (click)="openModal(content)">Nuevo</a>
             </div>
           </div>
@@ -30,7 +32,20 @@
               </tr>
             </thead>
             <tbody>
-
+              <tr (click)="seleccionar(1)">
+                <td>NOMBRE</td>
+                <td>CONTACTO</td>
+                <td>TELEFONO</td>
+                <td>LOCALIDAD</td>
+                <td>CONDICIONES</td>
+              </tr>
+              <tr (click)="seleccionar(2)">
+                <td>NOMBRE</td>
+                <td>CONTACTO</td>
+                <td>TELEFONO</td>
+                <td>LOCALIDAD</td>
+                <td>CONDICIONES</td>
+              </tr>
             </tbody>
           </table>
         </div><!--div.card-body-->

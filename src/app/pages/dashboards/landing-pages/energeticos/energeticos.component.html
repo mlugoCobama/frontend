@@ -1,0 +1,78 @@
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">Gaseras Marzo 2024</h4>
+            <div class="page-title-right ">
+                <ol class="breadcrumb m-0 ">
+                    <ng-container>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Landing Page</a>
+                        </li>
+                        <li class="breadcrumb-item active">Gaseras </li>
+                    </ng-container>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center" *ngIf="isLoad">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+<div class="row" *ngIf="!isLoad">
+    <div class="col-xl-12">
+        <div class="row">
+            <div class="col-sm-4">
+                <app-totales 
+                    [dataMes]="dataMesActual" 
+                    [dataMesAnterior]="dataMesAnterior" 
+                    concepto="ventas"
+                    [totalAnio]="dataTotalAnio"
+                    [totalAnioAnt]="dataTotalAnioAnt"
+                ></app-totales>
+            </div>
+            <div class="col-sm-4">
+                <app-totales 
+                    [dataMes]="dataMesActual" 
+                    [dataMesAnterior]="dataMesAnterior" 
+                    concepto="venta_litros"
+                    [totalAnio]="dataTotalAnio"
+                    [totalAnioAnt]="dataTotalAnioAnt"
+                ></app-totales>
+            </div>
+            <div class="col-sm-4">
+                <app-totales 
+                    [dataMes]="dataMesActual" 
+                    [dataMesAnterior]="dataMesAnterior" 
+                    concepto="gasto"
+                    [totalAnio]="dataTotalAnio"
+                    [totalAnioAnt]="dataTotalAnioAnt"
+                ></app-totales>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row" *ngIf="!isLoad">
+    <div class="col-xl-6">
+        <app-totales-grafica 
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            concepto="uno"
+            [totalAnio]="dataTotalAnio"
+            [totalAnioAnt]="dataTotalAnioAnt"
+        ></app-totales-grafica>
+    </div>
+    <div class="col-xl-6">
+        <app-totales-grafica 
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            concepto="utilidad_bruta"
+            [totalAnio]="dataTotalAnio"
+            [totalAnioAnt]="dataTotalAnioAnt"
+        ></app-totales-grafica>
+    </div>
+</div>

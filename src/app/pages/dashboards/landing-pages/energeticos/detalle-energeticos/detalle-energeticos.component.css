@@ -1,0 +1,3 @@
+.table-striped-columns > :not(caption) > tr > :nth-child(even) {
+    --bs-table-bg-type: #e2f0ff !important;
+}
