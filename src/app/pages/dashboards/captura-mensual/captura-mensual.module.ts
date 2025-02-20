@@ -7,12 +7,18 @@ import { CapturaMensualRoutingModule } from './captura-mensual-routing.module';
 import { CapturaGaserasComponent } from './captura-gaseras/captura-gaseras.component';
 import { CapturaGasolineriasComponent } from './captura-gasolinerias/captura-gasolinerias.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CapturaAgenciasComponent } from './captura-agencias/captura-agencias.component';
+import { FormUVendidasComponent } from './captura-agencias/forms/form-u-vendidas/form-u-vendidas.component';
+import { FormTablaCapturaComponent } from './captura-agencias/forms/form-tabla-captura/form-tabla-captura.component';
 
 
 @NgModule({
   declarations: [
     CapturaGaserasComponent,
-    CapturaGasolineriasComponent
+    CapturaGasolineriasComponent,
+    CapturaAgenciasComponent,
+    FormUVendidasComponent,
+    FormTablaCapturaComponent
   ],
   imports: [
     CommonModule,

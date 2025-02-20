@@ -10,10 +10,15 @@ import {
   Validators,
 } from "@angular/forms";
 
-import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import Swal from "sweetalert2";
 import { Config } from 'datatables.net';
 import { CatUnidadesMedidasService } from "src/app/core/services/compras/unidadesMedidas/cat-unidades-medidas.service";
+
+import { ModalAddUnidadComponent } from "./modal-add-unidad/modal-add-unidad.component";
+import { ModalUpdtUnidadComponent } from './modal-updt-unidad/modal-updt-unidad.component';
+
+
 
 @Component({
   selector: "app-cat-unidades-medidas",
@@ -29,10 +34,6 @@ export class CatUnidadesMedidasComponent implements OnInit{
   public data: any;
   
   public modalRef?: BsModalRef;
-  public submitted: boolean = false;
-  public formUnidades: FormGroup;
-  public formUpdateUnidades: FormGroup;
-
   public unidad: any;
   dtOptions: Config = {};
 
@@ -44,56 +45,52 @@ export class CatUnidadesMedidasComponent implements OnInit{
 
   public ngOnInit(): void {
     this.getAll();
-    this.buildForm();
     this.dtOptions = environment.dataTables;
   }
 
 
+    public openModalNuevo() {
+      const initialState: ModalOptions = {
+        initialState: {
+        },
+        class: "modal-lg",
+      };
+      this.modalRef = this.modalService.show(
+        ModalAddUnidadComponent,
+        initialState
+      );
+      this.modalRef.content.closeBtnName = "Close";
+      this.modalRef.content.event.subscribe(() => {
+        this.isLoad = true;
+        this.mostrar = false;
+        this.getAll();
+      });
+    }
+  
+    public openModalActualizar() {
+      const initialState: ModalOptions = {
+        initialState: {
+          unidad: this.unidad,
 
+        },
+        class: "modal-lg",
+      };
+      this.modalRef = this.modalService.show(
+        ModalUpdtUnidadComponent,
+        initialState
+      );
+      this.modalRef.content.closeBtnName = "Close";
+      
+      this.modalRef.content.event.subscribe(() => {
+        this.isLoad = true;
+        this.mostrar = false;
+        this.getAll();
+      });
+    }
   /**
    * Open modal
    * @param content modal content
    */
-  public openModal(content: any) {
-    this.submitted = false;
-    this.modalRef = this.modalService.show(content, { class: "modal-lg" });
-    this.mostrar = false;
-  }
-
-  public openModalupdate(update: any) {
-    this.mostrar = false;
-    this.mostrar = false;
-    this.submitted = false;
-    this.modalRef = this.modalService.show(update, { class: "modal-lg" });
-    this.formUpdateUnidades.patchValue({
-      nombre: this.unidad.nombre,
-      abreviatura: this.unidad.abreviatura,
-      id: this.unidad.id,
-    });
-  }
-  private buildForm() {
-    return new Promise((resolve, reject) => {
-      this.formUnidades = this.formBuilder.group({
-        nombre: new FormControl(null, Validators.required),
-        abreviatura: new FormControl(null, Validators.required),
-      });
-      this.formUpdateUnidades = this.formBuilder.group({
-        nombre: new FormControl(null, Validators.required),
-        abreviatura: new FormControl(null, Validators.required),
-      });
-      resolve(true);
-    });
-  }
-
-  get unidadesFormControl() {
-    return this.formUnidades.controls;
-  }
-
-  get unidadesFormControlUpdate() {
-    return this.formUpdateUnidades.controls;
-  }
-
-
   private getAll() {
     this.catUnidadesMedidasService.getAll().subscribe(
       (response) => {
@@ -123,56 +120,6 @@ export class CatUnidadesMedidasComponent implements OnInit{
       evento.currentTarget.classList.add("table-primary");
     }
   }
-
-  public save() {
-    this.submitted = true;
-    this.isLoad = true;
-    if (this.formUnidades.invalid) {
-      Swal.fire({
-        title: "Alerta",
-        text: "Debes llenar correctamente todos los campos",
-        buttonsStyling: false,
-        icon: "warning",
-        customClass: {
-          confirmButton: "btn btn-warning px-4",
-          cancelButton: "btn btn- ms-2 px-4",
-        },
-      });
-      this.isLoad = false;
-      return;
-    }
-    this.data = this.formUnidades.value;
-    this.catUnidadesMedidasService.save(this.data).subscribe(
-      (response) => {
-        if (response.status === "success") {
-          this.getAll();
-          this.showTable = true;
-          console.log(response.message);
-          Swal.fire({
-            title: "Guardado",
-            text: "Unidad registrada correctamente",
-            buttonsStyling: false,
-            icon: "success",
-            customClass: {
-              confirmButton: "btn btn-success px-4",
-              cancelButton: "btn btn- ms-2 px-4",
-            },
-          });
-          this.isLoad = false;
-        } else {
-          console.log(response.message);
-        }
-      },
-      (error) => {
-        console.error("Error fetching data:", error);
-      }
-    );
-
-    this.modalRef.hide();
-    this.submitted = false;
-    this.formUnidades.reset();
-  }
-
 
   public destroy() {
     this.isLoad = true;
@@ -225,45 +172,5 @@ export class CatUnidadesMedidasComponent implements OnInit{
       }
       this.isLoad = false;
     });
-  }
-
-  public edit() {
-    this.isLoad = true;
-    this.submitted = true;
-    if (this.formUpdateUnidades.invalid) {
-      console.log("Formulario invalido");
-      this.isLoad = false;
-      return;
-    }
-    this.data = this.formUpdateUnidades.value;
-    let id = this.unidad.id;
-
-    this.catUnidadesMedidasService.edit(id, this.data).subscribe(
-      (response) => {
-        if (response.status === "success") {
-          this.getAll();
-          console.log(response.message);
-          Swal.fire({
-            title: "Guardado",
-            text: "Proveedor registrado correctamente",
-            buttonsStyling: false,
-            icon: "success",
-            customClass: {
-              confirmButton: "btn btn-success px-4",
-              cancelButton: "btn btn- ms-2 px-4",
-            },
-          });
-          this.isLoad = false;
-        } else {
-          console.log(response.message);
-        }
-      },
-      (error) => {
-        console.error("Error fetching data:", error);
-      }
-    );
-    this.modalRef.hide();
-    this.submitted = false;
-    this.formUpdateUnidades.reset();
   }
 }

@@ -1,0 +1,121 @@
+<!-- MODAL EXPEDIENTE PROVEEDOR -->
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">
+      Expediente del Proveedor: {{ proveedor.nombre }}
+    </h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="cerrarModal()"
+    ></button>
+  </div>
+  <div class="card-body border-bottom">
+
+    <div class="d-flex justify-content-center" *ngIf="!archivos">
+    <div class="row">
+        <div class="spinner-border" role="status"></div>
+    </div>
+      </div>
+  <div class="modal-body" *ngIf="archivos">
+    <table class="table table-hover table-sm table-bordered text-center">
+      <thead class="table-light">
+        <tr>
+          <th>Documeto</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Constancia de situacion fiscal</td>
+          <td *ngIf="archivos?.constancia_fiscal; else noArchivo">
+            <a
+              class="btn btn-sm btn-info"
+              href="javascript:void(0)"
+              (click)="openFile(archivos?.constancia_fiscal)"
+              >Abrir</a
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>Comprobante de domicilio</td>
+          <td *ngIf="archivos?.comprobante_domicilio; else noArchivo">
+            <a
+              class="btn btn-sm btn-info"
+              href="javascript:void(0)"
+              (click)="openFile(archivos?.comprobante_domicilio)"
+              >Abrir</a
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>INE</td>
+          <td *ngIf="archivos?.ine; else noArchivo">
+            <a
+              class="btn btn-sm btn-info"
+              href="javascript:void(0)"
+              (click)="openFile(archivos?.ine)"
+              >Abrir</a
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>Estado de Cuenta</td>
+          <td *ngIf="archivos?.estado_cuenta; else noArchivo">
+            <a
+              class="btn btn-sm btn-info"
+              href="javascript:void(0)"
+              (click)="openFile(archivos?.estado_cuenta)"
+              >Abrir</a
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>Acta Constitutiva</td>
+          <td *ngIf="archivos?.acta_constitutiva; else noArchivo">
+            <a
+              class="btn btn-sm btn-info"
+              href="javascript:void(0)"
+              (click)="openFile(archivos?.acta_constitutiva)"
+              >Abrir</a
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>Poder Notarial</td>
+          <td *ngIf="archivos?.poder_notarial; else noArchivo">
+            <a
+              class="btn btn-sm btn-info"
+              href="javascript:void(0)"
+              (click)="openFile(archivos?.poder_notarial)"
+              >Abrir</a
+            >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>Ultima actualizacion: {{ archivos?.updated_at }}</p>
+  </div>
+  <div class="modal-footer">
+    <a
+      *ngIf="tamanioExp > 1"
+      class="btn btn-sm btn-info"
+      (click)="descargarExpediente()"
+    >
+      <i class="fas fa-cloud-download-alt"></i>
+      Descargar Expediente
+    </a>
+
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      data-bs-dismiss="modal"
+      (click)="cerrarModal()"
+    >
+      Cerrar
+    </button>
+  </div>
+  <ng-template #noArchivo> Archivo no cargado </ng-template>
+<!--End Modal -->

@@ -225,6 +225,5 @@ export class CapturaGaserasComponent implements OnInit {
     this.mes = value;
     this.selecMes = true;
   }
-
-  public calcTotal() {}
+  
 }

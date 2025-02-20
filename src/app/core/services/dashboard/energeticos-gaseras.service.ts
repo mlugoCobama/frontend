@@ -26,4 +26,8 @@ export class EnergeticosGaserasService {
   public save(data: any): Observable<any> {
     return this.http.post(environment.apiUrl + "dashboard/gasolinerias", data);
   }
+
+  public getAgencias(mes: number, anio: number) : Observable<ResponseEnergeticosGaseras> {
+    return this.http.get<ResponseEnergeticosGaseras>(environment.apiUrl + 'energeticos-gaseras/' + mes + '/' + anio);
+  }
 }

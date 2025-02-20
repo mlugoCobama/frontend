@@ -15,6 +15,12 @@ import { DetallesSolicitudCompraComponent } from './detalles-solicitud-compra/de
 import { CotizacionesComponent } from './cotizacion/cotizaciones/cotizaciones.component';
 import { DatosSolicitudCompraComponent } from './detalles-solicitud-compra/datos-solicitud-compra/datos-solicitud-compra.component';
 import { TablaDetallesSolicitudComponent } from './detalles-solicitud-compra/tabla-detalles-solicitud/tabla-detalles-solicitud.component';
+import { ModalAddProveedorComponent } from './proveedores/modal-add-proveedor/modal-add-proveedor.component';
+import { ModalUpdtProveedorComponent } from './proveedores/modal-updt-proveedor/modal-updt-proveedor.component';
+import { ModalShowProveedorComponent } from './proveedores/modal-show-proveedor/modal-show-proveedor.component';
+import { ModalAddUnidadComponent } from './cat-unidades-medidas/modal-add-unidad/modal-add-unidad.component';
+import { ModalUpdtUnidadComponent } from './cat-unidades-medidas/modal-updt-unidad/modal-updt-unidad.component';
+import { FormDetalleScComponent } from './compras/modal-compras/form-detalle-sc/form-detalle-sc.component';
 
 
 
@@ -30,6 +36,12 @@ import { TablaDetallesSolicitudComponent } from './detalles-solicitud-compra/tab
     CotizacionesComponent,
     DatosSolicitudCompraComponent,
     TablaDetallesSolicitudComponent,
+    ModalAddProveedorComponent,
+    ModalUpdtProveedorComponent,
+    ModalShowProveedorComponent,
+    ModalAddUnidadComponent,
+    ModalUpdtUnidadComponent,
+    FormDetalleScComponent,
   ],
   imports: [
     CommonModule,
