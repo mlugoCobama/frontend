@@ -160,6 +160,25 @@ export const MENU: MenuItem[] = [
             },
           ]
         },
+        {
+          id: 3,
+          label: 'Landing Page',
+          parentId: 1,
+          subItems: [
+            {
+              id: 35,
+              label: 'Energeticos',
+              link: '/dashboard/landing-page/energeticos',
+              parentId: 34
+            },
+            {
+              id: 36,
+              label: 'Captura Gasolinerias',
+              link: '/dashboard/captura/gasolinerias',
+              parentId: 34
+            },
+          ]
+        },
       ]
     },
 ];

@@ -5,6 +5,7 @@ import { DefaultComponent } from './default/default.component';
 
 const routes: Routes = [
   { path: 'captura', loadChildren: () => import('./captura-mensual/captura-mensual.module').then(m => m.CapturaMensualModule) },
+  { path: 'landing-page', loadChildren: () => import('./landing-pages/landing-pages.module').then(m => m.LandingPagesModule) },
 ];
 
 @NgModule({
