@@ -1,0 +1,133 @@
+<div class="alert alert-info" style="text-align: center" role="alert">
+    Seleccione los proveedores a los que se le solicitara la cotización
+  </div>
+  <form class="row g-2" [formGroup]="formSolicitudCotizacion">
+    <div class="col-md-4">
+      <label for="empresa1" class="form-label form-label-sm"
+        >Proveedor 1: *</label
+      >
+      <select
+        class="form-select form-select-sm"
+        formControlName="empresa1"
+        id="empresa1"
+        aria-label="Default select example"
+        (change)="onSelectChange($event.target.value, 0)"
+      >
+        <option *ngFor="let item of proveedores" [value]="item.id">
+          {{ item.nombre }}
+        </option>
+      </select>
+      <div
+        *ngIf="solicitudCotizacionFormControl.empresa1.touched || submitted"
+      >
+        <div
+          class="text-danger form-text"
+          *ngIf="solicitudCotizacionFormControl.empresa1.errors?.['required']"
+        >
+          Selecciona un proveedor
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <label for="empresa2" class="form-label form-label-sm"
+        >Proveedor 2: *</label
+      >
+      <select
+        class="form-select form-select-sm"
+        formControlName="empresa2"
+        id="empresa2"
+        aria-label="Default select example"
+        (change)="onSelectChange($event.target.value, 1)"
+      >
+        <option *ngFor="let item of proveedores" [value]="item.id">
+          {{ item.nombre }}
+        </option>
+      </select>
+      <div
+        *ngIf="solicitudCotizacionFormControl.empresa2.touched || submitted"
+      >
+        <div
+          class="text-danger form-text"
+          *ngIf="solicitudCotizacionFormControl.empresa2.errors?.['required']"
+        >
+          Selecciona un proveedor
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <label for="empresa3" class="form-label form-label-sm"
+        >Proveedor 3: *</label
+      >
+      <select
+        class="form-select form-select-sm"
+        formControlName="empresa3"
+        id="empresa3"
+        aria-label="Default select example"
+        (change)="onSelectChange($event.target.value, 2)"
+      >
+        <option *ngFor="let item of proveedores" [value]="item.id">
+          {{ item.nombre }}
+        </option>
+      </select>
+      <div
+        *ngIf="solicitudCotizacionFormControl.empresa3.touched || submitted"
+      >
+        <div
+          class="text-danger form-text"
+          *ngIf="solicitudCotizacionFormControl.empresa3.errors?.['required']"
+        >
+          Selecciona un proveedor
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <label for="consideraciones" class="form-label"
+        >Consideraciones: *</label
+      >
+      <textarea
+        [(ngModel)]="text"
+        [maxlength]="longitudMaxima"
+        (input)="contarCaracteres()"
+        class="form-control"
+        formControlName="consideraciones"
+        id="consideraciones"
+        rows="3"
+      ></textarea>
+      <p
+        [class]="
+          caracteresRestantes === 0 ? 'text-danger form-text' : 'form-text'
+        "
+      >
+        {{ longitudMaxima }}/{{ caracteresRestantes }}
+      </p>
+      <div
+        *ngIf="
+          solicitudCotizacionFormControl.consideraciones.touched || submitted
+        "
+      >
+        <div
+          class="text-danger form-text"
+          *ngIf="solicitudCotizacionFormControl.consideraciones.errors?.['required']"
+        >
+          Consideraciones es requerido.
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-2">
+      <button
+        class="btn btn-sm btn-primary"
+        type="button"
+        (click)="enviarSolicitudCotizacion()"
+        [disabled]="isDisabled"
+      >
+        <div *ngIf="!isDisabled">Solicitar Cotización</div>
+        <div *ngIf="isDisabled">
+          Trabajando
+          <div class="spinner-grow spinner-grow-sm" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </button>
+    </div>
+  </form>
