@@ -1,9 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
 import { ResponseEnergeticosGaseras } from '../../models/dashboard/energeticos-gaseras';
-
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -27,15 +25,7 @@ export class EnergeticosGaserasService {
     return this.http.get<ResponseEnergeticosGaseras>(environment.apiUrl + 'energeticos-anual/' + id_subdivision + '/' + anio);
   }
   
-  public getGasolinerias(mes: number, anio: number) : Observable<ResponseEnergeticosGaseras> {
-    return this.http.get<ResponseEnergeticosGaseras>(environment.apiUrl + 'energeticos-gasolineras/' + mes + '/' + anio);
-  }
-
   public save(data: any): Observable<any> {
     return this.http.post(environment.apiUrl + "dashboard/gasolinerias", data);
-  }
-
-  public getAgencias(mes: number, anio: number) : Observable<ResponseEnergeticosGaseras> {
-    return this.http.get<ResponseEnergeticosGaseras>(environment.apiUrl + 'energeticos-gaseras/' + mes + '/' + anio);
   }
 }

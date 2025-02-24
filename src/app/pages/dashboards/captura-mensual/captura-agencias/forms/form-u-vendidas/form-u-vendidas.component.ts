@@ -21,7 +21,7 @@ public formUnidadesVendidas: FormGroup;
 ngOnInit() {
   // this.buildFormUnidadesVendidas
   this.buildFormUnidadesVendidas()
-  console.log(this.catEmpresas)
+  // console.log(this.catEmpresas)
 }
 
   private modelInputs = {
@@ -39,7 +39,7 @@ constructor(
   ) {}
 
 private buildFormUnidadesVendidas() {
-  console.log(this.catEmpresas);
+  // console.log(this.catEmpresas);
    const fields = {};
 
    this.formUnidadesVendidas = this.formBuilder.group({});

@@ -2,42 +2,36 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import Swal from "sweetalert2";
 
-import { EnergeticosGaserasService } from "src/app/core/services/dashboard/energeticos-gaseras.service";
-import {
-  ResponseCatEmpresas,
-  CatEmpresas,
-} from "src/app/core/models/cat-empresas";
+
+import {ResponseCatEmpresas, CatEmpresas,} from "src/app/core/models/cat-empresas";
+
+import { EnergeticosGasolinerasService } from "src/app/core/services/dashboard/energeticos-gasolineras.service";
 import { AlertErrorService } from "src/app/core/services/alert-error.service";
 import { CatEmpresasService } from "src/app/core/services/cat-empresas.service";
 
-import dataMeses from "src/environments/meses.json";
 import { EnergeticosGaseras } from "src/app/core/models/dashboard/energeticos-gaseras";
-
+import dataMeses from "src/environments/meses.json";
 
 @Component({
   selector: "app-captura-gasolinerias",
   templateUrl: "./captura-gasolinerias.component.html",
   styleUrls: ["./captura-gasolinerias.component.css"],
 })
+
 export class CapturaGasolineriasComponent implements OnInit {
+
   public dataEmpresas: EnergeticosGaseras[];
-
   public catEmpresas: CatEmpresas[];
-
-  public mostrar: boolean = false;
+  public meses = dataMeses;
 
   public formDatosEnergeticos: FormGroup;
 
-  public meses = dataMeses;
-
   private fecha = new Date();
-
   public mes = this.fecha.getMonth();
-
   public anio = this.fecha.getFullYear();
 
+  public mostrar: boolean = false;
   public isDisabled: boolean = false;
-
   public existInfo: boolean = true;
 
   private modelInputs = {
@@ -55,7 +49,7 @@ export class CapturaGasolineriasComponent implements OnInit {
     private catEmpresasService: CatEmpresasService,
     public alertService: AlertErrorService,
     public formBuilder: FormBuilder,
-    private energerticosGaseras: EnergeticosGaserasService
+    private energeticosGasolineras: EnergeticosGasolinerasService
   ) {}
 
   ngOnInit(): void {
@@ -68,8 +62,6 @@ export class CapturaGasolineriasComponent implements OnInit {
       (data: ResponseCatEmpresas) => {
         if (data.success) {
           this.catEmpresas = data.data;
-          console.log(this.catEmpresas);
-          // this.buildFormDatosEnergeticos();
         } else {
           this.alertService.alertError(data.message, data.success);
         }
@@ -83,9 +75,7 @@ export class CapturaGasolineriasComponent implements OnInit {
   indexTotals: any;
   private buildFormDatosEnergeticos() {
     const fields = {};
-
     this.formDatosEnergeticos = this.formBuilder.group({});
-
     if (this.existInfo) {
       Object.entries(this.dataEmpresas).forEach((data) => {
         for (const field of Object.keys(this.modelInputs)) {
@@ -94,8 +84,6 @@ export class CapturaGasolineriasComponent implements OnInit {
             this.formBuilder.control(data[1][field], Validators.required)
           );
           this.indexTotals = this.dataEmpresas.length - 1;
-
-          
         }
       });
     } else {
@@ -108,7 +96,6 @@ export class CapturaGasolineriasComponent implements OnInit {
         }
       });
     }
-
     this.mostrar = true;
     this.isDisabled = false;
   }
@@ -158,7 +145,7 @@ export class CapturaGasolineriasComponent implements OnInit {
         buttonsStyling: false,
       }).then((result) => {
         if (result.value) {
-          this.energerticosGaseras.save(datos).subscribe((response) => {
+          this.energeticosGasolineras.save(datos).subscribe((response) => {
             if (response.status === "success") {
               Swal.fire({
                 title: "Listo",
@@ -184,7 +171,7 @@ export class CapturaGasolineriasComponent implements OnInit {
     this.isDisabled = true;
     this.dataEmpresas = [];
 
-    this.energerticosGaseras
+    this.energeticosGasolineras
       .getGasolinerias(this.mes, this.anio)
       .subscribe((data) => {
         if (data.success && data.data.length > 1) {
@@ -219,6 +206,7 @@ export class CapturaGasolineriasComponent implements OnInit {
         // }
       });
   }
+
   public selecAnio: boolean = false;
   public onSelectedAnio(value: number) {
     this.anio = value;
@@ -230,6 +218,4 @@ export class CapturaGasolineriasComponent implements OnInit {
     this.mes = value;
     this.selecMes = true;
   }
-
-  public calcTotal() {}
 }

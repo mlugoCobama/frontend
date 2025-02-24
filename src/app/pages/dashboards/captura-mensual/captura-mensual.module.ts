@@ -10,6 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CapturaAgenciasComponent } from './captura-agencias/captura-agencias.component';
 import { FormUVendidasComponent } from './captura-agencias/forms/form-u-vendidas/form-u-vendidas.component';
 import { FormTablaCapturaComponent } from './captura-agencias/forms/form-tabla-captura/form-tabla-captura.component';
+import { TablaMesAgenciaComponent } from './captura-agencias/forms/tabla-mes-agencia/tabla-mes-agencia.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { FormTablaCapturaComponent } from './captura-agencias/forms/form-tabla-c
     CapturaGasolineriasComponent,
     CapturaAgenciasComponent,
     FormUVendidasComponent,
-    FormTablaCapturaComponent
+    FormTablaCapturaComponent,
+    TablaMesAgenciaComponent
   ],
   imports: [
     CommonModule,

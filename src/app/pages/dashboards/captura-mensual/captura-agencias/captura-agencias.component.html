@@ -1,89 +1,130 @@
 <div class="row">
-    <div class="col-12">
-        <div class="page-title-box d-flex align-items-center justify-content-between">
-            <h4 class="mb-0 font-size-18"></h4>
-            <div class="page-title-right ">
-                <ol class="breadcrumb m-0 ">
-                    <ng-container>
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Captura</a>
-                        </li>
-                        <li class="breadcrumb-item active">Agencias</li>
-                    </ng-container>
-                </ol>
-            </div>
-        </div>
+  <div class="col-12">
+    <div
+      class="page-title-box d-flex align-items-center justify-content-between"
+    >
+      <h4 class="mb-0 font-size-18"></h4>
+      <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+          <ng-container>
+            <li class="breadcrumb-item">
+              <a href="javascript: void(0);">Captura</a>
+            </li>
+            <li class="breadcrumb-item active">Agencias</li>
+          </ng-container>
+        </ol>
+      </div>
     </div>
   </div>
-  <div class="row">
-    <div class="card ">
-      <div class="card-header text-bg-primary row">
-        <div class="col-6 pt-1">
-          <h4>Captura </h4>
-        </div>
-        <div class="col-6 pt-1">
-          <h5 class="text-end">Agencias</h5>
-        </div>
+</div>
+<div class="row">
+  <div class="card">
+    <div class="card-header text-bg-primary row">
+      <div class="col-6 pt-1">
+        <h4>Captura</h4>
       </div>
-      <div class="card-body ">
-  
-          <div class="row">
-            <div class="col-3">
-                <label class="form-label">Division:</label>
-                <select class="form-control form-control-sm" (change)="onSelectedSdivision($event.target.value)">
-                  <option value="" default>Selecciona uno</option>
-                  <option value="3">Nissan</option>
-                  <option value="4">Renault</option>
-                </select>
-            </div>
-            <div class="col-3">
-              <label class="form-label">Mes:</label>
-              <select class="form-control form-control-sm">
-                <option value="" default>Selecciona un mes</option>
-                <option> Mes</option>
-              </select>
-            </div>
-            <div class="col-3">
-              <label class="form-label">Año:</label>
-              <select #anios class="form-control form-control-sm">
-                <option value="" default>Selecciona un año</option>
-                <option value="2022">2022</option>
-                <option value="2023">2023</option>
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-              </select>
-            </div>
-            <div class="col-3 mt-4">
-              <button
-                type="submit"
-                class="btn btn-info btn-sm me-1"
-               
-              >
-                <div>
-                  <i class='bx bx-search-alt-2'></i> Consultar
-                </div>
-  
-                <!-- <div *ngIf="isDisabled">
+      <div class="col-6 pt-1">
+        <h5 class="text-end">Agencias</h5>
+      </div>
+    </div>
+    <div class="card-body">
+      <form class="row g-2" [formGroup]="formConsultaDatos">
+        <div class="row">
+          <div class="col-3">
+            <label class="form-label">Division:</label>
+            <select
+              formControlName="selectDivision"
+              class="form-control form-control-sm"
+              (change)="onSelectedSdivision($event.target.value)"
+            >
+              <option value="null" default>Selecciona uno</option>
+              <option value="3">Nissan</option>
+              <option value="4">Renault</option>
+            </select>
+            <div *ngIf="consultaDatosFormControl.selectDivision.touched">
+              <div
+                class="text-danger form-text" *ngIf="consultaDatosFormControl.selectDivision.errors?.['required']">
+                Selecciona una division
+              </div>
+           </div>
+          </div>
+          <div class="col-3">
+            <label class="form-label">Mes:</label>
+            <select
+              formControlName="selectMes"
+              class="form-control form-control-sm"
+              (change)="onSelectedMes($event.target.value)"
+            >
+              <option  value="null" default>Selecciona un mes</option>
+              <option value="{{ mes.mes }}" *ngFor="let mes of meses">
+                {{ mes.nombre }}
+              </option>
+            </select>
+            <div *ngIf="consultaDatosFormControl.selectMes.touched">
+              <div
+                class="text-danger form-text" *ngIf="consultaDatosFormControl.selectMes.errors?.['required']">
+                Selecciona un mes
+              </div>
+           </div>
+          </div>
+          <div class="col-3">
+            <label class="form-label">Año:</label>
+            <select
+              formControlName="selectAnio"
+              #anios
+              class="form-control form-control-sm"
+              (change)="onSelectedAnio($event.target.value)"
+            >
+              <option value="null" default>Selecciona un año</option>
+              <option value="2022">2022</option>
+              <option value="2023">2023</option>
+              <option value="2024">2024</option>
+              <option value="2025">2025</option>
+            </select>
+            <div *ngIf="consultaDatosFormControl.selectMes.touched">
+              <div
+                class="text-danger form-text" *ngIf="consultaDatosFormControl.selectMes.errors?.['required']">
+                Selecciona un mes
+              </div>
+           </div>
+          </div>
+          <div class="col-3 mt-4">
+            <button
+              type="submit"
+              class="btn btn-info btn-sm me-1"
+              (click)="getMesAgencia()"
+              *ngIf="selecAgencia && selecMes && selecAnio"
+            >
+              <div><i class="bx bx-search-alt-2"></i> Consultar</div>
+
+              <!-- <div *ngIf="isDisabled">
                   <div class="spinner-grow spinner-grow-sm" role="status">
                     <span class="visually-hidden">Loading...</span>
                   </div>
                   Buscando
                 </div> -->
-              </button>
-              <button type="submit" class="btn btn-primary btn-sm" >Guardar</button>
-            </div>
+            </button>
+            <button *ngIf ="showTable" type="submit" class="btn btn-primary btn-sm">
+              Guardar
+            </button>
           </div>
-          <br>
-          <div class="row">
-            <div class="table-responsive" *ngIf = "!subDivision">
-              <p class="text-danger">Selecciona una Sub Division</p>
+        </div>
+        <br />
+        <div class="row">
+          <div class="table-responsive" *ngIf ="showTable">
+            <hr/>
+            <app-form-tabla-captura *ngIf="!hasDatos"
+            [catEmpresas]="catEmpresas"
+            ></app-form-tabla-captura>
+            <app-tabla-mes-agencia 
+            *ngIf="hasDatos" 
+            [dataMesAgencias]="dataMesAgencias" 
+            [catEmpresas]="catEmpresas">
+          </app-tabla-mes-agencia>
+            <hr />
           </div>
-            <div class="table-responsive" *ngIf = "subDivision > 0">
-                <hr>
-                <app-form-tabla-captura></app-form-tabla-captura>
-                <hr>
-            </div>
-          </div>
-  
-      </div>
+        </div>
+      </form>
     </div>
   </div>
+</div>
