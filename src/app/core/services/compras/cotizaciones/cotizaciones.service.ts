@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -35,5 +36,28 @@ export class CotizacionesService {
 
   public obtenerFolio(){
     return this.http.get<{ nuevoFolio: string }>(environment.apiUrl + `compras/generar-folio-co`);
+  }
+
+  private selectedFiles: { [key: number]: File } = {};
+
+  setSelectedFile(proveedorId: number, file: File) {
+    this.selectedFiles[proveedorId] = file;
+  }
+  getSelectedFiles() {
+    return this.selectedFiles;
+  }
+
+  clearFiles() {
+    this.selectedFiles = {};
+  }
+
+  private formOrdenCompra: FormGroup;
+
+  setForm(form: FormGroup) {
+    this.formOrdenCompra = form;
+  }
+
+  getForm(): FormGroup {
+    return this.formOrdenCompra;
   }
 }

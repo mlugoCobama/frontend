@@ -12,7 +12,12 @@ export class EnergeticosGaserasService {
   constructor(
     private http: HttpClient,
   ) {}
-
+  /**
+    * Recupera los datos del mes gaseras
+   * @param mes 
+   * @param anio 
+   * @returns 
+   */
   public get(mes: number, anio: number) : Observable<ResponseEnergeticosGaseras> {
     return this.http.get<ResponseEnergeticosGaseras>(environment.apiUrl + 'energeticos-gaseras/' + mes + '/' + anio);
   }
@@ -25,6 +30,11 @@ export class EnergeticosGaserasService {
     return this.http.get<ResponseEnergeticosGaseras>(environment.apiUrl + 'energeticos-anual/' + id_subdivision + '/' + anio);
   }
   
+      /**
+     * Crea o actualiza registros en 'datos_generales'
+     * @param data 
+     * @returns 
+     */
   public save(data: any): Observable<any> {
     return this.http.post(environment.apiUrl + "dashboard/gasolinerias", data);
   }

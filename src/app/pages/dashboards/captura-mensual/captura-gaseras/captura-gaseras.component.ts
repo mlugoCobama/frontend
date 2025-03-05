@@ -19,15 +19,15 @@ import { EnergeticosGaseras } from "src/app/core/models/dashboard/energeticos-ga
   styleUrls: ["./captura-gaseras.component.css"],
 })
 export class CapturaGaserasComponent implements OnInit {
-  public dataEmpresas: EnergeticosGaseras[];
+  public dataEmpresas: EnergeticosGaseras[]; //alacena los datos recuperados del mes
 
-  public catEmpresas: CatEmpresas[];
+  public catEmpresas: CatEmpresas[]; //Empresas (Gaseras)
 
   public mostrar: boolean = false;
 
-  public formDatosEnergeticos: FormGroup;
+  public formDatosEnergeticos: FormGroup; //Formulario dinámico
 
-  public meses = dataMeses;
+  public meses = dataMeses; //meses en el select
 
   private fecha = new Date();
 
@@ -37,9 +37,11 @@ export class CapturaGaserasComponent implements OnInit {
 
   public isDisabled: boolean = false;
 
-  public existInfo: boolean = true;
-
+  public existInfo: boolean = true; //Define si existe información capturada en el periodo
+ 
+  //Modelo para generar los inputs
   private modelInputs = {
+    
     venta_litros: "",
     ventas: "",
     eficiencia: "",
@@ -62,13 +64,15 @@ export class CapturaGaserasComponent implements OnInit {
     //this.getInfoMes();
   }
 
+  /**
+   * Recupera los nombres de las gaseras
+   */
   public getAllEmpresas() {
     this.catEmpresasService.getAll(1).subscribe(
       (data: ResponseCatEmpresas) => {
         if (data.success) {
           this.catEmpresas = data.data;
           // this.buildFormDatosEnergeticos();
-          console.log;
         } else {
           this.alertService.alertError(data.message, data.success);
         }
@@ -80,6 +84,12 @@ export class CapturaGaserasComponent implements OnInit {
   }
 
   indexTotals: any;
+
+  /**
+   * Genera el formulario
+   * Flujo 1: En base a datos recuperados del servidor (Si hay datos de captura)
+   * Flujo 2: En base a un modelo y a las estaciones (Si no existen datos de captura)
+   */
   private buildFormDatosEnergeticos() {
     const fields = {};
 
@@ -109,9 +119,12 @@ export class CapturaGaserasComponent implements OnInit {
     this.mostrar = true;
     this.isDisabled = false;
   }
-
+  /**
+   * Guarda y actualiza los datos capturados en
+   * el formulario
+   */
   public saveInfo() {
-    console.warn(this.formDatosEnergeticos.value);
+    // console.warn(this.formDatosEnergeticos.value);
     if (this.formDatosEnergeticos.valid) {
       const formData = this.formDatosEnergeticos.value;
       const datos = [];
@@ -135,7 +148,7 @@ export class CapturaGaserasComponent implements OnInit {
           datosEmpresa = {
             sucursales_id: Number(sucursales_id),
             fecha: fecha,
-            isNew: !this.existInfo,
+            isNew: !this.existInfo, //NOTA: Define la manera en la que se guardara o actualizara los datos
           };
           datos.push(datosEmpresa);
         }
@@ -169,7 +182,17 @@ export class CapturaGaserasComponent implements OnInit {
               });
               this.getInfoMes();
             } else {
-              console.log(response.message);
+              Swal.fire({
+                title: "Error",
+                text: response.message,
+                buttonsStyling: false,
+                icon: "error",
+                customClass: {
+                  confirmButton: "btn btn-success px-4",
+                  cancelButton: "btn btn- ms-2 px-4",
+                },
+              });
+              this.getInfoMes();
             }
           });
         }
@@ -177,6 +200,11 @@ export class CapturaGaserasComponent implements OnInit {
     }
   }
 
+  /**
+   * Recupera la información del mes de gaseras
+   * Valida si tiene existe información capturada
+   * Genera el formulario de captura
+   */
   public getInfoMes() {
     this.isDisabled = true;
     this.dataEmpresas = [];
@@ -214,16 +242,22 @@ export class CapturaGaserasComponent implements OnInit {
       // }
     });
   }
+
+  /**
+   * Maneja el evento y el valor del select Mes
+   */
   public selecAnio: boolean = false;
   public onSelectedAnio(value: number) {
     this.anio = value;
     this.selecAnio = true;
   }
 
+  /**
+   * Maneja el evento y el valor del select Mes
+   */
   public selecMes: boolean = false;
   public onSelectedMes(value: number) {
     this.mes = value;
     this.selecMes = true;
   }
-  
 }

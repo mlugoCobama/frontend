@@ -12,7 +12,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ModalComprasComponent } from './compras/modal-compras/modal-compras.component';
 import { DetallesSolicitudCompraComponent } from './detalles-solicitud-compra/detalles-solicitud-compra.component';
-import { CotizacionesComponent } from './cotizacion/cotizaciones/cotizaciones.component';
 import { DatosSolicitudCompraComponent } from './detalles-solicitud-compra/datos-solicitud-compra/datos-solicitud-compra.component';
 import { TablaDetallesSolicitudComponent } from './detalles-solicitud-compra/tabla-detalles-solicitud/tabla-detalles-solicitud.component';
 import { ModalAddProveedorComponent } from './proveedores/modal-add-proveedor/modal-add-proveedor.component';
@@ -25,10 +24,6 @@ import { FormCotizacionComponent } from './detalles-solicitud-compra/form-cotiza
 import { TblFlsCotizacionComponent } from './detalles-solicitud-compra/tbl-fls-cotizacion/tbl-fls-cotizacion.component';
 import { AceptOrdnCompraComponent } from './detalles-solicitud-compra/acept-ordn-compra/acept-ordn-compra.component';
 import { FormFacturasComponent } from './detalles-solicitud-compra/form-facturas/form-facturas.component';
-import { ViewerFacturasComponent } from './detalles-solicitud-compra/viewer-facturas/viewer-facturas.component';
-
-
-
 
 
 @NgModule({
@@ -38,7 +33,6 @@ import { ViewerFacturasComponent } from './detalles-solicitud-compra/viewer-fact
     ProveedoresComponent,
     ModalComprasComponent,
     DetallesSolicitudCompraComponent,
-    CotizacionesComponent,
     DatosSolicitudCompraComponent,
     TablaDetallesSolicitudComponent,
     ModalAddProveedorComponent,
@@ -51,7 +45,6 @@ import { ViewerFacturasComponent } from './detalles-solicitud-compra/viewer-fact
     TblFlsCotizacionComponent,
     AceptOrdnCompraComponent,
     FormFacturasComponent,
-    ViewerFacturasComponent,
   ],
   imports: [
     CommonModule,

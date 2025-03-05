@@ -11,6 +11,7 @@ import { CapturaAgenciasComponent } from './captura-agencias/captura-agencias.co
 import { FormUVendidasComponent } from './captura-agencias/forms/form-u-vendidas/form-u-vendidas.component';
 import { FormTablaCapturaComponent } from './captura-agencias/forms/form-tabla-captura/form-tabla-captura.component';
 import { TablaMesAgenciaComponent } from './captura-agencias/forms/tabla-mes-agencia/tabla-mes-agencia.component';
+import { CapturaAgenciasRenaultComponent } from './captura-agencias-renault/captura-agencias-renault.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { TablaMesAgenciaComponent } from './captura-agencias/forms/tabla-mes-age
     CapturaAgenciasComponent,
     FormUVendidasComponent,
     FormTablaCapturaComponent,
-    TablaMesAgenciaComponent
+    TablaMesAgenciaComponent,
+    CapturaAgenciasRenaultComponent
   ],
   imports: [
     CommonModule,

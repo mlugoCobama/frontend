@@ -154,8 +154,14 @@ export const MENU: MenuItem[] = [
             },
             {
               id: 37,
-              label: 'Captura Agencias',
-              link: '/dashboard/captura/agencias',
+              label: 'Captura Nissan',
+              link: '/dashboard/captura/agencias-nissan',
+              parentId: 34
+            },
+            {
+              id: 38,
+              label: 'Captura Renault',
+              link: '/dashboard/captura/agencias-renault',
               parentId: 34
             },
           ]

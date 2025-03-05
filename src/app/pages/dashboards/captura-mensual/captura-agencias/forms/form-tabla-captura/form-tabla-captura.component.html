@@ -1,20 +1,3 @@
-<!-- 
-<form (paste)="onPaste($event)">
-    <p  class="text-center"><i class="fas fa-paste"></i>&nbsp;<strong>Pega aquí tu tabla de excel</strong></p>
-    <table  class="table table-bordered">
-      <thead>
-        <tr>
-          <th *ngFor="let header of headers">{{ header }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let row of tableData">
-          <td *ngFor="let cell of row">{{ cell }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </form>  -->
-  <button class="btn btn-sm btn-primary" (click)="proccesData()">PREPARA DATOS</button>
   <form (paste)="onPaste($event)">
     <p *ngIf="showInstructions" class="text-center"><i class="fas fa-paste"></i>&nbsp;<strong>Pega aquí tu tabla de excel</strong></p>
 

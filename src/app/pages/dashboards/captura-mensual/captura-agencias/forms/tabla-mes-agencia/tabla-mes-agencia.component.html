@@ -1,37 +1,21 @@
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>Concepto</th>
-      <th *ngFor="let agencia of dataMesAgencias; let i = index" class="text-center">
-        {{ agencia.estacion }}
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <!-- <tr *ngFor="let key of objeckKeys(dataMesAgencias[0])"> -->
-    <!-- <tr>
-        <td colspan="6" class="text-center">
-            <strong> UNIDADES VENDIDAS </strong>
+<form (paste)="onPaste($event)">
+  <p *ngIf="showInstructions" class="text-center"><i class="fas fa-paste"></i>&nbsp;<strong>Pega aquí tu tabla de excel</strong></p>
+
+  <table *ngIf="!showInstructions"  class="table table-bordered">
+    <thead>
+      <tr class="text-center">
+        <th>Concepto</th>
+        <th *ngFor="let empresa of catEmpresas" ><span>{{ empresa.sub_division }}</span> {{empresa.sucursal}} </th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of dataMesAgencias">
+        <td *ngFor="let cell of row" [attr.colspan]="cell.colspan" class="text-center">
+          {{ cell.value }}
         </td>
-    </tr>
-    <tr *ngFor="let key of filasUV">
-        <th> {{key}}</th>
-        <td *ngFor="let dato of dataMesAgencias"> {{ dato[key] }}</td>
-    </tr>
-    <tr>
-        <td colspan="6" class="text-center">
-            <strong>ORDENES DE SERVICIO</strong>
-        </td>
-    </tr>
-    <tr *ngFor="let key of filasOS">
-        <th> {{key}}</th>
-        <td *ngFor="let dato of dataMesAgencias"> {{ dato[key] }}</td>
-    </tr > -->
-      
-    <tr *ngFor="let field of dataMesAgencias[0]| keyvalue:originalOrder | slice:3">
-      <td>{{field.key}}</td>
-      <td *ngFor="let dato of dataMesAgencias">{{ dato[field.key] }}</td>
-    </tr>
-    
-  </tbody>
-</table>
+      </tr>
+    </tbody>
+  </table>
+</form> 
+

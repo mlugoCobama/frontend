@@ -10,44 +10,24 @@ export class TablaMesAgenciaComponent implements OnInit {
 
   @Input() dataMesAgencias: any;
 
+  public tableData: any;
+
   originalOrder = (a: KeyValue<number,string>, b: KeyValue<number,string>): number => {
     return 0;
   }
+  @Input() catEmpresas:any;
+  public onPaste(event){
+    console.log(event);
 
-  public filasUV = [
-   "nuevos",
-   "utilidad_nuevos",
-   "flotillas",
-   "utilidad_flotillas",
-   "seminuevos",
-   "utilidad_seminuevos"
-  ]
-
-  public filasOS = [
-    "servicio",
-    "utilidad_servicio",
-    "hyp",
-    "utilidad_hyp",
-   ]
-
-   public filasVPS = [
-    
-   ]
-
-   public filasCFC = [
-    
-   ]
-
-
-  // public filas:any = Object.keys(this.dataMesAgencias[0]);
-
-
-
+  }
+  public showInstructions: boolean = false;
+  
   ngOnInit() {
-    // console.log(this.dataMesAgencias);
+
   }
 
-  objeckKeys(obj:any):string[]{
-    return  Object.keys(obj);
-  }
+
+
+
+  
 }

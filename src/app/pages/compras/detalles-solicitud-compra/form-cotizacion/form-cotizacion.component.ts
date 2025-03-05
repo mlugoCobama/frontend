@@ -17,7 +17,7 @@ import { ProveedoresService } from "src/app/core/services/compras/proveedores/pr
   templateUrl: './form-cotizacion.component.html',
   styleUrls: ['./form-cotizacion.component.css']
 })
-export class FormCotizacionComponent {
+export class FormCotizacionComponent implements OnInit{
 
   text: string = "";
   longitudMaxima: number = 150;
@@ -25,7 +25,8 @@ export class FormCotizacionComponent {
   public formSolicitudCotizacion: FormGroup;
   public proveedores: any;
   public data: any;
-  public solicitudCompra: any;
+  @Input() solicitudCompra: any;
+  public detalles: any;
   public proveedorSelec: any;
   public correosProv: any;
   public proveedoresSeleccionados: any[] = [];
@@ -39,6 +40,12 @@ export class FormCotizacionComponent {
     private proveedoresService: ProveedoresService,
     public formBuilder: FormBuilder
    ) {}
+
+   ngOnInit(): void {
+     this.buildForm();
+     this.getProveedores();
+     console.log(this.detalles)
+   }
 
    private buildForm(){
     this.formSolicitudCotizacion = this.formBuilder.group({
@@ -145,14 +152,14 @@ export class FormCotizacionComponent {
       }
   
       try {
-        // const detalles = await this.getDetalle();
+        const detalles = await this.getDetalle();
         const idSolicitud = this.solicitudCompra.id;
         const folioCo = await this.generarFolioCo();
         const proveedores = this.proveedoresSeleccionados;
         const consideraciones = this.correosProv.consideraciones;
         this.data = {
           proveedores:proveedores,
-          // detalles,
+          detalles,
           fecha: this.fecha(),
           solicitudes_compra_id: idSolicitud,
           folioCo,
@@ -223,4 +230,25 @@ export class FormCotizacionComponent {
     return `${anio}-${mes}-${dia} ${horas}:${minutos}:${segundos}`;
   }
     
+  private getDetalle(): Promise<any> {
+    //Recupera el detalle y agrega columnas a la tabla
+    return new Promise((resolve, reject) => {
+      this.comprasService.getOne(this.solicitudCompra.id).subscribe(
+        (response) => {
+          if (response) {
+            this.detalles = response.data;
+            resolve(this.detalles);
+            this.isLoad = false;
+          } else {
+            console.log(response.message);
+            reject(response.message);
+          }
+        },
+        (error) => {
+          console.error("Error fetching data:", error);
+          reject(error);
+        }
+      );
+    });
+  }
 }

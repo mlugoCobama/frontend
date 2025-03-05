@@ -2,8 +2,10 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import Swal from "sweetalert2";
 
-
-import {ResponseCatEmpresas, CatEmpresas,} from "src/app/core/models/cat-empresas";
+import {
+  ResponseCatEmpresas,
+  CatEmpresas,
+} from "src/app/core/models/cat-empresas";
 
 import { EnergeticosGasolinerasService } from "src/app/core/services/dashboard/energeticos-gasolineras.service";
 import { AlertErrorService } from "src/app/core/services/alert-error.service";
@@ -17,14 +19,12 @@ import dataMeses from "src/environments/meses.json";
   templateUrl: "./captura-gasolinerias.component.html",
   styleUrls: ["./captura-gasolinerias.component.css"],
 })
-
 export class CapturaGasolineriasComponent implements OnInit {
+  public dataEmpresas: EnergeticosGaseras[]; //alacena los datos recuperados del mes
+  public catEmpresas: CatEmpresas[]; //Empresas (Gaseras)
+  public meses = dataMeses; //meses en el select
 
-  public dataEmpresas: EnergeticosGaseras[];
-  public catEmpresas: CatEmpresas[];
-  public meses = dataMeses;
-
-  public formDatosEnergeticos: FormGroup;
+  public formDatosEnergeticos: FormGroup; //Formulario dinámico
 
   private fecha = new Date();
   public mes = this.fecha.getMonth();
@@ -33,7 +33,7 @@ export class CapturaGasolineriasComponent implements OnInit {
   public mostrar: boolean = false;
   public isDisabled: boolean = false;
   public existInfo: boolean = true;
-
+  //Modelo para generar los inputs
   private modelInputs = {
     venta_litros: "",
     ventas: "",
@@ -57,6 +57,9 @@ export class CapturaGasolineriasComponent implements OnInit {
     //this.getInfoMes();
   }
 
+  /**
+   * Recupera los nombres de las gaseras
+   */
   public getAllEmpresas() {
     this.catEmpresasService.getAll(2).subscribe(
       (data: ResponseCatEmpresas) => {
@@ -73,6 +76,11 @@ export class CapturaGasolineriasComponent implements OnInit {
   }
 
   indexTotals: any;
+  /**
+   * Genera el formulario
+   * Flujo 1: En base a datos recuperados del servidor (Si hay datos de captura)
+   * Flujo 2: En base a un modelo y a las estaciones (Si no existen datos de captura)
+   */
   private buildFormDatosEnergeticos() {
     const fields = {};
     this.formDatosEnergeticos = this.formBuilder.group({});
@@ -99,13 +107,15 @@ export class CapturaGasolineriasComponent implements OnInit {
     this.mostrar = true;
     this.isDisabled = false;
   }
-
+  /**
+   * Guarda y actualiza los datos capturados en
+   * el formulario
+   */
   public saveInfo() {
-    console.warn(this.formDatosEnergeticos.value);
+    // console.warn(this.formDatosEnergeticos.value);
     if (this.formDatosEnergeticos.valid) {
       const formData = this.formDatosEnergeticos.value;
       const datos = [];
-
       const fecha = `${this.anio}-${this.mes.toString().padStart(2, "0")}-01`;
 
       Object.entries(formData).forEach(([key, value]) => {
@@ -131,6 +141,7 @@ export class CapturaGasolineriasComponent implements OnInit {
         }
         datosEmpresa[field] = value;
       });
+
       Swal.fire({
         title: "¿Estas seguro?",
         text: "Deseas capturar estos datos",
@@ -159,7 +170,16 @@ export class CapturaGasolineriasComponent implements OnInit {
               });
               this.getInfoMes();
             } else {
-              console.log(response.message);
+              Swal.fire({
+                title: "Algo salio mal",
+                text: response.message,
+                buttonsStyling: false,
+                icon: "success",
+                customClass: {
+                  confirmButton: "btn btn-success px-4",
+                  cancelButton: "btn btn- ms-2 px-4",
+                },
+              });
             }
           });
         }
@@ -167,6 +187,11 @@ export class CapturaGasolineriasComponent implements OnInit {
     }
   }
 
+  /**
+   * Recupera la información del mes de gaseras
+   * Valida si tiene existe información capturada
+   * Genera el formulario de captura
+   */
   public getInfoMes() {
     this.isDisabled = true;
     this.dataEmpresas = [];
@@ -207,12 +232,18 @@ export class CapturaGasolineriasComponent implements OnInit {
       });
   }
 
+  /**
+   * Maneja el evento y el valor del select Mes
+   */
   public selecAnio: boolean = false;
   public onSelectedAnio(value: number) {
     this.anio = value;
     this.selecAnio = true;
   }
 
+  /**
+   * Maneja el evento y el valor del select Mes
+   */
   public selecMes: boolean = false;
   public onSelectedMes(value: number) {
     this.mes = value;
