@@ -1,62 +1,60 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { FormGroup } from '@angular/forms';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { environment } from "src/environments/environment";
+import { FormGroup } from "@angular/forms";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class CotizacionesService {
-  constructor(private http: HttpClient) { }
-  public getAll(): Observable<any> {
-    return this.http.get(environment.apiUrl + 'compras/Cotizaciones');
-  } 
-  
-  public getOne(id:number): Observable<any> {
+  constructor(private http: HttpClient) {}
+
+  public getOne(id: number): Observable<any> {
     return this.http.get(environment.apiUrl + `compras/Cotizaciones/${id}`);
   }
 
-  public save(data:any): Observable<any> {
-    return this.http.post(environment.apiUrl + 'compras/Cotizaciones', data);
+  public save(data: any): Observable<any> {
+    return this.http.post(environment.apiUrl + "compras/Cotizaciones", data);
   }
 
-  public edit(id:number, data:any): Observable<any> {
-    return this.http.put(environment.apiUrl + `compras/Cotizaciones/${id}`, data);
+  /**
+   * Recupera los archivos de cotizaciones en el servidor
+   * @param rutaArchivo Archivo en le servidor
+   */
+  public abrirArchivo(rutaArchivo: string) {
+    const url = environment.apiUrl + `compras/${rutaArchivo}`;
+    window.open(url, "_blank");
+  }
+  /**
+   * Recupera el ultimo folio de cotización
+   */
+  public obtenerFolio() {
+    return this.http.get<{ nuevoFolio: string }>(
+      environment.apiUrl + `compras/generar-folio-co`
+    );
   }
 
-  public destroy(id:number): Observable<any> {
-    return this.http.delete(environment.apiUrl + `compras/Cotizaciones/${id}`);
-  }
-
-  public abrirArchivo(rutaArchivo: string){
-    const url =  (environment.apiUrl + `compras/${rutaArchivo}`);
-     window.open(url , '_blank')
-  }
-
-  public obtenerFolio(){
-    return this.http.get<{ nuevoFolio: string }>(environment.apiUrl + `compras/generar-folio-co`);
-  }
-
-  private selectedFiles: { [key: number]: File } = {};
-
+  private selectedFiles: { [key: number]: File } = {}; //array donde se guardan los archivos cargados
+  //Recupera los archivos del componente dentro del servicio
   setSelectedFile(proveedorId: number, file: File) {
     this.selectedFiles[proveedorId] = file;
   }
+  //Envia los archivos del componente dentro del servicio
   getSelectedFiles() {
     return this.selectedFiles;
   }
-
+  //Limpia el arreglo donde se almacenan los archivos
   clearFiles() {
     this.selectedFiles = {};
   }
 
-  private formOrdenCompra: FormGroup;
-
+  private formOrdenCompra: FormGroup; //FormGroup donde se guardan los datos del input
+  //Recupera el valor donde se guardan los datos del input
   setForm(form: FormGroup) {
     this.formOrdenCompra = form;
   }
-
+  //Recupera el valor donde se guardan los datos del input
   getForm(): FormGroup {
     return this.formOrdenCompra;
   }

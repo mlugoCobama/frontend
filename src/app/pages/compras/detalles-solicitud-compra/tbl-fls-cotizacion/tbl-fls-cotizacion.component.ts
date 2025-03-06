@@ -95,6 +95,7 @@ export class TblFlsCotizacionComponent implements OnInit {
   public contarCaracteres() {
     // Valida la longitud de los text area
     this.caracteresRestantes = this.longitudMaxima - this.text.length;
+    this.cotizacionesService.setForm(this.formOrdenCompra);
   }
 
   public cancelarOrden() {

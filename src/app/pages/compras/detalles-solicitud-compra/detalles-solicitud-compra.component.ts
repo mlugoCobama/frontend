@@ -391,11 +391,9 @@ export class DetallesSolicitudCompraComponent implements OnInit {
       this.submitted = false;
     });
   }
-
+  //recupera la cotización seleccionada y muestra el botón de generar orden de compra
   public manejoCheck(prov: any) {
-    //recupera la cotización seleccionada y muestra el botón de generar orden de compra
     const proveedorSleccionado = prov;
-    // console.log(proveedorSleccionado.cotizaciones_id);
     this.proveedorSelec = proveedorSleccionado;
     this.comprasService.setMostrarBoton(true);
     this.mostrarObs = true;
