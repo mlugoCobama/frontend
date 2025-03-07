@@ -173,7 +173,6 @@ export class TblFlsCotizacionComponent implements OnInit {
         this.ordenesComprasService.enviarSolicitudSurtido(data).subscribe(
           (response) => {
             if (response.status === "success") {
-              console.log(response.data);
               Swal.fire({
                 title: "Enviada!!",
                 text: "La orden de compra ha sido autorizada y enviada al proveedor.",
@@ -207,7 +206,6 @@ export class TblFlsCotizacionComponent implements OnInit {
         this.ordenesComprasService.autorizarOrdenCompra(data).subscribe(
           (response) => {
             if (response.status === "success") {
-              console.log(response.data);
               Swal.fire({
                 title: "Orden autorizada!!",
                 text: "La orden sera marcada como autorizada",

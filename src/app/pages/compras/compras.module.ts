@@ -19,10 +19,8 @@ import { ModalUpdtProveedorComponent } from './proveedores/modal-updt-proveedor/
 import { ModalShowProveedorComponent } from './proveedores/modal-show-proveedor/modal-show-proveedor.component';
 import { ModalAddUnidadComponent } from './cat-unidades-medidas/modal-add-unidad/modal-add-unidad.component';
 import { ModalUpdtUnidadComponent } from './cat-unidades-medidas/modal-updt-unidad/modal-updt-unidad.component';
-import { FormDetalleScComponent } from './compras/modal-compras/form-detalle-sc/form-detalle-sc.component';
 import { FormCotizacionComponent } from './detalles-solicitud-compra/form-cotizacion/form-cotizacion.component';
 import { TblFlsCotizacionComponent } from './detalles-solicitud-compra/tbl-fls-cotizacion/tbl-fls-cotizacion.component';
-import { AceptOrdnCompraComponent } from './detalles-solicitud-compra/acept-ordn-compra/acept-ordn-compra.component';
 import { FormFacturasComponent } from './detalles-solicitud-compra/form-facturas/form-facturas.component';
 
 
@@ -40,10 +38,8 @@ import { FormFacturasComponent } from './detalles-solicitud-compra/form-facturas
     ModalShowProveedorComponent,
     ModalAddUnidadComponent,
     ModalUpdtUnidadComponent,
-    FormDetalleScComponent,
     FormCotizacionComponent,
     TblFlsCotizacionComponent,
-    AceptOrdnCompraComponent,
     FormFacturasComponent,
   ],
   imports: [

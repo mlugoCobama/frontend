@@ -44,7 +44,6 @@ export class FormCotizacionComponent implements OnInit{
    ngOnInit(): void {
      this.buildForm();
      this.getProveedores();
-     console.log(this.detalles)
    }
 
    private buildForm(){

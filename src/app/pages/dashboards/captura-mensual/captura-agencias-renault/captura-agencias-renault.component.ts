@@ -109,9 +109,7 @@ export class CapturaAgenciasRenaultComponent implements OnInit {
             this.isLoad = true;
             this.verBtnConsulta = false;
           }
-        } else {
-          console.log(response.message);
-        }
+        } 
       },
       (error) => {
         console.error("Error fetching data:", error);
@@ -173,7 +171,6 @@ export class CapturaAgenciasRenaultComponent implements OnInit {
       this.showInstructions = false;
       this.dataMesAgencias = this.procesarCeldasCombinadas(filasFiltradas);
       this.showBtnAccion = true;
-
       if (this.dataMesAgencias.length === 0) {
         Swal.fire({
           title: 'Falta algo',
@@ -212,10 +209,8 @@ export class CapturaAgenciasRenaultComponent implements OnInit {
     this.showInstructions = false;
     this.dataMesAgencias = this.procesarCeldasCombinadas(filasFiltradas);
 
-    console.log(this.dataMesAgencias);
 
     if (this.dataMesAgencias.length === 0) {
-      console.log("Por eso el shampoo tiene instrucciones");
       return;
     }
   }
@@ -259,108 +254,6 @@ export class CapturaAgenciasRenaultComponent implements OnInit {
   }
 
   /**
-   * Genera una estructura adecuada en base  a la relación entre campos y tablas
-   * @returns json con el formato correcto para almacenamiento
-   */
-
-  //*Genera estructura: Agencia/Sección/Concepto:Valor
-  public procesarDatos(): Record<string, Record<string, Record<string, string>>> {
-    let jsonData: Record<string, Record<string, Record<string, string>>> = {};
-    let seccion = "";
-    const fecha = `${this.anio}-${this.mes.toString().padStart(2, "0")}-01`;
-    const headers = this.headers.slice(1);
-
-    //Relación secciónTabla->tablaBD
-    const relTablas: Record<string, string> = {
-      "UNIDADES VENDIDAS": "ordenes_unidades",
-      "ORDENES DE SERVICIO": "ordenes_unidades",
-      "VENTAS DE POST VENTA": "ventas_post_venta",
-      "TOTAL DE GASTOS OPERATIVOS": "datos_generales",
-      "COSTO FINANCIERO CONSOLIDADO": "costos_financieros_prestamos",
-      "BONOS MARCA": "complementos",
-      "UNO": "datos_generales",
-      "ACUMULADO PERSONAL CONSOLIDADO": "datos_generales",
-      "UTILIDAD POR AREA": "utilidad_area",
-    };
-
-    //Relación campoTabla->campos BD
-    const relCampos: Record<string, string> = {
-      "Nuevos": "nuevos",
-      "UB Nuevos": "utilidad_nuevos",
-      "Flotillas": "flotillas",
-      "UB Flotillas": "utilidad_flotillas",
-      "Seminuevos": "seminuevos",
-      "UB Seminuevos": "utilidad_seminuevos",
-
-      "Ordenes de servicios": "servicio",
-      "UB O. servicios": "utilidad_servicio",
-      "Ordenes de HyP": "hyp",
-      "UB Ordenes de HyP": "utilidad_hyp",
-
-      "Ventas Servicio": "ventas_servicio",
-      "Total Ventas Refacciones": "total_ventas_ref",
-      "Refacciones Servicio": "refacciones_servicio",
-      "Refacciones HyP": "refacciones_hyp",
-      "Refacciones Mostrador": "refacciones_mostrador",
-
-      "Total de Gastos Operativos": "gasto",
-
-      "CNuevos": "nuevos",
-      "CFlotillas": "utilidad_nuevos",
-      "Refacciones": "refacciones",
-      "Bajio": "bajio",
-      "Intercias": "intercias",
-
-      "Bonos Marca": "bonos",
-
-      "UNO": "uno",
-
-      "Personal": "personal",
-
-      "Area Comercial": "area_comercial",
-      "Area Postventa": "area_postventa",
-    };
-
-    //Relación header agencia->id_sucursal BD
-    const relAgencias: Record<string, number> = {
-      "Azcapotzalco": 26,
-      "Ecatepec": 27,
-      "Vallejo": 28,
-      "Pachuca": 29,
-    };
-
-    this.dataMesAgencias.forEach((row) => {
-      if (row.length === 1) {
-        seccion = row[0].value.trim();
-        // jsonData[seccion] = {};
-      } else if (seccion) {
-        let concepto = row[0].value.trim();
-
-        headers.forEach((header, index) => {
-          if (header.toLowerCase() !== "total") {
-            const agencia = header.trim();
-            const value = row[index + 1]?.value?.trim() || "";
-
-            const dbAgencia = relAgencias[agencia] || agencia;
-            const dbSeccion = relTablas[seccion] || seccion;
-            const dbCampos = relCampos[concepto] || concepto;
-
-            if (!jsonData[dbAgencia]) jsonData[dbAgencia] = {};
-            if (!jsonData[dbAgencia][dbSeccion]) jsonData[dbAgencia][dbSeccion] = {};
-
-            if (!jsonData[dbAgencia][dbSeccion].fecha) {
-              jsonData[dbAgencia][dbSeccion].fecha = fecha;
-            }
-
-            jsonData[dbAgencia][dbSeccion][dbCampos] = value;
-          }
-        });
-      }
-    });
-    return jsonData;
-  }
-
-  /**
    * Guarda los datos en la base de datos
    */
   public save() {
@@ -379,7 +272,15 @@ export class CapturaAgenciasRenaultComponent implements OnInit {
     }).then((result) => {
       this.isLoad = false;
       if (result.value) {
-        this.agenciasRenaultService.save(this.procesarDatos()).subscribe(
+        const data = {
+          dataMesAgencias :this.dataMesAgencias,
+          anio : this.anio,
+          mes : this.mes,
+          headers: this.headers
+        }
+        this.isLoad = false;
+        this.agenciasRenaultService.save(data).subscribe(
+        // this.agenciasRenaultService.save(this.procesarDatos()).subscribe(
           (response) => {
             if (response.status === "success") {
               Swal.fire({
@@ -445,8 +346,15 @@ export class CapturaAgenciasRenaultComponent implements OnInit {
       buttonsStyling: false,
     }).then((result) => {
       if (result.value) {
+        const data = {
+          dataMesAgencias :this.dataMesAgencias,
+          anio : this.anio,
+          mes : this.mes,
+          headers: this.headers
+        }
         this.isLoad = false;
-        this.agenciasRenaultService.update(this.procesarDatos()).subscribe(
+        this.agenciasRenaultService.update(data).subscribe(
+        // this.agenciasRenaultService.update(this.procesarDatos()).subscribe(
           (response) => {
             if (response.status === "success") {
               Swal.fire({

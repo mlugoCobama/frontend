@@ -211,7 +211,6 @@ export class ComprasComponent implements OnInit {
         this.comprasService.destroy(this.solicitudCompra.id).subscribe(
           (response) => {
             if (response.status === "success") {
-              console.log(response.message);
               this.getAll();
               Swal.fire({
                 title: "Cancelada!",
@@ -224,7 +223,6 @@ export class ComprasComponent implements OnInit {
                 },
               });
             } else {
-              console.log(response.message);
               Swal.fire({
                 title: "Error!",
                 text: "Your file has been deleted.",
@@ -255,7 +253,6 @@ export class ComprasComponent implements OnInit {
       .pdfOrdenCompra(this.solicitudCompra.id)
       .subscribe((response) => {
         if (response) {
-          console.log("Respuesta: ", response);
           const blob = new Blob([response], { type: "application/pdf" });
           const url = window.URL.createObjectURL(blob);
           const link = document.createElement("a");
@@ -264,7 +261,16 @@ export class ComprasComponent implements OnInit {
           link.click();
           window.URL.revokeObjectURL(url);
         } else {
-          console.log("No existe la orden de compra");
+          Swal.fire({
+            title: "Error!",
+            text: "La orden de compra no existe",
+            buttonsStyling: false,
+            icon: "error",
+            customClass: {
+              confirmButton: "btn btn-danger px-4",
+              cancelButton: "btn btn- ms-2 px-4",
+            },
+          });
         }
       });
   }

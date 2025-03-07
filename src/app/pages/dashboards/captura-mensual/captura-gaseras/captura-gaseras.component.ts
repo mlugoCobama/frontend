@@ -243,6 +243,87 @@ export class CapturaGaserasComponent implements OnInit {
     });
   }
 
+    /**
+     * Captura mediante un botón los datos copiados en el portapapeles
+     * ------------------------------------------------------------------
+     * Nota: El funcionamiento puedo variar dependiendo del navegador
+     * Navegadores probados: Google Chrome, Firefox, Microsoft Edge
+     * ------------------------------------------------------------------
+     * Genera dos arreglos uno para los headers (Recuperados del excel),
+     * arreglos por filas
+     */
+    public hasDatos: boolean = false; //
+    public headers: string[] = []; // headers obtenidos desde el contenido copiado
+    public showInstructions: boolean = true; //Bandera para mostrar u ocultar instrucciones
+    public dataMesAgencias: any;
+    public showBtnAccion: boolean = false;
+    public verBtnConsulta: boolean = true;
+    public showTable: boolean = false; //Bandera para mostrar u ocultar tabla
+
+    public clickPaste() {
+      navigator.clipboard
+        ?.readText()
+        .then((text) => {
+          this.hasDatos = true;
+          const filas = text
+            .split("\n")
+            .map((row) => row.split("\t").map((cell) => cell.trim()));
+          const filasFiltradas = filas.filter((row) =>
+            row.some((cell) => cell.length > 0)
+          );
+          this.headers = filasFiltradas.length > 0 ? filasFiltradas.shift()! : [];
+          this.showInstructions = false;
+          this.dataMesAgencias = this.procesarCeldasCombinadas(filasFiltradas);
+          this.showBtnAccion = true;
+  
+          if (this.dataMesAgencias.length === 0) {
+            Swal.fire({
+              title: "Falta algo",
+              text: "Selecciona nuevamente el contenido a pegar",
+              buttonsStyling: false,
+              icon: "warning",
+              customClass: {
+                confirmButton: "btn btn-success px-4",
+                cancelButton: "btn btn- ms-2 px-4",
+              },
+            });
+            this.showBtnAccion = false;
+            this.showTable = false;
+            this.verBtnConsulta = true;
+            return;
+          }
+          console.log(filasFiltradas);
+          console.log(this.headers);
+          console.log(this.dataMesAgencias);
+        })
+        .catch((err) => {
+          console.error("Error al leer del portapapeles:", err);
+        });
+    }
+
+      /**
+   * Procesa el contenido de "filas filtradas"
+   * y genera el formato para visualizar la tabla,
+   * se agrega la propiedad colspan y el valor de la celda es value
+   * ------------------------------------------------------------------
+   */
+  private procesarCeldasCombinadas(filas: string[][]): { value: string; colspan: number }[][] {
+    return filas.map((fila) => {
+      let filaProcesada: { value: string; colspan: number }[] = [];
+      let celdaAnterior = "";
+      for (let colIndex = 0; colIndex < fila.length; colIndex++) {
+        let celda = fila[colIndex];
+        if (celda === "" && celdaAnterior !== "") {
+          filaProcesada[filaProcesada.length - 1].colspan += 1;
+        } else {
+          filaProcesada.push({ value: celda, colspan: 1 });
+          celdaAnterior = celda;
+        }
+      }
+      return filaProcesada;
+    });
+  }
+
   /**
    * Maneja el evento y el valor del select Mes
    */

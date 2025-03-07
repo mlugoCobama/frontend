@@ -143,7 +143,6 @@ export class ProveedoresComponent implements OnInit {
         this.proveedoresService.destroy(this.proveedor.id).subscribe(
           (response) => {
             if (response.status === "success") {
-              console.log(response.message);
               this.getAll();
               Swal.fire({
                 title: "Deleted!",

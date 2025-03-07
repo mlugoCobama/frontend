@@ -68,8 +68,16 @@ export class ModalUpdtUnidadComponent {
       // this.isLoad = true;
       this.submitted = true;
       if (this.formUpdateUnidades.invalid) {
-        console.log("Formulario invalido");
-        // this.isLoad = false;
+        Swal.fire({
+        title: "Falta algo!",
+        text: "Llena correctamente el formulario",
+        buttonsStyling: false,
+        icon: "success",
+        customClass: {
+        confirmButton: "btn btn-danger px-4",
+        cancelButton: "btn btn- ms-2 px-4",
+        },
+      });
         return;
       }
       this.data = this.formUpdateUnidades.value;

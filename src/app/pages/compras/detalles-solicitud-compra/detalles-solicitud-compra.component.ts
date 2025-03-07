@@ -279,7 +279,6 @@ export class DetallesSolicitudCompraComponent implements OnInit {
         archivosIngresados = true;
       }
     });
-    console.log(formData);
     if (!datosIngresados || !archivosIngresados) {
       Swal.fire({
         title: "Error",
