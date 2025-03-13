@@ -13,6 +13,12 @@ export const MENU: MenuItem[] = [
           parentId: 1
         },
         {
+          id: 2,
+          label: 'Inventario',
+          link: '/ucoip/inventario',
+          parentId: 1
+        },
+        {
           id: 3,
           label: 'Configuración',
           link: '/ucoip/configuracion',

@@ -12,7 +12,7 @@ export class UcoipService {
 
 
   public getAll(): Observable<any> {
-    return this.http.get(environment.apiUrl + 'v1/ucoip');
+    return this.http.get(environment.apiUrl + 'ucoip/ucoip');
   }
 
 }

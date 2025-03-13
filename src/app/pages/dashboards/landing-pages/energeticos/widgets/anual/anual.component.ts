@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
 
 @Component({
   selector: 'app-anual',
@@ -8,6 +9,12 @@ import { Component, Input, OnInit } from '@angular/core';
 export class AnualComponent implements OnInit {
 
   @Input() concepto: string;
+
+  private dataEnergeticos: any;
+
+  public dataAnual: any = [];
+
+  public dataAnualAnt: any = [];
 
   public options = {
     chart: {
@@ -38,7 +45,7 @@ export class AnualComponent implements OnInit {
       }
     },
     xaxis: {
-      categories: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016]
+      categories: ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic']
     },
     yaxis: [
       {
@@ -96,9 +103,52 @@ export class AnualComponent implements OnInit {
     }
   }
 
+  constructor(
+      private localStorage: LocalStorageServiceService,
+    ) {}
+
   ngOnInit(): void {
+
+    this.dataEnergeticos = this.localStorage.getItem('DataEnergeticos');
+    
+    this.serieAnio();
+    this.serieAnioAnt();
+
+    let serie = [
+      this.dataAnualAnt,
+      this.dataAnual
+    ]
+    
+    this.options.series = serie;
+    
     var chart = new ApexCharts(document.querySelector("#chart_anual"), this.options);
-        chart.render();
+    chart.render();
+
+  }
+
+  private serieAnio(){
+    let data:any = [];
+    for (let i = 0; i < this.dataEnergeticos.totalAnio.length; i++) {
+      const element = this.dataEnergeticos.totalAnio[i][this.concepto];      
+      data.push(element);
+    }
+
+    this.dataAnual = {
+      name: '2025',
+      data: data
+    }
+  }
+
+  private serieAnioAnt(){
+    let data:any = [];
+    for (let i = 0; i < this.dataEnergeticos.totalAnioAnt.length; i++) {
+      const element = this.dataEnergeticos.totalAnioAnt[i][this.concepto];
+      data.push(element);
+    }
+    this.dataAnualAnt = {
+      name: '2024',
+      data: data
+    }
   }
 
 }

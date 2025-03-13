@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-12">
         <div class="page-title-box d-flex align-items-center justify-content-between">
-            <h4 class="mb-0 font-size-18">Gaseras - {{concepto}} Marzo 2024</h4>
+            <h4 class="mb-0 font-size-18">Gaseras - {{concepto}} {{mesSeleccionado}} {{ anioSeleccionado }}</h4>
             <div class="page-title-right ">
                 <ol class="breadcrumb m-0 ">
                     <ng-container>
@@ -20,6 +20,46 @@
       <span class="visually-hidden">Loading...</span>
     </div>
   </div>
+
+  <div class="row mb-3" *ngIf="!isLoad">
+    <div class="col-xl-12">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col">
+                        <select class="form-select form-select-sm" (change)="onChange('selectMes', $event.target.value)" >
+                            <option value="00">Selecciona un mes</option>
+                            <option value="{{mes.mes}}" *ngFor="let mes of meses" [selected]="mesSeleccionado === mes.mes">{{mes.nombre}}</option>
+                          </select>
+                    </div>
+                    <div class="col">
+                        <select class="form-select form-select-sm" (change)="onChange('selectAnio', $event.target.value)" [value]="anioSeleccionado">
+                            <option selected>Selecciona un año</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                          </select>
+                    </div>
+                    <div class="col">
+                        <button type="button" class="btn btn-sm btn-primary" (click)="filtrarInfo()">Filtrar</button>
+                    </div>
+                  </div>   
+            </div>
+            <div class="col-sm-6 text-end">
+                <div class="btn-group btn-group-sm" role="group" aria-label="Basic radio toggle button group">
+                    <input type="radio" class="btn-check" name="btnradio" id="VHA" value="VHA" autocomplete="off" (change)="onChangeDivision($event.target.value)">
+                    <label class="btn btn-outline-primary" for="VHA">División VHA</label>
+                  
+                    <input type="radio" class="btn-check" name="btnradio" id="MH" value="MH" autocomplete="off" (change)="onChangeDivision($event.target.value)">
+                    <label class="btn btn-outline-primary" for="MH">División MH</label>
+                  
+                    <input type="radio" class="btn-check" name="btnradio" id="all" value="all" autocomplete="off" checked (change)="onChangeDivision($event.target.value)">
+                    <label class="btn btn-outline-primary" for="all">Todas</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="row" *ngIf="!isLoad">
     <div class="col-xl-12">

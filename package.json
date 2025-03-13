@@ -47,6 +47,7 @@
     "@ngx-translate/http-loader": "^8.0.0",
     "@nicky-lenaers/ngx-scroll-to": "^14.0.0",
     "@popperjs/core": "^2.11.8",
+    "@swimlane/ngx-datatable": "^21.0.0-alpha.1",
     "angular-calendar": "^0.31.0",
     "angular-datatables": "^18.0.0",
     "angular-highcharts": "^17.0.1",

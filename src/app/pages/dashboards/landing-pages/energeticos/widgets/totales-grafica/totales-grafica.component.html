@@ -20,26 +20,31 @@
                 <div class="text-muted">
                     <div class="mb-4">
                         <p>Este mes</p>
-                        <h4>$ {{ dataMes[16][concepto] | number }}</h4>
+                        <ng-container *ngIf="dataMes[15][concepto] > 0; else elseTemplate1">
+                            <h4>$ {{ dataMes[15][concepto] | number }}</h4>
+                        </ng-container>
+                        <ng-template #elseTemplate1>
+                            <h4 class="text-danger">$ {{ dataMes[15][concepto] | number }}</h4> 
+                        </ng-template>
+                        
                         <div>
                             <ng-container *ngIf="diferencia > 0; else elseTemplate">
-                                <span class="badge badge-soft-success font-size-12 me-1"> + {{ (dataMes[16][concepto] -  dataMesAnterior[16][concepto]) | number }}</span> 
+                                <span class="badge badge-soft-success font-size-12 me-1"> + {{ diferencia | number }}</span> 
                             </ng-container>
                             <ng-template #elseTemplate>
-                                <span class="badge badge-soft-danger font-size-12 me-1"> - {{ (dataMes[16][concepto] -  dataMesAnterior[16][concepto]) | number }}</span> 
+                                <span class="badge badge-soft-danger font-size-12 me-1"> {{ diferencia | number }}</span> 
                             </ng-template>
                             
                         </div>
                     </div>
 
                     <div>
-                        <a [routerLink]="[ '../energeticos-detalle/', concepto ]">Ver Detalle</a>
-                        <a href="#" class="btn btn-primary btn-sm">Ver Detalles <i class="mdi mdi-chevron-right ms-1"></i></a>
+                        <a [routerLink]="[ '../energeticos-detalle/', concepto ]" class="btn btn-primary btn-sm">Ver Detalle</a>
                     </div>
 
                     <div class="mt-4">
                         <p class="mb-2">El mes pasado:</p>
-                        <h5>$ {{ dataMesAnterior[16][concepto] | number }}</h5>
+                        <h5>$ {{ dataMesAnterior[15][concepto] | number }}</h5>
                     </div>
 
                 </div>

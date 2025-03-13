@@ -6,6 +6,8 @@ import { DashboardsRoutingModule } from './dashboards-routing.module';
 import { UIModule } from '../../shared/ui/ui.module';
 import { WidgetModule } from '../../shared/widget/widget.module';
 
+import { DataTablesModule } from 'angular-datatables';
+
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { BsDropdownModule, BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
@@ -31,6 +33,7 @@ import { DefaultComponent } from './default/default.component';
     WidgetModule,
     SimplebarAngularModule,
     ModalModule.forRoot(),
+    DataTablesModule,
   ],
   providers: [BsDropdownConfig],
 })

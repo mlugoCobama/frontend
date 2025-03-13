@@ -28,8 +28,8 @@ export class TotalesComponent implements AfterViewInit {
 
   public options = {
     series: [{
-      name: '',
-      data: [12, 14, 2, 47, 42, 15, 47, 75, 65, 19, 14]
+        name: '',
+        data: [12, 14, 2, 47, 42, 15, 47, 75, 65, 19, 14]
       }],
       chart: {
           type: 'area',
@@ -75,7 +75,9 @@ export class TotalesComponent implements AfterViewInit {
     
     this.setTitle();
     this.setDataSerie();
-    this.diferencia = this.dataMes[16][this.concepto] - this.dataMesAnterior[16][this.concepto];
+    console.log(this.dataMes);
+    
+    this.diferencia = this.dataMes[15][this.concepto] - this.dataMesAnterior[15][this.concepto];
 
     this.options.series[0]['name'] = this.title;
     this.options.series[0]['data'] = this.dataSerie;

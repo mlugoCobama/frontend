@@ -65,7 +65,7 @@ export class TotalesGraficaComponent {
       
     this.setTitle();
     this.setDataSerie();
-    this.diferencia = this.dataMes[16][this.concepto] - this.dataMesAnterior[16][this.concepto];
+    this.diferencia = this.dataMes[15][this.concepto] - this.dataMesAnterior[15][this.concepto];
   
     this.options.series[0]['name'] = this.title;
     this.options.series[0]['data'] = this.dataSerie;

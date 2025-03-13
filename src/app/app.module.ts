@@ -20,7 +20,6 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { ToastrModule } from 'ngx-toastr';
 import { ScrollToModule } from '@nicky-lenaers/ngx-scroll-to';
-import { SharedModule } from './cyptolanding/shared/shared.module';
 
 // Store
 import { StoreModule } from '@ngrx/store';
@@ -32,7 +31,6 @@ import { LayoutsModule } from './layouts/layouts.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { initFirebaseBackend } from './authUtils';
-import { CyptolandingComponent } from './cyptolanding/cyptolanding.component';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
@@ -54,9 +52,6 @@ if (environment.defaultauth === 'firebase') {
 
 import { DataTablesModule } from "angular-datatables";
 
-
-
-
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }
@@ -64,9 +59,6 @@ export function createTranslateLoader(http: HttpClient): any {
 @NgModule({
   declarations: [
     AppComponent,
-    CyptolandingComponent,
-  
-
   ],
   imports: [
     BrowserModule,
@@ -87,7 +79,6 @@ export function createTranslateLoader(http: HttpClient): any {
     AccordionModule.forRoot(),
     TabsModule.forRoot(),
     TooltipModule.forRoot(),
-    SharedModule,
     ScrollToModule.forRoot(),
     SlickCarouselModule,
     ToastrModule.forRoot(),
@@ -105,7 +96,7 @@ export function createTranslateLoader(http: HttpClient): any {
     MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSortModule
+    MatSortModule,
   ],
   bootstrap: [AppComponent],
   providers: [

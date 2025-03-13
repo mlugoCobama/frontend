@@ -1,0 +1,306 @@
+<div class="modal-header">
+    <h5 class="modal-title">Inventario</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (onClick)="cerrarModal()"></button>
+    </div>
+<div class="modal-body">
+    
+    <form [formGroup]="formModalInventario">
+        <div class="row">
+          <!-- Tipo de Hardware -->
+          <div class="col-sm-12 col-md-4">
+            <div class="form-group">
+              <label class="form-label requerido">Tipo de Hardware *</label>
+              <div>
+
+                <select 
+                    class="form-select form-select-sm ng-dirty !ng-invalid"
+                    formControlName="cat_hardware_id"
+                    [style]="{ width: '100%' }"
+                >
+                    <option value="">Selecciona una opción</option>
+                    <option *ngFor="let item of dataCatHardware" value="{{item.id}}">{{item.tipo}}</option>
+                </select>
+
+              </div>
+              <div class="text-danger">
+                <div *ngIf="formModalInventario.controls['cat_hardware_id'].errors?.required">
+                  {{ this.mensajeCampoRequerido }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Marca -->
+          <div class="col-sm-12 col-md-4">
+            <div class="form-group">
+              <label class="form-label requerido">Marca*</label>
+              <div>
+                <input
+                  class="form-control form-control-sm ng-dirty !ng-invalid"
+                  formControlName="marca"
+                  placeholder="Ingresar Marca"
+                  maxlength="255"
+                  [style]="{ width: '100%' }"
+                />
+              </div>
+              <div class="text-danger">
+                <div *ngIf="formModalInventario.controls['marca'].errors?.required">
+                  {{ this.mensajeCampoRequerido }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-12 col-md-4">
+            <div class="form-group">
+              <label class="form-label requerido">Modelo*</label>
+              <div>
+                <input
+                  class="form-control form-control-sm ng-dirty !ng-invalid"
+                  formControlName="modelo"
+                  placeholder="Ingresar Modelo"
+                  maxlength="255"
+                  [style]="{ width: '100%' }"
+                />
+              </div>
+              <div class="text-danger">
+                <div *ngIf="formModalInventario.controls['modelo'].errors?.required">
+                  {{ this.mensajeCampoRequerido }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-2">
+            <!-- Tipo de Hardware -->
+            <div class="col-sm-12 col-md-4">
+              <div class="form-group">
+                <label class="form-label requerido">Número de Serie *</label>
+                <div>
+                  <input
+                    class="form-control form-control-sm ng-dirty !ng-invalid"
+                    formControlName="no_serie"
+                    placeholder="Ingresar Número de Serie"
+                    maxlength="255"
+                    [style]="{ width: '100%' }"
+                  />
+                </div>
+                <div class="text-danger">
+                  <div *ngIf="formModalInventario.controls['no_serie'].errors?.required">
+                    {{ this.mensajeCampoRequerido }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Marca -->
+            <div class="col-sm-12 col-md-4">
+              <div class="form-group">
+                <label class="form-label requerido">Tipo de CPU*</label>
+                <div>
+                  <select 
+                    class="form-select form-select-sm ng-dirty !ng-invalid"
+                    name="tipo_cpu" id="tipo_cpu"
+                    formControlName="tipo_cpu"
+                    [style]="{ width: '100%' }"
+                  >
+                    <option value="">Selecciona una opción</option>
+                    <option value="1">CPU de Marca</option>
+                    <option value="2">CPU Armada</option>
+                    <option value="3">Laptop</option>
+                    <option value="4">Terminal</option>
+                    <option value="5">All In One</option>
+                    <option value="6">Laptop Consult</option>
+                  </select>
+                </div>
+                <div class="text-danger">
+                  <div *ngIf="formModalInventario.controls['tipo_cpu'].errors?.required">
+                    {{ this.mensajeCampoRequerido }}
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <div class="col-sm-12 col-md-4">
+              <div class="form-group">
+                <label class="form-label requerido">MAC de Equipo*</label>
+                <div>
+                  <input
+                    class="form-control form-control-sm ng-dirty !ng-invalid"
+                    formControlName="mac"
+                    placeholder="Ingresar MAC de Equipo"
+                    maxlength="255"
+                    [style]="{ width: '100%' }"
+                  />
+                </div>
+                <div class="text-danger">
+                  <div *ngIf="formModalInventario.controls['mac'].errors?.required">
+                    {{ this.mensajeCampoRequerido }}
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <!-- Tipo de Hardware -->
+            <div class="col-sm-12 col-md-4">
+              <div class="form-group">
+                <label class="form-label requerido">Memoria RAM *</label>
+                <div>
+                  <input
+                    class="form-control form-control-sm ng-dirty !ng-invalid"
+                    formControlName="memoria_ram"
+                    placeholder="Ingresar Memoria RAM"
+                    maxlength="255"
+                    [style]="{ width: '100%' }"
+                  />
+                </div>
+                <div class="text-danger">
+                  <div *ngIf="formModalInventario.controls['memoria_ram'].errors?.required">
+                    {{ this.mensajeCampoRequerido }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Marca -->
+            <div class="col-sm-12 col-md-4">
+              <div class="form-group">
+                <label class="form-label requerido">Capacidad Disco Duro*</label>
+                <div>
+                  <input
+                    class="form-control form-control-sm ng-dirty !ng-invalid"
+                    formControlName="disco_duro"
+                    placeholder="Ingresar Capacidad Disco Duro"
+                    maxlength="255"
+                    [style]="{ width: '100%' }"
+                  />
+                </div>
+                <div class="text-danger">
+                  <div *ngIf="formModalInventario.controls['disco_duro'].errors?.required">
+                    {{ this.mensajeCampoRequerido }}
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <div class="col-sm-12 col-md-4">
+              <div class="form-group">
+                <label class="form-label requerido">Procesador*</label>
+                <div>
+                  <input
+                    class="form-control form-control-sm ng-dirty !ng-invalid"
+                    formControlName="procesador"
+                    placeholder="Ingresar Procesador "
+                    maxlength="255"
+                    [style]="{ width: '100%' }"
+                  />
+                </div>
+                <div class="text-danger">
+                  <div *ngIf="formModalInventario.controls['procesador'].errors?.required">
+                    {{ this.mensajeCampoRequerido }}
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <!-- Tipo de Hardware -->
+            <div class="col-sm-12 col-md-4">
+              <div class="form-group">
+                <label class="form-label requerido">Estatus de Hardware *</label>
+                <div>
+                  <select 
+                    class="form-select form-select-sm ng-dirty !ng-invalid"
+                    name="estado" id="estado"
+                    formControlName="estado"
+                    [style]="{ width: '100%' }"
+                  >
+                    <option value="">Selecciona una opción</option>
+                    <option value="1">Asignado</option>
+                    <option value="2">Disponible</option>
+                    <option value="3">Obsoleto</option>
+                  </select>
+                </div>
+                <div class="text-danger">
+                  <div *ngIf="formModalInventario.controls['estado'].errors?.required">
+                    {{ this.mensajeCampoRequerido }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Marca -->
+            <div class="col-sm-12 col-md-4">
+              <div class="form-group">
+                <label class="form-label requerido">Caracteristicas*</label>
+                <div>
+                  <input
+                    class="form-control form-control-sm ng-dirty !ng-invalid"
+                    formControlName="caracteristicas"
+                    placeholder="Ingresar Caracteristicas"
+                    maxlength="255"
+                    [style]="{ width: '100%' }"
+                  />
+                </div>
+                <div class="text-danger">
+                  <div *ngIf="formModalInventario.controls['caracteristicas'].errors?.required">
+                    {{ this.mensajeCampoRequerido }}
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <div class="col-sm-12 col-md-4">
+              <div class="form-group">
+                <label class="form-label requerido">Observaciones*</label>
+                <div>
+                  <input
+                    class="form-control form-control-sm ng-dirty !ng-invalid"
+                    formControlName="observaciones"
+                    placeholder="Ingresar Observaciones"
+                    maxlength="255"
+                    [style]="{ width: '100%' }"
+                  />
+                </div>
+                <div class="text-danger">
+                  <div *ngIf="formModalInventario.controls['observaciones'].errors?.required">
+                    {{ this.mensajeCampoRequerido }}
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="row mt-4 " *ngIf="tipo == 'editar'">
+        <nav class="navbar" style="background-color: #75c6ff;">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">Historial</a>
+            </div>
+        </nav>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (onClick)="cerrarModal()">Cerrar</button>
+    <app-button
+        [disabled]="formModalInventario.invalid"
+        *ngIf="tipo == 'agregar'"
+        class="btn btn-primary btn-sm"
+        type="submit"
+        [disabled]="!formModalInventario.valid"
+        (click)="save()"
+      >
+        <i class="fa fa-check-circle"></i> Guardar
+      </app-button>
+      <app-button
+        [disabled]="formModalInventario.invalid"
+        *ngIf="tipo != 'agregar'"
+        class="btn btn-primary btn-sm"
+        type="submit"
+        (click)="update()"
+      >
+        <i class="fa fa-check-circle"></i> Guardar
+      </app-button>
+</div>
+

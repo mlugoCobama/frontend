@@ -10,10 +10,11 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "module": "es2020",
+    "module": "ESNext",
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "ES2022",
+    "skipLibCheck": true,
     "lib": [
       "es2020",
       "dom"

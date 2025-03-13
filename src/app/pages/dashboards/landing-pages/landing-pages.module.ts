@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 import { ChartModule } from 'angular-highcharts';
 
@@ -10,6 +10,7 @@ import { TotalesGraficaComponent } from './energeticos/widgets/totales-grafica/t
 import { DetalleEnergeticosComponent } from './energeticos/detalle-energeticos/detalle-energeticos.component';
 import { AnualComponent } from './energeticos/widgets/anual/anual.component';
 import { TablaComponent } from './energeticos/widgets/tabla/tabla.component';
+import { DataTablesModule } from 'angular-datatables';
 
 
 @NgModule({
@@ -19,12 +20,16 @@ import { TablaComponent } from './energeticos/widgets/tabla/tabla.component';
     TotalesGraficaComponent,
     DetalleEnergeticosComponent,
     AnualComponent,
-    TablaComponent
+    TablaComponent,
   ],
   imports: [
     CommonModule,
     LandingPagesRoutingModule,
-    ChartModule 
+    ChartModule,
+    DataTablesModule
+  ],
+  providers: [
+    DatePipe
   ]
 })
 export class LandingPagesModule { }

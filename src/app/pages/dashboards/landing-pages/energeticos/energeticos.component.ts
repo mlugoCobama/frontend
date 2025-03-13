@@ -46,7 +46,6 @@ export class EnergeticosComponent implements OnInit {
           this.dataTotalAnio = data.data['totalAnio'];
           this.dataTotalAnioAnt = data.data['totalAnioAnt'];
           this.isLoad = false;
-
           this.localStorage.setItem('DataEnergeticos', data.data);
 
         } else {
