@@ -12,12 +12,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ModalComprasComponent } from './compras/modal-compras/modal-compras.component';
 import { DetallesSolicitudCompraComponent } from './detalles-solicitud-compra/detalles-solicitud-compra.component';
-import { CotizacionesComponent } from './cotizacion/cotizaciones/cotizaciones.component';
 import { DatosSolicitudCompraComponent } from './detalles-solicitud-compra/datos-solicitud-compra/datos-solicitud-compra.component';
 import { TablaDetallesSolicitudComponent } from './detalles-solicitud-compra/tabla-detalles-solicitud/tabla-detalles-solicitud.component';
-
-
-
+import { ModalAddProveedorComponent } from './proveedores/modal-add-proveedor/modal-add-proveedor.component';
+import { ModalUpdtProveedorComponent } from './proveedores/modal-updt-proveedor/modal-updt-proveedor.component';
+import { ModalShowProveedorComponent } from './proveedores/modal-show-proveedor/modal-show-proveedor.component';
+import { ModalAddUnidadComponent } from './cat-unidades-medidas/modal-add-unidad/modal-add-unidad.component';
+import { ModalUpdtUnidadComponent } from './cat-unidades-medidas/modal-updt-unidad/modal-updt-unidad.component';
+import { FormCotizacionComponent } from './detalles-solicitud-compra/form-cotizacion/form-cotizacion.component';
+import { TblFlsCotizacionComponent } from './detalles-solicitud-compra/tbl-fls-cotizacion/tbl-fls-cotizacion.component';
+import { FormFacturasComponent } from './detalles-solicitud-compra/form-facturas/form-facturas.component';
 
 
 @NgModule({
@@ -27,9 +31,16 @@ import { TablaDetallesSolicitudComponent } from './detalles-solicitud-compra/tab
     ProveedoresComponent,
     ModalComprasComponent,
     DetallesSolicitudCompraComponent,
-    CotizacionesComponent,
     DatosSolicitudCompraComponent,
     TablaDetallesSolicitudComponent,
+    ModalAddProveedorComponent,
+    ModalUpdtProveedorComponent,
+    ModalShowProveedorComponent,
+    ModalAddUnidadComponent,
+    ModalUpdtUnidadComponent,
+    FormCotizacionComponent,
+    TblFlsCotizacionComponent,
+    FormFacturasComponent,
   ],
   imports: [
     CommonModule,

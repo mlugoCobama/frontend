@@ -1,0 +1,365 @@
+<!-- Order Create Model MODAL NUEVO PROVEEDOR-->
+<!-- <ng-template #content role="document" let-modal> -->
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">Nuevo Proveedor</h5>
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="modal"
+    aria-label="Close"
+    id="close-modal"
+    (click)="cerrarModal()"
+  ></button>
+</div>
+<div class="modal-body">
+  <form
+    class="row g-2"
+    [formGroup]="formProveedores"
+    enctype="multipart/form-data"
+  >
+    <div class="col-md-6">
+      <label for="nombre" class="form-label">Nombre: *</label>
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        formControlName="nombre"
+        id="nombre"
+        name="nombre"
+        aria-label="Nombre"
+      />
+      <div *ngIf="proveedoresFormControl.nombre.touched || submitted">
+        <div
+          class="text-danger form-text"
+          *ngIf="proveedoresFormControl.nombre.errors?.['required']"
+        >
+          Nombre es requerido.
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label for="contacto" class="form-label form-label-sm">Contacto: *</label>
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        formControlName="contacto"
+        id="contacto"
+        name="contacto"
+        aria-label="Contacto"
+      />
+      <div *ngIf="proveedoresFormControl.contacto.touched || submitted">
+        <div
+          class="text-danger form-text"
+          *ngIf="proveedoresFormControl.contacto.errors?.['required']"
+        >
+          Contacto es requerido.
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label for="telefono" class="form-label">Teléfono: *</label>
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        formControlName="telefono"
+        (input)="validateNumberInput($event)"
+        id="telefono"
+        name="telefono"
+        aria-label="Teléfono"
+      />
+      <div
+        *ngIf="
+          proveedoresFormControl.telefono.touched ||
+          proveedoresFormControl.telefono.dirty ||
+          submitted
+        "
+      >
+        <div
+          class="text-danger form-text"
+          *ngIf="proveedoresFormControl.telefono.errors?.['required']"
+        >
+          Teléfono es requerido.
+        </div>
+        <div
+          class="text-danger form-text"
+          *ngIf="proveedoresFormControl.telefono.errors?.['pattern']"
+        >
+          El campo solo acepta números.
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label for="correo" class="form-label">Correo de contacto: *</label>
+      <input
+        type="email"
+        class="form-control form-control-sm"
+        formControlName="correo"
+        id="correo"
+        name="correo"
+        aria-label="Teléfono"
+      />
+      <div *ngIf="proveedoresFormControl.correo.touched || submitted">
+        <div
+          class="text-danger form-text"
+          *ngIf="proveedoresFormControl.correo.errors?.['required']"
+        >
+          Correo es requerido.
+        </div>
+        <div
+          class="text-danger form-text"
+          *ngIf="proveedoresFormControl.correo.errors?.['email']"
+        >
+          Introduce un correo valido.
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label for="localidad" class="form-label">Localidad: *</label>
+      <select
+        class="form-select form-select-sm"
+        type="text"
+        formControlName="localidad"
+        id="localidad"
+        name="localidad"
+        aria-label="localidad"
+      >
+        <option selected>Selecciona una localidad</option>
+        <option *ngFor="let item of estados" value="{{ item.clave }}">
+          {{ item.nombre }}
+        </option>
+      </select>
+      <div *ngIf="proveedoresFormControl.localidad.touched || submitted">
+        <div
+          class="text-danger form-text"
+          *ngIf="proveedoresFormControl.localidad.errors?.['required']"
+        >
+          Localidad es requerido.
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label for="condiciones" class="form-label form-label-sm"
+        >Condiciones: *</label
+      >
+      <select
+        class="form-select form-select-sm"
+        formControlName="condiciones"
+        id="condiciones"
+        name="condiciones"
+        aria-label="condiciones"
+        #selectElement
+        (change)="onChange(selectElement)"
+      >
+        <option value="">Selecciona uno</option>
+        <option value="Contado">Contado</option>
+        <option value="Credito">Crédito</option>
+      </select>
+      <div
+        *ngIf="
+          proveedoresFormControl.condiciones.touched ||
+          submitted ||
+          proveedoresFormControl.condiciones.value === 'Selecciona uno'
+        "
+      >
+        <div
+          class="text-danger form-text"
+          *ngIf="proveedoresFormControl.condiciones.errors?.['required']"
+        >
+          Condiciones es requerido.
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6" *ngIf="isCredit">
+      <label for="dias_credito" class="form-label">Dias de crédito: *</label>
+      <input
+        type="number"
+        value="0"
+        min="1"
+        class="form-control form-control-sm"
+        formControlName="dias_credito"
+        id="dias_credito"
+        name="dias_credito"
+        aria-label="dias_credito"
+      />
+      <div
+        *ngIf="
+          proveedoresFormControl.dias_credito.touched ||
+          submitted ||
+          proveedoresFormControl.dias_credito.dirty
+        "
+      >
+        <div
+          class="text-danger form-text"
+          *ngIf="proveedoresFormControl.dias_credito.errors?.['pattern']"
+        >
+          El campo solo acepta números.
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label for="horario_atencion" class="form-label"
+        >Horario de Atención: *</label
+      >
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        formControlName="horario_atencion"
+        id="horario_atencion"
+        name="horario_atencion"
+        aria-label="horario_atencion"
+      />
+      <div *ngIf="proveedoresFormControl.horario_atencion.touched || submitted">
+        <div
+          class="text-danger form-text"
+          *ngIf="proveedoresFormControl.horario_atencion.errors?.['required']"
+        >
+          Horario de atención es requerido.
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label for="tiempo_entrega" class="form-label"
+        >Tiempo de entrega: *</label
+      >
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        formControlName="tiempo_entrega"
+        id="tiempo_entrega"
+        name="tiempo_entrega"
+        aria-label="tiempo_entrega"
+      />
+      <div *ngIf="proveedoresFormControl.tiempo_entrega.touched || submitted">
+        <div
+          class="text-danger form-text"
+          *ngIf="proveedoresFormControl.tiempo_entrega.errors?.['required']"
+        >
+          Tiempo de entrega es requerido.
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <label for="servicios" class="form-label">Servicios: *</label>
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        formControlName="servicios"
+        id="servicios"
+        name="servicios"
+        aria-label="Servicios"
+      />
+      <div *ngIf="proveedoresFormControl.servicios.touched || submitted">
+        <div
+          class="text-danger form-text"
+          *ngIf="proveedoresFormControl.servicios.errors?.['required']"
+        >
+          Servicios es requerido.
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-info mt-4" role="alert">Expediente</div>
+
+    <div class="col-md-6">
+      <div class="mb-2">
+        <label for="constancia_fiscal" class="form-label"
+          >Constancia de Situación Fiscal</label
+        >
+        <input
+          class="form-control form-control-sm"
+          type="file"
+          accept="application/pdf"
+          (change)="onFileChange($event, 'constancia_fiscal')"
+          formControlName="constancia_fiscal"
+          id="constancia_fiscal"
+        />
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="mb-2">
+        <label for="ine" class="form-label">INE</label>
+        <input
+          class="form-control form-control-sm"
+          type="file"
+          (change)="onFileChange($event, 'ine')"
+          formControlName="ine"
+          id="ine"
+          accept="application/pdf"
+        />
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb-2">
+        <label for="comprobante_domicilio" class="form-label"
+          >Comprobante de Domicilio</label
+        >
+        <input
+          accept="application/pdf"
+          class="form-control form-control-sm"
+          type="file"
+          (change)="onFileChange($event, 'comprobante_domicilio')"
+          formControlName="comprobante_domicilio"
+          id="comprobante_domicilio"
+        />
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="mb-2">
+        <label for="estado_cuenta" class="form-label">Estado de Cuenta</label>
+        <input
+          accept="application/pdf"
+          class="form-control form-control-sm"
+          type="file"
+          (change)="onFileChange($event, 'estado_cuenta')"
+          formControlName="estado_cuenta"
+          id="estado_cuenta"
+        />
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="mb-2">
+        <label for="acta_constitutiva" class="form-label"
+          >Acta Constitutiva</label
+        >
+        <input
+          class="form-control form-control-sm"
+          type="file"
+          accept="application/pdf"
+          (change)="onFileChange($event, 'acta_constitutiva')"
+          formControlName="acta_constitutiva"
+          id="acta_constitutiva"
+        />
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="mb-2">
+        <label for="poder_notarial" class="form-label">Poder Notarial</label>
+        <input
+          class="form-control form-control-sm"
+          type="file"
+          accept="application/pdf"
+          (change)="onFileChange($event, 'poder_notarial')"
+          formControlName="poder_notarial"
+          id="poder_notarial"
+        />
+      </div>
+    </div>
+  </form>
+</div>
+<div class="modal-footer">
+  <button
+    type="button"
+    class="btn btn-secondary btn-sm"
+    data-bs-dismiss="modal"
+    (click)="cerrarModal()"
+  >
+    Cerrar
+  </button>
+  <button type="button" class="btn btn-primary btn-sm" (click)="save()">
+    Guardar
+  </button>
+</div>
+<!-- </ng-template> -->
+<!--End Modal -->

@@ -1,0 +1,145 @@
+<div class="row">
+  <div class="col-12">
+    <div
+      class="page-title-box d-flex align-items-center justify-content-between">
+      <h4 class="mb-0 font-size-18"></h4>
+      <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+          <ng-container>
+            <li class="breadcrumb-item">
+              <a href="javascript: void(0);">Captura</a>
+            </li>
+            <li class="breadcrumb-item active">Agencias Nissan</li>
+          </ng-container>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="card">
+    <div class="card-header text-bg-primary row">
+      <div class="col-6 pt-1">
+        <h4>Captura</h4>
+      </div>
+      <div class="col-6 pt-1">
+        <h5 class="text-end">Agencias Nissan</h5>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-3">
+          <label class="form-label">Mes:</label>
+          <select
+            class="form-control form-control-sm"
+            (change)="onSelectedMes($event.target.value)"
+          >
+            <option value="0" default>Selecciona un mes</option>
+            <option value="{{ mes.mes }}" *ngFor="let mes of meses">
+              {{ mes.nombre }}
+            </option>
+          </select>
+          <div *ngIf="!mes">
+            <div class="text-danger text-sm">Selecciona un mes</div>
+          </div>
+        </div>
+        <div class="col-3">
+          <label class="form-label">Año:</label>
+          <select
+            #anios
+            class="form-control form-control-sm"
+            (change)="onSelectedAnio($event.target.value)"
+          >
+            <option value="0" default>Selecciona un año</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+          </select>
+          <div *ngIf="!anio">
+            <div class="text-danger text-sm">Selecciona un año</div>
+          </div>
+        </div>
+        <div class="col-3 mt-4">
+          <button
+            type="submit"
+            class="btn btn-info btn-sm me-1"
+            (click)="getMesAgencia()"
+            *ngIf="selecMes && selecAnio && verBtnConsulta"
+          >
+            <div *ngIf="!isDisabled">
+              <i class="bx bx-search-alt-2"></i> Consultar
+            </div>
+            <div *ngIf="isDisabled">
+              <div class="spinner-grow spinner-grow-sm" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              Buscando
+            </div>
+          </button>
+          <button
+            *ngIf="showTable && !verBtnConsulta"
+            (click)="clickPaste()"
+            type="submit"
+            class="btn btn-success btn-sm me-1"
+          >
+            <i class="bx bx-paste"></i>
+            Pegar aquí
+          </button>
+          <button
+            *ngIf="showBtnAccion"
+            (click)="btnSoU()"
+            type="submit"
+            class="btn btn-info btn-sm me-1"
+          >
+            <i class="{{ iconoAccion }}"></i>
+            {{ accion }}
+          </button>
+        </div>
+      </div>
+      <br />
+      <!-- TABLA PARA VER INFORMACIÓN Y CARGAR DATOS -->
+      <div class="row" *ngIf="showTable">
+        <form>
+          <!-- <p *ngIf="showInstructions" class="text-center">
+            <i class="fas fa-paste"></i>&nbsp;<strong
+              >Pega aquí tu tabla de excel</strong
+            >
+          </p> -->
+
+          <div class="d-flex justify-content-center" *ngIf="!isLoad">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+
+          <table
+            *ngIf="!showInstructions && isLoad"
+            class="table table-sm table-bordered"
+          >
+            <thead class="text-center table-light">
+              <tr class="text-center">
+                <th>Concepto</th>
+                <th *ngFor="let empresa of catEmpresas">
+                  <span>{{ empresa.sub_division }}</span> {{ empresa.sucursal }}
+                </th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of dataMesAgencias">
+                <td
+                  *ngFor="let cell of row"
+                  [attr.colspan]="cell.colspan"
+                  class="text-center"
+                >
+                  {{ cell.value }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

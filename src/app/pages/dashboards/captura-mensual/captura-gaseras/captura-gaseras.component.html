@@ -1,130 +1,173 @@
 <div class="row">
   <div class="col-12">
-      <div class="page-title-box d-flex align-items-center justify-content-between">
-          <h4 class="mb-0 font-size-18"></h4>
-          <div class="page-title-right ">
-              <ol class="breadcrumb m-0 ">
-                  <ng-container>
-                      <li class="breadcrumb-item"><a href="javascript: void(0);">Captura</a>
-                      </li>
-                      <li class="breadcrumb-item active">Gaseras </li>
-                  </ng-container>
-              </ol>
-          </div>
+    <div
+      class="page-title-box d-flex align-items-center justify-content-between"
+    >
+      <h4 class="mb-0 font-size-18"></h4>
+      <div class="page-title-right">
+        <ol class="breadcrumb m-0">
+          <ng-container>
+            <li class="breadcrumb-item">
+              <a href="javascript: void(0);">Captura</a>
+            </li>
+            <li class="breadcrumb-item active">Gaseras</li>
+          </ng-container>
+        </ol>
       </div>
+    </div>
   </div>
 </div>
 <div class="row">
-  <div class="card ">
+  <div class="card">
     <div class="card-header text-bg-primary row">
       <div class="col-6 pt-1">
-        <h4>Captura Mensual </h4>
+        <h4>Captura Mensual</h4>
       </div>
       <div class="col-6 pt-1">
         <h5 class="text-end">Gaseras</h5>
       </div>
     </div>
-    <div class="card-body ">
-
-        <div class="row">
-          <div class="col-4">
-            <label class="form-label">Mes:</label>
-            <select class="form-control form-control-sm" (change)="onSelectedMes($event.target.value)">
-              <option value="" default>Selecciona un mes</option>
-              <option value="{{mes.mes}}" *ngFor="let mes of meses">{{mes.nombre}}</option>
-            </select>
-          </div>
-          <div class="col-4">
-            <label class="form-label">Año:</label>
-            <select #anios class="form-control form-control-sm" (change)="onSelectedAnio(anios.value)">
-              <option value="" default>Selecciona un año</option>
-              <option value="2022">2022</option>
-              <option value="2023">2023</option>
-              <option value="2024">2024</option>
-              <option value="2025">2025</option>
-            </select>
-          </div>
-          <div class="col-3 mt-4">
-            <button
-            *ngIf="selecAnio && selecMes"
-              type="submit"
-              class="btn btn-info btn-sm me-1"
-              (click)="getInfoMes()"
-              [disabled]="isDisabled"
-            >
-              <div *ngIf="!isDisabled">
-                <i class='bx bx-search-alt-2'></i> Consultar
-              </div>
-
-              <div *ngIf="isDisabled">
-                <div class="spinner-grow spinner-grow-sm" role="status">
-                  <span class="visually-hidden">Loading...</span>
-                </div>
-                Buscando
-              </div>
-            </button>
-            <button type="submit" class="btn btn-primary btn-sm" *ngIf="mostrar" [disabled]="!formDatosEnergeticos.valid" (click)="saveInfo()" >Guardar</button>
-          </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-4">
+          <label class="form-label">Mes:</label>
+          <select
+            class="form-control form-control-sm"
+            (change)="onSelectedMes($event.target.value)"
+          >
+            <option value="0" default>Selecciona un mes</option>
+            <option value="{{ mes.mes }}" *ngFor="let mes of meses">
+              {{ mes.nombre }}
+            </option>
+          </select>
         </div>
-        <br>
-        <div class="row">
-          <div class="table-responsive" *ngIf="mostrar">
-            <form [formGroup]="formDatosEnergeticos" >
-              <table class="table table-sm table-striped">
-                <thead class="table-light">
-                  <tr>
-                    <th>Planta</th>
-                    <th>Venta Litros</th>
-                    <th>Ventas</th>
-                    <th>Eficiencia</th>
-                    <th>Gasto</th>
-                    <th>UB</th>
-                    <th>UBO</th>
-                    <th>Acumulado Personal</th>
-                    <th>UNO</th>
-                  </tr>
-                </thead>
+        <div class="col-4">
+          <label class="form-label">Año:</label>
+          <select
+            #anios
+            class="form-control form-control-sm"
+            (change)="onSelectedAnio(anios.value)"
+          >
+            <option value="0" default>Selecciona un año</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+          </select>
+        </div>
+        <div class="col-3 mt-4">
+          <button
+          *ngIf="selecMes && selecAnio && verBtnConsulta"
+            type="submit"
+            class="btn btn-info btn-sm me-1"
+            (click)="getInfoMes()"
+            [disabled]="isDisabled"
+          >
+            <div *ngIf="!isDisabled">
+              <i class="bx bx-search-alt-2"></i> Consultar
+            </div>
 
-                <tbody>
-                  <tr *ngFor="let item of catEmpresas; index as i">
-                    <td>{{item.nombre}}</td>
-                    <td>
-                      <input
-                        type="text"
-                        class="form-control form-control-sm text-end !ng-invalid"
-                        mask="separator"
-                        thousandSeparator=","
-                        formControlName="venta_litros_{{item.id}}"
-                        [allowNegativeNumbers]="true"
-                      >
-                    </td>
-                    <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," [allowNegativeNumbers]="true" formControlName="ventas_{{item.id}}"></td>
-                    <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," [allowNegativeNumbers]="true" formControlName="eficiencia_{{item.id}}"></td>
-                    <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," [allowNegativeNumbers]="true" formControlName="gasto_{{item.id}}"></td>
-                    <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," [allowNegativeNumbers]="true" formControlName="utilidad_bruta_{{item.id}}"></td>
-                    <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," [allowNegativeNumbers]="true" formControlName="ubo_{{item.id}}"></td>
-                    <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," [allowNegativeNumbers]="true" formControlName="personal_{{item.id}}"></td>
-                    <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," [allowNegativeNumbers]="true" formControlName="uno_{{item.id}}"></td>
-                  </tr>
-                </tbody>
-                <tfoot *ngIf="existInfo" >
-                  <tr >
-                    <th class="text-end">Totales</th>
-                    <th class="text-end">{{dataEmpresas[indexTotals].venta_litros}}</th>
-                    <th class="text-end">{{dataEmpresas[indexTotals].ventas}}</th>
-                    <th class="text-end">{{dataEmpresas[indexTotals].eficiencia}}</th>
-                    <th class="text-end">{{dataEmpresas[indexTotals].gasto}}</th>
-                    <th class="text-end">{{dataEmpresas[indexTotals].utilidad_bruta}}</th>
-                    <th class="text-end">{{dataEmpresas[indexTotals].ubo}}</th>
-                    <th class="text-end">{{dataEmpresas[indexTotals].personal}}</th>
-                    <th class="text-end">{{dataEmpresas[indexTotals].uno}}</th>
-                  </tr>
-                </tfoot>
-              </table>
-            </form>
+            <div *ngIf="isDisabled">
+              <div class="spinner-grow spinner-grow-sm" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              Buscando
+            </div>
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary btn-sm me-1"
+            *ngIf="showBtnAccion"
+            [disabled]=""
+            (click)="saveInfo()"
+          >
+          <i class="{{ iconoAccion }}"></i>
+          {{ accion }}
+          </button>
+
+          <button
+            *ngIf="showTable && !verBtnConsulta"
+            (click)="clickPaste()"
+            type="submit"
+            class="btn btn-success btn-sm me-1"
+          >
+            <i class="bx bx-paste"></i>
+            Pegar aquí
+          </button>
+        </div>
+      </div>
+      <br />
+      <div class="row" *ngIf="showTable">
+
+        <div class="d-flex justify-content-center" *ngIf="!isLoad">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
           </div>
         </div>
 
+        <!-- Tabla desde el excel -->
+        <table class="table table-sm table-striped" *ngIf="hasDatos">
+          <thead class="text-center table-light">
+            <tr>
+              <th *ngFor="let header of headers">
+                {{ header }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of dataMesAgencias">
+              <td
+                *ngFor="let cell of row"
+                class="text-center"
+              >
+                {{ cell }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- tabla desde bd -->
+        <table class="table table-sm table-striped text-center" *ngIf="existInfo && !hasDatos">
+          <thead class="table-light">
+            <tr>
+              <th>Planta</th>
+              <th>Venta Litros</th>
+              <th>Ventas</th>
+              <th>Eficiencia</th>
+              <th>Gasto</th>
+              <th>UB</th>
+              <th>UBO</th>
+              <th>Acumulado Personal</th>
+              <th>UNO</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of catEmpresas; index as i">
+              <td>{{ item.nombre }}</td>
+              <td>{{dataEmpresas[item.id-1].venta_litros | number: '1.2-2' }}</td>
+              <td>{{dataEmpresas[item.id-1].ventas | number : '1.2-2'}}</td>
+              <td>{{dataEmpresas[item.id-1].eficiencia | number : '1.2-2'}}</td>
+              <td>{{dataEmpresas[item.id-1].gasto | number : '1.2-2'}}</td>
+              <td>{{dataEmpresas[item.id-1].utilidad_bruta | number : '1.2-2'}}</td>
+              <td>{{dataEmpresas[item.id-1].ubo | number : '1.2-2'}}</td>
+              <td>{{dataEmpresas[item.id-1].personal | number : '1.2-2'}}</td>
+              <td>{{dataEmpresas[item.id-1].uno | number : '1.2-2'}}</td>
+            </tr>
+          </tbody>
+          <tfoot >
+            <tr>
+              <th>Totales</th>
+              <th> {{ dataEmpresas[lastIndex].venta_litros | number : '1.2-2'}}</th>
+              <th>{{ dataEmpresas[lastIndex].ventas |number : '1.2-2' }}</th>
+              <th>{{ dataEmpresas[lastIndex].eficiencia | number  : '1.2-2'}}</th>
+              <th>{{ dataEmpresas[lastIndex].gasto | number : '1.2-2'}}</th>
+              <th>{{ dataEmpresas[lastIndex].utilidad_bruta |number : '1.2-2' }}</th>
+              <th>{{ dataEmpresas[lastIndex].ubo | number : '1.2-2' }}</th>
+              <th>{{ dataEmpresas[lastIndex].personal | number : '1.2-2'}}</th>
+              <th>{{ dataEmpresas[lastIndex].uno | number : '1.2-2'}}</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </div>
   </div>
 </div>

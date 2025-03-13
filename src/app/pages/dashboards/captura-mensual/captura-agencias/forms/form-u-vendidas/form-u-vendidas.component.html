@@ -1,0 +1,38 @@
+<form  [formGroup]="formUnidadesVendidas">
+    <table class="table table-sm " (paste)="onPaste($event)" >
+        <thead>
+            <tr>
+                <th colspan="5" class="text-center table-primary"> <strong>Unidades de Vendidas</strong></th>  
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Nuevos</td>
+                <td *ngFor="let item of catEmpresas"><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," [allowNegativeNumbers]="true" formControlName="nuevos_{{item.id}}"></td>                    
+            </tr>
+            <tr>
+                <td>UB Nuevos</td>
+                <td *ngFor="let item of catEmpresas"><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," [allowNegativeNumbers]="true" formControlName="utilidad_nuevos_{{item.id}}"></td>
+            </tr>
+            <tr>
+                <td>Flotillas</td>
+                <td *ngFor="let item of catEmpresas"><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," [allowNegativeNumbers]="true" formControlName="flotillas_{{item.id}}"></td>
+            </tr>
+            <tr>
+                <td>UB Flotillas</td>
+                <td *ngFor="let item of catEmpresas"><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," [allowNegativeNumbers]="true" formControlName="utilidad_flotillas_{{item.id}}"></td>
+            </tr>
+            <tr>
+                <td>Seminuevos</td>
+                <td *ngFor="let item of catEmpresas"><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," [allowNegativeNumbers]="true" formControlName="seminuevos_{{item.id}}"></td>
+            </tr>
+            <tr>
+                <td>UB Seminuevos</td>
+                <td *ngFor="let item of catEmpresas"><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," [allowNegativeNumbers]="true" formControlName="utilidad_seminuevos_{{item.id}}"></td>
+            </tr>
+        </tbody>
+        
+    </table>
+</form>
+
+

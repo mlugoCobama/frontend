@@ -2,12 +2,6 @@ import { Component, OnInit, NgModule } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { ModalComprasComponent } from "./modal-compras/modal-compras.component";
 
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { Config } from "datatables.net";
 import Swal from "sweetalert2";
@@ -24,279 +18,84 @@ import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompr
 })
 export class ComprasComponent implements OnInit {
   public dtOptions: Config = {};
-  public showTable: boolean = false;
+  
   public modalRef?: BsModalRef;
+  
+  public showTable: boolean = false;
+  public solicitudSelecionada: boolean = false;
+  public isLoad: boolean = true;
   mostrarBoton = false;
 
-  public solicitudSelecionada: boolean = false;
-
-  public submitted: boolean = false;
-  public submittedDetail: boolean = false;
-  public isLoad: boolean = true;
-
-  public formSolicitudCompra: FormGroup;
-  public formDetalleSolicitud: FormGroup;
-
   public solicitudCompra: any; // Objeto que envió al componente detallesSolicitudCompra
-
+  public status: any;
   public data: any;
   public unidades: any;
-  unidad: any;
-  detalles: any;
-
-  public formData = new FormData();
-
-  public usuarioActivo = {
-    claveEmpresa: 333,
-    nombreEmpresa: "CAS",
-    idUsuario: 1
-  };
 
   constructor(
     private catUnidadesMedidasService: CatUnidadesMedidasService,
     public ordenesComprasService: OrdenesCompraService,
     public comprasService: ComprasService,
-    private modalService: BsModalService,
-    public formBuilder: FormBuilder
+    private modalService: BsModalService
   ) {}
 
   public ngOnInit(): void {
-    this.comprasService.mostrarBoton$.subscribe(mostrar => { this.mostrarBoton = mostrar; });
-    this.dtOptions = environment.dataTables;
-    this.buildForm();
-    this.getAll();
-  }
+    this.comprasService.mostrarBoton$.subscribe((mostrar) => {
+      this.mostrarBoton = mostrar;
+    });
 
-  /**
-   * Open modal
-   * @param content modal content
-   */
-  public openModal(content: any) {
-    this.submitted = false;
-    this.modalRef = this.modalService.show(content, { class: "modal-lg" });
-    console.log(this.usuarioActivo.claveEmpresa);
+    this.dtOptions = environment.dataTables;
+    this.getAll();
     this.getUnidades();
   }
 
-  text: string = '';
-  longitudMaxima: number = 150;
-  caracteresRestantes: number = this.longitudMaxima;
-  public contarCaracteres(){
-    this.caracteresRestantes = this.longitudMaxima - this.text.length;
-  }
 
-  private buildForm() {
-    return new Promise((resolve, reject) => {
-      this.formSolicitudCompra = this.formBuilder.group({
-        usuario: new FormControl(null, Validators.required),
-        usuario_destino: new FormControl(null, Validators.required),
-        motivo: new FormControl(null, Validators.required),
-      });
-      this.formDetalleSolicitud = this.formBuilder.group({
-        cantidad: new FormControl(null, Validators.required),
-        cat_unidades_medida_id: new FormControl(null, Validators.required),
-        descripcion: new FormControl(null, [Validators.required, Validators.maxLength(150)]),
-        observaciones: new FormControl(null, [Validators.required, Validators.maxLength(45)]),
-        img_referencia: new FormControl(null),
-      });
-      resolve(true);
+  /**
+   * Manejo de componentes
+   */
+  
+  public openModalNuevo() {
+    const initialState: ModalOptions = {
+      initialState: {
+        unidades: this.unidades,
+      },
+      class: "modal-lg",
+    };
+    this.modalRef = this.modalService.show(ModalComprasComponent, initialState);
+    this.modalRef.content.closeBtnName = "Close";
+    this.modalRef.content.event.subscribe(() => {
+      this.isLoad = true;
+      this.getAll();
     });
   }
 
-  get solicitudCompraFormControl() {
-    return this.formSolicitudCompra.controls;
-  }
+  public openDetallesSolicitud(dato: any, evento: any) {
+    // Funcion para llenar la vista con el detalle component
+    this.solicitudSelecionada = true;
+    // Verifica si hay un elemento seleccionado (evento del doble click)
+    if (evento.currentTarget.classList.contains("table-primary")) {
+      evento.currentTarget.classList.remove("table-primary");
+      this.solicitudSelecionada = false;
+    } else {
+      const filas = document.querySelectorAll("tbody tr");
 
-  get detalleSolicitudFormControl() {
-    return this.formDetalleSolicitud.controls;
-  }
-
-  public onChange(selectElement: any) {
-    // metodo que obtiene el texto del select unidad
-    const selectedText =
-      selectElement.options[selectElement.selectedIndex].text;
-    this.unidad = selectedText;
-  }
-
-  detalle = {
-    cantidad: "",
-    cat_unidades_medida_id: "",
-    cat_unidades_medida_id1: "",
-    img_referencia1: "",
-    descripcion: "",
-    observaciones: "",
-    img_referencia: null,
-  };
-  tableData: Array<any> = [];
-
-  public addDetalle() {
-    if (this.formDetalleSolicitud.invalid) {
-      this.submittedDetail = true;
-      return;
-    }
-    const valores = this.formDetalleSolicitud.value;
-
-    const newDetalle = {
-      ...this.formDetalleSolicitud.value,
-      cat_unidades_medida_id1: this.unidad,
-      img_referencia1: valores.img_referencia,
-    };
-
-    if (this.formData.has("img_referencia")) {
-      newDetalle.img_referencia1 = URL.createObjectURL(
-        this.formData.get("img_referencia") as Blob
-      );
-    }
-    if (this.formData.has("img_referencia")) {
-      newDetalle.img_referencia = this.formData.get("img_referencia") as File;
-    }
-    this.tableData.push(newDetalle);
-    this.formDetalleSolicitud.reset();
-    this.formData.delete("img_referencia");
-    this.submittedDetail = false;
-  }
-
-  onFileChange(event: any, fieldName: string) {
-    // Funcion que captura el archivo en el input
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.formData.append(fieldName, file);
+      filas.forEach((fila) => fila.classList.remove("table-primary"));
+      evento.currentTarget.classList.add("table-primary");
+      this.solicitudSelecionada = true;
+      this.solicitudCompra = dato; // Castea el objeto que se envia al detalleSolicitudCompra
+      this.status = this.solicitudCompra.estatus;
     }
   }
 
-  public removeDetalle(index: number) {
-    this.tableData.splice(index, 1);
-  }
-
-  private async generateFolio(): Promise<string>  {
-    // Método para generar el folio de solicitud de compras
-    const response = await this.comprasService
-      .obtenerFolio()
-      .toPromise();
-    return response.nuevoFolio;
-  }
-
-  public fecha() {
-    // Método para asignar una fecha
-    // obtener la fecha en el formato correcto para la bd
-    const fecha = new Date();
-    const anio = fecha.getFullYear();
-    const mes = ("0" + (fecha.getMonth() + 1)).slice(-2);
-    const dia = ("0" + fecha.getDate()).slice(-2);
-    const horas = ("0" + fecha.getHours()).slice(-2);
-    const minutos = ("0" + fecha.getMinutes()).slice(-2);
-    const segundos = ("0" + fecha.getSeconds()).slice(-2);
-    return `${anio}-${mes}-${dia} ${horas}:${minutos}:${segundos}`;
-  }
-
-  public save() {
-    this.submitted = true;
-    this.isLoad = true;
-    if (this.formSolicitudCompra.invalid) {
-      this.isLoad = false;
-      Swal.fire({
-        title: "Alerta",
-        text: "Debes llenar correctamente todos los campos",
-        buttonsStyling: false,
-        icon: "warning",
-        customClass: {
-          confirmButton: "btn btn-warning px-4",
-          cancelButton: "btn btn- ms-2 px-4",
-        },
-      });
-      return;
-    }
-
-    if (this.tableData.length === 0) {
-      // Valida que el usuario ingrese por lo menos un detalle
-      this.isLoad = false;
-      Swal.fire({
-        title: "Alerta",
-        text: "Agrega por lo menos un elemento a la solicitud",
-        buttonsStyling: false,
-        icon: "warning",
-        customClass: {
-          confirmButton: "btn btn-warning px-4",
-          cancelButton: "btn btn- ms-2 px-4",
-        },
-      });
-      return;
-    }
-    this.generateFolio().then((folio) =>{
-      const data = {
-        //Datos del form solicitud
-        ...this.formSolicitudCompra.value,
-        usuario_solicita: "1",
-        users_id: "1",
-        fecha: this.fecha(),
-        folio: folio,
-        detalles: this.tableData,
-      };
-      const formDataToSend = new FormData();
-      formDataToSend.append("data", JSON.stringify(data));
-      this.tableData.forEach((detalle, index) => {
-        //agrega los detalles al form data para enviarlos
-        if (detalle.img_referencia) {
-          formDataToSend.append(
-            `img_referencia_${index}`,
-            detalle.img_referencia
-          );
-        }
-      });
-
-      console.log(formDataToSend);
-
-      this.comprasService.save(formDataToSend).subscribe(
-        (response) => {
-          if (response.status === "success") {
-            this.getAll();
-            this.showTable = true;
-            Swal.fire({
-              title: "Guardado",
-              text: "Solicitud registrada correctamente",
-              buttonsStyling: false,
-              icon: "success",
-              customClass: {
-                confirmButton: "btn btn-success px-4",
-                cancelButton: "btn btn- ms-2 px-4",
-              },
-            });
-          } else {
-            Swal.fire({
-              title: "Error",
-              text: "Hubo un error al guardar la solicitud",
-              buttonsStyling: false,
-              icon: "warning",
-              customClass: {
-                confirmButton: "btn btn-warning px-4",
-                cancelButton: "btn btn- ms-2 px-4",
-              },
-            });
-            this.getAll();
-            console.log(response.message);
-          }
-        },
-        (error) => {
-          console.error("Error fetching data:", error);
-        }
-      );
-      this.tableData = [];
-      this.modalRef.hide();
-      this.submitted = false;
-      this.formSolicitudCompra.reset();
-    })
-    
-  }
-
-  public solictado:any = 1;
-  public enCotizacion:any = 2;
-  public enOrdenCompra:any = 3;
-  public autorizada:any = 4;
-  public cancelada:any = 5;
-  public enSurtido:any = 6;
-  public pagada:any = 7;
-
-  
+  /**
+   * Consultas generales
+   */
+  public solictado: any = 1;
+  public enCotizacion: any = 2;
+  public enOrdenCompra: any = 3;
+  public autorizada: any = 4;
+  public cancelada: any = 5;
+  public enSurtido: any = 6;
+  public pagada: any = 7;
 
   private getAll() {
     this.comprasService.getAll().subscribe(
@@ -323,7 +122,7 @@ export class ComprasComponent implements OnInit {
 
               case this.autorizada:
                 registro.estado = "AUTORIZADA";
-                
+
                 registro.claseEstado = "badge-soft-success";
                 break;
 
@@ -331,7 +130,7 @@ export class ComprasComponent implements OnInit {
                 registro.estado = "CANCELADA";
                 registro.claseEstado = "bg-danger";
                 break;
-                
+
               case this.enSurtido:
                 registro.estado = "EN SURTIDO";
                 registro.claseEstado = "badge-soft-warning";
@@ -349,7 +148,6 @@ export class ComprasComponent implements OnInit {
             }
           });
 
-          // console.log(this.data);
           this.isLoad = false;
           this.showTable = true;
         } else {
@@ -376,24 +174,10 @@ export class ComprasComponent implements OnInit {
       }
     );
   }
-  public status: any;
-  public openModal1(dato: any, evento: any) {
-    // Funcion para llenar la vista con el detalle component
-    this.solicitudSelecionada = true;
-    // Verifica si hay un elemento seleccionado (evento del doble click)
-    if (evento.currentTarget.classList.contains("table-primary")) {
-      evento.currentTarget.classList.remove("table-primary");
-      this.solicitudSelecionada = false;
-    } else {
-      const filas = document.querySelectorAll("tbody tr");
-
-      filas.forEach((fila) => fila.classList.remove("table-primary"));
-      evento.currentTarget.classList.add("table-primary");
-      this.solicitudSelecionada = true;
-      this.solicitudCompra = dato; // Castea el objeto que se envia al detalleSolicitudCompra
-      this.status = this.solicitudCompra.estatus;
-    }
-  }
+  
+  /**
+   * Funciones Botonera
+   */
 
   public regresar() {
     // Muestra la vista de la tabla
@@ -427,7 +211,6 @@ export class ComprasComponent implements OnInit {
         this.comprasService.destroy(this.solicitudCompra.id).subscribe(
           (response) => {
             if (response.status === "success") {
-              console.log(response.message);
               this.getAll();
               Swal.fire({
                 title: "Cancelada!",
@@ -440,7 +223,6 @@ export class ComprasComponent implements OnInit {
                 },
               });
             } else {
-              console.log(response.message);
               Swal.fire({
                 title: "Error!",
                 text: "Your file has been deleted.",
@@ -463,27 +245,33 @@ export class ComprasComponent implements OnInit {
   }
 
   btnGenerarOC() {
-     this.comprasService.triggerGenerateOrder(); 
+    this.comprasService.triggerGenerateOrder();
   }
 
-  btnDescargarOC(){
+  btnDescargarOC() {
     this.ordenesComprasService
       .pdfOrdenCompra(this.solicitudCompra.id)
       .subscribe((response) => {
-        if(response){
-        console.log("Respuesta: ",response);
-        const blob = new Blob([response], { type: "application/pdf"});
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "orden_compra.pdf";
-        link.click();
-        window.URL.revokeObjectURL(url);
-        }else{
-          console.log('No existe la orden de compra');
+        if (response) {
+          const blob = new Blob([response], { type: "application/pdf" });
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = "orden_compra.pdf";
+          link.click();
+          window.URL.revokeObjectURL(url);
+        } else {
+          Swal.fire({
+            title: "Error!",
+            text: "La orden de compra no existe",
+            buttonsStyling: false,
+            icon: "error",
+            customClass: {
+              confirmButton: "btn btn-danger px-4",
+              cancelButton: "btn btn- ms-2 px-4",
+            },
+          });
         }
-        
       });
   }
-  
 }

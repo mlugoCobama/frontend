@@ -158,6 +158,18 @@ export const MENU: MenuItem[] = [
               link: '/dashboard/captura/gasolinerias',
               parentId: 34
             },
+            {
+              id: 37,
+              label: 'Captura Nissan',
+              link: '/dashboard/captura/agencias-nissan',
+              parentId: 34
+            },
+            {
+              id: 38,
+              label: 'Captura Renault',
+              link: '/dashboard/captura/agencias-renault',
+              parentId: 34
+            },
           ]
         },
         {

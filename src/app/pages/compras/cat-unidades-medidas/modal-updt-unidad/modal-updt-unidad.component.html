@@ -1,0 +1,70 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">
+      Actualizar Unidad de Medida
+    </h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="cerrarModal()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form class="row g-2" [formGroup]="formUpdateUnidades">
+      <div class="col-md-6">
+        <label for="nombre" class="form-label">Nombre: *</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          formControlName="nombre"
+          id="nombre"
+          name="nombre"
+          aria-label="Nombre"
+        />
+        <div *ngIf="unidadesFormControlUpdate.nombre.touched || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="unidadesFormControlUpdate.nombre.errors?.['required']"
+          >
+            Nombre es requerido.
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="abreviatura" class="form-label form-label-sm"
+          >Abreviatura: *</label
+        >
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          formControlName="abreviatura"
+          id="abreviatura"
+          name="abreviatura"
+          aria-label="abreviatura"
+        />
+        <div *ngIf="unidadesFormControlUpdate.abreviatura.touched || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="unidadesFormControlUpdate.abreviatura.errors?.['required']"
+          >
+            abreviatura es requerido.
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      data-bs-dismiss="modal"
+      (click)="cerrarModal()"
+    >
+      Cerrar
+    </button>
+    <button type="button" class="btn btn-primary btn-sm" (click)="edit()">
+      Actualizar
+    </button>
+  </div>

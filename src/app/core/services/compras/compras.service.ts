@@ -11,12 +11,10 @@ import { Subject } from "rxjs";
 export class ComprasService {
 
   public mostrarCotizacionSource = new BehaviorSubject<boolean>(false);
-  mostrarCotizacion$ = this.mostrarCotizacionSource.asObservable();
-
-  private generateOrderSubject = new Subject<void>();
-  generateOrder$ = this.generateOrderSubject.asObservable();
-
   private mostrarBotonSource = new BehaviorSubject<boolean>(false);
+  private generateOrderSubject = new Subject<void>();
+  mostrarCotizacion$ = this.mostrarCotizacionSource.asObservable();
+  generateOrder$ = this.generateOrderSubject.asObservable();
   mostrarBoton$ = this.mostrarBotonSource.asObservable();
 
   constructor(private http: HttpClient) {}
@@ -73,6 +71,7 @@ export class ComprasService {
     this.mostrarBotonSource.next(mostrar);
   }
 
+  //Realiza la petición para recuperar un folio de la base de datos
   public obtenerFolio(){
     return this.http.get<{ nuevoFolio: string }>(environment.apiUrl + `compras/generar-folio-sc`);
   }

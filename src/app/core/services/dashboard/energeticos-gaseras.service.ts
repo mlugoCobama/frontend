@@ -1,9 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
 import { ResponseEnergeticosGaseras } from '../../models/dashboard/energeticos-gaseras';
-
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -15,10 +13,17 @@ export class EnergeticosGaserasService {
     private http: HttpClient,
   ) {}
   /**
+<<<<<<< HEAD
    * Funcion para consultar informacion mensual de gaseras
    * MODULO Dashboard/Captura/Captura Gaseras
    * @param mes integer
    * @param anio integer
+=======
+    * Recupera los datos del mes gaseras
+   * @param mes 
+   * @param anio 
+   * @returns 
+>>>>>>> ac3d6ea0ba6cc26594ff47aeb3ccb27f2cbeb88d
    */
   public get(mes: number, anio: number) : Observable<ResponseEnergeticosGaseras> {
     return this.http.get<ResponseEnergeticosGaseras>(environment.apiUrl + 'energeticos-gaseras/' + mes + '/' + anio);
@@ -38,6 +43,7 @@ export class EnergeticosGaserasService {
     return this.http.get<ResponseEnergeticosGaseras>(environment.apiUrl + 'energeticos-anual/' + id_subdivision + '/' + anio);
   }
   
+<<<<<<< HEAD
   public getGasolinerias(mes: number, anio: number) : Observable<ResponseEnergeticosGaseras> {
     return this.http.get<ResponseEnergeticosGaseras>(environment.apiUrl + 'energeticos-gasolineras/' + mes + '/' + anio);
   }
@@ -46,6 +52,13 @@ export class EnergeticosGaserasService {
    * @param data 
    * @returns 
    */
+=======
+      /**
+     * Crea o actualiza registros en 'datos_generales'
+     * @param data 
+     * @returns 
+     */
+>>>>>>> ac3d6ea0ba6cc26594ff47aeb3ccb27f2cbeb88d
   public save(data: any): Observable<any> {
     return this.http.post(environment.apiUrl + "dashboard/gasolinerias", data);
   }
