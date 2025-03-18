@@ -14,18 +14,19 @@
                     </thead>
                     <tbody class="table-group-divider">
                         <tr *ngFor="let item of dataEnergeticos.mes; let i = index;" >
-                            <td>{{ dataEnergeticos.mes[i]['entidad'] }}</td>
-                            <td class="text-end" [ngClass]="{'text-danger': dataEnergeticos.mesAnt[i][concepto] < 0 }">{{ dataEnergeticos.mesAnt[i][concepto] | number }}</td>
-                            <td class="text-end" [ngClass]="{'text-danger': dataEnergeticos.mes[i][concepto] < 0 }">{{ dataEnergeticos.mes[i][concepto] | number }}</td>
-                            <td class="text-end" [ngClass]="{'text-danger': dataEnergeticos.anioAnt[i][concepto] < 0 }">{{ dataEnergeticos.anioAnt[i][concepto] | number }}</td>
+                            <td>{{ dataEnergeticos.mes[i]['entidad'] || dataEnergeticos.mesAnt[i]['entidad'] || dataEnergeticos.anioAnt[i]['entidad'] }}</td>
+                            <td  *ngIf="dataEnergeticos.mesAnt.length > 1; else celdaVacia"  class="text-end" [ngClass]="{'text-danger': dataEnergeticos.mesAnt[i][concepto] < 0 }">{{ dataEnergeticos.mesAnt[i][concepto] || 0 | number }}</td>
+                            <td  *ngIf="dataEnergeticos.mes.length > 1; else celdaVacia" class="text-end" [ngClass]="{'text-danger': dataEnergeticos.mes[i][concepto] < 0 }">{{ dataEnergeticos.mes[i][concepto] || 0 | number }}</td>
+                            <td  *ngIf="dataEnergeticos.anioAnt.length > 1; else celdaVacia" class="text-end" [ngClass]="{'text-danger': dataEnergeticos.anioAnt[i][concepto] < 0 }">{{ dataEnergeticos.anioAnt[i][concepto] || 0 | number}}</td>
+                            <ng-template #celdaVacia><td class="text-end"> 0 </td></ng-template>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
                             <td><b>Total</b></td>
-                            <td class="text-end" [ngClass]="{'text-danger': dataTotales[1][0][this.concepto] < 0 }"><b>{{ dataTotales[1][0][this.concepto] | number }}</b></td>
-                            <td class="text-end" [ngClass]="{'text-danger': dataTotales[0][0][this.concepto] < 0 }"><b>{{ dataTotales[0][0][this.concepto] | number }}</b></td>
-                            <td class="text-end" [ngClass]="{'text-danger': dataTotales[2][0][this.concepto] < 0 }"><b>{{ dataTotales[2][0][this.concepto] | number }}</b></td>
+                            <td class="text-end" [ngClass]="{'text-danger': dataTotales[1][0][this.concepto] < 0 }"><b>{{ dataTotales[1][0][this.concepto] || 0 | number }}</b></td>
+                            <td class="text-end" [ngClass]="{'text-danger': dataTotales[0][0][this.concepto] < 0 }"><b>{{ dataTotales[0][0][this.concepto] || 0 | number }}</b></td>
+                            <td class="text-end" [ngClass]="{'text-danger': dataTotales[2][0][this.concepto] < 0 }"><b>{{ dataTotales[2][0][this.concepto] || 0 | number }}</b></td>
                         </tr>
                     </tfoot>
                 </table>

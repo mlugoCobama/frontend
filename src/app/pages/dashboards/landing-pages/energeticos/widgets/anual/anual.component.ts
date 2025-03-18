@@ -132,47 +132,59 @@ export class AnualComponent implements OnInit {
     this.options.series = serie;
     this.chart = new ApexCharts(document.querySelector("#chart_anual"), this.options);
     this.chart.render();
-    console.groupCollapsed(this.dataEnergeticos);
+    // console.groupCollapsed(this.dataEnergeticos);
   }
 
   private actualizarGrafica(){
-    // var chart = 
-    this.dataEnergeticos = this.localStorage.getItem('DataEnergeticos');
-    this.serieAnio();
-    this.serieAnioAnt();
-    let serie = [
-      this.dataAnualAnt,
-      this.dataAnual
-    ]
-    this.options.series = serie;
-
-    // chartrender();
-    this.chart.updateOptions(this.options)
+      this.dataEnergeticos = this.localStorage.getItem('DataEnergeticos');
+      this.serieAnio();
+      this.serieAnioAnt();
+      let serie = [
+        this.dataAnualAnt,
+        this.dataAnual
+      ]
+      this.options.series = serie;
+      this.chart.updateOptions(this.options)
   }
 
   private serieAnio(){
     let data:any = [];
-    for (let i = 0; i < this.dataEnergeticos.totalAnio.length; i++) {
-      const element = this.dataEnergeticos.totalAnio[i][this.concepto];      
-      data.push(element);
-    }
-
-    this.dataAnual = {
-      name: new Date(this.dataEnergeticos.totalAnio[0]['fecha']).getFullYear() + 1,
-      data: data
-    }
+    if(this.dataEnergeticos.totalAnio.length > 1){
+      for (let i = 0; i < this.dataEnergeticos.totalAnio.length; i++) {
+        const element = this.dataEnergeticos.totalAnio[i][this.concepto] ;      
+        data.push(element);
+      }
+  
+      this.dataAnual = {
+        name: new Date(this.dataEnergeticos.totalAnio[0]['fecha']).getFullYear() + 1 ,
+        data: data
+      }
+    }else{
+      this.dataAnual = {
+        name: 'sin datos',
+        data: data
+      }
+    } 
   }
 
   private serieAnioAnt(){
     let data:any = [];
-    for (let i = 0; i < this.dataEnergeticos.totalAnioAnt.length; i++) {
-      const element = this.dataEnergeticos.totalAnioAnt[i][this.concepto];
-      data.push(element);
+    if(this.dataEnergeticos.totalAnioAnt.length > 1){
+      for (let i = 0; i < this.dataEnergeticos.totalAnioAnt.length; i++) {
+        const element = this.dataEnergeticos.totalAnioAnt[i][this.concepto] ;
+        data.push(element);
+      }
+      this.dataAnualAnt = {
+        name: new Date(this.dataEnergeticos.totalAnioAnt[0]['fecha']).getFullYear() +1,
+        data: data
+      }
+    }else{
+      this.dataAnual = {
+        name: 'sin datos',
+        data: data
+      }
     }
-    this.dataAnualAnt = {
-      name: new Date(this.dataEnergeticos.totalAnioAnt[0]['fecha']).getFullYear() +1,
-      data: data
-    }
+    
   }
 
 }

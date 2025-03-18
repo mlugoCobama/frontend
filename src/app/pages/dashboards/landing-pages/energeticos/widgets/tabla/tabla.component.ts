@@ -53,7 +53,6 @@ export class TablaComponent implements OnInit {
   private recuperarData(){
     this.dataEnergeticos = [];
     this.dataEnergeticos = this.localStorage.getItem('DataEnergeticos');
-    // console.log('data desde la tabla',this.dataEnergeticos);
     this.deleteLast();
   }
 
