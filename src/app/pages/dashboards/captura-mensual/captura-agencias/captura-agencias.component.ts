@@ -82,6 +82,7 @@ export class CapturaAgenciasComponent implements OnInit {
         if (response) {
           this.showTable = true;
           this.dataMesAgencias = response.data;
+          this.catEmpresas =  response.encabezados;
           if (response.size > 1) {
             this.isDisabled = false;
             this.existInfo = true;

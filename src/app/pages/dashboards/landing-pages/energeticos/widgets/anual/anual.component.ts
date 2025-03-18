@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
+import { EnergeticosGaserasService } from 'src/app/core/services/dashboard/energeticos-gaseras.service';
+import { Subject, Subscription } from "rxjs";
 
 @Component({
   selector: 'app-anual',
@@ -12,6 +14,8 @@ export class AnualComponent implements OnInit {
 
   private dataEnergeticos: any;
 
+  private actualizarDatosSubscripcion: Subscription;
+
   public dataAnual: any = [];
 
   public dataAnualAnt: any = [];
@@ -20,7 +24,7 @@ export class AnualComponent implements OnInit {
     chart: {
       height: 200,
       type: "line",
-      stacked: false
+      stacked: false,
     },
     dataLabels: {
       enabled: false
@@ -105,25 +109,45 @@ export class AnualComponent implements OnInit {
 
   constructor(
       private localStorage: LocalStorageServiceService,
+      private gaseras : EnergeticosGaserasService
     ) {}
 
   ngOnInit(): void {
+    this.inicializarGrfica();
+    this.actualizarDatosSubscripcion =
+    this.gaseras.actualizarData$.subscribe(() => {
+      this.actualizarGrafica();
+    });
+  }
 
+  public chart:any;
+  private inicializarGrfica(){
     this.dataEnergeticos = this.localStorage.getItem('DataEnergeticos');
-    
     this.serieAnio();
     this.serieAnioAnt();
-
     let serie = [
       this.dataAnualAnt,
       this.dataAnual
     ]
-    
     this.options.series = serie;
-    
-    var chart = new ApexCharts(document.querySelector("#chart_anual"), this.options);
-    chart.render();
+    this.chart = new ApexCharts(document.querySelector("#chart_anual"), this.options);
+    this.chart.render();
+    console.groupCollapsed(this.dataEnergeticos);
+  }
 
+  private actualizarGrafica(){
+    // var chart = 
+    this.dataEnergeticos = this.localStorage.getItem('DataEnergeticos');
+    this.serieAnio();
+    this.serieAnioAnt();
+    let serie = [
+      this.dataAnualAnt,
+      this.dataAnual
+    ]
+    this.options.series = serie;
+
+    // chartrender();
+    this.chart.updateOptions(this.options)
   }
 
   private serieAnio(){
@@ -134,7 +158,7 @@ export class AnualComponent implements OnInit {
     }
 
     this.dataAnual = {
-      name: '2025',
+      name: new Date(this.dataEnergeticos.totalAnio[0]['fecha']).getFullYear() + 1,
       data: data
     }
   }
@@ -146,7 +170,7 @@ export class AnualComponent implements OnInit {
       data.push(element);
     }
     this.dataAnualAnt = {
-      name: '2024',
+      name: new Date(this.dataEnergeticos.totalAnioAnt[0]['fecha']).getFullYear() +1,
       data: data
     }
   }

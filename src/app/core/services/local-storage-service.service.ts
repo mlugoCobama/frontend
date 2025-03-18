@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -6,7 +7,6 @@ import { Injectable } from '@angular/core';
 export class LocalStorageServiceService {
 
   constructor() { }
-
   setItem(key: string, value: any): void {
     try {
       const jsonValue = JSON.stringify(value);
@@ -20,6 +20,7 @@ export class LocalStorageServiceService {
     try {
       const value = localStorage.getItem(key);
       return value ? JSON.parse(value) : null;
+      
     } catch (error) {
       console.error('Error reading from local storage', error);
       return null;

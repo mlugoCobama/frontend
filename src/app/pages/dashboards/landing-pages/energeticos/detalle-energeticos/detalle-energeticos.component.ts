@@ -7,6 +7,7 @@ import { EnergeticosGaserasService } from 'src/app/core/services/dashboard/energ
 import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
 import dataMeses from "src/environments/meses.json";
 
+
 @Component({
   selector: 'app-detalle-energeticos',
   templateUrl: './detalle-energeticos.component.html',
@@ -50,12 +51,28 @@ export class DetalleEnergeticosComponent implements OnInit{
   }
 
   public filtrarInfo(){
-
+    this.energerticosGaseras.getAnual(1, this.mesSeleccionado, this.anioSeleccionado, this.divisionSeleccionada).subscribe(
+      (data: ResponseEnergeticosGaseras) => {
+        if (data.success) {;
+          this.localStorage.removeItem('DataEnergeticos'); 
+          this.localStorage.setItem('DataEnergeticos', data.data); 
+          this.dataEnergeticos = this.localStorage.getItem('DataEnergeticos');  
+          this.energerticosGaseras.actualizarData();
+        } else {
+          this.alertService.alertError(data.message, data.success);
+        }
+      },
+      (error) => {
+        this.alertService.alertError(error, false);
+      }
+    );
     
+    // this.actionSearch();
   }
 
+
   public onChange(select: string, value: any) {
-  
+    // console.log(value);
     if (select === 'selectMes') {
       this.mesSeleccionado = value;
     } else {
@@ -65,20 +82,8 @@ export class DetalleEnergeticosComponent implements OnInit{
   }
 
   public onChangeDivision(value: string){
-    
-    this.energerticosGaseras.getAnual(1).subscribe(
-          (data: ResponseEnergeticosGaseras) => {
-            if (data.success) {
-              
-    
-            } else {
-              this.alertService.alertError(data.message, data.success);
-            }
-          },
-          (error) => {
-            this.alertService.alertError(error, false);
-          }
-        );
+    this.divisionSeleccionada = value;
+    this.filtrarInfo();
   }
 
 }

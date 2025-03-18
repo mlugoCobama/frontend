@@ -6,6 +6,8 @@ import { ResponseEnergeticosGaseras } from 'src/app/core/models/dashboard/energe
 import { EnergeticosGaserasService } from 'src/app/core/services/dashboard/energeticos-gaseras.service';
 import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
 
+import { DatePipe } from '@angular/common';
+
 @Component({
   selector: 'app-energeticos',
   templateUrl: './energeticos.component.html',
@@ -25,8 +27,10 @@ export class EnergeticosComponent implements OnInit {
 
   public isLoad: boolean = true;
 
+
   constructor(
       public alertService: AlertErrorService,
+      public datepipe: DatePipe,
       private energerticosGaseras: EnergeticosGaserasService,
       private localStorage: LocalStorageServiceService
     ) {}
@@ -36,7 +40,11 @@ export class EnergeticosComponent implements OnInit {
   }
 
   private getDataAnual() {
-    this.energerticosGaseras.getAnual(1).subscribe(
+    const fecha = new Date;
+    const mes = fecha.getMonth() ;
+    console.log(fecha.getMonth());
+    const anio = this.datepipe.transform((new Date), 'y');
+    this.energerticosGaseras.getAnual(1, mes, anio, 'all').subscribe(
       (data: ResponseEnergeticosGaseras) => {
         if (data.success) {
           
