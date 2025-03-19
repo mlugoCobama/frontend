@@ -41,9 +41,9 @@ export class DetalleEnergeticosComponent implements OnInit{
     this.concepto = this.route.snapshot.paramMap.get('concepto')
     this.isLoad = false;
 
-    this.dataEnergeticos = this.localStorage.getItem('DataEnergeticos');  
-    
-    this.mesSeleccionado = this.datepipe.transform((new Date), 'MM');
+    this.dataEnergeticos = this.localStorage.getItem('DataEnergeticos');
+    const fecha = new Date;
+    this.mesSeleccionado = this.datepipe.transform((fecha.setMonth(fecha.getMonth() -1)), 'MM');
     this.anioSeleccionado = this.datepipe.transform((new Date), 'yyyy');
 
     console.log(this.mesSeleccionado);
@@ -67,6 +67,7 @@ export class DetalleEnergeticosComponent implements OnInit{
       }
     );
     
+    console.log(this.dataEnergeticos);
     // this.actionSearch();
   }
 

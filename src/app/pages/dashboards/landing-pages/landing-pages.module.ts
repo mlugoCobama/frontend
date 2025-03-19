@@ -11,6 +11,7 @@ import { DetalleEnergeticosComponent } from './energeticos/detalle-energeticos/d
 import { AnualComponent } from './energeticos/widgets/anual/anual.component';
 import { TablaComponent } from './energeticos/widgets/tabla/tabla.component';
 import { DataTablesModule } from 'angular-datatables';
+import { PorcentajesGraficasComponent } from './energeticos/widgets/porcentajes-graficas/porcentajes-graficas.component';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { DataTablesModule } from 'angular-datatables';
     DetalleEnergeticosComponent,
     AnualComponent,
     TablaComponent,
+    PorcentajesGraficasComponent,
   ],
   imports: [
     CommonModule,

@@ -41,8 +41,7 @@ export class EnergeticosComponent implements OnInit {
 
   private getDataAnual() {
     const fecha = new Date;
-    const mes = fecha.getMonth() ;
-    console.log(fecha.getMonth());
+    const mes = fecha.getMonth();
     const anio = this.datepipe.transform((new Date), 'y');
     this.energerticosGaseras.getAnual(1, mes, anio, 'all').subscribe(
       (data: ResponseEnergeticosGaseras) => {
