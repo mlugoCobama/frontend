@@ -11,7 +11,8 @@ import { DetalleEnergeticosComponent } from './energeticos/detalle-energeticos/d
 import { AnualComponent } from './energeticos/widgets/anual/anual.component';
 import { TablaComponent } from './energeticos/widgets/tabla/tabla.component';
 import { DataTablesModule } from 'angular-datatables';
-
+import { HighchartsChartModule } from 'highcharts-angular';
+import { GraficaBarraComponent } from './energeticos/widgets/grafica-barra/grafica-barra.component';
 
 @NgModule({
   declarations: [
@@ -21,12 +22,14 @@ import { DataTablesModule } from 'angular-datatables';
     DetalleEnergeticosComponent,
     AnualComponent,
     TablaComponent,
+    GraficaBarraComponent,
   ],
   imports: [
     CommonModule,
     LandingPagesRoutingModule,
     ChartModule,
-    DataTablesModule
+    DataTablesModule,
+    HighchartsChartModule
   ],
   providers: [
     DatePipe
