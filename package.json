@@ -64,6 +64,7 @@
     "fix": "^0.0.3",
     "flatpickr": "^4.6.13",
     "highcharts": "^12.1.2",
+    "highcharts-angular": "^4.0.1",
     "jquery": "^3.7.1",
     "leaflet": "^1.9.4",
     "masonry-layout": "^4.2.2",
