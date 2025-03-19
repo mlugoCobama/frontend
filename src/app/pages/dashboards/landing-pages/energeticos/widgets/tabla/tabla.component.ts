@@ -21,6 +21,8 @@ export class TablaComponent implements OnInit {
 
   public dataTotales: number[] = [] ;
 
+  public sucursales: any;
+
   private actualizarDatosSubscripcion: Subscription;
 
   constructor(
