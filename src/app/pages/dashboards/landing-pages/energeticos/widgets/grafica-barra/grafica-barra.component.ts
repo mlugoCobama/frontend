@@ -26,7 +26,7 @@ export class GraficaBarraComponent implements OnInit {
 
   chartOptions: Highcharts.Options = {
     title: {
-      text: "Anual",
+      text: "Mensual",
     },
     xAxis: {
       categories: [
@@ -65,6 +65,9 @@ export class GraficaBarraComponent implements OnInit {
           enabled: true,
         },
         enableMouseTracking: true,
+      },
+      column: {
+        colorByPoint: true
       },
     },
     series: [
@@ -141,10 +144,13 @@ export class GraficaBarraComponent implements OnInit {
 
   private generarSerie() {
     let data: any = [];
-    for (let i = 0; i < this.dataEnergeticos.mes.length - 1; i++) {
-      const element = Number(this.dataEnergeticos.mes[i][this.concepto]);
-      const entidad = this.dataEnergeticos.mes[i]["entidad"];
-      data.push({ valor: element, entidad: entidad });
+    for (let i = 0; i < this.dataEnergeticos.mes.length; i++) {
+      if(this.dataEnergeticos.mes[i]["entidad"] != 'Total'){
+        const element = Number(this.dataEnergeticos.mes[i][this.concepto]);
+        const entidad = this.dataEnergeticos.mes[i]["entidad"];
+        data.push({ valor: element, entidad: entidad });
+      }
+      
     }
     data.sort((a, b) => b.valor - a.valor);
     this.labels = data.map((item) => item.entidad);
@@ -152,7 +158,7 @@ export class GraficaBarraComponent implements OnInit {
     this.dataMensual = {
       data: valoresOrdenados,
       name: String(
-        new Date(this.dataEnergeticos.mes[0]["fecha"]).getFullYear()
+        new Date(this.dataEnergeticos.mes[1]["fecha"]).getFullYear()
       ),
       type: "bar",
     };
