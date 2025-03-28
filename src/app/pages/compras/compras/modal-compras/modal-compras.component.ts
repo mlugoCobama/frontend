@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 
 //services
 import { ComprasService } from "src/app/core/services/compras/compras.service";
+import { CatUnidadesMedidasService } from "src/app/core/services/compras/unidadesMedidas/cat-unidades-medidas.service";
 
 @Component({
   selector: "app-modal-compras",
@@ -51,12 +52,14 @@ export class ModalComprasComponent implements OnInit {
   public event: EventEmitter<any> = new EventEmitter();
 
   constructor(
+    private catUnidadesMedidasService: CatUnidadesMedidasService,
     private comprasService: ComprasService,
     public formBuilder: FormBuilder,
     public modalRef: BsModalRef
   ) {}
 
   public ngOnInit(): void {
+    this.getUnidades();
     this.buildForm();
   }
   /**
@@ -131,14 +134,11 @@ export class ModalComprasComponent implements OnInit {
       });
       return;
     }
-    this.generateFolio().then((folio) => {
       const data = {
         //Datos del form solicitud
         ...this.formSolicitudCompra.value,
         usuario_solicita: "1",
         users_id: "1",
-        fecha: this.fecha(),
-        folio: folio,
         detalles: this.tableData,
       };
       const formDataToSend = new FormData();
@@ -189,25 +189,6 @@ export class ModalComprasComponent implements OnInit {
       this.modalRef.hide();
       this.submitted = false;
       this.formSolicitudCompra.reset();
-    });
-  }
-
-  private async generateFolio(): Promise<string> {
-    // Método para generar el folio de solicitud de compras
-    const response = await this.comprasService.obtenerFolio().toPromise();
-    return response.nuevoFolio;
-  }
-
-  public fecha() {
-    // Método para asignar una fecha en el formato correcto para la bd
-    const fecha = new Date();
-    const anio = fecha.getFullYear();
-    const mes = ("0" + (fecha.getMonth() + 1)).slice(-2);
-    const dia = ("0" + fecha.getDate()).slice(-2);
-    const horas = ("0" + fecha.getHours()).slice(-2);
-    const minutos = ("0" + fecha.getMinutes()).slice(-2);
-    const segundos = ("0" + fecha.getSeconds()).slice(-2);
-    return `${anio}-${mes}-${dia} ${horas}:${minutos}:${segundos}`;
   }
 
   public cerrarModal(): void {
@@ -276,5 +257,20 @@ export class ModalComprasComponent implements OnInit {
 
   public removeDetalle(index: number) {
     this.tableData.splice(index, 1);
+  }
+
+  private getUnidades() {
+    this.catUnidadesMedidasService.getAll().subscribe(
+      (response) => {
+        if (response) {
+          this.unidades = response.data;
+        } else {
+          console.log(response.message);
+        }
+      },
+      (error) => {
+        console.error("Error fetching data:", error);
+      }
+    );
   }
 }

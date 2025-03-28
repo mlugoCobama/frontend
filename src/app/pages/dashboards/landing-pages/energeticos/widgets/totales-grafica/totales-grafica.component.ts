@@ -10,6 +10,7 @@ export class TotalesGraficaComponent {
   @Input() dataMes: any;
   @Input() dataMesAnterior: any;
   @Input() concepto: any;
+  @Input() tipo: any;
   @Input() totalAnio: string;
   @Input() totalAnioAnt: string;
 
@@ -17,6 +18,8 @@ export class TotalesGraficaComponent {
 
   public money: string  = '';
 
+  public totalMes: number = 0;
+  public totalMesAnt: number = 0;
   public diferencia: number = 0;
 
   private dataSerie: any[] = [];
@@ -65,7 +68,10 @@ export class TotalesGraficaComponent {
       
     this.setTitle();
     this.setDataSerie();
-    this.diferencia = this.dataMes[15][this.concepto] - this.dataMesAnterior[15][this.concepto];
+
+    this.totalMes = this.dataMes.find((registro) => registro.id === "Total");
+    this.totalMesAnt = this.dataMesAnterior.find((registro) => registro.id === "Total");
+    this.diferencia = this.totalMes[this.concepto] -  this.totalMesAnt[this.concepto];
   
     this.options.series[0]['name'] = this.title;
     this.options.series[0]['data'] = this.dataSerie;
@@ -83,8 +89,13 @@ export class TotalesGraficaComponent {
         break;
       case 'utilidad_bruta':
         this.title = 'Utilidad Bruta';
+        break; 
+      case 'ubo':
+        this.title = 'UBO';
         break;
-        
+      case 'eficiencia':
+        this.title = 'Eficiencia';
+        break;
       default:
         break;
     }

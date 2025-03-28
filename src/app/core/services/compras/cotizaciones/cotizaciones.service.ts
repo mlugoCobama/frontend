@@ -26,15 +26,6 @@ export class CotizacionesService {
     const url = environment.apiUrl + `compras/${rutaArchivo}`;
     window.open(url, "_blank");
   }
-  /**
-   * Recupera el ultimo folio de cotización
-   */
-  public obtenerFolio() {
-    return this.http.get<{ nuevoFolio: string }>(
-      environment.apiUrl + `compras/generar-folio-co`
-    );
-  }
-
   private selectedFiles: { [key: number]: File } = {}; //array donde se guardan los archivos cargados
   //Recupera los archivos del componente dentro del servicio
   setSelectedFile(proveedorId: number, file: File) {

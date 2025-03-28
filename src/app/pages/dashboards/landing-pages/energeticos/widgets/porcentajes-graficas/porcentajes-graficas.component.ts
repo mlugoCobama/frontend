@@ -20,10 +20,15 @@ export class PorcentajesGraficasComponent implements OnInit {
 
   public dataAnualAnt: any = [];
 
+  public total: number[] = [] ;
+  public chart:any;
+  private labels: any;
+  private serie: any;
+
   public options = {
     series: [],
     chart: {
-      width: 500,
+      width: '100%',
       type: "pie"
     },
     labels: [],
@@ -55,7 +60,7 @@ export class PorcentajesGraficasComponent implements OnInit {
     });
   }
 
-  public chart:any;
+  //Inicializa los valores de las gráficas
   private inicializarGrfica(){
     this.dataEnergeticos = this.localStorage.getItem('DataEnergeticos');
     if(this.dataEnergeticos.mes.length > 1){
@@ -70,11 +75,10 @@ export class PorcentajesGraficasComponent implements OnInit {
     }
     this.chart = new ApexCharts(document.querySelector("#chart_participacion"), this.options);
     this.chart.render();
-    // console.groupCollapsed(this.dataEnergeticos);
   }
 
+  // Actualiza los valores de la grafica
   private actualizarGrafica(){
-    // var chart = 
     this.dataEnergeticos = this.localStorage.getItem('DataEnergeticos');
     if(this.dataEnergeticos.mes.length > 1){
     this.generarLabels();
@@ -85,28 +89,53 @@ export class PorcentajesGraficasComponent implements OnInit {
     this.options.series = [100];
     this.options.labels = ['Sin datos'];
   }
-    // chartrender();
-    this.chart.updateOptions(this.options)
-  
+    this.chart.updateOptions(this.options)   
   }
 
-  private serie: any;
+  // Genera las series de la gráfica
   private generarSerie(){
     let data:any = [];
-    for (let i = 0; i < this.dataEnergeticos.mes.length-1; i++) {
-      // const element = this.dataEnergeticos.totalAnioAnt[i][this.concepto];
-      const element = Number(formatNumber((this.dataEnergeticos.mes[i][this.concepto] / this.dataEnergeticos.mes[this.dataEnergeticos.mes.length-1][this.concepto]) * 100, 'en-US', '1.0-2'))
-      data.push(element);
+    this.deleteLast();
+    for (let i = 0; i < this.dataEnergeticos.mes.length; i++) {
+      if(this.dataEnergeticos.mes[i]["entidad"] != 'Total'){
+        const element = this.valueNegative(Number(formatNumber((this.dataEnergeticos.mes[i][this.concepto] / this.total[0][0][this.concepto]) * 100, 'en-US', '1.0-2')))
+        data.push(element);
+      } 
     }
     this.serie = data;
   }
-  private labels: any;
+
+  //Manejo de valores negativos
+  private valueNegative( value: number ) {
+    if (value < 0) {
+      return value * -1;
+    } else {
+      return value;
+    }
+  }
+
+  //Genera las etiquetas de las series de las gráficas
   private generarLabels(){
     let data:any = [];
-    for (let i = 0; i < this.dataEnergeticos.mes.length-1; i++) {
-      const element = this.dataEnergeticos.anioAnt[i]['entidad'];
-      data.push(element);
+    for (let i = 0; i < this.dataEnergeticos.mes.length; i++) {
+      if(this.dataEnergeticos.mes[i]["entidad"] != 'Total'){
+        const element = this.dataEnergeticos?.mes[i]['entidad'];
+        data.push(element);
+      }
     }
     this.labels = data;
+  }
+
+
+  // elimina el total y lo almacena eun un nuevo arreglo
+  private deleteLast () { 
+    this.total = [];
+    for ( let item in this.dataEnergeticos ) {
+      if (item == 'mes') {
+        let total = this.dataEnergeticos[item].filter( data => data.entidad === 'Total');
+        this.dataEnergeticos[item] = this.dataEnergeticos[item].filter( data => data.entidad !== 'Total');
+        this.total.push(total);
+      }     
+    }   
   }
 }

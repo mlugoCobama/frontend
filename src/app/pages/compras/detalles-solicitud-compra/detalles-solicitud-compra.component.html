@@ -6,81 +6,81 @@
               
             </div>
           </div> -->
-<div class="card-body border-bottom">
-  <!-- componente datos solictud compra -->
-  <app-datos-solicitud-compra
-    [solicitudCompra]="solicitudCompra"
-    [mostrarTotal]="mostrarTotal"
-    [cotizacion]="cotizacion"
-  ></app-datos-solicitud-compra>
-
-  <!-- componente datos solictud compra -->
-  <app-tabla-detalles-solicitud
-    [solicitudCompra]="solicitudCompra"
-    [detalles]="detalles"
-    [cotProv]="cotProv"
-    [totals]="totals"
-    [totalMasBajo]="totalMasBajo"
-    [mostrarTotal]="mostrarTotal"
-    [isLoad]="isLoad"
-    [isLoad]="isLoad"
-    (updatePrices)="updateTotals()"
-    (validateInput)="validateNumberInput($event)"
-    (openModal)="openModal(content, $event)"
-  ></app-tabla-detalles-solicitud>
-
-  <div *ngIf="mostrarTotal">
-    <app-tbl-fls-cotizacion
-      [solicitudCompra]="solicitudCompra"
-      [detalles]="detalles"
-      [ordenCompra]="ordenCompra"
-      [mostrarObs]="mostrarObs"
-      [cotProv]="cotProv"
-      (selectCotizacion)="manejoCheck($event)"
-      (savePrices)="guardarPrecios()"
-    ></app-tbl-fls-cotizacion>
-  </div>
-
-  <!-- form selects cotización proveedores -->
-  <app-form-cotizacion
-    *ngIf="mostrarCotizacionFlag"
-    [solicitudCompra]="solicitudCompra"
-    (validateInput)="validateNumberInput($event)"
-  ></app-form-cotizacion>
-  <!-- form orden de compra -->
-
-  <app-form-facturas [solicitudCompra]="solicitudCompra"></app-form-facturas>
-</div>
-<!-- termina card body -->
-<!-- Modal -->
-<ng-template #content let-modal>
-  <div class="modal-header">
-    <h5 class="modal-title" id="exampleModalLabel">Img. referencia</h5>
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="modal"
-      aria-label="Close"
-      id="close-modal"
-      (click)="modalRef?.hide()"
-    ></button>
-  </div>
-  <div class="modal-body">
-    <img
-      [src]="selectedImage"
-      class="img-fluid rounded"
-      style="max-width: 100%; height: auto"
-      alt="Imagen de referencia"
-    />
-  </div>
-  <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-secondary btn-sm"
-      data-bs-dismiss="modal"
-      (click)="modalRef?.hide()"
-    >
-      Cerrar
-    </button>
-  </div>
-</ng-template>
+          <div class="card-body border-bottom">
+            <!-- componente datos solictud compra -->
+            <app-datos-solicitud-compra
+              [solicitudCompra]="solicitudCompra"
+              [mostrarTotal]="mostrarTotal"
+              [cotizacion]="cotizacion"
+            ></app-datos-solicitud-compra>
+          
+            <!-- componente datos solictud compra -->
+            <app-tabla-detalles-solicitud
+              [solicitudCompra]="solicitudCompra"
+              [detalles]="detalles"
+              [cotProv]="cotProv"
+              [totals]="totals"
+              [totalMasBajo]="totalMasBajo"
+              [mostrarTotal]="mostrarTotal"
+              [isLoad]="isLoad"
+              [isLoad]="isLoad"
+              (updatePrices)="updateTotals()"
+              (validateInput)="validateNumberInput($event)"
+              (openModal)="openModal(content, $event)"
+            ></app-tabla-detalles-solicitud>
+          
+            <div *ngIf="mostrarTotal">
+              <app-tbl-fls-cotizacion
+                [solicitudCompra]="solicitudCompra"
+                [detalles]="detalles"
+                [ordenCompra]="ordenCompra"
+                [mostrarObs]="mostrarObs"
+                [cotProv]="cotProv"
+                (selectCotizacion)="manejoCheck($event)"
+                (savePrices)="guardarPrecios()"
+              ></app-tbl-fls-cotizacion>
+            </div>
+          
+            <!-- form selects cotización proveedores -->
+            <app-form-cotizacion
+              *ngIf="mostrarCotizacionFlag"
+              [solicitudCompra]="solicitudCompra"
+              (validateInput)="validateNumberInput($event)"
+            ></app-form-cotizacion>
+            <!-- form orden de compra -->
+          
+            <app-form-facturas [solicitudCompra]="solicitudCompra"></app-form-facturas>
+          </div>
+          <!-- termina card body -->
+          <!-- Modal -->
+          <ng-template #content let-modal>
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Img. referencia</h5>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+                id="close-modal"
+                (click)="modalRef?.hide()"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <img
+                [src]="selectedImage"
+                class="img-fluid rounded"
+                style="max-width: 100%; height: auto"
+                alt="Imagen de referencia"
+              />
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary btn-sm"
+                data-bs-dismiss="modal"
+                (click)="modalRef?.hide()"
+              >
+                Cerrar
+              </button>
+            </div>
+          </ng-template>

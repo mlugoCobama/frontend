@@ -2,7 +2,7 @@
 <div class="card" *ngIf="!isLoad">
     <div class="card-body">
         <div class="row">
-            <div class="col-12">
+            <div class="col-12 table-responsive">
                 <table  class="table table-sm table-striped-columns">
                     <thead>
                         <tr >
@@ -27,6 +27,7 @@
                             <td class="text-end" [ngClass]="{'text-danger': dataTotales[1][0][this.concepto] < 0 }"><b>{{ dataTotales[1][0][this.concepto] || 0 | number }}</b></td>
                             <td class="text-end" [ngClass]="{'text-danger': dataTotales[0][0][this.concepto] < 0 }"><b>{{ dataTotales[0][0][this.concepto] || 0 | number }}</b></td>
                             <td class="text-end" [ngClass]="{'text-danger': dataTotales[2][0][this.concepto] < 0 }"><b>{{ dataTotales[2][0][this.concepto] || 0 | number }}</b></td>
+                            
                         </tr>
                     </tfoot>
                 </table>

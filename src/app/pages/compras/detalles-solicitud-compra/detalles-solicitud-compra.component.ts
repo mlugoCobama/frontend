@@ -89,11 +89,6 @@ export class DetallesSolicitudCompraComponent implements OnInit {
       });
 
     this.getDetalle();
-
-    // Valida el estatus de la solcitud para recuperar datos
-    if (this.solicitudCompra.estatus === 1) {
-      this.getProveedores();
-    }
   }
 
   ngOnDestroy(): void {
@@ -104,55 +99,6 @@ export class DetallesSolicitudCompraComponent implements OnInit {
 
   get seleccionarProveedorFormControl() {
     return this.formSeleccionarProveedor.controls;
-  }
-
-  //Recupera todos los registros de los proveedores
-  private getProveedores() {
-    this.proveedoresService.getAll().subscribe(
-      (response) => {
-        if (response) {
-          this.proveedores = response.data;
-
-          const opcionPredeterminada = {
-            id: null,
-            nombre: "Seleccione uno",
-            contacto: null,
-            telefono: null,
-            localidad: null,
-            condiciones: null,
-            servicios: null,
-            correo: null,
-            horario_atencion: null,
-            tiempo_entrega: null,
-            dias_credito: 0,
-            activo: 1,
-          };
-
-          this.proveedores.unshift(opcionPredeterminada);
-
-          this.isLoad = false;
-        } else {
-          console.log(response.message);
-        }
-      },
-      (error) => {
-        console.error("Error fetching data:", error);
-      }
-    );
-  }
-
-  // Método para asignar una fecha
-  public fecha() {
-    // Método para asignar una fecha
-    // obtener la fecha en el formato correcto para la bd
-    const fecha = new Date();
-    const anio = fecha.getFullYear();
-    const mes = ("0" + (fecha.getMonth() + 1)).slice(-2);
-    const dia = ("0" + fecha.getDate()).slice(-2);
-    const horas = ("0" + fecha.getHours()).slice(-2);
-    const minutos = ("0" + fecha.getMinutes()).slice(-2);
-    const segundos = ("0" + fecha.getSeconds()).slice(-2);
-    return `${anio}-${mes}-${dia} ${horas}:${minutos}:${segundos}`;
   }
 
   public mostrarDivCotizaciones() {
@@ -335,8 +281,6 @@ export class DetallesSolicitudCompraComponent implements OnInit {
   public generarOrden() {
     this.formOrdenCompra = this.cotizacionesService.getForm();
     this.comprasService.setMostrarBoton(false);
-    this.generarFolioOc().then((folio_oc) => {
-      const fecha = this.fecha();
       const observaciones = this.formOrdenCompra.value.observaciones;
       const cotizaciones_id = this.proveedorSelec.cotizaciones_id;
       const cotizacionProveedor = this.proveedorSelec.id;
@@ -344,8 +288,6 @@ export class DetallesSolicitudCompraComponent implements OnInit {
       const solicitudCompra = this.solicitudCompra.id;
 
       const datos = {
-        folio_oc: folio_oc,
-        fecha: fecha,
         observaciones: observaciones,
         cotizaciones_id: cotizaciones_id,
         id_cotizacion_prov: cotizacionProveedor,
@@ -388,7 +330,6 @@ export class DetallesSolicitudCompraComponent implements OnInit {
       );
 
       this.submitted = false;
-    });
   }
   //recupera la cotización seleccionada y muestra el botón de generar orden de compra
   public manejoCheck(prov: any) {
@@ -398,12 +339,6 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     this.mostrarObs = true;
   }
 
-  private async generarFolioOc(): Promise<string> {
-    const response = await this.ordenesComprasService
-      .obtenerFolio()
-      .toPromise();
-    return response.nuevoFolio;
-  }
 
   validateNumberInput(event: any) {
     const inputValue = event.target.value;

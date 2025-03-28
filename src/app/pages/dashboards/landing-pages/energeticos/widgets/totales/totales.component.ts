@@ -15,6 +15,7 @@ export class TotalesComponent implements AfterViewInit {
   @Input() dataMes: any[];
   @Input() dataMesAnterior: any[];
   @Input() concepto: string;
+  @Input() tipo: string;
   @Input() totalAnio: string;
   @Input() totalAnioAnt: string;
 
@@ -23,6 +24,8 @@ export class TotalesComponent implements AfterViewInit {
   public money: string  = '';
 
   public diferencia: number = 0;
+  public totalMes: number = 0;
+  public totalMesAnt: number = 0;
 
   private dataSerie: number[] = [];
 
@@ -75,9 +78,11 @@ export class TotalesComponent implements AfterViewInit {
     
     this.setTitle();
     this.setDataSerie();
-    console.log(this.dataMes);
+    // console.log(this.dataMes);
     
-    this.diferencia = this.dataMes[15][this.concepto] - this.dataMesAnterior[15][this.concepto];
+    this.totalMes = this.dataMes.find((registro) => registro.id === "Total");
+    this.totalMesAnt = this.dataMesAnterior.find((registro) => registro.id === "Total");
+    this.diferencia = this.totalMes[this.concepto] - this.totalMesAnt[this.concepto];
 
     this.options.series[0]['name'] = this.title;
     this.options.series[0]['data'] = this.dataSerie;

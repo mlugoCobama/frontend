@@ -70,9 +70,4 @@ export class ComprasService {
   setMostrarBoton(mostrar: boolean) {
     this.mostrarBotonSource.next(mostrar);
   }
-
-  //Realiza la petición para recuperar un folio de la base de datos
-  public obtenerFolio(){
-    return this.http.get<{ nuevoFolio: string }>(environment.apiUrl + `compras/generar-folio-sc`);
-  }
 }

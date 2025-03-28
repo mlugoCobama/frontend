@@ -13,6 +13,10 @@ import { TablaComponent } from './energeticos/widgets/tabla/tabla.component';
 import { DataTablesModule } from 'angular-datatables';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { GraficaBarraComponent } from './energeticos/widgets/grafica-barra/grafica-barra.component';
+import { PorcentajesGraficasComponent } from './energeticos/widgets/porcentajes-graficas/porcentajes-graficas.component';
+import { GasolineriasComponent } from './gasolinerias/gasolinerias.component';
+import { DetalleGasolineriasComponent } from './gasolinerias/detalle-gasolinerias/detalle-gasolinerias.component';
+import { GraficaPersonalComponent } from './energeticos/widgets/grafica-personal/grafica-personal.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +27,10 @@ import { GraficaBarraComponent } from './energeticos/widgets/grafica-barra/grafi
     AnualComponent,
     TablaComponent,
     GraficaBarraComponent,
+    PorcentajesGraficasComponent,
+    GasolineriasComponent,
+    DetalleGasolineriasComponent,
+    GraficaPersonalComponent,
   ],
   imports: [
     CommonModule,

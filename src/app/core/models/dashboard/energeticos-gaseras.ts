@@ -7,9 +7,9 @@ export interface EnergeticosGaseras {
   ventas : number,
   venta_litros : number,
   utilidad_bruta : number,
-  personal : number,
+  personal? : number,
   ubo : number,
-  eficiencia : number,
+  eficiencia? : number,
 }
 
 export interface ResponseEnergeticosGaseras {

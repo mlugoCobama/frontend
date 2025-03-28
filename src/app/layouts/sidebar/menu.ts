@@ -189,6 +189,12 @@ export const MENU: MenuItem[] = [
               link: '/dashboard/captura/gasolinerias',
               parentId: 34
             },
+            {
+              id: 37,
+              label: 'Gasolinerias',
+              link: '/dashboard/landing-page/gasolinerias',
+              parentId: 34
+            },
           ]
         },
       ]

@@ -1,27 +1,28 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { ResponseEnergeticosGaseras } from '../../models/dashboard/energeticos-gaseras';
-import { environment } from 'src/environments/environment';
+import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { ResponseEnergeticosGaseras } from "../../models/dashboard/energeticos-gaseras";
+import { environment } from "src/environments/environment";
 import { Subject } from "rxjs";
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class EnergeticosGaserasService {
-
-  constructor(
-    private http: HttpClient,
-  ) {}
+  constructor(private http: HttpClient) {}
   /**
    * Funcion para consultar informacion mensual de gaseras
    * MODULO Dashboard/Captura/Captura Gaseras
    * @param mes integer
    * @param anio integer
    */
-  public get(mes: number, anio: number) : Observable<ResponseEnergeticosGaseras> {
-    return this.http.get<ResponseEnergeticosGaseras>(environment.apiUrl + 'energeticos-gaseras/' + mes + '/' + anio);
+  public get(
+    mes: number,
+    anio: number
+  ): Observable<ResponseEnergeticosGaseras> {
+    return this.http.get<ResponseEnergeticosGaseras>(
+      environment.apiUrl + "energeticos-gaseras/" + mes + "/" + anio
+    );
   }
   /**
    * Función para obtener los datos anuales de la division de energeticos o gasolinerias
@@ -30,33 +31,59 @@ export class EnergeticosGaserasService {
    * 2 = gasolinerias
    * @param id_subdivision integer
    */
-  public getAnual(id_subdivision: number, mes: any, anio: any, titular: any) : Observable<ResponseEnergeticosGaseras> {
-    return this.http.get<ResponseEnergeticosGaseras>(environment.apiUrl + 'energeticos/' + id_subdivision+ '/' +mes+ '/' +anio + '/' +titular  );
-  }
-  
-  public getAnualSubDivision(id_subdivision: number, anio: number) : Observable<ResponseEnergeticosGaseras> {
-    return this.http.get<ResponseEnergeticosGaseras>(environment.apiUrl + 'energeticos-anual/' + id_subdivision + '/' + anio);
-  }
-  
-  public getGasolinerias(mes: number, anio: number) : Observable<ResponseEnergeticosGaseras> {
-    return this.http.get<ResponseEnergeticosGaseras>(environment.apiUrl + 'energeticos-gasolineras/' + mes + '/' + anio);
+  public getAnual(
+    id_subdivision: number,
+    mes: any,
+    anio: any,
+    titular: any
+  ): Observable<ResponseEnergeticosGaseras> {
+    return this.http.get<ResponseEnergeticosGaseras>(
+      environment.apiUrl +
+        "energeticos/" +
+        id_subdivision +
+        "/" +
+        mes +
+        "/" +
+        anio +
+        "/" +
+        titular
+    );
   }
 
-      /**
-     * Crea o actualiza registros en 'datos_generales'
-     * @param data 
-     * @returns 
-     */
+  public getAnualSubDivision(
+    id_subdivision: number,
+    anio: number
+  ): Observable<ResponseEnergeticosGaseras> {
+    return this.http.get<ResponseEnergeticosGaseras>(
+      environment.apiUrl + "energeticos-anual/" + id_subdivision + "/" + anio
+    );
+  }
+
+  public getGasolinerias(
+    mes: number,
+    anio: number
+  ): Observable<ResponseEnergeticosGaseras> {
+    return this.http.get<ResponseEnergeticosGaseras>(
+      environment.apiUrl + "energeticos-gasolineras/" + mes + "/" + anio
+    );
+  }
+
+  /**
+   * Crea o actualiza registros en 'datos_generales'
+   * @param data
+   * @returns
+   */
   public save(data: any): Observable<any> {
     return this.http.post(environment.apiUrl + "dashboard/gasolinerias", data);
   }
 
-/**14/03/2025
- *  Ejecuta la función que actualiza el contenido de la data
- */
-    private actualizarDataSubject = new Subject<void>();
-    actualizarData$ = this.actualizarDataSubject.asObservable();
-    actualizarData() {
-      this.actualizarDataSubject.next();
-    }
+  /**14/03/2025
+   *  Ejecuta la función que actualiza contenidos en base 
+   *  a la actualización de la data
+   */
+  private actualizarDataSubject = new Subject<void>();
+  actualizarData$ = this.actualizarDataSubject.asObservable();
+  actualizarData() {
+    this.actualizarDataSubject.next();
+  }
 }

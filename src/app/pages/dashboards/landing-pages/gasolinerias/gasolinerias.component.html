@@ -7,7 +7,7 @@
                     <ng-container>
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Landing Page</a>
                         </li>
-                        <li class="breadcrumb-item active">Gaseras {{nombreMes}} {{anioActual}} </li>
+                        <li class="breadcrumb-item active">Gasolineras {{nombreMes}} {{anioActual}} </li>
                     </ng-container>
                 </ol>
             </div>
@@ -27,8 +27,8 @@
             <div class="col-sm-4">
                 <app-totales 
                     [dataMes]="dataMesActual" 
-                    [dataMesAnterior]="dataMesAnterior" 
-                    tipo = "energeticos-detalle"
+                    [dataMesAnterior]="dataMesAnterior"
+                    tipo = "gasolinerias-detalle"
                     concepto="ventas"
                     [totalAnio]="dataTotalAnio"
                     [totalAnioAnt]="dataTotalAnioAnt"
@@ -37,8 +37,8 @@
             <div class="col-sm-4">
                 <app-totales 
                     [dataMes]="dataMesActual" 
-                    [dataMesAnterior]="dataMesAnterior" 
-                    tipo = "energeticos-detalle"
+                    [dataMesAnterior]="dataMesAnterior"
+                    tipo = "gasolinerias-detalle" 
                     concepto="venta_litros"
                     [totalAnio]="dataTotalAnio"
                     [totalAnioAnt]="dataTotalAnioAnt"
@@ -48,7 +48,7 @@
                 <app-totales 
                     [dataMes]="dataMesActual" 
                     [dataMesAnterior]="dataMesAnterior" 
-                    tipo = "energeticos-detalle"
+                    tipo = "gasolinerias-detalle"
                     concepto="gasto"
                     [totalAnio]="dataTotalAnio"
                     [totalAnioAnt]="dataTotalAnioAnt"
@@ -63,8 +63,8 @@
     <div class="col-xl-6">
         <app-totales-grafica 
             [dataMes]="dataMesActual" 
-            [dataMesAnterior]="dataMesAnterior"
-            tipo = "energeticos-detalle"
+            [dataMesAnterior]="dataMesAnterior" 
+            tipo = "gasolinerias-detalle"
             concepto="uno"
             [totalAnio]="dataTotalAnio"
             [totalAnioAnt]="dataTotalAnioAnt"
@@ -73,8 +73,8 @@
     <div class="col-xl-6">
         <app-totales-grafica 
             [dataMes]="dataMesActual" 
-            [dataMesAnterior]="dataMesAnterior"
-            tipo = "energeticos-detalle" 
+            [dataMesAnterior]="dataMesAnterior" 
+            tipo = "gasolinerias-detalle"
             concepto="utilidad_bruta"
             [totalAnio]="dataTotalAnio"
             [totalAnioAnt]="dataTotalAnioAnt"
@@ -86,18 +86,8 @@
         <app-totales-grafica 
             [dataMes]="dataMesActual" 
             [dataMesAnterior]="dataMesAnterior" 
-            tipo = "energeticos-detalle"
+            tipo = "gasolinerias-detalle"
             concepto="ubo"
-            [totalAnio]="dataTotalAnio"
-            [totalAnioAnt]="dataTotalAnioAnt"
-        ></app-totales-grafica>
-    </div>
-    <div class="col-xl-6">
-        <app-totales-grafica 
-            [dataMes]="dataMesActual" 
-            [dataMesAnterior]="dataMesAnterior" 
-            tipo = "energeticos-detalle"
-            concepto="eficiencia"
             [totalAnio]="dataTotalAnio"
             [totalAnioAnt]="dataTotalAnioAnt"
         ></app-totales-grafica>

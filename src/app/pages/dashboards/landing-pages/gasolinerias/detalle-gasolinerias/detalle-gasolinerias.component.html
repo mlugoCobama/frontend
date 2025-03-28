@@ -2,9 +2,9 @@
     <div class="col-12">
         <div class="page-title-box d-flex align-items-center justify-content-between">
             <div>
-                <a [routerLink]="[ '../../energeticos']" class="btn btn-primary btn-sm"> <i class="bx bx-arrow-back "></i> Atras</a>
+                <a [routerLink]="[ '../../gasolinerias']" class="btn btn-primary btn-sm"> <i class="bx bx-arrow-back "></i> Atras</a>
                 <br>
-                <h4 class="mb-0 font-size-18 pt-2">Gaseras - {{concepto}} {{nombreMes}} {{ anioSeleccionado }}</h4>
+                <h4 class="mb-0 font-size-18 pt-2">Gasolinerias - {{concepto}} {{nombreMes}} {{ anioSeleccionado }}</h4>
             </div>
             
             <div class="page-title-right ">
@@ -12,7 +12,7 @@
                     <ng-container>
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Detalle {{concepto}}</a>
                         </li>
-                        <li class="breadcrumb-item active">Gaseras </li>
+                        <li class="breadcrumb-item active">Gasolinerias </li>
                     </ng-container>
                 </ol>
             </div>
@@ -49,19 +49,6 @@
                         <button type="button" class="btn btn-sm btn-primary" (click)="filtrarInfo()">Filtrar</button>
                     </div>
                   </div>   
-            </div>
-            <div class="col-sm-6 text-end">
-                
-                <div class="btn-group btn-group-sm" role="group" aria-label="Basic radio toggle button group">
-                    <input type="radio" class="btn-check" name="btnradio" id="VHA" value="VHA" autocomplete="off" (change)="onChangeDivision($event.target.value)">
-                    <label class="btn btn-outline-primary" for="VHA">División VHA</label>
-                  
-                    <input type="radio" class="btn-check" name="btnradio" id="MH" value="MH" autocomplete="off" (change)="onChangeDivision($event.target.value)">
-                    <label class="btn btn-outline-primary" for="MH">División MH</label>
-                  
-                    <input type="radio" class="btn-check" name="btnradio" id="all" value="all" autocomplete="off" checked (change)="onChangeDivision($event.target.value)">
-                    <label class="btn btn-outline-primary" for="all">Todas</label>
-                </div>
             </div>
         </div>
     </div>

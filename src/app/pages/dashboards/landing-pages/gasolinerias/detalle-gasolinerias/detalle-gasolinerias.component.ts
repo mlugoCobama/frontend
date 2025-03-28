@@ -3,16 +3,17 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ResponseEnergeticosGaseras } from "src/app/core/models/dashboard/energeticos-gaseras";
 import { AlertErrorService } from "src/app/core/services/alert-error.service";
+import { EnergeticosGasolinerasService } from "src/app/core/services/dashboard/energeticos-gasolineras.service";
 import { EnergeticosGaserasService } from "src/app/core/services/dashboard/energeticos-gaseras.service";
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
 import dataMeses from "src/environments/meses.json";
 
 @Component({
-  selector: "app-detalle-energeticos",
-  templateUrl: "./detalle-energeticos.component.html",
-  styleUrls: ["./detalle-energeticos.component.css"],
+  selector: "app-detalle-gasolinerias",
+  templateUrl: "./detalle-gasolinerias.component.html",
+  styleUrl: "./detalle-gasolinerias.component.css",
 })
-export class DetalleEnergeticosComponent implements OnInit {
+export class DetalleGasolineriasComponent implements OnInit {
   public concepto: string;
 
   public isLoad: boolean = true;
@@ -26,18 +27,17 @@ export class DetalleEnergeticosComponent implements OnInit {
   public anioSeleccionado: any = 0;
   public nombreMes: any;
 
-  private anioActual :any =new Date().getFullYear();
-  private mesActual :any =  new Date().getMonth();
-
-  private divisionSeleccionada: string = "all";
+  private anioActual: any = new Date().getFullYear();
+  private mesActual: any = new Date().getMonth();
 
   constructor(
     private route: ActivatedRoute,
     private localStorage: LocalStorageServiceService,
     public datepipe: DatePipe,
     public alertService: AlertErrorService,
+    private energerticosGasolinerias: EnergeticosGasolinerasService,
     private energerticosGaseras: EnergeticosGaserasService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.concepto = this.route.snapshot.paramMap.get("concepto");
@@ -46,23 +46,22 @@ export class DetalleEnergeticosComponent implements OnInit {
     this.recuperarLocalStorage();
   }
 
-  public recuperarLocalStorage(){
-    this.dataEnergeticos = this.localStorage.getItem('DataEnergeticos');
-      const fecha = new Date;
-      const mes = (fecha.setMonth(fecha.getMonth() -1))
-      this.mesSeleccionado = this.datepipe.transform(mes, 'MM');
-      this.anioSeleccionado = this.datepipe.transform((new Date), 'yyyy');
-      this. nombreMes = this.meses[Number(this.mesSeleccionado-1)]["nombre"];
-      this.filtrarInfo();
+  public recuperarLocalStorage() {
+    this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
+    const fecha = new Date();
+    const mes = fecha.setMonth(fecha.getMonth() - 1);
+    this.mesSeleccionado = this.datepipe.transform(mes, "MM");
+    this.anioSeleccionado = this.datepipe.transform(new Date(), "yyyy");
+    this.nombreMes = this.meses[Number(this.mesSeleccionado - 1)]["nombre"];
+    this.filtrarInfo();
   }
 
   public filtrarInfo() {
-    this.energerticosGaseras
-      .getAnual(
-        1,
-        Number(this.mesSeleccionado)+1,
-        this.anioSeleccionado,
-        this.divisionSeleccionada
+    this.energerticosGasolinerias
+      .getAnualGasolinerias(
+        2,
+        Number(this.mesSeleccionado) + 1,
+        this.anioSeleccionado
       )
       .subscribe(
         (data: ResponseEnergeticosGaseras) => {
@@ -73,8 +72,8 @@ export class DetalleEnergeticosComponent implements OnInit {
             this.localStorage.setItem("DataEnergeticos", data.data);
             this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
             this.energerticosGaseras.actualizarData();
-            // this.isLoad = false;
-            this.nombreMes = (this.meses[Number(this.mesSeleccionado)-1]['nombre']);
+            this.nombreMes =
+              this.meses[Number(this.mesSeleccionado) - 1]["nombre"];
           } else {
             this.alertService.alertError(data.message, data.success);
           }
@@ -95,12 +94,11 @@ export class DetalleEnergeticosComponent implements OnInit {
       const arrayReferencia = arrayMes.map((item, index) => ({
         index,
         value: item[this.concepto],
-      }));//Genera un array con index y el valor por el cual se va a ordenar
-
-      arrayReferencia.sort((a, b) => b.value - a.value);//Ordena el array de referencia mayor a menor
+      })); //Genera un array con index y el valor por el cual se va a ordenar
+      arrayReferencia.sort((a, b) => b.value - a.value); //Ordena el array de referencia mayor a menor
       const arrayMes_ordenado = arrayReferencia.map(
-        (item) => arrayMes[item.index] // ordena el array del periodo en base al array de referencia
-      );
+        (item) => arrayMes[item.index]
+      ); // ordena el array del periodo en base al array de referencia
       data.data["mes"] = arrayMes_ordenado;
       if (data.data["mesAnt"].length > 1) {
         const arrayMesAnterior = data.data["mesAnt"];
@@ -119,7 +117,6 @@ export class DetalleEnergeticosComponent implements OnInit {
     }
   }
 
-
   public onChange(select: string, value: any) {
     if (select === "selectMes") {
       this.mesSeleccionado = value;
@@ -128,16 +125,11 @@ export class DetalleEnergeticosComponent implements OnInit {
     }
   }
 
-  public onChangeDivision(value: string) {
-    this.divisionSeleccionada = value;
-    this.filtrarInfo();
-  }
-  
-
   //Deshabilita meses superiores o iguales al mes actual
-  public filtrarMeses(mes: string):boolean{
-    return Number(this.anioSeleccionado) === this.anioActual && Number(mes) > this.mesActual;   
+  public filtrarMeses(mes: string): boolean {
+    return (
+      Number(this.anioSeleccionado) === this.anioActual &&
+      Number(mes) > this.mesActual
+    );
   }
-
-
 }

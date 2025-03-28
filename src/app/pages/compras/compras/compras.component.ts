@@ -8,7 +8,6 @@ import Swal from "sweetalert2";
 
 //services
 import { ComprasService } from "src/app/core/services/compras/compras.service";
-import { CatUnidadesMedidasService } from "src/app/core/services/compras/unidadesMedidas/cat-unidades-medidas.service";
 import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompra/ordenes-compra.service";
 
 @Component({
@@ -29,10 +28,8 @@ export class ComprasComponent implements OnInit {
   public solicitudCompra: any; // Objeto que envió al componente detallesSolicitudCompra
   public status: any;
   public data: any;
-  public unidades: any;
 
   constructor(
-    private catUnidadesMedidasService: CatUnidadesMedidasService,
     public ordenesComprasService: OrdenesCompraService,
     public comprasService: ComprasService,
     private modalService: BsModalService
@@ -45,18 +42,14 @@ export class ComprasComponent implements OnInit {
 
     this.dtOptions = environment.dataTables;
     this.getAll();
-    this.getUnidades();
   }
-
-
   /**
    * Manejo de componentes
    */
-  
   public openModalNuevo() {
     const initialState: ModalOptions = {
       initialState: {
-        unidades: this.unidades,
+        //Datos que envió al componente
       },
       class: "modal-lg",
     };
@@ -67,9 +60,9 @@ export class ComprasComponent implements OnInit {
       this.getAll();
     });
   }
-
+  // Funcion para llenar la vista con el detalle component
   public openDetallesSolicitud(dato: any, evento: any) {
-    // Funcion para llenar la vista con el detalle component
+    
     this.solicitudSelecionada = true;
     // Verifica si hay un elemento seleccionado (evento del doble click)
     if (evento.currentTarget.classList.contains("table-primary")) {
@@ -77,77 +70,20 @@ export class ComprasComponent implements OnInit {
       this.solicitudSelecionada = false;
     } else {
       const filas = document.querySelectorAll("tbody tr");
-
       filas.forEach((fila) => fila.classList.remove("table-primary"));
       evento.currentTarget.classList.add("table-primary");
       this.solicitudSelecionada = true;
-      this.solicitudCompra = dato; // Castea el objeto que se envia al detalleSolicitudCompra
+      this.solicitudCompra = dato; // Objeto que se envía al detalleSolicitudCompra
       this.status = this.solicitudCompra.estatus;
     }
   }
 
-  /**
-   * Consultas generales
-   */
-  public solictado: any = 1;
-  public enCotizacion: any = 2;
-  public enOrdenCompra: any = 3;
-  public autorizada: any = 4;
-  public cancelada: any = 5;
-  public enSurtido: any = 6;
-  public pagada: any = 7;
-
+  //Recupera todos los registros de solicitudes de compras
   private getAll() {
     this.comprasService.getAll().subscribe(
       (response) => {
         if (response) {
           this.data = response.data;
-          this.data.forEach((registro: any) => {
-            registro.fecha = new Date(registro.fecha).toLocaleString();
-            switch (registro.estatus) {
-              case this.solictado:
-                registro.estado = "SOLICITADO";
-                registro.claseEstado = "bg-primary";
-                break;
-
-              case this.enCotizacion:
-                registro.estado = "EN COTIZACIÓN";
-                registro.claseEstado = "bg-info";
-                break;
-
-              case this.enOrdenCompra:
-                registro.estado = "ORDEN DE COMPRA";
-                registro.claseEstado = "bg-warning";
-                break;
-
-              case this.autorizada:
-                registro.estado = "AUTORIZADA";
-
-                registro.claseEstado = "badge-soft-success";
-                break;
-
-              case this.cancelada:
-                registro.estado = "CANCELADA";
-                registro.claseEstado = "bg-danger";
-                break;
-
-              case this.enSurtido:
-                registro.estado = "EN SURTIDO";
-                registro.claseEstado = "badge-soft-warning";
-                break;
-
-              case this.pagada:
-                registro.estado = "PAGADA";
-                registro.claseEstado = "bg-success";
-                break;
-
-              default:
-                registro.estado = "DESCONOCIDO";
-                registro.claseEstado = "badge-soft-dark";
-                break;
-            }
-          });
-
           this.isLoad = false;
           this.showTable = true;
         } else {
@@ -160,25 +96,9 @@ export class ComprasComponent implements OnInit {
     );
   }
 
-  private getUnidades() {
-    this.catUnidadesMedidasService.getAll().subscribe(
-      (response) => {
-        if (response) {
-          this.unidades = response.data;
-        } else {
-          console.log(response.message);
-        }
-      },
-      (error) => {
-        console.error("Error fetching data:", error);
-      }
-    );
-  }
-  
   /**
    * Funciones Botonera
    */
-
   public regresar() {
     // Muestra la vista de la tabla
     this.comprasService.cambiarEstadoCotizacion(false);
@@ -274,4 +194,7 @@ export class ComprasComponent implements OnInit {
         }
       });
   }
+  /**
+   * Fin funciones Botonera
+   */
 }

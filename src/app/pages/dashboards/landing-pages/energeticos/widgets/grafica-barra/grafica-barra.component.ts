@@ -5,6 +5,7 @@ import { EnergeticosGaserasService } from "src/app/core/services/dashboard/energ
 import * as Highcharts from "highcharts";
 import { Subscription } from "rxjs";
 import { formatNumber } from "@angular/common";
+import dataMeses from "src/environments/meses.json";
 @Component({
   selector: "app-grafica-barra",
   templateUrl: "./grafica-barra.component.html",
@@ -18,7 +19,7 @@ export class GraficaBarraComponent implements OnInit {
   private actualizarDatosSubscripcion: Subscription;
 
   public dataMensual: any = [];
-
+  public meses = dataMeses;
   public dataMensualAnt: any = [];
 
   Highcharts: typeof Highcharts = Highcharts;
@@ -73,6 +74,7 @@ export class GraficaBarraComponent implements OnInit {
     series: [
       {
         name: "2025",
+
         data: [
           16.0, 18.2, 23.1, 27.9, 32.2, 36.4, -39.8, 38.4, -35.5, 29.2, 22.0,
           17.8, 25.6,
@@ -80,6 +82,36 @@ export class GraficaBarraComponent implements OnInit {
         type: "bar",
       },
     ],
+    responsive: {
+      rules: [{
+          condition: {
+              maxWidth: 500
+          },
+          chartOptions: {
+              legend: {
+                  align: 'center',
+                  verticalAlign: 'bottom',
+                  layout: 'horizontal'
+              },
+              yAxis: {
+                  labels: {
+                      align: 'left',
+                      x: 0,
+                      y: -5
+                  },
+                  title: {
+                      text: null
+                  }
+              },
+              subtitle: {
+                  text: null
+              },
+              credits: {
+                  enabled: false
+              }
+          }
+      }]
+  }
   };
   constructor(
     private localStorage: LocalStorageServiceService,
@@ -94,10 +126,15 @@ export class GraficaBarraComponent implements OnInit {
       }
     );
   }
+  // Inicializa los valores de la gráfica en base al localstorage
   private inicializarGrfica() {
     this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
     if (this.dataEnergeticos.mes.length > 1) {
       this.generarSerie();
+      /**
+       * Se asignan los valores creando una copia de chartOptions 
+       * Y se asignan los valores nuevos
+       */
       this.chartOptions = {
         ...this.chartOptions,
         xAxis: {
@@ -105,6 +142,7 @@ export class GraficaBarraComponent implements OnInit {
           categories: this.labels,
         },
         series: [this.dataMensual],
+        
       };
     } else {
       this.chartOptions = {
@@ -122,9 +160,10 @@ export class GraficaBarraComponent implements OnInit {
         ],
       };
     }
-    this.updateFlag = true;
+    this.updateFlag = true; //Es necesario declarar esto para que la gráfica actualice valores
   }
 
+  //Actualiza los datos de las series y las etiquetas
   private actualizarGrafica() {
     this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
     if (this.dataEnergeticos.mes.length > 1) {
@@ -142,6 +181,7 @@ export class GraficaBarraComponent implements OnInit {
     this.updateFlag = true;
   }
 
+  // Genera las series y la etiquetas de la gráfica
   private generarSerie() {
     let data: any = [];
     for (let i = 0; i < this.dataEnergeticos.mes.length; i++) {
@@ -152,15 +192,23 @@ export class GraficaBarraComponent implements OnInit {
       }
       
     }
+    //Ordena los datos de mayor a menor
     data.sort((a, b) => b.valor - a.valor);
     this.labels = data.map((item) => item.entidad);
     const valoresOrdenados = data.map((item) => item.valor);
     this.dataMensual = {
       data: valoresOrdenados,
       name: String(
-        new Date(this.dataEnergeticos.mes[1]["fecha"]).getFullYear()
+        this.obtenerPeriodo().toUpperCase()
       ),
       type: "bar",
     };
+  }
+
+  //Recupera el periodo recuperado del localStorage
+  public obtenerPeriodo(){
+    const mes = this.dataEnergeticos.mes.find((registro) => registro.id != "Total");
+    const periodo =  mes.fecha.split("-")
+   return `${this.meses[periodo[1]-1].nombre} de ${periodo[2]}`
   }
 }

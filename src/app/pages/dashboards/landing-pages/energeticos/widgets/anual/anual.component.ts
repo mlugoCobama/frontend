@@ -99,7 +99,7 @@ export class AnualComponent implements OnInit {
     this.serieAnioAnt();
     let serie = [this.dataAnualAnt, this.dataAnual];
     this.chartOptions.series = serie;
-    console.groupCollapsed(this.dataEnergeticos);
+    // console.groupCollapsed(this.dataEnergeticos);
     this.updateFlag = true;
   }
 

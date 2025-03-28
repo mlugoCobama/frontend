@@ -13,7 +13,7 @@
     </p>
     </div>
     <div class="col-md-6">
-      <p><strong>Fecha: </strong>{{ solicitudCompra.fecha }}</p>
+      <p><strong>Fecha: </strong>{{ solicitudCompra.fecha | date:'dd/MM/yyyy h:mm a'}}</p>
       <p><strong>Usuario Destino: </strong>{{ solicitudCompra.usuario_destino }}</p>
       <p><strong>Motivo: </strong>{{ solicitudCompra.motivo }}</p>
       <div *ngIf="mostrarTotal" class="row">

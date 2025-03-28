@@ -52,12 +52,14 @@ export class TablaComponent implements OnInit {
 
   }
 
+  //Actualiza o inicializa los datos 
   private recuperarData(){
     this.dataEnergeticos = [];
     this.dataEnergeticos = this.localStorage.getItem('DataEnergeticos');
     this.deleteLast();
   }
 
+  // Elimina los totales del arreglo original y los agrega a dataTotales
   private deleteLast () {
     this.dataTotales = [];
     for ( let item in this.dataEnergeticos ) {
@@ -68,7 +70,6 @@ export class TablaComponent implements OnInit {
         this.dataTotales.push(total);
       }     
     }   
-    console.log(this.dataTotales);
   }
   
 }

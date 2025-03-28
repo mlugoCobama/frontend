@@ -64,14 +64,6 @@ export class OrdenesCompraService {
       environment.apiUrl + `compras/consulta-datos-pdf/${id}`,{ responseType: 'blob' });
   }
 
-  /**
-   * Genera un folio consecutivo para la ordenes de compra
-   * @returns folio consecutivo basado en el ultimo guardado en bd
-   */
-  public obtenerFolio(){
-    return this.http.get<{ nuevoFolio: string }>(environment.apiUrl + `compras/generar-folio`);
-  }
-
     /**
    * Petición pra realizar el update de orden compras a autorizado
    * Invoca el metodo en el backend para enviar un correo al proveedor

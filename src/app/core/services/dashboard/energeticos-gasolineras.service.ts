@@ -23,6 +23,15 @@ export class EnergeticosGasolinerasService {
     }
 
     /**
+   * Recupera los datos del año, año anterior, mes actual, mes anterior gasolinera
+   * @param mes 
+   * @param anio 
+   */
+    public getAnualGasolinerias(subdivision: number, mes: number, anio: number) : Observable<ResponseEnergeticosGaseras> {
+      return this.http.get<ResponseEnergeticosGaseras>(environment.apiUrl + 'energeticos-gasolinerias/'+ subdivision + '/' + mes + '/' + anio);
+    }
+
+    /**
      * Crea o actualiza registros en 'datos_generales'
      * @param data 
      * @returns 

@@ -2,15 +2,7 @@
     <div class="card-body">
         <div class="clearfix">
             <div class="float-end">
-                <div class="input-group input-group-sm">
-                    <select class="form-select form-select-sm" >
-                        <option value="january" selected>Ene</option>
-                        <option value="december">Feb</option>
-                        <option value="november">Maz</option>
-                        <option value="october">Abr</option>
-                    </select>
-                    <label class="input-group-text">Mes</label>
-                </div>
+                
             </div>
             <h4 class="card-title mb-4">{{title}}</h4>
         </div>
@@ -20,11 +12,11 @@
                 <div class="text-muted">
                     <div class="mb-4">
                         <p>Este mes</p>
-                        <ng-container *ngIf="dataMes[15][concepto] > 0; else elseTemplate1">
-                            <h4>$ {{ dataMes[15][concepto] | number }}</h4>
+                        <ng-container *ngIf="totalMes[concepto] > 0; else elseTemplate1">
+                            <h4>$ {{ totalMes[concepto] | number }}</h4>
                         </ng-container>
                         <ng-template #elseTemplate1>
-                            <h4 class="text-danger">$ {{ dataMes[15][concepto] | number }}</h4> 
+                            <h4 class="text-danger">$ {{ totalMes[concepto] | number }}</h4> 
                         </ng-template>
                         
                         <div>
@@ -39,12 +31,12 @@
                     </div>
 
                     <div>
-                        <a [routerLink]="[ '../energeticos-detalle/', concepto ]" class="btn btn-primary btn-sm">Ver Detalle</a>
+                        <a [routerLink]="[ '../',tipo, concepto ]" class="btn btn-primary btn-sm">Ver Detalle</a>
                     </div>
 
                     <div class="mt-4">
                         <p class="mb-2">El mes pasado:</p>
-                        <h5>$ {{ dataMesAnterior[15][concepto] | number }}</h5>
+                        <h5>$ {{ totalMesAnt[concepto] | number }}</h5>
                     </div>
 
                 </div>
