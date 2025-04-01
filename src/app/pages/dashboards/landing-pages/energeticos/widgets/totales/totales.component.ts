@@ -18,6 +18,7 @@ export class TotalesComponent implements AfterViewInit {
   @Input() tipo: string;
   @Input() totalAnio: string;
   @Input() totalAnioAnt: string;
+  @Input() color: string;
 
   public title: string;
 
@@ -86,7 +87,7 @@ export class TotalesComponent implements AfterViewInit {
 
     this.options.series[0]['name'] = this.title;
     this.options.series[0]['data'] = this.dataSerie;
-
+    this.options.colors.unshift(this.color);
     var chart = new ApexCharts(document.querySelector("#chart_"+ this.concepto), this.options);
     chart.render();
   }

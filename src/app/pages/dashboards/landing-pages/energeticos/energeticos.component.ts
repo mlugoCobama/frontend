@@ -80,7 +80,7 @@ export class EnergeticosComponent implements OnInit {
           const periodo =  mes.fecha.split("-")
           this.nombreMes = this.meses[periodo[1]-1]["nombre"];
           this.anioActual = periodo[2];
-          
+          this.alertService.alertError(data.message, data.success);
         } else {
           this.alertService.alertError(data.message, data.success);
         }

@@ -17,6 +17,8 @@ import { PorcentajesGraficasComponent } from './energeticos/widgets/porcentajes-
 import { GasolineriasComponent } from './gasolinerias/gasolinerias.component';
 import { DetalleGasolineriasComponent } from './gasolinerias/detalle-gasolinerias/detalle-gasolinerias.component';
 import { GraficaPersonalComponent } from './energeticos/widgets/grafica-personal/grafica-personal.component';
+import { NissanComponent } from './nissan/nissan.component';
+import { RenaultComponent } from './renault/renault.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,8 @@ import { GraficaPersonalComponent } from './energeticos/widgets/grafica-personal
     GasolineriasComponent,
     DetalleGasolineriasComponent,
     GraficaPersonalComponent,
+    NissanComponent,
+    RenaultComponent,
   ],
   imports: [
     CommonModule,

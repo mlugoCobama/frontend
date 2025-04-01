@@ -72,8 +72,10 @@ export class DetalleGasolineriasComponent implements OnInit {
             this.localStorage.setItem("DataEnergeticos", data.data);
             this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
             this.energerticosGaseras.actualizarData();
-            this.nombreMes =
-              this.meses[Number(this.mesSeleccionado) - 1]["nombre"];
+            const mes = this.dataEnergeticos['mes'].find((registro) => registro.id != "Total");
+            const periodo =  mes.fecha.split("-")
+            this.nombreMes = this.meses[periodo[1]-1]["nombre"];
+            this.mesSeleccionado = periodo[1];
           } else {
             this.alertService.alertError(data.message, data.success);
           }

@@ -30,6 +30,7 @@
                     [dataMesAnterior]="dataMesAnterior" 
                     tipo = "energeticos-detalle"
                     concepto="ventas"
+                    color = "#f1b44c"
                     [totalAnio]="dataTotalAnio"
                     [totalAnioAnt]="dataTotalAnioAnt"
                 ></app-totales>
@@ -40,6 +41,7 @@
                     [dataMesAnterior]="dataMesAnterior" 
                     tipo = "energeticos-detalle"
                     concepto="venta_litros"
+                    color = "#f1b44c"
                     [totalAnio]="dataTotalAnio"
                     [totalAnioAnt]="dataTotalAnioAnt"
                 ></app-totales>
@@ -50,6 +52,7 @@
                     [dataMesAnterior]="dataMesAnterior" 
                     tipo = "energeticos-detalle"
                     concepto="gasto"
+                    color = "#f1b44c"
                     [totalAnio]="dataTotalAnio"
                     [totalAnioAnt]="dataTotalAnioAnt"
                 ></app-totales>
@@ -66,6 +69,7 @@
             [dataMesAnterior]="dataMesAnterior"
             tipo = "energeticos-detalle"
             concepto="uno"
+            color = "#f1b44c"
             [totalAnio]="dataTotalAnio"
             [totalAnioAnt]="dataTotalAnioAnt"
         ></app-totales-grafica>
@@ -76,6 +80,7 @@
             [dataMesAnterior]="dataMesAnterior"
             tipo = "energeticos-detalle" 
             concepto="utilidad_bruta"
+            color = "#f1b44c"
             [totalAnio]="dataTotalAnio"
             [totalAnioAnt]="dataTotalAnioAnt"
         ></app-totales-grafica>
@@ -88,6 +93,7 @@
             [dataMesAnterior]="dataMesAnterior" 
             tipo = "energeticos-detalle"
             concepto="ubo"
+            color = "#f1b44c"
             [totalAnio]="dataTotalAnio"
             [totalAnioAnt]="dataTotalAnioAnt"
         ></app-totales-grafica>
@@ -97,9 +103,23 @@
             [dataMes]="dataMesActual" 
             [dataMesAnterior]="dataMesAnterior" 
             tipo = "energeticos-detalle"
+            color = "#f1b44c"
             concepto="eficiencia"
             [totalAnio]="dataTotalAnio"
             [totalAnioAnt]="dataTotalAnioAnt"
         ></app-totales-grafica>
+    </div>
+</div>
+<div class="row" *ngIf="!isLoad">
+    <div class="col-xl-6">
+        <app-grafica-personal
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            tipo = "energeticos-detalle"
+            concepto="eficiencia"
+            color = "#f1b44c"
+            [totalAnio]="dataTotalAnio"
+            [totalAnioAnt]="dataTotalAnioAnt"
+        ></app-grafica-personal>
     </div>
 </div>

@@ -10,11 +10,11 @@ import { DatePipe } from "@angular/common";
 import dataMeses from "src/environments/meses.json";
 
 @Component({
-  selector: 'app-gasolinerias',
-  templateUrl: './gasolinerias.component.html',
-  styleUrl: './gasolinerias.component.css'
+  selector: 'app-nissan',
+  templateUrl: './nissan.component.html',
+  styleUrl: './nissan.component.css'
 })
-export class GasolineriasComponent implements OnInit {
+export class NissanComponent implements OnInit {
   public dataMesActual: any;
 
   public dataMesAnterior: any;
