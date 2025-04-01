@@ -1,0 +1,232 @@
+<div class="modal-header">
+    <h5 class="modal-title">UcoIP</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+    </div>
+<div class="modal-body">
+    
+    <form [formGroup]="formModalUcoip">
+        <div class="row">
+          <!-- Area -->
+          <div class="col-sm-12 col-md-4">
+            <div class="form-group">
+              <label class="form-label requerido">Area *</label>
+              <div>
+                <select 
+                    class="form-select form-select-sm ng-dirty !ng-invalid"
+                    formControlName="area"
+                    [style]="{ width: '100%' }"
+                    (change)="onSelectAreaChange($event.target.value)"
+                >
+                    <option value="">Selecciona una opción</option>
+                    <option *ngFor="let item of dataAreas" value="{{item.id}}">{{item.nombre}}</option>
+                </select>
+              </div>
+              <div class="text-danger">
+                <div *ngIf="formModalUcoip.controls['area'].errors?.required">
+                  {{ this.mensajeCampoRequerido }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Marca -->
+          <div class="col-sm-12 col-md-4">
+            <div class="form-group">
+              <label class="form-label requerido">Departamento *</label>
+              <div>
+                <select 
+                    class="form-select form-select-sm ng-dirty !ng-invalid"
+                    formControlName="area"
+                    [style]="{ width: '100%' }"
+                    (change)="onSelectDeptoChange($event.target.value)"
+                >
+                    <option value="">Selecciona una opción</option>
+                    <option *ngFor="let item of dataDepto" value="{{item.id}}">{{item.nombre}}</option>
+                </select>
+              </div>
+              <div class="text-danger">
+                <div *ngIf="formModalUcoip.controls['departamento'].errors?.required">
+                  {{ this.mensajeCampoRequerido }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-12 col-md-4">
+            <div class="form-group">
+              <label class="form-label requerido">Puesto *</label>
+              <div>
+                <select 
+                    class="form-select form-select-sm ng-dirty !ng-invalid"
+                    formControlName="area"
+                    [style]="{ width: '100%' }"
+                >
+                    <option value="">Selecciona una opción</option>
+                    <option *ngFor="let item of dataPuesto" value="{{item.id}}">{{item.nombre}}</option>
+                </select>
+              </div>
+              <div class="text-danger">
+                <div *ngIf="formModalUcoip.controls['puesto'].errors?.required">
+                  {{ this.mensajeCampoRequerido }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-2">
+            <!-- Tipo de Hardware -->
+            <div class="col-sm-12 col-md-4">
+              <div class="form-group">
+                <label class="form-label requerido">Titular *</label>
+                <div>
+                  <input
+                    class="form-control form-control-sm ng-dirty !ng-invalid"
+                    formControlName="titular"
+                    placeholder="Ingresar Titular"
+                    maxlength="255"
+                    [style]="{ width: '100%' }"
+                  />
+                </div>
+                <div class="text-danger">
+                  <div *ngIf="formModalUcoip.controls['titular'].errors?.required">
+                    {{ this.mensajeCampoRequerido }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Marca -->
+            <div class="col-sm-12 col-md-4">
+              <div class="form-group">
+                <label class="form-label requerido">UcoIP *</label>
+                <div>
+                  <input
+                    class="form-control form-control-sm ng-dirty !ng-invalid"
+                    formControlName="ucoip"
+                    placeholder="Ingresar UcoIP"
+                    maxlength="255"
+                    [style]="{ width: '100%' }"
+                  />
+                </div>
+                <div class="text-danger">
+                  <div *ngIf="formModalUcoip.controls['ucoip'].errors?.required">
+                    {{ this.mensajeCampoRequerido }}
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <div class="col-sm-12 col-md-4">
+              <div class="form-group">
+                <label class="form-label requerido">Contraseña *</label>
+                <div>
+                  <input
+                    class="form-control form-control-sm ng-dirty !ng-invalid"
+                    formControlName="contrasenia"
+                    placeholder="Ingresar Contraseña"
+                    maxlength="255"
+                    [style]="{ width: '100%' }"
+                  />
+                </div>
+                <div class="text-danger">
+                  <div *ngIf="formModalUcoip.controls['contrasenia'].errors?.required">
+                    {{ this.mensajeCampoRequerido }}
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <!-- Tipo de Hardware -->
+            <div class="col-sm-12 col-md-4">
+              <div class="form-group">
+                <label class="form-label requerido">Correo Electronico *</label>
+                <div>
+                  <input
+                    class="form-control form-control-sm ng-dirty !ng-invalid"
+                    formControlName="correo"
+                    placeholder="Ingresar Correo Electronico"
+                    maxlength="255"
+                    [style]="{ width: '100%' }"
+                  />
+                </div>
+                <div class="text-danger">
+                  <div *ngIf="formModalUcoip.controls['correo'].errors?.required">
+                    {{ this.mensajeCampoRequerido }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Marca -->
+            <div class="col-sm-12 col-md-4">
+              <div class="form-group">
+                <label class="form-label requerido">Usuario AutoSystem *</label>
+                <div>
+                  <input
+                    class="form-control form-control-sm ng-dirty !ng-invalid"
+                    formControlName="usuario_as"
+                    placeholder="Ingresar Usuario AutoSystem"
+                    maxlength="255"
+                    [style]="{ width: '100%' }"
+                  />
+                </div>
+                <div class="text-danger">
+                  <div *ngIf="formModalUcoip.controls['usuario_as'].errors?.required">
+                    {{ this.mensajeCampoRequerido }}
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <div class="col-sm-12 col-md-4">
+              <div class="form-group">
+                <label class="form-label requerido">IP*</label>
+                <div>
+                  <input
+                    class="form-control form-control-sm ng-dirty !ng-invalid"
+                    formControlName="ip"
+                    placeholder="Ingresar IP"
+                    maxlength="255"
+                    [style]="{ width: '100%' }"
+                  />
+                </div>
+                <div class="text-danger">
+                  <div *ngIf="formModalUcoip.controls['ip'].errors?.required">
+                    {{ this.mensajeCampoRequerido }}
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <!-- Tipo de Hardware -->
+            <div class="col-sm-12 col-md-4">
+              <div class="form-group">
+                <label class="form-label requerido">Extensión *</label>
+                <div>
+                  <input
+                  class="form-control form-control-sm ng-dirty !ng-invalid"
+                  formControlName="extension"
+                  placeholder="Ingresar Extensión"
+                  maxlength="255"
+                  [style]="{ width: '100%' }"
+                />
+                </div>
+                <div class="text-danger">
+                  <div *ngIf="formModalUcoip.controls['extension'].errors?.required">
+                    {{ this.mensajeCampoRequerido }}
+                  </div>
+                </div>
+              </div>
+            </div>
+           
+        </div>
+    </form>
+
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" >Cerrar</button>
+    
+</div>
+
