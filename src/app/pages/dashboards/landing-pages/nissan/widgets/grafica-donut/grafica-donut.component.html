@@ -1,0 +1,58 @@
+  <div class="card">
+    <div class="card-body">
+        <h5 class="text-muted mb-4"> <i class="fas fa-percent h5 text-warning align-middle mb-0 me-1"></i>{{ title }}</h5>
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="text-muted">
+                <div class="mb-4">
+                    <p>Este mes</p>
+                    <ng-container *ngIf="totalMes > 0; else elseTemplate1">
+                        <h4>$ {{ totalMes | number }}</h4>
+                    </ng-container>
+                    <ng-template #elseTemplate1>
+                        <h4 class="text-danger">$ {{ totalMes | number }}</h4> 
+                    </ng-template>
+                    
+                    <div>
+                        <ng-container *ngIf="diferencia > 0; else elseTemplate">
+                            <span class="badge badge-soft-success font-size-12 me-1"> + {{ diferencia | number }}</span> 
+                        </ng-container>
+                        <ng-template #elseTemplate>
+                            <span class="badge badge-soft-danger font-size-12 me-1"> $ {{ diferencia | number }}</span> 
+                        </ng-template>
+                        
+                    </div>
+                </div>
+    
+                <div>
+                    <a  class="btn btn-primary btn-sm">Ver Detalle</a>
+                </div>
+    
+                <div class="mt-4">
+                    <p class="mb-2">El mes pasado:</p>
+                    <h5>$ {{ totalMesAnt | number }}</h5>
+                </div>
+    
+            </div>
+        </div>
+            
+                <div class="col-lg-8">
+                    <div id="chart_dona_{{concepto}}"></div>
+                </div>
+            <!-- <div class="row text-muted text-center">
+                <div class="col-6"> 
+                    <h5> <small>Este mes: </small></h5>
+                </div>
+                <div class="col-6">
+                    <ng-container >
+                        <p class="text-truncate mb-0 text-success"> 
+                            20,000
+                            <i class="mdi mdi-arrow-up ms-1 text-success"></i>
+                        </p>
+                    </ng-container>
+                </div>
+            </div> -->
+            
+        </div>
+    </div>
+</div>

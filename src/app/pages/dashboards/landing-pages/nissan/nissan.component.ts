@@ -1,7 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 
 import { AlertErrorService } from "src/app/core/services/alert-error.service";
-
+import { ResponseAgenciasNissan } from "src/app/core/models/dashboard/agencias-nissan";
+import { AgenciasService } from "src/app/core/services/dashboard/agencias.service";
 import { ResponseEnergeticosGaseras } from "src/app/core/models/dashboard/energeticos-gaseras";
 import { EnergeticosGasolinerasService } from "src/app/core/services/dashboard/energeticos-gasolineras.service";
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
@@ -38,7 +39,7 @@ export class NissanComponent implements OnInit {
   constructor(
     public alertService: AlertErrorService,
     public datepipe: DatePipe,
-    private energerticosGasolinerias: EnergeticosGasolinerasService,
+    private agencias: AgenciasService,
     private localStorage: LocalStorageServiceService
   ) {}
 
@@ -62,14 +63,24 @@ export class NissanComponent implements OnInit {
    * @param anio 
    */
   consultarDatos(mes: any, anio: any){
-    this.energerticosGasolinerias.getAnualGasolinerias(2, mes, anio).subscribe(
-      (data: ResponseEnergeticosGaseras) => {
+    this.agencias.getAnual().subscribe(
+      (data: ResponseAgenciasNissan) => {
         if (data.success) {
           this.dataMesActual = data.data["mes"];
+            console.log('mes');
+            console.table(this.dataMesActual);
           this.dataMesAnterior = data.data["mesAnt"];
+            console.log('mesAnt');
+            console.table(this.dataMesAnterior);
           this.dataMesAnioAnterior = data.data["anioAnt"];
+            console.log('mesAnioAnterior');
+            console.table(this.dataMesAnioAnterior);
           this.dataTotalAnio = data.data["totalAnio"];
+            console.log('totalAnio');
+            console.table(this.dataTotalAnio);
           this.dataTotalAnioAnt = data.data["totalAnioAnt"];
+            console.log('totalAnioAnt');
+            console.table(this.dataTotalAnioAnt);
           this.isLoad = false;
           this.localStorage.setItem("DataEnergeticos", data.data);
           this.alertService.alertError(data.message, data.success);

@@ -29,6 +29,10 @@ export class GraficaBarraComponent implements OnInit {
     title: {
       text: "Mensual",
     },
+    chart:{
+      height: null
+      // 567
+    },
     xAxis: {
       categories: [
         "Servigas del Valle",
@@ -170,6 +174,8 @@ export class GraficaBarraComponent implements OnInit {
       this.generarSerie();
       this.chartOptions.series = this.dataMensual;
       this.chartOptions.xAxis["categories"] = this.labels;
+      const tamanioGrafica = 150 + ((this.dataEnergeticos.mes.length - 1) * 28);
+      this.chartOptions.chart.height = tamanioGrafica;
     } else {
       this.chartOptions.series = [{
             name: "Sin datos",

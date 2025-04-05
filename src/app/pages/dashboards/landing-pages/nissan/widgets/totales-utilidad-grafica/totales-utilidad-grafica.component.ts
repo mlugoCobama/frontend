@@ -6,15 +6,16 @@ import { AlertErrorService } from 'src/app/core/services/alert-error.service';
 import { EnergeticosGaserasService } from 'src/app/core/services/dashboard/energeticos-gaseras.service';
 
 @Component({
-  selector: 'app-totales',
-  templateUrl: './totales.component.html',
-  styleUrls: ['./totales.component.css']
+  selector: 'app-totales-utilidad-grafica',
+  templateUrl: './totales-utilidad-grafica.component.html',
+  styleUrl: './totales-utilidad-grafica.component.css'
 })
-export class TotalesComponent implements AfterViewInit {
+export class TotalesUtilidadGraficaComponent implements AfterViewInit {
 
   @Input() dataMes: any[];
   @Input() dataMesAnterior: any[];
   @Input() concepto: string;
+  public concepto2: string;
   @Input() tipo: string;
   @Input() totalAnio: string;
   @Input() totalAnioAnt: string;
@@ -28,16 +29,23 @@ export class TotalesComponent implements AfterViewInit {
   public totalMes: number = 0;
   public totalMesAnt: number = 0;
 
-  private dataSerie: number[] = [];
+  public diferencia1: number = 0;
+  public totalMes1: number = 0;
+  public totalMesAnt1: number = 0;
 
+  private dataSerie: number[] = [];
+  private dataSerie1: number[] = [];
   public options = {
     series: [{
         name: '',
         data: [12, 14, 2, 47, 42, 15, 47, 75, 65, 19, 14]
-      }],
+    }
+
+    ],
       chart: {
           type: 'area',
           height: 40,
+          stacked: true,
           sparkline: {
               enabled: true
           }
@@ -57,6 +65,7 @@ export class TotalesComponent implements AfterViewInit {
               stops: [25, 100, 100, 100]
           },
       },
+      
       tooltip: {
           fixed: {
               enabled: false
@@ -84,14 +93,18 @@ export class TotalesComponent implements AfterViewInit {
     
     this.setTitle();
     this.setDataSerie();
+    this.setDataSerie1();
     // console.log(this.dataMes);
     
     this.totalMes = this.dataMes.find((registro) => registro.estacion === "Total");
     this.totalMesAnt = this.dataMesAnterior.find((registro) => registro.estacion === "Total");
     this.diferencia = this.totalMes[this.concepto] - this.totalMesAnt[this.concepto];
+    this.concepto2 = `utilidad_${this.concepto}`
+    this.diferencia1 = this.totalMes[this.concepto2] - this.totalMesAnt[this.concepto2];
 
-    this.options.series[0]['name'] = this.title;
-    this.options.series[0]['data'] = this.dataSerie;
+    this.options.series[0]['name'] = 'Utilidad Bruta';
+    this.options.series[0]['data'] = this.dataSerie1;
+
     this.options.colors.unshift(this.color);
     var chart = new ApexCharts(document.querySelector("#chart_"+ this.concepto), this.options);
     chart.render();
@@ -99,38 +112,43 @@ export class TotalesComponent implements AfterViewInit {
 
   private setTitle() {
     switch (this.concepto) {
-      case 'ventas':
-        this.title = 'Ventas';
-        this.money = '$';
-        break;
-        case 'ventas':
-          this.title = 'Ventas';
+        case 'nuevos':
+          this.title = 'Nuevos';
           this.money = '$';
           break;
-        case 'uno':
-          this.title = 'UNO';
+        case 'seminuevos':
+          this.title = 'Semi Nuevos';
           this.money = '$';
           break;
-        case 'personal':
-          this.title = 'Personal';
+        case 'flotillas':
+          this.title = 'Flotillas';
           this.money = '$';
           break;
-      case 'venta_litros':
-        this.title = 'Ventas Litros';
-        break;
-      case 'gasto':
-        this.title = 'Gastos';
-        this.money = '$';
-        break;
+        case 'servicio':
+          this.title = 'Ordenes de servicio';
+          this.money = '$';
+          break;
+        case 'hyp':
+          this.title = 'Ordenes de HyP';
+          this.money = '$';
+          break;
       default:
         break;
     }
   }
 
   private setDataSerie(){
-    for (let i = 0; i < this.totalAnio.length; i++) {
-      this.dataSerie.push( this.totalAnio[i][this.concepto] );
-    }
+  for (let i = 0; i < this.totalAnio.length; i++) {
+        this.dataSerie.push( this.totalAnio[i][this.concepto] );
+        
+     }
+    // this.dataSerie = [128930.76,131460.15,129613.83,31288,26128,32192,23420,21683,29284,25598,33582,25140]
   }
 
+  private setDataSerie1(){
+    for (let i = 0; i < this.totalAnio.length; i++) {
+          this.dataSerie1.push( this.totalAnio[i][`utilidad_${this.concepto}`] );
+       }
+      // this.dataSerie = [128930.76,131460.15,129613.83,31288,26128,32192,23420,21683,29284,25598,33582,25140]
+    }
 }

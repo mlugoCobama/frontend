@@ -19,6 +19,14 @@ import { DetalleGasolineriasComponent } from './gasolinerias/detalle-gasolineria
 import { GraficaPersonalComponent } from './energeticos/widgets/grafica-personal/grafica-personal.component';
 import { NissanComponent } from './nissan/nissan.component';
 import { RenaultComponent } from './renault/renault.component';
+import { TotalesUtilidadGraficaComponent } from './nissan/widgets/totales-utilidad-grafica/totales-utilidad-grafica.component';
+import { GraficaDonutComponent } from './nissan/widgets/grafica-donut/grafica-donut.component';
+import { GraficaRadialComponent } from './nissan/widgets/grafica-radial/grafica-radial.component';
+import { TotalesPorcentajeGraficaComponent } from './nissan/widgets/totales-porcentaje-grafica/totales-porcentaje-grafica.component';
+import { BarrasHorizontalesMetasComponent } from './nissan/widgets/barras-horizontales-metas/barras-horizontales-metas.component';
+import { GraficaBarrasTotalesComponent } from './nissan/widgets/grafica-barras-totales/grafica-barras-totales.component';
+import { CardPrestamosComponent } from './nissan/widgets/card-prestamos/card-prestamos.component';
+import { StackGraficaComponent } from './nissan/widgets/stack-grafica/stack-grafica.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +43,14 @@ import { RenaultComponent } from './renault/renault.component';
     GraficaPersonalComponent,
     NissanComponent,
     RenaultComponent,
+    TotalesUtilidadGraficaComponent,
+    GraficaDonutComponent,
+    GraficaRadialComponent,
+    TotalesPorcentajeGraficaComponent,
+    BarrasHorizontalesMetasComponent,
+    GraficaBarrasTotalesComponent,
+    CardPrestamosComponent,
+    StackGraficaComponent,
   ],
   imports: [
     CommonModule,

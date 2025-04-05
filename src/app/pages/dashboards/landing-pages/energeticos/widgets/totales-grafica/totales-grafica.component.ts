@@ -61,6 +61,11 @@ export class TotalesGraficaComponent {
           },
           marker: {
               show: false
+          },
+          y: {
+            formatter:  function(value){
+              return value.toLocaleString('en-US');
+            }
           }
       }
   }
@@ -70,8 +75,8 @@ export class TotalesGraficaComponent {
     this.setTitle();
     this.setDataSerie();
 
-    this.totalMes = this.dataMes.find((registro) => registro.id === "Total");
-    this.totalMesAnt = this.dataMesAnterior.find((registro) => registro.id === "Total");
+    this.totalMes = this.dataMes.find((registro) => registro.estacion === "Total");
+    this.totalMesAnt = this.dataMesAnterior.find((registro) => registro.estacion === "Total");
     this.diferencia = this.totalMes[this.concepto] -  this.totalMesAnt[this.concepto];
   
     this.options.series[0]['name'] = this.title;
@@ -96,6 +101,15 @@ export class TotalesGraficaComponent {
         break;
       case 'eficiencia':
         this.title = 'Eficiencia';
+        this.money = '%';
+        break;
+      case 'utilidad_nuevos':
+        this.title = 'utilidad_nuevos';
+        this.money = '%';
+        break;
+      case 'utilidad_flotilla':
+        this.title = 'utilidad_flotilla';
+        this.money = '$';
         break;
       default:
         break;
@@ -104,7 +118,7 @@ export class TotalesGraficaComponent {
 
   private setDataSerie(){
     for (let i = 0; i < this.totalAnio.length; i++) {
-      this.dataSerie.push( this.totalAnio[i][this.concepto] );
+      this.dataSerie.push( this.totalAnio[i][this.concepto] || 0 );
     }
   }
 }
