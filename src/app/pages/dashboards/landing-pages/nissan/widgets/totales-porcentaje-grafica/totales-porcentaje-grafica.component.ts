@@ -32,6 +32,7 @@ public totalMesAnt: number = 0;
 public diferencia: number = 0;
 
 public conceptos: any = [];
+public simbolo:  any = [];
 
 public chart:any;
 public options = {
@@ -217,20 +218,22 @@ public options = {
           case 'total_ventas_ref':
             this.title = 'Ventas de post venta';
             this.conceptos = ['ventas_servicio', 'refacciones_mostrador','refacciones_hyp','refacciones_servicio'];
+            this.simbolo = "$"
             break;
           case 'inventarios':
             this.title = 'Inventarios';
             this.conceptos = ['inventario_nuevos', 'inventario_refacciones','inventario_seminuevos'];
+            this.simbolo = ""
             break;
           case 'utilidad_area':
             this.title = 'Utilidad por area';
             this.conceptos = ['area_postventa', 'area_comercial'];
+            this.simbolo = "$"
             break;
-          case 'servicio':
-            this.title = 'Servicio';
-            break;
-          case 'hyp':
-            this.title = 'HyP';
+          case 'personal':
+            this.title = 'Personal';
+            this.conceptos = ['personal_ventas', 'personal_usados', 'personal_refacciones', 'personal_servicios', 'personal_admin', 'personal_apvs'];
+            this.simbolo = ""
             break;
         default:
           break;

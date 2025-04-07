@@ -67,27 +67,17 @@ export class NissanComponent implements OnInit {
       (data: ResponseAgenciasNissan) => {
         if (data.success) {
           this.dataMesActual = data.data["mes"];
-            console.log('mes');
-            console.table(this.dataMesActual);
           this.dataMesAnterior = data.data["mesAnt"];
-            console.log('mesAnt');
-            console.table(this.dataMesAnterior);
           this.dataMesAnioAnterior = data.data["anioAnt"];
-            console.log('mesAnioAnterior');
-            console.table(this.dataMesAnioAnterior);
           this.dataTotalAnio = data.data["totalAnio"];
-            console.log('totalAnio');
-            console.table(this.dataTotalAnio);
           this.dataTotalAnioAnt = data.data["totalAnioAnt"];
-            console.log('totalAnioAnt');
-            console.table(this.dataTotalAnioAnt);
           this.isLoad = false;
           this.localStorage.setItem("DataEnergeticos", data.data);
           this.alertService.alertError(data.message, data.success);
           const mes = this.dataMesActual.find((registro) => registro.id != "Total");
           const periodo =  mes.fecha.split("-")
           this.nombreMes = this.meses[periodo[1]-1]["nombre"];
-          this.anioActual = periodo[2];
+          this.anioActual = periodo[0];
           
         } else {
           this.alertService.alertError(data.message, data.success);

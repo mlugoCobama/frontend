@@ -7,10 +7,10 @@
               <div class="mb-4">
                 <p>Este mes</p>
                 <ng-container *ngIf="totalMes > 0; else elseTemplate1">
-                  <h4>$ {{ totalMes | number }}</h4>
+                  <h4>{{simbolo}} {{ totalMes | number }}</h4>
                 </ng-container>
                 <ng-template #elseTemplate1>
-                  <h4 class="text-danger">$ {{ totalMes | number }}</h4>
+                  <h4 class="text-danger">{{simbolo}} {{ totalMes | number }}</h4>
                 </ng-template>
     
                 <div>
@@ -21,7 +21,7 @@
                   </ng-container>
                   <ng-template #elseTemplate>
                     <span class="badge badge-soft-danger font-size-12 me-1">
-                      $ {{ diferencia | number }}</span
+                      {{simbolo}} {{ diferencia | number }}</span
                     >
                   </ng-template>
                 </div>
@@ -33,7 +33,7 @@
     
               <div class="mt-4">
                 <p class="mb-2">El mes pasado:</p>
-                <h5>$ {{ totalMesAnt | number }}</h5>
+                <h5>{{simbolo}} {{ totalMesAnt | number }}</h5>
               </div>
             </div>
           </div>

@@ -91,7 +91,7 @@
 
     </div>
 </div>
-<!-- Ventas de post venta -->
+<!-- Ventas de post venta, Inventarios -->
 <div class="row" *ngIf="!isLoad">
     <div class="col-xl-6">
         <app-totales-porcentaje-grafica 
@@ -116,14 +116,14 @@
 <div class="row" *ngIf="!isLoad">
     
     <div class="col-xl-6">
-        <app-grafica-donut 
+        <app-totales-porcentaje-grafica
             [dataMes]="dataMesActual" 
             [dataMesAnterior]="dataMesAnterior" 
             color = "#FB4141"
             concepto="personal"
             [totalAnio]="dataTotalAnio"
             [totalAnioAnt]="dataTotalAnioAnt"
-        ></app-grafica-donut>
+        ></app-totales-porcentaje-grafica>
     </div>
     <div class="col-xl-6">
         <app-grafica-donut 

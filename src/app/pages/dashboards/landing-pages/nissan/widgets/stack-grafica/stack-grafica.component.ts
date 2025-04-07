@@ -153,11 +153,6 @@ export class StackGraficaComponent implements AfterViewInit {
   }
 
   public generarSeriesStack(){
-    // this.conceptos = ["inv_nuevo_101", "inv_nuevo_201", "inv_nuevo_301", "inv_nuevo_401", "inv_semi_101", "inv_semi_201", "inv_semi_301", "inv_semi_401"]
-    this.conceptos = ['nuevo', 'semi' ] 
-    console.log("se ejecuto esto");
-    console.log(this.conceptos);
-    
     this.conceptos.forEach(concepto => {
 
     });
