@@ -173,6 +173,23 @@
 
 <div class="row" *ngIf="!isLoad">
     <div class="col-xl-6">
+        <app-card-prestamos
+            concepto = "nrf"
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior"
+            ></app-card-prestamos>
+    </div>
+    <div class="col-xl-6">
+            <app-card-prestamos
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior"
+            concepto = "plan_piso"
+            ></app-card-prestamos>
+    </div>
+</div>
+
+<div class="row" *ngIf="!isLoad">
+    <div class="col-xl-6">
         <app-grafica-barras-totales 
             [dataMes]="dataMesActual" 
             [dataMesAnterior]="dataMesAnterior" 
@@ -180,34 +197,6 @@
             [totalAnio]="dataTotalAnio"
             [totalAnioAnt]="dataTotalAnioAnt"
         ></app-grafica-barras-totales>
-    </div>
-    <div class="col-xl-6">
-        <div class="row">
-            <app-card-prestamos
-            concepto = "nrf"
-            [dataMes]="dataMesActual" 
-            [dataMesAnterior]="dataMesAnterior"
-            ></app-card-prestamos>
-        </div>
-        <div class="row">
-            <app-card-prestamos
-            [dataMes]="dataMesActual" 
-            [dataMesAnterior]="dataMesAnterior"
-            concepto = "plan_piso"
-            ></app-card-prestamos>
-        </div>
-    </div>
-</div>
-
-<div class="row" *ngIf="!isLoad">
-    <div class="col-xl-6">
-        <app-stack-grafica
-            [dataMes]="dataMesActual" 
-            [dataMesAnterior]="dataMesAnterior" 
-            concepto="antiguedad_inventatios"
-            [totalAnio]="dataTotalAnio"
-            [totalAnioAnt]="dataTotalAnioAnt"
-        ></app-stack-grafica>
     </div>
     <div class="col-xl-6">
         <app-grafica-donut
@@ -218,4 +207,29 @@
             [totalAnioAnt]="dataTotalAnioAnt"
         ></app-grafica-donut>
     </div>
+</div>
+
+<div class="row" *ngIf="!isLoad">
+    <div class="col-xl-6">
+        <app-stack-grafica
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            [dataAntInventario] = "dataAntInventario"
+            concepto="ant_inv_nuevo"
+            [totalAnio]="dataTotalAnio"
+            [totalAnioAnt]="dataTotalAnioAnt"
+        ></app-stack-grafica>
+    </div>
+    <div class="col-xl-6">
+        <app-stack-grafica
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            [dataAntInventario] = "dataAntInventario"
+            concepto="ant_inv_semi"
+            [totalAnio]="dataTotalAnio"
+            [totalAnioAnt]="dataTotalAnioAnt"
+        ></app-stack-grafica>
+    </div>
+
+    
 </div>

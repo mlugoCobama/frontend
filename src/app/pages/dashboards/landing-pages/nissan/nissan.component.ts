@@ -22,6 +22,8 @@ export class NissanComponent implements OnInit {
 
   public dataMesAnioAnterior: any;
 
+  public dataAntInventario: any;
+
   public dataTotalAnio: any;
 
   public dataTotalAnioAnt: any;
@@ -71,6 +73,8 @@ export class NissanComponent implements OnInit {
           this.dataMesAnioAnterior = data.data["anioAnt"];
           this.dataTotalAnio = data.data["totalAnio"];
           this.dataTotalAnioAnt = data.data["totalAnioAnt"];
+          this.dataAntInventario = data.data["antInventarios"];
+          console.log(this.dataAntInventario);
           this.isLoad = false;
           this.localStorage.setItem("DataEnergeticos", data.data);
           this.alertService.alertError(data.message, data.success);

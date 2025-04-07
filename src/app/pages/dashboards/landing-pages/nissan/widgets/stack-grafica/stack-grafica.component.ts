@@ -4,6 +4,7 @@ import ApexCharts from "apexcharts";
 import { ResponseEnergeticosGaseras } from "src/app/core/models/dashboard/energeticos-gaseras";
 import { AlertErrorService } from "src/app/core/services/alert-error.service";
 import { EnergeticosGaserasService } from "src/app/core/services/dashboard/energeticos-gaseras.service";
+import dataMeses from "src/environments/meses.json";
 
 @Component({
   selector: 'app-stack-grafica',
@@ -19,7 +20,7 @@ export class StackGraficaComponent implements AfterViewInit {
   @Input() totalAnio: string;
   @Input() totalAnioAnt: string;
   @Input() color: string;
-
+  @Input() dataAntInventario: any;
   public title: string;
 
   public money: string = "";
@@ -28,6 +29,7 @@ export class StackGraficaComponent implements AfterViewInit {
   public totalMes: number = 0;
   public totalMesAnt: number = 0;
 
+  
   public diferencia1: number = 0;
   public totalMes1: number = 0;
   public totalMesAnt1: number = 0;
@@ -36,6 +38,7 @@ export class StackGraficaComponent implements AfterViewInit {
   private dataSerie1: number[] = [];
 
   public conceptos:string[] = [];
+  public meses = dataMeses;
 
   public options = {
     series: [{
@@ -116,23 +119,25 @@ export class StackGraficaComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.setTitle();
+    this.generarSeriesStack();
     const filaTotales = this.dataMesAnterior.find((registro) => registro.estacion === "Total");
     console.log(filaTotales)
-    this.options.series = 
-      [{
-        name: '101-200',
-        data: [Number(filaTotales['inv_nuevo_101']), Number(filaTotales['inv_semi_101'])]
-      }, {
-        name: '201-300',
-        data: [Number(filaTotales['inv_nuevo_201']), Number(filaTotales['inv_semi_201'])]
-      }, {
-        name: '301-400',
-        data: [Number(filaTotales['inv_nuevo_301']), Number(filaTotales['inv_semi_301'])]
-      }, {
-        name: '401 y Mas',
-        data: [Number(filaTotales['inv_nuevo_401']), Number(filaTotales['inv_semi_401'])]
-      }]
-       console.log(this.options.series);
+    this.options.series = this.generarSeriesStack();
+    this.options.xaxis.categories =  this.generarCategories();
+      // [{
+      //   name: '101-200',
+      //   data: [Number(filaTotales['inv_nuevo_101']), Number(filaTotales['inv_semi_101'])]
+      // }, {
+      //   name: '201-300',
+      //   data: [Number(filaTotales['inv_nuevo_201']), Number(filaTotales['inv_semi_201'])]
+      // }, {
+      //   name: '301-400',
+      //   data: [Number(filaTotales['inv_nuevo_301']), Number(filaTotales['inv_semi_301'])]
+      // }, {
+      //   name: '401 y Mas',
+      //   data: [Number(filaTotales['inv_nuevo_401']), Number(filaTotales['inv_semi_401'])]
+      // }]
+      //  console.log(this.options.series);
     
     this.generarSeriesStack();
     var chart = new ApexCharts(
@@ -144,18 +149,62 @@ export class StackGraficaComponent implements AfterViewInit {
 
   private setTitle() {
     switch (this.concepto) {
-      case "antiguedad_inventatios":
-        this.title = "Antigüedad Inventarios";
+      case "ant_inv_nuevo":
+        this.title = "Antigüedad Inventarios Nuevos";
+        this.concepto2 = "nuevo"
+        break;
+      case "ant_inv_semi":
+        this.title = "Antigüedad Inventarios Seminuevos";
+        this.concepto2 = "semi"
         break;
       default:
+        this.title = "Antigüedad A 6 Meses";
         break;
     }
   }
 
   public generarSeriesStack(){
-    this.conceptos.forEach(concepto => {
-
+    let series = [
+      {
+        name: '101-200',
+        data:[]
+      },
+      {
+        name: '201-300',
+        data:[]
+      },
+      {
+        name: '301-400',
+        data:[]
+      },
+      {
+        name: '400 y mas',
+        data:[]
+      }
+    ]
+    this.dataAntInventario.forEach(row => {
+      series[0].data.push(row[`inv_${this.concepto2}_101`]);
+      series[1].data.push(row[`inv_${this.concepto2}_201`]);
+      series[2].data.push(row[`inv_${this.concepto2}_301`]);
+      series[3].data.push(row[`inv_${this.concepto2}_401`]);
     });
+
+    return series;
+  }
+
+  public generarCategories(){
+    let categorias = [];
+    let fecha : any;
+    let mes: any;
+    let anio: any;
+    this.dataAntInventario.forEach(row => {
+      fecha =row['fecha'].split('-');
+      mes = this.meses[fecha[1]-1].nombre.toUpperCase();
+      anio = fecha[0]
+      categorias.push(`${mes} de ${anio}`);
+    });
+
+    return categorias;
   }
 
   private setDataSerie() {
