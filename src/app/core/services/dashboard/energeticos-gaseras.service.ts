@@ -31,23 +31,8 @@ export class EnergeticosGaserasService {
    * 2 = gasolinerias
    * @param id_subdivision integer
    */
-  public getAnual(
-    id_subdivision: number,
-    mes: any,
-    anio: any,
-    titular: any
-  ): Observable<ResponseEnergeticosGaseras> {
-    return this.http.get<ResponseEnergeticosGaseras>(
-      environment.apiUrl +
-        "energeticos/" +
-        id_subdivision +
-        "/" +
-        mes +
-        "/" +
-        anio +
-        "/" +
-        titular
-    );
+  public getAnual(id_subdivision: number, mes: any, anio: any, titular: any): Observable<ResponseEnergeticosGaseras> {
+    return this.http.get<ResponseEnergeticosGaseras>(environment.apiUrl +"energeticos/" +id_subdivision +"/" +mes +"/" +anio +"/" +titular);
   }
 
   public getAnualSubDivision(
@@ -77,7 +62,7 @@ export class EnergeticosGaserasService {
     return this.http.post(environment.apiUrl + "dashboard/gasolinerias", data);
   }
 
-  /**14/03/2025
+  /**
    *  Ejecuta la función que actualiza contenidos en base 
    *  a la actualización de la data
    */

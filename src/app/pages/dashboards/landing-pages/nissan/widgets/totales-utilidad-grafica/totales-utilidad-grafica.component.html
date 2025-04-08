@@ -1,0 +1,49 @@
+<div class="card">
+    <div class="card-body">
+        <h5 class="text-muted mb-4"> <i class="mdi mdi-cash h2 text-warning align-middle mb-0 me-1"></i> {{title}}</h5>
+        <div class="row">
+            <div class="col-6 text-center">
+                <div class="text-muted"> 
+                    <p > <strong>Vendidas</strong></p>
+                    <p class=" p-0">Este mes:</p>
+                    <h5>{{ totalMes[concepto] | number }} </h5>
+
+                    <ng-container *ngIf="diferencia > 0; else elseTemplate">
+                        <p class="text-truncate mb-0 text-success"> 
+                             {{ diferencia | number }} 
+                            <i class="mdi mdi-arrow-up ms-1 text-success"></i>
+                        </p>
+                    </ng-container>
+                    <ng-template #elseTemplate>
+                        <p class="text-truncate mb-0 text-danger"> 
+                             {{ diferencia | number }} 
+                            <i class="mdi mdi-arrow-down ms-1 text-danger"></i>
+                        </p>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="col-6 text-center">
+                <div class="text-muted">
+                    <p> <strong> Utilidad bruta </strong> </p>
+                    <p class=" p-0">Este mes:</p>
+                    <h5> {{money}} {{ totalMes[concepto2] | number }} </h5>
+                    <ng-container *ngIf="diferencia > 0; else elseTemplate1">
+                        <p class="text-truncate mb-0 text-success"> 
+                            {{money}} {{ diferencia1 | number }} 
+                            <i class="mdi mdi-arrow-up ms-1 text-success"></i>
+                        </p>
+                    </ng-container>
+                    <ng-template #elseTemplate1>
+                        <p class="text-truncate mb-0 text-danger"> 
+                            {{money}} {{ diferencia1 | number }} 
+                            <i class="mdi mdi-arrow-down ms-1 text-danger"></i>
+                        </p>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="col-12">
+                <div id="chart_{{concepto}}"></div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -28,7 +28,7 @@ export class PorcentajesGraficasComponent implements OnInit {
   public options = {
     series: [],
     chart: {
-      width: '100%',
+      width: '500',
       type: "pie"
     },
     labels: [],
@@ -65,7 +65,7 @@ export class PorcentajesGraficasComponent implements OnInit {
     this.dataEnergeticos = this.localStorage.getItem('DataEnergeticos');
     if(this.dataEnergeticos.mes.length > 1){
     this.generarLabels();
-    this.generarSerie()
+    this.generarSerie();
     this.options.series = this.serie;
     this.options.labels = this.labels;
     
@@ -103,6 +103,7 @@ export class PorcentajesGraficasComponent implements OnInit {
       } 
     }
     this.serie = data;
+    console.log(this.serie);
   }
 
   //Manejo de valores negativos

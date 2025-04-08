@@ -1,1 +1,235 @@
-<p>nissan works!</p>
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">{{nombreMes}} {{anioActual}}</h4>
+            <div class="page-title-right ">
+                <ol class="breadcrumb m-0 ">
+                    <ng-container>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Landing Page</a>
+                        </li>
+                        <li class="breadcrumb-item active">Nissan {{nombreMes}} {{anioActual}} </li>
+                    </ng-container>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center" *ngIf="isLoad">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+<!-- Unidades vendidas  -->
+<div class="row" *ngIf="!isLoad">
+    <div class="col-xl-12">
+        <div class="row">
+            <div class="col-sm-4">
+                <app-totales-utilidad-grafica
+                    [dataMes]="dataMesActual" 
+                    [dataMesAnterior]="dataMesAnterior"
+                    tipo = "gasolinerias-detalle"
+                    color = "#FB4141"
+                    concepto="nuevos"
+                    [totalAnio]="dataTotalAnio"
+                    [totalAnioAnt]="dataTotalAnioAnt"
+                ></app-totales-utilidad-grafica>
+            </div>
+            <div class="col-sm-4">
+                <app-totales-utilidad-grafica
+                    [dataMes]="dataMesActual" 
+                    [dataMesAnterior]="dataMesAnterior"
+                    tipo = "gasolinerias-detalle"
+                    color = "#FB4141"
+                    concepto="seminuevos"
+                    [totalAnio]="dataTotalAnio"
+                    [totalAnioAnt]="dataTotalAnioAnt"
+                ></app-totales-utilidad-grafica>
+            </div>
+            <div class="col-sm-4">
+                <app-totales-utilidad-grafica
+                    [dataMes]="dataMesActual" 
+                    [dataMesAnterior]="dataMesAnterior"
+                    tipo = "gasolinerias-detalle"
+                    color = "#FB4141"
+                    concepto="flotillas"
+                    [totalAnio]="dataTotalAnio"
+                    [totalAnioAnt]="dataTotalAnioAnt"
+                ></app-totales-utilidad-grafica>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Ordenes de servicio -->
+<div class="row" *ngIf="!isLoad">
+    <div class="col-xl-12">
+        <div class="row">
+            <div class="col-sm-6">
+                <app-totales-utilidad-grafica
+                    [dataMes]="dataMesActual" 
+                    [dataMesAnterior]="dataMesAnterior"
+                    tipo = "gasolinerias-detalle"
+                    color = "#FB4141"
+                    concepto="servicio"
+                    [totalAnio]="dataTotalAnio"
+                    [totalAnioAnt]="dataTotalAnioAnt"
+                ></app-totales-utilidad-grafica>
+            </div>
+            <div class="col-sm-6">
+                <app-totales-utilidad-grafica
+                    [dataMes]="dataMesActual" 
+                    [dataMesAnterior]="dataMesAnterior"
+                    tipo = "gasolinerias-detalle"
+                    color = "#FB4141"
+                    concepto="hyp"
+                    [totalAnio]="dataTotalAnio"
+                    [totalAnioAnt]="dataTotalAnioAnt"
+                ></app-totales-utilidad-grafica>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Ventas de post venta, Inventarios -->
+<div class="row" *ngIf="!isLoad">
+    <div class="col-xl-6">
+        <app-totales-porcentaje-grafica 
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            concepto="total_ventas_ref"
+            [totalAnio]="dataTotalAnio"
+            [totalAnioAnt]="dataTotalAnioAnt"
+        ></app-totales-porcentaje-grafica>
+    </div>
+    <div class="col-xl-6">
+        <app-totales-porcentaje-grafica 
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            concepto="inventarios"
+            [totalAnio]="dataTotalAnio"
+            [totalAnioAnt]="dataTotalAnioAnt"
+        ></app-totales-porcentaje-grafica>
+    </div>
+</div>
+
+<div class="row" *ngIf="!isLoad">
+    
+    <div class="col-xl-6">
+        <app-totales-porcentaje-grafica
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            color = "#FB4141"
+            concepto="personal"
+            [totalAnio]="dataTotalAnio"
+            [totalAnioAnt]="dataTotalAnioAnt"
+        ></app-totales-porcentaje-grafica>
+    </div>
+    <div class="col-xl-6">
+        <app-grafica-donut 
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            color = "#FB4141"
+            concepto="gasto"
+            [totalAnio]="dataTotalAnio"
+            [totalAnioAnt]="dataTotalAnioAnt"
+        ></app-grafica-donut>
+    </div>
+</div>
+
+<div class="row" *ngIf="!isLoad">
+    <div class="col-xl-12">
+        <app-totales-grafica 
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            color = "#FB4141"
+            concepto="uno"
+            [totalAnio]="dataTotalAnio"
+            [totalAnioAnt]="dataTotalAnioAnt"
+        ></app-totales-grafica>
+    </div>
+</div>
+
+<div class="row" *ngIf="!isLoad">
+    <div class="col-xl-6">
+        <app-totales-porcentaje-grafica 
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            concepto="utilidad_area"
+            [totalAnio]="dataTotalAnio"
+            [totalAnioAnt]="dataTotalAnioAnt"
+        ></app-totales-porcentaje-grafica>
+    </div>
+    <div class="col-xl-6">
+        <app-barras-horizontales-metas 
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            concepto="objetivos"
+            [totalAnio]="dataTotalAnio"
+            [totalAnioAnt]="dataTotalAnioAnt"
+        ></app-barras-horizontales-metas>
+    </div>
+</div>
+
+<div class="row" *ngIf="!isLoad">
+    <div class="col-xl-6">
+        <app-card-prestamos
+            concepto = "nrf"
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior"
+            ></app-card-prestamos>
+    </div>
+    <div class="col-xl-6">
+            <app-card-prestamos
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior"
+            concepto = "plan_piso"
+            ></app-card-prestamos>
+    </div>
+</div>
+
+<div class="row" *ngIf="!isLoad">
+    <div class="col-xl-6">
+        <app-grafica-barras-totales 
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            concepto="costos_financieros"
+            [totalAnio]="dataTotalAnio"
+            [totalAnioAnt]="dataTotalAnioAnt"
+        ></app-grafica-barras-totales>
+    </div>
+    <div class="col-xl-6">
+        <app-grafica-donut
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            concepto="bono_marca"
+            [totalAnio]="dataTotalAnio"
+            [totalAnioAnt]="dataTotalAnioAnt"
+        ></app-grafica-donut>
+    </div>
+</div>
+
+<div class="row" *ngIf="!isLoad">
+    <div class="col-xl-6">
+        <app-stack-grafica
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            [dataAntInventario] = "dataAntInventario"
+            concepto="ant_inv_nuevo"
+            [totalAnio]="dataTotalAnio"
+            [totalAnioAnt]="dataTotalAnioAnt"
+        ></app-stack-grafica>
+    </div>
+    <div class="col-xl-6">
+        <app-stack-grafica
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            [dataAntInventario] = "dataAntInventario"
+            concepto="ant_inv_semi"
+            [totalAnio]="dataTotalAnio"
+            [totalAnioAnt]="dataTotalAnioAnt"
+        ></app-stack-grafica>
+    </div>
+
+    
+</div>

@@ -142,6 +142,31 @@ export const MENU: MenuItem[] = [
           parentId: 1
         },
         {
+          id: 4,
+          label: 'Gaseras',
+          link: '/dashboard/landing-page/energeticos',
+          parentId: 1
+        },
+        
+        {
+          id: 5,
+          label: 'Gasolinerias',
+          link: '/dashboard/landing-page/gasolinerias',
+          parentId: 1
+        },
+        {
+          id: 6,
+          label: 'Nissan',
+          link: '/dashboard/landing-page/nissan',
+          parentId: 1
+        },
+        {
+          id: 7,
+          label: 'Renault',
+          link: '/dashboard/landing-page/reanult',
+          parentId: 1
+        },
+        {
           id: 3,
           label: 'Captura',
           parentId: 1,
@@ -168,31 +193,6 @@ export const MENU: MenuItem[] = [
               id: 38,
               label: 'Captura Renault',
               link: '/dashboard/captura/agencias-renault',
-              parentId: 34
-            },
-          ]
-        },
-        {
-          id: 3,
-          label: 'Landing Page',
-          parentId: 1,
-          subItems: [
-            {
-              id: 35,
-              label: 'Energeticos',
-              link: '/dashboard/landing-page/energeticos',
-              parentId: 34
-            },
-            {
-              id: 36,
-              label: 'Captura Gasolinerias',
-              link: '/dashboard/captura/gasolinerias',
-              parentId: 34
-            },
-            {
-              id: 37,
-              label: 'Gasolinerias',
-              link: '/dashboard/landing-page/gasolinerias',
               parentId: 34
             },
           ]
