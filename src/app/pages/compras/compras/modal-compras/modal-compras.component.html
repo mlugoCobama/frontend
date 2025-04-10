@@ -2,76 +2,43 @@
   <h5 class="modal-title" id="exampleModalLabel">
     Nueva Requisición de Compra
   </h5>
-  <button
-    type="button"
-    class="btn-close"
-    data-bs-dismiss="modal"
-    aria-label="Close"
-    id="close-modal"
-    (click)="modalRef?.hide()"
-  ></button>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef?.hide()"></button>
 </div>
 <div class="modal-body">
   <form class="row g-2" [formGroup]="formSolicitudCompra">
     <div class="col-md-6">
-      <label for="usuario" class="form-label form-label-sm"
-        >Empresa: *</label
-      >
+      <label for="usuario" class="form-label form-label-sm">Empresa: *</label>
       
       <select
       *ngIf = "usuarioActivo.claveEmpresa === 333 ; else nombreEmpresa"
-        class="form-select form-select-sm"
-        aria-label="Default select example"
-        formControlName="usuario"
-        id="usuario"
-        name="usuario"
-        aria-label="usuario"
-      >
-        <option value="1">Selecciona uno</option>
-        <option value="1">Empresa 1</option>
-        <option value="2">Empresa 2</option>
-        <option value="3">Empresa 3</option>
+        class="form-select form-select-sm" aria-label="Default select example" formControlName="usuario" id="usuario"
+        name="usuario" aria-label="usuario"(change)="getUsuarios($event.target.value)">
+        <option value="" selected>Selecciona uno</option>
+        <option *ngIf = "isLoading" value="" [disabled] = "isLoading"> Cargando opciones espera...</option>
+        <option  *ngFor="let item of empresas" [value]="item.intercompania ">
+          {{ item.name }}
+        </option>
       </select>
-      <div
-        *ngIf="
-          solicitudCompraFormControl.usuario.touched ||
-          submitted ||
-          solicitudCompraFormControl.usuario.value === 'Selecciona uno'
-        "
-      >
-        <div
-          class="text-danger form-text"
-          *ngIf="solicitudCompraFormControl.usuario.errors?.['required']"
-        >
-          usuario es requerido.
+      <div *ngIf="solicitudCompraFormControl.usuario.touched || submitted || solicitudCompraFormControl.usuario.value === 'Selecciona uno'">
+        <div class="text-danger form-text" *ngIf="solicitudCompraFormControl.usuario.errors?.['required']">
+          Debes de seleccionar una empresa.
         </div>
       </div>
     </div>
 
     <div class="col-md-6">
       <label for="usuario_destino" class="form-label">Usuarios: *</label>
-      <select
-        class="form-select form-select-sm"
-        aria-label="Default select example"
-        formControlName="usuario_destino"
-        id="usuario_destino"
-        name="usuario_destino"
-        aria-label="usuario_destino"
-      >
-        <option selected>Selecciona uno</option>
-        <option value="1">Usuario 1</option>
-        <option value="2">Usuario 2</option>
-        <option value="3">Usuario 3</option>
+      <select class="form-select form-select-sm" aria-label="Default select example" formControlName="usuario_destino" id="usuario_destino" 
+      name="usuario_destino" aria-label="usuario_destino">
+        <option value="" selected>Selecciona uno</option>
+        <option *ngIf = "!isLoad" value="" [disabled] = "!isLoad"> Cargando opciones espera...</option>
+        <option [disabled] = "disabled" *ngFor="let item of usuarios" [value]="item.id ">
+          {{ item.firstname }} {{ item.realname }} <span>  ({{item.puesto}})</span>
+        </option>
       </select>
-      <div
-        *ngIf="
-          solicitudCompraFormControl.usuario_destino.touched || submitted
-        "
-      >
+      <div *ngIf="solicitudCompraFormControl.usuario_destino.touched || submitted">
         <div
-          class="text-danger form-text"
-          *ngIf="solicitudCompraFormControl.usuario_destino.errors?.['required']"
-        >
+          class="text-danger form-text" *ngIf="solicitudCompraFormControl.usuario_destino.errors?.['required']">
           Usuarios es requerido.
         </div>
       </div>
@@ -79,16 +46,7 @@
 
     <div class="col-md-12">
       <label for="motivo" class="form-label">Motivo de la compra: *</label>
-      <textarea
-        [(ngModel)] = "text"
-        [maxlength] = "longitudMaxima"
-        (input) = "contarCaracteres()"
-
-        class="form-control"
-        formControlName="motivo"
-        id="motivo"
-        name="motivo"
-        rows="3"
+      <textarea [(ngModel)] = "text" [maxlength] = "longitudMaxima" (input) = "contarCaracteres()" class="form-control" formControlName="motivo" id="motivo" name="motivo" rows="3"
       ></textarea>
 
       <p [class] = "caracteresRestantes === 0 ? 'text-danger form-text' : 'form-text'">
@@ -96,9 +54,7 @@
       </p>
       <div *ngIf="solicitudCompraFormControl.motivo.touched || submitted">
         <div
-          class="text-danger form-text"
-          *ngIf="solicitudCompraFormControl.motivo.errors?.['required']"
-        >
+          class="text-danger form-text" *ngIf="solicitudCompraFormControl.motivo.errors?.['required']">
           motivo es requerido.
         </div>
       </div>
@@ -113,148 +69,76 @@
         <label class="sr-only" for="inlineFormInputName">cantidad</label>
         <input
           min="1"
-          type="number"
-          formControlName="cantidad"
-          id="cantidad"
-          name="cantidad"
-          aria-label="cantidad"
-          class="form-control form-control-sm"
-          size="4"
-          placeholder="Cantidad"
-        />
+          type="number" formControlName="cantidad" id="cantidad" name="cantidad"
+          aria-label="cantidad" class="form-control form-control-sm" size="4" placeholder="Cantidad"/>
         <div
-          *ngIf="
-            detalleSolicitudFormControl.cantidad.touched || submittedDetail
-          "
-        >
-          <div
-            class="text-danger form-text"
-            *ngIf="detalleSolicitudFormControl.cantidad.errors?.['required']"
-          >
+          *ngIf="detalleSolicitudFormControl.cantidad.touched || submittedDetail">
+          <div class="text-danger form-text" *ngIf="detalleSolicitudFormControl.cantidad.errors?.['required']">
             Cantidad es requerido.
           </div>
         </div>
       </div>
       <div class="col-sm-2 my-1">
-        <select
-          class="form-select form-select-sm"
-          type="text"
-          formControlName="cat_unidades_medida_id"
-          #selectElement
-          (change)="onChange(selectElement)"
-          id="cat_unidades_medida_id"
-          name="cat_unidades_medida_id"
-          aria-label="cat_unidades_medida_id"
-        >
+        <select class="form-select form-select-sm" type="text" formControlName="cat_unidades_medida_id" #selectElement 
+        (change)="onChange(selectElement)" id="cat_unidades_medida_id" name="cat_unidades_medida_id" aria-label="cat_unidades_medida_id">
           <option selected>Selecciona una unidad</option>
           <option *ngFor="let item of unidades" value="{{ item.id }}">
             {{ item.nombre }} ({{ item.abreviatura }})
           </option>
         </select>
         <div
-          *ngIf="
-            detalleSolicitudFormControl.cat_unidades_medida_id.touched ||
-            submittedDetail
-          "
-        >
+          *ngIf="detalleSolicitudFormControl.cat_unidades_medida_id.touched || submittedDetail">
           <div
-            class="text-danger form-text"
-            *ngIf="detalleSolicitudFormControl.cat_unidades_medida_id.errors?.['required']"
-          >
+            class="text-danger form-text" *ngIf="detalleSolicitudFormControl.cat_unidades_medida_id.errors?.['required']">
             Unidad es requerido.
           </div>
         </div>
       </div>
       <div class="col-sm-4 my-1">
-        <input
-          type="text"
-          formControlName="descripcion"
-          id="descripcion"
-          name="descripcion"
-          aria-label="descripcion"
-          class="form-control form-control-sm"
-          maxlength="100"
-          placeholder="Descripción"
-        />
+        <input type="text" formControlName="descripcion" id="descripcion" name="descripcion" aria-label="descripcion" 
+        class="form-control form-control-sm" maxlength="100"placeholder="Descripción"/>
         <div
-          *ngIf="detalleSolicitudFormControl.descripcion.touched || submittedDetail"
-        >
+          *ngIf="detalleSolicitudFormControl.descripcion.touched || submittedDetail">
           <div
-            class="text-danger form-text"
-            *ngIf="detalleSolicitudFormControl.descripcion.errors?.['required']"
-          >
+            class="text-danger form-text" *ngIf="detalleSolicitudFormControl.descripcion.errors?.['required']">
             Descripción es requerido.
           </div>
-          <div
-            class="text-danger form-text"
-            *ngIf="detalleSolicitudFormControl.descripcion.errors?.['maxLength']"
-          >
+          <div class="text-danger form-text" *ngIf="detalleSolicitudFormControl.descripcion.errors?.['maxLength']">
             El texto excede la longitud maxima (100).
           </div>
         </div>
       </div>
       <div class="col-sm-4 my-1">
-        <input
-          type="text"
-          formControlName="observaciones"
-          id="observaciones"
-          name="observaciones"
-          aria-label="observaciones"
-          class="form-control form-control-sm"
-          maxlength="45"
-          placeholder="Observaciones"
-        />
+        <input type="text" formControlName="observaciones" id="observaciones" name="observaciones" aria-label="observaciones" 
+        class="form-control form-control-sm" maxlength="45" placeholder="Observaciones"/>
         <div
-          *ngIf="detalleSolicitudFormControl.observaciones.touched || submittedDetail"
-        >
+          *ngIf="detalleSolicitudFormControl.observaciones.touched || submittedDetail">
           <div
             class="text-danger form-text"
-            *ngIf="detalleSolicitudFormControl.observaciones.errors?.['required']"
-          >
+            *ngIf="detalleSolicitudFormControl.observaciones.errors?.['required']">
             Observaciones es requerido.
           </div>
           <div
             class="text-danger form-text"
-            *ngIf="detalleSolicitudFormControl.observaciones.errors?.['maxLength']"
-          >
+            *ngIf="detalleSolicitudFormControl.observaciones.errors?.['maxLength']">
             El texto excede la longitud maxima (45).
           </div>
         </div>
       </div>
 
       <div class="col-sm-10 my-1">
-        <label for="img_referencia" class="form-label"
-          >Referencia fotografica:
-        </label>
-        <input
-          type="file"
-          accept=".jpg, .png"
-          id="img_referencia"
-          name="img_referencia"
-          aria-label="img_referencia"
-          class="form-control form-control-sm"
-          (change)="onFileChange($event, 'img_referencia')"
-          formControlName="img_referencia"
-        />
+        <label for="img_referencia" class="form-label">Referencia fotografica: </label>
+        <input type="file" accept=".jpg, .png" id="img_referencia" name="img_referencia" aria-label="img_referencia" class="form-control form-control-sm" 
+        (change)="onFileChange($event, 'img_referencia')" formControlName="img_referencia"/>
         <div
-          *ngIf="
-            detalleSolicitudFormControl.img_referencia.touched ||
-            submittedDetail
-          "
-        >
-          <div
-            class="text-danger form-text"
-            *ngIf="detalleSolicitudFormControl.img_referencia.errors?.['required']"
-          >
+          *ngIf=" detalleSolicitudFormControl.img_referencia.touched || submittedDetail">
+          <div class="text-danger form-text" *ngIf="detalleSolicitudFormControl.img_referencia.errors?.['required']">
             Imagen de referencia es requerido.
           </div>
         </div>
       </div>
       <div class="col-auto my-1">
-        <button
-          type="submit"
-          class="btn btn-primary btn-sm float-end"
-          (click)="addDetalle()"
+        <button type="submit" class="btn btn-primary btn-sm float-end" (click)="addDetalle()"
         >
         <i class="fas fa-plus"></i>
           Agregar
@@ -284,19 +168,9 @@
         <td>{{ row.cat_unidades_medida_id1 }}</td>
         <td>{{ row.descripcion }}</td>
         <td>{{ row.observaciones }}</td>
+        <td><img src="{{ row.img_referencia1 }}" alt="Sin imagen de referencia" width="100"/></td>
         <td>
-          <img
-            src="{{ row.img_referencia1 }}"
-            alt="Sin imagen de referencia"
-            width="100"
-          />
-        </td>
-        <td>
-          <button
-            type="button"
-            class="btn btn-danger btn-sm"
-            (click)="removeDetalle(i)"
-          >
+          <button type="button" class="btn btn-danger btn-sm" (click)="removeDetalle(i)">
             Quitar
           </button>
         </td>
@@ -308,10 +182,7 @@
 </div>
 <div class="modal-footer">
   <button
-    type="button"
-    class="btn btn-secondary btn-sm"
-    data-bs-dismiss="modal"
-    (click)="modalRef?.hide()"
+    type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="modalRef?.hide()"
   >
     Cerrar
   </button>

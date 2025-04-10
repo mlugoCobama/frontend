@@ -7,6 +7,7 @@ import {
 } from "@angular/forms";
 import Swal from "sweetalert2";
 
+
 import { ComprasService } from "src/app/core/services/compras/compras.service";
 import { CotizacionesService } from "src/app/core/services/compras/cotizaciones/cotizaciones.service";
 import { ProveedoresService } from "src/app/core/services/compras/proveedores/proveedores.service";
@@ -93,7 +94,6 @@ export class FormCotizacionComponent implements OnInit {
           this.proveedores.unshift(opcionPredeterminada);
 
           this.isLoad = false;
-          console.table(this.proveedores)
         } else {
           console.log(response.message);
         }
@@ -175,9 +175,12 @@ export class FormCotizacionComponent implements OnInit {
               },
             });
             // this.mostrarCotizacionFlag = false;
+            this.comprasService.cambiarEstadoCotizacion(false);
+            this.comprasService.setMostrarBoton(false);
             this.isLoad = false;
             this.isDisabled = false;
-            this.solicitudCompra.estatus = 2;
+            // this.comprasService.actualizarSolicitud();
+            // this.solicitudCompra.estatus = 2;
             // this.getDetalle();
           } else {
             Swal.fire({

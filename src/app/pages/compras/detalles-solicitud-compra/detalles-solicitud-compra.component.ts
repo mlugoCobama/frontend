@@ -1,17 +1,6 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  ViewChild,
-  AfterViewInit,
-} from "@angular/core";
+import {Component, Input, OnInit, ViewChild, AfterViewInit } from "@angular/core";
 import { TblFlsCotizacionComponent } from "./tbl-fls-cotizacion/tbl-fls-cotizacion.component";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
+import { FormBuilder, FormGroup } from "@angular/forms";
 import Swal from "sweetalert2";
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { Subscription } from "rxjs";
@@ -83,8 +72,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
       this.mostrarCotizacionFlag = mostrar;
     });
 
-    this.generarOrdenSubscripcion =
-      this.comprasService.generateOrder$.subscribe(() => {
+    this.generarOrdenSubscripcion = this.comprasService.generateOrder$.subscribe(() => {
         this.generarOrden();
       });
 
@@ -101,8 +89,8 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     return this.formSeleccionarProveedor.controls;
   }
 
+  //Envía un true al service para mostrar el div
   public mostrarDivCotizaciones() {
-    //Envía un true al service para mostrar el div
     this.comprasService.mostrarCotizacion$.subscribe((mostrar) => {
       this.mostrarCotizacionFlag = mostrar;
     });
@@ -118,8 +106,9 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     this.modalRef = this.modalService.show(content, { class: "modal-sm" });
   }
 
+  //Recupera el detalle y agrega columnas a la tabla
   private getDetalle(): Promise<any> {
-    //Recupera el detalle y agrega columnas a la tabla
+    
     return new Promise((resolve, reject) => {
       this.comprasService.getOne(this.solicitudCompra.id).subscribe(
         (response) => {
@@ -145,6 +134,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     });
   }
 
+  // Recupera los datos cotizacion proveedores
   public getProveedoresCotizacion() {
     this.cotizacionesService.getOne(this.solicitudCompra.id).subscribe(
       (response) => {
@@ -163,6 +153,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     );
   }
 
+  // Calcula los totales de cada cotizacion
   public updateTotals() {
     this.totals = {};
     this.cotProv.forEach((cotizacion) => {
@@ -180,6 +171,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     this.totalMasBajo = this.getTotalMasBajo();
   }
 
+  // Agrega las columna en base al numero de proveedores
   private addProveedorColumns() {
     this.cotProv.forEach((cotizacion) => {
       const proveedorId = cotizacion.proveedores_id[0].id;
@@ -199,6 +191,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     });
   }
 
+  // Guarda los precios capturados dentro de la tabla
   public guardarPrecios() {
     const formData = new FormData();
     let allFilesUploaded = true;
@@ -265,6 +258,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     );
   }
 
+  // Calcula el total mas bajo de la cotizacion
   getTotalMasBajo(): number {
     let tmasBajo = Number.MAX_VALUE;
     for (let prov of this.cotProv) {
@@ -277,59 +271,60 @@ export class DetallesSolicitudCompraComponent implements OnInit {
       return tmasBajo;
     }
   }
-
+  
+  //Genera el pdf de orden de compra
   public generarOrden() {
     this.formOrdenCompra = this.cotizacionesService.getForm();
     this.comprasService.setMostrarBoton(false);
-      const observaciones = this.formOrdenCompra.value.observaciones;
-      const cotizaciones_id = this.proveedorSelec.cotizaciones_id;
-      const cotizacionProveedor = this.proveedorSelec.id;
+    const observaciones = this.formOrdenCompra.value.observaciones;
+    const cotizaciones_id = this.proveedorSelec.cotizaciones_id;
+    const cotizacionProveedor = this.proveedorSelec.id;
 
-      const solicitudCompra = this.solicitudCompra.id;
+    const solicitudCompra = this.solicitudCompra.id;
 
-      const datos = {
-        observaciones: observaciones,
-        cotizaciones_id: cotizaciones_id,
-        id_cotizacion_prov: cotizacionProveedor,
-        id_solicitud_compra: solicitudCompra,
-      };
+    const datos = {
+      observaciones: observaciones,
+      cotizaciones_id: cotizaciones_id,
+      id_cotizacion_prov: cotizacionProveedor,
+      id_solicitud_compra: solicitudCompra,
+    };
 
-      this.ordenesComprasService.save(datos).subscribe(
-        (response) => {
-          if (response.status === "success") {
-            Swal.fire({
-              title: "Guardado",
-              text: "Se generó correctamente la orden de compra",
-              buttonsStyling: false,
-              icon: "success",
-              customClass: {
-                confirmButton: "btn btn-success px-4",
-                cancelButton: "btn btn-ms-2 px-4",
-              },
-            });
-            this.getDetalle();
-            this.solicitudCompra.estatus = 3;
-            this.mostrarObs = false;
-          } else {
-            Swal.fire({
-              title: "Error",
-              text: response.message,
-              buttonsStyling: false,
-              icon: "warning",
-              customClass: {
-                confirmButton: "btn btn-warning px-4",
-                cancelButton: "btn btn-ms-2 px-4",
-              },
-            });
-            console.log(response.message);
-          }
-        },
-        (error) => {
-          console.error("Error enviando datos:", error);
+    this.ordenesComprasService.save(datos).subscribe(
+      (response) => {
+        if (response.status === "success") {
+          Swal.fire({
+            title: "Guardado",
+            text: "Se generó correctamente la orden de compra",
+            buttonsStyling: false,
+            icon: "success",
+            customClass: {
+              confirmButton: "btn btn-success px-4",
+              cancelButton: "btn btn-ms-2 px-4",
+            },
+          });
+          this.getDetalle();
+          this.solicitudCompra.estatus = 3;
+          this.mostrarObs = false;
+        } else {
+          Swal.fire({
+            title: "Error",
+            text: response.message,
+            buttonsStyling: false,
+            icon: "warning",
+            customClass: {
+              confirmButton: "btn btn-warning px-4",
+              cancelButton: "btn btn-ms-2 px-4",
+            },
+          });
+          console.log(response.message);
         }
-      );
+      },
+      (error) => {
+        console.error("Error enviando datos:", error);
+      }
+    );
 
-      this.submitted = false;
+    this.submitted = false;
   }
   //recupera la cotización seleccionada y muestra el botón de generar orden de compra
   public manejoCheck(prov: any) {
@@ -339,7 +334,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
     this.mostrarObs = true;
   }
 
-
+  // Valida que se ingresen unicamente números al campo
   validateNumberInput(event: any) {
     const inputValue = event.target.value;
     const validNumber = /^[0-9]*\.?[0-9]{0,2}$/.test(inputValue);

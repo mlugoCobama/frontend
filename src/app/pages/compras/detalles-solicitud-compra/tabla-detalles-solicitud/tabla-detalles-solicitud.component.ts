@@ -8,7 +8,7 @@ import { CotizacionesService } from "src/app/core/services/compras/cotizaciones/
   templateUrl: './tabla-detalles-solicitud.component.html',
   styleUrls: ['./tabla-detalles-solicitud.component.css']
 })
-export class TablaDetallesSolicitudComponent implements OnInit, OnChanges {
+export class TablaDetallesSolicitudComponent implements OnInit{
  @Input() solicitudCompra: any;
  @Input() detalles:any[] = [];
  @Input() cotProv:any[] = [];
@@ -30,12 +30,6 @@ constructor(
 
   public ngOnInit(): void {
 
-  }
-
-  ngOnChanges(changes: SimpleChanges) {   
-      console.count()
-      console.log(changes.detalles) 
-      console.log(changes.cotProv)      
   }
 
   actualizarPrecios(){

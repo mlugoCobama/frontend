@@ -40,21 +40,15 @@
                 >Volver</a
               >
               <a
-                *ngIf="
-                  status === 1 && !comprasService.mostrarCotizacionSource.value
-                "
+                *ngIf="status === 1 && !comprasService.mostrarCotizacionSource.value"
                 href="javascript:void(0);"
                 class="btn btn-info btn-sm"
                 (click)="mostrarCotizacion()"
                 >Cotizar</a
               >
               <a
-                *ngIf="
-                  status >= 2 &&
-                  status != 5 &&
-                  status != 8 &&
-                  !comprasService.mostrarCotizacionSource.value
-                "
+                *ngIf="status >= 2 && status != 5 && status != 8 &&
+                  !comprasService.mostrarCotizacionSource.value"
                 href="javascript:void(0);"
                 class="btn btn-danger btn-sm"
                 (click)="cancelarSolicitud()"
@@ -92,18 +86,14 @@
                     (dblclick)="openDetallesSolicitud(item, $event)"
                   >
                     <td>{{ item.folio }}</td>
-                    <td>CAS</td>
-                    <td>{{ item.usuario_solicita }}</td>
-                    <td>{{ item.usuario_destino }}</td>
+                    <td>{{ item.empresa || 'CAS'}}</td>
+                    <td>{{ item.usuario_solicita}}</td>
+                    <td>{{ item.usuario_destino}}</td>
                     <td>{{ item.fecha | date:'dd/MM/yyyy h:mm a' }}</td>
                     <td>
                       <div class="text-center">
                         <span
-                          [ngClass]="
-                            'badge rounded-pill font-size-11 ' +
-                            item.claseEstado
-                          "
-                        >
+                          [ngClass]="'badge rounded-pill font-size-11 ' + item.claseEstado">
                           {{ item.estado }}
                         </span>
                       </div>

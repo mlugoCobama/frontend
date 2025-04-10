@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, EventEmitter } from "@angular/core";
-import { environment } from "src/environments/environment";
+import { UsuariosService } from "src/app/core/services/compras/usuarios.service";
+import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
 
 import {
   FormBuilder,
@@ -8,37 +9,43 @@ import {
   Validators,
 } from "@angular/forms";
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
-import { Config } from "datatables.net";
 import Swal from "sweetalert2";
 
 //services
 import { ComprasService } from "src/app/core/services/compras/compras.service";
 import { CatUnidadesMedidasService } from "src/app/core/services/compras/unidadesMedidas/cat-unidades-medidas.service";
+import { first } from "rxjs";
 
 @Component({
   selector: "app-modal-compras",
   templateUrl: "./modal-compras.component.html",
   styleUrls: ["./modal-compras.component.css"],
-  // standalone: true
 })
 export class ModalComprasComponent implements OnInit {
+  public isLoading: boolean = true;
+  public submittedDetail: boolean = false;
   public isLoad: boolean = false;
   public showTable: boolean = false;
+  public submitted: boolean = false;
+  public disabled: boolean = false;
+
   public formSolicitudCompra: FormGroup;
   public formDetalleSolicitud: FormGroup;
 
-  public formData = new FormData();
-
-  public submitted: boolean = false;
-  public submittedDetail: boolean = false;
-
-  text: string = "";
-  longitudMaxima: number = 150;
-  caracteresRestantes: number = this.longitudMaxima;
+  public text: string = "";
+  public longitudMaxima: number = 150;
+  public caracteresRestantes: number = this.longitudMaxima;
 
   public unidades: any;
-  unidad: any;
-  detalles: any;
+  public unidad: any;
+  public detalles: any;
+  public empresas: any;
+  public usuarios: any;
+  public usuarioSolicita: any;
+
+  public event: EventEmitter<any> = new EventEmitter();
+  public tableData: Array<any> = [];
+  public formData = new FormData();
 
   public usuarioActivo = {
     claveEmpresa: 333,
@@ -49,19 +56,93 @@ export class ModalComprasComponent implements OnInit {
   /**
    * variable para regresar el evento
    */
-  public event: EventEmitter<any> = new EventEmitter();
-
   constructor(
     private catUnidadesMedidasService: CatUnidadesMedidasService,
+    private usuariosService: UsuariosService,
     private comprasService: ComprasService,
+    private localStorage: LocalStorageServiceService,
     public formBuilder: FormBuilder,
     public modalRef: BsModalRef
   ) {}
 
   public ngOnInit(): void {
     this.getUnidades();
+    this.getEmpresas();
     this.buildForm();
+    this.getUsuarioActivo();
   }
+
+  //Recupera el catalogo de empresas (Select empresa)
+  public getEmpresas() {
+    this.usuariosService.getEmpresas().subscribe(
+      (response) => {
+        if (response) {
+          this.empresas = response.data;
+          this.isLoading = false;
+        } else {
+          console.log(response.message);
+        }
+      },
+      (error) => {
+        console.error("Error fetching data:", error);
+      }
+    );
+  }
+
+  //Recupera el usuario activo en el local storage
+  public getUsuarioActivo() {
+    const usuarioActivo = this.localStorage.getItem("currentUser");
+    //TODO this.usuariosService.getUserById(usuarioActivo['role']['email']).subscribe(
+    this.usuariosService.getUserById("mlugo@cobama.com.mx").subscribe(
+      (response) => {
+        if (response) {
+          this.usuarioSolicita = response.data;
+        } else {
+          console.log(response.message);
+        }
+      },
+      (error) => {
+        console.error("Error fetching data:", error);
+      }
+    );
+    //TODO this.usuarioSolicita = usuarioActivo;
+  }
+
+  //Recupera los usuarios que pertenecen a las empresas (Select usuario)
+  public getUsuarios(intercompania: any) {
+    console.log(intercompania);
+    this.usuarios = [];
+    this.isLoad = false;
+    this.disabled = false;
+    if(intercompania != ""){
+      this.usuariosService.getUsuariosEmpresas(intercompania).subscribe(
+        (response) => {
+          if (response) {
+            if(response.data.length > 0 ){
+              this.usuarios = response.data;
+              this.isLoad = true;
+            }else{
+              this.usuarios = [{id: 0, firstname: "No hay datos", realname: "",  puesto: '' }]
+              this.isLoad = true;
+              this.disabled =  true;
+            }
+            
+          } else {
+            console.log(response.message);
+          }
+        },
+        (error) => {
+          console.error("Error fetching data:", error);
+        }
+      );
+    }else{
+        this.usuarios = [{id: 0, firstname: " Debes seleccionar una empresa", realname: "",  puesto: '' }]
+        this.isLoad = true;
+        this.disabled =  true;
+    }
+    
+  }
+
   /**
    * Construcción del formulario
    */
@@ -92,18 +173,15 @@ export class ModalComprasComponent implements OnInit {
   /**
    * Funciones form solicitud
    */
-
   get solicitudCompraFormControl() {
     return this.formSolicitudCompra.controls;
   }
 
-  public contarCaracteres() {
-    this.caracteresRestantes = this.longitudMaxima - this.text.length;
-  }
-
+  //Guarda el contenido del la solicitud y detalles
   public save() {
     this.submitted = true;
     this.isLoad = true;
+
     if (this.formSolicitudCompra.invalid) {
       this.isLoad = false;
       Swal.fire({
@@ -119,8 +197,8 @@ export class ModalComprasComponent implements OnInit {
       return;
     }
 
+    // Valido que el usuario ingrese por lo menos un detalle
     if (this.tableData.length === 0) {
-      // Valida que el usuario ingrese por lo menos un detalle
       this.isLoad = false;
       Swal.fire({
         title: "Alerta",
@@ -134,63 +212,66 @@ export class ModalComprasComponent implements OnInit {
       });
       return;
     }
-      const data = {
-        //Datos del form solicitud
-        ...this.formSolicitudCompra.value,
-        usuario_solicita: "1",
-        users_id: "1",
-        detalles: this.tableData,
-      };
-      const formDataToSend = new FormData();
-      formDataToSend.append("data", JSON.stringify(data));
-      this.tableData.forEach((detalle, index) => {
-        //agrega los detalles al form data para enviarlos
-        if (detalle.img_referencia) {
-          formDataToSend.append(
-            `img_referencia_${index}`,
-            detalle.img_referencia
-          );
+
+    const data = {
+      ...this.formSolicitudCompra.value,
+      users_id: "1",
+      usuario_solicita: this.usuarioSolicita[0].id,
+      detalles: this.tableData,
+    };
+
+    const formDataToSend = new FormData();
+    formDataToSend.append("data", JSON.stringify(data));
+
+    //agrega los detalles al form data para enviarlos
+    this.tableData.forEach((detalle, index) => {
+      if (detalle.img_referencia) {
+        formDataToSend.append(`img_referencia_${index}`, detalle.img_referencia);
+      }
+    });
+
+    this.comprasService.save(formDataToSend).subscribe(
+      (response) => {
+        if (response.status === "success") {
+          this.event.emit(true);
+          this.showTable = true;
+          Swal.fire({
+            title: "Guardado",
+            text: "Solicitud registrada correctamente",
+            buttonsStyling: false,
+            icon: "success",
+            customClass: {
+              confirmButton: "btn btn-success px-4",
+              cancelButton: "btn btn- ms-2 px-4",
+            },
+          });
+        } else {
+          Swal.fire({
+            title: "Error",
+            text: "Hubo un error al guardar la solicitud",
+            buttonsStyling: false,
+            icon: "warning",
+            customClass: {
+              confirmButton: "btn btn-warning px-4",
+              cancelButton: "btn btn- ms-2 px-4",
+            },
+          });
+          console.log(response.message);
         }
-      });
-      this.comprasService.save(formDataToSend).subscribe(
-        (response) => {
-          if (response.status === "success") {
-            this.event.emit(true);
-            this.showTable = true;
-            Swal.fire({
-              title: "Guardado",
-              text: "Solicitud registrada correctamente",
-              buttonsStyling: false,
-              icon: "success",
-              customClass: {
-                confirmButton: "btn btn-success px-4",
-                cancelButton: "btn btn- ms-2 px-4",
-              },
-            });
-          } else {
-            Swal.fire({
-              title: "Error",
-              text: "Hubo un error al guardar la solicitud",
-              buttonsStyling: false,
-              icon: "warning",
-              customClass: {
-                confirmButton: "btn btn-warning px-4",
-                cancelButton: "btn btn- ms-2 px-4",
-              },
-            });
-            console.log(response.message);
-          }
-        },
-        (error) => {
-          console.error("Error fetching data:", error);
-        }
-      );
-      this.tableData = [];
-      this.modalRef.hide();
-      this.submitted = false;
-      this.formSolicitudCompra.reset();
+      },
+      (error) => {
+        console.error("Error fetching data:", error);
+      }
+    );
+
+    this.tableData = [];
+    this.modalRef.hide();
+    this.submitted = false;
+    this.formSolicitudCompra.reset();
+
   }
 
+  // cierra la ventana modal
   public cerrarModal(): void {
     this.modalRef.hide();
   }
@@ -202,15 +283,15 @@ export class ModalComprasComponent implements OnInit {
     return this.formDetalleSolicitud.controls;
   }
 
+  // metodo que obtiene el texto del select unidad
   public onChange(selectElement: any) {
-    // metodo que obtiene el texto del select unidad
     const selectedText =
       selectElement.options[selectElement.selectedIndex].text;
     this.unidad = selectedText;
   }
 
+  // Función que captura el archivo en el input
   onFileChange(event: any, fieldName: string) {
-    // Funcion que captura el archivo en el input
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
       this.formData.append(fieldName, file);
@@ -226,8 +307,8 @@ export class ModalComprasComponent implements OnInit {
     observaciones: "",
     img_referencia: null,
   };
-  tableData: Array<any> = [];
 
+  // Agrega los detalles a el array detalle para después mostrarlo en la tabla
   public addDetalle() {
     if (this.formDetalleSolicitud.invalid) {
       this.submittedDetail = true;
@@ -242,23 +323,33 @@ export class ModalComprasComponent implements OnInit {
     };
 
     if (this.formData.has("img_referencia")) {
-      newDetalle.img_referencia1 = URL.createObjectURL(
-        this.formData.get("img_referencia") as Blob
-      );
+      newDetalle.img_referencia1 = URL.createObjectURL(this.formData.get("img_referencia") as Blob);
     }
+    
     if (this.formData.has("img_referencia")) {
       newDetalle.img_referencia = this.formData.get("img_referencia") as File;
     }
+
     this.tableData.push(newDetalle);
+
     this.formDetalleSolicitud.reset();
+
     this.formData.delete("img_referencia");
+
     this.submittedDetail = false;
   }
 
+  //elimina el detalle del array detalles
   public removeDetalle(index: number) {
     this.tableData.splice(index, 1);
   }
 
+  // Cuenta los caracteres restantes de text area motivo
+  public contarCaracteres() {
+    this.caracteresRestantes = this.longitudMaxima - this.text.length;
+  }
+
+  //Recupera el catalogo de unidades 
   private getUnidades() {
     this.catUnidadesMedidasService.getAll().subscribe(
       (response) => {

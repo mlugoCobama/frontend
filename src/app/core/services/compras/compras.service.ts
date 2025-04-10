@@ -11,11 +11,13 @@ import { Subject } from "rxjs";
 export class ComprasService {
 
   public mostrarCotizacionSource = new BehaviorSubject<boolean>(false);
+  public actualizarEstatusSource = new Subject<void>();
   private mostrarBotonSource = new BehaviorSubject<boolean>(false);
   private generateOrderSubject = new Subject<void>();
   mostrarCotizacion$ = this.mostrarCotizacionSource.asObservable();
   generateOrder$ = this.generateOrderSubject.asObservable();
   mostrarBoton$ = this.mostrarBotonSource.asObservable();
+  actualizarEstatus$ = this.actualizarEstatusSource.asObservable();
 
   constructor(private http: HttpClient) {}
 
@@ -58,6 +60,10 @@ export class ComprasService {
   //Servicio para mostrar el apartado de cotización
   cambiarEstadoCotizacion(mostrar: boolean) {
     this.mostrarCotizacionSource.next(mostrar);
+  }
+
+  actualizarSolicitud() {
+    this.actualizarEstatusSource.next();
   }
 
   //Ejecuta la función generar orden desde el componente compras

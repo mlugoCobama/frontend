@@ -6,6 +6,7 @@ import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { Config } from "datatables.net";
 import Swal from "sweetalert2";
 
+
 //services
 import { ComprasService } from "src/app/core/services/compras/compras.service";
 import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompra/ordenes-compra.service";
@@ -23,7 +24,7 @@ export class ComprasComponent implements OnInit {
   public showTable: boolean = false;
   public solicitudSelecionada: boolean = false;
   public isLoad: boolean = true;
-  mostrarBoton = false;
+  public mostrarBoton = false;
 
   public solicitudCompra: any; // Objeto que envió al componente detallesSolicitudCompra
   public status: any;
@@ -39,7 +40,6 @@ export class ComprasComponent implements OnInit {
     this.comprasService.mostrarBoton$.subscribe((mostrar) => {
       this.mostrarBoton = mostrar;
     });
-
     this.dtOptions = environment.dataTables;
     this.getAll();
   }
@@ -62,9 +62,7 @@ export class ComprasComponent implements OnInit {
   }
   // Funcion para llenar la vista con el detalle component
   public openDetallesSolicitud(dato: any, evento: any) {
-    
     this.solicitudSelecionada = true;
-    // Verifica si hay un elemento seleccionado (evento del doble click)
     if (evento.currentTarget.classList.contains("table-primary")) {
       evento.currentTarget.classList.remove("table-primary");
       this.solicitudSelecionada = false;
@@ -99,15 +97,15 @@ export class ComprasComponent implements OnInit {
   /**
    * Funciones Botonera
    */
+  // Muestra la vista de la tabla
   public regresar() {
-    // Muestra la vista de la tabla
     this.comprasService.cambiarEstadoCotizacion(false);
     this.solicitudSelecionada = false;
     this.status = 0;
     this.mostrarBoton = false;
     this.getAll();
   }
-
+  //Muestra u oculta el panel de cotizaciones
   mostrarCotizacion() {
     this.comprasService.cambiarEstadoCotizacion(true);
   }

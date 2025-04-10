@@ -12,6 +12,7 @@ import { Observable, map } from 'rxjs';
 import { changesLayout } from 'src/app/store/layouts/layout.actions';
 import { getLayoutMode } from 'src/app/store/layouts/layout.selector';
 import { RootReducerState } from 'src/app/store';
+import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
 
 import { MenuItem } from '../horizontaltopbar/menu.model';
 import { MENU } from '../horizontaltopbar/menu';
@@ -42,10 +43,13 @@ export class TopbarComponent implements OnInit {
   menuItems: MenuItem[] = [];
   // Define layoutMode as a property
 
+  userName:any;
+
   constructor(@Inject(DOCUMENT) private document: any, private router: Router, private authService: AuthenticationService,
     private authFackservice: AuthfakeauthenticationService,
     public languageService: LanguageService,
     public translate: TranslateService,
+    public localStorage: LocalStorageServiceService,
     public _cookiesService: CookieService, public store: Store<RootReducerState>) {
 
   }
@@ -72,6 +76,8 @@ export class TopbarComponent implements OnInit {
     })
     this.openMobileMenu = false;
     this.element = document.documentElement;
+    
+    this.userName = this.localStorage.getItem('currentUser');
 
     this.cookieValue = this._cookiesService.get('lang');
     const val = this.listLang.filter(x => x.lang === this.cookieValue);
