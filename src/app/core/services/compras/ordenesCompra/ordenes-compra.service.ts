@@ -10,6 +10,8 @@ import { environment } from 'src/environments/environment';
 export class OrdenesCompraService {
   constructor(private http: HttpClient) { }
   public getAll(): Observable<any> {
+
+    
     return this.http.get(environment.apiUrl + 'compras/OrdenesCompras');
   } 
   
@@ -104,11 +106,7 @@ export class OrdenesCompraService {
     return this.http.get(environment.apiUrl + `compras/descargar-facturas/${id}`, { responseType: 'blob' });
   }
 
-  // private handleError(error:HttpErrorResponse){
-  //   if(error.error instanceof ErrorEvent){
-  //     console.error('Erro')
-  //   }
-  // }
+
 
 }
 

@@ -1,10 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import Swal from "sweetalert2";
 
 
@@ -60,7 +55,6 @@ export class FormCotizacionComponent implements OnInit {
 
   // Recupera los contenidos de los selects
   onSelectChange(selectedId: string, index: number) {
-    // obtiene el objeto por medio del id y lo agrega al array
     const selectedItem = this.proveedores.find(
       (item) => item.id === +selectedId
     );

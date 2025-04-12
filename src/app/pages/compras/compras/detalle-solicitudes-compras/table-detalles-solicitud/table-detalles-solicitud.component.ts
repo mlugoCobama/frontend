@@ -1,0 +1,323 @@
+import { Component, Input, Output, OnInit, EventEmitter } from "@angular/core";
+
+import { ComprasService } from "src/app/core/services/compras/compras.service";
+import { CotizacionesService } from "src/app/core/services/compras/cotizaciones/cotizaciones.service";
+import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompra/ordenes-compra.service";
+
+import Swal from "sweetalert2";
+import { Subscription } from "rxjs";
+import {FormGroup} from "@angular/forms";
+
+
+@Component({
+  selector: "app-table-detalles-solicitud",
+  templateUrl: "./table-detalles-solicitud.component.html",
+  styleUrl: "./table-detalles-solicitud.component.css",
+})
+export class TableDetallesSolicitudComponent implements OnInit {
+
+  @Input() mostrarTotal : boolean = false;
+  @Input() solicitudCompra: any;
+  @Input() ordenCompra: any;
+
+  @Output() openModal = new EventEmitter<string>();
+  @Output() showTotal = new EventEmitter<boolean>();
+  @Output() savePrices = new EventEmitter<void>();
+  @Output() actualizarStatus = new EventEmitter<void>();
+  @Output() actualizarDetalles = new EventEmitter<void>();
+  @Output() setDataCotizacion = new EventEmitter<any>();
+  
+  public formOrdenCompra: FormGroup;
+
+  public isLoad: boolean = true;
+
+  public cotProv: any[] = [];
+  public totals:any = {};
+  public detalles: any;
+  
+  public cotizacion: any;
+
+  public totalMasBajo: number| null = null;
+
+  public proveedorSelec: any;
+  public mostrarObs: boolean = false;
+
+  private generarOrdenSubscripcion: Subscription;
+
+  constructor(
+    public compras: ComprasService,
+    public cotizacionesService: CotizacionesService,
+    public ordenesComprasService: OrdenesCompraService
+  ) {}
+
+  ngOnInit(): void {
+    this.getDetalles();
+    this.generarOrdenSubscripcion = this.compras.generateOrder$.subscribe(() => {
+      this.generarOrden();
+    });
+  }
+
+  verReferencia(image: string) {
+    this.openModal.emit(image);
+  }
+
+  udtShowTotal(valor: boolean) {
+    this.showTotal.emit(valor);
+  }
+
+  setCotizacion(data: any) {
+    this.setDataCotizacion.emit(data);
+  }
+
+  /**
+   * Recupera el detalle de la solicitud
+   * Si el estado es >= 2
+   * ---------------------Recupera proveedores-cotizacion
+   * ---------------------Agrega columnas e inputs
+   * ---------------------Actualiza la bandera mostrar total
+   */
+  public getDetalles() {
+    this.compras.getOne(this.solicitudCompra.id).subscribe(
+      (response) => {
+        if (response) {
+          this.detalles = response.data;
+          if (this.solicitudCompra.estatus >= 2) {
+
+            this.getProveedoresCotizacion();
+            this.addProveedorColumns();
+            
+            this.mostrarTotal = true;
+            this.udtShowTotal(true);
+          }
+          this.isLoad = false;
+        } else {
+          console.log(response.message);
+        }
+      },
+      (error) => {
+        console.error("Error fetching data:", error);
+      }
+    );
+  }
+
+  //Recupera proveedores-cotizacion
+  public getProveedoresCotizacion() {
+    this.cotizacionesService.getOne(this.solicitudCompra.id).subscribe(
+      (response) => {
+        if (response) {
+          this.cotProv = response.data;
+
+          this.cotizacion = response.dataCotizacion;
+
+          this.setCotizacion(this.cotizacion);
+
+          this.addProveedorColumns();
+          this.isLoad = false;
+        } else {
+          console.log(response.message);
+        }
+      },
+      (error) => {
+        console.error("Error fetching data:", error);
+      }
+    );
+  }
+ 
+  /**
+   * Agrega columnas e inputs
+   * ----------Actualiza los valores de totales
+   */
+  private addProveedorColumns() {
+    this.cotProv.forEach((cotizacion) => {
+      const proveedorId = cotizacion.proveedores_id[0].id;
+
+      this.detalles.forEach((detalle) => {
+        const detalleCotizacion = cotizacion.detalles.find((d) => d.detalle_solicitud_id === detalle.id);
+
+        detalle["precio_" + proveedorId] = detalleCotizacion ? detalleCotizacion.importe_unitario : "";
+
+        detalle["disabled_" + proveedorId] = !!detalleCotizacion;
+      });
+      this.updateTotals();
+    });
+  }
+
+  // Valida que se ingresen unicamente números al campo
+  validateNumberInput(event: any) {
+    const inputValue = event.target.value;
+    const validNumber = /^[0-9]*\.?[0-9]{0,2}$/.test(inputValue);
+
+    if (!validNumber) {
+      event.target.value = inputValue.slice(0, -1);
+    }
+  }
+
+  // Actualiza los valores de totales
+  public updateTotals() {
+    this.totals = {};
+    this.cotProv.forEach((cotizacion) => {
+      let total = 0;
+      const proveedorId = cotizacion.proveedores_id[0].id;
+      this.detalles.forEach((detalle) => {
+        const precio = parseFloat(detalle["precio_" + proveedorId]);
+        if (!isNaN(precio)) {
+          total += precio * detalle.cantidad;
+        }
+      });
+
+      this.totals["precio_" + proveedorId] = total;
+    });
+    this.totalMasBajo = this.getTotalMasBajo();
+  }
+
+  //Recupera el total mas bajo
+  getTotalMasBajo(): number {
+    let tmasBajo = Number.MAX_VALUE;
+    for (let prov of this.cotProv) {
+      let total = this.totals["precio_" + prov.proveedores_id[0].id];
+      if (total < tmasBajo) {
+        tmasBajo = total;
+      }
+    }
+    if (tmasBajo != 0) {
+      return tmasBajo;
+    }
+  }
+
+  // Guarda los precios capturados dentro de la tabla
+    public guardarPrecios() {
+      const formData = new FormData();
+      let allFilesUploaded = true;
+      let datosIngresados = false;
+      let archivosIngresados = false;
+      const selectedFiles = this.cotizacionesService.getSelectedFiles();
+  
+      this.cotProv.forEach((proveedor) => {
+        this.detalles.forEach((detalle) => {
+          const proveedorId = proveedor.proveedores_id[0].id;
+          const precio = detalle["precio_" + proveedorId];
+  
+          if (!detalle["disabled_" + proveedorId] && precio) {
+            formData.append(`precios[${detalle.id}][${proveedor.id}]`, precio.toString());
+            datosIngresados = true;
+          }
+          
+        });
+  
+        if (selectedFiles[proveedor.id]) {
+          formData.append(`files[${proveedor.id}]`, selectedFiles[proveedor.id]);
+          archivosIngresados = true;
+        }
+      });
+      if (!datosIngresados || !archivosIngresados) {
+        Swal.fire({
+          title: "Error",
+          text: "Recuerda que ademas de los precios también debes de adjuntar el archivo de la cotización ",
+          buttonsStyling: false,
+          icon: "warning",
+          customClass: {
+            confirmButton: "btn btn-danger px-4",
+            cancelButton: "btn btn-secondary ms-2 px-4",
+          },
+        });
+        return;
+      }
+  
+      this.cotizacionesService.save(formData).subscribe(
+        (response) => {
+          if (response.status === "success") {
+            Swal.fire({
+              title: "Enviado",
+              text: "Tu cotización se ha guardado correctamente",
+              buttonsStyling: false,
+              icon: "success",
+              customClass: {
+                confirmButton: "btn btn-success px-4",
+                cancelButton: "btn btn-secondary ms-2 px-4",
+              },
+            });
+            this.getDetalles();
+            this.cotizacionesService.clearFiles();
+            this.isLoad = false;
+          } else {
+            console.log(response.message);
+          }
+        },
+        (error) => {
+          console.error("Error guardando los datos:", error);
+        }
+      );
+    }
+
+    //Recupera los valores del chechk
+    public manejoCheck(prov: any) {
+      const proveedorSleccionado = prov;
+      this.proveedorSelec = proveedorSleccionado;
+      this.compras.setMostrarBoton(true);
+      this.mostrarObs = true;
+    }
+
+    // Genera la orden de compra
+    public generarOrden() {
+
+     this.formOrdenCompra = this.cotizacionesService.getForm();
+     this.compras.setMostrarBoton(false);
+     let observaciones: any; 
+     if(this.formOrdenCompra != undefined){
+      observaciones = this.formOrdenCompra.value.observaciones;
+     }
+      
+      const cotizaciones_id = this.proveedorSelec?.cotizaciones_id;
+      const cotizacionProveedor = this.proveedorSelec?.id;
+    
+      const solicitudCompra = this.solicitudCompra.id;
+    
+      const datos = {
+        observaciones: observaciones || null,
+        cotizaciones_id: cotizaciones_id,
+        id_cotizacion_prov: cotizacionProveedor,
+        id_solicitud_compra: solicitudCompra,
+      };
+    
+      this.ordenesComprasService.save(datos).subscribe(
+        (response) => {
+          if (response.status === "success") {
+            Swal.fire({
+              title: "Guardado",
+              text: "Se generó correctamente la orden de compra",
+              buttonsStyling: false,
+              icon: "success",
+              customClass: {
+                confirmButton: "btn btn-success px-4",
+                cancelButton: "btn btn-ms-2 px-4",
+              },
+            });
+
+            this.getDetalles();
+            this.actualizarStatus.emit();
+            
+            this.mostrarObs = false;
+          } else {
+            Swal.fire({
+              title: "Error",
+              text: response.message,
+              buttonsStyling: false,
+              icon: "warning",
+              customClass: {
+                confirmButton: "btn btn-warning px-4",
+                cancelButton: "btn btn-ms-2 px-4",
+              },
+            });
+            console.log(response.message);
+          }
+        },
+        (error) => {
+          console.error("Error enviando datos:", error);
+        }
+      );
+    
+      // this.submitted = false;
+    }
+
+}
+

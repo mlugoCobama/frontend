@@ -326,6 +326,7 @@ export class DetallesSolicitudCompraComponent implements OnInit {
 
     this.submitted = false;
   }
+  
   //recupera la cotización seleccionada y muestra el botón de generar orden de compra
   public manejoCheck(prov: any) {
     const proveedorSleccionado = prov;

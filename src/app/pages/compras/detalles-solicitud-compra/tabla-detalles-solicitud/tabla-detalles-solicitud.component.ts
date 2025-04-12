@@ -3,6 +3,10 @@ import { Component, Input, Output, EventEmitter, OnInit, OnChanges,SimpleChanges
 import { ComprasService } from "src/app/core/services/compras/compras.service";
 import { CotizacionesService } from "src/app/core/services/compras/cotizaciones/cotizaciones.service";
 
+import Swal from "sweetalert2";
+import { Subscription } from "rxjs";
+
+
 @Component({
   selector: 'app-tabla-detalles-solicitud',
   templateUrl: './tabla-detalles-solicitud.component.html',
@@ -16,20 +20,21 @@ export class TablaDetallesSolicitudComponent implements OnInit{
  @Input() totalMasBajo: number| null = null;
  @Input() mostrarTotal : boolean = false;
  @Input() isLoad : boolean = false;
+ 
 
  @Output() updatePrices = new EventEmitter <void>();
  @Output() validateInput = new EventEmitter <Event>();
  @Output() openModal = new EventEmitter <string>();
 
  public cotizacion: any;
-
+ 
 constructor(
     public comprasService: ComprasService,
     private cotizacionesService: CotizacionesService,
   ) {}
 
   public ngOnInit(): void {
-
+    
   }
 
   actualizarPrecios(){
@@ -82,5 +87,7 @@ validateNumberInput(event: any) {
     event.target.value = inputValue.slice(0, -1);
   }
 }
+
+
 
 }

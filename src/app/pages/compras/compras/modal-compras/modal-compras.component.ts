@@ -92,7 +92,11 @@ export class ModalComprasComponent implements OnInit {
   //Recupera el usuario activo en el local storage
   public getUsuarioActivo() {
     const usuarioActivo = this.localStorage.getItem("currentUser");
-    //TODO this.usuariosService.getUserById(usuarioActivo['role']['email']).subscribe(
+    /** ****************************************************************************
+     * !------------------------------IMPORTANTE------------------------------------
+     * TODO cambiar esta linea para que recupere el usuario activo en base al correo
+     *******************************************************************************/
+    //  this.usuariosService.getUserById(usuarioActivo['role']['email']).subscribe(
     this.usuariosService.getUserById("mlugo@cobama.com.mx").subscribe(
       (response) => {
         if (response) {
@@ -110,7 +114,6 @@ export class ModalComprasComponent implements OnInit {
 
   //Recupera los usuarios que pertenecen a las empresas (Select usuario)
   public getUsuarios(intercompania: any) {
-    console.log(intercompania);
     this.usuarios = [];
     this.isLoad = false;
     this.disabled = false;

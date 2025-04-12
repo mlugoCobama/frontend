@@ -59,57 +59,65 @@
         </div>
 
         <div *ngIf="!solicitudSelecionada" class="card-body border-bottom">
-          <div>
+          <div class="table-responsive" style="overflow-y: auto; height: 43rem;">
+
             <div class="d-flex justify-content-center" *ngIf="isLoad">
               <div class="spinner-border" role="status">
                 <span class="visually-hidden">Loading...</span>
               </div>
             </div>
-            <div class="tab-page-content mt-3 table-responsive">
-              <table
-                *ngIf="!isLoad"
-                class="table table-striped table-hover table-sm table-bordered"
-              >
-                <thead class="table-light">
-                  <tr >
-                    <th>Folio</th>
-                    <th>Empresa</th>
-                    <th>Solicita</th>
-                    <th>Usuario Destino</th>
-                    <th>Fecha Solicitud</th>
-                    <th class="text-center">Estatus</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    *ngFor="let item of data"
-                    (dblclick)="openDetallesSolicitud(item, $event)"
-                  >
-                    <td>{{ item.folio }}</td>
-                    <td>{{ item.empresa || 'CAS'}}</td>
-                    <td>{{ item.usuario_solicita}}</td>
-                    <td>{{ item.usuario_destino}}</td>
-                    <td>{{ item.fecha | date:'dd/MM/yyyy h:mm a' }}</td>
-                    <td>
-                      <div class="text-center">
-                        <span
-                          [ngClass]="'badge rounded-pill font-size-11 ' + item.claseEstado">
-                          {{ item.estado }}
-                        </span>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+            <div>
+              <div class="tab-page-content mt-3 table-responsive">
+                <table
+                  *ngIf="!isLoad"
+                  class="table table-striped table-hover table-sm table-bordered"
+                >
+                  <thead class="table-light">
+                    <tr >
+                      <th>Folio</th>
+                      <th>Empresa</th>
+                      <th>Solicita</th>
+                      <th>Usuario Destino</th>
+                      <th>Fecha Solicitud</th>
+                      <th class="text-center">Estatus</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="let item of data"
+                      (dblclick)="openDetallesSolicitud(item, $event)"
+                    >
+                      <td>{{ item.folio }}</td>
+                      <td>{{ item.empresa || 'CAS'}}</td>
+                      <td>{{ item.usuario_solicita}}</td>
+                      <td>{{ item.usuario_destino}}</td>
+                      <td>{{ item.fecha | date:'dd/MM/yyyy h:mm a' }}</td>
+                      <td>
+                        <div class="text-center">
+                          <span
+                            [ngClass]="'badge rounded-pill font-size-11 ' + item.claseEstado">
+                            {{ item.estado }}
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
             </div>
+            
+
+
           </div>
         </div>
-        <app-detalles-solicitud-compra
+        <app-detalle-solicitudes-compras
           [solicitudCompra]="solicitudCompra"
+          [status]="status"
           *ngIf="solicitudSelecionada"
-        ></app-detalles-solicitud-compra>
-        <!-- <app-cotizaciones [solicitudCompra]="solicitudCompra" *ngIf="solicitudSelecionada"></app-cotizaciones> -->
-        <!--div.card-body-->
+          (udtStatus)="updateStatus($event)" 
+        ></app-detalle-solicitudes-compras>
+  
       </div>
     </div>
   </div>

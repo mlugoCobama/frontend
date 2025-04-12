@@ -108,8 +108,10 @@ export class ComprasComponent implements OnInit {
   //Muestra u oculta el panel de cotizaciones
   mostrarCotizacion() {
     this.comprasService.cambiarEstadoCotizacion(true);
+    this.status = this.solicitudCompra.estatus;
   }
 
+  // Cancela la solicitud desde un botón en la botonera
   public cancelarSolicitud() {
     this.isLoad = true;
     Swal.fire({
@@ -162,10 +164,12 @@ export class ComprasComponent implements OnInit {
     });
   }
 
+  //Botón que genera la orden  de compra
   btnGenerarOC() {
     this.comprasService.triggerGenerateOrder();
   }
 
+  //Botón que descarga la orden de compra
   btnDescargarOC() {
     this.ordenesComprasService
       .pdfOrdenCompra(this.solicitudCompra.id)
@@ -192,6 +196,11 @@ export class ComprasComponent implements OnInit {
         }
       });
   }
+
+  updateStatus(status:any){
+    this.status = status;
+  }
+
   /**
    * Fin funciones Botonera
    */

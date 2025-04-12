@@ -48,7 +48,7 @@ export class CatUnidadesMedidasComponent implements OnInit{
     this.dtOptions = environment.dataTables;
   }
 
-
+    // Despliega la ventana modal para un nuevo registro
     public openModalNuevo() {
       const initialState: ModalOptions = {
         initialState: {
@@ -67,6 +67,7 @@ export class CatUnidadesMedidasComponent implements OnInit{
       });
     }
   
+    // Despliega una ventana modal para actualizar los registros
     public openModalActualizar() {
       const initialState: ModalOptions = {
         initialState: {
@@ -87,10 +88,8 @@ export class CatUnidadesMedidasComponent implements OnInit{
         this.getAll();
       });
     }
-  /**
-   * Open modal
-   * @param content modal content
-   */
+
+  // Recupera todos los regsitros de las unidades en la bse de datos 
   private getAll() {
     this.catUnidadesMedidasService.getAll().subscribe(
       (response) => {
@@ -108,6 +107,7 @@ export class CatUnidadesMedidasComponent implements OnInit{
     );
   }
 
+//Recupera los datos del elemento seleccionado
   public seleccionar(dato: any, evento: any) {
     this.mostrar = true;
     this.unidad = dato;
@@ -121,6 +121,7 @@ export class CatUnidadesMedidasComponent implements OnInit{
     }
   }
 
+//"Borra" el registro seleccionado
   public destroy() {
     this.isLoad = true;
     Swal.fire({

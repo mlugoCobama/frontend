@@ -13,6 +13,10 @@ export class ProveedoresService {
     return this.http.get(environment.apiUrl + 'compras/Proveedores');
   } 
   
+  public getProveedores(): Observable<any> {
+    return this.http.get(environment.apiUrl + 'compras/getProveedores');
+  } 
+
   public abrirArchivo(rutaArchivo: string){
     const url =  (environment.apiUrl + `compras/${rutaArchivo}`);
      window.open(url , '_blank')

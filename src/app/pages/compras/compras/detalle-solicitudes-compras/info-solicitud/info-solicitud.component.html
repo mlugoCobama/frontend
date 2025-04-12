@@ -1,0 +1,21 @@
+<div class="row"> <!--Inicia div datos solicitud -->
+    <div class="col-md-6">
+      <p><strong>Folio: </strong>{{ solicitudCompra.folio }}</p>
+      <p>
+        <strong>Usuario solicita: </strong>{{ solicitudCompra.usuario_solicita }}
+      </p>
+      <p><strong>Empresa: </strong>{{solicitudCompra.empresa}}</p>
+      <p> <strong>Estatus: </strong>  <span [ngClass]="'badge rounded-pill font-size-11 ' + solicitudCompra.claseEstado "> {{solicitudCompra.estado}} </span>
+    </p>
+    </div>
+    <div class="col-md-6">
+      <p><strong>Fecha: </strong>{{ solicitudCompra.fecha | date:'dd/MM/yyyy h:mm a'}}</p>
+      <p><strong>Usuario Destino: </strong>{{solicitudCompra.usuario_destino}} </p>
+      <p><strong>Motivo: </strong>{{ solicitudCompra.motivo }}</p>
+      <div *ngIf="mostrarTotal" class="row">
+        <p *ngIf="cotizacion">
+          <strong>Consideraciones: </strong> {{ cotizacion.consideraciones }}
+        </p>
+      </div>
+    </div>
+  </div> <!--Fin div datos solicitud -->

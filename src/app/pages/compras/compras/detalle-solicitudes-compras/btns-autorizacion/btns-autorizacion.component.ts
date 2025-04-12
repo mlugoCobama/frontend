@@ -1,107 +1,37 @@
-import { Component, Input, OnInit, Output, EventEmitter } from "@angular/core";
-import { ProveedoresService } from "src/app/core/services/compras/proveedores/proveedores.service";
-import { ComprasService } from "src/app/core/services/compras/compras.service";
-import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompra/ordenes-compra.service";
-import { CotizacionesService } from "src/app/core/services/compras/cotizaciones/cotizaciones.service";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
+import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
+import { OrdenesCompraService } from 'src/app/core/services/compras/ordenesCompra/ordenes-compra.service';
 
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2';
 
 @Component({
-  selector: "app-tbl-fls-cotizacion",
-  templateUrl: "./tbl-fls-cotizacion.component.html",
-  styleUrls: ["./tbl-fls-cotizacion.component.css"],
+  selector: 'app-btns-autorizacion',
+  templateUrl: './btns-autorizacion.component.html',
+  styleUrl: './btns-autorizacion.component.css'
 })
-export class TblFlsCotizacionComponent implements OnInit {
-  @Input() solicitudCompra: any;
-  @Input() cotProv: any[] = [];
-  @Input() ordenCompra: any;
+export class BtnsAutorizacionComponent implements OnInit {
 
-  text: string = "";
-  longitudMaxima: number = 150;
-  caracteresRestantes: number = this.longitudMaxima;
+  @Input() solicitudCompra:any;
 
-  public formOrdenCompra: FormGroup;
-  @Input() mostrarObs: boolean = false;
-  public selectedFiles: { [key: number]: File } = {};
-  public proveedorSelec: any;
+  @Output() actualizarStatus = new EventEmitter<void>();
+  @Output() setDataOrdenCompra = new EventEmitter<void>();
 
-  @Output() savePrices = new EventEmitter<void>();
-  @Output() selectCotizacion = new EventEmitter<object>();
+  public ordenCompra: any;
+  public isLoad: boolean = false;
 
   constructor(
-    private proveedoresService: ProveedoresService,
-    private ordenesComprasService: OrdenesCompraService,
-    private cotizacionesService: CotizacionesService,
-    private comprasService: ComprasService,
-    public formBuilder: FormBuilder
-  ) { this.buildForm();
-    this.cotizacionesService.setForm(this.formOrdenCompra);}
+    public ordenesComprasService: OrdenesCompraService
+  ){}
 
-  public ngOnInit(): void {
-    this.validarSatus();
-    this.buildForm();
+  ngOnInit(): void {
+     this.getOrdenCompra();
   }
 
-  validarSatus(){
-    if (
-      this.solicitudCompra.estatus === 3 ||
-      this.solicitudCompra.estatus === 4 ||
-      this.solicitudCompra.estatus > 5
-    ) {
-      this.getOrdenCompra();
-    }
+  setOrdenCompra(data: any) {
+    this.setDataOrdenCompra.emit(data);
   }
 
-  guardarPrecios() {
-    this.savePrices.emit();
-  }
-
-  manejoCheck(prov: any) {
-    this.selectCotizacion.emit(prov);
-  }
-
-  onFileChange1(event: Event, proveedorId: number) {
-    //Recupera los archivos de los input file de la tabla proveedores
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.selectedFiles[proveedorId] = input.files[0];
-    }
-  }
-
-  onFileChange(event: Event, proveedorId: number) {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.cotizacionesService.setSelectedFile(proveedorId, input.files[0]);
-    }
-  }
-
-  verArchivos(prov: any) {
-    this.proveedoresService.abrirArchivo(prov);
-  }
-
-  private buildForm() {
-    this.formOrdenCompra = this.formBuilder.group({
-      observaciones: new FormControl(null, Validators.required),
-    });
-  }
-
-  get ordenCompraFormControl() {
-    return this.formOrdenCompra.controls;
-  }
-
-  public contarCaracteres() {
-    this.caracteresRestantes = this.longitudMaxima - this.text.length;
-    this.cotizacionesService.setForm(this.formOrdenCompra);
-  }
-
+  // Maneja la función de cancelar una orden
   public  cancelarOrden() {
-    this.validarSatus();
     Swal.fire({
       title: "¿Estas seguro?",
       text: "La orden será cancelada",
@@ -130,7 +60,7 @@ export class TblFlsCotizacionComponent implements OnInit {
                   cancelButton: "btn btn- ms-2 px-4",
                 },
               });
-              this.solicitudCompra.estatus = 5;
+              this.actualizarStatus.emit();
             } else {
               console.log(response.message);
               Swal.fire({
@@ -150,12 +80,16 @@ export class TblFlsCotizacionComponent implements OnInit {
           }
         );
       }
-      // this.isLoad = false;
-    });
-  }
 
+    });
+  }  
+  
+  /* **************************************
+  Maneja la función de autorizar una orden
+  SI--Enviar solicitud de compra a proveedor
+  NO--------------------Autorizar unicamente
+  */
   public  autorizarOrden() {
-    this.validarSatus();
     const data = {
       idSolicituCompra: this.solicitudCompra.id,
       idOrdenCompra: this.ordenCompra.id,
@@ -187,7 +121,7 @@ export class TblFlsCotizacionComponent implements OnInit {
                   cancelButton: "btn btn- ms-2 px-4",
                 },
               });
-              this.solicitudCompra.estatus = 6;
+              this.actualizarStatus.emit();
             } else {
               console.log(response.message);
               Swal.fire({
@@ -220,7 +154,7 @@ export class TblFlsCotizacionComponent implements OnInit {
                   cancelButton: "btn btn- ms-2 px-4",
                 },
               });
-              this.solicitudCompra.estatus = 4;
+              this.actualizarStatus.emit();
             } else {
               console.log(response.message);
               Swal.fire({
@@ -240,15 +174,17 @@ export class TblFlsCotizacionComponent implements OnInit {
           }
         );
       }
-      // this.isLoad = false;
     });
-  }
-
+  }  
+  
+  // Recupera la orden de compra 
   private getOrdenCompra() {
     this.ordenesComprasService.getOne(this.solicitudCompra.id).subscribe(
       (response) => {
         if (response) {
           this.ordenCompra = response;
+          this.setOrdenCompra(this.ordenCompra);
+          this.isLoad = true;
         } else {
           console.log(response.message);
         }
@@ -257,9 +193,5 @@ export class TblFlsCotizacionComponent implements OnInit {
         console.error("Error fetching data:", error);
       }
     );
-  }
-
-
-  
-  
+  }  
 }
