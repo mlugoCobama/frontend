@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, EventEmitter } from "@angular/core";
+import { Component, Input, Output, OnInit, EventEmitter, OnDestroy } from "@angular/core";
 
 import { ComprasService } from "src/app/core/services/compras/compras.service";
 import { CotizacionesService } from "src/app/core/services/compras/cotizaciones/cotizaciones.service";
@@ -14,7 +14,7 @@ import {FormGroup} from "@angular/forms";
   templateUrl: "./table-detalles-solicitud.component.html",
   styleUrl: "./table-detalles-solicitud.component.css",
 })
-export class TableDetallesSolicitudComponent implements OnInit {
+export class TableDetallesSolicitudComponent implements OnInit{
 
   @Input() mostrarTotal : boolean = false;
   @Input() solicitudCompra: any;
@@ -55,6 +55,14 @@ export class TableDetallesSolicitudComponent implements OnInit {
     this.generarOrdenSubscripcion = this.compras.generateOrder$.subscribe(() => {
       this.generarOrden();
     });
+  }
+
+
+  ngOnDestroy(): void {
+    if (this.generarOrdenSubscripcion) {
+      //Elimino la subscripcion para evitar que se genere mas de una orden de compra la hacer click
+      this.generarOrdenSubscripcion.unsubscribe();
+    }
   }
 
   verReferencia(image: string) {
@@ -262,17 +270,35 @@ export class TableDetallesSolicitudComponent implements OnInit {
 
      this.formOrdenCompra = this.cotizacionesService.getForm();
      this.compras.setMostrarBoton(false);
-     let observaciones: any; 
-     if(this.formOrdenCompra != undefined){
-      observaciones = this.formOrdenCompra.value.observaciones;
+     let observaciones: any;
+     let entrega: any; 
+
+     if(this.formOrdenCompra === undefined || !this.formOrdenCompra.valid){
+      Swal.fire({
+        title: "Error",
+        text: "Debes de seleccionar un lugar de entrega",
+        buttonsStyling: false,
+        icon: "warning",
+        customClass: {
+          confirmButton: "btn btn-danger px-4",
+          cancelButton: "btn btn-secondary ms-2 px-4",
+        },
+      });
+      this.compras.setMostrarBoton(true);
+      return;
      }
-      
+
+     if(this.formOrdenCompra != undefined && this.formOrdenCompra.valid){
+      observaciones = this.formOrdenCompra.value.observaciones;
+      entrega = this.formOrdenCompra.value.entrega;
+     }
       const cotizaciones_id = this.proveedorSelec?.cotizaciones_id;
       const cotizacionProveedor = this.proveedorSelec?.id;
     
       const solicitudCompra = this.solicitudCompra.id;
     
       const datos = {
+        entrega: entrega || null,
         observaciones: observaciones || null,
         cotizaciones_id: cotizaciones_id,
         id_cotizacion_prov: cotizacionProveedor,

@@ -6,7 +6,6 @@ import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { Config } from "datatables.net";
 import Swal from "sweetalert2";
 
-
 //services
 import { ComprasService } from "src/app/core/services/compras/compras.service";
 import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompra/ordenes-compra.service";
@@ -18,9 +17,9 @@ import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompr
 })
 export class ComprasComponent implements OnInit {
   public dtOptions: Config = {};
-  
+
   public modalRef?: BsModalRef;
-  
+
   public showTable: boolean = false;
   public solicitudSelecionada: boolean = false;
   public isLoad: boolean = true;
@@ -29,6 +28,18 @@ export class ComprasComponent implements OnInit {
   public solicitudCompra: any; // Objeto que envió al componente detallesSolicitudCompra
   public status: any;
   public data: any;
+
+  // varibles funciones tablas
+  // Paginación y búsqueda
+  filtro: string = "";
+  paginaActual: number = 1;
+  itemsPorPagina: number = 10;
+
+  columnaOrdenada: string = "";
+  ordenAscendente: boolean = true;
+
+  datosFiltrados: any[] = [];
+  datosPaginados: any[] = [];
 
   constructor(
     public ordenesComprasService: OrdenesCompraService,
@@ -82,6 +93,10 @@ export class ComprasComponent implements OnInit {
       (response) => {
         if (response) {
           this.data = response.data;
+
+          this.datosFiltrados = [...this.data];
+          this.aplicarFiltro;
+
           this.isLoad = false;
           this.showTable = true;
         } else {
@@ -197,11 +212,40 @@ export class ComprasComponent implements OnInit {
       });
   }
 
-  updateStatus(status:any){
+  updateStatus(status: any) {
     this.status = status;
   }
 
-  /**
-   * Fin funciones Botonera
-   */
+  //Funciones de la tabla
+  aplicarFiltro() {
+    const texto = this.filtro.toLowerCase();
+    this.datosFiltrados = this.data.filter((item: any) =>
+      Object.values(item).some((val) =>
+        val?.toString().toLowerCase().includes(texto)
+      )
+    );
+    this.ordenarPor(this.columnaOrdenada || "folio"); // vuelve a ordenar
+  }
+
+  ordenarPor(columna: string) {
+    if (this.columnaOrdenada === columna) {
+      this.ordenAscendente = !this.ordenAscendente;
+    } else {
+      this.columnaOrdenada = columna;
+      this.ordenAscendente = true;
+    }
+
+    this.datosFiltrados.sort((a: any, b: any) => {
+      const valA = a[columna] || "";
+      const valB = b[columna] || "";
+      return (valA < valB ? -1 : 1) * (this.ordenAscendente ? 1 : -1);
+    });
+  }
+
+  getIconoOrden(columna: string): string {
+    if (this.columnaOrdenada !== columna) return ""; // ícono neutral
+    return this.ordenAscendente
+      ? "bx bx-up-arrow-alt "
+      : "bx bx-down-arrow-alt";
+  }
 }

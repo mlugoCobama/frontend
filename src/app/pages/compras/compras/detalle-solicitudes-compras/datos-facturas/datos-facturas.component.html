@@ -42,18 +42,18 @@
             <td>{{ comprobante.fecha }}</td>
             <td>{{ comprobante.folio }}</td>
             <td>{{ comprobante.serie }}</td>
-            <td>$ {{ comprobante.subTotal }}</td>
-            <td>$ {{ comprobante.total }}</td>
+            <td>$ {{ comprobante.subTotal | number }}</td>
+            <td>$ {{ comprobante.total | number }}</td>
             <td>{{ comprobante.moneda }}</td>
           </tr>
         </tbody>
         <tfoot>
           <td colspan="3" class="text-end"><strong> Totales: </strong></td>
           <td>
-            <strong>$ {{ factura.sumaSubTotal }}</strong>
+            <strong>$ {{ factura.sumaSubTotal | number }}</strong>
           </td>
           <td>
-            <strong>$ {{ factura.sumaTotal }} </strong>
+            <strong>$ {{ factura.sumaTotal | number }} </strong>
           </td>
         </tfoot>
       </table>

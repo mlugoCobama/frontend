@@ -1,6 +1,7 @@
 import { Component, OnInit} from '@angular/core';
 
 
+import { FuncionesTablas } from '../compras/funciones-tablas';
 import { environment } from 'src/environments/environment';
 
 import {
@@ -36,6 +37,10 @@ export class CatUnidadesMedidasComponent implements OnInit{
   public modalRef?: BsModalRef;
   public unidad: any;
   dtOptions: Config = {};
+
+  datosFiltrados:any[] = [];
+  private ordenador!: FuncionesTablas<any>;
+  busqueda:string = '';
 
   constructor(
     private catUnidadesMedidasService: CatUnidadesMedidasService,
@@ -95,6 +100,10 @@ export class CatUnidadesMedidasComponent implements OnInit{
       (response) => {
         if (response) {
           this.data = response.data;
+
+          this.ordenador = new FuncionesTablas(this.data);
+          this.datosFiltrados = [...this.data];
+
           this.isLoad = false;
           this.showTable = true;
         } else {
@@ -107,6 +116,19 @@ export class CatUnidadesMedidasComponent implements OnInit{
     );
   }
 
+  ordenarPor(columna: keyof any){
+    this.datosFiltrados = this.ordenador.ordenar(columna);
+  }
+
+  getIconoOrden(columna:keyof any):string{
+    return this.ordenador.getIcono(columna)
+  }
+
+  filtrarTabla(){
+    this.datosFiltrados = this.ordenador.filtrar(this.busqueda, [
+      'nombre', 'abreviatura'
+    ]);
+  }
 //Recupera los datos del elemento seleccionado
   public seleccionar(dato: any, evento: any) {
     this.mostrar = true;

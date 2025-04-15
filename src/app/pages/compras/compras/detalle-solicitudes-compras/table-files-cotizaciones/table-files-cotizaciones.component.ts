@@ -2,6 +2,7 @@ import { Component, Input, Output, OnInit, OnChanges, SimpleChanges, EventEmitte
 import { ProveedoresService } from "src/app/core/services/compras/proveedores/proveedores.service";
 import { ComprasService } from "src/app/core/services/compras/compras.service";
 import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompra/ordenes-compra.service";
+import { UsuariosService } from 'src/app/core/services/compras/usuarios.service';
 import { CotizacionesService } from "src/app/core/services/compras/cotizaciones/cotizaciones.service";
 import {FormBuilder, FormControl, FormGroup, Validators, } from "@angular/forms";
 import Swal from "sweetalert2";
@@ -29,15 +30,19 @@ caracteresRestantes: number = this.longitudMaxima;
 
 public selectedFiles: { [key: number]: File } = {};
 public proveedorSelec: any;
-
+public empresas: any;
+public isLoading: boolean = true;
 public isLoad: boolean = true;
+
 constructor(
   private proveedoresService: ProveedoresService,
   private cotizacionesService: CotizacionesService,
+  private usuariosService: UsuariosService,
   public formBuilder: FormBuilder,
 ){}
 
 ngOnInit(): void {
+  this.getEmpresas();
   this.buildForm();
 }
 
@@ -61,7 +66,8 @@ manejoCheck(prov: any) {
 
 private buildForm() {
   this.formOrdenCompra = this.formBuilder.group({
-    observaciones: new FormControl(null, Validators.required),
+    entrega: new FormControl(null, Validators.required),
+    observaciones: new FormControl(null),
   });
 }
 
@@ -71,6 +77,10 @@ get ordenCompraFormControl() {
 
 public contarCaracteres() {
   this.caracteresRestantes = this.longitudMaxima - this.text.length;
+  this.setValuesForm();
+}
+
+public setValuesForm(){
   this.cotizacionesService.setForm(this.formOrdenCompra);
 }
 
@@ -93,6 +103,24 @@ verArchivos(prov: any) {
   this.proveedoresService.abrirArchivo(prov);
 }
 
+//Recupera el catalogo de empresas (Select empresa)
+public getEmpresas() {
+  if(this.solicitudCompra.estatus === 2){
+    this.usuariosService.getEmpresas().subscribe(
+      (response) => {
+        if (response) {
+          this.empresas = response.data;
+          this.isLoading = false;
+        } else {
+          console.log(response.message);
+        }
+      },
+      (error) => {
+        console.error("Error fetching data:", error);
+      }
+    );
+  }
+}
 
 
 

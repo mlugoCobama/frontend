@@ -72,6 +72,20 @@
     <form class="row g-2" [formGroup]="formOrdenCompra">
       <div class="col-12" *ngIf="mostrarObs">
         <div class="col-md-12">
+          <label for="entrega" class="form-label">Se entrega en: *</label>
+          <select (change)="setValuesForm()" class="form-select form-select-sm" aria-label="Default select example" formControlName="entrega">
+            <option  selected>Selecciona uno</option>
+            <option *ngIf = "isLoading" value="" [disabled] = "isLoading"> Cargando opciones espera...</option>
+            <option  *ngFor="let item of empresas" [value]="item.intercompania ">
+              {{ item.name }}
+            </option>
+          </select>
+          <div *ngIf="ordenCompraFormControl.entrega.touched || submitted || ordenCompraFormControl.entrega.value === 'Selecciona uno'">
+            <div class="text-danger form-text" *ngIf="ordenCompraFormControl.entrega.errors?.['required']">
+              Debes de seleccionar una empresa.
+            </div>
+          </div>
+
           <label for="observaciones" class="form-label">Observaciones: *</label>
           <textarea
             [(ngModel)]="text"
@@ -82,20 +96,11 @@
             id="observaciones"
             rows="3"
           ></textarea>
-          <p
-            [class]="
-              caracteresRestantes === 0 ? 'text-danger form-text' : 'form-text'
-            "
-          >
+          <p [class]="caracteresRestantes === 0 ? 'text-danger form-text' : 'form-text'">
             {{ longitudMaxima }}/{{ caracteresRestantes }}
           </p>
-          <div
-            *ngIf="ordenCompraFormControl.observaciones.touched || submitted"
-          >
-            <div
-              class="text-danger form-text"
-              *ngIf="ordenCompraFormControl.observaciones.errors?.['required']"
-            >
+          <div *ngIf="ordenCompraFormControl.observaciones.touched || submitted">
+            <div class="text-danger form-text" *ngIf="ordenCompraFormControl.observaciones.errors?.['required']">
               Observaciones es requerido.
             </div>
           </div>
@@ -115,9 +120,7 @@
     *ngIf="solicitudCompra.estatus === 2 && !mostrarObs"
     type="submit"
     class="btn btn-sm btn-success"
-    (click)="guardarPrecios()"
-  >
-    Guardar Cotización
+    (click)="guardarPrecios()"> Guardar Cotización
   </button>
 </div>
 </div>
