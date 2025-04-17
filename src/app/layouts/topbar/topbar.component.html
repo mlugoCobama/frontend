@@ -92,11 +92,12 @@
       </div>
 
       <div class="dropdown d-inline-block" dropdown>
-        <button type="button" class="btn header-item" dropdownToggle id="page-header-user-dropdown">
-          <img class="rounded-circle header-profile-user" src="assets/images/users/user-dummy-img.jpg" alt="Header Avatar">
-          <!-- <div class="avatar-xs align-self-center me-3">
-            <span class="avatar-title rounded-circle bg-primary-subtle text-primary font-size-16"> {{ userName.role.name.charAt(0)}} </span>
-          </div> -->
+        <button type="button" class="btn header-item d-flex align-items-center" dropdownToggle id="page-header-user-dropdown">
+          <!-- <img class="rounded-circle header-profile-user" src="assets/images/users/user-dummy-img.jpg" alt="Header Avatar"> -->
+          <div class="avatar-xs align-self-center">
+            <span class="avatar-title rounded-circle bg-primary-subtle text-primary font-size-16 
+            header-profile-user d-flex align-items-center justify-content-center" > {{ inciales }} </span>
+          </div>
           
           <span class="d-none d-xl-inline-block ms-1"> {{ userName.role.name }} </span>
           <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>

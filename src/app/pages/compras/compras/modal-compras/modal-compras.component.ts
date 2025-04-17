@@ -91,7 +91,9 @@ export class ModalComprasComponent implements OnInit {
     );
   }
 
-  //Recupera el usuario activo en el local storage
+  /**
+   * Recupera el usuario activo en el local storage
+   */
   public getUsuarioActivo() {
     const usuarioActivo = this.localStorage.getItem("currentUser");
     /** ****************************************************************************
@@ -101,7 +103,7 @@ export class ModalComprasComponent implements OnInit {
     this.usuariosService.getUserById(usuarioActivo['role']['email']).subscribe(
     // this.usuariosService.getUserById("mlugo@cobama.com.mx").subscribe(
       (response) => {
-        if (response) {
+        if (response.status === 'success') {
           this.usuarioSolicita = response.data;
         } else {
           console.log(response.message);
@@ -111,7 +113,7 @@ export class ModalComprasComponent implements OnInit {
         console.error("Error fetching data:", error);
       }
     );
-    //TODO this.usuarioSolicita = usuarioActivo;
+
   }
 
   /**
