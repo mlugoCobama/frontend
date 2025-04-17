@@ -33,6 +33,7 @@ export class GraficaBarrasTotalesComponent implements AfterViewInit {
   private dataSerieMA: number[] = [];
 
   public options = {
+    
     series: [
       {
         name: "Costo financiero",
@@ -41,7 +42,11 @@ export class GraficaBarrasTotalesComponent implements AfterViewInit {
     ],
     chart: {
       type: "bar",
-      height: 350
+      toolbar:{
+        show:false
+      },
+
+      // height: 300
     },
     plotOptions: {
       bar: {
@@ -66,7 +71,22 @@ export class GraficaBarrasTotalesComponent implements AfterViewInit {
         "Bajio",
         "Intercias",
       ]
-    }
+    },
+    responsive: [
+      {
+        breakpoint: 1400,
+        options: {
+          plotOptions: {
+            bar: {
+              horizontal: false
+            }
+          },
+          legend: {
+            position: "bottom"
+          }
+        }
+      }
+    ]
   };
 
   constructor(

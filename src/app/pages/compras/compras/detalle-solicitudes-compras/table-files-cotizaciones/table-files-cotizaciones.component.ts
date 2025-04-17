@@ -18,6 +18,7 @@ export class TableFilesCotizacionesComponent implements OnInit{
 @Input() detalles: any;
 @Input() mostrarObs: any;
 @Input() ordenCompra: any;
+// @Input() isLoad: any;
 
 @Output() savePrices = new EventEmitter<void>();
 @Output() selectCotizacion = new EventEmitter<object>();
@@ -64,26 +65,41 @@ manejoCheck(prov: any) {
   this.selectCotizacion.emit(prov);
 }
 
+/**
+ * construye el formulario
+ */
 private buildForm() {
   this.formOrdenCompra = this.formBuilder.group({
     entrega: new FormControl(null, Validators.required),
     observaciones: new FormControl(null),
   });
+
 }
 
 get ordenCompraFormControl() {
   return this.formOrdenCompra.controls;
 }
 
+/**
+ * Cuenta la longitud de caracteres y lo muestra en pantalla
+ */
 public contarCaracteres() {
   this.caracteresRestantes = this.longitudMaxima - this.text.length;
   this.setValuesForm();
 }
 
+/**
+ *  Envía los valores del formulario al servicio
+ */
 public setValuesForm(){
   this.cotizacionesService.setForm(this.formOrdenCompra);
 }
 
+/**
+ * Maneja los archivos almacenados en los inputs
+ * @param event cambio de archivo en el input
+ * @param proveedorId id del proveedor/input
+ */
 onFileChange(event: Event, proveedorId: number) {
   const input = event.target as HTMLInputElement;
   if (input.files && input.files.length > 0) {
@@ -91,19 +107,25 @@ onFileChange(event: Event, proveedorId: number) {
   }
 }
 
-onFileChange1(event: Event, proveedorId: number) {
-  //Recupera los archivos de los input file de la tabla proveedores
+//Recupera los archivos de los input file de la tabla proveedores
+onFileChange1(event: Event, proveedorId: number) {  
   const input = event.target as HTMLInputElement;
   if (input.files && input.files.length > 0) {
     this.selectedFiles[proveedorId] = input.files[0];
   }
 }
 
+/**
+ * abre los archivos en una pestaña nueva
+ * @param prov ruta del archivo
+ */
 verArchivos(prov: any) {
   this.proveedoresService.abrirArchivo(prov);
 }
 
-//Recupera el catalogo de empresas (Select empresa)
+/**
+ * Recupera el catalogo de empresas (Select empresa) 
+ */
 public getEmpresas() {
   if(this.solicitudCompra.estatus === 2){
     this.usuariosService.getEmpresas().subscribe(
@@ -121,8 +143,4 @@ public getEmpresas() {
     );
   }
 }
-
-
-
-
 }

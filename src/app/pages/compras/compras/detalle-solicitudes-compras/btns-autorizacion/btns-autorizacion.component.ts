@@ -30,7 +30,9 @@ export class BtnsAutorizacionComponent implements OnInit {
     this.setDataOrdenCompra.emit(data);
   }
 
-  // Maneja la función de cancelar una orden
+  /**
+   * Maneja la función de cancelar una orden
+   */ 
   public  cancelarOrden() {
     Swal.fire({
       title: "¿Estas seguro?",
@@ -84,10 +86,10 @@ export class BtnsAutorizacionComponent implements OnInit {
     });
   }  
   
-  /* **************************************
-  Maneja la función de autorizar una orden
-  SI--Enviar solicitud de compra a proveedor
-  NO--------------------Autorizar unicamente
+  /**
+  * Maneja la función de autorizar una orden
+  * SI-Enviar solicitud de compra a proveedor
+  * NO-Autorizar unicamente
   */
   public  autorizarOrden() {
     const data = {
@@ -177,7 +179,9 @@ export class BtnsAutorizacionComponent implements OnInit {
     });
   }  
   
-  // Recupera la orden de compra 
+  /**
+  * Recupera la orden de compra
+  */  
   private getOrdenCompra() {
     this.ordenesComprasService.getOne(this.solicitudCompra.id).subscribe(
       (response) => {

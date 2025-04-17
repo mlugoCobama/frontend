@@ -59,7 +59,7 @@
         </div>
 
         <div *ngIf="!solicitudSelecionada" class="card-body border-bottom">
-          <div class="table-responsive" style="overflow-y: auto; height: 43rem;">
+          
 
             <div class="d-flex justify-content-center" *ngIf="isLoad">
               <div class="spinner-border" role="status">
@@ -67,11 +67,13 @@
               </div>
             </div>
             <div>
+
               <div *ngIf="!isLoad" class="row justify-content-end">
                 <div class="col-3">
-                  <input type="text" class="form-control form-control-sm" placeholder="Buscar..." [(ngModel)]="filtro"  (input)="aplicarFiltro()"/>
+                  <input type="text" class="form-control form-control-sm" placeholder="Buscar..." [(ngModel)]="busqueda"  (input)="filtrarTabla()"/>
                 </div>
               </div>
+              <div class="table-responsive" style="overflow-y: auto; height: 20rem;">
               <div class="tab-page-content mt-3 table-responsive">
                 <table
                   *ngIf="!isLoad"

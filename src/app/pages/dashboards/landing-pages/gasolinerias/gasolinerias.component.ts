@@ -48,7 +48,9 @@ export class GasolineriasComponent implements OnInit {
 
   
 
-  // Recupera los datos en base a la fecha actual
+  /**
+   * Recupera los datos en base a la fecha actual
+   */ 
   private getDataAnual() {
       let mes = this.fecha.getMonth();
       let anio = this.datepipe.transform(this.fecha, "y");

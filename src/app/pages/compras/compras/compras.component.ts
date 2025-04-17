@@ -1,11 +1,11 @@
-import { Component, OnInit, NgModule } from "@angular/core";
+import { Component, OnInit, NgModule, OnDestroy } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { ModalComprasComponent } from "./modal-compras/modal-compras.component";
 
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { Config } from "datatables.net";
 import Swal from "sweetalert2";
-
+import { FuncionesTablas } from "./funciones-tablas";
 //services
 import { ComprasService } from "src/app/core/services/compras/compras.service";
 import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompra/ordenes-compra.service";
@@ -25,21 +25,18 @@ export class ComprasComponent implements OnInit {
   public isLoad: boolean = true;
   public mostrarBoton = false;
 
-  public solicitudCompra: any; // Objeto que envió al componente detallesSolicitudCompra
+  
+  /**
+   * Objeto que envió al componente detallesSolicitudCompra
+   */
+  public solicitudCompra: any; 
   public status: any;
   public data: any;
 
   // varibles funciones tablas
-  // Paginación y búsqueda
-  filtro: string = "";
-  paginaActual: number = 1;
-  itemsPorPagina: number = 10;
-
-  columnaOrdenada: string = "";
-  ordenAscendente: boolean = true;
-
-  datosFiltrados: any[] = [];
-  datosPaginados: any[] = [];
+    datosFiltrados:any[] = [];
+    private ordenador!: FuncionesTablas<any>;
+    busqueda:string = '';
 
   constructor(
     public ordenesComprasService: OrdenesCompraService,
@@ -53,6 +50,10 @@ export class ComprasComponent implements OnInit {
     });
     this.dtOptions = environment.dataTables;
     this.getAll();
+  }
+
+  ngOnDestroy():void{
+
   }
   /**
    * Manejo de componentes
@@ -94,8 +95,8 @@ export class ComprasComponent implements OnInit {
         if (response) {
           this.data = response.data;
 
+          this.ordenador = new FuncionesTablas(this.data);
           this.datosFiltrados = [...this.data];
-          this.aplicarFiltro;
 
           this.isLoad = false;
           this.showTable = true;
@@ -217,35 +218,18 @@ export class ComprasComponent implements OnInit {
   }
 
   //Funciones de la tabla
-  aplicarFiltro() {
-    const texto = this.filtro.toLowerCase();
-    this.datosFiltrados = this.data.filter((item: any) =>
-      Object.values(item).some((val) =>
-        val?.toString().toLowerCase().includes(texto)
-      )
-    );
-    this.ordenarPor(this.columnaOrdenada || "folio"); // vuelve a ordenar
+  ordenarPor(columna: keyof any){
+    this.datosFiltrados = this.ordenador.ordenar(columna);
   }
 
-  ordenarPor(columna: string) {
-    if (this.columnaOrdenada === columna) {
-      this.ordenAscendente = !this.ordenAscendente;
-    } else {
-      this.columnaOrdenada = columna;
-      this.ordenAscendente = true;
-    }
-
-    this.datosFiltrados.sort((a: any, b: any) => {
-      const valA = a[columna] || "";
-      const valB = b[columna] || "";
-      return (valA < valB ? -1 : 1) * (this.ordenAscendente ? 1 : -1);
-    });
+  getIconoOrden(columna:keyof any):string{
+    return this.ordenador.getIcono(columna)
   }
 
-  getIconoOrden(columna: string): string {
-    if (this.columnaOrdenada !== columna) return ""; // ícono neutral
-    return this.ordenAscendente
-      ? "bx bx-up-arrow-alt "
-      : "bx bx-down-arrow-alt";
+  filtrarTabla(){
+    this.datosFiltrados = this.ordenador.filtrar(this.busqueda, [
+      'folio', 'usuario_destino', 'motivo',
+      'fecha', 'usuario_solicita', 'empresa', 'estado'
+    ]);
   }
 }

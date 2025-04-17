@@ -83,17 +83,17 @@ public options = {
       }
     },
     responsive: [
-      {
-        breakpoint: 480,
-        options: {
-          chart: {
-            width: 200
-          },
-          legend: {
-            position: "bottom"
-          }
-        }
-      }
+       {
+         breakpoint: 1500,
+         options: {
+           chart: {
+           },
+           legend: {
+            show: false,
+             position: "bottom"
+           }
+         }
+       }
     ]
   };
 

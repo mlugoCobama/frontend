@@ -4,7 +4,7 @@ export class FuncionesTablas<T> {
     private datosOriginales: T[] = [];
   
     constructor(private datos: T[]) {
-      this.datosOriginales = [...datos]; // Copia original para filtros
+      this.datosOriginales = [...datos];
     }
   
     ordenar(columna: keyof T): T[] {
@@ -44,14 +44,14 @@ export class FuncionesTablas<T> {
         })
       );
   
-      // Si hay orden activa, mantenla
       if (this.columnaOrdenada) {
         this.ordenar(this.columnaOrdenada);
       }
   
       return this.datos;
     }
-  
+
+
     reset(): T[] {
       this.datos = [...this.datosOriginales];
       return this.datos;

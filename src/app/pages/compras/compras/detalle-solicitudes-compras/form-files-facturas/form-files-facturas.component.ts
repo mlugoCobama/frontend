@@ -59,6 +59,10 @@ export class FormFilesFacturasComponent implements OnInit {
     this.getOrdenCompra();
   }
 
+  /**
+   * Emite la orden de compra al componente padre 
+   * @param data datos de la orden de compra
+   */
   setOrdenCompra(data: any) {
     this.setDataOrdenCompra.emit(data);
   }
@@ -76,7 +80,9 @@ export class FormFilesFacturasComponent implements OnInit {
     return this.formDocsOrdenCompra.controls;
   }
 
-  // Recupera la orden de compra actual en base a la solicitud de compra 
+  /**
+   * Recupera la orden de compra actual en base a la solicitud de compra 
+   */  
   private getOrdenCompra() {
     this.ordenesComprasService.getOne(this.solicitudCompra.id).subscribe(
       (response) => {
@@ -120,8 +126,8 @@ export class FormFilesFacturasComponent implements OnInit {
 
   /**
    * Guarda los archivos de las facturas 
-   * ------------------------------PDF
-   * ------------------------------XML
+   * ->PDF
+   * y XML
    * @returns 
    */
   public guardarArchivos() {
@@ -181,7 +187,7 @@ export class FormFilesFacturasComponent implements OnInit {
 
   /**
    * Guarda los archivos de comprobante de pago
-   * ---------------------------------------PDF
+   * ->PDF
    * @returns 
    */
   public guardarComPago() {
@@ -271,9 +277,9 @@ export class FormFilesFacturasComponent implements OnInit {
 
   /**
    * Lee el XML 
-   * ----------Lee los xmls de la orden de compra
-   * ----------Calcula la suma de los xml recuperados
-   * ----------Verifica cual es el método de pago
+   * Lee los xmls de la orden de compra
+   * Calcula la suma de los xml recuperados
+   * Verifica cual es el método de pago
    */
   public leerXML() {
     this.ordenesComprasService.getContenidoXML(this.ordenCompra.id).subscribe({
@@ -373,8 +379,7 @@ export class FormFilesFacturasComponent implements OnInit {
 
   /**
    * Verifica cual es el método de pago
-   * -------------------------------PPD
-   * -------------------------------PUE
+   * PPD o PUE del xml
    */
   checkMetodoPago() {
     this.metodoPago = this.factura.metodoPago?.metodoPago;
@@ -385,14 +390,18 @@ export class FormFilesFacturasComponent implements OnInit {
     }
   }
 
-  // Llama el service para abrir el archivo
+  /**
+   * Llama el service para abrir el archivo 
+   */ 
   verArchivos(prov: any) {
     
     this.proveedoresService.abrirArchivo(prov);
 
   }
 
-  //Descarga  todas las facturas de la orden de compra en formato zip
+  /**
+   * Descarga  todas las facturas de la orden de compra en formato zip
+   */
   public descargarFacturas() {
     this.ordenesComprasService.descargarFacturas(this.ordenCompra.id).subscribe((response) => {
 
@@ -407,8 +416,13 @@ export class FormFilesFacturasComponent implements OnInit {
       });
   }
 
+  /**
+   * Recupera archivos de los inputs files
+   * @param event archivo en el input
+   * @param fieldName nombre del input
+   */
   onFileChange1(event: any, fieldName: string) {
-    // Obtiene el archivo del input
+    
     this.formData.delete(fieldName);
     if (event.target.files.length > 0) {
       const file = event.target.files[0];

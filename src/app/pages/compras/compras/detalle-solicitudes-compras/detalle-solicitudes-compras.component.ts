@@ -34,28 +34,40 @@ export class DetalleSolicitudesComprasComponent implements OnInit{
     this.comprasService.mostrarCotizacion$.subscribe((mostrar) => { this.mostrarCotizacionFlag = mostrar; });
    }
 
- //Abre un modal con una imagen de referencia
+ /**
+  * Abre un modal con una imagen de referencia
+  */
  public openModal(content: any, imgReferencia: string) {
   this.selectedImage = imgReferencia;
   this.modalRef = this.modalService.show(content, { class: "modal-sm" });
 }
 
-// Asigna un valor a cotizacion
+/**
+ * Asigna un valor a cotización
+ * @param data valor que recibe 
+ */ 
 public setDataCotizacion(data:any) {
   this.cotizacion = data;
 }
 
-// Asigna un valor a ordenCompra
+/**
+ * Asigna un valor a OrdenCompra
+ * @param data valor que recibe 
+ */ 
 public setDataOrdenCompra(data:any) {
   this.ordenCompra = data;
 }
-
-// Asigna un valor a mostrarTotal
+/**
+ * Asigna un valor a MostrarTotal
+ * @param data valor que recibe 
+ */ 
 public setMostrarTotal(data:any) {
   this.mostrarTotal = data;
 }
 
-//Actualiza el estatus de la solicitud de compra
+/**
+ * Actualiza el estatus de la solicitud de compra
+ */  
 public updateStatus() {
   this.comprasService.getSolicitudCompra(this.solicitudCompra.id).subscribe(
     (response) => {

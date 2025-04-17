@@ -78,11 +78,11 @@ export class TableDetallesSolicitudComponent implements OnInit{
   }
 
   /**
-   * Recupera el detalle de la solicitud
-   * Si el estado es >= 2
-   * ---------------------Recupera proveedores-cotizacion
-   * ---------------------Agrega columnas e inputs
-   * ---------------------Actualiza la bandera mostrar total
+   * Recupera el detalle de la solicitud. 
+   * Si el estado es >= 2{
+   * Recupera proveedores-cotizacion. 
+   * Agrega columnas e inputs. 
+   * Actualiza la bandera mostrar total. } 
    */
   public getDetalles() {
     this.compras.getOne(this.solicitudCompra.id).subscribe(
@@ -108,7 +108,9 @@ export class TableDetallesSolicitudComponent implements OnInit{
     );
   }
 
-  //Recupera proveedores-cotizacion
+  /**
+  * Recupera proveedores-cotizacion
+  */
   public getProveedoresCotizacion() {
     this.cotizacionesService.getOne(this.solicitudCompra.id).subscribe(
       (response) => {
@@ -133,7 +135,6 @@ export class TableDetallesSolicitudComponent implements OnInit{
  
   /**
    * Agrega columnas e inputs
-   * ----------Actualiza los valores de totales
    */
   private addProveedorColumns() {
     this.cotProv.forEach((cotizacion) => {
@@ -150,7 +151,10 @@ export class TableDetallesSolicitudComponent implements OnInit{
     });
   }
 
-  // Valida que se ingresen unicamente números al campo
+  /**
+  * Valida que se ingresen unicamente números al campo
+  * @param event caracteres tecleados
+  */
   validateNumberInput(event: any) {
     const inputValue = event.target.value;
     const validNumber = /^[0-9]*\.?[0-9]{0,2}$/.test(inputValue);
@@ -160,7 +164,9 @@ export class TableDetallesSolicitudComponent implements OnInit{
     }
   }
 
-  // Actualiza los valores de totales
+  /**
+  * Actualiza los valores de totales
+  */
   public updateTotals() {
     this.totals = {};
     this.cotProv.forEach((cotizacion) => {
@@ -178,7 +184,9 @@ export class TableDetallesSolicitudComponent implements OnInit{
     this.totalMasBajo = this.getTotalMasBajo();
   }
 
-  //Recupera el total mas bajo
+  /**
+  *Recupera el total mas bajo
+  */
   getTotalMasBajo(): number {
     let tmasBajo = Number.MAX_VALUE;
     for (let prov of this.cotProv) {
@@ -192,8 +200,10 @@ export class TableDetallesSolicitudComponent implements OnInit{
     }
   }
 
-  // Guarda los precios capturados dentro de la tabla
-    public guardarPrecios() {
+  /**
+  * Guarda los precios capturados dentro de la tabla
+  */
+  public guardarPrecios() {
       const formData = new FormData();
       let allFilesUploaded = true;
       let datosIngresados = false;
@@ -257,7 +267,9 @@ export class TableDetallesSolicitudComponent implements OnInit{
       );
     }
 
-    //Recupera los valores del chechk
+    /**
+    *Recupera los valores del check
+    */
     public manejoCheck(prov: any) {
       const proveedorSleccionado = prov;
       this.proveedorSelec = proveedorSleccionado;
@@ -265,7 +277,9 @@ export class TableDetallesSolicitudComponent implements OnInit{
       this.mostrarObs = true;
     }
 
-    // Genera la orden de compra
+    /**
+    * Genera la orden de compra
+    */
     public generarOrden() {
 
      this.formOrdenCompra = this.cotizacionesService.getForm();

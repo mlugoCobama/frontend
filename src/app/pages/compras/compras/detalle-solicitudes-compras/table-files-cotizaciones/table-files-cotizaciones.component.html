@@ -1,18 +1,18 @@
-<div class="row" >
+<div class="row" *ngIf="">
   <div class="alert alert-warning text-center" role="alert">
     Marca la casilla de la fila con el proveedor seleccionado para generar la
     orden de compra
   </div>
   <div class="col-1" *ngIf="solicitudCompra.estatus >= 3"></div>
   <div class="col-10">
-
     <div class="d-flex justify-content-center" *ngIf="!isLoad">
       <div class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
     </div>
     <!--Tabla documentos cotizaciones-->
-    <table *ngIf="isLoad"
+    <table
+      *ngIf="isLoad"
       class="table table-striped table-hover table-sm table-bordered table-responsive"
     >
       <thead class="table-light">
@@ -73,15 +73,31 @@
       <div class="col-12" *ngIf="mostrarObs">
         <div class="col-md-12">
           <label for="entrega" class="form-label">Se entrega en: *</label>
-          <select (change)="setValuesForm()" class="form-select form-select-sm" aria-label="Default select example" formControlName="entrega">
-            <option  selected>Selecciona uno</option>
-            <option *ngIf = "isLoading" value="" [disabled] = "isLoading"> Cargando opciones espera...</option>
-            <option  *ngFor="let item of empresas" [value]="item.intercompania ">
+          <select
+            (change)="setValuesForm()"
+            class="form-select form-select-sm"
+            aria-label="Default select example"
+            formControlName="entrega"
+          >
+            <option selected>Selecciona uno</option>
+            <option *ngIf="isLoading" value="" [disabled]="isLoading">
+              Cargando opciones espera...
+            </option>
+            <option *ngFor="let item of empresas" [value]="item.intercompania">
               {{ item.name }}
             </option>
           </select>
-          <div *ngIf="ordenCompraFormControl.entrega.touched || submitted || ordenCompraFormControl.entrega.value === 'Selecciona uno'">
-            <div class="text-danger form-text" *ngIf="ordenCompraFormControl.entrega.errors?.['required']">
+          <div
+            *ngIf="
+              ordenCompraFormControl.entrega.touched ||
+              submitted ||
+              ordenCompraFormControl.entrega.value === 'Selecciona uno'
+            "
+          >
+            <div
+              class="text-danger form-text"
+              *ngIf="ordenCompraFormControl.entrega.errors?.['required']"
+            >
               Debes de seleccionar una empresa.
             </div>
           </div>
@@ -96,11 +112,20 @@
             id="observaciones"
             rows="3"
           ></textarea>
-          <p [class]="caracteresRestantes === 0 ? 'text-danger form-text' : 'form-text'">
+          <p
+            [class]="
+              caracteresRestantes === 0 ? 'text-danger form-text' : 'form-text'
+            "
+          >
             {{ longitudMaxima }}/{{ caracteresRestantes }}
           </p>
-          <div *ngIf="ordenCompraFormControl.observaciones.touched || submitted">
-            <div class="text-danger form-text" *ngIf="ordenCompraFormControl.observaciones.errors?.['required']">
+          <div
+            *ngIf="ordenCompraFormControl.observaciones.touched || submitted"
+          >
+            <div
+              class="text-danger form-text"
+              *ngIf="ordenCompraFormControl.observaciones.errors?.['required']"
+            >
               Observaciones es requerido.
             </div>
           </div>
@@ -111,17 +136,20 @@
     <div *ngIf="solicitudCompra.estatus >= 3" class="row">
       <p *ngIf="ordenCompra">
         <strong>Observaciones: </strong> {{ ordenCompra.observaciones }}
+        
       </p>
     </div>
   </div>
 
-<div class="col-2 d-flex align-items-start">
-  <button
-    *ngIf="solicitudCompra.estatus === 2 && !mostrarObs"
-    type="submit"
-    class="btn btn-sm btn-success"
-    (click)="guardarPrecios()"> Guardar Cotización
-  </button>
-</div>
+  <div class="col-2 d-flex align-items-start">
+    <button
+      *ngIf="solicitudCompra.estatus === 2 && !mostrarObs"
+      type="submit"
+      class="btn btn-sm btn-success"
+      (click)="guardarPrecios()"
+    >
+      Guardar Cotización
+    </button>
+  </div>
 </div>
 <hr />

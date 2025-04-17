@@ -72,7 +72,9 @@ export class ModalComprasComponent implements OnInit {
     this.getUsuarioActivo();
   }
 
-  //Recupera el catalogo de empresas (Select empresa)
+  /**
+   * Recupera el catalogo de empresas (Select empresa)
+   */
   public getEmpresas() {
     this.usuariosService.getEmpresas().subscribe(
       (response) => {
@@ -96,8 +98,8 @@ export class ModalComprasComponent implements OnInit {
      * !------------------------------IMPORTANTE------------------------------------
      * TODO cambiar esta linea para que recupere el usuario activo en base al correo
      *******************************************************************************/
-    //  this.usuariosService.getUserById(usuarioActivo['role']['email']).subscribe(
-    this.usuariosService.getUserById("mlugo@cobama.com.mx").subscribe(
+    this.usuariosService.getUserById(usuarioActivo['role']['email']).subscribe(
+    // this.usuariosService.getUserById("mlugo@cobama.com.mx").subscribe(
       (response) => {
         if (response) {
           this.usuarioSolicita = response.data;
@@ -112,7 +114,10 @@ export class ModalComprasComponent implements OnInit {
     //TODO this.usuarioSolicita = usuarioActivo;
   }
 
-  //Recupera los usuarios que pertenecen a las empresas (Select usuario)
+  /**
+   * Recupera los usuarios que pertenecen a las empresas (Select usuario)
+   * @param intercompania num de intercompania
+   */
   public getUsuarios(intercompania: any) {
     this.usuarios = [];
     this.isLoad = false;
@@ -180,7 +185,10 @@ export class ModalComprasComponent implements OnInit {
     return this.formSolicitudCompra.controls;
   }
 
-  //Guarda el contenido del la solicitud y detalles
+  /**
+   * Guarda el contenido del la solicitud y detalles
+   * @returns 
+   */
   public save() {
     this.submitted = true;
     this.isLoad = true;
@@ -200,7 +208,9 @@ export class ModalComprasComponent implements OnInit {
       return;
     }
 
-    // Valido que el usuario ingrese por lo menos un detalle
+    /**
+     * Valido que el usuario ingrese por lo menos un detalle
+     */ 
     if (this.tableData.length === 0) {
       this.isLoad = false;
       Swal.fire({
@@ -274,7 +284,9 @@ export class ModalComprasComponent implements OnInit {
 
   }
 
-  // cierra la ventana modal
+  /**
+   * cierra la ventana modal
+   */
   public cerrarModal(): void {
     this.modalRef.hide();
   }
@@ -286,14 +298,22 @@ export class ModalComprasComponent implements OnInit {
     return this.formDetalleSolicitud.controls;
   }
 
-  // metodo que obtiene el texto del select unidad
+  /**
+   * método que obtiene el texto del select unidad
+   * @param selectElement eventos del select
+   */
   public onChange(selectElement: any) {
     const selectedText =
       selectElement.options[selectElement.selectedIndex].text;
     this.unidad = selectedText;
   }
 
-  // Función que captura el archivo en el input
+  
+  /**
+   * Función que captura el archivo en el input
+   * @param event evento capturado del input
+   * @param fieldName nombre del campo
+   */
   onFileChange(event: any, fieldName: string) {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
@@ -311,7 +331,9 @@ export class ModalComprasComponent implements OnInit {
     img_referencia: null,
   };
 
-  // Agrega los detalles a el array detalle para después mostrarlo en la tabla
+  /**
+   *  Agrega los detalles a el array detalle para después mostrarlo en la tabla
+   */ 
   public addDetalle() {
     if (this.formDetalleSolicitud.invalid) {
       this.submittedDetail = true;
@@ -342,17 +364,23 @@ export class ModalComprasComponent implements OnInit {
     this.submittedDetail = false;
   }
 
-  //elimina el detalle del array detalles
+  /**
+   * elimina el detalle del array detalles
+   */
   public removeDetalle(index: number) {
     this.tableData.splice(index, 1);
   }
 
-  // Cuenta los caracteres restantes de text area motivo
+  /**
+   * Cuenta los caracteres restantes de text area motivo
+   */
   public contarCaracteres() {
     this.caracteresRestantes = this.longitudMaxima - this.text.length;
   }
 
-  //Recupera el catalogo de unidades 
+  /**
+   * Recupera el catalogo de unidades
+   */
   private getUnidades() {
     this.catUnidadesMedidasService.getAll().subscribe(
       (response) => {

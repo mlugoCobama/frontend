@@ -12,6 +12,7 @@ import { formatNumber } from '@angular/common';
   templateUrl: './barras-horizontales-metas.component.html',
   styleUrl: './barras-horizontales-metas.component.css'
 })
+
 export class BarrasHorizontalesMetasComponent implements AfterViewInit {
   @Input() dataMes: any[];
   @Input() dataMesAnterior: any[];
@@ -31,7 +32,7 @@ export class BarrasHorizontalesMetasComponent implements AfterViewInit {
   public options = {
     series: [80],
     chart: {
-    height: 350,
+    height: 300,
     type: 'radialBar',
     offsetY: -10
   },
@@ -88,7 +89,6 @@ export class BarrasHorizontalesMetasComponent implements AfterViewInit {
   /**
    * Inicializa la gráfica en base a los parámetros generados
    */
-
   public inicializarGrafica(){
     const filaTotal =  this.dataMes.find((registro) => registro.estacion === "Total");
     const cumplimiento  =  Number(filaTotal['cumplimiento']);

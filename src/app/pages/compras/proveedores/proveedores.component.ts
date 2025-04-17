@@ -39,6 +39,7 @@ export class ProveedoresComponent implements OnInit {
   public archivos: any;
   public tamanioExp:any;
 
+  //Variables funciones tablas
   datosFiltrados:any[] = [];
   private ordenador!: FuncionesTablas<any>;
   busqueda:string = '';
