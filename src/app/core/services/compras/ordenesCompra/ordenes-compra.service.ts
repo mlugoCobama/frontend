@@ -130,6 +130,10 @@ export class OrdenesCompraService {
     });
   }
 
+  public getDataXMLs(id: number): Observable<any> {
+    return this.http.get(environment.apiUrl + `compras/get-data-xml/${id}`);
+  }
+
   /**
    * Petición al servidor para recuperar un rar con facturas
    * @param id id orden compra (clave foránea)

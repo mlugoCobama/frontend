@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
 
 import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompra/ordenes-compra.service";
-import { ProveedoresService } from "src/app/core/services/compras/proveedores/proveedores.service";
+
 
 import {
   FormBuilder,
@@ -51,7 +51,6 @@ export class FormFilesFacturasComponent implements OnInit {
   constructor(
     public formBuilder: FormBuilder,
     private ordenesComprasService: OrdenesCompraService,
-    private proveedoresService: ProveedoresService
   ) {}
 
   ngOnInit(): void {
@@ -282,99 +281,16 @@ export class FormFilesFacturasComponent implements OnInit {
    * Verifica cual es el método de pago
    */
   public leerXML() {
-    this.ordenesComprasService.getContenidoXML(this.ordenCompra.id).subscribe({
-      next: (data) => {
-        this.parseVariosXml(data.contenidos);
-        this.calcularSumas();
-        this.checkMetodoPago();
-      },
-      error: (err) => console.error("error al obtener los xml: ", err),
+    this.mostrarDtsFac = false;
+    this.ordenesComprasService.getDataXMLs(this.ordenCompra.id).subscribe(
+      (response) => {
+        if(response){
+          console.log(response);
+          this.factura = response.factura;
+          this.checkMetodoPago();
+        }
     });
     this.mostrarDtsFac = true;
-  }
-
- /**
-  * Lee los xmls de la orden de compra
-  * @param xmls data que recibe del servicio
-  */
-  parseVariosXml(xmls: string[]) {
-    const parser = new DOMParser();
-    const ns = "http://www.sat.gob.mx/cfd/4";
-
-    this.factura = {
-      comprobantes: [],
-      impuestos: [],
-      emisor: {},
-      receptor: {},
-      metodoPago: {},
-    };
-
-    xmls.forEach((xml, index) => {
-
-      const xmlDoc = parser.parseFromString(xml, "application/xml");
-
-      const comprobante = xmlDoc.getElementsByTagNameNS(ns, "Comprobante")[0];
-      if (comprobante) {
-        this.factura.comprobantes.push({
-          fecha: comprobante?.getAttribute("Fecha"),
-          folio: comprobante?.getAttribute("Folio"),
-          serie: comprobante?.getAttribute("Serie"),
-          subTotal: parseFloat(comprobante?.getAttribute("SubTotal") || "0"),
-          moneda: comprobante?.getAttribute("Moneda"),
-          total: parseFloat(comprobante?.getAttribute("Total") || "0"),
-        });
-      }
-
-      const impuestos = xmlDoc.getElementsByTagNameNS(ns, "Impuestos")[0];
-      if (impuestos) {
-        this.factura.impuestos.push({
-          totalImpuestosTrasladados:
-            impuestos?.getAttribute("TotalImpuestosTrasladados") || "0.00",
-        });
-      }
-
-      if (index === 0) {
-        const emisor = xmlDoc.getElementsByTagNameNS(ns, "Emisor")[0];
-        if (emisor) {
-          this.factura.emisor = {
-            rfc: emisor?.getAttribute("Rfc"),
-            nombre: emisor?.getAttribute("Nombre"),
-            regimenFiscal: emisor?.getAttribute("RegimenFiscal"),
-          };
-        }
-
-        const metodoPago = xmlDoc.getElementsByTagNameNS(ns, "Comprobante")[0];
-        if (metodoPago) {
-          this.factura.metodoPago = {
-            metodoPago: metodoPago?.getAttribute("MetodoPago"),
-          };
-        }
-        const receptor = xmlDoc.getElementsByTagNameNS(ns, "Receptor")[0];
-        if (receptor) {
-          this.factura.receptor = {
-            rfc: receptor?.getAttribute("Rfc"),
-            nombre: receptor?.getAttribute("Nombre"),
-            usoCFDI: receptor?.getAttribute("UsoCFDI"),
-            domicilioFiscalReceptor: receptor?.getAttribute(
-              "DomicilioFiscalReceptor"
-            ),
-          };
-        }
-      }
-    });
-  }
-
-  //Calcula la suma de los xml recuperados
-  calcularSumas() {
-    this.factura.sumaSubTotal = this.factura.comprobantes.reduce(
-      (sum, comprobante) => sum + comprobante.subTotal,
-      0
-    );
-
-    this.factura.sumaTotal = this.factura.comprobantes.reduce(
-      (sum, comprobante) => sum + comprobante.total,
-      0
-    );
   }
 
   /**
@@ -390,14 +306,7 @@ export class FormFilesFacturasComponent implements OnInit {
     }
   }
 
-  /**
-   * Llama el service para abrir el archivo 
-   */ 
-  verArchivos(prov: any) {
-    
-    this.proveedoresService.abrirArchivo(prov);
 
-  }
 
   /**
    * Descarga  todas las facturas de la orden de compra en formato zip

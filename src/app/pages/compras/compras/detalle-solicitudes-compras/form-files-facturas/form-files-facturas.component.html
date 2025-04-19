@@ -45,11 +45,6 @@ class="row g-2"
             </div>
           </div>
         </td>
-        <td>
-          <a *ngFor="let documento of ordenCompra.documentos; let idx = $index" class="btn btn-sm btn-danger" (click)="verArchivos(documento.ruta_pdf_factura)">
-            <i class="fas fa-file-pdf"></i>
-          </a>
-        </td>
       </tr>
       <tr>
         <td>

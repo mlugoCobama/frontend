@@ -100,8 +100,8 @@ export class ModalComprasComponent implements OnInit {
      * !------------------------------IMPORTANTE------------------------------------
      * TODO cambiar esta linea para que recupere el usuario activo en base al correo
      *******************************************************************************/
-    this.usuariosService.getUserById(usuarioActivo['role']['email']).subscribe(
-    // this.usuariosService.getUserById("mlugo@cobama.com.mx").subscribe(
+    // this.usuariosService.getUserById(usuarioActivo['role']['email']).subscribe(
+    this.usuariosService.getUserById("mlugo@cobama.com.mx").subscribe(
       (response) => {
         if (response.status === 'success') {
           this.usuarioSolicita = response.data;
