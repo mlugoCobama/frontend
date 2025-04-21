@@ -1,8 +1,4 @@
-<div class="d-flex justify-content-center" *ngIf="!mostrarDtsFac">
-  <div class="spinner-border" role="status">
-    <span class="visually-hidden">Loading...</span>
-  </div>
-</div>
+
 <div *ngIf="mostrarDtsFac">
     <div class="row" *ngIf="ordenCompra.documentos[0].ruta_xml_factura">
       <h5>Datos de facturación</h5>
@@ -86,5 +82,4 @@
 </div>
 <ng-template #noArchivo>
   <span class="badge badge-pill fs-4 badge-soft-secondary"><i class="fas fa-ban"></i></span>
-
 </ng-template>

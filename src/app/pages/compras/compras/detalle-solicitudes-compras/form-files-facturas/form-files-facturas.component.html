@@ -14,7 +14,6 @@ class="row g-2"
       <tr class="text-center">
         <th>Documento</th>
         <th >Subir archivo</th>
-        <th >Ver</th>
       </tr>
     </thead>
 
@@ -53,11 +52,11 @@ class="row g-2"
         <td >
           <input *ngIf="!hasComprobantePago" class="form-control form-control-sm" id="comprobante_pago" type="file" accept="application/pdf" (change)="onFileChange1($event, 'comprobante_pago')" formControlName="comprobante_pago"/>
         </td>
-        <td>
+        <!-- <td>
           <a class="btn btn-sm btn-danger" *ngFor="let documento of ordenCompra.documentos" (click)="verArchivos(documento.comprobante_pago)">
             <i class="fas fa-file-pdf"></i>
           </a>
-        </td>
+        </td> -->
       </tr>
     </tbody>
   </table>
