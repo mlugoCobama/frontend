@@ -21,6 +21,7 @@ export class TblFlsCotizacionComponent implements OnInit {
   @Input() solicitudCompra: any;
   @Input() cotProv: any[] = [];
   @Input() ordenCompra: any;
+
   text: string = "";
   longitudMaxima: number = 150;
   caracteresRestantes: number = this.longitudMaxima;
@@ -43,6 +44,11 @@ export class TblFlsCotizacionComponent implements OnInit {
     this.cotizacionesService.setForm(this.formOrdenCompra);}
 
   public ngOnInit(): void {
+    this.validarSatus();
+    this.buildForm();
+  }
+
+  validarSatus(){
     if (
       this.solicitudCompra.estatus === 3 ||
       this.solicitudCompra.estatus === 4 ||
@@ -50,8 +56,6 @@ export class TblFlsCotizacionComponent implements OnInit {
     ) {
       this.getOrdenCompra();
     }
-    
-    this.buildForm();
   }
 
   guardarPrecios() {
@@ -78,7 +82,6 @@ export class TblFlsCotizacionComponent implements OnInit {
   }
 
   verArchivos(prov: any) {
-    //llama el service para abrir el archivo
     this.proveedoresService.abrirArchivo(prov);
   }
 
@@ -93,12 +96,12 @@ export class TblFlsCotizacionComponent implements OnInit {
   }
 
   public contarCaracteres() {
-    // Valida la longitud de los text area
     this.caracteresRestantes = this.longitudMaxima - this.text.length;
     this.cotizacionesService.setForm(this.formOrdenCompra);
   }
 
-  public cancelarOrden() {
+  public  cancelarOrden() {
+    this.validarSatus();
     Swal.fire({
       title: "¿Estas seguro?",
       text: "La orden será cancelada",
@@ -151,7 +154,8 @@ export class TblFlsCotizacionComponent implements OnInit {
     });
   }
 
-  public autorizarOrden() {
+  public  autorizarOrden() {
+    this.validarSatus();
     const data = {
       idSolicituCompra: this.solicitudCompra.id,
       idOrdenCompra: this.ordenCompra.id,
@@ -254,4 +258,8 @@ export class TblFlsCotizacionComponent implements OnInit {
       }
     );
   }
+
+
+  
+  
 }

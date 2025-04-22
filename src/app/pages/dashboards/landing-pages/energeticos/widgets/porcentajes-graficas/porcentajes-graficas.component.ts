@@ -60,7 +60,9 @@ export class PorcentajesGraficasComponent implements OnInit {
     });
   }
 
-  //Inicializa los valores de las gráficas
+  /**
+   * Inicializa los valores de las gráficas
+   */
   private inicializarGrfica(){
     this.dataEnergeticos = this.localStorage.getItem('DataEnergeticos');
     if(this.dataEnergeticos.mes.length > 1){
@@ -77,7 +79,9 @@ export class PorcentajesGraficasComponent implements OnInit {
     this.chart.render();
   }
 
-  // Actualiza los valores de la grafica
+  /** 
+   * Actualiza los valores de la grafica
+   */
   private actualizarGrafica(){
     this.dataEnergeticos = this.localStorage.getItem('DataEnergeticos');
     if(this.dataEnergeticos.mes.length > 1){
@@ -92,7 +96,9 @@ export class PorcentajesGraficasComponent implements OnInit {
     this.chart.updateOptions(this.options)   
   }
 
-  // Genera las series de la gráfica
+  /**
+   * Genera las series de la gráfica
+   */
   private generarSerie(){
     let data:any = [];
     this.deleteLast();
@@ -106,7 +112,9 @@ export class PorcentajesGraficasComponent implements OnInit {
     console.log(this.serie);
   }
 
-  //Manejo de valores negativos
+  /**
+   * Manejo de valores negativos
+   */
   private valueNegative( value: number ) {
     if (value < 0) {
       return value * -1;
@@ -115,7 +123,9 @@ export class PorcentajesGraficasComponent implements OnInit {
     }
   }
 
-  //Genera las etiquetas de las series de las gráficas
+  /**
+   * Genera las etiquetas de las series de las gráficas
+   */
   private generarLabels(){
     let data:any = [];
     for (let i = 0; i < this.dataEnergeticos.mes.length; i++) {
@@ -128,7 +138,9 @@ export class PorcentajesGraficasComponent implements OnInit {
   }
 
 
-  // elimina el total y lo almacena eun un nuevo arreglo
+  /**
+   * elimina el total y lo almacena eun un nuevo arreglo
+   */
   private deleteLast () { 
     this.total = [];
     for ( let item in this.dataEnergeticos ) {

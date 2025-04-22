@@ -1,0 +1,17 @@
+<!-- botones aceptar o rechazar orden -->
+<div *ngIf = "isLoad" class="row justify-content-around">
+    <button
+      *ngIf="solicitudCompra.estatus === 3"
+      class="btn btn-danger col-md-5"
+      (click)="cancelarOrden()"
+    >
+      Orden de compra rechazada
+    </button>
+    <button
+      *ngIf="solicitudCompra.estatus === 3"
+      class="btn btn-success col-md-5"
+      (click)="autorizarOrden()"
+    >
+      Orden de compra autorizada
+    </button>
+</div>

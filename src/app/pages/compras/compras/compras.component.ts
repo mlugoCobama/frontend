@@ -1,11 +1,11 @@
-import { Component, OnInit, NgModule } from "@angular/core";
+import { Component, OnInit, NgModule, OnDestroy } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { ModalComprasComponent } from "./modal-compras/modal-compras.component";
 
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { Config } from "datatables.net";
 import Swal from "sweetalert2";
-
+import { FuncionesTablas } from "./funciones-tablas";
 //services
 import { ComprasService } from "src/app/core/services/compras/compras.service";
 import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompra/ordenes-compra.service";
@@ -17,17 +17,26 @@ import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompr
 })
 export class ComprasComponent implements OnInit {
   public dtOptions: Config = {};
-  
+
   public modalRef?: BsModalRef;
-  
+
   public showTable: boolean = false;
   public solicitudSelecionada: boolean = false;
   public isLoad: boolean = true;
-  mostrarBoton = false;
+  public mostrarBoton = false;
 
-  public solicitudCompra: any; // Objeto que envió al componente detallesSolicitudCompra
+  
+  /**
+   * Objeto que envió al componente detallesSolicitudCompra
+   */
+  public solicitudCompra: any; 
   public status: any;
   public data: any;
+
+  // varibles funciones tablas
+    datosFiltrados:any[] = [];
+    private ordenador!: FuncionesTablas<any>;
+    busqueda:string = '';
 
   constructor(
     public ordenesComprasService: OrdenesCompraService,
@@ -39,9 +48,12 @@ export class ComprasComponent implements OnInit {
     this.comprasService.mostrarBoton$.subscribe((mostrar) => {
       this.mostrarBoton = mostrar;
     });
-
     this.dtOptions = environment.dataTables;
     this.getAll();
+  }
+
+  ngOnDestroy():void{
+
   }
   /**
    * Manejo de componentes
@@ -62,9 +74,7 @@ export class ComprasComponent implements OnInit {
   }
   // Funcion para llenar la vista con el detalle component
   public openDetallesSolicitud(dato: any, evento: any) {
-    
     this.solicitudSelecionada = true;
-    // Verifica si hay un elemento seleccionado (evento del doble click)
     if (evento.currentTarget.classList.contains("table-primary")) {
       evento.currentTarget.classList.remove("table-primary");
       this.solicitudSelecionada = false;
@@ -84,6 +94,10 @@ export class ComprasComponent implements OnInit {
       (response) => {
         if (response) {
           this.data = response.data;
+
+          this.ordenador = new FuncionesTablas(this.data);
+          this.datosFiltrados = [...this.data];
+
           this.isLoad = false;
           this.showTable = true;
         } else {
@@ -99,19 +113,21 @@ export class ComprasComponent implements OnInit {
   /**
    * Funciones Botonera
    */
+  // Muestra la vista de la tabla
   public regresar() {
-    // Muestra la vista de la tabla
     this.comprasService.cambiarEstadoCotizacion(false);
     this.solicitudSelecionada = false;
     this.status = 0;
     this.mostrarBoton = false;
     this.getAll();
   }
-
+  //Muestra u oculta el panel de cotizaciones
   mostrarCotizacion() {
     this.comprasService.cambiarEstadoCotizacion(true);
+    this.status = this.solicitudCompra.estatus;
   }
 
+  // Cancela la solicitud desde un botón en la botonera
   public cancelarSolicitud() {
     this.isLoad = true;
     Swal.fire({
@@ -164,10 +180,12 @@ export class ComprasComponent implements OnInit {
     });
   }
 
+  //Botón que genera la orden  de compra
   btnGenerarOC() {
     this.comprasService.triggerGenerateOrder();
   }
 
+  //Botón que descarga la orden de compra
   btnDescargarOC() {
     this.ordenesComprasService
       .pdfOrdenCompra(this.solicitudCompra.id)
@@ -194,7 +212,24 @@ export class ComprasComponent implements OnInit {
         }
       });
   }
-  /**
-   * Fin funciones Botonera
-   */
+
+  updateStatus(status: any) {
+    this.status = status;
+  }
+
+  //Funciones de la tabla
+  ordenarPor(columna: keyof any){
+    this.datosFiltrados = this.ordenador.ordenar(columna);
+  }
+
+  getIconoOrden(columna:keyof any):string{
+    return this.ordenador.getIcono(columna)
+  }
+
+  filtrarTabla(){
+    this.datosFiltrados = this.ordenador.filtrar(this.busqueda, [
+      'folio', 'usuario_destino', 'motivo',
+      'fecha', 'usuario_solicita', 'empresa', 'estado'
+    ]);
+  }
 }

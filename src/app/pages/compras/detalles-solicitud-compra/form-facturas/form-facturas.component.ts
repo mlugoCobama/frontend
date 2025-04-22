@@ -39,6 +39,7 @@ export class FormFacturasComponent implements OnInit{
  public hasFacturas: boolean = false;
  public hasComprobantePago: boolean = false;
  public idDocOrdC: any;
+ 
   constructor(
     public formBuilder: FormBuilder,
     private ordenesComprasService: OrdenesCompraService,
@@ -342,6 +343,7 @@ get ordenDocsCompraFormControl() {
       }
     );
   }
+
   public leerXML() {
     this.ordenesComprasService.getContenidoXML(this.ordenCompra.id).subscribe({
       next: (data) => {

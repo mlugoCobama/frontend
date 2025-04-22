@@ -1,0 +1,76 @@
+
+<div class="card-body">
+<!-- Inicia vista final  -->
+    <app-info-solicitud
+    [solicitudCompra]="solicitudCompra"
+    [mostrarTotal]="mostrarTotal"  
+    [cotizacion]="cotizacion"     
+    ></app-info-solicitud>
+
+    <app-table-detalles-solicitud
+    [solicitudCompra]="solicitudCompra"
+    [ordenCompra]="ordenCompra"
+    (openModal)="openModal(content, $event)"
+    (showTotal) = "setMostrarTotal($event)"
+    (setDataCotizacion)="setDataCotizacion($event)"
+    (actualizarStatus)="updateStatus()"       
+    ></app-table-detalles-solicitud>
+
+    <app-form-files-facturas
+    *ngIf = "solicitudCompra.estatus > 3"
+    [solicitudCompra]="solicitudCompra"
+    (setDataOrdenCompra)="setDataOrdenCompra($event)"
+    (actualizarStatus)="updateStatus()" 
+    ></app-form-files-facturas>
+
+<!-- Fin vista final  -->
+
+<!-- Inicia paneles temporales -->
+    <app-panel-cotizaciones
+    *ngIf="mostrarCotizacionFlag && solicitudCompra.estatus === 1 "
+    [solicitudCompra]="solicitudCompra"
+    (actualizarStatus)="updateStatus()"
+    (showTotal)="showTotal()"         
+    ></app-panel-cotizaciones>
+
+    <app-btns-autorizacion
+    *ngIf= "solicitudCompra.estatus === 3"
+    [solicitudCompra]="solicitudCompra" 
+    (setDataOrdenCompra)="setDataOrdenCompra($event)"
+    (actualizarStatus)="updateStatus()"   
+    ></app-btns-autorizacion>
+<!-- Inicia paneles temporales -->
+
+</div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">Img. referencia</h5>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        id="close-modal"
+        (click)="modalRef?.hide()"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <img
+        [src]="selectedImage"
+        class="img-fluid rounded"
+        style="max-width: 100%; height: auto"
+        alt="Imagen de referencia"
+      />
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-secondary btn-sm"
+        data-bs-dismiss="modal"
+        (click)="modalRef?.hide()"
+      >
+        Cerrar
+      </button>
+    </div>
+</ng-template>

@@ -56,9 +56,12 @@ export class StackGraficaComponent implements AfterViewInit {
   }],
     chart: {
     type: 'bar',
-    height: 260,
+    height: 250,
     stacked: true,
-    stackType: "100%"
+    stackType: "100%",
+    toolbar:{
+      show:false
+    },
   },
   plotOptions: {
     bar: {
@@ -119,34 +122,22 @@ export class StackGraficaComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.setTitle();
-    this.generarSeriesStack();
-    const filaTotales = this.dataMesAnterior.find((registro) => registro.estacion === "Total");
-    console.log(filaTotales)
+
     this.options.series = this.generarSeriesStack();
+
     this.options.xaxis.categories =  this.generarCategories();
-      // [{
-      //   name: '101-200',
-      //   data: [Number(filaTotales['inv_nuevo_101']), Number(filaTotales['inv_semi_101'])]
-      // }, {
-      //   name: '201-300',
-      //   data: [Number(filaTotales['inv_nuevo_201']), Number(filaTotales['inv_semi_201'])]
-      // }, {
-      //   name: '301-400',
-      //   data: [Number(filaTotales['inv_nuevo_301']), Number(filaTotales['inv_semi_301'])]
-      // }, {
-      //   name: '401 y Mas',
-      //   data: [Number(filaTotales['inv_nuevo_401']), Number(filaTotales['inv_semi_401'])]
-      // }]
-      //  console.log(this.options.series);
-    
-    this.generarSeriesStack();
+
     var chart = new ApexCharts(
       document.querySelector("#chart_barras_" + this.concepto),
       this.options
     );
+
     chart.render();
   }
 
+  /**
+   * Asigna un titulo al card
+   */
   private setTitle() {
     switch (this.concepto) {
       case "ant_inv_nuevo":
@@ -163,6 +154,10 @@ export class StackGraficaComponent implements AfterViewInit {
     }
   }
 
+  /**
+   * Genera las series
+   * @returns series
+   */
   public generarSeriesStack(){
     let series = [
       {
@@ -192,6 +187,9 @@ export class StackGraficaComponent implements AfterViewInit {
     return series;
   }
 
+  /**
+   * Genera categorías por fechas 
+   */
   public generarCategories(){
     let categorias = [];
     let fecha : any;

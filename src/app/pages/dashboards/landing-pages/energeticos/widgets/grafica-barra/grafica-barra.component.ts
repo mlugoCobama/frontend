@@ -167,7 +167,9 @@ export class GraficaBarraComponent implements OnInit {
     this.updateFlag = true; //Es necesario declarar esto para que la gráfica actualice valores
   }
 
-  //Actualiza los datos de las series y las etiquetas
+  /**
+   * Actualiza los datos de las series y las etiquetas
+   */
   private actualizarGrafica() {
     this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
     if (this.dataEnergeticos.mes.length > 1) {
@@ -187,7 +189,9 @@ export class GraficaBarraComponent implements OnInit {
     this.updateFlag = true;
   }
 
-  // Genera las series y la etiquetas de la gráfica
+  /** 
+   * Genera las series y la etiquetas de la gráfica
+   */ 
   private generarSerie() {
     let data: any = [];
     for (let i = 0; i < this.dataEnergeticos.mes.length; i++) {
@@ -211,7 +215,9 @@ export class GraficaBarraComponent implements OnInit {
     };
   }
 
-  //Recupera el periodo recuperado del localStorage
+  /**
+   * Recupera el periodo recuperado del localStorage
+   */
   public obtenerPeriodo(){
     const mes = this.dataEnergeticos.mes.find((registro) => registro.id != "Total");
     const periodo =  mes.fecha.split("-")

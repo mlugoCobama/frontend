@@ -45,7 +45,9 @@ export class DetalleGasolineriasComponent implements OnInit {
 
     this.recuperarLocalStorage();
   }
-
+  /**
+   * Recupera los datos almacenados en local storage
+   */
   public recuperarLocalStorage() {
     this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
     const fecha = new Date();
@@ -56,13 +58,11 @@ export class DetalleGasolineriasComponent implements OnInit {
     this.filtrarInfo();
   }
 
+  /**
+   * Filtra la información en base al mes y al año seleccionado
+   */
   public filtrarInfo() {
-    this.energerticosGasolinerias
-      .getAnualGasolinerias(
-        2,
-        Number(this.mesSeleccionado) + 1,
-        this.anioSeleccionado
-      )
+    this.energerticosGasolinerias.getAnualGasolinerias(2, Number(this.mesSeleccionado) + 1, this.anioSeleccionado)
       .subscribe(
         (data: ResponseEnergeticosGaseras) => {
           if (data.success) {
@@ -127,7 +127,10 @@ export class DetalleGasolineriasComponent implements OnInit {
     }
   }
 
-  //Deshabilita meses superiores o iguales al mes actual
+  /**
+   * Deshabilita meses superiores o iguales al mes actual
+   * @param mes mes del select
+   */
   public filtrarMeses(mes: string): boolean {
     return (
       Number(this.anioSeleccionado) === this.anioActual &&

@@ -1,0 +1,85 @@
+
+<div *ngIf="mostrarDtsFac">
+    <div class="row" *ngIf="ordenCompra.documentos[0].ruta_xml_factura">
+      <h5>Datos de facturación</h5>
+
+      <div class="col-6">
+        <h5><strong>RECEPTOR</strong></h5>
+        <p><strong>RFC:</strong> {{ factura.receptor?.rfc }}</p>
+        <p><strong>NOMBRE: </strong> {{ factura.receptor?.nombre }}</p>
+        <p><strong>USO CFDI: </strong> {{ factura.receptor?.usoCFDIDesc }} ({{ factura.receptor?.usoCFDI }})</p>
+        <p>
+          <strong>DOMICILIO FISCAL: </strong>
+          {{ factura.receptor?.domicilioFiscalReceptor }}
+        </p>
+      </div>
+      <div class="col-6">
+        <h5><strong>EMISOR: </strong></h5>
+        <p><strong>RFC: </strong> {{ factura.emisor?.rfc }}</p>
+        <p><strong>NOMBRE: </strong> {{ factura.emisor?.nombre }}</p>
+        <p>
+          <strong>REGIMEN FISCAL: </strong>
+          {{ factura.emisor?.regimenFiscalDesc }} ({{ factura.emisor?.regimenFiscal }}) 
+        </p>
+        <p>
+          <strong>MET. PAGO: </strong> {{ factura.metodoPago?.metodoPagoDesc }} ({{ factura.metodoPago?.metodoPago }})
+        </p>
+      </div>
+      <table
+        class="text-center table table-sm table-borderless table-responsive"
+      >
+        <thead class="table-light">
+          <tr>
+            <th>FECHA</th>
+            <th>FOLIO</th>
+            <th>SERIE</th>
+            <th>SUB TOTAL</th>
+            <th>IMPUESTOS</th>
+            <th>TOTAL</th>
+            <th>MONEDA</th>
+            <th>FAC.</th>
+            <th>C.PAGO</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let comprobante of factura.comprobantes; index as i">
+            <td>{{ comprobante.fecha | date:'dd/MM/yyyy h:mm:ss a'}}</td>
+            <td>{{ comprobante.folio }}</td>
+            <td>{{ comprobante.serie }}</td>
+            <td>$ {{ comprobante.subTotal | number }}</td>
+            <td>$ {{ comprobante.total - comprobante.subTotal| number}}</td>
+            <td>$ {{ comprobante.total | number }}</td>
+            <td>{{ comprobante.moneda }}</td>
+            <td>
+              <a *ngIf="ordenCompra.documentos[i].ruta_pdf_factura; else noArchivo"  class="btn btn-sm btn-danger" (click)="verArchivos(ordenCompra.documentos[i].ruta_pdf_factura)">
+                <i class="fas fa-file-pdf"></i>
+              </a>
+            </td>
+            <td>
+              <a *ngIf="ordenCompra.documentos[i].comprobante_pago; else noArchivo" class="btn btn-sm btn-info" (click)="verArchivos(ordenCompra.documentos[i].comprobante_pago)">
+                <i class="fas fa-file-pdf"></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <td colspan="3" class="text-end"><strong> Totales: </strong></td>
+          <td>
+            <strong>$ {{ factura.sumaSubTotal | number }}</strong>
+          </td>
+          <td>
+            <strong>$ {{ factura.sumaTotal - factura.sumaSubTotal | number }} </strong>
+          </td>
+          <td>
+            <strong>$ {{ factura.sumaTotal | number }} </strong>
+          </td>
+        </tfoot>
+      </table>
+      <br />
+      <hr />
+    </div>
+</div>
+<ng-template #noArchivo>
+  <span class="badge badge-pill fs-4 badge-soft-secondary"><i class="fas fa-ban"></i></span>
+</ng-template>

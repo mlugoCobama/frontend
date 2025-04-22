@@ -9,11 +9,23 @@ import { FormGroup } from "@angular/forms";
 })
 export class CotizacionesService {
   constructor(private http: HttpClient) {}
+  private selectedFiles: { [key: number]: File } = {}; //array donde se guardan los archivos cargados
+  private formOrdenCompra: FormGroup; //FormGroup donde se guardan los datos del input
 
+  /**
+   * Recupera la relación entre cotización y proveedores
+   * @param id id de cotización
+   * @returns registros cotización-proveedor
+   */
   public getOne(id: number): Observable<any> {
     return this.http.get(environment.apiUrl + `compras/Cotizaciones/${id}`);
   }
 
+  /**
+   * Guarda los datos y archivos de cotizaciones
+   * @param data precios y archivos ligados a la cotización (formData)
+   * @returns
+   */
   public save(data: any): Observable<any> {
     return this.http.post(environment.apiUrl + "compras/Cotizaciones", data);
   }
@@ -26,26 +38,44 @@ export class CotizacionesService {
     const url = environment.apiUrl + `compras/${rutaArchivo}`;
     window.open(url, "_blank");
   }
-  private selectedFiles: { [key: number]: File } = {}; //array donde se guardan los archivos cargados
-  //Recupera los archivos del componente dentro del servicio
+
+  /**
+   * Recupera los archivos del componente dentro del servicio
+   * @param proveedorId id del proveedor con el que se cotiza
+   * @param file archivo ligado a la cotizacion
+   */
   setSelectedFile(proveedorId: number, file: File) {
     this.selectedFiles[proveedorId] = file;
   }
-  //Envia los archivos del componente dentro del servicio
+
+  /**
+   * Recupera archivos almacenados en selectedFiles
+   * @returns this.selectedFiles = {files...};
+   */
   getSelectedFiles() {
     return this.selectedFiles;
   }
-  //Limpia el arreglo donde se almacenan los archivos
+
+  /**
+   * Limpia los archivos almacenados en selectedFiles
+   * @returns this.selectedFiles = {};
+   */
   clearFiles() {
     this.selectedFiles = {};
   }
 
-  private formOrdenCompra: FormGroup; //FormGroup donde se guardan los datos del input
-  //Recupera el valor donde se guardan los datos del input
+  /**
+   * Envía los valores al formGroup que esta en el service
+   * @returns
+   */
   setForm(form: FormGroup) {
     this.formOrdenCompra = form;
   }
-  //Recupera el valor donde se guardan los datos del input
+
+  /**
+   * Recupera el valor donde se guardan los datos del formOrdenCompra
+   * @returns
+   */
   getForm(): FormGroup {
     return this.formOrdenCompra;
   }

@@ -1,6 +1,7 @@
 import { Component, OnInit} from '@angular/core';
 
 
+import { FuncionesTablas } from '../compras/funciones-tablas';
 import { environment } from 'src/environments/environment';
 
 import {
@@ -37,6 +38,10 @@ export class CatUnidadesMedidasComponent implements OnInit{
   public unidad: any;
   dtOptions: Config = {};
 
+  datosFiltrados:any[] = [];
+  private ordenador!: FuncionesTablas<any>;
+  busqueda:string = '';
+
   constructor(
     private catUnidadesMedidasService: CatUnidadesMedidasService,
     private modalService: BsModalService,
@@ -48,7 +53,7 @@ export class CatUnidadesMedidasComponent implements OnInit{
     this.dtOptions = environment.dataTables;
   }
 
-
+    // Despliega la ventana modal para un nuevo registro
     public openModalNuevo() {
       const initialState: ModalOptions = {
         initialState: {
@@ -67,6 +72,7 @@ export class CatUnidadesMedidasComponent implements OnInit{
       });
     }
   
+    // Despliega una ventana modal para actualizar los registros
     public openModalActualizar() {
       const initialState: ModalOptions = {
         initialState: {
@@ -87,15 +93,17 @@ export class CatUnidadesMedidasComponent implements OnInit{
         this.getAll();
       });
     }
-  /**
-   * Open modal
-   * @param content modal content
-   */
+
+  // Recupera todos los regsitros de las unidades en la bse de datos 
   private getAll() {
     this.catUnidadesMedidasService.getAll().subscribe(
       (response) => {
         if (response) {
           this.data = response.data;
+
+          this.ordenador = new FuncionesTablas(this.data);
+          this.datosFiltrados = [...this.data];
+
           this.isLoad = false;
           this.showTable = true;
         } else {
@@ -108,6 +116,20 @@ export class CatUnidadesMedidasComponent implements OnInit{
     );
   }
 
+  ordenarPor(columna: keyof any){
+    this.datosFiltrados = this.ordenador.ordenar(columna);
+  }
+
+  getIconoOrden(columna:keyof any):string{
+    return this.ordenador.getIcono(columna)
+  }
+
+  filtrarTabla(){
+    this.datosFiltrados = this.ordenador.filtrar(this.busqueda, [
+      'nombre', 'abreviatura'
+    ]);
+  }
+//Recupera los datos del elemento seleccionado
   public seleccionar(dato: any, evento: any) {
     this.mostrar = true;
     this.unidad = dato;
@@ -121,6 +143,7 @@ export class CatUnidadesMedidasComponent implements OnInit{
     }
   }
 
+//"Borra" el registro seleccionado
   public destroy() {
     this.isLoad = true;
     Swal.fire({

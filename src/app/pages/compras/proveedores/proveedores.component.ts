@@ -6,10 +6,12 @@ import { CatEstadosService } from "src/app/core/services/cat-estados.service";
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { Config } from "datatables.net";
 import Swal from "sweetalert2";
+import { FuncionesTablas } from "../compras/funciones-tablas";
 
 import { ModalAddProveedorComponent } from "./modal-add-proveedor/modal-add-proveedor.component";
 import { ModalUpdtProveedorComponent } from "./modal-updt-proveedor/modal-updt-proveedor.component";
 import { ModalShowProveedorComponent } from "./modal-show-proveedor/modal-show-proveedor.component";
+
 
 @Component({
   selector: "app-proveedores",
@@ -36,6 +38,11 @@ export class ProveedoresComponent implements OnInit {
   public expediente: any;
   public archivos: any;
   public tamanioExp:any;
+
+  //Variables funciones tablas
+  datosFiltrados:any[] = [];
+  private ordenador!: FuncionesTablas<any>;
+  busqueda:string = '';
 
   constructor(
     private proveedoresService: ProveedoresService,
@@ -111,6 +118,10 @@ export class ProveedoresComponent implements OnInit {
       (response) => {
         if (response) {
           this.data = response.data;
+
+          this.ordenador = new FuncionesTablas(this.data);
+          this.datosFiltrados = [...this.data];
+
           this.isLoad = false;
           this.showTable = true;
         } else {
@@ -121,6 +132,21 @@ export class ProveedoresComponent implements OnInit {
         console.error("Error fetching data:", error);
       }
     );
+  }
+
+  ordenarPor(columna: keyof any){
+    this.datosFiltrados = this.ordenador.ordenar(columna);
+  }
+
+  getIconoOrden(columna:keyof any):string{
+    return this.ordenador.getIcono(columna)
+  }
+
+  filtrarTabla(){
+    this.datosFiltrados = this.ordenador.filtrar(this.busqueda, [
+      'nombre', 'contacto', 'telefono',
+      'localidad', 'condiciones'
+    ]);
   }
 
   public destroy() {

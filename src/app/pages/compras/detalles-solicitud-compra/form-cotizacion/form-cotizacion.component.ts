@@ -1,11 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import Swal from "sweetalert2";
+
 
 import { ComprasService } from "src/app/core/services/compras/compras.service";
 import { CotizacionesService } from "src/app/core/services/compras/cotizaciones/cotizaciones.service";
@@ -59,7 +55,6 @@ export class FormCotizacionComponent implements OnInit {
 
   // Recupera los contenidos de los selects
   onSelectChange(selectedId: string, index: number) {
-    // obtiene el objeto por medio del id y lo agrega al array
     const selectedItem = this.proveedores.find(
       (item) => item.id === +selectedId
     );
@@ -93,7 +88,6 @@ export class FormCotizacionComponent implements OnInit {
           this.proveedores.unshift(opcionPredeterminada);
 
           this.isLoad = false;
-          console.table(this.proveedores)
         } else {
           console.log(response.message);
         }
@@ -175,9 +169,12 @@ export class FormCotizacionComponent implements OnInit {
               },
             });
             // this.mostrarCotizacionFlag = false;
+            this.comprasService.cambiarEstadoCotizacion(false);
+            this.comprasService.setMostrarBoton(false);
             this.isLoad = false;
             this.isDisabled = false;
-            this.solicitudCompra.estatus = 2;
+            // this.comprasService.actualizarSolicitud();
+            // this.solicitudCompra.estatus = 2;
             // this.getDetalle();
           } else {
             Swal.fire({

@@ -22,6 +22,14 @@ import { ModalUpdtUnidadComponent } from './cat-unidades-medidas/modal-updt-unid
 import { FormCotizacionComponent } from './detalles-solicitud-compra/form-cotizacion/form-cotizacion.component';
 import { TblFlsCotizacionComponent } from './detalles-solicitud-compra/tbl-fls-cotizacion/tbl-fls-cotizacion.component';
 import { FormFacturasComponent } from './detalles-solicitud-compra/form-facturas/form-facturas.component';
+import { DetalleSolicitudesComprasComponent } from './compras/detalle-solicitudes-compras/detalle-solicitudes-compras.component';
+import { InfoSolicitudComponent } from './compras/detalle-solicitudes-compras/info-solicitud/info-solicitud.component';
+import { TableDetallesSolicitudComponent } from './compras/detalle-solicitudes-compras/table-detalles-solicitud/table-detalles-solicitud.component';
+import { PanelCotizacionesComponent } from './compras/detalle-solicitudes-compras/panel-cotizaciones/panel-cotizaciones.component';
+import { TableFilesCotizacionesComponent } from './compras/detalle-solicitudes-compras/table-files-cotizaciones/table-files-cotizaciones.component';
+import { BtnsAutorizacionComponent } from './compras/detalle-solicitudes-compras/btns-autorizacion/btns-autorizacion.component';
+import { FormFilesFacturasComponent } from './compras/detalle-solicitudes-compras/form-files-facturas/form-files-facturas.component';
+import { DatosFacturasComponent } from './compras/detalle-solicitudes-compras/datos-facturas/datos-facturas.component';
 
 
 @NgModule({
@@ -41,6 +49,14 @@ import { FormFacturasComponent } from './detalles-solicitud-compra/form-facturas
     FormCotizacionComponent,
     TblFlsCotizacionComponent,
     FormFacturasComponent,
+    DetalleSolicitudesComprasComponent,
+    InfoSolicitudComponent,
+    TableDetallesSolicitudComponent,
+    PanelCotizacionesComponent,
+    TableFilesCotizacionesComponent,
+    BtnsAutorizacionComponent,
+    FormFilesFacturasComponent,
+    DatosFacturasComponent,
   ],
   imports: [
     CommonModule,
