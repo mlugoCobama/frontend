@@ -46,12 +46,14 @@
 
     <div class="col-md-12">
       <label for="motivo" class="form-label">Motivo de la compra: *</label>
-      <textarea [(ngModel)] = "text" [maxlength] = "longitudMaxima" (input) = "contarCaracteres()" class="form-control" formControlName="motivo" id="motivo" name="motivo" rows="3"
+      <textarea 
+
+      class="form-control" formControlName="motivo" id="motivo" name="motivo" rows="3"
       ></textarea>
 
-      <p [class] = "caracteresRestantes === 0 ? 'text-danger form-text' : 'form-text'">
+      <!-- <p [class] = "caracteresRestantes === 0 ? 'text-danger form-text' : 'form-text'">
         {{longitudMaxima}}/{{caracteresRestantes}}
-      </p>
+      </p> -->
       <div *ngIf="solicitudCompraFormControl.motivo.touched || submitted">
         <div
           class="text-danger form-text" *ngIf="solicitudCompraFormControl.motivo.errors?.['required']">

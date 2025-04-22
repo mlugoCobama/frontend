@@ -67,6 +67,6 @@ export class AgenciasService {
      * @returns Data anual de agencias nissan
      */
     public getAnual(): Observable<ResponseAgenciasNissan> {
-        return this.http.get<ResponseAgenciasNissan>(environment.apiUrl +"dashboard/agencia-nissan");
+        return this.http.get<ResponseAgenciasNissan>(environment.apiUrl +"dashboard/agencia-nissan/4/4/2025");
     }
 }

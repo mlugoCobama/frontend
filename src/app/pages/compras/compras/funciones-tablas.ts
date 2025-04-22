@@ -58,7 +58,8 @@ export class FuncionesTablas<T> {
     }
   
     getIcono(columna: keyof T): string {
-      if (this.columnaOrdenada !== columna) return '';
+      if (this.columnaOrdenada !== columna) return ''
+      // 'mdi mdi-arrow-up-down';
       return this.ascendente ? 'bx bx-up-arrow-alt' : 'bx bx-down-arrow-alt';
     }
   }
