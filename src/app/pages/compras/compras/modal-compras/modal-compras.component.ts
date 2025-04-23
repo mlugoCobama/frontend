@@ -32,9 +32,9 @@ export class ModalComprasComponent implements OnInit {
   public formSolicitudCompra: FormGroup;
   public formDetalleSolicitud: FormGroup;
 
-  public text: string = "";
-  public longitudMaxima: number = 150;
-  public caracteresRestantes: number = this.longitudMaxima;
+  // public text: string = "";
+  // public longitudMaxima: number = 150;
+  // public caracteresRestantes: number = this.longitudMaxima;
 
   public unidades: any;
   public unidad: any;
@@ -231,7 +231,7 @@ export class ModalComprasComponent implements OnInit {
     const data = {
       ...this.formSolicitudCompra.value,
       users_id: "1",
-      usuario_solicita: this.usuarioSolicita[0].id,
+      usuario_solicita: this.usuarioSolicita.id,
       detalles: this.tableData,
     };
 
@@ -376,9 +376,9 @@ export class ModalComprasComponent implements OnInit {
   /**
    * Cuenta los caracteres restantes de text area motivo
    */
-  public contarCaracteres() {
-    this.caracteresRestantes = this.longitudMaxima - this.text.length;
-  }
+  // public contarCaracteres() {
+  //   this.caracteresRestantes = this.longitudMaxima - this.text.length;
+  // }
 
   /**
    * Recupera el catalogo de unidades

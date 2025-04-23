@@ -204,7 +204,6 @@ export class GraficaDonutComponent implements AfterViewInit {
       }
     }
     this.serie = data;
-    console.log(this.serie);
   }
 
   /**
