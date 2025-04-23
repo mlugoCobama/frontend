@@ -50,11 +50,12 @@
 
     <div class="col-md-12">
       <label for="consideraciones" class="form-label">Consideraciones: *</label>
-      <textarea [(ngModel)]="text" [maxlength]="longitudMaxima" (input)="contarCaracteres()" class="form-control" formControlName="consideraciones"
+      <textarea 
+       class="form-control" formControlName="consideraciones"
         id="consideraciones" rows="3"></textarea>
-      <p [class]="caracteresRestantes === 0 ? 'text-danger form-text' : 'form-text'">
+      <!-- <p [class]="caracteresRestantes === 0 ? 'text-danger form-text' : 'form-text'">
         {{ longitudMaxima }}/{{ caracteresRestantes }}
-      </p>
+      </p> -->
       <div *ngIf="solicitudCotizacionFormControl.consideraciones.touched || submitted">
         <div class="text-danger form-text" *ngIf="solicitudCotizacionFormControl.consideraciones.errors?.['required']">
           Consideraciones es requerido.

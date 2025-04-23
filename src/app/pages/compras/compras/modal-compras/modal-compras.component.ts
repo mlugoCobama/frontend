@@ -168,11 +168,11 @@ export class ModalComprasComponent implements OnInit {
         cat_unidades_medida_id: new FormControl(null, Validators.required),
         descripcion: new FormControl(null, [
           Validators.required,
-          Validators.maxLength(150),
+          // Validators.maxLength(150),
         ]),
         observaciones: new FormControl(null, [
-          Validators.required,
-          Validators.maxLength(45),
+          // Validators.required,
+          // Validators.maxLength(45),
         ]),
         img_referencia: new FormControl(null),
       });

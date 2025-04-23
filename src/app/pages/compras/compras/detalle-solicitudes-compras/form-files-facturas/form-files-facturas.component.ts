@@ -285,7 +285,7 @@ export class FormFilesFacturasComponent implements OnInit {
     this.ordenesComprasService.getDataXMLs(this.ordenCompra.id).subscribe(
       (response) => {
         if(response){
-          console.log(response);
+          // console.log(response);
           this.factura = response.factura;
           this.checkMetodoPago();
         }

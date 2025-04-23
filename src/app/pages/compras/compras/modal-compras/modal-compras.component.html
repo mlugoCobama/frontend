@@ -170,7 +170,7 @@
         <td>{{ row.cat_unidades_medida_id1 }}</td>
         <td>{{ row.descripcion }}</td>
         <td>{{ row.observaciones }}</td>
-        <td><img src="{{ row.img_referencia1 }}" alt="Sin imagen de referencia" width="100"/></td>
+        <td class="text-center"><img *ngIf="row.img_referencia1;else elseBlock" src="{{ row.img_referencia1 }}" alt="Sin imagen de referencia" width="100"/></td>
         <td>
           <button type="button" class="btn btn-danger btn-sm" (click)="removeDetalle(i)">
             Quitar
@@ -192,7 +192,7 @@
     Guardar
   </button>
 </div>
-
+<ng-template #elseBlock ><i class="fas far fa-eye-slash"></i> Sin imagen</ng-template>
 <ng-template #nombreEmpresa>
   <p> <strong>{{ usuarioActivo.nombreEmpresa }} </strong> </p>
 </ng-template>
