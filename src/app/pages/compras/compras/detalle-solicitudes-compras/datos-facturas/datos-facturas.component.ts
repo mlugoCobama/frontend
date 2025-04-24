@@ -20,6 +20,7 @@ export class DatosFacturasComponent {
 
     /**
    * Llama el service para abrir el archivo 
+   * @param prov ruta del archivo
    */ 
     verArchivos(prov: any) {
     
@@ -27,7 +28,7 @@ export class DatosFacturasComponent {
   
     }
 
-  ngOnChanges(changes: SimpleChanges) {
-    console.log(changes);
-  }
+  // ngOnChanges(changes: SimpleChanges) {
+  //   console.log(changes);
+  // }
 }

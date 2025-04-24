@@ -168,11 +168,11 @@ export class ModalComprasComponent implements OnInit {
         cat_unidades_medida_id: new FormControl(null, Validators.required),
         descripcion: new FormControl(null, [
           Validators.required,
-          Validators.maxLength(150),
+          // Validators.maxLength(150),
         ]),
         observaciones: new FormControl(null, [
-          Validators.required,
-          Validators.maxLength(45),
+          // Validators.required,
+          // Validators.maxLength(45),
         ]),
         img_referencia: new FormControl(null),
       });
@@ -261,17 +261,19 @@ export class ModalComprasComponent implements OnInit {
             },
           });
         } else {
-          Swal.fire({
-            title: "Error",
-            text: "Hubo un error al guardar la solicitud",
-            buttonsStyling: false,
-            icon: "warning",
-            customClass: {
-              confirmButton: "btn btn-warning px-4",
-              cancelButton: "btn btn- ms-2 px-4",
-            },
-          });
-          console.log(response.message);
+
+          // Swal.fire({
+          //   title: "Error",
+          //   text: "Hubo un error al guardar la solicitud",
+          //   buttonsStyling: false,
+          //   icon: "warning",
+          //   customClass: {
+          //     confirmButton: "btn btn-warning px-4",
+          //     cancelButton: "btn btn- ms-2 px-4",
+          //   },
+          // });
+          // console.log(response.message);
+          this.mostrarErrores(response.message);
         }
       },
       (error) => {
@@ -396,5 +398,21 @@ export class ModalComprasComponent implements OnInit {
         console.error("Error fetching data:", error);
       }
     );
+  }
+
+  mostrarErrores(errores: any){
+    let mensajes = '';
+    for (let campo in errores){
+      mensajes += `${errores[campo].join(', ')}\n`
+    }
+
+    Swal.fire({
+      icon: 'error',
+      title: 'Errores de validacion',
+      text: mensajes,
+    customClass:{
+     popup : 'text-start'
+    }
+      })
   }
 }

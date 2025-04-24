@@ -31,9 +31,9 @@
         </td>
         <td>{{ row.descripcion }}</td>
         <td>{{ row.observaciones }}</td>
-        <td>
+        <td class="text-center">
           <a
-            *ngIf="row.img_referencia"
+            *ngIf="row.img_referencia; else elseBlock"
             href="javascript:void(0);"
             class="btn btn-info btn-sm"
             (click)="verReferencia(row.img_referencia)"
@@ -79,6 +79,7 @@
     </tfoot>
   </table>
   </div>
+  <ng-template #elseBlock ><i class="fas far fa-eye-slash"></i></ng-template>
   
   <!-- Fin tabla detalle solicitud + precios cotizaciones -->
   <app-table-files-cotizaciones

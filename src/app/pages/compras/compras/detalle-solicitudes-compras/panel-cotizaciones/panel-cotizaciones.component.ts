@@ -30,9 +30,9 @@ export class PanelCotizacionesComponent implements OnInit {
 
   public isLoad: boolean = true;
 
-  text: string = "";
-  longitudMaxima: number = 150;
-  caracteresRestantes: number = this.longitudMaxima;
+  // text: string = "";
+  // longitudMaxima: number = 600;
+  // caracteresRestantes: number = this.longitudMaxima;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -78,9 +78,9 @@ export class PanelCotizacionesComponent implements OnInit {
   }
 
   // Valida la longitud de los text area
-  public contarCaracteres() {
-    this.caracteresRestantes = this.longitudMaxima - this.text.length;
-  }
+  // public contarCaracteres() {
+  //   this.caracteresRestantes = this.longitudMaxima - this.text.length;
+  // }
 
   // Guarda el registro de la cotización y llama al servicio para enviar correos
   public enviarSolicitudCotizacion() {
