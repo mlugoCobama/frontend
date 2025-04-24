@@ -104,21 +104,13 @@
 
           <label for="observaciones" class="form-label">Observaciones: *</label>
           <textarea
-            [(ngModel)]="text"
-            [maxlength]="longitudMaxima"
-            (input)="contarCaracteres()"
+            
             class="form-control"
             formControlName="observaciones"
             id="observaciones"
             rows="3"
           ></textarea>
-          <p
-            [class]="
-              caracteresRestantes === 0 ? 'text-danger form-text' : 'form-text'
-            "
-          >
-            {{ longitudMaxima }}/{{ caracteresRestantes }}
-          </p>
+          
           <div
             *ngIf="ordenCompraFormControl.observaciones.touched || submitted"
           >
