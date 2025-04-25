@@ -159,13 +159,13 @@ export class ModalComprasComponent implements OnInit {
   private buildForm() {
     return new Promise((resolve, reject) => {
       this.formSolicitudCompra = this.formBuilder.group({
-        usuario: new FormControl(null, Validators.required),
-        usuario_destino: new FormControl(null, Validators.required),
+        usuario: new FormControl("", Validators.required),
+        usuario_destino: new FormControl("", Validators.required),
         motivo: new FormControl(null, Validators.required),
       });
       this.formDetalleSolicitud = this.formBuilder.group({
         cantidad: new FormControl(null, Validators.required),
-        cat_unidades_medida_id: new FormControl(null, Validators.required),
+        cat_unidades_medida_id: new FormControl("", Validators.required),
         descripcion: new FormControl(null, [
           Validators.required,
           // Validators.maxLength(150),
@@ -403,12 +403,12 @@ export class ModalComprasComponent implements OnInit {
   mostrarErrores(errores: any){
     let mensajes = '';
     for (let campo in errores){
-      mensajes += `${errores[campo].join(', ')}\n`
+      mensajes += `${errores[campo].join(', ')} \n`
     }
 
     Swal.fire({
       icon: 'error',
-      title: 'Errores de validacion',
+      title: 'Errores de validación',
       text: mensajes,
     customClass:{
      popup : 'text-start'

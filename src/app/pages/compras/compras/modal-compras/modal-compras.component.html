@@ -13,7 +13,7 @@
       *ngIf = "usuarioActivo.claveEmpresa === 333 ; else nombreEmpresa"
         class="form-select form-select-sm" aria-label="Default select example" formControlName="usuario" id="usuario"
         name="usuario" aria-label="usuario"(change)="getUsuarios($event.target.value)">
-        <option value="" selected>Selecciona uno</option>
+        <option value="" selected disabled>Selecciona uno</option>
         <option *ngIf = "isLoading" value="" [disabled] = "isLoading"> Cargando opciones espera...</option>
         <option  *ngFor="let item of empresas" [value]="item.intercompania ">
           {{ item.name }}
@@ -30,7 +30,7 @@
       <label for="usuario_destino" class="form-label">Usuarios: *</label>
       <select class="form-select form-select-sm" aria-label="Default select example" formControlName="usuario_destino" id="usuario_destino" 
       name="usuario_destino" aria-label="usuario_destino">
-        <option value="" selected>Selecciona uno</option>
+        <option value="" selected disabled>Selecciona uno</option>
         <option *ngIf = "!isLoad" value="" [disabled] = "!isLoad"> Cargando opciones espera...</option>
         <option [disabled] = "disabled" *ngFor="let item of usuarios" [value]="item.id ">
           {{ item.firstname }} {{ item.realname }} <span>  ({{item.puesto}})</span>

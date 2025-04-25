@@ -70,7 +70,7 @@ manejoCheck(prov: any) {
  */
 private buildForm() {
   this.formOrdenCompra = this.formBuilder.group({
-    entrega: new FormControl(null, Validators.required),
+    entrega: new FormControl("", Validators.required),
     observaciones: new FormControl(null),
   });
 

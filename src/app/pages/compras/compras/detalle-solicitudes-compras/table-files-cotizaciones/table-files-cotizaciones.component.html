@@ -13,7 +13,7 @@
     <!--Tabla documentos cotizaciones-->
     <table
       *ngIf="isLoad"
-      class="table table-striped table-hover table-sm table-bordered table-responsive"
+      class="table  table-hover table-sm table-bordered table-responsive"
     >
       <thead class="table-light">
         <tr class="text-center">
@@ -24,13 +24,14 @@
       </thead>
       <tbody>
         <tr *ngFor="let prov of cotProv; let i = index" class="text-center">
-          <td *ngIf="solicitudCompra.estatus === 2">
+          <td [ngClass] = "prov.ruta ? 'bg-secondary-subtle bg-opacity-75' : '' "
+          *ngIf="solicitudCompra.estatus === 2">
             <div class="col align-self-center">
               <input
                 *ngIf="prov.ruta"
                 (change)="manejoCheck(prov)"
                 name="radioProveedor"
-                class="form-check-input form-radio-success"
+                class="form-check-input form-radio-success "
                 type="radio"
               />
             </div>
@@ -79,7 +80,7 @@
             aria-label="Default select example"
             formControlName="entrega"
           >
-            <option selected>Selecciona uno</option>
+            <option selected disabled value="">Selecciona uno</option>
             <option *ngIf="isLoading" value="" [disabled]="isLoading">
               Cargando opciones espera...
             </option>
@@ -102,7 +103,7 @@
             </div>
           </div>
 
-          <label for="observaciones" class="form-label">Observaciones: *</label>
+          <label for="observaciones" class="form-label">Observaciones: </label>
           <textarea
             
             class="form-control"

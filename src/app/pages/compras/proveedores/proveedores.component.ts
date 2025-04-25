@@ -171,8 +171,8 @@ export class ProveedoresComponent implements OnInit {
             if (response.status === "success") {
               this.getAll();
               Swal.fire({
-                title: "Deleted!",
-                text: "Your file has been deleted.",
+                title: "Borrado!",
+                text: "El proveedor se borro correctamente.",
                 buttonsStyling: false,
                 icon: "success",
                 customClass: {
@@ -184,9 +184,9 @@ export class ProveedoresComponent implements OnInit {
               console.log(response.message);
               Swal.fire({
                 title: "Error!",
-                text: "Your file has been deleted.",
+                text: "Hubo un error al borrar",
                 buttonsStyling: false,
-                icon: "success",
+                icon: "error",
                 customClass: {
                   confirmButton: "btn btn-danger px-4",
                   cancelButton: "btn btn- ms-2 px-4",

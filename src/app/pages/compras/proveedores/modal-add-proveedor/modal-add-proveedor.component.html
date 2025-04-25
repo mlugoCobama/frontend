@@ -122,7 +122,7 @@
         name="localidad"
         aria-label="localidad"
       >
-        <option selected>Selecciona una localidad</option>
+        <option value="Selecciona uno" selected disabled>Selecciona una localidad</option>
         <option *ngFor="let item of estados" value="{{ item.clave }}">
           {{ item.nombre }}
         </option>
@@ -149,7 +149,7 @@
         #selectElement
         (change)="onChange(selectElement)"
       >
-        <option value="">Selecciona uno</option>
+        <option value="Selecciona uno" selected disabled>Selecciona uno</option>
         <option value="Contado">Contado</option>
         <option value="Credito">Crédito</option>
       </select>

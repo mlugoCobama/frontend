@@ -49,9 +49,9 @@ export class PanelCotizacionesComponent implements OnInit {
 
   private buildForm() {
     this.formProveedoresCotizacion = this.formBuilder.group({
-      proveedor1: new FormControl(null, Validators.required),
-      proveedor2: new FormControl(null, Validators.required),
-      proveedor3: new FormControl(null, Validators.required),
+      proveedor1: new FormControl("", Validators.required),
+      proveedor2: new FormControl("", Validators.required),
+      proveedor3: new FormControl("", Validators.required),
       consideraciones: new FormControl(null),
     });
   }

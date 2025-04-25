@@ -7,7 +7,7 @@
       <label for="proveedor1" class="form-label form-label-sm">Proveedor 1: *</label>
       <select
         class="form-select form-select-sm" formControlName="proveedor1" id="proveedor1" aria-label="Default select example">
-        <option [value]="" selected disabled> Selecciona una opción</option>
+        <option value="" selected disabled> Selecciona una opción</option>
         <option *ngFor="let item of proveedores" [value]="item.id">
           {{ item.nombre }}
         </option>
@@ -22,7 +22,7 @@
     <div class="col-md-4">
       <label for="proveedor2" class="form-label form-label-sm"> Proveedor 2: *</label>
       <select class="form-select form-select-sm" formControlName="proveedor2" id="proveedor2" aria-label="Default select example">
-        <option [value]="" selected disabled> Selecciona una opción</option>
+        <option value="" selected disabled> Selecciona una opción</option>
         <option *ngFor="let item of proveedores" [value]="item.id">
           {{ item.nombre }}
         </option>
@@ -36,7 +36,7 @@
     <div class="col-md-4">
       <label for="proveedor3" class="form-label form-label-sm">Proveedor 3: *</label>
       <select class="form-select form-select-sm" formControlName="proveedor3" id="proveedor3" aria-label="Default select example">
-        <option [value]="" selected disabled> Selecciona una opción</option>
+        <option value="" selected disabled> Selecciona una opción</option>
         <option *ngFor="let item of proveedores" [value]="item.id">
           {{ item.nombre }}
         </option>
@@ -49,7 +49,7 @@
     </div>
 
     <div class="col-md-12">
-      <label for="consideraciones" class="form-label">Consideraciones: *</label>
+      <label for="consideraciones" class="form-label">Consideraciones: </label>
       <textarea 
        class="form-control" formControlName="consideraciones"
         id="consideraciones" rows="3"></textarea>
