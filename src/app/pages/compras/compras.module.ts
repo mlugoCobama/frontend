@@ -30,6 +30,7 @@ import { TableFilesCotizacionesComponent } from './compras/detalle-solicitudes-c
 import { BtnsAutorizacionComponent } from './compras/detalle-solicitudes-compras/btns-autorizacion/btns-autorizacion.component';
 import { FormFilesFacturasComponent } from './compras/detalle-solicitudes-compras/form-files-facturas/form-files-facturas.component';
 import { DatosFacturasComponent } from './compras/detalle-solicitudes-compras/datos-facturas/datos-facturas.component';
+import { BtnAutorizacionGerenciaComponent } from './compras/detalle-solicitudes-compras/btn-autorizacion-gerencia/btn-autorizacion-gerencia.component';
 
 
 @NgModule({
@@ -57,6 +58,7 @@ import { DatosFacturasComponent } from './compras/detalle-solicitudes-compras/da
     BtnsAutorizacionComponent,
     FormFilesFacturasComponent,
     DatosFacturasComponent,
+    BtnAutorizacionGerenciaComponent,
   ],
   imports: [
     CommonModule,

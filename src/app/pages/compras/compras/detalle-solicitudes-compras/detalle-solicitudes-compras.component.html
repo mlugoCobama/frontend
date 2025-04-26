@@ -27,18 +27,24 @@
 
 <!-- Inicia paneles temporales -->
     <app-panel-cotizaciones
-    *ngIf="mostrarCotizacionFlag && solicitudCompra.estatus === 1 "
+    *ngIf="mostrarCotizacionFlag && solicitudCompra.estatus === 2 "
     [solicitudCompra]="solicitudCompra"
     (actualizarStatus)="updateStatus()"
     (showTotal)="showTotal()"         
     ></app-panel-cotizaciones>
 
     <app-btns-autorizacion
-    *ngIf= "solicitudCompra.estatus === 3"
+    *ngIf= "solicitudCompra.estatus === 4"
     [solicitudCompra]="solicitudCompra" 
     (setDataOrdenCompra)="setDataOrdenCompra($event)"
     (actualizarStatus)="updateStatus()"   
     ></app-btns-autorizacion>
+
+    <app-btn-autorizacion-gerencia
+    *ngIf="solicitudCompra.estado === 'ESP. AUT. PLANTA'"
+    (actualizarStatus)="updateStatus()"
+    [solicitudCompra]="solicitudCompra" 
+    ></app-btn-autorizacion-gerencia>
 <!-- Inicia paneles temporales -->
 
 </div>

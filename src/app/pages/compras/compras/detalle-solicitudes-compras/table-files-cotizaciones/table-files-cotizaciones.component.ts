@@ -47,15 +47,6 @@ ngOnInit(): void {
   this.buildForm();
 }
 
-validarSatus(){
-  if (
-    this.solicitudCompra.estatus === 3 ||
-    this.solicitudCompra.estatus === 4 ||
-    this.solicitudCompra.estatus > 5
-  ) {
-    // this.getOrdenCompra();
-  }
-}
 
 guardarPrecios() {
   this.savePrices.emit();
@@ -127,7 +118,7 @@ verArchivos(prov: any) {
  * Recupera el catalogo de empresas (Select empresa) 
  */
 public getEmpresas() {
-  if(this.solicitudCompra.estatus === 2){
+  if(this.solicitudCompra.estatus === 3){
     this.usuariosService.getEmpresas().subscribe(
       (response) => {
         if (response) {

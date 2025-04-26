@@ -7,7 +7,7 @@
             <h5 class="mb-0 card-title flex-grow-1">Solicitudes de Compra</h5>
             <div class="flex-shrink-0 d-flex gap-1">
               <a
-                *ngIf="status >= 3"
+                *ngIf="status >= 4 "
                 href="javascript:void(0);"
                 class="btn btn-sm btn-primary"
                 (click)="btnDescargarOC()"
@@ -16,7 +16,7 @@
               Descargar Orden de Compra
               </a>
               <a
-                *ngIf="status === 2  && mostrarBoton"
+                *ngIf="status === 3  && mostrarBoton"
                 href="javascript:void(0);"
                 class="btn btn-primary btn-sm"
                 (click)="btnGenerarOC()"
@@ -40,14 +40,14 @@
                 >Volver</a
               >
               <a
-                *ngIf="status === 1 && !comprasService.mostrarCotizacionSource.value"
+                *ngIf="status === 2 && !comprasService.mostrarCotizacionSource.value"
                 href="javascript:void(0);"
                 class="btn btn-info btn-sm"
                 (click)="mostrarCotizacion()"
                 >Cotizar</a
               >
               <a
-                *ngIf="status >= 2 && status != 5 && status != 8 &&
+                *ngIf="status >= 2 && status <= 8 &&
                   !comprasService.mostrarCotizacionSource.value"
                 href="javascript:void(0);"
                 class="btn btn-danger btn-sm"
@@ -128,8 +128,6 @@
 <ng-template #elseBlock>
   <div class="text-center text-muted">
     <Strong>No hay solicitudes para mostrar...</Strong>
-
   </div>
-  
 </ng-template>
 <!-- container-fluid -->

@@ -147,7 +147,7 @@ export class ComprasComponent implements OnInit {
         this.comprasService.destroy(this.solicitudCompra.id).subscribe(
           (response) => {
             if (response.status === "success") {
-              this.getAll();
+              this.regresar();
               Swal.fire({
                 title: "Cancelada!",
                 text: "La solicitud ha sido cancelada.",

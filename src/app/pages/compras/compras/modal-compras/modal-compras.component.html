@@ -83,7 +83,7 @@
       <div class="col-sm-2 my-1">
         <select class="form-select form-select-sm" type="text" formControlName="cat_unidades_medida_id" #selectElement 
         (change)="onChange(selectElement)" id="cat_unidades_medida_id" name="cat_unidades_medida_id" aria-label="cat_unidades_medida_id">
-          <option selected>Selecciona una unidad</option>
+          <option value="" selected disabled>Selecciona una unidad</option>
           <option *ngFor="let item of unidades" value="{{ item.id }}">
             {{ item.nombre }} ({{ item.abreviatura }})
           </option>

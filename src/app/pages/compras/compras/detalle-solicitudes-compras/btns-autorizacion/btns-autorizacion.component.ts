@@ -51,7 +51,6 @@ export class BtnsAutorizacionComponent implements OnInit {
         this.ordenesComprasService.destroy(this.solicitudCompra.id).subscribe(
           (response) => {
             if (response.status === "success") {
-              console.log(response.message);
               Swal.fire({
                 title: "Cancelada!",
                 text: "La orden ha sido cancelada.",

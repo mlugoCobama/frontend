@@ -83,7 +83,7 @@
   
   <!-- Fin tabla detalle solicitud + precios cotizaciones -->
   <app-table-files-cotizaciones
-    *ngIf="mostrarTotal"
+    *ngIf="mostrarTotal && solicitudCompra.estatus > 2"
     [ordenCompra]="ordenCompra"
     [solicitudCompra]="solicitudCompra"
     [cotProv]="cotProv"
