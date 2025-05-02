@@ -1,7 +1,7 @@
 <div class="row"> <!--Inicia div datos solicitud -->
     <div class="col-md-6">
       <p><strong>Folio: </strong>{{ solicitudCompra.folio }}</p>
-      <p>
+      <p >
         <strong>Usuario solicita: </strong>{{ solicitudCompra.usuario_solicita }}
       </p>
       <p><strong>Empresa: </strong>{{solicitudCompra.empresa}}</p>
@@ -10,7 +10,12 @@
     </div>
     <div class="col-md-6">
       <p><strong>Fecha: </strong>{{ solicitudCompra.fecha | date:'dd/MM/yyyy h:mm a'}}</p>
-      <p><strong>Usuario Destino: </strong>{{solicitudCompra.usuario_destino}} </p>
+      <p *ngIf="solicitudCompra.c_c === 0">
+        <strong>Usuario Destino: </strong>{{solicitudCompra.usuario_destino}} 
+      </p>
+      <p *ngIf="solicitudCompra.c_c != 0">
+        <strong>Centro de costos: </strong> {{ centrosCostos[solicitudCompra.c_c-1].Descripcion }}
+     </p>
       <p><strong>Motivo: </strong>{{ solicitudCompra.motivo }}</p>
       <div *ngIf="mostrarTotal" class="row">
         <p *ngIf="cotizacion">

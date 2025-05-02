@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, EventEmitter } from "@angular/core";
 import { UsuariosService } from "src/app/core/services/compras/usuarios.service";
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
+import catCentrosCostos from "src/environments/cat_centros_costos.json";
 
 import {
   FormBuilder,
@@ -31,6 +32,8 @@ export class ModalComprasComponent implements OnInit {
 
   public formSolicitudCompra: FormGroup;
   public formDetalleSolicitud: FormGroup;
+
+  public centrosCostos = catCentrosCostos;
 
   // public text: string = "";
   // public longitudMaxima: number = 150;
@@ -71,6 +74,9 @@ export class ModalComprasComponent implements OnInit {
     this.buildForm();
     this.getUsuarioActivo();
   }
+
+  public interAgencias = [7102, 7075, 7074, 7072, 7071, 7064, 7063, 7062, 7061, 7051, 712, 710, 706];
+  public isAgencia: boolean = false;
 
   /**
    * Recupera el catalogo de empresas (Select empresa)
@@ -124,7 +130,8 @@ export class ModalComprasComponent implements OnInit {
     this.usuarios = [];
     this.isLoad = false;
     this.disabled = false;
-    if(intercompania != ""){
+    this.isAgencia = this.interAgencias.some((num) => num === Number(intercompania));
+    if(intercompania != "" && this.isAgencia === false){
       this.usuariosService.getUsuariosEmpresas(intercompania).subscribe(
         (response) => {
           if (response) {
@@ -159,22 +166,20 @@ export class ModalComprasComponent implements OnInit {
   private buildForm() {
     return new Promise((resolve, reject) => {
       this.formSolicitudCompra = this.formBuilder.group({
-        usuario: new FormControl("", Validators.required),
-        usuario_destino: new FormControl("", Validators.required),
+        empresa: new FormControl("", Validators.required),
+        usuario_destino: new FormControl(""),
+        c_c: new FormControl(0),
         motivo: new FormControl(null, Validators.required),
       });
       this.formDetalleSolicitud = this.formBuilder.group({
         cantidad: new FormControl(null, Validators.required),
         cat_unidades_medida_id: new FormControl("", Validators.required),
-        descripcion: new FormControl(null, [
-          Validators.required,
-          // Validators.maxLength(150),
+        descripcion: new FormControl(null, [ Validators.required,// Validators.maxLength(150),
         ]),
-        observaciones: new FormControl(null, [
-          // Validators.required,
-          // Validators.maxLength(45),
+        observaciones: new FormControl(null, [// Validators.required, Validators.maxLength(45),
         ]),
         img_referencia: new FormControl(null),
+        cat_areas: new FormControl(""),
       });
       resolve(true);
     });
@@ -230,10 +235,14 @@ export class ModalComprasComponent implements OnInit {
 
     const data = {
       ...this.formSolicitudCompra.value,
-      users_id: "1",
       usuario_solicita: this.usuarioSolicita.id,
       detalles: this.tableData,
     };
+
+    if(this.isAgencia){
+      data.usuario_destino = this.usuarioSolicita.id
+    }
+
 
     const formDataToSend = new FormData();
     formDataToSend.append("data", JSON.stringify(data));
@@ -260,29 +269,40 @@ export class ModalComprasComponent implements OnInit {
               cancelButton: "btn btn- ms-2 px-4",
             },
           });
+          this.cerrarModal();
         } else {
 
-          // Swal.fire({
-          //   title: "Error",
-          //   text: "Hubo un error al guardar la solicitud",
-          //   buttonsStyling: false,
-          //   icon: "warning",
-          //   customClass: {
-          //     confirmButton: "btn btn-warning px-4",
-          //     cancelButton: "btn btn- ms-2 px-4",
-          //   },
-          // });
-          // console.log(response.message);
-          this.mostrarErrores(response.message);
+           Swal.fire({
+             title: "Error",
+             text: response.message,
+             buttonsStyling: false,
+             icon: "warning",
+             customClass: {
+               confirmButton: "btn btn-warning px-4",
+               cancelButton: "btn btn- ms-2 px-4",
+             },
+           });
+          //  console.log(response.message);
+          // this.mostrarErrores(response.errors, response.message);
+          return;
         }
       },
       (error) => {
-        console.error("Error fetching data:", error);
+        Swal.fire({
+          title: "Error",
+          text: error,
+          buttonsStyling: false,
+          icon: "warning",
+          customClass: {
+            confirmButton: "btn btn-warning px-4",
+            cancelButton: "btn btn- ms-2 px-4",
+          },
+        });
+        // console.error("Error fetching data:", error);
       }
     );
 
     this.tableData = [];
-    this.modalRef.hide();
     this.submitted = false;
     this.formSolicitudCompra.reset();
 
@@ -333,6 +353,7 @@ export class ModalComprasComponent implements OnInit {
     descripcion: "",
     observaciones: "",
     img_referencia: null,
+    // cat_areas: "",
   };
 
   /**
@@ -343,12 +364,14 @@ export class ModalComprasComponent implements OnInit {
       this.submittedDetail = true;
       return;
     }
+    
     const valores = this.formDetalleSolicitud.value;
 
     const newDetalle = {
       ...this.formDetalleSolicitud.value,
       cat_unidades_medida_id1: this.unidad,
       img_referencia1: valores.img_referencia,
+      // cat_areas: (this.centrosCostos[this.formSolicitudCompra.value.c_c-1].Clave)
     };
 
     if (this.formData.has("img_referencia")) {
@@ -400,7 +423,7 @@ export class ModalComprasComponent implements OnInit {
     );
   }
 
-  mostrarErrores(errores: any){
+  mostrarErrores(errores: any, mensaje:any){
     let mensajes = '';
     for (let campo in errores){
       mensajes += `${errores[campo].join(', ')} \n`
@@ -408,7 +431,7 @@ export class ModalComprasComponent implements OnInit {
 
     Swal.fire({
       icon: 'error',
-      title: 'Errores de validación',
+      title: mensaje,
       text: mensajes,
     customClass:{
      popup : 'text-start'

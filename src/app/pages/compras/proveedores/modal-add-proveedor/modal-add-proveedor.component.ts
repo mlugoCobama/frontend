@@ -145,7 +145,7 @@ export class ModalAddProveedorComponent implements OnInit {
       }
     );
 
-    this.modalRef.hide();
+    this.cerrarModal();
     // this.submitted = false;
     this.formProveedores.reset();
 

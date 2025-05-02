@@ -6,6 +6,7 @@ import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { Config } from "datatables.net";
 import Swal from "sweetalert2";
 import { FuncionesTablas } from "./funciones-tablas";
+import catCentrosCostos from "src/environments/cat_centros_costos.json";
 //services
 import { ComprasService } from "src/app/core/services/compras/compras.service";
 import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompra/ordenes-compra.service";
@@ -25,6 +26,7 @@ export class ComprasComponent implements OnInit {
   public isLoad: boolean = true;
   public mostrarBoton = false;
 
+  public centrosCostos : any = catCentrosCostos; 
   
   /**
    * Objeto que envió al componente detallesSolicitudCompra

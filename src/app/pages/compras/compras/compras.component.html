@@ -84,7 +84,7 @@
                       <th (click)="ordenarPor('folio')" style="cursor: pointer;">Folio <i [ngClass]="getIconoOrden('folio')"></i></th>
                       <th (click)="ordenarPor('empresa')" style="cursor: pointer;">Empresa <i [ngClass]="getIconoOrden('empresa')"></i></th>
                       <th (click)="ordenarPor('usuario_solicita')" style="cursor: pointer;">Solicita <i [ngClass]="getIconoOrden('usuario_solicita')"></i></th>
-                      <th (click)="ordenarPor('usuario_destino')" style="cursor: pointer;">Usuario Destino <i [ngClass]="getIconoOrden('usuario_destino')"></i> </th>
+                      <th (click)="ordenarPor('usuario_destino')" style="cursor: pointer;"> Destino <i [ngClass]="getIconoOrden('usuario_destino')"></i> </th>
                       <th (click)="ordenarPor('fecha')" style="cursor: pointer;">Fecha Solicitud <i [ngClass]="getIconoOrden('fecha')"></i></th>
                       <th (click)="ordenarPor('estado')" class="text-center" style="cursor: pointer;">Estatus <i [ngClass]="getIconoOrden('estado')"></i></th>
                     </tr>
@@ -95,9 +95,10 @@
                       (dblclick)="openDetallesSolicitud(item, $event)"
                     >
                       <td>{{ item.folio }}</td>
-                      <td>{{ item.empresa || 'CAS'}}</td>
-                      <td>{{ item.usuario_solicita}}</td>
-                      <td>{{ item.usuario_destino}}</td>
+                      <td>{{ item.empresa || 'CAS' }}</td>
+                      <td>{{ item.usuario_solicita }}</td>
+                      <td *ngIf = "item.c_c === 0">{{ item.usuario_destino }}</td>
+                      <td *ngIf = "item.c_c > 0">{{centrosCostos[item.c_c-1].Descripcion }}</td>
                       <td>{{ item.fecha | date:'dd/MM/yyyy h:mm a' }}</td>
                       <td>
                         <div class="text-center">

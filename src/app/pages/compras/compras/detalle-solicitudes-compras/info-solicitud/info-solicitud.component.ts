@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges, EventEmitter, OnInit } from '@angular/core';
 import { ComprasService } from 'src/app/core/services/compras/compras.service';
+import catCentrosCostos from "src/environments/cat_centros_costos.json";
 
 @Component({
   selector: 'app-info-solicitud',
@@ -10,6 +11,8 @@ export class InfoSolicitudComponent implements OnInit{
   @Input() solicitudCompra:any;//Datos de 
   @Input() mostrarTotal:any;
   @Input() cotizacion:any;
+
+ public centrosCostos:any = catCentrosCostos;
 
   constructor(
    private comprasService: ComprasService
