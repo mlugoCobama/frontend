@@ -5,11 +5,11 @@ class="row g-2"
 >
 <div class="col-md-1"></div>
 <div class="col-md-10" *ngIf="ordenCompra">
-  <div class="alert alert-primary text-center" role="alert">
+  <div *ngIf = "solicitudCompra.estatus != 9" class="alert alert-primary text-center" role="alert">
     Adjunta los siguientes archivos para la orden de compra:
     <strong>{{ ordenCompra.folio_oc }}</strong>
   </div>
-  <table class="table table-sm table-borderless table-responsive">
+  <table *ngIf = "solicitudCompra.estatus != 9" class="table table-sm table-borderless table-responsive">
     <thead class="table-light">
       <tr class="text-center">
         <th>Documento</th>

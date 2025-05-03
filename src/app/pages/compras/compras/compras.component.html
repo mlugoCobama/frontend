@@ -98,7 +98,7 @@
                       <td>{{ item.empresa || 'CAS' }}</td>
                       <td>{{ item.usuario_solicita }}</td>
                       <td *ngIf = "item.c_c === 0">{{ item.usuario_destino }}</td>
-                      <td *ngIf = "item.c_c > 0">{{centrosCostos[item.c_c-1].Descripcion }}</td>
+                      <td *ngIf = "item.c_c > 0">{{item.centro_costo}}</td>
                       <td>{{ item.fecha | date:'dd/MM/yyyy h:mm a' }}</td>
                       <td>
                         <div class="text-center">

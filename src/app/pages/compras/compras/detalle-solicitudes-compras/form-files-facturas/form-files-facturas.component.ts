@@ -56,6 +56,7 @@ export class FormFilesFacturasComponent implements OnInit {
   ngOnInit(): void {
     this.buildForm();
     this.getOrdenCompra();
+    console.log("Inicio el componente de facturas")
   }
 
   /**
@@ -86,7 +87,8 @@ export class FormFilesFacturasComponent implements OnInit {
     this.ordenesComprasService.getOne(this.solicitudCompra.id).subscribe(
       (response) => {
         if (response) {
-          this.ordenCompra = response;
+          this.ordenCompra = response.data;
+          console.log(this.ordenCompra);
           this.setOrdenCompra(this.ordenCompra);
           
           this.isLoad = false;

@@ -75,7 +75,9 @@ export class ModalComprasComponent implements OnInit {
     this.getUsuarioActivo();
   }
 
-  public interAgencias = [7102, 7075, 7074, 7072, 7071, 7064, 7063, 7062, 7061, 7051, 712, 710, 706];
+  public interAgencias = [
+    7102, 7075, 7074, 7072, 7071, 7064, 7063, 7062, 7061, 7051, 712, 710, 706,
+  ];
   public isAgencia: boolean = false;
 
   /**
@@ -102,24 +104,28 @@ export class ModalComprasComponent implements OnInit {
    */
   public getUsuarioActivo() {
     const usuarioActivo = this.localStorage.getItem("currentUser");
-    /** ****************************************************************************
-     * !------------------------------IMPORTANTE------------------------------------
-     * TODO cambiar esta linea para que recupere el usuario activo en base al correo
-     *******************************************************************************/
-    this.usuariosService.getUserById(usuarioActivo['role']['email']).subscribe(
-    // this.usuariosService.getUserById("mlugo@cobama.com.mx").subscribe(
+
+    this.usuariosService.getUserById(usuarioActivo["role"]["email"]).subscribe(
+      // this.usuariosService.getUserById("mlugo@cobama.com.mx").subscribe(
       (response) => {
-        if (response.status === 'success') {
+        if (response.status === "success") {
           this.usuarioSolicita = response.data;
         } else {
-          console.log(response.message);
+          this.mostrarAlerta(
+            response.message,
+            "Intente iniciar sesión nuevamente",
+            "warning",
+            "warning"
+          );
+
+          this.cerrarModal();
+          return;
         }
       },
       (error) => {
         console.error("Error fetching data:", error);
       }
     );
-
   }
 
   /**
@@ -131,19 +137,20 @@ export class ModalComprasComponent implements OnInit {
     this.isLoad = false;
     this.disabled = false;
     this.isAgencia = this.interAgencias.some((num) => num === Number(intercompania));
-    if(intercompania != "" && this.isAgencia === false){
+    if (intercompania != "" && this.isAgencia === false) {
       this.usuariosService.getUsuariosEmpresas(intercompania).subscribe(
         (response) => {
           if (response) {
-            if(response.data.length > 0 ){
+            if (response.data.length > 0) {
               this.usuarios = response.data;
               this.isLoad = true;
-            }else{
-              this.usuarios = [{id: 0, firstname: "No hay datos", realname: "",  puesto: '' }]
+            } else {
+              this.usuarios = [
+                { id: 0, firstname: "No hay datos", realname: "", puesto: "" },
+              ];
               this.isLoad = true;
-              this.disabled =  true;
+              this.disabled = true;
             }
-            
           } else {
             console.log(response.message);
           }
@@ -152,12 +159,18 @@ export class ModalComprasComponent implements OnInit {
           console.error("Error fetching data:", error);
         }
       );
-    }else{
-        this.usuarios = [{id: 0, firstname: " Debes seleccionar una empresa", realname: "",  puesto: '' }]
-        this.isLoad = true;
-        this.disabled =  true;
+    } else {
+      this.usuarios = [
+        {
+          id: 0,
+          firstname: " Debes seleccionar una empresa",
+          realname: "",
+          puesto: "",
+        },
+      ];
+      this.isLoad = true;
+      this.disabled = true;
     }
-    
   }
 
   /**
@@ -174,10 +187,8 @@ export class ModalComprasComponent implements OnInit {
       this.formDetalleSolicitud = this.formBuilder.group({
         cantidad: new FormControl(null, Validators.required),
         cat_unidades_medida_id: new FormControl("", Validators.required),
-        descripcion: new FormControl(null, [ Validators.required,// Validators.maxLength(150),
-        ]),
-        observaciones: new FormControl(null, [// Validators.required, Validators.maxLength(45),
-        ]),
+        descripcion: new FormControl(null, [Validators.required]),
+        observaciones: new FormControl(null, []),
         img_referencia: new FormControl(null),
         cat_areas: new FormControl(""),
       });
@@ -194,7 +205,7 @@ export class ModalComprasComponent implements OnInit {
 
   /**
    * Guarda el contenido del la solicitud y detalles
-   * @returns 
+   * @returns
    */
   public save() {
     this.submitted = true;
@@ -202,34 +213,30 @@ export class ModalComprasComponent implements OnInit {
 
     if (this.formSolicitudCompra.invalid) {
       this.isLoad = false;
-      Swal.fire({
-        title: "Alerta",
-        text: "Debes llenar correctamente todos los campos",
-        buttonsStyling: false,
-        icon: "warning",
-        customClass: {
-          confirmButton: "btn btn-warning px-4",
-          cancelButton: "btn btn- ms-2 px-4",
-        },
-      });
+
+      this.mostrarAlerta(
+        "Alerta",
+        "Debes llenar correctamente todos los campos",
+        "warning",
+        "warning"
+      );
+
       return;
     }
 
     /**
      * Valido que el usuario ingrese por lo menos un detalle
-     */ 
+     */
     if (this.tableData.length === 0) {
       this.isLoad = false;
-      Swal.fire({
-        title: "Alerta",
-        text: "Agrega por lo menos un elemento a la solicitud",
-        buttonsStyling: false,
-        icon: "warning",
-        customClass: {
-          confirmButton: "btn btn-warning px-4",
-          cancelButton: "btn btn- ms-2 px-4",
-        },
-      });
+
+      this.mostrarAlerta(
+        "Alerta",
+        "Agrega por lo menos un elemento a la solicitud",
+        "warning",
+        "warning"
+      );
+
       return;
     }
 
@@ -239,10 +246,9 @@ export class ModalComprasComponent implements OnInit {
       detalles: this.tableData,
     };
 
-    if(this.isAgencia){
-      data.usuario_destino = this.usuarioSolicita.id
+    if (this.isAgencia) {
+      data.usuario_destino = this.usuarioSolicita.id;
     }
-
 
     const formDataToSend = new FormData();
     formDataToSend.append("data", JSON.stringify(data));
@@ -250,7 +256,10 @@ export class ModalComprasComponent implements OnInit {
     //agrega los detalles al form data para enviarlos
     this.tableData.forEach((detalle, index) => {
       if (detalle.img_referencia) {
-        formDataToSend.append(`img_referencia_${index}`, detalle.img_referencia);
+        formDataToSend.append(
+          `img_referencia_${index}`,
+          detalle.img_referencia
+        );
       }
     });
 
@@ -259,53 +268,29 @@ export class ModalComprasComponent implements OnInit {
         if (response.status === "success") {
           this.event.emit(true);
           this.showTable = true;
-          Swal.fire({
-            title: "Guardado",
-            text: "Solicitud registrada correctamente",
-            buttonsStyling: false,
-            icon: "success",
-            customClass: {
-              confirmButton: "btn btn-success px-4",
-              cancelButton: "btn btn- ms-2 px-4",
-            },
-          });
+
+          this.mostrarAlerta(
+            "Guardado",
+            "Solicitud registrada correctamente",
+            "success",
+            "success"
+          );
+
           this.cerrarModal();
         } else {
+          this.mostrarAlerta("Error", response.message, "warning", "warning");
 
-           Swal.fire({
-             title: "Error",
-             text: response.message,
-             buttonsStyling: false,
-             icon: "warning",
-             customClass: {
-               confirmButton: "btn btn-warning px-4",
-               cancelButton: "btn btn- ms-2 px-4",
-             },
-           });
-          //  console.log(response.message);
-          // this.mostrarErrores(response.errors, response.message);
           return;
         }
       },
       (error) => {
-        Swal.fire({
-          title: "Error",
-          text: error,
-          buttonsStyling: false,
-          icon: "warning",
-          customClass: {
-            confirmButton: "btn btn-warning px-4",
-            cancelButton: "btn btn- ms-2 px-4",
-          },
-        });
-        // console.error("Error fetching data:", error);
+        this.mostrarAlerta("Error", error, "warning", "warning");
       }
     );
 
     this.tableData = [];
     this.submitted = false;
     this.formSolicitudCompra.reset();
-
   }
 
   /**
@@ -332,7 +317,6 @@ export class ModalComprasComponent implements OnInit {
     this.unidad = selectedText;
   }
 
-  
   /**
    * Función que captura el archivo en el input
    * @param event evento capturado del input
@@ -358,13 +342,13 @@ export class ModalComprasComponent implements OnInit {
 
   /**
    *  Agrega los detalles a el array detalle para después mostrarlo en la tabla
-   */ 
+   */
   public addDetalle() {
     if (this.formDetalleSolicitud.invalid) {
       this.submittedDetail = true;
       return;
     }
-    
+
     const valores = this.formDetalleSolicitud.value;
 
     const newDetalle = {
@@ -375,9 +359,11 @@ export class ModalComprasComponent implements OnInit {
     };
 
     if (this.formData.has("img_referencia")) {
-      newDetalle.img_referencia1 = URL.createObjectURL(this.formData.get("img_referencia") as Blob);
+      newDetalle.img_referencia1 = URL.createObjectURL(
+        this.formData.get("img_referencia") as Blob
+      );
     }
-    
+
     if (this.formData.has("img_referencia")) {
       newDetalle.img_referencia = this.formData.get("img_referencia") as File;
     }
@@ -423,19 +409,39 @@ export class ModalComprasComponent implements OnInit {
     );
   }
 
-  mostrarErrores(errores: any, mensaje:any){
-    let mensajes = '';
-    for (let campo in errores){
-      mensajes += `${errores[campo].join(', ')} \n`
+  mostrarErrores(errores: any, mensaje: any) {
+    let mensajes = "";
+    for (let campo in errores) {
+      mensajes += `${errores[campo].join(", ")} \n`;
     }
 
     Swal.fire({
-      icon: 'error',
+      icon: "error",
       title: mensaje,
       text: mensajes,
-    customClass:{
-     popup : 'text-start'
-    }
-      })
+      customClass: {
+        popup: "text-start",
+      },
+    });
+  }
+
+  /**
+   * Genera una alerta de swet alert con un solo boton
+   * @param titulo titulo de la alerta
+   * @param texto mensaje de la alerta
+   * @param icono icono de la alerta
+   * @param btnClass clase que define el color del botón (en colores de bootstrap)
+   */
+  mostrarAlerta(titulo: any, texto: any, icono: any, btnClass: any) {
+    Swal.fire({
+      title: titulo,
+      text: texto,
+      buttonsStyling: false,
+      icon: icono,
+      customClass: {
+        confirmButton: `btn btn-${btnClass} px-4`,
+        cancelButton: "btn btn- ms-2 px-4",
+      },
+    });
   }
 }

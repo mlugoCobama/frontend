@@ -185,7 +185,7 @@ export class BtnsAutorizacionComponent implements OnInit {
     this.ordenesComprasService.getOne(this.solicitudCompra.id).subscribe(
       (response) => {
         if (response) {
-          this.ordenCompra = response;
+          this.ordenCompra = response.data;
           this.setOrdenCompra(this.ordenCompra);
           this.isLoad = true;
         } else {

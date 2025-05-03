@@ -231,7 +231,7 @@ export class ComprasComponent implements OnInit {
   filtrarTabla(){
     this.datosFiltrados = this.ordenador.filtrar(this.busqueda, [
       'folio', 'usuario_destino', 'motivo',
-      'fecha', 'usuario_solicita', 'empresa', 'estado'
+      'fecha', 'usuario_solicita', 'empresa', 'estado', 'centro_costo'
     ]);
   }
 }

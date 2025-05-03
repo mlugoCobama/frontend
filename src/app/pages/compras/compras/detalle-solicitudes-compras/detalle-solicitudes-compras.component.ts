@@ -73,7 +73,7 @@ public updateStatus() {
     (response) => {
       if (response) {
         this.solicitudCompra = response.data;
-        console.log('se esta ejecutando update status');
+        // console.log('se esta ejecutando update status');
         // this.udtStatus.emit(Number(this.solicitudCompra.estatus));
       } 
     },

@@ -44,10 +44,7 @@ export class ModalAddProveedorComponent implements OnInit {
       this.formProveedores = this.formBuilder.group({
         nombre: new FormControl(null, Validators.required),
         contacto: new FormControl(null, [Validators.required]),
-        telefono: new FormControl(null, [
-          Validators.required,
-          Validators.pattern("^[0-9]*$"),
-        ]),
+        telefono: new FormControl(null, [Validators.required, Validators.pattern("^[0-9]*$"),]),
         localidad: new FormControl('Selecciona uno', Validators.required),
         condiciones: new FormControl('Selecciona uno', Validators.required),
         servicios: new FormControl(null, Validators.required),
