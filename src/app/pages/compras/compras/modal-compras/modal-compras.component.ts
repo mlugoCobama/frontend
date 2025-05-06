@@ -45,7 +45,18 @@ export class ModalComprasComponent implements OnInit {
   public detalles: any;
   public empresas: any;
   public usuarios: any;
-  public usuarioSolicita: any;
+  public usuarioSolicita: any = {
+    id: null,
+    firstname: "",
+    realname: "",
+    name: "",
+    puesto: "",
+    Telfono: "",
+    direccion: "",
+    intercompania: 333,
+    empresa: "",
+    isAgencia: false
+    };
 
   public event: EventEmitter<any> = new EventEmitter();
   public tableData: Array<any> = [];
@@ -111,10 +122,11 @@ export class ModalComprasComponent implements OnInit {
       // this.usuariosService.getUserById("mlugo@cobama.com.mx").subscribe(
       (response) => {
         if (response.status === "success") {
-          
+
           this.usuarioSolicita = response.data[0];
           this.getUsuarios(this.usuarioSolicita.intercompania);
           this.formSolicitudCompra.patchValue({empresa :  this.usuarioSolicita.intercompania});
+          console.log(this.usuarioSolicita);
 
         } else {
           this.alertasService.mostrarAlerta(
