@@ -1,4 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges, EventEmitter, OnInit } from '@angular/core';
+import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
+
 import { ComprasService } from 'src/app/core/services/compras/compras.service';
 import catCentrosCostos from "src/environments/cat_centros_costos.json";
 
@@ -15,7 +17,8 @@ export class InfoSolicitudComponent implements OnInit{
  public centrosCostos:any = catCentrosCostos;
 
   constructor(
-   private comprasService: ComprasService
+   private comprasService: ComprasService,
+   private alertasService: SwalComprsServiceService
   ){}
 
   ngOnInit(): void {

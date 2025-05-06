@@ -3,11 +3,10 @@ import { Component, Input, Output, OnInit, EventEmitter, OnDestroy } from "@angu
 import { ComprasService } from "src/app/core/services/compras/compras.service";
 import { CotizacionesService } from "src/app/core/services/compras/cotizaciones/cotizaciones.service";
 import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompra/ordenes-compra.service";
+import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 
-import Swal from "sweetalert2";
 import { Subscription } from "rxjs";
 import {FormGroup} from "@angular/forms";
-
 
 @Component({
   selector: "app-table-detalles-solicitud",
@@ -47,7 +46,8 @@ export class TableDetallesSolicitudComponent implements OnInit{
   constructor(
     public compras: ComprasService,
     public cotizacionesService: CotizacionesService,
-    public ordenesComprasService: OrdenesCompraService
+    public ordenesComprasService: OrdenesCompraService,
+    public alertasService: SwalComprsServiceService
   ) {}
 
   ngOnInit(): void {
@@ -228,32 +228,15 @@ export class TableDetallesSolicitudComponent implements OnInit{
         }
       });
       if (!datosIngresados || !archivosIngresados) {
-        Swal.fire({
-          title: "Error",
-          text: "Recuerda que ademas de los precios también debes de adjuntar el archivo de la cotización ",
-          buttonsStyling: false,
-          icon: "warning",
-          customClass: {
-            confirmButton: "btn btn-danger px-4",
-            cancelButton: "btn btn-secondary ms-2 px-4",
-          },
-        });
+      const mensaje = "Recuerda que ademas de los precios también debes de adjuntar el archivo de la cotización ";
+      this.alertasService.mostrarAlerta("Error", mensaje, "warning", "warning")
         return;
       }
   
       this.cotizacionesService.save(formData).subscribe(
         (response) => {
           if (response.status === "success") {
-            Swal.fire({
-              title: "Enviado",
-              text: "Tu cotización se ha guardado correctamente",
-              buttonsStyling: false,
-              icon: "success",
-              customClass: {
-                confirmButton: "btn btn-success px-4",
-                cancelButton: "btn btn-secondary ms-2 px-4",
-              },
-            });
+            this.alertasService.mostrarAlerta("Enviado", "Tu cotización se ha guardado correctamente", "success", "success");
             this.getDetalles();
             this.cotizacionesService.clearFiles();
             this.isLoad = false;
@@ -288,16 +271,7 @@ export class TableDetallesSolicitudComponent implements OnInit{
      let entrega: any; 
 
      if(this.formOrdenCompra === undefined || !this.formOrdenCompra.valid){
-      Swal.fire({
-        title: "Error",
-        text: "Debes de seleccionar un lugar de entrega",
-        buttonsStyling: false,
-        icon: "warning",
-        customClass: {
-          confirmButton: "btn btn-danger px-4",
-          cancelButton: "btn btn-secondary ms-2 px-4",
-        },
-      });
+      this.alertasService.mostrarAlerta("Error", "Debes de seleccionar un lugar de entrega", "warning", "warning");
       this.compras.setMostrarBoton(true);
       return;
      }
@@ -322,32 +296,15 @@ export class TableDetallesSolicitudComponent implements OnInit{
       this.ordenesComprasService.save(datos).subscribe(
         (response) => {
           if (response.status === "success") {
-            Swal.fire({
-              title: "Guardado",
-              text: "Se generó correctamente la orden de compra",
-              buttonsStyling: false,
-              icon: "success",
-              customClass: {
-                confirmButton: "btn btn-success px-4",
-                cancelButton: "btn btn-ms-2 px-4",
-              },
-            });
+            this.alertasService.mostrarAlerta("Guardado", "Se generó correctamente la orden de compra", "success", "success");
 
             this.getDetalles();
             this.actualizarStatus.emit();
             
             this.mostrarObs = false;
           } else {
-            Swal.fire({
-              title: "Error",
-              text: response.message,
-              buttonsStyling: false,
-              icon: "warning",
-              customClass: {
-                confirmButton: "btn btn-warning px-4",
-                cancelButton: "btn btn-ms-2 px-4",
-              },
-            });
+            
+            this.alertasService.mostrarAlerta("Error", response.message, "warning", "warning");
             console.log(response.message);
           }
         },

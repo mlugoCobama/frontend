@@ -1,9 +1,9 @@
 <div class="row">
   <div class="d-flex justify-content-evenly gap-2 col-9 mx-auto">
-    <button *ngIf="solicitudCompra.auto_gg === 0" class="btn btn-primary col-md-4" type="button" (click)="autorizar('auto_gg')">
+    <button *ngIf="solicitudCompra.auto_gg === 0 && isGG" class="btn btn-primary col-md-4" type="button" (click)="autorizar('auto_gg')">
       <strong> Autoriza: Gerencia general </strong>
     </button>
-    <button *ngIf="solicitudCompra.auto_admin === 0" class="btn btn-info col-md-4" type="button" (click)="autorizar('auto_admin')">
+    <button *ngIf="solicitudCompra.auto_admin === 0 && isGA" class="btn btn-info col-md-4" type="button" (click)="autorizar('auto_admin')">
       <strong> Autoriza: Gerencia administrativa </strong>
     </button>
   </div>

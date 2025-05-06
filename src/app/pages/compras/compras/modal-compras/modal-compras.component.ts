@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 //services
 import { ComprasService } from "src/app/core/services/compras/compras.service";
 import { CatUnidadesMedidasService } from "src/app/core/services/compras/unidadesMedidas/cat-unidades-medidas.service";
+import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 import { first } from "rxjs";
 
 @Component({
@@ -61,6 +62,7 @@ export class ModalComprasComponent implements OnInit {
    */
   constructor(
     private catUnidadesMedidasService: CatUnidadesMedidasService,
+    private alertasService: SwalComprsServiceService,
     private usuariosService: UsuariosService,
     private comprasService: ComprasService,
     private localStorage: LocalStorageServiceService,
@@ -109,9 +111,13 @@ export class ModalComprasComponent implements OnInit {
       // this.usuariosService.getUserById("mlugo@cobama.com.mx").subscribe(
       (response) => {
         if (response.status === "success") {
-          this.usuarioSolicita = response.data;
+          
+          this.usuarioSolicita = response.data[0];
+          this.getUsuarios(this.usuarioSolicita.intercompania);
+          this.formSolicitudCompra.patchValue({empresa :  this.usuarioSolicita.intercompania});
+
         } else {
-          this.mostrarAlerta(
+          this.alertasService.mostrarAlerta(
             response.message,
             "Intente iniciar sesión nuevamente",
             "warning",
@@ -214,7 +220,7 @@ export class ModalComprasComponent implements OnInit {
     if (this.formSolicitudCompra.invalid) {
       this.isLoad = false;
 
-      this.mostrarAlerta(
+      this.alertasService.mostrarAlerta(
         "Alerta",
         "Debes llenar correctamente todos los campos",
         "warning",
@@ -230,7 +236,7 @@ export class ModalComprasComponent implements OnInit {
     if (this.tableData.length === 0) {
       this.isLoad = false;
 
-      this.mostrarAlerta(
+      this.alertasService.mostrarAlerta(
         "Alerta",
         "Agrega por lo menos un elemento a la solicitud",
         "warning",
@@ -269,7 +275,7 @@ export class ModalComprasComponent implements OnInit {
           this.event.emit(true);
           this.showTable = true;
 
-          this.mostrarAlerta(
+          this.alertasService.mostrarAlerta(
             "Guardado",
             "Solicitud registrada correctamente",
             "success",
@@ -278,13 +284,13 @@ export class ModalComprasComponent implements OnInit {
 
           this.cerrarModal();
         } else {
-          this.mostrarAlerta("Error", response.message, "warning", "warning");
+          this.alertasService.mostrarAlerta("Error", response.message, "warning", "warning");
 
           return;
         }
       },
       (error) => {
-        this.mostrarAlerta("Error", error, "warning", "warning");
+        this.alertasService.mostrarAlerta("Error", error, "warning", "warning");
       }
     );
 
@@ -421,26 +427,6 @@ export class ModalComprasComponent implements OnInit {
       text: mensajes,
       customClass: {
         popup: "text-start",
-      },
-    });
-  }
-
-  /**
-   * Genera una alerta de swet alert con un solo boton
-   * @param titulo titulo de la alerta
-   * @param texto mensaje de la alerta
-   * @param icono icono de la alerta
-   * @param btnClass clase que define el color del botón (en colores de bootstrap)
-   */
-  mostrarAlerta(titulo: any, texto: any, icono: any, btnClass: any) {
-    Swal.fire({
-      title: titulo,
-      text: texto,
-      buttonsStyling: false,
-      icon: icono,
-      customClass: {
-        confirmButton: `btn btn-${btnClass} px-4`,
-        cancelButton: "btn btn- ms-2 px-4",
       },
     });
   }

@@ -10,6 +10,7 @@ import catCentrosCostos from "src/environments/cat_centros_costos.json";
 //services
 import { ComprasService } from "src/app/core/services/compras/compras.service";
 import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompra/ordenes-compra.service";
+import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 
 @Component({
   selector: "app-compras",
@@ -42,6 +43,7 @@ export class ComprasComponent implements OnInit {
 
   constructor(
     public ordenesComprasService: OrdenesCompraService,
+    public alertasService: SwalComprsServiceService,
     public comprasService: ComprasService,
     private modalService: BsModalService
   ) {}
@@ -150,27 +152,9 @@ export class ComprasComponent implements OnInit {
           (response) => {
             if (response.status === "success") {
               this.regresar();
-              Swal.fire({
-                title: "Cancelada!",
-                text: "La solicitud ha sido cancelada.",
-                buttonsStyling: false,
-                icon: "success",
-                customClass: {
-                  confirmButton: "btn btn-danger px-4",
-                  cancelButton: "btn btn- ms-2 px-4",
-                },
-              });
+              this.alertasService.mostrarAlerta("Cancelada!", "La solicitud ha sido cancelada.", "success","success");
             } else {
-              Swal.fire({
-                title: "Error!",
-                text: "Your file has been deleted.",
-                buttonsStyling: false,
-                icon: "success",
-                customClass: {
-                  confirmButton: "btn btn-danger px-4",
-                  cancelButton: "btn btn- ms-2 px-4",
-                },
-              });
+              this.alertasService.mostrarAlerta("Error!", "Ocurrió un error inesperado", "error","error");
             }
           },
           (error) => {
@@ -201,16 +185,7 @@ export class ComprasComponent implements OnInit {
           link.click();
           window.URL.revokeObjectURL(url);
         } else {
-          Swal.fire({
-            title: "Error!",
-            text: "La orden de compra no existe",
-            buttonsStyling: false,
-            icon: "error",
-            customClass: {
-              confirmButton: "btn btn-danger px-4",
-              cancelButton: "btn btn- ms-2 px-4",
-            },
-          });
+          this.alertasService.mostrarAlerta("Error!", "La orden de compra no existe", "error","error");
         }
       });
   }

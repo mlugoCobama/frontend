@@ -1,5 +1,6 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { OrdenesCompraService } from 'src/app/core/services/compras/ordenesCompra/ordenes-compra.service';
+import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 
 import Swal from 'sweetalert2';
 
@@ -19,7 +20,8 @@ export class BtnsAutorizacionComponent implements OnInit {
   public isLoad: boolean = false;
 
   constructor(
-    public ordenesComprasService: OrdenesCompraService
+    public ordenesComprasService: OrdenesCompraService,
+    private alertasService:SwalComprsServiceService
   ){}
 
   ngOnInit(): void {
@@ -51,29 +53,10 @@ export class BtnsAutorizacionComponent implements OnInit {
         this.ordenesComprasService.destroy(this.solicitudCompra.id).subscribe(
           (response) => {
             if (response.status === "success") {
-              Swal.fire({
-                title: "Cancelada!",
-                text: "La orden ha sido cancelada.",
-                buttonsStyling: false,
-                icon: "success",
-                customClass: {
-                  confirmButton: "btn btn-danger px-4",
-                  cancelButton: "btn btn- ms-2 px-4",
-                },
-              });
+              this.alertasService.mostrarAlerta("Cancelada!", "La orden ha sido cancelada.","success","success");
               this.actualizarStatus.emit();
             } else {
-              console.log(response.message);
-              Swal.fire({
-                title: "Error!",
-                text: "Your file has been deleted.",
-                buttonsStyling: false,
-                icon: "success",
-                customClass: {
-                  confirmButton: "btn btn-danger px-4",
-                  cancelButton: "btn btn- ms-2 px-4",
-                },
-              });
+              this.alertasService.mostrarAlerta("Error!", response.message,"error","danger");
             }
           },
           (error) => {
@@ -112,29 +95,10 @@ export class BtnsAutorizacionComponent implements OnInit {
         this.ordenesComprasService.enviarSolicitudSurtido(data).subscribe(
           (response) => {
             if (response.status === "success") {
-              Swal.fire({
-                title: "Enviada!!",
-                text: "La orden de compra ha sido autorizada y enviada al proveedor.",
-                buttonsStyling: false,
-                icon: "success",
-                customClass: {
-                  confirmButton: "btn btn-success px-4",
-                  cancelButton: "btn btn- ms-2 px-4",
-                },
-              });
+              this.alertasService.mostrarAlerta("Enviada!!", "La orden de compra ha sido autorizada y enviada al proveedor.","success","success");
               this.actualizarStatus.emit();
             } else {
-              console.log(response.message);
-              Swal.fire({
-                title: "Error!",
-                text: "Your file has been deleted.",
-                buttonsStyling: false,
-                icon: "success",
-                customClass: {
-                  confirmButton: "btn btn-danger px-4",
-                  cancelButton: "btn btn- ms-2 px-4",
-                },
-              });
+              this.alertasService.mostrarAlerta("Error!", response.message,"error","danger");
             }
           },
           (error) => {
@@ -145,29 +109,11 @@ export class BtnsAutorizacionComponent implements OnInit {
         this.ordenesComprasService.autorizarOrdenCompra(data).subscribe(
           (response) => {
             if (response.status === "success") {
-              Swal.fire({
-                title: "Orden autorizada!!",
-                text: "La orden sera marcada como autorizada",
-                buttonsStyling: false,
-                icon: "success",
-                customClass: {
-                  confirmButton: "btn btn-success px-4",
-                  cancelButton: "btn btn- ms-2 px-4",
-                },
-              });
+              this.alertasService.mostrarAlerta("Orden autorizada", "La orden sera marcada como autorizada","success","success");
               this.actualizarStatus.emit();
             } else {
               console.log(response.message);
-              Swal.fire({
-                title: "Error!",
-                text: "Your file has been deleted.",
-                buttonsStyling: false,
-                icon: "success",
-                customClass: {
-                  confirmButton: "btn btn-danger px-4",
-                  cancelButton: "btn btn- ms-2 px-4",
-                },
-              });
+              this.alertasService.mostrarAlerta("Error!", response.message,"error","danger");
             }
           },
           (error) => {

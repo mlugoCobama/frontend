@@ -1,7 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
-
+import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompra/ordenes-compra.service";
-
 
 import {
   FormBuilder,
@@ -51,12 +50,12 @@ export class FormFilesFacturasComponent implements OnInit {
   constructor(
     public formBuilder: FormBuilder,
     private ordenesComprasService: OrdenesCompraService,
+    private alertasService: SwalComprsServiceService
   ) {}
 
   ngOnInit(): void {
     this.buildForm();
     this.getOrdenCompra();
-    console.log("Inicio el componente de facturas")
   }
 
   /**
@@ -83,12 +82,11 @@ export class FormFilesFacturasComponent implements OnInit {
   /**
    * Recupera la orden de compra actual en base a la solicitud de compra 
    */  
-  private getOrdenCompra() {
+  private getOrdenCompra1() {
     this.ordenesComprasService.getOne(this.solicitudCompra.id).subscribe(
       (response) => {
         if (response) {
           this.ordenCompra = response.data;
-          console.log(this.ordenCompra);
           this.setOrdenCompra(this.ordenCompra);
           
           this.isLoad = false;
@@ -125,27 +123,46 @@ export class FormFilesFacturasComponent implements OnInit {
     );
   }
 
+  private getOrdenCompra() {
+    this.ordenesComprasService.getOne(this.solicitudCompra.id).subscribe(
+      (response) => {
+        if (!response) {
+          console.log(response?.message);
+          return;
+        }
+  
+        this.ordenCompra = response.data;
+        this.setOrdenCompra(this.ordenCompra);
+        this.isLoad = false;
+  
+        const documentos = this.ordenCompra.documentos || [];
+        this.hasFiles = documentos.length > 0;
+  
+        if (this.hasFiles) {
+          this.leerXML();
+          this.hasFacturas = true;
+          
+          const ultimoDoc = documentos[documentos.length - 1] || {};
+          this.hasComprobantePago = !!ultimoDoc.comprobante_pago;
+          this.idDocOrdC = this.hasComprobantePago ? null : ultimoDoc.id;
+        } else {
+          this.habilitado = true;
+          this.hasFacturas = false;
+          this.hasComprobantePago = true;
+        }
+      },
+      (error) => console.error("Error fetching data:", error)
+    );
+  }
   /**
-   * Guarda los archivos de las facturas 
-   * ->PDF
-   * y XML
+   * Guarda los archivos de las facturas  PDF  y XML
    * @returns 
    */
   public guardarArchivos() {
     this.submitted = true;
     this.isLoad = true;
     if (this.formDocsOrdenCompra.invalid) {
-
-      Swal.fire({
-        title: "Alerta",
-        text: "Debes adjuntar la factura en ambos formatos",
-        buttonsStyling: false,
-        icon: "warning",
-        customClass: {
-          confirmButton: "btn btn-warning px-4",
-          cancelButton: "btn btn- ms-2 px-4",
-        },
-      });
+      this.alertasService.mostrarAlerta("Alerta", "Debes adjuntar la factura en ambos formatos", "warning", "warning");
       this.isLoad = false;
       return;
     }
@@ -159,17 +176,7 @@ export class FormFilesFacturasComponent implements OnInit {
         if (response.status === "success") {
 
           this.getOrdenCompra();
-
-          Swal.fire({
-            title: "Guardado",
-            text: "Documentos guardados correctamente",
-            buttonsStyling: false,
-            icon: "success",
-            customClass: {
-              confirmButton: "btn btn-success px-4",
-              cancelButton: "btn btn- ms-2 px-4",
-            },
-          });
+          this.alertasService.mostrarAlerta("Guardado", "Documentos guardados correctamente", "success", "success");
 
           this.isLoad = false;
           this.formData = new FormData();
@@ -205,17 +212,7 @@ export class FormFilesFacturasComponent implements OnInit {
           if (response.status === "success") {
 
             this.getOrdenCompra();
-
-            Swal.fire({
-              title: "Guardado",
-              text: "Documentos guardados correctamente",
-              buttonsStyling: false,
-              icon: "success",
-              customClass: {
-                confirmButton: "btn btn-success px-4",
-                cancelButton: "btn btn- ms-2 px-4",
-              },
-            });
+            this.alertasService.mostrarAlerta("Guardado", "Documentos guardados correctamente", "success", "success");
 
             this.isLoad = false;
             this.formData = new FormData();
@@ -229,16 +226,7 @@ export class FormFilesFacturasComponent implements OnInit {
         }
       );
     } else {
-      Swal.fire({
-        title: "Alerta",
-        text: "Debes adjuntar el comprobante pago",
-        buttonsStyling: false,
-        icon: "warning",
-        customClass: {
-          confirmButton: "btn btn-warning px-4",
-          cancelButton: "btn btn- ms-2 px-4",
-        },
-      });
+      this.alertasService.mostrarAlerta("Alerta", "Debes adjuntar el comprobante pago", "warning", "warning");
       this.isLoad = false;
       return;
     }
@@ -253,17 +241,7 @@ export class FormFilesFacturasComponent implements OnInit {
       .subscribe(
         (response) => {
           if (response.status === "success") {
-            Swal.fire({
-              title: "Listo",
-              text: "Se ha marcado como pagada",
-              buttonsStyling: false,
-              icon: "success",
-              customClass: {
-                confirmButton: "btn btn-success px-4",
-                cancelButton: "btn btn- ms-2 px-4",
-              },
-            });
-
+            this.alertasService.mostrarAlerta("Listo", "Se ha marcado como pagada", "success", "success");
             this.isLoad = false;
             this.actualizarStatus.emit();
           } else {
@@ -333,7 +311,6 @@ export class FormFilesFacturasComponent implements OnInit {
    * @param fieldName nombre del input
    */
   onFileChange1(event: any, fieldName: string) {
-    
     this.formData.delete(fieldName);
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
