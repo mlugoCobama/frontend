@@ -1,11 +1,9 @@
 import { Component, Input, Output, OnInit, OnChanges, SimpleChanges, EventEmitter } from '@angular/core';
 import { ProveedoresService } from "src/app/core/services/compras/proveedores/proveedores.service";
-import { ComprasService } from "src/app/core/services/compras/compras.service";
-import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompra/ordenes-compra.service";
 import { UsuariosService } from 'src/app/core/services/compras/usuarios.service';
 import { CotizacionesService } from "src/app/core/services/compras/cotizaciones/cotizaciones.service";
 import {FormBuilder, FormControl, FormGroup, Validators, } from "@angular/forms";
-import Swal from "sweetalert2";
+import { EstadoSolicitud } from '../../estado-solicitud.enum';
 
 @Component({
   selector: 'app-table-files-cotizaciones',
@@ -34,6 +32,7 @@ public proveedorSelec: any;
 public empresas: any;
 public isLoading: boolean = true;
 public isLoad: boolean = true;
+public enEsts = EstadoSolicitud;
 
 constructor(
   private proveedoresService: ProveedoresService,
@@ -118,7 +117,7 @@ verArchivos(prov: any) {
  * Recupera el catalogo de empresas (Select empresa) 
  */
 public getEmpresas() {
-  if(this.solicitudCompra.estatus === 3){
+  if(this.solicitudCompra.estatus === this.enEsts.EnCotizacion){
     this.usuariosService.getEmpresas().subscribe(
       (response) => {
         if (response) {

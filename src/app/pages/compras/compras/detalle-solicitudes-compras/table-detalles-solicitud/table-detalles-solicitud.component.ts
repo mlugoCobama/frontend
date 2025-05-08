@@ -5,6 +5,8 @@ import { CotizacionesService } from "src/app/core/services/compras/cotizaciones/
 import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompra/ordenes-compra.service";
 import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 
+import { EstadoSolicitud } from "../../estado-solicitud.enum";
+
 import { Subscription } from "rxjs";
 import {FormGroup} from "@angular/forms";
 
@@ -42,6 +44,8 @@ export class TableDetallesSolicitudComponent implements OnInit{
   public mostrarObs: boolean = false;
 
   private generarOrdenSubscripcion: Subscription;
+  
+  public enEsts = EstadoSolicitud;
 
   constructor(
     public compras: ComprasService,
@@ -89,7 +93,7 @@ export class TableDetallesSolicitudComponent implements OnInit{
       (response) => {
         if (response) {
           this.detalles = response.data;
-          if (this.solicitudCompra.estatus >= 2) {
+          if (this.solicitudCompra.estatus >= this.enEsts.EnCotizacion) {
 
             this.getProveedoresCotizacion();
             this.addProveedorColumns();

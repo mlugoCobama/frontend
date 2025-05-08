@@ -109,7 +109,6 @@ export class PorcentajesGraficasComponent implements OnInit {
       } 
     }
     this.serie = data;
-    console.log(this.serie);
   }
 
   /**

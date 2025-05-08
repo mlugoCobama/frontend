@@ -7,7 +7,7 @@
             <h5 class="mb-0 card-title flex-grow-1">Solicitudes de Compra</h5>
             <div class="flex-shrink-0 d-flex gap-1">
               <a
-                *ngIf="status >= 4 "
+                *ngIf="status >= enEsts.OrdenCompra || status === enEsts.Cancelado"
                 href="javascript:void(0);"
                 class="btn btn-sm btn-primary"
                 (click)="btnDescargarOC()"
@@ -16,7 +16,7 @@
               Descargar Orden de Compra
               </a>
               <a
-                *ngIf="status === 3  && mostrarBoton"
+                *ngIf="status === enEsts.EnCotizacion  && mostrarBoton"
                 href="javascript:void(0);"
                 class="btn btn-primary btn-sm"
                 (click)="btnGenerarOC()"
@@ -40,15 +40,15 @@
                 >Volver</a
               >
               <a
-                *ngIf="status === 2 && !comprasService.mostrarCotizacionSource.value"
+                *ngIf="status === enEsts.Solicitado && !comprasService.mostrarCotizacionSource.value"
                 href="javascript:void(0);"
                 class="btn btn-info btn-sm"
                 (click)="mostrarCotizacion()"
                 >Cotizar</a
               >
               <a
-                *ngIf="status >= 2 && status <= 8 &&
-                  !comprasService.mostrarCotizacionSource.value"
+                *ngIf="status >= enEsts.Solicitado && status < enEsts.Autorizado &&
+                  !comprasService.mostrarCotizacionSource.value &&  status != enEsts.Cancelado"
                 href="javascript:void(0);"
                 class="btn btn-danger btn-sm"
                 (click)="cancelarSolicitud()"
@@ -59,8 +59,6 @@
         </div>
 
         <div *ngIf="!solicitudSelecionada" class="card-body border-bottom">
-          
-
             <div class="d-flex justify-content-center" *ngIf="isLoad">
               <div class="spinner-border" role="status">
                 <span class="visually-hidden">Loading...</span>

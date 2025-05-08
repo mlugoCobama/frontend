@@ -82,7 +82,9 @@ export class OrdenesCompraService {
   public pdfOrdenCompra(id: number): Observable<Blob> {
     return this.http.get(
       environment.apiUrl + `compras/consulta-datos-pdf/${id}`,
-      { responseType: "blob" }
+      { 
+        responseType: "blob",
+       }
     );
   }
 

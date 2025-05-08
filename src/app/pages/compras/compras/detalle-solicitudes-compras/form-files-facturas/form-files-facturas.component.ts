@@ -1,15 +1,9 @@
 import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
 import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompra/ordenes-compra.service";
+import { EstadoSolicitud } from "../../estado-solicitud.enum";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
-
-import Swal from "sweetalert2";
 
 @Component({
   selector: "app-form-files-facturas",
@@ -29,6 +23,7 @@ export class FormFilesFacturasComponent implements OnInit {
   public submitted: boolean = false;
   public isLoad: boolean = true;
   public mostrarDtsFac: boolean = false;
+  public enEsts= EstadoSolicitud;
 
   public hasFiles: boolean = false;
   factura: any = {
@@ -82,7 +77,7 @@ export class FormFilesFacturasComponent implements OnInit {
   /**
    * Recupera la orden de compra actual en base a la solicitud de compra 
    */  
-  private getOrdenCompra1() {
+  private getOrdenCompra() {
     this.ordenesComprasService.getOne(this.solicitudCompra.id).subscribe(
       (response) => {
         if (response) {
@@ -123,37 +118,6 @@ export class FormFilesFacturasComponent implements OnInit {
     );
   }
 
-  private getOrdenCompra() {
-    this.ordenesComprasService.getOne(this.solicitudCompra.id).subscribe(
-      (response) => {
-        if (!response) {
-          console.log(response?.message);
-          return;
-        }
-  
-        this.ordenCompra = response.data;
-        this.setOrdenCompra(this.ordenCompra);
-        this.isLoad = false;
-  
-        const documentos = this.ordenCompra.documentos || [];
-        this.hasFiles = documentos.length > 0;
-  
-        if (this.hasFiles) {
-          this.leerXML();
-          this.hasFacturas = true;
-          
-          const ultimoDoc = documentos[documentos.length - 1] || {};
-          this.hasComprobantePago = !!ultimoDoc.comprobante_pago;
-          this.idDocOrdC = this.hasComprobantePago ? null : ultimoDoc.id;
-        } else {
-          this.habilitado = true;
-          this.hasFacturas = false;
-          this.hasComprobantePago = true;
-        }
-      },
-      (error) => console.error("Error fetching data:", error)
-    );
-  }
   /**
    * Guarda los archivos de las facturas  PDF  y XML
    * @returns 
