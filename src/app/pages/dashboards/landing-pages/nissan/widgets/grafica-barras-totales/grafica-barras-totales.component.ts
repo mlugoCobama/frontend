@@ -45,8 +45,6 @@ export class GraficaBarrasTotalesComponent implements AfterViewInit {
       toolbar:{
         show:false
       },
-
-      // height: 300
     },
     plotOptions: {
       bar: {

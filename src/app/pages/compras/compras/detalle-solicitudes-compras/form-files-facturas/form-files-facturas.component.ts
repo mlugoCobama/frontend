@@ -279,6 +279,37 @@ export class FormFilesFacturasComponent implements OnInit {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
       this.formData.append(fieldName, file);
+      if(fieldName === 'factura_xml'){
+        this.validarXML(file);
+      }
+      
     }
+    
   }
+
+  /**
+   *  Valida que el archivo que se suba sea un cfdi
+   * y recupera el tipo de comprobante
+  */ 
+  validarXML(file: File) {
+  const reader = new FileReader();
+
+  reader.onload = (e) => {
+    const xmlContent = e.target?.result as string;
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlContent, "application/xml");
+
+    const comprobante = xmlDoc.getElementsByTagName("cfdi:Comprobante")[0];
+    if (comprobante) {
+      const tipo = comprobante.getAttribute("TipoDeComprobante");
+      console.log("Tipo de comprobante:", tipo);
+    } else {
+      this.alertasService.mostrarAlerta('No valido', 'El archivo que intentas subir no es un CFDI','error', 'danger');
+      this.formDocsOrdenCompra.reset();
+      console.warn("No se encontró el nodo 'cfdi:Comprobante'.");
+    }
+  };
+
+  reader.readAsText(file);
+}
 }

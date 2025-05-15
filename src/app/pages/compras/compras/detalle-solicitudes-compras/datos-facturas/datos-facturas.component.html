@@ -33,13 +33,13 @@
             <th>FECHA</th>
             <th>FOLIO</th>
             <th>SERIE</th>
+            <th>T.COMP.</th>
             <th>SUB TOTAL</th>
             <th>IMPUESTOS</th>
             <th>TOTAL</th>
             <th>MONEDA</th>
             <th>FAC.</th>
             <th>C.PAGO</th>
-
           </tr>
         </thead>
         <tbody>
@@ -47,6 +47,7 @@
             <td>{{ comprobante.fecha | date:'dd/MM/yyyy h:mm:ss a'}}</td>
             <td>{{ comprobante.folio }}</td>
             <td>{{ comprobante.serie }}</td>
+            <td>{{ comprobante.tComprobanteDesc }}</td>
             <td>$ {{ comprobante.subTotal | number }}</td>
             <td>$ {{ comprobante.total - comprobante.subTotal| number}}</td>
             <td>$ {{ comprobante.total | number }}</td>

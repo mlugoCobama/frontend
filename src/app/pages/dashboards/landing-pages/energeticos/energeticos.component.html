@@ -87,7 +87,7 @@
     </div>
 </div>
 <div class="row" *ngIf="!isLoad">
-    <div class="col-xl-12">
+    <div class="col-xl-6">
         <app-totales-grafica 
             [dataMes]="dataMesActual" 
             [dataMesAnterior]="dataMesAnterior" 
@@ -98,8 +98,8 @@
             [totalAnioAnt]="dataTotalAnioAnt"
         ></app-totales-grafica>
     </div>
-    <!-- <div class="col-xl-6">
-        <app-totales-grafica 
+    <div class="col-xl-6">
+        <app-porcentaje-eficiencia
             [dataMes]="dataMesActual" 
             [dataMesAnterior]="dataMesAnterior" 
             tipo = "energeticos-detalle"
@@ -107,6 +107,6 @@
             concepto="eficiencia"
             [totalAnio]="dataTotalAnio"
             [totalAnioAnt]="dataTotalAnioAnt"
-        ></app-totales-grafica>
-    </div> -->
+        ></app-porcentaje-eficiencia>
+    </div>
 </div>

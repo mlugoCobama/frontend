@@ -37,7 +37,9 @@
                 href="javascript:void(0);"
                 class="btn btn-dark btn-sm"
                 (click)="regresar()"
-                >Volver</a
+                >
+              <i class=" mdi mdi-arrow-left"></i>
+                Volver</a
               >
               <a
                 *ngIf="status === enEsts.Solicitado && !comprasService.mostrarCotizacionSource.value"

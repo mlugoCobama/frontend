@@ -27,6 +27,7 @@ import { BarrasHorizontalesMetasComponent } from './nissan/widgets/barras-horizo
 import { GraficaBarrasTotalesComponent } from './nissan/widgets/grafica-barras-totales/grafica-barras-totales.component';
 import { CardPrestamosComponent } from './nissan/widgets/card-prestamos/card-prestamos.component';
 import { StackGraficaComponent } from './nissan/widgets/stack-grafica/stack-grafica.component';
+import { PorcentajeEficienciaComponent } from './energeticos/widgets/porcentaje-eficiencia/porcentaje-eficiencia.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { StackGraficaComponent } from './nissan/widgets/stack-grafica/stack-graf
     GraficaBarrasTotalesComponent,
     CardPrestamosComponent,
     StackGraficaComponent,
+    PorcentajeEficienciaComponent,
   ],
   imports: [
     CommonModule,

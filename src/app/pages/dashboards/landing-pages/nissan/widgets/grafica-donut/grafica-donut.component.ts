@@ -41,7 +41,6 @@ export class GraficaDonutComponent implements AfterViewInit {
           labels: {
             show: true,
             name: {
-              // show: true,
               fontWeight: 600,
               fontSize: "22px",
             },
@@ -69,9 +68,6 @@ export class GraficaDonutComponent implements AfterViewInit {
       },
     },
     labels: ["Team A", "Team B", "Team C", "Team D", "Team E"],
-    // legend: {
-    //   position: "bottom"
-    // },
     tooltip: {
       y: {
         formatter: function (value) {
@@ -84,36 +80,14 @@ export class GraficaDonutComponent implements AfterViewInit {
         breakpoint: 1500,
         options: {
           chart: {
-            // width: 300,
+            
           },
           legend: {
             show: false,
-            // position: "bottom",
+            
           },
         },
       },
-      // {
-      //   breakpoint: 768,
-      //   options: {
-      //     chart: {
-      //       width: 200
-      //     },
-      //     legend: {
-      //       position: "bottom"
-      //     }
-      //   }
-      // },
-      // {
-      //   breakpoint: 480,
-      //   options: {
-      //     chart: {
-      //       width: 200
-      //     },
-      //     legend: {
-      //       position: "bottom"
-      //     }
-      //   }
-      // }
     ],
   };
 
@@ -180,8 +154,6 @@ export class GraficaDonutComponent implements AfterViewInit {
    */
   private generarSerie() {
     let data: any = [];
-    // this.deleteLast();
-
     let total = this.dataEnergeticos.mes.find(
       (registro) => registro.estacion === "Total"
     );
@@ -199,7 +171,6 @@ export class GraficaDonutComponent implements AfterViewInit {
         const element = this.valueNegative(
           Number(this.dataEnergeticos.mes[i][this.concepto])
         );
-        // const element = this.valueNegative(Number(formatNumber((this.dataEnergeticos.mes[i][this.concepto] / this.total) * 100, 'en-US', '1.0-2')))
         data.push(element);
       }
     }

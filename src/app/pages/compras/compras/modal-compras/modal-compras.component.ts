@@ -264,6 +264,10 @@ export class ModalComprasComponent implements OnInit {
       detalles: this.tableData,
     };
 
+    if(!this.isAgencia){
+      data.c_c = 0;
+    }
+    
     if (this.isAgencia) {
       data.usuario_destino = this.usuarioSolicita.id;
     }

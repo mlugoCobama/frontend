@@ -1,7 +1,5 @@
 import { Component , Input, OnInit, AfterViewInit} from '@angular/core';
 import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
-import { EnergeticosGaserasService } from 'src/app/core/services/dashboard/energeticos-gaseras.service';
-import { Subject, Subscription } from "rxjs";
 import { formatNumber } from '@angular/common';
 
 @Component({
@@ -14,8 +12,6 @@ export class TotalesPorcentajeGraficaComponent implements AfterViewInit{
   @Input() concepto: string;
 
 public dataEnergeticos: any;
-
-private actualizarDatosSubscripcion: Subscription;
 
 public dataAnual: any = [];
 
@@ -50,7 +46,6 @@ public options = {
               fontSize: '22px',
             },
             value: {
-              // show: true,
               fontSize: '16px',
               formatter: function (val) {
                 return Number(val).toLocaleString()
@@ -72,8 +67,6 @@ public options = {
     },
     labels: ["Team A", "Team B", "Team C", "Team D", "Team E"],
     legend: {
-      // position: "bottom"
-      // show: false
     },
     tooltip: {
       y: {
@@ -99,7 +92,6 @@ public options = {
 
   constructor(
     private localStorage: LocalStorageServiceService,
-    private gaseras : EnergeticosGaserasService
   ) {}
 
   ngAfterViewInit(): void {
@@ -113,7 +105,6 @@ public options = {
   private inicializarGrfica(){
     this.dataEnergeticos = this.localStorage.getItem('DataEnergeticos');
     if(this.dataEnergeticos.mes.length > 1){
-    // this.getTotalesSeries();
     this.options.labels = this.getLabelsConceptos();
     this.options.series = this.getSeriesConceptos();
     
@@ -141,9 +132,7 @@ public options = {
         const value = Number(filaTotales[concepto]);
         totales.push(value);
       });
-      let totalConceptos =  totales.reduce((a, b) => {
-        return a + b
-      }, 0)
+      let totalConceptos =  totales.reduce((a, b) => { return a + b }, 0)
       console.log(totales)
       console.log(totalConceptos);
       totales.forEach(totalConcepto => {
@@ -157,9 +146,7 @@ public options = {
 
     public getSumaConcepto(){
       let totales = this.getData().map((item) => item.value);
-      let totalConceptos =  totales.reduce((a, b) => {
-        return a + b
-      }, 0);
+      let totalConceptos =  totales.reduce((a, b) => { return a + b }, 0);
       return totalConceptos;
     }
 
@@ -169,12 +156,9 @@ public options = {
       const total =  this.getSumaConcepto();
 
       data.forEach(totalConcepto => {
-        // const element = this.valueNegative(Number(formatNumber((totalConcepto.value / total) * 100, 'en-US', '1.0-2')))
         const element =this.valueNegative(Number(totalConcepto.value))
-
         serie.push(element);
       });
-
       return serie;
     }
 
@@ -209,8 +193,6 @@ public options = {
       this.totalMes = totales.reduce((a, b) => {return a + b}, 0);
       this.totalMesAnt = totalesMA.reduce((a, b) => {return a + b}, 0);
       this.diferencia = this.totalMes - this.totalMesAnt;
-
-
     }
 
     private setTitle() {
