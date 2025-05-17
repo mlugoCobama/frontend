@@ -1,16 +1,15 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit } from '@angular/core';
+import * as Highcharts from "highcharts";
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
 import { EnergeticosGaserasService } from "src/app/core/services/dashboard/energeticos-gaseras.service";
 import { Subject, Subscription } from "rxjs";
 
-import * as Highcharts from "highcharts";
-
 @Component({
-  selector: "app-anual",
-  templateUrl: "./anual.component.html",
-  styleUrls: ["./anual.component.css"],
+  selector: 'app-tendencia',
+  templateUrl: './tendencia.component.html',
+  styleUrl: './tendencia.component.css'
 })
-export class AnualComponent implements OnInit {
+export class TendenciaComponent implements OnInit{
   @Input() concepto: string;
 
   private dataEnergeticos: any;
@@ -21,27 +20,18 @@ export class AnualComponent implements OnInit {
 
   public dataAnualAnt: any = [];
 
+  public chart: any;
+
+  public diferencia: any;
+
   Highcharts: typeof Highcharts = Highcharts;
   updateFlag = false;
   chartOptions: Highcharts.Options = {
     title: {
-      text: "Anual",
+      text: "Tendencia",
     },
     xAxis: {
-      categories: [
-        "Ene",
-        "Feb",
-        "Mar",
-        "Abr",
-        "May",
-        "Jun",
-        "Jul",
-        "Ago",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dic",
-      ],
+      categories: ["Ene","Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic",],
     },
     yAxis: {
       title: {
@@ -68,112 +58,54 @@ export class AnualComponent implements OnInit {
         ],
         type: "line",
       },
-      {
-        name: "2024",
-        data: [
-          -2.9, -3.6, -0.6, 4.8, 10.2, 14.5, 17.6, 16.5, 12.0, 6.5, 2.0, -0.9,
-        ],
-        type: "line",
-      },
     ],
   };
 
-  constructor(
+    constructor(
     private localStorage: LocalStorageServiceService,
     private gaseras: EnergeticosGaserasService
   ) {}
 
   ngOnInit(): void {
+    this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
+    this.recuperarDatos();
     this.inicializarGrfica();
-    this.actualizarDatosSubscripcion = this.gaseras.actualizarData$.subscribe(
-      () => {
-        this.actualizarGrafica();
-      }
-    );
   }
-
-  public chart: any;
-  private inicializarGrfica() {
+    private inicializarGrfica() {
     this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
-    this.serieAnio();
-    this.serieAnioAnt();
     const prediccion2 = this.seriePrediccion(this.dataAnual);
 
-    let serie = [this.dataAnualAnt, this.dataAnual, prediccion2];
+    let serie = [prediccion2];
     this.chartOptions.series = serie;
 
     this.updateFlag = true;
   }
 
-  private actualizarGrafica() {
-    this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
-    this.serieAnio();
-    this.serieAnioAnt();
+  private recuperarDatos(){
+    let dataAnual = this.dataEnergeticos.totalAnio.map((dato) => Number(dato[this.concepto]));
+    let dataAnualAnt = this.dataEnergeticos.totalAnioAnt.map((dato) => Number(dato[this.concepto]));
 
-    const prediccion2 = this.seriePrediccion(this.dataAnual);
-    let serie = [this.dataAnualAnt, this.dataAnual, prediccion2];
-    this.chartOptions.series = serie;
-    this.updateFlag = true;
-  }
-
-  private serieAnio() {
-    let data: any = [];
-    if (this.dataEnergeticos.totalAnio.length > 1) {
-      for (let i = 0; i < this.dataEnergeticos.totalAnio.length; i++) {
-        const element = Number(
-          this.dataEnergeticos.totalAnio[i][this.concepto]
-        );
-        data.push(element);
-      }
-
-      this.dataAnual = {
+    this.dataAnual = {
         name: String(
           new Date(this.dataEnergeticos.totalAnio[0]["fecha"]).getFullYear() + 1
         ),
-        data: data,
+        data: dataAnual,
         type: "line",
       };
-    } else {
-      this.dataAnual = {
-        name: "sin datos",
-        data: data,
-        type: "line",
-      };
-    }
-  }
-
-  private serieAnioAnt() {
-    let data: any = [];
-    if (this.dataEnergeticos.totalAnioAnt.length > 1) {
-      for (let i = 0; i < this.dataEnergeticos.totalAnioAnt.length; i++) {
-        const element = Number(
-          this.dataEnergeticos.totalAnioAnt[i][this.concepto]
-        );
-        data.push(element);
-      }
-      this.dataAnualAnt = {
+    
+    this.dataAnualAnt = {
         name: String(
-          new Date(
-            this.dataEnergeticos.totalAnioAnt[0]["fecha"]
-          ).getFullYear() + 1
+          new Date(this.dataEnergeticos.totalAnioAnt[0]["fecha"]).getFullYear() + 1
         ),
-        data: data,
+        data:  dataAnualAnt,
         type: "line",
       };
-    } else {
-      this.dataAnual = {
-        name: "sin datos",
-        data: data,
-        type: "line",
-      };
-    }
   }
-
-  private seriePrediccion(data) {
+    private seriePrediccion(data) {
     const datos = [...this.dataAnualAnt.data, ...data.data];
     let serie;
     const prediccion = this.predecirRestantes(datos);
-
+    this.diferencia = (prediccion[prediccion.length-1]) - prediccion[0];
     const mesesExcluidos = data.data.map(() => null);
     const seriePrediccion = mesesExcluidos.concat(prediccion);
     serie = {
@@ -205,6 +137,7 @@ export class AnualComponent implements OnInit {
 
     const predicciones: number[] = [];
     for (let i = n + inicioMes; i <= totalMeses; i++) {
+      console.log(`operacion = ${m} * ${i} + ${b}`);
       predicciones.push(Math.round(m * i + b));
     }
     return predicciones;

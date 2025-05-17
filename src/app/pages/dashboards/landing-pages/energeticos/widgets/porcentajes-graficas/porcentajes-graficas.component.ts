@@ -28,7 +28,7 @@ export class PorcentajesGraficasComponent implements OnInit {
   public options = {
     series: [],
     chart: {
-      width: '500',
+      width: '450',
       type: "pie"
     },
     labels: [],
@@ -37,7 +37,7 @@ export class PorcentajesGraficasComponent implements OnInit {
         breakpoint: 480,
         options: {
           chart: {
-            width: 200
+            width: 400
           },
           legend: {
             position: "bottom"

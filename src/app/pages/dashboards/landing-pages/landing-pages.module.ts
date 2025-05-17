@@ -28,6 +28,7 @@ import { GraficaBarrasTotalesComponent } from './nissan/widgets/grafica-barras-t
 import { CardPrestamosComponent } from './nissan/widgets/card-prestamos/card-prestamos.component';
 import { StackGraficaComponent } from './nissan/widgets/stack-grafica/stack-grafica.component';
 import { PorcentajeEficienciaComponent } from './energeticos/widgets/porcentaje-eficiencia/porcentaje-eficiencia.component';
+import { TendenciaComponent } from './energeticos/widgets/tendencia/tendencia.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { PorcentajeEficienciaComponent } from './energeticos/widgets/porcentaje-
     CardPrestamosComponent,
     StackGraficaComponent,
     PorcentajeEficienciaComponent,
+    TendenciaComponent,
   ],
   imports: [
     CommonModule,

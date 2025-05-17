@@ -19,7 +19,6 @@ export class PorcentajeEficienciaComponent implements OnInit {
   public diferencia:any;
 
   ngOnInit(): void {
-    
     this.incicializarGrafica();
   }
 
@@ -38,7 +37,7 @@ export class PorcentajeEficienciaComponent implements OnInit {
             startAngle: -120,
             endAngle: 120,
             track: {
-              background: "#e7e7e7",
+              background: "",
               strokeWidth: '97%',
               margin: 5, // margin is in pixels
               dropShadow: {
@@ -52,7 +51,7 @@ export class PorcentajeEficienciaComponent implements OnInit {
             },
             dataLabels: {
               name: {
-                show: false
+                show: true
               },
               value: {
                 offsetY: 5,
@@ -66,19 +65,19 @@ export class PorcentajeEficienciaComponent implements OnInit {
             top: 0
           }
         },
-        fill: {
+         fill: {
 
-          type: 'gradient',
-          gradient: {
-            shade: 'light',
-            shadeIntensity: 0.4,
-            inverseColors: false,
-            opacityFrom: 1,
-            opacityTo: 1,
-            stops: [0, 50, 53, 91]
-          },
-        },
-        labels: ['Average Results'],
+           type: 'gradient',
+           gradient: {
+             shade: 'light',
+             shadeIntensity: 0.4,
+             inverseColors: false,
+             opacityFrom: 1,
+             opacityTo: 1,
+             stops: [0, 50, 53, 91]
+           },
+         },
+        labels: ['Eficiencia'],
         };
 
   incicializarGrafica(){
