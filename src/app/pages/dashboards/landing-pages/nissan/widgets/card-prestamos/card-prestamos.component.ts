@@ -13,14 +13,14 @@ export class CardPrestamosComponent implements AfterViewInit{
 
   public title: any;
 
-  public totalMes: any;
-  public interesMes:  any;
+  public totalMes: any = 0;
+  public interesMes:  any = 0;
 
-  public totalMesAnt: any;
-  public interesMesAnt:  any;
+  public totalMesAnt: any = 0;
+  public interesMesAnt:  any = 0;
 
-  public difTotal: any;
-  public difIntereses: any;
+  public difTotal: any = 0;
+  public difIntereses: any = 0;
 
   ngAfterViewInit(): void {
     this.setTitle();

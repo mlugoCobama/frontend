@@ -20,9 +20,9 @@ export class GraficaDonutComponent implements AfterViewInit {
 
   public dataAnualAnt: any = [];
 
-  public totalMes: number;
-  public totalMesAnt: number;
-  public diferencia: number;
+  public totalMes: number = 0;
+  public totalMesAnt: number = 0;
+  public diferencia: number = 0;
 
   public total2: string = "0";
   private labels: any;

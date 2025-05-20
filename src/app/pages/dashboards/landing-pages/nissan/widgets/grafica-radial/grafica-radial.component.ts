@@ -16,7 +16,7 @@ export class GraficaRadialComponent implements OnInit{
 
   public dataAnualAnt: any = [];
 
-  public total: number;
+  public total: number = 0;
   public total2: string = "0";
   private labels: any;
   private serie: any;
