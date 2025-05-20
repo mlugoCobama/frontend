@@ -32,7 +32,7 @@ export class BarrasHorizontalesMetasComponent implements AfterViewInit {
   public options = {
     series: [80],
     chart: {
-    height: 300,
+    height: 295,
     type: 'radialBar',
     offsetY: -10
   },
@@ -44,10 +44,10 @@ export class BarrasHorizontalesMetasComponent implements AfterViewInit {
         name: {
           fontSize: '16px',
           color: undefined,
-          offsetY: 120
+          offsetY: 100
         },
         value: {
-          offsetY: 76,
+          offsetY: 50,
           fontSize: '22px',
           color: undefined,
           formatter: function (val) {

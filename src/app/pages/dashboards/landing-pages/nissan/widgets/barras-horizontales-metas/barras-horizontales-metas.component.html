@@ -5,40 +5,42 @@
       {{ title }}
     </h5>
     <div class="row">
-    <div class="col-lg-4 col-4">
+      <div class="col-lg-4 col-4">
         <div class="text-muted">
-            <div class="mb-4">
-                <p>Este mes</p>
-                <ng-container *ngIf="totalMes > 0; else elseTemplate1">
-                    <h4>{{ totalMes | number }} %</h4>
-                </ng-container>
-                <ng-template #elseTemplate1>
-                    <h4 class="text-danger">{{ totalMes | number }} %</h4> 
-                </ng-template>
-                
-                <div>
-                    <ng-container *ngIf="diferencia > 0; else elseTemplate">
-                        <span class="badge badge-soft-success font-size-12 me-1"> + {{ diferencia | number }} %</span> 
-                    </ng-container>
-                    <ng-template #elseTemplate>
-                        <span class="badge badge-soft-danger font-size-12 me-1"> {{ diferencia | number }} %</span> 
-                    </ng-template>
-                    
-                </div>
-            </div>
+          <div class="mb-4">
+            <p>Este mes</p>
+            <ng-container *ngIf="totalMes > 0; else elseTemplate1">
+              <h4>{{ totalMes | number }} %</h4>
+            </ng-container>
+            <ng-template #elseTemplate1>
+              <h4 class="text-danger">{{ totalMes | number }} %</h4>
+            </ng-template>
 
             <div>
-                <a  class="btn btn-primary btn-sm">Ver Detalle</a>
+              <ng-container *ngIf="diferencia > 0; else elseTemplate">
+                <span class="badge badge-soft-success font-size-12 me-1">
+                  + {{ diferencia | number }} %</span
+                >
+              </ng-container>
+              <ng-template #elseTemplate>
+                <span class="badge badge-soft-danger font-size-12 me-1">
+                  {{ diferencia | number }} %</span
+                >
+              </ng-template>
             </div>
+          </div>
 
-            <div class="mt-4">
-                <p class="mb-2">El mes pasado:</p>
-                <h5>{{ totalMesAnt | number }} %</h5>
-            </div>
+          <div>
+            <a class="btn btn-primary btn-sm">Ver Detalle</a>
+          </div>
 
+          <div class="mt-4">
+            <p class="mb-2">El mes pasado:</p>
+            <h5>{{ totalMesAnt | number }} %</h5>
+          </div>
         </div>
-    </div>
-      <div class="col-lg-8 col-8">
+      </div>
+      <div class="col-lg-8 col-8" >
         <div id="chart_{{ concepto }}"></div>
       </div>
     </div>
