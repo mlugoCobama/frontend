@@ -12,11 +12,11 @@ import * as Highcharts from "highcharts";
 })
 export class AnualComponent implements OnInit {
   @Input() concepto: string;
-
+  @Input() titulo: string;
   private dataEnergeticos: any;
 
   private actualizarDatosSubscripcion: Subscription;
-
+ 
   public dataAnual: any = [];
 
   public dataAnualAnt: any = [];
@@ -101,7 +101,7 @@ export class AnualComponent implements OnInit {
 
     let serie = [this.dataAnualAnt, this.dataAnual, prediccion2];
     this.chartOptions.series = serie;
-
+    this.chartOptions.title.text =  `Anual: ${this.concepto.replace('_',' ')}`
     this.updateFlag = true;
   }
 

@@ -11,6 +11,7 @@ import { formatNumber } from "@angular/common";
 })
 export class GraficaDonutComponent implements AfterViewInit {
   @Input() concepto: string;
+  @Input() tipo:any;
 
   public dataEnergeticos: any;
 

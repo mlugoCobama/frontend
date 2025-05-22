@@ -10,6 +10,7 @@ import { formatNumber } from '@angular/common';
 export class TotalesPorcentajeGraficaComponent implements AfterViewInit{
 
   @Input() concepto: string;
+  @Input() tipo:any;
 
 public dataEnergeticos: any;
 

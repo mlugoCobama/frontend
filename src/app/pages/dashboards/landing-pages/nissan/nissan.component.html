@@ -28,9 +28,9 @@
                 <app-totales-utilidad-grafica
                     [dataMes]="dataMesActual" 
                     [dataMesAnterior]="dataMesAnterior"
-                    tipo = "gasolinerias-detalle"
+                    tipo = "nissan-detalle"
                     color = "#f00a2c"
-                    concepto="nuevos"
+                    concepto="nuevos"                    
                     [totalAnio]="dataTotalAnio"
                     [totalAnioAnt]="dataTotalAnioAnt"
                 ></app-totales-utilidad-grafica>
@@ -39,7 +39,7 @@
                 <app-totales-utilidad-grafica
                     [dataMes]="dataMesActual" 
                     [dataMesAnterior]="dataMesAnterior"
-                    tipo = "gasolinerias-detalle"
+                    tipo = "nissan-detalle"
                     color = "#f00a2c"
                     concepto="seminuevos"
                     [totalAnio]="dataTotalAnio"
@@ -50,7 +50,7 @@
                 <app-totales-utilidad-grafica
                     [dataMes]="dataMesActual" 
                     [dataMesAnterior]="dataMesAnterior"
-                    tipo = "gasolinerias-detalle"
+                    tipo = "nissan-detalle"
                     color = "#f00a2c"
                     concepto="flotillas"
                     [totalAnio]="dataTotalAnio"
@@ -69,7 +69,7 @@
                 <app-totales-utilidad-grafica
                     [dataMes]="dataMesActual" 
                     [dataMesAnterior]="dataMesAnterior"
-                    tipo = "gasolinerias-detalle"
+                    tipo = "nissan-detalle"
                     color = "#f00a2c"
                     concepto="servicio"
                     [totalAnio]="dataTotalAnio"
@@ -80,7 +80,7 @@
                 <app-totales-utilidad-grafica
                     [dataMes]="dataMesActual" 
                     [dataMesAnterior]="dataMesAnterior"
-                    tipo = "gasolinerias-detalle"
+                    tipo = "nissan-detalle"
                     color = "#f00a2c"
                     concepto="hyp"
                     [totalAnio]="dataTotalAnio"
@@ -97,6 +97,7 @@
         <app-totales-porcentaje-grafica 
             [dataMes]="dataMesActual" 
             [dataMesAnterior]="dataMesAnterior" 
+            tipo = "nissan-detalle"
             concepto="total_ventas_ref"
             [totalAnio]="dataTotalAnio"
             [totalAnioAnt]="dataTotalAnioAnt"
@@ -105,7 +106,8 @@
     <div class="col-xl-6">
         <app-totales-porcentaje-grafica 
             [dataMes]="dataMesActual" 
-            [dataMesAnterior]="dataMesAnterior" 
+            [dataMesAnterior]="dataMesAnterior"
+            tipo = "nissan-detalle" 
             concepto="inventarios"
             [totalAnio]="dataTotalAnio"
             [totalAnioAnt]="dataTotalAnioAnt"
@@ -117,7 +119,8 @@
     <div class="col-xl-6">
         <app-totales-porcentaje-grafica
             [dataMes]="dataMesActual" 
-            [dataMesAnterior]="dataMesAnterior" 
+            [dataMesAnterior]="dataMesAnterior"
+            tipo = "nissan-detalle" 
             color = "#f00a2c"
             concepto="personal"
             [totalAnio]="dataTotalAnio"
@@ -127,7 +130,8 @@
     <div class="col-xl-6">
         <app-grafica-donut 
             [dataMes]="dataMesActual" 
-            [dataMesAnterior]="dataMesAnterior" 
+            [dataMesAnterior]="dataMesAnterior"
+            tipo = "nissan-detalle" 
             color = "#f00a2c"
             concepto="gasto"
             [totalAnio]="dataTotalAnio"
@@ -141,6 +145,7 @@
         <app-totales-grafica 
             [dataMes]="dataMesActual" 
             [dataMesAnterior]="dataMesAnterior" 
+            tipo = "nissan-detalle"
             color = "#f00a2c"
             concepto="uno"
             [totalAnio]="dataTotalAnio"
@@ -154,6 +159,7 @@
         <app-totales-porcentaje-grafica 
             [dataMes]="dataMesActual" 
             [dataMesAnterior]="dataMesAnterior" 
+            tipo = "nissan-detalle"
             concepto="utilidad_area"
             [totalAnio]="dataTotalAnio"
             [totalAnioAnt]="dataTotalAnioAnt"
@@ -162,7 +168,8 @@
     <div class="col-xl-6">
         <app-barras-horizontales-metas 
             [dataMes]="dataMesActual" 
-            [dataMesAnterior]="dataMesAnterior" 
+            [dataMesAnterior]="dataMesAnterior"
+            tipo = "nissan-detalle" 
             concepto="objetivos"
             [totalAnio]="dataTotalAnio"
             [totalAnioAnt]="dataTotalAnioAnt"
@@ -175,12 +182,14 @@
         <app-card-prestamos
             concepto = "nrf"
             [dataMes]="dataMesActual" 
+            tipo = "nissan-detalle"
             [dataMesAnterior]="dataMesAnterior"
             ></app-card-prestamos>
     </div>
     <div class="col-xl-6">
             <app-card-prestamos
-            [dataMes]="dataMesActual" 
+            [dataMes]="dataMesActual"
+            tipo = "nissan-detalle" 
             [dataMesAnterior]="dataMesAnterior"
             concepto = "plan_piso"
             ></app-card-prestamos>
@@ -191,7 +200,8 @@
     <div class="col-xl-6">
         <app-grafica-barras-totales 
             [dataMes]="dataMesActual" 
-            [dataMesAnterior]="dataMesAnterior" 
+            [dataMesAnterior]="dataMesAnterior"
+            tipo = "nissan-detalle" 
             concepto="costos_financieros"
             [totalAnio]="dataTotalAnio"
             [totalAnioAnt]="dataTotalAnioAnt"
@@ -201,6 +211,7 @@
         <app-grafica-donut
             [dataMes]="dataMesActual" 
             [dataMesAnterior]="dataMesAnterior" 
+            tipo = "nissan-detalle"
             concepto="bono_marca"
             [totalAnio]="dataTotalAnio"
             [totalAnioAnt]="dataTotalAnioAnt"
@@ -212,21 +223,19 @@
     <div class="col-xl-6">
         <app-stack-grafica
             [dataMes]="dataMesActual" 
-            [dataMesAnterior]="dataMesAnterior" 
+            tipo = "nissan-ant-detalle"
             [dataAntInventario] = "dataAntInventario"
+            filtro = "Consolidado"
             concepto="ant_inv_nuevo"
-            [totalAnio]="dataTotalAnio"
-            [totalAnioAnt]="dataTotalAnioAnt"
         ></app-stack-grafica>
     </div>
     <div class="col-xl-6">
         <app-stack-grafica
             [dataMes]="dataMesActual" 
-            [dataMesAnterior]="dataMesAnterior" 
+            tipo = "nissan-ant-detalle"
+            filtro = "Consolidado"
             [dataAntInventario] = "dataAntInventario"
             concepto="ant_inv_semi"
-            [totalAnio]="dataTotalAnio"
-            [totalAnioAnt]="dataTotalAnioAnt"
         ></app-stack-grafica>
     </div>
 </div>

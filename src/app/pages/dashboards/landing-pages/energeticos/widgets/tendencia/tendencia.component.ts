@@ -137,7 +137,6 @@ export class TendenciaComponent implements OnInit{
 
     const predicciones: number[] = [];
     for (let i = n + inicioMes; i <= totalMeses; i++) {
-      console.log(`operacion = ${m} * ${i} + ${b}`);
       predicciones.push(Math.round(m * i + b));
     }
     return predicciones;

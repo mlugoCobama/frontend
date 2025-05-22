@@ -1,44 +1,34 @@
-import { AfterViewInit, Component, Input, OnDestroy, ViewChild } from "@angular/core";
-
+import { AfterViewInit, Component, Input, ViewChild, OnDestroy } from "@angular/core";
 import ApexCharts from "apexcharts";
+import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
+
 import { ResponseEnergeticosGaseras } from "src/app/core/models/dashboard/energeticos-gaseras";
 import { AlertErrorService } from "src/app/core/services/alert-error.service";
 import { EnergeticosGaserasService } from "src/app/core/services/dashboard/energeticos-gaseras.service";
 import dataMeses from "src/environments/meses.json";
+import { Subject, Subscription } from "rxjs";
 
 @Component({
-  selector: 'app-stack-grafica',
-  templateUrl: './stack-grafica.component.html',
-  styleUrl: './stack-grafica.component.css'
+  selector: 'app-ant-inventario',
+  templateUrl: './ant-inventario.component.html',
+  styleUrl: './ant-inventario.component.css'
 })
-export class StackGraficaComponent implements AfterViewInit, OnDestroy {
-  @Input() dataMes: any[];
-  @Input() dataMesAnterior: any[];
+
+export class AntInventarioComponent implements AfterViewInit, OnDestroy {
   @Input() concepto: string;
-  @Input() tipo: string;
-  @Input() totalAnio: string;
-  @Input() totalAnioAnt: string;
-  @Input() color: string;
   @Input() dataAntInventario: any;
   @Input() filtro: string;
 
   public title: string;
-
+  public concepto2: string;
   public money: string = "";
 
-  public diferencia: number = 0;
-  public totalMes: number = 0;
-  public totalMesAnt: number = 0;
-
-  
-  public diferencia1: number = 0;
-  public totalMes1: number = 0;
-  public totalMesAnt1: number = 0;
+  private actualizarDatosSubscripcion: Subscription;
+  public chart:any;
 
   private dataSerie: number[] = [];
 
   public conceptos:string[] = [];
-  public concepto2: string;
   public meses = dataMeses;
 
   public datosFiltrados:any;
@@ -94,12 +84,15 @@ export class StackGraficaComponent implements AfterViewInit, OnDestroy {
       formatter: function (val) {
         return val 
       }
-    }
+    },
+    title: {
+      position: 'top',
+      horizontalAlign: 'center',
+      text: "Ultimos 6 meses"
+    },
   },
   yaxis: {
-    title: {
-      text: undefined
-    },
+    
   },
   tooltip: {
     y: {
@@ -113,32 +106,51 @@ export class StackGraficaComponent implements AfterViewInit, OnDestroy {
   },
   legend: {
     position: 'top',
-    horizontalAlign: 'left',
+    horizontalAlign: 'center',
     offsetX: 40
   }
   };
 
   constructor(
     public alertService: AlertErrorService,
-    private energerticosGaseras: EnergeticosGaserasService
+    private energerticosGaseras: EnergeticosGaserasService,
+    private localStorage: LocalStorageServiceService,
   ) { }
 
   ngAfterViewInit(): void {
     this.setTitle();
-
-    this.options.xaxis.categories =  this.generarCategories();
-    this.options.series = this.generarSeriesStack();
-
-    var chart = new ApexCharts(
-      document.querySelector("#chart_barras_" + this.concepto +"_" +this.filtro),
-      this.options
-    );
-
-    chart.render();
+    this.inicializarGrafica();
+    this.actualizarDatosSubscripcion =
+    this.energerticosGaseras.actualizarData$.subscribe(() => {
+      this.actualizarGrafica();
+    });
   }
 
   ngOnDestroy(): void {
+    this.chart.destroy();
+  }
+
+
+  public inicializarGrafica(){
     
+    this.options.xaxis.categories =  this.generarCategories();
+    this.options.series = this.generarSeriesStack();
+
+     this.chart = new ApexCharts(
+      document.querySelector("#chart_barras_" + this.concepto +"_" +this.filtro),
+      this.options
+    );
+     this.chart.render();
+  }
+
+  public actualizarGrafica(){
+    // this.chart.resetSeries();
+    const data = this.localStorage.getItem('DataEnergeticos');
+    this.dataAntInventario =  data['antInventarios']
+    this.options.xaxis.categories =  this.generarCategories();
+    this.options.series = this.generarSeriesStack();
+    
+    this.chart.updateOptions(this.options);
   }
 
   /**
@@ -147,11 +159,11 @@ export class StackGraficaComponent implements AfterViewInit, OnDestroy {
   private setTitle() {
     switch (this.concepto) {
       case "ant_inv_nuevo":
-        this.title = "Antigüedad Inventarios Nuevos";
+        this.title = "Nuevos";
         this.concepto2 = "nuevo"
         break;
       case "ant_inv_semi":
-        this.title = "Antigüedad Inventarios Seminuevos";
+        this.title = "Seminuevos";
         this.concepto2 = "semi"
         break;
       default:
@@ -201,7 +213,7 @@ export class StackGraficaComponent implements AfterViewInit, OnDestroy {
     let fecha : any;
     let mes: any;
     let anio: any;
-    this.datosFiltrados = this.dataAntInventario.filter((item) => item.estacion === 'Total' );
+    this.datosFiltrados = this.dataAntInventario.filter((item) => item.estacion === this.filtro );
     this.datosFiltrados = this.datosFiltrados.reverse();
     this.datosFiltrados.forEach(row => {
       fecha = row['fecha'].split('-');
@@ -212,4 +224,5 @@ export class StackGraficaComponent implements AfterViewInit, OnDestroy {
 
     return categorias;
   }
+
 }

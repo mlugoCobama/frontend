@@ -8,6 +8,7 @@ import { Component, Input, AfterViewInit } from '@angular/core';
 export class CardPrestamosComponent implements AfterViewInit{
 
   @Input() concepto:any;
+  @Input() tipo:any;
   @Input() dataMes:any;
   @Input() dataMesAnterior:any;
 

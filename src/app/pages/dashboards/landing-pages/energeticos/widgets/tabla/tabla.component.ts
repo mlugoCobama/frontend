@@ -63,6 +63,7 @@ export class TablaComponent implements OnInit {
   private recuperarData(){
     this.dataEnergeticos = [];
     this.dataEnergeticos = this.localStorage.getItem('DataEnergeticos');
+
     this.deleteLast();
     // this.reordenarData();
   }

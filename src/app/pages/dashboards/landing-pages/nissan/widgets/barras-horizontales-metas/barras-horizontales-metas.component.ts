@@ -16,7 +16,9 @@ import { formatNumber } from '@angular/common';
 export class BarrasHorizontalesMetasComponent implements AfterViewInit {
   @Input() dataMes: any[];
   @Input() dataMesAnterior: any[];
+
   @Input() concepto: string;
+  @Input() tipo:any;
   @Input() totalAnio: string;
   @Input() totalAnioAnt: string;
   public dataEnergeticos: any;

@@ -14,8 +14,10 @@ import { EnergeticosGaserasService } from "src/app/core/services/dashboard/energ
 export class GraficaBarrasTotalesComponent implements AfterViewInit {
   @Input() dataMes: any[];
   @Input() dataMesAnterior: any[];
+
   @Input() concepto: string;
-  
+  @Input() tipo:any;
+
   @Input() totalAnio: string;
   @Input() totalAnioAnt: string;
 

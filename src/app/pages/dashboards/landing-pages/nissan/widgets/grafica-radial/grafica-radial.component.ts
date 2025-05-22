@@ -9,6 +9,7 @@ import { formatNumber } from '@angular/common';
 })
 export class GraficaRadialComponent implements OnInit{
   @Input() concepto: string;
+  @Input() tipo:any;
 
   public dataEnergeticos: any;
 

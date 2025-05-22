@@ -65,7 +65,7 @@ export class NissanComponent implements OnInit {
    * @param anio 
    */
   consultarDatos(mes: any, anio: any){
-    this.agencias.getAnual().subscribe(
+    this.agencias.getAnual(3, mes, anio).subscribe(
       (data: ResponseAgenciasNissan) => {
         if (data.success) {
           this.dataMesActual = data.data["mes"];

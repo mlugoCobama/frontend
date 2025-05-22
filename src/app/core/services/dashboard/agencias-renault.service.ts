@@ -62,8 +62,8 @@ export class AgenciasRenaultService {
     * Devuelve los datos de mes y mesAnt Renault
     * @returns Data anual de agencias Renault
     */
-  public getAnual(): Observable<ResponseAgenciasNissan> {
-    return this.http.get<ResponseAgenciasNissan>(environment.apiUrl +"dashboard/agencia-renault/3/9/2023");
+  public getAnual(subdivision:number, mes:number, anio:number): Observable<ResponseAgenciasNissan> {
+    return this.http.get<ResponseAgenciasNissan>(environment.apiUrl +"dashboard/agencia-renault/"+ subdivision + '/' + mes + '/' + anio);
 
   }
 }

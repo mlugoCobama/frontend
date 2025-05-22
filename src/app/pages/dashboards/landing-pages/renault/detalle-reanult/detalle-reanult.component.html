@@ -2,17 +2,18 @@
     <div class="col-12">
         <div class="page-title-box d-flex align-items-center justify-content-between">
             <div>
-                <a [routerLink]="[ '../../gasolinerias']" class="btn btn-primary btn-sm"> <i class="bx bx-arrow-back "></i> Atras</a>
+                <a [routerLink]="[ '../../reanult']" class="btn btn-primary btn-sm"> <i class="bx bx-arrow-back "></i> Atras</a>
                 <br>
-                <h4 class="mb-0 font-size-18 pt-2">Gasolinerias - {{titulo}} {{nombreMes}} {{ anioSeleccionado }}</h4>
+                <!-- <h4 class="mb-0 font-size-18 pt-2">Gaseras - {{titulo}} {{nombreMes}} {{ anioSeleccionado }}</h4> -->
             </div>
             
             <div class="page-title-right ">
                 <ol class="breadcrumb m-0 ">
                     <ng-container>
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Detalle {{titulo}}</a>
-                        </li>
-                        <li class="breadcrumb-item active">Gasolinerias </li>
+                        <li class="breadcrumb-item"><a [routerLink]="[ '../../reanult']">Home</a> </li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Detalle {{titulo}}</a></li> 
+                        
+                        <li class="breadcrumb-item active">Renault</li>
                     </ng-container>
                 </ol>
             </div>
@@ -54,46 +55,55 @@
     </div>
 </div>
 
-<div class="row mb-4" *ngIf="!isLoad">
-    <div class="col-xl-12">
-        <div class="row">
-            <div class="col-sm-12">
-                <app-anual  [concepto]="concepto"></app-anual>
+<div class="row" *ngIf="concepto != 'ant_inv_nuevo'">
+<div [ngClass]="conceptos.length === 1 ? 'col-xl-12' : 'col-xl-6'" *ngFor="let item of conceptos">
+    <div class="row mb-4" *ngIf="!isLoad">
+        <div class="col-xl-12">
+            <div class="row">
+                <div class="col-sm-12">
+                    <app-anual  [concepto]="item"></app-anual>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" *ngIf="!isLoad">
+        <div [ngClass]="conceptos.length === 1 ? 'col-xl-6' : 'col-xl-12'">
+            <div class="row">
+                <div class="col-sm-12">
+                    <app-tabla  [concepto]="item"></app-tabla>
+                </div>
+            </div>
+        </div>
+        <div [ngClass]="conceptos.length === 1 ? 'col-xl-6' : 'col-xl-12'" >
+            <div class="row">
+                <div class="col-sm-12">
+                    <app-porcentajes-graficas  [concepto]="item"></app-porcentajes-graficas>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-<div class="row" *ngIf="!isLoad">
-    <div class="col-6">
-        <div class="row">
-            <div class="col-sm-12">
-                <app-tabla  [concepto]="concepto"></app-tabla>
-            </div>
-        </div>
-    </div>
-    <div class="col-6">
-        <div class="row">
-            <div class="col-sm-12">
-                <app-grafica-barra  [concepto]="concepto"></app-grafica-barra>
-            </div>
-        </div>
-    </div>
 </div>
 
-<div class="row" *ngIf="!isLoad">
-    <div class="col-6">
-        <div class="row">
-            <div class="col-sm-12">
-                <app-porcentajes-graficas  [concepto]="concepto"></app-porcentajes-graficas>
-            </div>
-        </div>
+<div *ngIf="concepto === 'ant_inv_nuevo'">
+<div class="row" *ngFor="let item of arrAgencias">
+    <div class="col-xl-6">
+        <app-ant-inventario
+            [dataMes]="dataMesActual" 
+            [dataAntInventario] = "dataAntInventario"
+            filtro = {{item}}
+            concepto="ant_inv_nuevo"
+
+        ></app-ant-inventario>
     </div>
-    <div class="col-6">
-        <div class="row">
-            <div class="col-sm-12">
-                 <app-tendencia  [concepto]="concepto"></app-tendencia>
-            </div>
-        </div>
+    <div class="col-xl-6">
+        <app-ant-inventario
+            [dataMes]="dataMesActual"
+            [dataAntInventario] = "dataAntInventario"  
+            filtro = {{item}}
+            concepto="ant_inv_semi"
+        ></app-ant-inventario>
     </div>
+</div>
 </div>
