@@ -99,8 +99,6 @@
             [dataMesAnterior]="dataMesAnterior" 
             tipo = "renault-detalle"
             concepto="total_ventas_ref"
-            [totalAnio]="dataTotalAnio"
-            [totalAnioAnt]="dataTotalAnioAnt"
         ></app-totales-porcentaje-grafica>
     </div>
     <div class="col-xl-6">
@@ -109,8 +107,6 @@
             [dataMesAnterior]="dataMesAnterior" 
             concepto="inventarios"
             tipo = "renault-detalle"
-            [totalAnio]="dataTotalAnio"
-            [totalAnioAnt]="dataTotalAnioAnt"
         ></app-totales-porcentaje-grafica>
     </div>
 </div>
@@ -119,26 +115,18 @@
 <div class="row" *ngIf="!isLoad">
     <div class="col-xl-6">
         <app-stack-grafica
-            [dataMes]="dataMesActual" 
-            [dataMesAnterior]="dataMesAnterior" 
             [dataAntInventario] = "dataAntInventario"
             tipo = "renault-detalle"
             filtro = "Consolidado"
             concepto="ant_inv_nuevo"
-            [totalAnio]="dataTotalAnio"
-            [totalAnioAnt]="dataTotalAnioAnt"
         ></app-stack-grafica>
     </div>
     <div class="col-xl-6">
         <app-stack-grafica
-            [dataMes]="dataMesActual" 
-            [dataMesAnterior]="dataMesAnterior" 
             [dataAntInventario] = "dataAntInventario"
             filtro = "Consolidado"
             tipo = "renault-detalle"
             concepto="ant_inv_semi"
-            [totalAnio]="dataTotalAnio"
-            [totalAnioAnt]="dataTotalAnioAnt"
         ></app-stack-grafica>
     </div>
 </div>
@@ -172,8 +160,6 @@
             tipo = "renault-detalle"
             color = "#FB4141"
             concepto="gasto"
-            [totalAnio]="dataTotalAnio"
-            [totalAnioAnt]="dataTotalAnioAnt"
         ></app-grafica-donut>
     </div>
     <div class="col-xl-6">
@@ -182,8 +168,6 @@
             [dataMesAnterior]="dataMesAnterior" 
             tipo = "renault-detalle"
             concepto="costos_financieros"
-            [totalAnio]="dataTotalAnio"
-            [totalAnioAnt]="dataTotalAnioAnt"
         ></app-grafica-barras-totales>
     </div>
  </div>
@@ -194,11 +178,10 @@
         <app-totales-grafica 
             [dataMes]="dataMesActual" 
             [dataMesAnterior]="dataMesAnterior" 
+            [totalAnio]="dataTotalAnio"
             tipo = "renault-detalle"
             color = "#F08A0C"
             concepto="uno"
-            [totalAnio]="dataTotalAnio"
-            [totalAnioAnt]="dataTotalAnioAnt"
         ></app-totales-grafica>
     </div>
 </div>
@@ -211,8 +194,6 @@
             [dataMesAnterior]="dataMesAnterior" 
             tipo = "renault-detalle"
             concepto="utilidad_area"
-            [totalAnio]="dataTotalAnio"
-            [totalAnioAnt]="dataTotalAnioAnt"
         ></app-totales-porcentaje-grafica>
     </div>
     <div class="col-xl-6">
@@ -221,8 +202,6 @@
             [dataMesAnterior]="dataMesAnterior"
             tipo = "renault-detalle" 
             concepto="bono_marca"
-            [totalAnio]="dataTotalAnio"
-            [totalAnioAnt]="dataTotalAnioAnt"
         ></app-grafica-donut>
     </div>
 </div>
@@ -235,19 +214,15 @@
             [dataMesAnterior]="dataMesAnterior" 
             tipo = "renault-detalle"
             concepto="objetivos"
-            [totalAnio]="dataTotalAnio"
-            [totalAnioAnt]="dataTotalAnioAnt"
         ></app-barras-horizontales-metas>
     </div>
     <div class="col-xl-6">
-        <app-totales-porcentaje-grafica
+        <app-grafica-donut 
             [dataMes]="dataMesActual" 
-            [dataMesAnterior]="dataMesAnterior"
-            tipo = "renault-detalle" 
+            [dataMesAnterior]="dataMesAnterior" 
+            tipo = "renault-detalle"
             color = "#FB4141"
             concepto="personal"
-            [totalAnio]="dataTotalAnio"
-            [totalAnioAnt]="dataTotalAnioAnt"
-        ></app-totales-porcentaje-grafica>
+        ></app-grafica-donut>
     </div>
 </div>

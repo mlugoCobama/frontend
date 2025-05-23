@@ -1,5 +1,10 @@
 import { Component, Input, AfterViewInit } from '@angular/core';
 
+/**
+ * Componente que genera un card con información de prestamos
+ * (componente no actualizable)
+ * @component card prestamos dashboard
+ */
 @Component({
   selector: 'app-card-prestamos',
   templateUrl: './card-prestamos.component.html',

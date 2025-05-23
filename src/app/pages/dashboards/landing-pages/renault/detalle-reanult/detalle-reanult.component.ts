@@ -153,7 +153,10 @@ export class DetalleReanultComponent implements OnInit {
     return Number(this.anioSeleccionado) === this.anioActual && Number(mes) > this.mesActual;   
   }
 
-
+  /**
+   * Genera un array para cada tipo de concepto
+   * @param concepto concepto dado por la grafica
+   */
   public subConceptos(concepto){
     switch (concepto) {
       case "nuevos":

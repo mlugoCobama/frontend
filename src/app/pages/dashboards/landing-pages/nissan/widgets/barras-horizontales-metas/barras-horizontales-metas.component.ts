@@ -1,12 +1,13 @@
 import { AfterViewInit, Component, Input, ViewChild } from "@angular/core";
-import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
 import ApexCharts from "apexcharts";
-import { ResponseEnergeticosGaseras } from "src/app/core/models/dashboard/energeticos-gaseras";
-import { AlertErrorService } from "src/app/core/services/alert-error.service";
-import { EnergeticosGaserasService } from "src/app/core/services/dashboard/energeticos-gaseras.service";
 import { formatNumber } from '@angular/common';
 
-
+/**
+ * Componente que genera una gráfica "Radial" con apariencia de barras
+ * para mostrar metas
+ * (componente no actualizable)
+ * @component gráfica radial dashboard
+ */
 @Component({
   selector: 'app-barras-horizontales-metas',
   templateUrl: './barras-horizontales-metas.component.html',
@@ -16,16 +17,13 @@ import { formatNumber } from '@angular/common';
 export class BarrasHorizontalesMetasComponent implements AfterViewInit {
   @Input() dataMes: any[];
   @Input() dataMesAnterior: any[];
-
   @Input() concepto: string;
   @Input() tipo:any;
   @Input() totalAnio: string;
   @Input() totalAnioAnt: string;
+
   public dataEnergeticos: any;
-
   public title: string;
-
-
   public diferencia: number = 0;
   public totalMes: number = 0;
   public totalMesAnt: number = 0;
@@ -77,9 +75,6 @@ export class BarrasHorizontalesMetasComponent implements AfterViewInit {
   };
 
   constructor(
-    private localStorage: LocalStorageServiceService,
-    public alertService: AlertErrorService,
-    private energerticosGaseras: EnergeticosGaserasService
   ) { }
 
   ngAfterViewInit(): void {

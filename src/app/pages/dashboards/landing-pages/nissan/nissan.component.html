@@ -88,29 +88,24 @@
                 ></app-totales-utilidad-grafica>
             </div>
         </div>
-
     </div>
 </div>
 <!-- Ventas de post venta, Inventarios -->
 <div class="row" *ngIf="!isLoad">
     <div class="col-xl-6">
         <app-totales-porcentaje-grafica 
-            [dataMes]="dataMesActual" 
+            [dataMes]="dataMesActual"
             [dataMesAnterior]="dataMesAnterior" 
             tipo = "nissan-detalle"
             concepto="total_ventas_ref"
-            [totalAnio]="dataTotalAnio"
-            [totalAnioAnt]="dataTotalAnioAnt"
         ></app-totales-porcentaje-grafica>
     </div>
     <div class="col-xl-6">
         <app-totales-porcentaje-grafica 
-            [dataMes]="dataMesActual" 
-            [dataMesAnterior]="dataMesAnterior"
+            [dataMes]="dataMesActual"
+            [dataMesAnterior]="dataMesAnterior" 
             tipo = "nissan-detalle" 
             concepto="inventarios"
-            [totalAnio]="dataTotalAnio"
-            [totalAnioAnt]="dataTotalAnioAnt"
         ></app-totales-porcentaje-grafica>
     </div>
 </div>
@@ -118,24 +113,19 @@
 <div class="row" *ngIf="!isLoad">
     <div class="col-xl-6">
         <app-totales-porcentaje-grafica
-            [dataMes]="dataMesActual" 
-            [dataMesAnterior]="dataMesAnterior"
+            [dataMes]="dataMesActual"
+            [dataMesAnterior]="dataMesAnterior" 
             tipo = "nissan-detalle" 
-            color = "#f00a2c"
             concepto="personal"
-            [totalAnio]="dataTotalAnio"
-            [totalAnioAnt]="dataTotalAnioAnt"
         ></app-totales-porcentaje-grafica>
     </div>
     <div class="col-xl-6">
         <app-grafica-donut 
-            [dataMes]="dataMesActual" 
-            [dataMesAnterior]="dataMesAnterior"
+            [dataMes]="dataMesActual"
+            [dataMesAnterior]="dataMesAnterior" 
             tipo = "nissan-detalle" 
             color = "#f00a2c"
             concepto="gasto"
-            [totalAnio]="dataTotalAnio"
-            [totalAnioAnt]="dataTotalAnioAnt"
         ></app-grafica-donut>
     </div>
 </div>
@@ -157,12 +147,10 @@
 <div class="row" *ngIf="!isLoad">
     <div class="col-xl-6">
         <app-totales-porcentaje-grafica 
-            [dataMes]="dataMesActual" 
-            [dataMesAnterior]="dataMesAnterior" 
+             [dataMes]="dataMesActual"
+            [dataMesAnterior]="dataMesAnterior"
             tipo = "nissan-detalle"
             concepto="utilidad_area"
-            [totalAnio]="dataTotalAnio"
-            [totalAnioAnt]="dataTotalAnioAnt"
         ></app-totales-porcentaje-grafica>
     </div>
     <div class="col-xl-6">
@@ -171,8 +159,6 @@
             [dataMesAnterior]="dataMesAnterior"
             tipo = "nissan-detalle" 
             concepto="objetivos"
-            [totalAnio]="dataTotalAnio"
-            [totalAnioAnt]="dataTotalAnioAnt"
         ></app-barras-horizontales-metas>
     </div>
 </div>
@@ -203,18 +189,14 @@
             [dataMesAnterior]="dataMesAnterior"
             tipo = "nissan-detalle" 
             concepto="costos_financieros"
-            [totalAnio]="dataTotalAnio"
-            [totalAnioAnt]="dataTotalAnioAnt"
         ></app-grafica-barras-totales>
     </div>
     <div class="col-xl-6">
         <app-grafica-donut
-            [dataMes]="dataMesActual" 
+            [dataMes]="dataMesActual"
             [dataMesAnterior]="dataMesAnterior" 
             tipo = "nissan-detalle"
             concepto="bono_marca"
-            [totalAnio]="dataTotalAnio"
-            [totalAnioAnt]="dataTotalAnioAnt"
         ></app-grafica-donut>
     </div>
 </div>
@@ -222,7 +204,6 @@
 <div class="row" *ngIf="!isLoad">
     <div class="col-xl-6">
         <app-stack-grafica
-            [dataMes]="dataMesActual" 
             tipo = "nissan-ant-detalle"
             [dataAntInventario] = "dataAntInventario"
             filtro = "Consolidado"
@@ -231,7 +212,6 @@
     </div>
     <div class="col-xl-6">
         <app-stack-grafica
-            [dataMes]="dataMesActual" 
             tipo = "nissan-ant-detalle"
             filtro = "Consolidado"
             [dataAntInventario] = "dataAntInventario"

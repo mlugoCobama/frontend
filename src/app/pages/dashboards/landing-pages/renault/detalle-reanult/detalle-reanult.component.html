@@ -4,7 +4,7 @@
             <div>
                 <a [routerLink]="[ '../../reanult']" class="btn btn-primary btn-sm"> <i class="bx bx-arrow-back "></i> Atras</a>
                 <br>
-                <!-- <h4 class="mb-0 font-size-18 pt-2">Gaseras - {{titulo}} {{nombreMes}} {{ anioSeleccionado }}</h4> -->
+               <h4 class="mb-0 font-size-18 pt-2">Renault - {{titulo}} / {{nombreMes}} {{ anioSeleccionado }}</h4>
             </div>
             
             <div class="page-title-right ">
@@ -55,7 +55,7 @@
     </div>
 </div>
 
-<div class="row" *ngIf="concepto != 'ant_inv_nuevo'">
+<div class="row" *ngIf=" concepto !== 'ant_inv_nuevo' && concepto !== 'ant_inv_semi' ">
 <div [ngClass]="conceptos.length === 1 ? 'col-xl-12' : 'col-xl-6'" *ngFor="let item of conceptos">
     <div class="row mb-4" *ngIf="!isLoad">
         <div class="col-xl-12">
@@ -86,13 +86,13 @@
 </div>
 </div>
 
-<div *ngIf="concepto === 'ant_inv_nuevo'">
-<div class="row" *ngFor="let item of arrAgencias">
+<div *ngIf=" concepto === 'ant_inv_nuevo' || concepto === 'ant_inv_semi' ">
+<div class="row" >
     <div class="col-xl-6">
         <app-ant-inventario
             [dataMes]="dataMesActual" 
             [dataAntInventario] = "dataAntInventario"
-            filtro = {{item}}
+            filtro = "Azcapotzalco"
             concepto="ant_inv_nuevo"
 
         ></app-ant-inventario>
@@ -101,7 +101,7 @@
         <app-ant-inventario
             [dataMes]="dataMesActual"
             [dataAntInventario] = "dataAntInventario"  
-            filtro = {{item}}
+            filtro = "Azcapotzalco"
             concepto="ant_inv_semi"
         ></app-ant-inventario>
     </div>

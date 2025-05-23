@@ -1,16 +1,17 @@
 import { AfterViewInit, Component, Input, ViewChild } from "@angular/core";
-
 import ApexCharts from "apexcharts";
-import { tooltip } from "leaflet";
-import { ResponseEnergeticosGaseras } from "src/app/core/models/dashboard/energeticos-gaseras";
-import { AlertErrorService } from "src/app/core/services/alert-error.service";
-import { EnergeticosGaserasService } from "src/app/core/services/dashboard/energeticos-gaseras.service";
 
+/**
+ * Componente que genera una gráfica de " Barras" para mostrar costos financieros
+ * (componente no actualizable)
+ * @component gráfica barras costos financieros dashboard
+ */
 @Component({
   selector: 'app-grafica-barras-totales',
   templateUrl: './grafica-barras-totales.component.html',
   styleUrl: './grafica-barras-totales.component.css'
 })
+
 export class GraficaBarrasTotalesComponent implements AfterViewInit {
   @Input() dataMes: any[];
   @Input() dataMesAnterior: any[];
@@ -90,8 +91,6 @@ export class GraficaBarrasTotalesComponent implements AfterViewInit {
   };
 
   constructor(
-    public alertService: AlertErrorService,
-    private energerticosGaseras: EnergeticosGaserasService
   ) { }
 
   ngAfterViewInit(): void {

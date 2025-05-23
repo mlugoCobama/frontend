@@ -1,18 +1,25 @@
-import { AfterViewInit, Component, Input, ViewChild, OnDestroy } from "@angular/core";
+import { AfterViewInit, Component, Input, OnDestroy } from "@angular/core";
 import ApexCharts from "apexcharts";
-import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
 
-import { ResponseEnergeticosGaseras } from "src/app/core/models/dashboard/energeticos-gaseras";
 import { AlertErrorService } from "src/app/core/services/alert-error.service";
 import { EnergeticosGaserasService } from "src/app/core/services/dashboard/energeticos-gaseras.service";
+import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
+
 import dataMeses from "src/environments/meses.json";
 import { Subject, Subscription } from "rxjs";
 
+/**
+ * Componente que genera una gráfica de "StackBar" para la antigüedad
+ * de inventarios a 6 meses en el detalle 
+ * (componente actualizable)
+ * @component gráfica stackBar detalle antigüedad inventario
+ */
 @Component({
   selector: 'app-ant-inventario',
   templateUrl: './ant-inventario.component.html',
   styleUrl: './ant-inventario.component.css'
 })
+
 
 export class AntInventarioComponent implements AfterViewInit, OnDestroy {
   @Input() concepto: string;
@@ -130,7 +137,9 @@ export class AntInventarioComponent implements AfterViewInit, OnDestroy {
     this.chart.destroy();
   }
 
-
+  /**
+  * Inicializa la gráfica con opciones  
+  */
   public inicializarGrafica(){
     
     this.options.xaxis.categories =  this.generarCategories();
@@ -143,6 +152,9 @@ export class AntInventarioComponent implements AfterViewInit, OnDestroy {
      this.chart.render();
   }
 
+  /**
+  * Actualiza las series y las categorías
+  */
   public actualizarGrafica(){
     // this.chart.resetSeries();
     const data = this.localStorage.getItem('DataEnergeticos');
