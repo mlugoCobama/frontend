@@ -1,9 +1,5 @@
 import { AfterViewInit, Component, Input, OnDestroy, ViewChild } from "@angular/core";
-
 import ApexCharts from "apexcharts";
-import { ResponseEnergeticosGaseras } from "src/app/core/models/dashboard/energeticos-gaseras";
-import { AlertErrorService } from "src/app/core/services/alert-error.service";
-import { EnergeticosGaserasService } from "src/app/core/services/dashboard/energeticos-gaseras.service";
 import dataMeses from "src/environments/meses.json";
 
 @Component({
@@ -119,8 +115,6 @@ export class StackGraficaComponent implements AfterViewInit, OnDestroy {
   };
 
   constructor(
-    public alertService: AlertErrorService,
-    private energerticosGaseras: EnergeticosGaserasService
   ) { }
 
   ngAfterViewInit(): void {

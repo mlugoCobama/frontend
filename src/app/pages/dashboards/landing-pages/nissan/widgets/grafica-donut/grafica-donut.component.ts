@@ -18,6 +18,7 @@ export class GraficaDonutComponent implements AfterViewInit {
 
   // public dataEnergeticos: any;
   public dataAnual: any = [];
+  public money:any = ''
 
   public dataAnualAnt: any = [];
 
@@ -193,21 +194,26 @@ export class GraficaDonutComponent implements AfterViewInit {
   private setTitle() {
     switch (this.concepto) {
       case "ventas_servicio":
+        this.money = "$"
         this.title = "Ventas Servicio";
         break;
       case "gasto":
+        this.money = "$"
         this.title = "Gastos";
         break;
       case "personal":
         this.title = "Personal";
         break;
       case "bono_marca":
+        this.money = "$"
         this.title = "Bonos Marcas";
         break;
       case "servicio":
+        this.money = "$"
         this.title = "Servicio";
         break;
       case "hyp":
+        this.money = "$"
         this.title = "HyP";
         break;
       default:
