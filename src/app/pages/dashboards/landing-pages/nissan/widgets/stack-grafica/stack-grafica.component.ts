@@ -1,9 +1,5 @@
-import { AfterViewInit, Component, Input, ViewChild } from "@angular/core";
-
+import { AfterViewInit, Component, Input, OnDestroy, ViewChild } from "@angular/core";
 import ApexCharts from "apexcharts";
-import { ResponseEnergeticosGaseras } from "src/app/core/models/dashboard/energeticos-gaseras";
-import { AlertErrorService } from "src/app/core/services/alert-error.service";
-import { EnergeticosGaserasService } from "src/app/core/services/dashboard/energeticos-gaseras.service";
 import dataMeses from "src/environments/meses.json";
 
 @Component({
@@ -11,16 +7,17 @@ import dataMeses from "src/environments/meses.json";
   templateUrl: './stack-grafica.component.html',
   styleUrl: './stack-grafica.component.css'
 })
-export class StackGraficaComponent implements AfterViewInit {
+export class StackGraficaComponent implements AfterViewInit, OnDestroy {
   @Input() dataMes: any[];
   @Input() dataMesAnterior: any[];
   @Input() concepto: string;
-  public concepto2: string;
   @Input() tipo: string;
   @Input() totalAnio: string;
   @Input() totalAnioAnt: string;
   @Input() color: string;
   @Input() dataAntInventario: any;
+  @Input() filtro: string;
+
   public title: string;
 
   public money: string = "";
@@ -35,10 +32,12 @@ export class StackGraficaComponent implements AfterViewInit {
   public totalMesAnt1: number = 0;
 
   private dataSerie: number[] = [];
-  private dataSerie1: number[] = [];
 
   public conceptos:string[] = [];
+  public concepto2: string;
   public meses = dataMeses;
+
+  public datosFiltrados:any;
 
   public options = {
     series: [{
@@ -58,7 +57,7 @@ export class StackGraficaComponent implements AfterViewInit {
     type: 'bar',
     height: 250,
     stacked: true,
-    stackType: "100%",
+    // stackType: "100%",
     toolbar:{
       show:false
     },
@@ -116,23 +115,24 @@ export class StackGraficaComponent implements AfterViewInit {
   };
 
   constructor(
-    public alertService: AlertErrorService,
-    private energerticosGaseras: EnergeticosGaserasService
   ) { }
 
   ngAfterViewInit(): void {
     this.setTitle();
 
+    this.options.xaxis.categories =  this.generarCategories();
     this.options.series = this.generarSeriesStack();
 
-    this.options.xaxis.categories =  this.generarCategories();
-
     var chart = new ApexCharts(
-      document.querySelector("#chart_barras_" + this.concepto),
+      document.querySelector("#chart_barras_" + this.concepto +"_" +this.filtro),
       this.options
     );
 
     chart.render();
+  }
+
+  ngOnDestroy(): void {
+    
   }
 
   /**
@@ -177,7 +177,7 @@ export class StackGraficaComponent implements AfterViewInit {
         data:[]
       }
     ]
-    this.dataAntInventario.forEach(row => {
+    this.datosFiltrados.forEach(row => {
       series[0].data.push(row[`inv_${this.concepto2}_101`]);
       series[1].data.push(row[`inv_${this.concepto2}_201`]);
       series[2].data.push(row[`inv_${this.concepto2}_301`]);
@@ -195,19 +195,15 @@ export class StackGraficaComponent implements AfterViewInit {
     let fecha : any;
     let mes: any;
     let anio: any;
-    this.dataAntInventario.forEach(row => {
-      fecha =row['fecha'].split('-');
+    this.datosFiltrados = this.dataAntInventario.filter((item) => item.estacion === 'Total' );
+    this.datosFiltrados = this.datosFiltrados.reverse();
+    this.datosFiltrados.forEach(row => {
+      fecha = row['fecha'].split('-');
       mes = this.meses[fecha[1]-1].nombre.toUpperCase();
       anio = fecha[0]
       categorias.push(`${mes} de ${anio}`);
     });
 
     return categorias;
-  }
-
-  private setDataSerie() {
-    for (let i = 0; i < this.totalAnio.length; i++) {
-      this.dataSerie.push(this.totalAnio[i][this.concepto2]);
-    }
   }
 }

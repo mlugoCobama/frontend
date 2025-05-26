@@ -64,7 +64,7 @@ export class GasolineriasComponent implements OnInit {
    * @param anio 
    */
   consultarDatos(mes: any, anio: any){
-    this.energerticosGasolinerias.getAnualGasolinerias(2, mes, anio).subscribe(
+    this.energerticosGasolinerias.getAnualGasolinerias(2, mes, anio).subscribe(  
       (data: ResponseEnergeticosGaseras) => {
         if (data.success) {
           this.dataMesActual = data.data["mes"];
@@ -89,5 +89,5 @@ export class GasolineriasComponent implements OnInit {
       }
     );
   }
-
+ 
 }

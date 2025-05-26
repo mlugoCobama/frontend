@@ -1,9 +1,9 @@
-<div class="row">
+<div *ngIf ="cotProv.length > 0" class="row">
   <div class="alert alert-warning text-center" role="alert">
     Marca la casilla de la fila con el proveedor seleccionado para generar la
     orden de compra
   </div>
-  <div class="col-1" *ngIf="solicitudCompra.estatus >= 3"></div>
+  <div class="col-1" *ngIf="solicitudCompra.estatus >= enEsts.OrdenCompra"></div>
   <div class="col-10">
     <div class="d-flex justify-content-center" *ngIf="!isLoad">
       <div class="spinner-border" role="status">
@@ -12,25 +12,26 @@
     </div>
     <!--Tabla documentos cotizaciones-->
     <table
-      *ngIf="isLoad"
-      class="table table-striped table-hover table-sm table-bordered table-responsive"
+      *ngIf="isLoad "
+      class="table  table-hover table-sm table-bordered table-responsive"
     >
-      <thead class="table-light">
+      <thead class="table-light" >
         <tr class="text-center">
-          <th *ngIf="solicitudCompra.estatus === 2">#</th>
+          <th *ngIf="solicitudCompra.estatus === enEsts.EnCotizacion">#</th>
           <th>Nombre proveedor</th>
           <th>Archivo cotización</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let prov of cotProv; let i = index" class="text-center">
-          <td *ngIf="solicitudCompra.estatus === 2">
+          <td [ngClass] = "prov.ruta ? 'bg-secondary-subtle bg-opacity-75' : '' "
+          *ngIf="solicitudCompra.estatus === enEsts.EnCotizacion">
             <div class="col align-self-center">
               <input
                 *ngIf="prov.ruta"
                 (change)="manejoCheck(prov)"
                 name="radioProveedor"
-                class="form-check-input form-radio-success"
+                class="form-check-input form-radio-success "
                 type="radio"
               />
             </div>
@@ -79,7 +80,7 @@
             aria-label="Default select example"
             formControlName="entrega"
           >
-            <option selected>Selecciona uno</option>
+            <option selected disabled value="">Selecciona uno</option>
             <option *ngIf="isLoading" value="" [disabled]="isLoading">
               Cargando opciones espera...
             </option>
@@ -102,7 +103,7 @@
             </div>
           </div>
 
-          <label for="observaciones" class="form-label">Observaciones: *</label>
+          <label for="observaciones" class="form-label">Observaciones: </label>
           <textarea
             
             class="form-control"
@@ -125,20 +126,20 @@
       </div>
     </form>
     <!-- form observaciones orden de compra -->
-    <div *ngIf="solicitudCompra.estatus >= 3" class="row">
+    <div *ngIf="solicitudCompra.estatus >= enEsts.OrdenCompra" class="row">
       <div *ngIf="ordenCompra">
         <p>
-          <strong>Observaciones: </strong> {{ ordenCompra.observaciones }}
+          <strong>Observaciones: </strong> {{ ordenCompra?.observaciones ?? ' Sin observaciones '}}
         </p>
-        <p> <strong>Se entrega en:</strong> {{ordenCompra.entrega.EMPRESA}} </p>
-        <p> <strong>Ubicada en:</strong> {{ordenCompra.entrega.DIRECCION}}, {{ordenCompra.entrega.COLONIA}}, {{ordenCompra.entrega["CIUDAD/DELEG/ESTADO"]}}, C.P. {{ordenCompra.entrega["C.P."]}}   </p>
+        <p> <strong>Se entrega en:</strong> {{ordenCompra?.entrega.EMPRESA ?? ' '}} </p>
+        <p> <strong>Ubicada en:</strong> {{ordenCompra?.entrega.DIRECCION ?? ' '}}, {{ordenCompra?.entrega.COLONIA ?? ' '}}, {{ordenCompra?.entrega["CIUDAD/DELEG/ESTADO"] ?? ' '}}, C.P. {{ordenCompra?.entrega["C.P."] ?? ' '}}   </p>
       </div>
     </div>
   </div>
 
   <div class="col-2 d-flex align-items-start">
     <button
-      *ngIf="solicitudCompra.estatus === 2 && !mostrarObs"
+      *ngIf="solicitudCompra.estatus === enEsts.EnCotizacion && !mostrarObs"
       type="submit"
       class="btn btn-sm btn-success"
       (click)="guardarPrecios()"

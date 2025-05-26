@@ -44,12 +44,9 @@ export class ModalAddProveedorComponent implements OnInit {
       this.formProveedores = this.formBuilder.group({
         nombre: new FormControl(null, Validators.required),
         contacto: new FormControl(null, [Validators.required]),
-        telefono: new FormControl(null, [
-          Validators.required,
-          Validators.pattern("^[0-9]*$"),
-        ]),
-        localidad: new FormControl(null, Validators.required),
-        condiciones: new FormControl(null, Validators.required),
+        telefono: new FormControl(null, [Validators.required, Validators.pattern("^[0-9]*$"),]),
+        localidad: new FormControl('Selecciona uno', Validators.required),
+        condiciones: new FormControl('Selecciona uno', Validators.required),
         servicios: new FormControl(null, Validators.required),
         correo: new FormControl(null, [Validators.required, Validators.email]),
         horario_atencion: new FormControl(null, Validators.required),
@@ -120,15 +117,16 @@ export class ModalAddProveedorComponent implements OnInit {
           });
           //this.isLoad = false;
         } else {
-          Swal.fire({
-            title: "Ocurrio un error",
-            text: response.message,
-            buttonsStyling: false,
-            icon: "error",
-            customClass: {
-              confirmButton: "btn btn-danger px-4",
-            },
-          });
+          this.mostrarErrores(response.errors)
+          // Swal.fire({
+          //   title: "Ocurrio un error",
+          //   text: response.message,
+          //   buttonsStyling: false,
+          //   icon: "error",
+          //   customClass: {
+          //     confirmButton: "btn btn-danger px-4",
+          //   },
+          // });
         }
       },
       (error) => {
@@ -144,7 +142,7 @@ export class ModalAddProveedorComponent implements OnInit {
       }
     );
 
-    this.modalRef.hide();
+    this.cerrarModal();
     // this.submitted = false;
     this.formProveedores.reset();
 
@@ -183,4 +181,20 @@ export class ModalAddProveedorComponent implements OnInit {
   public cerrarModal(): void {
     this.bsModalRef.hide();
   }
+
+  mostrarErrores(errores: any){
+      let mensajes = '';
+      for (let campo in errores){
+        mensajes += `• ${errores[campo].join(', ')} \n`
+      }
+  
+      Swal.fire({
+        icon: 'error',
+        title: 'Errores de validación',
+        text: mensajes,
+      customClass:{
+       popup : 'text-start'
+      }
+        })
+    }
 }

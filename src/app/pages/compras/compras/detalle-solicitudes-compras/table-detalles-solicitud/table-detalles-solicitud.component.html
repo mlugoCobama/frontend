@@ -26,9 +26,7 @@
       <!-- datos de la tabla detalle -->
       <tr *ngFor="let row of detalles; let i = index">
         <td class="text-center">{{ row.cantidad }}</td>
-        <td>
-          {{ row.unidadMedida.nombre }} ({{ row.unidadMedida.abreviatura }})
-        </td>
+        <td>{{ row.unidadMedida.nombre }} ({{ row.unidadMedida.abreviatura }})</td>
         <td>{{ row.descripcion }}</td>
         <td>{{ row.observaciones }}</td>
         <td class="text-center">
@@ -58,17 +56,14 @@
         </td>
       </tr>
     </tbody>
-    <tfoot>
-      <tr *ngIf="mostrarTotal">
+    <tfoot *ngIf="mostrarTotal">
+      <tr >
         <td colspan="5" class="text-end">
           <Strong>SUB-TOTAL (sin iva)</Strong>
         </td>
         <td
           *ngFor="let prov of cotProv"
-          [ngClass]="{
-            'bg-success text-white':
-              totals['precio_' + prov.proveedores_id[0].id] === totalMasBajo
-          }"
+          [ngClass]="{'bg-success text-white': totals['precio_' + prov.proveedores_id[0].id] === totalMasBajo}"
           class="text-center"
         >
           <strong>
@@ -83,7 +78,7 @@
   
   <!-- Fin tabla detalle solicitud + precios cotizaciones -->
   <app-table-files-cotizaciones
-    *ngIf="mostrarTotal"
+    *ngIf="(mostrarTotal && solicitudCompra.estatus > enEsts.Solicitado)"
     [ordenCompra]="ordenCompra"
     [solicitudCompra]="solicitudCompra"
     [cotProv]="cotProv"

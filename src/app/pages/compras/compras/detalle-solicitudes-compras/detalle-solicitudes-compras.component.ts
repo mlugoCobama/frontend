@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { ComprasService } from 'src/app/core/services/compras/compras.service';
-
+import { EstadoSolicitud } from '../estado-solicitud.enum';
 
 @Component({
   selector: 'app-detalle-solicitudes-compras',
@@ -17,7 +17,7 @@ export class DetalleSolicitudesComprasComponent implements OnInit{
 
  public cotizacion:any;
  public ordenCompra:any;
-
+ public enEsts = EstadoSolicitud;
  public selectedImage: any;
  public modalRef?: BsModalRef;
 
@@ -73,7 +73,8 @@ public updateStatus() {
     (response) => {
       if (response) {
         this.solicitudCompra = response.data;
-        this.udtStatus.emit(Number(this.solicitudCompra.estatus));
+        // console.log('se esta ejecutando update status');
+        // this.udtStatus.emit(Number(this.solicitudCompra.estatus));
       } 
     },
     (error) => {

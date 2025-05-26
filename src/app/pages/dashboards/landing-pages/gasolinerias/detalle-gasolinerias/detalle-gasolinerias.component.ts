@@ -15,6 +15,7 @@ import dataMeses from "src/environments/meses.json";
 })
 export class DetalleGasolineriasComponent implements OnInit {
   public concepto: string;
+  public titulo: string;
 
   public isLoad: boolean = true;
 
@@ -42,7 +43,7 @@ export class DetalleGasolineriasComponent implements OnInit {
   ngOnInit(): void {
     this.concepto = this.route.snapshot.paramMap.get("concepto");
     this.isLoad = false;
-
+    this.titulo = this.concepto.replace('_',' ');
     this.recuperarLocalStorage();
   }
   /**

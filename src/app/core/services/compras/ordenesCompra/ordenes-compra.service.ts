@@ -42,9 +42,7 @@ export class OrdenesCompraService {
    */
   public saveDocs1(id: number, data: any): Observable<any> {
     return this.http.post(
-      environment.apiUrl + `compras/DocumentosOrdenesCompras/${id}`,
-      data
-    );
+      environment.apiUrl + `compras/DocumentosOrdenesCompras/${id}`,data);
   }
 
   /**
@@ -53,10 +51,7 @@ export class OrdenesCompraService {
    * @returns
    */
   public saveDocs(data: any): Observable<any> {
-    return this.http.post(
-      environment.apiUrl + `compras/DocumentosOrdenesCompras/`,
-      data
-    );
+    return this.http.post(environment.apiUrl + `compras/DocumentosOrdenesCompras`, data);
   }
 
   /**
@@ -65,10 +60,7 @@ export class OrdenesCompraService {
    * @returns
    */
   public edit(id: number, data: any): Observable<any> {
-    return this.http.put(
-      environment.apiUrl + `compras/OrdenesCompras/${id}`,
-      data
-    );
+    return this.http.put(environment.apiUrl + `compras/OrdenesCompras/${id}`, data);
   }
 
   /**
@@ -90,7 +82,9 @@ export class OrdenesCompraService {
   public pdfOrdenCompra(id: number): Observable<Blob> {
     return this.http.get(
       environment.apiUrl + `compras/consulta-datos-pdf/${id}`,
-      { responseType: "blob" }
+      { 
+        responseType: "blob",
+       }
     );
   }
 

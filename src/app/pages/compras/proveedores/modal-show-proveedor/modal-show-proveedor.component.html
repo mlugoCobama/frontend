@@ -14,12 +14,12 @@
   </div>
   <div class="card-body border-bottom">
 
-    <div class="d-flex justify-content-center" *ngIf="!archivos">
+    <div class="d-flex justify-content-center p-2" *ngIf="!isLoad">
     <div class="row">
         <div class="spinner-border" role="status"></div>
     </div>
       </div>
-  <div class="modal-body" *ngIf="archivos">
+  <div class="modal-body" *ngIf="isLoad">
     <table class="table table-hover table-sm table-bordered text-center">
       <thead class="table-light">
         <tr>
@@ -100,7 +100,7 @@
   </div>
   <div class="modal-footer">
     <a
-      *ngIf="tamanioExp > 1"
+      *ngIf="downloadable"
       class="btn btn-sm btn-info"
       (click)="descargarExpediente()"
     >

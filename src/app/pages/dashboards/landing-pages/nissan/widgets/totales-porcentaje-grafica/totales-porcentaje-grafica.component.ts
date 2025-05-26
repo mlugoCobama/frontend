@@ -1,27 +1,28 @@
 import { Component , Input, OnInit, AfterViewInit} from '@angular/core';
 import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
-import { EnergeticosGaserasService } from 'src/app/core/services/dashboard/energeticos-gaseras.service';
-import { Subject, Subscription } from "rxjs";
 import { formatNumber } from '@angular/common';
 
+/**
+ * Componente que genera una gráfica de "Pastel (Donut)" para mostrar porcentajes 
+ * por un conjunto de conceptos en base a un concepto clave
+ * (componente no actualizable)
+ * @component gráfica totales porcentajes dashboard
+ */
 @Component({
   selector: 'app-totales-porcentaje-grafica',
   templateUrl: './totales-porcentaje-grafica.component.html',
   styleUrl: './totales-porcentaje-grafica.component.css'
 })
+
 export class TotalesPorcentajeGraficaComponent implements AfterViewInit{
 
   @Input() concepto: string;
+  @Input() tipo:any;
+  @Input() dataMes:any;
+ @Input() dataMesAnterior:any;
+// public dataEnergeticos: any;
 
-public dataEnergeticos: any;
-
-private actualizarDatosSubscripcion: Subscription;
-
-public dataAnual: any = [];
-
-public dataAnualAnt: any = [];
-
-public total: number;
+public total: number = 0;
 public total2: string = "0";
 private labels: any;
 private serie: any;
@@ -50,7 +51,6 @@ public options = {
               fontSize: '22px',
             },
             value: {
-              // show: true,
               fontSize: '16px',
               formatter: function (val) {
                 return Number(val).toLocaleString()
@@ -72,8 +72,6 @@ public options = {
     },
     labels: ["Team A", "Team B", "Team C", "Team D", "Team E"],
     legend: {
-      // position: "bottom"
-      // show: false
     },
     tooltip: {
       y: {
@@ -99,7 +97,6 @@ public options = {
 
   constructor(
     private localStorage: LocalStorageServiceService,
-    private gaseras : EnergeticosGaserasService
   ) {}
 
   ngAfterViewInit(): void {
@@ -111,9 +108,8 @@ public options = {
 
 
   private inicializarGrfica(){
-    this.dataEnergeticos = this.localStorage.getItem('DataEnergeticos');
-    if(this.dataEnergeticos.mes.length > 1){
-    // this.getTotalesSeries();
+    // this.dataEnergeticos = this.localStorage.getItem('DataEnergeticos');
+    if(this.dataMes.length > 1){
     this.options.labels = this.getLabelsConceptos();
     this.options.series = this.getSeriesConceptos();
     
@@ -136,16 +132,12 @@ public options = {
     public getTotalesSeries(){
       let totales:any = [];
       let serie:any = [];
-      let filaTotales = this.dataEnergeticos.mes.find((registro) => registro.estacion === "Total");
+      let filaTotales = this.dataMes.find((registro) => registro.estacion === "Total");
       this.conceptos.forEach( concepto => {
         const value = Number(filaTotales[concepto]);
         totales.push(value);
       });
-      let totalConceptos =  totales.reduce((a, b) => {
-        return a + b
-      }, 0)
-      console.log(totales)
-      console.log(totalConceptos);
+      let totalConceptos =  totales.reduce((a, b) => { return a + b }, 0)
       totales.forEach(totalConcepto => {
         const element = this.valueNegative(Number(formatNumber((totalConcepto / totalConceptos) * 100, 'en-US', '1.0-2')))
         serie.push(element);
@@ -157,9 +149,7 @@ public options = {
 
     public getSumaConcepto(){
       let totales = this.getData().map((item) => item.value);
-      let totalConceptos =  totales.reduce((a, b) => {
-        return a + b
-      }, 0);
+      let totalConceptos =  totales.reduce((a, b) => { return a + b }, 0);
       return totalConceptos;
     }
 
@@ -169,12 +159,9 @@ public options = {
       const total =  this.getSumaConcepto();
 
       data.forEach(totalConcepto => {
-        // const element = this.valueNegative(Number(formatNumber((totalConcepto.value / total) * 100, 'en-US', '1.0-2')))
         const element =this.valueNegative(Number(totalConcepto.value))
-
         serie.push(element);
       });
-
       return serie;
     }
 
@@ -185,7 +172,7 @@ public options = {
 
     getData(){
       let totales:any = [];
-      let filaTotales = this.dataEnergeticos.mes.find((registro) => registro.estacion === "Total");
+      let filaTotales = this.dataMes.find((registro) => registro.estacion === "Total");
       this.conceptos.forEach( concepto => {
         const key = concepto;
         const value = Number(filaTotales[concepto]);
@@ -197,8 +184,8 @@ public options = {
     getDiferencias(){
       let totales:any = [];
       let totalesMA:any = [];
-      let filaTotales = this.dataEnergeticos.mes.find((registro) => registro.estacion === "Total");
-      let filaTotalesMA = this.dataEnergeticos.mesAnt.find((registro) => registro.estacion === "Total");
+      let filaTotales = this.dataMes.find((registro) => registro.estacion === "Total");
+      let filaTotalesMA = this.dataMesAnterior.find((registro) => registro.estacion === "Total");
       this.conceptos.forEach( concepto => {
         const value = Number(filaTotales[concepto]);
         const valueMA = Number(filaTotalesMA[concepto]);
@@ -209,8 +196,6 @@ public options = {
       this.totalMes = totales.reduce((a, b) => {return a + b}, 0);
       this.totalMesAnt = totalesMA.reduce((a, b) => {return a + b}, 0);
       this.diferencia = this.totalMes - this.totalMesAnt;
-
-
     }
 
     private setTitle() {

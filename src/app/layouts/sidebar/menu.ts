@@ -136,12 +136,6 @@ export const MENU: MenuItem[] = [
       icon: 'bx-user',
       subItems: [
         {
-          id: 2,
-          label: 'UcoIP',
-          link: '/ucoip',
-          parentId: 1
-        },
-        {
           id: 4,
           label: 'Gaseras',
           link: '/dashboard/landing-page/energeticos',

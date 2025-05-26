@@ -5,10 +5,13 @@ import { ModalComprasComponent } from "./modal-compras/modal-compras.component";
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { Config } from "datatables.net";
 import Swal from "sweetalert2";
+import { EstadoSolicitud } from "./estado-solicitud.enum";
 import { FuncionesTablas } from "./funciones-tablas";
+import catCentrosCostos from "src/environments/cat_centros_costos.json";
 //services
 import { ComprasService } from "src/app/core/services/compras/compras.service";
 import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompra/ordenes-compra.service";
+import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 
 @Component({
   selector: "app-compras",
@@ -24,7 +27,9 @@ export class ComprasComponent implements OnInit {
   public solicitudSelecionada: boolean = false;
   public isLoad: boolean = true;
   public mostrarBoton = false;
+  public habilitarDescarga = false;
 
+  public centrosCostos : any = catCentrosCostos; 
   
   /**
    * Objeto que envió al componente detallesSolicitudCompra
@@ -32,6 +37,7 @@ export class ComprasComponent implements OnInit {
   public solicitudCompra: any; 
   public status: any;
   public data: any;
+  public enEsts = EstadoSolicitud;
 
   // varibles funciones tablas
     datosFiltrados:any[] = [];
@@ -40,6 +46,7 @@ export class ComprasComponent implements OnInit {
 
   constructor(
     public ordenesComprasService: OrdenesCompraService,
+    public alertasService: SwalComprsServiceService,
     public comprasService: ComprasService,
     private modalService: BsModalService
   ) {}
@@ -117,7 +124,7 @@ export class ComprasComponent implements OnInit {
   public regresar() {
     this.comprasService.cambiarEstadoCotizacion(false);
     this.solicitudSelecionada = false;
-    this.status = 0;
+    this.status = null;
     this.mostrarBoton = false;
     this.getAll();
   }
@@ -147,28 +154,10 @@ export class ComprasComponent implements OnInit {
         this.comprasService.destroy(this.solicitudCompra.id).subscribe(
           (response) => {
             if (response.status === "success") {
-              this.getAll();
-              Swal.fire({
-                title: "Cancelada!",
-                text: "La solicitud ha sido cancelada.",
-                buttonsStyling: false,
-                icon: "success",
-                customClass: {
-                  confirmButton: "btn btn-danger px-4",
-                  cancelButton: "btn btn- ms-2 px-4",
-                },
-              });
+              this.regresar();
+              this.alertasService.mostrarAlerta("Cancelada!", "La solicitud ha sido cancelada.", "success","success");
             } else {
-              Swal.fire({
-                title: "Error!",
-                text: "Your file has been deleted.",
-                buttonsStyling: false,
-                icon: "success",
-                customClass: {
-                  confirmButton: "btn btn-danger px-4",
-                  cancelButton: "btn btn- ms-2 px-4",
-                },
-              });
+              this.alertasService.mostrarAlerta("Error!", "Ocurrió un error inesperado", "error","error");
             }
           },
           (error) => {
@@ -190,6 +179,7 @@ export class ComprasComponent implements OnInit {
     this.ordenesComprasService
       .pdfOrdenCompra(this.solicitudCompra.id)
       .subscribe((response) => {
+        
         if (response) {
           const blob = new Blob([response], { type: "application/pdf" });
           const url = window.URL.createObjectURL(blob);
@@ -198,24 +188,20 @@ export class ComprasComponent implements OnInit {
           link.download = "orden_compra.pdf";
           link.click();
           window.URL.revokeObjectURL(url);
+          // this.alertasService.mostrarAlerta("Descargando", "Revisa el apartado de descargas en tu explorar de archivos", "success","success");
         } else {
-          Swal.fire({
-            title: "Error!",
-            text: "La orden de compra no existe",
-            buttonsStyling: false,
-            icon: "error",
-            customClass: {
-              confirmButton: "btn btn-danger px-4",
-              cancelButton: "btn btn- ms-2 px-4",
-            },
-          });
+          this.alertasService.mostrarAlerta("Error!", "La orden de compra no existe", "error","danger");
         }
+      },(error) => {
+        this.alertasService.mostrarAlerta("Error!", "No es posible descargar la orden de compra", "error","danger");
       });
   }
 
   updateStatus(status: any) {
     this.status = status;
   }
+
+
 
   //Funciones de la tabla
   ordenarPor(columna: keyof any){
@@ -229,7 +215,7 @@ export class ComprasComponent implements OnInit {
   filtrarTabla(){
     this.datosFiltrados = this.ordenador.filtrar(this.busqueda, [
       'folio', 'usuario_destino', 'motivo',
-      'fecha', 'usuario_solicita', 'empresa', 'estado'
+      'fecha', 'usuario_solicita', 'empresa', 'estado', 'centro_costo'
     ]);
   }
 }

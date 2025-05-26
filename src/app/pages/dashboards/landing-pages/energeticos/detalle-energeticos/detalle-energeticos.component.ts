@@ -15,6 +15,8 @@ import dataMeses from "src/environments/meses.json";
 export class DetalleEnergeticosComponent implements OnInit {
   public concepto: string;
 
+  public titulo: any;
+
   public isLoad: boolean = true;
 
   public dataEnergeticos: any;
@@ -42,7 +44,7 @@ export class DetalleEnergeticosComponent implements OnInit {
   ngOnInit(): void {
     this.concepto = this.route.snapshot.paramMap.get("concepto");
     this.isLoad = false;
-
+    this.titulo = this.concepto.replace('_',' ');
     this.recuperarLocalStorage();
   }
 

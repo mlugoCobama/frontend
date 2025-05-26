@@ -1,0 +1,107 @@
+[
+    {
+        "Id":"1", "Clave":"24-VT", "Descripcion": " TELEFONO E INTERNET"
+    },
+    {
+        "Id":"2", "Clave":"A.F.", "Descripcion": "ACTIVO FIJO"
+    },
+    {
+        "Id":"3", "Clave":"ACREE", "Descripcion": "ACREEDORES DIVERSOS"
+    },
+    {
+        "Id":"4", "Clave":"ACTIV", "Descripcion": "ACTIVOS FIJOS"
+    },
+    {
+        "Id":"5", "Clave":"ADMIN", "Descripcion": "SERVICIO UNIDAD"
+    },
+    {
+        "Id":"6", "Clave":"COSTO", "Descripcion": "COSTO UNIDADES NUEVAS"
+    },
+    {
+        "Id":"7", "Clave":"CTOFI", "Descripcion": "COSTO FINANCIERO (INTERESES)"
+    },
+    {
+        "Id":"8", "Clave":"DEUDO", "Descripcion": "DEUDORES DIVERSOS"
+    },
+    {
+        "Id":"9", "Clave":"EQUIP", "Descripcion": "EQUIPAMIENTO"
+    },
+    {
+        "Id":"10", "Clave":"G.ADM", "Descripcion": "GASTOS DE ADMINISTRACION"
+    },
+    {
+        "Id":"10", "Clave":"G.FLO", "Descripcion": " GASTOS DE VENTA FLOTILLAS"
+    },
+    {
+        "Id":"12", "Clave":"G.REF", "Descripcion": "GASTOS DE REFACCIONES"
+    },
+    {
+        "Id":"13", "Clave":"G.SER", "Descripcion": "GASTOS DE SERVICIO"
+    },
+    {
+        "Id":"14", "Clave":"G.SIC", "Descripcion": "GASTOS DE VENTA SICREA"
+    },
+    {
+        "Id":"15", "Clave":"G.US", "Descripcion": "GASTOS DE VENTA SEMI-NUEVOS"
+    },
+    {
+        "Id":"16", "Clave":"G.VTA", "Descripcion": "GASTOS DE VENTA MENUDEO"
+    },
+    {
+        "Id":"17", "Clave":"GTHYP", "Descripcion": "GASTOS DE HOJALATERIA Y PINTURA"
+    },
+    {
+        "Id":"18", "Clave":"HYP", "Descripcion": "HOJALATERIA Y PINTURA"
+    },
+    {
+        "Id":"19", "Clave":"INREF", "Descripcion": "INTERNAS XVENTAS (CORTESIAS REFACCIONES)"
+    },
+    {
+        "Id":"20", "Clave":"INRES", "Descripcion": "PREPARACIONES (PREVIAS Y REPAR SERVICIO)"
+    },
+    {
+        "Id":"21", "Clave":"INSER", "Descripcion": "INTERNAS X VENTAS (CORTESIAS SERVICIO)"
+    },
+    {
+        "Id":"22", "Clave":"INT", "Descripcion": "INTERESES PRESTAMOS INTERCOMPAÑIAS"
+    },
+    {
+        "Id":"23", "Clave":"INTRU", "Descripcion": "PREPARACIONES (PREVIAS Y REP. SEMI-NUEV)"
+    },
+    {
+        "Id":"24", "Clave":"INURE", "Descripcion": "INURE PREPARACIONES (PREVIAS, REPAR. NUEVOS)"
+    },
+    {
+        "Id":"25", "Clave":"INUSA", "Descripcion": "INTERNAS X VENTAS (CORTESIAS SEMI-NVOS)"
+    },
+    {
+        "Id":"26", "Clave":"INUVO", "Descripcion": "INTERNAS X VENTAS (CORTESIAS NUEVOS)"
+    },
+    {
+        "Id":"27", "Clave":"OTRIN", "Descripcion": "OTROS INGRESOS"
+    },
+    {
+        "Id":"28", "Clave":"PROT", "Descripcion": "PROTECCION CIVIL"
+    },
+    {
+        "Id":"29", "Clave":"REF", "Descripcion": "SERVICIO UNIDAD"
+    },
+    {
+        "Id":"30", "Clave":"REFAC", "Descripcion": "REFACCIONES"
+    },
+    {
+        "Id":"31", "Clave":"SERV", "Descripcion": "SERVICIO UNIDAD"
+    },
+    {
+        "Id":"32", "Clave":"SERVI", "Descripcion": "SERVICIO"
+    },
+    {
+        "Id":"33", "Clave":"US", "Descripcion": "COSTO DE UNIDADES SEMI-NUEVAS"
+    },
+    {
+        "Id":"34", "Clave":"VTA", "Descripcion": "INTERNA VENTAS"
+    },
+    {
+        "Id":"35", "Clave":"VTAS", "Descripcion": "SERVICIO UNIDAD"
+    }
+]

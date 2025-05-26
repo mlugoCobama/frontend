@@ -9,7 +9,7 @@ import { formatNumber } from '@angular/common';
   templateUrl: './porcentajes-graficas.component.html',
   styleUrls: ['./porcentajes-graficas.component.css']
 })
-export class PorcentajesGraficasComponent implements OnInit {
+export class PorcentajesGraficasComponent{
   @Input() concepto: string;
 
   public dataEnergeticos: any;
@@ -28,7 +28,7 @@ export class PorcentajesGraficasComponent implements OnInit {
   public options = {
     series: [],
     chart: {
-      width: '500',
+      width: '450',
       type: "pie"
     },
     labels: [],
@@ -37,7 +37,7 @@ export class PorcentajesGraficasComponent implements OnInit {
         breakpoint: 480,
         options: {
           chart: {
-            width: 200
+            width: 400
           },
           legend: {
             position: "bottom"
@@ -52,7 +52,7 @@ export class PorcentajesGraficasComponent implements OnInit {
     private gaseras : EnergeticosGaserasService
   ) {}
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.inicializarGrfica();
     this.actualizarDatosSubscripcion =
     this.gaseras.actualizarData$.subscribe(() => {
@@ -75,7 +75,8 @@ export class PorcentajesGraficasComponent implements OnInit {
       this.options.series = [100];
       this.options.labels = ['Sin datos'];
     }
-    this.chart = new ApexCharts(document.querySelector("#chart_participacion"), this.options);
+    this.chart = new ApexCharts(document.querySelector("#chart_participacion_"+this.concepto), this.options);
+    
     this.chart.render();
   }
 
@@ -109,7 +110,6 @@ export class PorcentajesGraficasComponent implements OnInit {
       } 
     }
     this.serie = data;
-    console.log(this.serie);
   }
 
   /**

@@ -4,13 +4,13 @@
             <div>
                 <a [routerLink]="[ '../../gasolinerias']" class="btn btn-primary btn-sm"> <i class="bx bx-arrow-back "></i> Atras</a>
                 <br>
-                <h4 class="mb-0 font-size-18 pt-2">Gasolinerias - {{concepto}} {{nombreMes}} {{ anioSeleccionado }}</h4>
+                <h4 class="mb-0 font-size-18 pt-2">Gasolinerias - {{titulo}} {{nombreMes}} {{ anioSeleccionado }}</h4>
             </div>
             
             <div class="page-title-right ">
                 <ol class="breadcrumb m-0 ">
                     <ng-container>
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">Detalle {{concepto}}</a>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Detalle {{titulo}}</a>
                         </li>
                         <li class="breadcrumb-item active">Gasolinerias </li>
                     </ng-container>
@@ -86,6 +86,13 @@
         <div class="row">
             <div class="col-sm-12">
                 <app-porcentajes-graficas  [concepto]="concepto"></app-porcentajes-graficas>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="row">
+            <div class="col-sm-12">
+                 <app-tendencia  [concepto]="concepto"></app-tendencia>
             </div>
         </div>
     </div>

@@ -11,17 +11,17 @@ import { UIModule } from 'src/app/shared/ui/ui.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ModalComprasComponent } from './compras/modal-compras/modal-compras.component';
-import { DetallesSolicitudCompraComponent } from './detalles-solicitud-compra/detalles-solicitud-compra.component';
-import { DatosSolicitudCompraComponent } from './detalles-solicitud-compra/datos-solicitud-compra/datos-solicitud-compra.component';
-import { TablaDetallesSolicitudComponent } from './detalles-solicitud-compra/tabla-detalles-solicitud/tabla-detalles-solicitud.component';
+// import { DetallesSolicitudCompraComponent } from './detalles-solicitud-compra/detalles-solicitud-compra.component';
+// import { DatosSolicitudCompraComponent } from './detalles-solicitud-compra/datos-solicitud-compra/datos-solicitud-compra.component';
+// import { TablaDetallesSolicitudComponent } from './detalles-solicitud-compra/tabla-detalles-solicitud/tabla-detalles-solicitud.component';
 import { ModalAddProveedorComponent } from './proveedores/modal-add-proveedor/modal-add-proveedor.component';
 import { ModalUpdtProveedorComponent } from './proveedores/modal-updt-proveedor/modal-updt-proveedor.component';
 import { ModalShowProveedorComponent } from './proveedores/modal-show-proveedor/modal-show-proveedor.component';
 import { ModalAddUnidadComponent } from './cat-unidades-medidas/modal-add-unidad/modal-add-unidad.component';
 import { ModalUpdtUnidadComponent } from './cat-unidades-medidas/modal-updt-unidad/modal-updt-unidad.component';
-import { FormCotizacionComponent } from './detalles-solicitud-compra/form-cotizacion/form-cotizacion.component';
-import { TblFlsCotizacionComponent } from './detalles-solicitud-compra/tbl-fls-cotizacion/tbl-fls-cotizacion.component';
-import { FormFacturasComponent } from './detalles-solicitud-compra/form-facturas/form-facturas.component';
+// import { FormCotizacionComponent } from './detalles-solicitud-compra/form-cotizacion/form-cotizacion.component';
+// import { TblFlsCotizacionComponent } from './detalles-solicitud-compra/tbl-fls-cotizacion/tbl-fls-cotizacion.component';
+// import { FormFacturasComponent } from './detalles-solicitud-compra/form-facturas/form-facturas.component';
 import { DetalleSolicitudesComprasComponent } from './compras/detalle-solicitudes-compras/detalle-solicitudes-compras.component';
 import { InfoSolicitudComponent } from './compras/detalle-solicitudes-compras/info-solicitud/info-solicitud.component';
 import { TableDetallesSolicitudComponent } from './compras/detalle-solicitudes-compras/table-detalles-solicitud/table-detalles-solicitud.component';
@@ -30,6 +30,7 @@ import { TableFilesCotizacionesComponent } from './compras/detalle-solicitudes-c
 import { BtnsAutorizacionComponent } from './compras/detalle-solicitudes-compras/btns-autorizacion/btns-autorizacion.component';
 import { FormFilesFacturasComponent } from './compras/detalle-solicitudes-compras/form-files-facturas/form-files-facturas.component';
 import { DatosFacturasComponent } from './compras/detalle-solicitudes-compras/datos-facturas/datos-facturas.component';
+import { BtnAutorizacionGerenciaComponent } from './compras/detalle-solicitudes-compras/btn-autorizacion-gerencia/btn-autorizacion-gerencia.component';
 
 
 @NgModule({
@@ -38,17 +39,17 @@ import { DatosFacturasComponent } from './compras/detalle-solicitudes-compras/da
     CatUnidadesMedidasComponent,
     ProveedoresComponent,
     ModalComprasComponent,
-    DetallesSolicitudCompraComponent,
-    DatosSolicitudCompraComponent,
-    TablaDetallesSolicitudComponent,
+    // DetallesSolicitudCompraComponent,
+    // DatosSolicitudCompraComponent,
+    // TablaDetallesSolicitudComponent,
     ModalAddProveedorComponent,
     ModalUpdtProveedorComponent,
     ModalShowProveedorComponent,
     ModalAddUnidadComponent,
     ModalUpdtUnidadComponent,
-    FormCotizacionComponent,
-    TblFlsCotizacionComponent,
-    FormFacturasComponent,
+    // FormCotizacionComponent,
+    // TblFlsCotizacionComponent,
+    // FormFacturasComponent,
     DetalleSolicitudesComprasComponent,
     InfoSolicitudComponent,
     TableDetallesSolicitudComponent,
@@ -57,6 +58,7 @@ import { DatosFacturasComponent } from './compras/detalle-solicitudes-compras/da
     BtnsAutorizacionComponent,
     FormFilesFacturasComponent,
     DatosFacturasComponent,
+    BtnAutorizacionGerenciaComponent,
   ],
   imports: [
     CommonModule,

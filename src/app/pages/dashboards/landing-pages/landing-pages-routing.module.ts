@@ -6,6 +6,10 @@ import { DetalleEnergeticosComponent } from './energeticos/detalle-energeticos/d
 import { DetalleGasolineriasComponent } from './gasolinerias/detalle-gasolinerias/detalle-gasolinerias.component';
 import { NissanComponent } from './nissan/nissan.component';
 import { RenaultComponent } from './renault/renault.component';
+import { DetalleNissanComponent } from './nissan/detalle-nissan/detalle-nissan.component';
+import { DetalleReanultComponent } from './renault/detalle-reanult/detalle-reanult.component';
+
+import { DetalleAntInventarioComponent } from './nissan/widgets/detalle-ant-inventario/detalle-ant-inventario.component';
 
 const routes: Routes = [
   { path: 'energeticos', component: EnergeticosComponent },
@@ -14,6 +18,10 @@ const routes: Routes = [
   { path: 'reanult', component: RenaultComponent },
   { path: 'energeticos-detalle/:concepto', component: DetalleEnergeticosComponent },
   { path: 'gasolinerias-detalle/:concepto', component: DetalleGasolineriasComponent  },
+  { path: 'nissan-detalle/:concepto', component: DetalleNissanComponent  },
+  { path: 'renault-detalle/:concepto', component: DetalleReanultComponent  },
+
+  { path: 'nissan-ant-detalle/:concepto', component:  DetalleAntInventarioComponent },
 ];
 
 @NgModule({

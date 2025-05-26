@@ -27,6 +27,12 @@ import { BarrasHorizontalesMetasComponent } from './nissan/widgets/barras-horizo
 import { GraficaBarrasTotalesComponent } from './nissan/widgets/grafica-barras-totales/grafica-barras-totales.component';
 import { CardPrestamosComponent } from './nissan/widgets/card-prestamos/card-prestamos.component';
 import { StackGraficaComponent } from './nissan/widgets/stack-grafica/stack-grafica.component';
+import { PorcentajeEficienciaComponent } from './energeticos/widgets/porcentaje-eficiencia/porcentaje-eficiencia.component';
+import { TendenciaComponent } from './energeticos/widgets/tendencia/tendencia.component';
+import { DetalleNissanComponent } from './nissan/detalle-nissan/detalle-nissan.component';
+import { DetalleReanultComponent } from './renault/detalle-reanult/detalle-reanult.component';
+import { DetalleAntInventarioComponent } from './nissan/widgets/detalle-ant-inventario/detalle-ant-inventario.component';
+import { AntInventarioComponent } from './nissan/widgets/ant-inventario/ant-inventario.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +57,12 @@ import { StackGraficaComponent } from './nissan/widgets/stack-grafica/stack-graf
     GraficaBarrasTotalesComponent,
     CardPrestamosComponent,
     StackGraficaComponent,
+    PorcentajeEficienciaComponent,
+    TendenciaComponent,
+    DetalleNissanComponent,
+    DetalleReanultComponent,
+    DetalleAntInventarioComponent,
+    AntInventarioComponent,
   ],
   imports: [
     CommonModule,

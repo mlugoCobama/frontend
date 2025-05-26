@@ -1,16 +1,9 @@
 import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
-
+import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompra/ordenes-compra.service";
+import { EstadoSolicitud } from "../../estado-solicitud.enum";
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 
-
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
-
-import Swal from "sweetalert2";
 
 @Component({
   selector: "app-form-files-facturas",
@@ -30,6 +23,7 @@ export class FormFilesFacturasComponent implements OnInit {
   public submitted: boolean = false;
   public isLoad: boolean = true;
   public mostrarDtsFac: boolean = false;
+  public enEsts= EstadoSolicitud;
 
   public hasFiles: boolean = false;
   factura: any = {
@@ -51,6 +45,7 @@ export class FormFilesFacturasComponent implements OnInit {
   constructor(
     public formBuilder: FormBuilder,
     private ordenesComprasService: OrdenesCompraService,
+    private alertasService: SwalComprsServiceService
   ) {}
 
   ngOnInit(): void {
@@ -86,7 +81,7 @@ export class FormFilesFacturasComponent implements OnInit {
     this.ordenesComprasService.getOne(this.solicitudCompra.id).subscribe(
       (response) => {
         if (response) {
-          this.ordenCompra = response;
+          this.ordenCompra = response.data;
           this.setOrdenCompra(this.ordenCompra);
           
           this.isLoad = false;
@@ -124,26 +119,14 @@ export class FormFilesFacturasComponent implements OnInit {
   }
 
   /**
-   * Guarda los archivos de las facturas 
-   * ->PDF
-   * y XML
+   * Guarda los archivos de las facturas  PDF  y XML
    * @returns 
    */
   public guardarArchivos() {
     this.submitted = true;
     this.isLoad = true;
     if (this.formDocsOrdenCompra.invalid) {
-
-      Swal.fire({
-        title: "Alerta",
-        text: "Debes adjuntar la factura en ambos formatos",
-        buttonsStyling: false,
-        icon: "warning",
-        customClass: {
-          confirmButton: "btn btn-warning px-4",
-          cancelButton: "btn btn- ms-2 px-4",
-        },
-      });
+      this.alertasService.mostrarAlerta("Alerta", "Debes adjuntar la factura en ambos formatos", "warning", "warning");
       this.isLoad = false;
       return;
     }
@@ -157,17 +140,7 @@ export class FormFilesFacturasComponent implements OnInit {
         if (response.status === "success") {
 
           this.getOrdenCompra();
-
-          Swal.fire({
-            title: "Guardado",
-            text: "Documentos guardados correctamente",
-            buttonsStyling: false,
-            icon: "success",
-            customClass: {
-              confirmButton: "btn btn-success px-4",
-              cancelButton: "btn btn- ms-2 px-4",
-            },
-          });
+          this.alertasService.mostrarAlerta("Guardado", "Documentos guardados correctamente", "success", "success");
 
           this.isLoad = false;
           this.formData = new FormData();
@@ -203,17 +176,7 @@ export class FormFilesFacturasComponent implements OnInit {
           if (response.status === "success") {
 
             this.getOrdenCompra();
-
-            Swal.fire({
-              title: "Guardado",
-              text: "Documentos guardados correctamente",
-              buttonsStyling: false,
-              icon: "success",
-              customClass: {
-                confirmButton: "btn btn-success px-4",
-                cancelButton: "btn btn- ms-2 px-4",
-              },
-            });
+            this.alertasService.mostrarAlerta("Guardado", "Documentos guardados correctamente", "success", "success");
 
             this.isLoad = false;
             this.formData = new FormData();
@@ -227,16 +190,7 @@ export class FormFilesFacturasComponent implements OnInit {
         }
       );
     } else {
-      Swal.fire({
-        title: "Alerta",
-        text: "Debes adjuntar el comprobante pago",
-        buttonsStyling: false,
-        icon: "warning",
-        customClass: {
-          confirmButton: "btn btn-warning px-4",
-          cancelButton: "btn btn- ms-2 px-4",
-        },
-      });
+      this.alertasService.mostrarAlerta("Alerta", "Debes adjuntar el comprobante pago", "warning", "warning");
       this.isLoad = false;
       return;
     }
@@ -251,17 +205,7 @@ export class FormFilesFacturasComponent implements OnInit {
       .subscribe(
         (response) => {
           if (response.status === "success") {
-            Swal.fire({
-              title: "Listo",
-              text: "Se ha marcado como pagada",
-              buttonsStyling: false,
-              icon: "success",
-              customClass: {
-                confirmButton: "btn btn-success px-4",
-                cancelButton: "btn btn- ms-2 px-4",
-              },
-            });
-
+            this.alertasService.mostrarAlerta("Listo", "Se ha marcado como pagada", "success", "success");
             this.isLoad = false;
             this.actualizarStatus.emit();
           } else {
@@ -331,11 +275,41 @@ export class FormFilesFacturasComponent implements OnInit {
    * @param fieldName nombre del input
    */
   onFileChange1(event: any, fieldName: string) {
-    
     this.formData.delete(fieldName);
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
       this.formData.append(fieldName, file);
+      if(fieldName === 'factura_xml'){
+        this.validarXML(file);
+      }
+      
     }
+    
   }
+
+  /**
+   *  Valida que el archivo que se suba sea un cfdi
+   * y recupera el tipo de comprobante
+  */ 
+  validarXML(file: File) {
+  const reader = new FileReader();
+
+  reader.onload = (e) => {
+    const xmlContent = e.target?.result as string;
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlContent, "application/xml");
+
+    const comprobante = xmlDoc.getElementsByTagName("cfdi:Comprobante")[0];
+    if (comprobante) {
+      const tipo = comprobante.getAttribute("TipoDeComprobante");
+      console.log("Tipo de comprobante:", tipo);
+    } else {
+      this.alertasService.mostrarAlerta('No valido', 'El archivo que intentas subir no es un CFDI','error', 'danger');
+      this.formDocsOrdenCompra.reset();
+      console.warn("No se encontró el nodo 'cfdi:Comprobante'.");
+    }
+  };
+
+  reader.readAsText(file);
+}
 }

@@ -1,5 +1,10 @@
 import { Component, Input, AfterViewInit } from '@angular/core';
 
+/**
+ * Componente que genera un card con información de prestamos
+ * (componente no actualizable)
+ * @component card prestamos dashboard
+ */
 @Component({
   selector: 'app-card-prestamos',
   templateUrl: './card-prestamos.component.html',
@@ -8,19 +13,20 @@ import { Component, Input, AfterViewInit } from '@angular/core';
 export class CardPrestamosComponent implements AfterViewInit{
 
   @Input() concepto:any;
+  @Input() tipo:any;
   @Input() dataMes:any;
   @Input() dataMesAnterior:any;
 
   public title: any;
 
-  public totalMes: any;
-  public interesMes:  any;
+  public totalMes: any = 0;
+  public interesMes:  any = 0;
 
-  public totalMesAnt: any;
-  public interesMesAnt:  any;
+  public totalMesAnt: any = 0;
+  public interesMesAnt:  any = 0;
 
-  public difTotal: any;
-  public difIntereses: any;
+  public difTotal: any = 0;
+  public difIntereses: any = 0;
 
   ngAfterViewInit(): void {
     this.setTitle();

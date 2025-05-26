@@ -1,9 +1,10 @@
 import { Component, Input, OnInit, AfterViewInit } from "@angular/core";
-import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
-import { EnergeticosGaserasService } from "src/app/core/services/dashboard/energeticos-gaseras.service";
-import { Subject, Subscription } from "rxjs";
-import { formatNumber } from "@angular/common";
 
+/**
+ * Componente que genera una gráfica de "Pastel (Donut)" para mostrar porcentajes por conceptos
+ * (componente no actualizable)
+ * @component gráfica barras costos financieros dashboard
+ */
 @Component({
   selector: "app-grafica-donut",
   templateUrl: "./grafica-donut.component.html",
@@ -11,18 +12,19 @@ import { formatNumber } from "@angular/common";
 })
 export class GraficaDonutComponent implements AfterViewInit {
   @Input() concepto: string;
+  @Input() tipo:any;
+  @Input() dataMes:any;
+  @Input() dataMesAnterior:any;
 
-  public dataEnergeticos: any;
-
-  private actualizarDatosSubscripcion: Subscription;
-
+  // public dataEnergeticos: any;
   public dataAnual: any = [];
+  public money:any = ''
 
   public dataAnualAnt: any = [];
 
-  public totalMes: number;
-  public totalMesAnt: number;
-  public diferencia: number;
+  public totalMes: number = 0;
+  public totalMesAnt: number = 0;
+  public diferencia: number = 0;
 
   public total2: string = "0";
   private labels: any;
@@ -41,7 +43,6 @@ export class GraficaDonutComponent implements AfterViewInit {
           labels: {
             show: true,
             name: {
-              // show: true,
               fontWeight: 600,
               fontSize: "22px",
             },
@@ -69,9 +70,6 @@ export class GraficaDonutComponent implements AfterViewInit {
       },
     },
     labels: ["Team A", "Team B", "Team C", "Team D", "Team E"],
-    // legend: {
-    //   position: "bottom"
-    // },
     tooltip: {
       y: {
         formatter: function (value) {
@@ -84,42 +82,18 @@ export class GraficaDonutComponent implements AfterViewInit {
         breakpoint: 1500,
         options: {
           chart: {
-            // width: 300,
+            
           },
           legend: {
             show: false,
-            // position: "bottom",
+            
           },
         },
       },
-      // {
-      //   breakpoint: 768,
-      //   options: {
-      //     chart: {
-      //       width: 200
-      //     },
-      //     legend: {
-      //       position: "bottom"
-      //     }
-      //   }
-      // },
-      // {
-      //   breakpoint: 480,
-      //   options: {
-      //     chart: {
-      //       width: 200
-      //     },
-      //     legend: {
-      //       position: "bottom"
-      //     }
-      //   }
-      // }
     ],
   };
 
   constructor(
-    private localStorage: LocalStorageServiceService,
-    private gaseras: EnergeticosGaserasService
   ) {}
 
   ngAfterViewInit(): void {
@@ -131,8 +105,8 @@ export class GraficaDonutComponent implements AfterViewInit {
    * Inicializa la gráfica
    */
   private inicializarGrfica() {
-    this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
-    if (this.dataEnergeticos.mes.length > 1) {
+    // this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
+    if (this.dataMes.length > 1) {
       this.generarLabels();
       this.generarSerie();
       this.options.series = this.serie;
@@ -153,9 +127,9 @@ export class GraficaDonutComponent implements AfterViewInit {
    */
   private generarLabels() {
     let data: any = [];
-    for (let i = 0; i < this.dataEnergeticos.mes.length; i++) {
-      if (this.dataEnergeticos.mes[i]["estacion"] != "Total") {
-        const element = this.dataEnergeticos?.mes[i]["estacion"];
+    for (let i = 0; i < this.dataMes.length; i++) {
+      if (this.dataMes[i]["estacion"] != "Total") {
+        const element = this.dataMes[i]["estacion"];
         data.push(element);
       }
     }
@@ -180,26 +154,23 @@ export class GraficaDonutComponent implements AfterViewInit {
    */
   private generarSerie() {
     let data: any = [];
-    // this.deleteLast();
-
-    let total = this.dataEnergeticos.mes.find(
+    let total = this.dataMes.find(
       (registro) => registro.estacion === "Total"
     );
     this.totalMes = total[this.concepto];
 
-    let totalMA = this.dataEnergeticos.mesAnt.find(
+    let totalMA = this.dataMesAnterior.find(
       (registro) => registro.estacion === "Total"
     );
     this.totalMesAnt = totalMA[this.concepto];
 
     this.diferencia = this.totalMes - this.totalMesAnt;
 
-    for (let i = 0; i < this.dataEnergeticos.mes.length; i++) {
-      if (this.dataEnergeticos.mes[i]["estacion"] != "Total") {
+    for (let i = 0; i < this.dataMes.length; i++) {
+      if (this.dataMes[i]["estacion"] != "Total") {
         const element = this.valueNegative(
-          Number(this.dataEnergeticos.mes[i][this.concepto])
+          Number(this.dataMes[i][this.concepto])
         );
-        // const element = this.valueNegative(Number(formatNumber((this.dataEnergeticos.mes[i][this.concepto] / this.total) * 100, 'en-US', '1.0-2')))
         data.push(element);
       }
     }
@@ -211,7 +182,7 @@ export class GraficaDonutComponent implements AfterViewInit {
    * @returns total del concepto
    */
   public getTotal() {
-    let total = this.dataEnergeticos.mes.find(
+    let total = this.dataMes.find(
       (registro) => registro.estacion === "Total"
     );
     return String(total[this.concepto]) || "0";
@@ -223,21 +194,26 @@ export class GraficaDonutComponent implements AfterViewInit {
   private setTitle() {
     switch (this.concepto) {
       case "ventas_servicio":
+        this.money = "$"
         this.title = "Ventas Servicio";
         break;
       case "gasto":
+        this.money = "$"
         this.title = "Gastos";
         break;
       case "personal":
         this.title = "Personal";
         break;
       case "bono_marca":
+        this.money = "$"
         this.title = "Bonos Marcas";
         break;
       case "servicio":
+        this.money = "$"
         this.title = "Servicio";
         break;
       case "hyp":
+        this.money = "$"
         this.title = "HyP";
         break;
       default:

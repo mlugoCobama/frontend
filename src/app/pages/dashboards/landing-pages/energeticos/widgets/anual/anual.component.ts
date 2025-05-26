@@ -12,11 +12,11 @@ import * as Highcharts from "highcharts";
 })
 export class AnualComponent implements OnInit {
   @Input() concepto: string;
-
+  @Input() titulo: string;
   private dataEnergeticos: any;
 
   private actualizarDatosSubscripcion: Subscription;
-
+ 
   public dataAnual: any = [];
 
   public dataAnualAnt: any = [];
@@ -97,9 +97,11 @@ export class AnualComponent implements OnInit {
     this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
     this.serieAnio();
     this.serieAnioAnt();
-    let serie = [this.dataAnualAnt, this.dataAnual];
+    const prediccion2 = this.seriePrediccion(this.dataAnual);
+
+    let serie = [this.dataAnualAnt, this.dataAnual, prediccion2];
     this.chartOptions.series = serie;
-    // console.groupCollapsed(this.dataEnergeticos);
+    this.chartOptions.title.text =  `Anual: ${this.concepto.replace('_',' ')}`
     this.updateFlag = true;
   }
 
@@ -107,8 +109,9 @@ export class AnualComponent implements OnInit {
     this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
     this.serieAnio();
     this.serieAnioAnt();
-    let serie = [this.dataAnualAnt, this.dataAnual];
 
+    const prediccion2 = this.seriePrediccion(this.dataAnual);
+    let serie = [this.dataAnualAnt, this.dataAnual, prediccion2];
     this.chartOptions.series = serie;
     this.updateFlag = true;
   }
@@ -164,5 +167,46 @@ export class AnualComponent implements OnInit {
         type: "line",
       };
     }
+  }
+
+  private seriePrediccion(data) {
+    const datos = [...this.dataAnualAnt.data, ...data.data];
+    let serie;
+    const prediccion = this.predecirRestantes(datos);
+
+    const mesesExcluidos = data.data.map(() => null);
+    const seriePrediccion = mesesExcluidos.concat(prediccion);
+    serie = {
+      name: `Tendencia ${data.name}`,
+      type: "line",
+      data: seriePrediccion,
+      dashStyle: "ShortDash",
+      color: "#f39c12",
+      marker: {
+        enabled: true,
+        
+      },
+    };
+    return serie;
+  }
+
+  predecirRestantes( totales: number[], inicioMes = 1 ,totalMeses = 24): number[] {
+    const n = totales.length;
+    const x = Array.from({ length: n }, (_, i) => i + inicioMes);
+
+    const sumX = x.reduce((a, b) => a + b, 0);
+    const sumY = totales.reduce((a, b) => a + b, 0);
+    const sumXY = totales.reduce((acc, y, i) => acc + y * x[i], 0);
+    const sumX2 = x.reduce((acc, xi) => acc + xi * xi, 0);
+
+    const m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+    
+    const b = (sumY - m * sumX) / n;
+
+    const predicciones: number[] = [];
+    for (let i = n + inicioMes; i <= totalMeses; i++) {
+      predicciones.push(Math.round(m * i + b));
+    }
+    return predicciones;
   }
 }

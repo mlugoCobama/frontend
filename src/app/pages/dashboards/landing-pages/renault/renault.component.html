@@ -1,1 +1,228 @@
-<p>renault works!</p>
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0 font-size-18">{{nombreMes}} {{anioActual}}</h4>
+            <div class="page-title-right ">
+                <ol class="breadcrumb m-0 ">
+                    <ng-container>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Landing Page</a>
+                        </li>
+                        <li class="breadcrumb-item active">Renault {{nombreMes}} {{anioActual}} </li>
+                    </ng-container>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center" *ngIf="isLoad">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+<!-- Unidades vendidas  -->
+<div class="row" *ngIf="!isLoad">
+    <div class="col-xl-12">
+        <div class="row">
+            <div class="col-sm-4">
+                <app-totales-utilidad-grafica
+                    [dataMes]="dataMesActual" 
+                    [dataMesAnterior]="dataMesAnterior"
+                    tipo = "renault-detalle"
+                    color = "#F08A0C"
+                    concepto="nuevos"
+                    [totalAnio]="dataTotalAnio"
+                    [totalAnioAnt]="dataTotalAnioAnt"
+                ></app-totales-utilidad-grafica>
+            </div>
+            <div class="col-sm-4">
+                <app-totales-utilidad-grafica
+                    [dataMes]="dataMesActual" 
+                    [dataMesAnterior]="dataMesAnterior"
+                    tipo = "renault-detalle"
+                    color = "#F08A0C"
+                    concepto="seminuevos"
+                    [totalAnio]="dataTotalAnio"
+                    [totalAnioAnt]="dataTotalAnioAnt"
+                ></app-totales-utilidad-grafica>
+            </div>
+            <div class="col-sm-4">
+                <app-totales-utilidad-grafica
+                    [dataMes]="dataMesActual" 
+                    [dataMesAnterior]="dataMesAnterior"
+                    tipo = "renault-detalle"
+                    color = "#F08A0C"
+                    concepto="flotillas"
+                    [totalAnio]="dataTotalAnio"
+                    [totalAnioAnt]="dataTotalAnioAnt"
+                ></app-totales-utilidad-grafica>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Ordenes de servicio -->
+<div class="row" *ngIf="!isLoad">
+    <div class="col-xl-12">
+        <div class="row">
+            <div class="col-sm-6">
+                <app-totales-utilidad-grafica
+                    [dataMes]="dataMesActual" 
+                    [dataMesAnterior]="dataMesAnterior"
+                    tipo = "renault-detalle"
+                    color = "#F08A0C"
+                    concepto="servicio"
+                    [totalAnio]="dataTotalAnio"
+                    [totalAnioAnt]="dataTotalAnioAnt"
+                ></app-totales-utilidad-grafica>
+            </div>
+            <div class="col-sm-6">
+                <app-totales-utilidad-grafica
+                    [dataMes]="dataMesActual" 
+                    [dataMesAnterior]="dataMesAnterior"
+                    tipo = "renault-detalle"
+                    color = "#F08A0C"
+                    concepto="hyp"
+                    [totalAnio]="dataTotalAnio"
+                    [totalAnioAnt]="dataTotalAnioAnt"
+                ></app-totales-utilidad-grafica>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Ventas de post venta, Inventarios -->
+<div class="row" *ngIf="!isLoad">
+    <div class="col-xl-6">
+        <app-totales-porcentaje-grafica 
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            tipo = "renault-detalle"
+            concepto="total_ventas_ref"
+        ></app-totales-porcentaje-grafica>
+    </div>
+    <div class="col-xl-6">
+        <app-totales-porcentaje-grafica 
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            concepto="inventarios"
+            tipo = "renault-detalle"
+        ></app-totales-porcentaje-grafica>
+    </div>
+</div>
+
+<!-- Antiguedad inventario -->
+<div class="row" *ngIf="!isLoad">
+    <div class="col-xl-6">
+        <app-stack-grafica
+            [dataAntInventario] = "dataAntInventario"
+            tipo = "renault-detalle"
+            filtro = "Consolidado"
+            concepto="ant_inv_nuevo"
+        ></app-stack-grafica>
+    </div>
+    <div class="col-xl-6">
+        <app-stack-grafica
+            [dataAntInventario] = "dataAntInventario"
+            filtro = "Consolidado"
+            tipo = "renault-detalle"
+            concepto="ant_inv_semi"
+        ></app-stack-grafica>
+    </div>
+</div>
+
+<!-- PRESTAMOS NRF Y PLAN PISO -->
+<div class="row" *ngIf="!isLoad">
+    <div class="col-xl-6">
+        <app-card-prestamos
+            concepto = "nrf"
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior"
+            tipo = "renault-detalle"
+            ></app-card-prestamos>
+    </div>
+    <div class="col-xl-6">
+            <app-card-prestamos
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior"
+            tipo = "renault-detalle"
+            concepto = "plan_piso"
+            ></app-card-prestamos>
+    </div>
+</div>
+
+<!-- Gastos y costo financiero -->
+ <div class="row" *ngIf="!isLoad">
+    <div class="col-xl-6">
+        <app-grafica-donut 
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            tipo = "renault-detalle"
+            color = "#FB4141"
+            concepto="gasto"
+        ></app-grafica-donut>
+    </div>
+    <div class="col-xl-6">
+        <app-grafica-barras-totales 
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            tipo = "renault-detalle"
+            concepto="costos_financieros"
+        ></app-grafica-barras-totales>
+    </div>
+ </div>
+
+ <!-- UNO -->
+<div class="row" *ngIf="!isLoad">
+    <div class="col-xl-12">
+        <app-totales-grafica 
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            [totalAnio]="dataTotalAnio"
+            tipo = "renault-detalle"
+            color = "#F08A0C"
+            concepto="uno"
+        ></app-totales-grafica>
+    </div>
+</div>
+
+<!-- UTILIDAD AREA Y BONOS MARCAS -->
+<div class="row" *ngIf="!isLoad">
+    <div class="col-xl-6">
+        <app-totales-porcentaje-grafica 
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            tipo = "renault-detalle"
+            concepto="utilidad_area"
+        ></app-totales-porcentaje-grafica>
+    </div>
+    <div class="col-xl-6">
+        <app-grafica-donut
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior"
+            tipo = "renault-detalle" 
+            concepto="bono_marca"
+        ></app-grafica-donut>
+    </div>
+</div>
+
+<!-- OBJETIVOS Y PERSONAL -->
+<div class="row" *ngIf="!isLoad">
+    <div class="col-xl-6">
+        <app-barras-horizontales-metas 
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            tipo = "renault-detalle"
+            concepto="objetivos"
+        ></app-barras-horizontales-metas>
+    </div>
+    <div class="col-xl-6">
+        <app-grafica-donut 
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            tipo = "renault-detalle"
+            color = "#FB4141"
+            concepto="personal"
+        ></app-grafica-donut>
+    </div>
+</div>

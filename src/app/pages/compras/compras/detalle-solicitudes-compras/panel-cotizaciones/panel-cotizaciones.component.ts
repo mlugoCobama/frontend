@@ -5,9 +5,9 @@ import {
   FormGroup,
   Validators,
 } from "@angular/forms";
-import Swal from "sweetalert2";
 
 import { ProveedoresService } from "src/app/core/services/compras/proveedores/proveedores.service";
+import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 import { ComprasService } from "src/app/core/services/compras/compras.service";
 
 @Component({
@@ -37,7 +37,8 @@ export class PanelCotizacionesComponent implements OnInit {
   constructor(
     public formBuilder: FormBuilder,
     public proveedoresService: ProveedoresService,
-    public comprasService: ComprasService
+    public comprasService: ComprasService,
+    public alertasService: SwalComprsServiceService
   ) {}
 
   ngOnInit(): void {
@@ -49,9 +50,9 @@ export class PanelCotizacionesComponent implements OnInit {
 
   private buildForm() {
     this.formProveedoresCotizacion = this.formBuilder.group({
-      proveedor1: new FormControl(null, Validators.required),
-      proveedor2: new FormControl(null, Validators.required),
-      proveedor3: new FormControl(null, Validators.required),
+      proveedor1: new FormControl("", Validators.required),
+      proveedor2: new FormControl("", Validators.required),
+      proveedor3: new FormControl("", Validators.required),
       consideraciones: new FormControl(null),
     });
   }
@@ -88,16 +89,9 @@ export class PanelCotizacionesComponent implements OnInit {
     this.isDisabled = true;
     if (this.formProveedoresCotizacion.invalid) {
       this.isLoad = false;
-      Swal.fire({
-        title: "Algo anda mal",
-        text: "Debes llenar correctamente todos los campos",
-        buttonsStyling: false,
-        icon: "warning",
-        customClass: {
-          confirmButton: "btn btn-warning px-4",
-          cancelButton: "btn btn- ms-2 px-4",
-        },
-      });
+
+      this.alertasService.mostrarAlerta("Algo anda mal", "Debes llenar correctamente todos los campos", "warning",  "warning");
+
       this.isDisabled = false;
       return;
     }
@@ -107,16 +101,9 @@ export class PanelCotizacionesComponent implements OnInit {
     if (
       data.proveedor1 === data.proveedor2 || data.proveedor2 === data.proveedor3 || data.proveedor1 === data.proveedor3
     ) {
-      Swal.fire({
-        title: "Algo anda mal",
-        text: "Debes de seleccionar proveedores distintos",
-        buttonsStyling: false,
-        icon: "warning",
-        customClass: {
-          confirmButton: "btn btn-warning px-4",
-          cancelButton: "btn btn- ms-2 px-4",
-        },
-      });
+
+      this.alertasService.mostrarAlerta("Algo anda mal", "Debes de seleccionar proveedores distintos", "warning",  "warning");
+
       this.isDisabled = false;
       return;
     }
@@ -131,33 +118,14 @@ export class PanelCotizacionesComponent implements OnInit {
       this.comprasService.sendMail(data).subscribe(
         (response) => {
           if (response.status === "success") {
-            Swal.fire({
-              title: "Enviado",
-              text: "Tu solicitud de cotización se ha enviado correctamente",
-              buttonsStyling: false,
-              icon: "success",
-              customClass: {
-                confirmButton: "btn btn-success px-4",
-                cancelButton: "btn btn- ms-2 px-4",
-              },
-            });
-            
-            // this.comprasService.cambiarEstadoCotizacion(true);
+            this.alertasService.mostrarAlerta("Listo", "Tu solicitud de cotización se ha enviado con éxito", "success",  "success");
 
+            // this.comprasService.cambiarEstadoCotizacion(true);
             this.actualizarStatus.emit()
             this.isLoad = false;
             this.isDisabled = false;
           } else {
-            Swal.fire({
-              title: response.message,
-              text: "Revisa que el proveedor tenga un correo asignado",
-              buttonsStyling: false,
-              icon: "error",
-              customClass: {
-                confirmButton: "btn btn-success px-4",
-                cancelButton: "btn btn- ms-2 px-4",
-              },
-            });
+            this.alertasService.mostrarAlerta(response.message, "Revisa que el proveedor tenga un correo asignado", "error",  "danger");
             console.log(response.errors);
             this.isDisabled = false;
           }
@@ -175,4 +143,5 @@ export class PanelCotizacionesComponent implements OnInit {
     this.submitted = false;
     this.formProveedoresCotizacion.reset();
   }  
+
 }

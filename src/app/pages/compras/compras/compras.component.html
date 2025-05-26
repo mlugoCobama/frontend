@@ -7,7 +7,7 @@
             <h5 class="mb-0 card-title flex-grow-1">Solicitudes de Compra</h5>
             <div class="flex-shrink-0 d-flex gap-1">
               <a
-                *ngIf="status >= 3"
+                *ngIf="status >= enEsts.OrdenCompra || status === enEsts.Cancelado"
                 href="javascript:void(0);"
                 class="btn btn-sm btn-primary"
                 (click)="btnDescargarOC()"
@@ -16,7 +16,7 @@
               Descargar Orden de Compra
               </a>
               <a
-                *ngIf="status === 2  && mostrarBoton"
+                *ngIf="status === enEsts.EnCotizacion  && mostrarBoton"
                 href="javascript:void(0);"
                 class="btn btn-primary btn-sm"
                 (click)="btnGenerarOC()"
@@ -37,18 +37,20 @@
                 href="javascript:void(0);"
                 class="btn btn-dark btn-sm"
                 (click)="regresar()"
-                >Volver</a
+                >
+              <i class=" mdi mdi-arrow-left"></i>
+                Volver</a
               >
               <a
-                *ngIf="status === 1 && !comprasService.mostrarCotizacionSource.value"
+                *ngIf="status === enEsts.Solicitado && !comprasService.mostrarCotizacionSource.value"
                 href="javascript:void(0);"
                 class="btn btn-info btn-sm"
                 (click)="mostrarCotizacion()"
                 >Cotizar</a
               >
               <a
-                *ngIf="status >= 2 && status != 5 && status != 8 &&
-                  !comprasService.mostrarCotizacionSource.value"
+                *ngIf="status >= enEsts.Solicitado && status < enEsts.Autorizado &&
+                  !comprasService.mostrarCotizacionSource.value &&  status != enEsts.Cancelado"
                 href="javascript:void(0);"
                 class="btn btn-danger btn-sm"
                 (click)="cancelarSolicitud()"
@@ -59,8 +61,6 @@
         </div>
 
         <div *ngIf="!solicitudSelecionada" class="card-body border-bottom">
-          
-
             <div class="d-flex justify-content-center" *ngIf="isLoad">
               <div class="spinner-border" role="status">
                 <span class="visually-hidden">Loading...</span>
@@ -84,7 +84,7 @@
                       <th (click)="ordenarPor('folio')" style="cursor: pointer;">Folio <i [ngClass]="getIconoOrden('folio')"></i></th>
                       <th (click)="ordenarPor('empresa')" style="cursor: pointer;">Empresa <i [ngClass]="getIconoOrden('empresa')"></i></th>
                       <th (click)="ordenarPor('usuario_solicita')" style="cursor: pointer;">Solicita <i [ngClass]="getIconoOrden('usuario_solicita')"></i></th>
-                      <th (click)="ordenarPor('usuario_destino')" style="cursor: pointer;">Usuario Destino <i [ngClass]="getIconoOrden('usuario_destino')"></i> </th>
+                      <th (click)="ordenarPor('usuario_destino')" style="cursor: pointer;"> Destino <i [ngClass]="getIconoOrden('usuario_destino')"></i> </th>
                       <th (click)="ordenarPor('fecha')" style="cursor: pointer;">Fecha Solicitud <i [ngClass]="getIconoOrden('fecha')"></i></th>
                       <th (click)="ordenarPor('estado')" class="text-center" style="cursor: pointer;">Estatus <i [ngClass]="getIconoOrden('estado')"></i></th>
                     </tr>
@@ -95,9 +95,10 @@
                       (dblclick)="openDetallesSolicitud(item, $event)"
                     >
                       <td>{{ item.folio }}</td>
-                      <td>{{ item.empresa || 'CAS'}}</td>
-                      <td>{{ item.usuario_solicita}}</td>
-                      <td>{{ item.usuario_destino}}</td>
+                      <td>{{ item.empresa || 'CAS' }}</td>
+                      <td>{{ item.usuario_solicita }}</td>
+                      <td *ngIf = "item.c_c === 0">{{ item.usuario_destino }}</td>
+                      <td *ngIf = "item.c_c > 0">{{item.centro_costo}}</td>
                       <td>{{ item.fecha | date:'dd/MM/yyyy h:mm a' }}</td>
                       <td>
                         <div class="text-center">
@@ -128,8 +129,6 @@
 <ng-template #elseBlock>
   <div class="text-center text-muted">
     <Strong>No hay solicitudes para mostrar...</Strong>
-
   </div>
-  
 </ng-template>
 <!-- container-fluid -->

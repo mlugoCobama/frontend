@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, EventEmitter } from "@angular/core";
 import { UsuariosService } from "src/app/core/services/compras/usuarios.service";
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
+import catCentrosCostos from "src/environments/cat_centros_costos.json";
 
 import {
   FormBuilder,
@@ -14,6 +15,7 @@ import Swal from "sweetalert2";
 //services
 import { ComprasService } from "src/app/core/services/compras/compras.service";
 import { CatUnidadesMedidasService } from "src/app/core/services/compras/unidadesMedidas/cat-unidades-medidas.service";
+import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 import { first } from "rxjs";
 
 @Component({
@@ -32,6 +34,8 @@ export class ModalComprasComponent implements OnInit {
   public formSolicitudCompra: FormGroup;
   public formDetalleSolicitud: FormGroup;
 
+  public centrosCostos = catCentrosCostos;
+
   // public text: string = "";
   // public longitudMaxima: number = 150;
   // public caracteresRestantes: number = this.longitudMaxima;
@@ -41,7 +45,18 @@ export class ModalComprasComponent implements OnInit {
   public detalles: any;
   public empresas: any;
   public usuarios: any;
-  public usuarioSolicita: any;
+  public usuarioSolicita: any = {
+    id: null,
+    firstname: "",
+    realname: "",
+    name: "",
+    puesto: "",
+    Telfono: "",
+    direccion: "",
+    intercompania: 333,
+    empresa: "",
+    isAgencia: false
+    };
 
   public event: EventEmitter<any> = new EventEmitter();
   public tableData: Array<any> = [];
@@ -58,6 +73,7 @@ export class ModalComprasComponent implements OnInit {
    */
   constructor(
     private catUnidadesMedidasService: CatUnidadesMedidasService,
+    private alertasService: SwalComprsServiceService,
     private usuariosService: UsuariosService,
     private comprasService: ComprasService,
     private localStorage: LocalStorageServiceService,
@@ -71,6 +87,11 @@ export class ModalComprasComponent implements OnInit {
     this.buildForm();
     this.getUsuarioActivo();
   }
+
+  public interAgencias = [
+    7102, 7075, 7074, 7072, 7071, 7064, 7063, 7062, 7061, 7051, 712, 710, 706,
+  ];
+  public isAgencia: boolean = false;
 
   /**
    * Recupera el catalogo de empresas (Select empresa)
@@ -96,24 +117,33 @@ export class ModalComprasComponent implements OnInit {
    */
   public getUsuarioActivo() {
     const usuarioActivo = this.localStorage.getItem("currentUser");
-    /** ****************************************************************************
-     * !------------------------------IMPORTANTE------------------------------------
-     * TODO cambiar esta linea para que recupere el usuario activo en base al correo
-     *******************************************************************************/
-    this.usuariosService.getUserById(usuarioActivo['role']['email']).subscribe(
-    // this.usuariosService.getUserById("mlugo@cobama.com.mx").subscribe(
+
+    this.usuariosService.getUserById(usuarioActivo["role"]["email"]).subscribe(
+      // this.usuariosService.getUserById("mlugo@cobama.com.mx").subscribe(
       (response) => {
-        if (response.status === 'success') {
-          this.usuarioSolicita = response.data;
+        if (response.status === "success") {
+
+          this.usuarioSolicita = response.data[0];
+          this.getUsuarios(this.usuarioSolicita.intercompania);
+          this.formSolicitudCompra.patchValue({empresa :  this.usuarioSolicita.intercompania});
+          // console.log(this.usuarioSolicita);
+
         } else {
-          console.log(response.message);
+          this.alertasService.mostrarAlerta(
+            response.message,
+            "Intente iniciar sesión nuevamente",
+            "warning",
+            "warning"
+          );
+
+          this.cerrarModal();
+          return;
         }
       },
       (error) => {
         console.error("Error fetching data:", error);
       }
     );
-
   }
 
   /**
@@ -124,19 +154,21 @@ export class ModalComprasComponent implements OnInit {
     this.usuarios = [];
     this.isLoad = false;
     this.disabled = false;
-    if(intercompania != ""){
+    this.isAgencia = this.interAgencias.some((num) => num === Number(intercompania));
+    if (intercompania != "" && this.isAgencia === false) {
       this.usuariosService.getUsuariosEmpresas(intercompania).subscribe(
         (response) => {
           if (response) {
-            if(response.data.length > 0 ){
+            if (response.data.length > 0) {
               this.usuarios = response.data;
               this.isLoad = true;
-            }else{
-              this.usuarios = [{id: 0, firstname: "No hay datos", realname: "",  puesto: '' }]
+            } else {
+              this.usuarios = [
+                { id: 0, firstname: "No hay datos", realname: "", puesto: "" },
+              ];
               this.isLoad = true;
-              this.disabled =  true;
+              this.disabled = true;
             }
-            
           } else {
             console.log(response.message);
           }
@@ -145,12 +177,18 @@ export class ModalComprasComponent implements OnInit {
           console.error("Error fetching data:", error);
         }
       );
-    }else{
-        this.usuarios = [{id: 0, firstname: " Debes seleccionar una empresa", realname: "",  puesto: '' }]
-        this.isLoad = true;
-        this.disabled =  true;
+    } else {
+      this.usuarios = [
+        {
+          id: 0,
+          firstname: " Debes seleccionar una empresa",
+          realname: "",
+          puesto: "",
+        },
+      ];
+      this.isLoad = true;
+      this.disabled = true;
     }
-    
   }
 
   /**
@@ -159,22 +197,18 @@ export class ModalComprasComponent implements OnInit {
   private buildForm() {
     return new Promise((resolve, reject) => {
       this.formSolicitudCompra = this.formBuilder.group({
-        usuario: new FormControl(null, Validators.required),
-        usuario_destino: new FormControl(null, Validators.required),
+        empresa: new FormControl("", Validators.required),
+        usuario_destino: new FormControl(""),
+        c_c: new FormControl(0),
         motivo: new FormControl(null, Validators.required),
       });
       this.formDetalleSolicitud = this.formBuilder.group({
         cantidad: new FormControl(null, Validators.required),
-        cat_unidades_medida_id: new FormControl(null, Validators.required),
-        descripcion: new FormControl(null, [
-          Validators.required,
-          // Validators.maxLength(150),
-        ]),
-        observaciones: new FormControl(null, [
-          // Validators.required,
-          // Validators.maxLength(45),
-        ]),
+        cat_unidades_medida_id: new FormControl("", Validators.required),
+        descripcion: new FormControl(null, [Validators.required]),
+        observaciones: new FormControl(null, []),
         img_referencia: new FormControl(null),
+        cat_areas: new FormControl(""),
       });
       resolve(true);
     });
@@ -189,7 +223,7 @@ export class ModalComprasComponent implements OnInit {
 
   /**
    * Guarda el contenido del la solicitud y detalles
-   * @returns 
+   * @returns
    */
   public save() {
     this.submitted = true;
@@ -197,43 +231,46 @@ export class ModalComprasComponent implements OnInit {
 
     if (this.formSolicitudCompra.invalid) {
       this.isLoad = false;
-      Swal.fire({
-        title: "Alerta",
-        text: "Debes llenar correctamente todos los campos",
-        buttonsStyling: false,
-        icon: "warning",
-        customClass: {
-          confirmButton: "btn btn-warning px-4",
-          cancelButton: "btn btn- ms-2 px-4",
-        },
-      });
+
+      this.alertasService.mostrarAlerta(
+        "Alerta",
+        "Debes llenar correctamente todos los campos",
+        "warning",
+        "warning"
+      );
+
       return;
     }
 
     /**
      * Valido que el usuario ingrese por lo menos un detalle
-     */ 
+     */
     if (this.tableData.length === 0) {
       this.isLoad = false;
-      Swal.fire({
-        title: "Alerta",
-        text: "Agrega por lo menos un elemento a la solicitud",
-        buttonsStyling: false,
-        icon: "warning",
-        customClass: {
-          confirmButton: "btn btn-warning px-4",
-          cancelButton: "btn btn- ms-2 px-4",
-        },
-      });
+
+      this.alertasService.mostrarAlerta(
+        "Alerta",
+        "Agrega por lo menos un elemento a la solicitud",
+        "warning",
+        "warning"
+      );
+
       return;
     }
 
     const data = {
       ...this.formSolicitudCompra.value,
-      users_id: "1",
       usuario_solicita: this.usuarioSolicita.id,
       detalles: this.tableData,
     };
+
+    if(!this.isAgencia){
+      data.c_c = 0;
+    }
+    
+    if (this.isAgencia) {
+      data.usuario_destino = this.usuarioSolicita.id;
+    }
 
     const formDataToSend = new FormData();
     formDataToSend.append("data", JSON.stringify(data));
@@ -241,7 +278,10 @@ export class ModalComprasComponent implements OnInit {
     //agrega los detalles al form data para enviarlos
     this.tableData.forEach((detalle, index) => {
       if (detalle.img_referencia) {
-        formDataToSend.append(`img_referencia_${index}`, detalle.img_referencia);
+        formDataToSend.append(
+          `img_referencia_${index}`,
+          detalle.img_referencia
+        );
       }
     });
 
@@ -250,42 +290,29 @@ export class ModalComprasComponent implements OnInit {
         if (response.status === "success") {
           this.event.emit(true);
           this.showTable = true;
-          Swal.fire({
-            title: "Guardado",
-            text: "Solicitud registrada correctamente",
-            buttonsStyling: false,
-            icon: "success",
-            customClass: {
-              confirmButton: "btn btn-success px-4",
-              cancelButton: "btn btn- ms-2 px-4",
-            },
-          });
-        } else {
 
-          // Swal.fire({
-          //   title: "Error",
-          //   text: "Hubo un error al guardar la solicitud",
-          //   buttonsStyling: false,
-          //   icon: "warning",
-          //   customClass: {
-          //     confirmButton: "btn btn-warning px-4",
-          //     cancelButton: "btn btn- ms-2 px-4",
-          //   },
-          // });
-          // console.log(response.message);
-          this.mostrarErrores(response.message);
+          this.alertasService.mostrarAlerta(
+            "Guardado",
+            "Solicitud registrada correctamente",
+            "success",
+            "success"
+          );
+
+          this.cerrarModal();
+        } else {
+          this.alertasService.mostrarAlerta("Error", response.message, "warning", "warning");
+
+          return;
         }
       },
       (error) => {
-        console.error("Error fetching data:", error);
+        this.alertasService.mostrarAlerta("Error", error, "warning", "warning");
       }
     );
 
     this.tableData = [];
-    this.modalRef.hide();
     this.submitted = false;
     this.formSolicitudCompra.reset();
-
   }
 
   /**
@@ -312,7 +339,6 @@ export class ModalComprasComponent implements OnInit {
     this.unidad = selectedText;
   }
 
-  
   /**
    * Función que captura el archivo en el input
    * @param event evento capturado del input
@@ -333,28 +359,33 @@ export class ModalComprasComponent implements OnInit {
     descripcion: "",
     observaciones: "",
     img_referencia: null,
+    // cat_areas: "",
   };
 
   /**
    *  Agrega los detalles a el array detalle para después mostrarlo en la tabla
-   */ 
+   */
   public addDetalle() {
     if (this.formDetalleSolicitud.invalid) {
       this.submittedDetail = true;
       return;
     }
+
     const valores = this.formDetalleSolicitud.value;
 
     const newDetalle = {
       ...this.formDetalleSolicitud.value,
       cat_unidades_medida_id1: this.unidad,
       img_referencia1: valores.img_referencia,
+      // cat_areas: (this.centrosCostos[this.formSolicitudCompra.value.c_c-1].Clave)
     };
 
     if (this.formData.has("img_referencia")) {
-      newDetalle.img_referencia1 = URL.createObjectURL(this.formData.get("img_referencia") as Blob);
+      newDetalle.img_referencia1 = URL.createObjectURL(
+        this.formData.get("img_referencia") as Blob
+      );
     }
-    
+
     if (this.formData.has("img_referencia")) {
       newDetalle.img_referencia = this.formData.get("img_referencia") as File;
     }
@@ -400,19 +431,19 @@ export class ModalComprasComponent implements OnInit {
     );
   }
 
-  mostrarErrores(errores: any){
-    let mensajes = '';
-    for (let campo in errores){
-      mensajes += `${errores[campo].join(', ')}\n`
+  mostrarErrores(errores: any, mensaje: any) {
+    let mensajes = "";
+    for (let campo in errores) {
+      mensajes += `${errores[campo].join(", ")} \n`;
     }
 
     Swal.fire({
-      icon: 'error',
-      title: 'Errores de validacion',
+      icon: "error",
+      title: mensaje,
       text: mensajes,
-    customClass:{
-     popup : 'text-start'
-    }
-      })
+      customClass: {
+        popup: "text-start",
+      },
+    });
   }
 }

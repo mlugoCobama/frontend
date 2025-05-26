@@ -1,7 +1,5 @@
 import { Component , Input, OnInit} from '@angular/core';
 import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
-import { EnergeticosGaserasService } from 'src/app/core/services/dashboard/energeticos-gaseras.service';
-import { Subject, Subscription } from "rxjs";
 import { formatNumber } from '@angular/common';
 
 @Component({
@@ -11,16 +9,15 @@ import { formatNumber } from '@angular/common';
 })
 export class GraficaRadialComponent implements OnInit{
   @Input() concepto: string;
+  @Input() tipo:any;
 
   public dataEnergeticos: any;
-
-  private actualizarDatosSubscripcion: Subscription;
 
   public dataAnual: any = [];
 
   public dataAnualAnt: any = [];
 
-  public total: number;
+  public total: number = 0;
   public total2: string = "0";
   private labels: any;
   private serie: any;
@@ -30,7 +27,6 @@ export class GraficaRadialComponent implements OnInit{
   public options = {
     series: [44, 55, 67, 83],
     chart: {
-      // height: 350,
       type: "radialBar"
     },
     plotOptions: {
@@ -59,7 +55,6 @@ export class GraficaRadialComponent implements OnInit{
 
     constructor(
       private localStorage: LocalStorageServiceService,
-      private gaseras : EnergeticosGaserasService
     ) {}
 
     ngOnInit(): void {

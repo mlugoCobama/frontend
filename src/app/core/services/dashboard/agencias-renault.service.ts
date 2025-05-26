@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, Subject } from "rxjs";
-
+import { ResponseAgenciasNissan} from "../../models/dashboard/agencias-nissan";
 import { environment } from "src/environments/environment";
 
 @Injectable({
@@ -56,5 +56,14 @@ export class AgenciasRenaultService {
     return this.http.get(
       environment.apiUrl + "show-agencia-renault/" + mes + "/" + anio
     );
+  }
+
+  /**
+    * Devuelve los datos de mes y mesAnt Renault
+    * @returns Data anual de agencias Renault
+    */
+  public getAnual(subdivision:number, mes:number, anio:number): Observable<ResponseAgenciasNissan> {
+    return this.http.get<ResponseAgenciasNissan>(environment.apiUrl +"dashboard/agencia-renault/"+ subdivision + '/' + mes + '/' + anio);
+
   }
 }

@@ -66,7 +66,7 @@ export class AgenciasService {
      * Devuelve los datos de mes y mesAnt nissan
      * @returns Data anual de agencias nissan
      */
-    public getAnual(): Observable<ResponseAgenciasNissan> {
-        return this.http.get<ResponseAgenciasNissan>(environment.apiUrl +"dashboard/agencia-nissan/4/4/2025");
+    public getAnual(subdivision:number, mes:number, anio:number): Observable<ResponseAgenciasNissan> {
+        return this.http.get<ResponseAgenciasNissan>(environment.apiUrl +"dashboard/agencia-nissan/"+ subdivision + '/' + mes + '/' + anio);
     }
 }
