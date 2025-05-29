@@ -13,32 +13,23 @@
                         </tr>
                     </thead>
                     <tbody class="table-group-divider">
-                        <tr *ngFor="let item of dataEnergeticos.mes; let i = index;" >
-                            <td>{{ dataEnergeticos.mes[i]['entidad'] || dataEnergeticos.mesAnt[i]['entidad'] || dataEnergeticos.anioAnt[i]['entidad'] }}</td>
+                        <tr (click)="seleccionar(item.id, $event)" *ngFor="let item of dataEnergeticos.mes; let i = index;" >
+                            <td>{{ dataEnergeticos.mes[i]['entidad'] }}</td>
                             <td  *ngIf="dataEnergeticos.mesAnt.length > 1; else celdaVacia"  class="text-end" [ngClass]="{'text-danger': dataEnergeticos.mesAnt[i][concepto] < 0 }">{{ dataEnergeticos.mesAnt[i][concepto] || 0 | number }}</td>
                             <td  *ngIf="dataEnergeticos.mes.length > 1; else celdaVacia" class="text-end" [ngClass]="{'text-danger': dataEnergeticos.mes[i][concepto] < 0 }">{{ dataEnergeticos.mes[i][concepto] || 0 | number }}</td>
                             <td  *ngIf="dataEnergeticos.anioAnt.length > 1; else celdaVacia" class="text-end" [ngClass]="{'text-danger': dataEnergeticos.anioAnt[i][concepto] < 0 }">{{ dataEnergeticos.anioAnt[i][concepto] || 0 | number}}</td>
+                            <td class="text-end">
+                            <div *ngIf="( dataEnergeticos.mes[i][concepto]  > (dataTotales[2][0][this.concepto] != null ? dataEnergeticos.anioAnt[i][concepto] : 0) );else templateName" >
+                                <i class='bx bx-up-arrow-alt fs-3 text-success'></i>
+                                </div>
+                                    <ng-template #templateName>
+                                    <i class='bx bx-down-arrow-alt fs-3 text-danger' ></i>
+                                    </ng-template>
+                            </td> 
                             <ng-template #celdaVacia><td class="text-end"> 0 </td></ng-template>
+
                         </tr>
                     </tbody>
-                    <!-- <thead>
-                        <tr >
-                            <th scope="col">Empresa</th>
-                            <th scope="col" class="text-center" (click)="ordenarPor('mesAnt')">Mes Anterior<i [ngClass]="getIconoOrden('mesAnt')"></i></th>
-                            <th scope="col" class="text-center" (click)="ordenarPor('mes')">Mes Actual<i [ngClass]="getIconoOrden('mes')"></i></th>
-                            <th scope="col" class="text-center" (click)="ordenarPor('anioAnt')">Mes Año Anterior<i [ngClass]="getIconoOrden('anioAnt')"></i></th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-group-divider">
-                        <tr *ngFor="let item of datosFiltrados;" >
-                            <td>{{ item.entidad }}</td>
-                            <td *ngIf="dataEnergeticos.mesAnt.length > 1; else celdaVacia" class="text-end" [ngClass]="{'text-danger': item.mesAnt < 0 }">{{ item.mesAnt || 0 | number }}</td>
-                            <td *ngIf="dataEnergeticos.mes.length > 1; else celdaVacia"class="text-end" [ngClass]="{'text-danger': item.mes < 0 }">{{ item.mes || 0 | number }}</td>
-                            <td *ngIf="dataEnergeticos.anioAnt.length > 1; else celdaVacia" class="text-end" [ngClass]="{'text-danger': item.anioAnt < 0 }">{{ item.anioAnt || 0 | number}}</td>
-                            <ng-template #celdaVacia><td class="text-end"> 0 </td></ng-template>
-                        </tr>
-                    </tbody> -->
-
                     <tfoot>
                         <tr>
                             <td><b>Total</b></td>

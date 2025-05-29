@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 
+
 @Component({
   selector: 'app-totales-grafica',
   templateUrl: './totales-grafica.component.html',
@@ -37,6 +38,9 @@ export class TotalesGraficaComponent {
               enabled: true
           }
       },
+      xaxis:{
+       type: 'datetime'
+      },
       stroke: {
           curve: 'smooth',
           width: 2,
@@ -57,7 +61,10 @@ export class TotalesGraficaComponent {
               enabled: false
           },
           x: {
-              show: false
+              formatter:  function(value){
+                const fecha =  new Date(value)
+              return fecha.toLocaleDateString('es-ES', {month : 'short', year : 'numeric'});
+              }
           },
           marker: {
               show: false
@@ -95,9 +102,11 @@ export class TotalesGraficaComponent {
         break;
       case 'utilidad_bruta':
         this.title = 'Utilidad Bruta';
+        this.money = '$';
         break; 
       case 'ubo':
         this.title = 'UBO';
+        this.money = '$';
         break;
       case 'eficiencia':
         this.title = 'Eficiencia';
@@ -112,13 +121,21 @@ export class TotalesGraficaComponent {
         this.money = '$';
         break;
       default:
+        this.title = this.capitalizeFirstLetter(this.concepto);
+        this.money = ''
         break;
     }
   }
 
+  private capitalizeFirstLetter(val) {
+    return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+  }
+
   private setDataSerie(){
     for (let i = 0; i < this.totalAnio.length; i++) {
-      this.dataSerie.push( this.totalAnio[i][this.concepto] || 0 );
+      this.dataSerie.push( [new Date(this.totalAnio[i]['fecha']).getTime() , this.totalAnio[i][this.concepto] || 0] );
+      // this.dataSerie.push( [new Date(this.totalAnio[i]['fecha']).getTime() , this.totalAnio[i][this.concepto] || 0] );
+
     }
   }
 }

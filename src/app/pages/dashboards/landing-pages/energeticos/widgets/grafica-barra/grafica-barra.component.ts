@@ -84,6 +84,10 @@ export class GraficaBarraComponent implements OnInit {
           17.8, 25.6,
         ],
         type: "bar",
+        zones:[{
+          value: 0,
+          color: 'red'
+        }]
       },
     ],
     responsive: {
@@ -176,7 +180,8 @@ export class GraficaBarraComponent implements OnInit {
       this.generarSerie();
       this.chartOptions.series = this.dataMensual;
       this.chartOptions.xAxis["categories"] = this.labels;
-      const tamanioGrafica = 150 + ((this.dataEnergeticos.mes.length - 1) * 28);
+      // const tamanioGrafica = 150 + ((this.dataEnergeticos.mes.length - 1) * 28);
+      const tamanioGrafica = 117 + ((this.dataEnergeticos.mes.length - 1) * 36.87);
       this.chartOptions.chart.height = tamanioGrafica;
     } else {
       this.chartOptions.series = [{
@@ -212,6 +217,13 @@ export class GraficaBarraComponent implements OnInit {
         this.obtenerPeriodo().toUpperCase()
       ),
       type: "bar",
+      zones:[
+        {value: 0,
+         color: '#FF2929' 
+        },// {
+        //   color: '#3D3BF3' 
+        // }
+      ]
     };
   }
 

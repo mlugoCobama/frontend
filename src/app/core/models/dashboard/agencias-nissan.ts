@@ -10,7 +10,7 @@ export interface AgenciasNissan {
   // personal? : number,
   // ubo : number,
   // eficiencia? : number,
-
+    id : number,
     planta: string;
     estacion: string;
     fecha: Date;

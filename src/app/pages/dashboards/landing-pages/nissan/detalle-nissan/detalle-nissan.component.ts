@@ -21,6 +21,8 @@ export class DetalleNissanComponent implements OnInit {
 
   public titulo: any;
 
+  public tipo:any =  "autos";
+  
   public isLoad: boolean = true;
 
   public dataEnergeticos: any;
@@ -196,7 +198,10 @@ export class DetalleNissanComponent implements OnInit {
         break;
       case "total_ventas_ref":
         this.conceptos = ['ventas_servicio', 'refacciones_servicio', "refacciones_hyp", "refacciones_mostrador"]
-        break;     
+        break;
+      case "personal":
+        this.conceptos = ['personal_ventas', 'personal_usados', "personal_refacciones", "personal_servicios", "personal_admin", "personal_apvs",]
+        break;       
       default:
         this.conceptos = [this.concepto];
         break;

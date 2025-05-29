@@ -87,7 +87,7 @@ export class TendenciaComponent implements OnInit{
 
     this.dataAnual = {
         name: String(
-          new Date(this.dataEnergeticos.totalAnio[0]["fecha"]).getFullYear() + 1
+          new Date(this.dataEnergeticos.totalAnio[0]["fecha"]).getFullYear()
         ),
         data: dataAnual,
         type: "line",
@@ -95,7 +95,7 @@ export class TendenciaComponent implements OnInit{
     
     this.dataAnualAnt = {
         name: String(
-          new Date(this.dataEnergeticos.totalAnioAnt[0]["fecha"]).getFullYear() + 1
+          new Date(this.dataEnergeticos.totalAnioAnt[0]["fecha"]).getFullYear()
         ),
         data:  dataAnualAnt,
         type: "line",
@@ -115,9 +115,11 @@ export class TendenciaComponent implements OnInit{
       dashStyle: "ShortDash",
       color: "#f39c12",
       marker: {
-        enabled: true,
-        
+        enabled: false,
       },
+      dataLabels: {
+        enabled: false
+      }
     };
     return serie;
   }

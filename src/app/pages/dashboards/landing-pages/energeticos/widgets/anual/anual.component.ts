@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, AfterViewInit} from "@angular/core";
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
 import { EnergeticosGaserasService } from "src/app/core/services/dashboard/energeticos-gaseras.service";
 import { Subject, Subscription } from "rxjs";
@@ -10,7 +10,7 @@ import * as Highcharts from "highcharts";
   templateUrl: "./anual.component.html",
   styleUrls: ["./anual.component.css"],
 })
-export class AnualComponent implements OnInit {
+export class AnualComponent implements OnInit{
   @Input() concepto: string;
   @Input() titulo: string;
   private dataEnergeticos: any;
@@ -83,14 +83,15 @@ export class AnualComponent implements OnInit {
     private gaseras: EnergeticosGaserasService
   ) {}
 
-  ngOnInit(): void {
-    this.inicializarGrfica();
-    this.actualizarDatosSubscripcion = this.gaseras.actualizarData$.subscribe(
-      () => {
-        this.actualizarGrafica();
-      }
-    );
-  }
+   ngOnInit(): void {
+   this.inicializarGrfica();
+   this.actualizarDatosSubscripcion = this.gaseras.actualizarData$.subscribe(
+       () => {
+         this.actualizarGrafica();
+       }
+     );
+   }
+
 
   public chart: any;
   private inicializarGrfica() {
@@ -101,7 +102,7 @@ export class AnualComponent implements OnInit {
 
     let serie = [this.dataAnualAnt, this.dataAnual, prediccion2];
     this.chartOptions.series = serie;
-    this.chartOptions.title.text =  `Anual: ${this.concepto.replace('_',' ')}`
+    this.chartOptions.title.text =  `Anual: ${this.concepto.replace('_',' ')}-${this.setTitle()}`
     this.updateFlag = true;
   }
 
@@ -109,11 +110,26 @@ export class AnualComponent implements OnInit {
     this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
     this.serieAnio();
     this.serieAnioAnt();
-
     const prediccion2 = this.seriePrediccion(this.dataAnual);
     let serie = [this.dataAnualAnt, this.dataAnual, prediccion2];
     this.chartOptions.series = serie;
+    this.chartOptions.title.text =  `Anual: ${this.concepto.replace('_',' ')}-${this.setTitle()}`
     this.updateFlag = true;
+  }
+
+  public setTitle(){
+
+    switch (this.dataEnergeticos.totalAnio[0].estacion) {
+      case undefined:
+        return 'Total';
+        break;
+      case 'Planta':
+        return this.dataEnergeticos.totalAnio[0].entidad
+        break;
+      default:
+        return this.dataEnergeticos.totalAnio[0].estacion
+        break;
+    }
   }
 
   private serieAnio() {
@@ -128,7 +144,7 @@ export class AnualComponent implements OnInit {
 
       this.dataAnual = {
         name: String(
-          new Date(this.dataEnergeticos.totalAnio[0]["fecha"]).getFullYear() + 1
+          new Date(this.dataEnergeticos.totalAnio[0]["fecha"]).getFullYear() 
         ),
         data: data,
         type: "line",
@@ -155,13 +171,13 @@ export class AnualComponent implements OnInit {
         name: String(
           new Date(
             this.dataEnergeticos.totalAnioAnt[0]["fecha"]
-          ).getFullYear() + 1
+          ).getFullYear() 
         ),
         data: data,
         type: "line",
       };
     } else {
-      this.dataAnual = {
+      this.dataAnualAnt = {
         name: "sin datos",
         data: data,
         type: "line",
@@ -169,7 +185,7 @@ export class AnualComponent implements OnInit {
     }
   }
 
-  private seriePrediccion(data) {
+    private seriePrediccion(data) {
     const datos = [...this.dataAnualAnt.data, ...data.data];
     let serie;
     const prediccion = this.predecirRestantes(datos);
@@ -183,9 +199,12 @@ export class AnualComponent implements OnInit {
       dashStyle: "ShortDash",
       color: "#f39c12",
       marker: {
-        enabled: true,
+        enabled: false,
         
       },
+      dataLabels: {
+            enabled: false
+        }
     };
     return serie;
   }

@@ -28,6 +28,8 @@ export class DetalleGasolineriasComponent implements OnInit {
   public anioSeleccionado: any = 0;
   public nombreMes: any;
 
+  public tipo:any = "energeticos";
+
   private anioActual: any = new Date().getFullYear();
   private mesActual: any = new Date().getMonth();
 

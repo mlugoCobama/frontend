@@ -28,7 +28,7 @@ export class TotalesComponent implements AfterViewInit {
   public totalMes: number = 0;
   public totalMesAnt: number = 0;
 
-  private dataSerie: number[] = [];
+  private dataSerie: any[] = [];
 
   public options = {
     series: [{
@@ -46,6 +46,9 @@ export class TotalesComponent implements AfterViewInit {
           curve: 'smooth',
           width: 2,
       },
+      xaxis:{
+       type: 'datetime'
+      },
       colors: ['#f1b44c'],
       fill: {
           type: 'gradient',
@@ -58,11 +61,21 @@ export class TotalesComponent implements AfterViewInit {
           },
       },
       tooltip: {
+        style: {
+        fontSize: '12px',
+        fontFamily: undefined
+        },
           fixed: {
-              enabled: false
-          },
+          enabled: false,
+          position: 'topRight',
+          offsetX: 10,
+          offsetY: 10,
+         },
           x: {
-              show: false
+               formatter:  function(value){
+                 const fecha =  new Date(value)
+               return fecha.toLocaleDateString('es-ES', {month : 'short', year : 'numeric'});
+              }
           },
           marker: {
               show: false
@@ -129,7 +142,8 @@ export class TotalesComponent implements AfterViewInit {
 
   private setDataSerie(){
     for (let i = 0; i < this.totalAnio.length; i++) {
-      this.dataSerie.push( this.totalAnio[i][this.concepto] );
+      // this.dataSerie.push( this.totalAnio[i][this.concepto] );
+      this.dataSerie.push( [new Date(this.totalAnio[i]['fecha']).getTime() , this.totalAnio[i][this.concepto] || 0] );
     }
   }
 

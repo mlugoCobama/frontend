@@ -67,6 +67,13 @@ export class AgenciasService {
      * @returns Data anual de agencias nissan
      */
     public getAnual(subdivision:number, mes:number, anio:number): Observable<ResponseAgenciasNissan> {
-        return this.http.get<ResponseAgenciasNissan>(environment.apiUrl +"dashboard/agencia-nissan/"+ subdivision + '/' + mes + '/' + anio);
+        return this.http.get<ResponseAgenciasNissan>(
+          environment.apiUrl +"dashboard/agencia-nissan/"+ subdivision + '/' + mes + '/' + anio);
     }
+
+    public getAnualAgencia(id_agencia: number, anio: number): Observable<ResponseAgenciasNissan> {
+        return this.http.get<ResponseAgenciasNissan>(
+          environment.apiUrl + "agencias/anual-agencias/" + id_agencia + "/" + anio
+        );
+      }
 }
