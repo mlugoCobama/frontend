@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit , OnDestroy} from "@angular/core";
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
 import { EnergeticosGaserasService } from "src/app/core/services/dashboard/energeticos-gaseras.service";
 
@@ -11,7 +11,7 @@ import dataMeses from "src/environments/meses.json";
   templateUrl: "./grafica-barra.component.html",
   styleUrl: "./grafica-barra.component.css",
 })
-export class GraficaBarraComponent implements OnInit {
+export class GraficaBarraComponent implements OnInit, OnDestroy {
   @Input() concepto: string;
 
   private dataEnergeticos: any;
@@ -134,6 +134,11 @@ export class GraficaBarraComponent implements OnInit {
       }
     );
   }
+
+  ngOnDestroy(): void {
+     this.actualizarDatosSubscripcion.unsubscribe();
+   }
+
   // Inicializa los valores de la gráfica en base al localstorage
   private inicializarGrfica() {
     this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, AfterViewInit} from "@angular/core";
+import { Component, Input, OnInit, AfterViewInit, OnDestroy} from "@angular/core";
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
 import { EnergeticosGaserasService } from "src/app/core/services/dashboard/energeticos-gaseras.service";
 import { Subject, Subscription } from "rxjs";
@@ -10,7 +10,7 @@ import * as Highcharts from "highcharts";
   templateUrl: "./anual.component.html",
   styleUrls: ["./anual.component.css"],
 })
-export class AnualComponent implements OnInit{
+export class AnualComponent implements OnInit, OnDestroy{
   @Input() concepto: string;
   @Input() titulo: string;
   private dataEnergeticos: any;
@@ -91,6 +91,9 @@ export class AnualComponent implements OnInit{
        }
      );
    }
+   ngOnDestroy(): void {
+     this.actualizarDatosSubscripcion.unsubscribe();
+   }
 
 
   public chart: any;
@@ -102,7 +105,7 @@ export class AnualComponent implements OnInit{
 
     let serie = [this.dataAnualAnt, this.dataAnual, prediccion2];
     this.chartOptions.series = serie;
-    this.chartOptions.title.text =  `Anual: ${this.concepto.replace('_',' ')}-${this.setTitle()}`
+    this.chartOptions.title.text =  `Anual: ${this.formatearTexto(this.concepto)} - ${this.setTitle()}`
     this.updateFlag = true;
   }
 
@@ -113,9 +116,12 @@ export class AnualComponent implements OnInit{
     const prediccion2 = this.seriePrediccion(this.dataAnual);
     let serie = [this.dataAnualAnt, this.dataAnual, prediccion2];
     this.chartOptions.series = serie;
-    this.chartOptions.title.text =  `Anual: ${this.concepto.replace('_',' ')}-${this.setTitle()}`
+    this.chartOptions.title.text =  `Anual: ${this.formatearTexto(this.concepto)} - ${this.setTitle()}`
     this.updateFlag = true;
   }
+
+  
+
 
   public setTitle(){
 
@@ -130,6 +136,12 @@ export class AnualComponent implements OnInit{
         return this.dataEnergeticos.totalAnio[0].estacion
         break;
     }
+  }
+
+  public formatearTexto(texto){
+    const capitalCaseText= String(texto).charAt(0).toUpperCase() + String(texto).slice(1);
+    let textoFormateado = capitalCaseText.replace("_", " ")
+    return textoFormateado;
   }
 
   private serieAnio() {
@@ -191,7 +203,13 @@ export class AnualComponent implements OnInit{
     const prediccion = this.predecirRestantes(datos);
 
     const mesesExcluidos = data.data.map(() => null);
-    const seriePrediccion = mesesExcluidos.concat(prediccion);
+    let seriePrediccion = [];
+    if(mesesExcluidos.length < 12){
+      seriePrediccion = mesesExcluidos.concat(prediccion);
+    }else{
+      seriePrediccion = prediccion;
+    }
+    
     serie = {
       name: `Tendencia ${data.name}`,
       type: "line",

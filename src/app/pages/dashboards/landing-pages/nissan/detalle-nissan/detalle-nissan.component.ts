@@ -62,8 +62,7 @@ export class DetalleNissanComponent implements OnInit {
       this.mesSeleccionado = this.datepipe.transform(mes, 'MM');
       this.anioSeleccionado = this.datepipe.transform((new Date), 'yyyy');
       this. nombreMes = this.meses[Number(this.mesSeleccionado-1)]["nombre"];
-       
-      this.agencias  = (this.dataEnergeticos['mes']).map((item) => item.estacion).reverse();
+      this.agencias  = (this.dataEnergeticos['mes']).map((item) => item.estacion);
       this.dataAntInventario = this.dataEnergeticos['antInventarios'];
 
       this.filtrarInfo();

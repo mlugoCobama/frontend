@@ -94,11 +94,11 @@ export class TendenciaComponent implements OnInit{
       };
     
     this.dataAnualAnt = {
-        name: String(
-          new Date(this.dataEnergeticos.totalAnioAnt[0]["fecha"]).getFullYear()
-        ),
+        // name: String(
+        //   new Date(this.dataEnergeticos.totalAnioAnt[0]["fecha"]).getFullYear()
+        // ),
         data:  dataAnualAnt,
-        type: "line",
+        // type: "line",
       };
   }
     private seriePrediccion(data) {

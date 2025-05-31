@@ -1,0 +1,34 @@
+<div class="modal-header bg-dark text-white">
+  <h5>Detalle - {{ formatearTexto(concepto) }}</h5>
+  <button
+    type="button"
+    class="btn-close btn-close-white"
+    data-bs-dismiss="modal"
+    aria-label="Close"
+    id="close-modal"
+    (click)="modalRef?.hide()"
+  ></button>
+</div>
+<div class="modal-body">
+  <div class="d-flex justify-content-center" *ngIf="isLoad">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  <div class="row" *ngIf="!isLoad">
+    <div class="col-6">
+      <app-porcentajes-graficas
+        [concepto]="concepto"
+      ></app-porcentajes-graficas>
+    </div>
+    <div class="col-6">
+      <app-tabla [tipo]="tipo" [concepto]="concepto"></app-tabla>
+    </div>
+    <div class="col-12">
+      <app-anual [concepto]="concepto"></app-anual>
+    </div>
+  </div>
+</div>
+<div class="modal-footer  bg-dark text-white" >
+    <button (click)="modalRef?.hide()" type="button" class="btn btn-sm btn-secondary bg-dark-subtle text-white" data-dismiss="modal">Cerrar</button>
+</div>

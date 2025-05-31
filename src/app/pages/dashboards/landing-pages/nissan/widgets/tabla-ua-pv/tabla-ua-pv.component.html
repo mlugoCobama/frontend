@@ -1,0 +1,40 @@
+<div class="card">
+  <div class="card-body">
+    <div class="col-12 table-responsive">
+      <table class="table table-sm table-striped-columns">
+        <thead>
+          <tr>
+            <th scope="col">Punto de Venta</th>
+            <th scope="col" class="text-center">Mes Anterior</th>
+            <th scope="col" class="text-center">Mes Actual</th>
+            <th scope="col" class="text-center">Mes Año anterior</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr   *ngFor="let item of areas">
+            <td>{{ item }}</td>
+            <td> 0 </td>
+            <td> 0 </td>
+            <td> 0 </td>
+            <td>
+            <div>
+                  <i class='bx bx-up-arrow-alt fs-3 text-success'></i>
+                  </div>
+                  <ng-template #templateName>
+                  <i class='bx bx-down-arrow-alt fs-3 text-danger' ></i>
+                  </ng-template>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td><b>Total</b></td>
+            <td><b> 0 </b></td>
+            <td><b> 0 </b></td>
+            <td><b> 0 </b></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>

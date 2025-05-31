@@ -134,7 +134,7 @@ export class AntInventarioComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.chart.destroy();
+    this.actualizarDatosSubscripcion.unsubscribe();
   }
 
   /**

@@ -30,11 +30,6 @@ export class TablaComponent implements OnInit {
 
   private actualizarDatosSubscripcion: Subscription;
 
-    // varibles funciones tablas
-      datosFiltrados:any[] = [];
-      private ordenador!: FuncionesTablas<any>;
-      busqueda:string = '';
-
   constructor(
     private localStorage: LocalStorageServiceService,
     private gaseras: EnergeticosGaserasService,
@@ -58,8 +53,6 @@ export class TablaComponent implements OnInit {
     this.recuperarData();
 
     this.isLoad = false;
-    console.log(this.tipo);
-
     // this.reordenarData();
   }
 
