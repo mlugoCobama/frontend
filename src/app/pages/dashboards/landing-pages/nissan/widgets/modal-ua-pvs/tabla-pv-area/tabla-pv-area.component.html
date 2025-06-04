@@ -4,34 +4,34 @@
       <table class="table table-sm table-striped-columns">
         <thead>
           <tr>
-            <th scope="col">Punto de Venta</th>
+            <th scope="col">Area</th>
             <th scope="col" class="text-center">Mes Anterior</th>
             <th scope="col" class="text-center">Mes Actual</th>
             <th scope="col" class="text-center">Mes Año anterior</th>
           </tr>
         </thead>
         <tbody>
-          <tr (click)="openModalNuevo(item.pv, item.id)"  *ngFor="let item of datos">
-            <td>{{ item.pv }}</td>
-            <td> {{ item.mesAnt || 0 | number}} </td>
-            <td> {{ item.mes || 0 | number }} </td>
-            <td> {{ item.anioAnt || 0 | number}} </td>
-            <td>
-            <div *ngIf = "item.mes > item.anioAnt; else templateName">
+          <tr (click)="seleccionar(item)"  *ngFor="let item of areas">
+            <td>{{ formatearTexto(item) }}</td>
+            <td>{{ dataMesAnt[0][item] || 0  | number }}</td>
+            <td>{{ dataMes[0][item] || 0  | number}}</td>
+            <td>{{ dataAnioAnt[0][item] || 0 | number }}</td>
+            <td> 
+            <div *ngIf="(dataMes[0][item] > dataAnioAnt[0][item]);else templateName" >
                   <i class='bx bx-up-arrow-alt fs-3 text-success'></i>
-            </div>
-            <ng-template #templateName>
+                  </div>
+                  <ng-template #templateName>
                   <i class='bx bx-down-arrow-alt fs-3 text-danger' ></i>
-              </ng-template>
+                  </ng-template>
             </td>
           </tr>
         </tbody>
         <tfoot>
           <tr>
             <td><b>Total</b></td>
-            <td><b> {{ totalMesAnt | number }} </b></td>
-            <td><b> {{ totalMes | number }} </b></td>
-            <td><b> {{ totalAnioAnt | number }} </b></td>
+            <td><b> {{totalMesAnt || 0 | number}} </b></td>
+            <td><b> {{totalMes || 0 | number}} </b></td>
+            <td><b> {{totalAnioAnt || 0 | number}} </b></td>
           </tr>
         </tfoot>
       </table>

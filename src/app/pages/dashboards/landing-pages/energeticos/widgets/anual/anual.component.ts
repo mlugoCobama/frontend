@@ -47,6 +47,13 @@ export class AnualComponent implements OnInit, OnDestroy{
       title: {
         text: "Miles de Pesos",
       },
+      plotLines: [
+      {
+        color: '#7F8CAA',
+        width: 2,
+        value: 0
+      }
+    ],
     },
     tooltip: {
       shared: true,
@@ -146,7 +153,7 @@ export class AnualComponent implements OnInit, OnDestroy{
 
   private serieAnio() {
     let data: any = [];
-    if (this.dataEnergeticos.totalAnio.length > 1) {
+    if (this.dataEnergeticos.totalAnio.length > 0) {
       for (let i = 0; i < this.dataEnergeticos.totalAnio.length; i++) {
         const element = Number(
           this.dataEnergeticos.totalAnio[i][this.concepto]
@@ -172,7 +179,7 @@ export class AnualComponent implements OnInit, OnDestroy{
 
   private serieAnioAnt() {
     let data: any = [];
-    if (this.dataEnergeticos.totalAnioAnt.length > 1) {
+    if (this.dataEnergeticos.totalAnioAnt.length > 0) {
       for (let i = 0; i < this.dataEnergeticos.totalAnioAnt.length; i++) {
         const element = Number(
           this.dataEnergeticos.totalAnioAnt[i][this.concepto]
@@ -204,8 +211,8 @@ export class AnualComponent implements OnInit, OnDestroy{
 
     const mesesExcluidos = data.data.map(() => null);
     let seriePrediccion = [];
-    if(mesesExcluidos.length < 12){
-      seriePrediccion = mesesExcluidos.concat(prediccion);
+    if(mesesExcluidos.length <= 12){
+      seriePrediccion = mesesExcluidos.concat(prediccion.slice(mesesExcluidos.length-12, prediccion.length));
     }else{
       seriePrediccion = prediccion;
     }

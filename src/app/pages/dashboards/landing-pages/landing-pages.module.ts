@@ -36,6 +36,9 @@ import { AntInventarioComponent } from './nissan/widgets/ant-inventario/ant-inve
 import { TablaUtilidadAreaComponent } from './nissan/widgets/tabla-utilidad-area/tabla-utilidad-area.component';
 import { ModalDetalleComponent } from './nissan/widgets/modal-detalle/modal-detalle.component';
 import { TablaUaPvComponent } from './nissan/widgets/tabla-ua-pv/tabla-ua-pv.component';
+import { ModalDetallePvComponent } from './nissan/widgets/modal-ua-pvs/modal-detalle-pv/modal-detalle-pv.component';
+import { TablaPvAreaComponent } from './nissan/widgets/modal-ua-pvs/tabla-pv-area/tabla-pv-area.component';
+import { PieChartPvAreaComponent } from './nissan/widgets/modal-ua-pvs/pie-chart-pv-area/pie-chart-pv-area.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +72,9 @@ import { TablaUaPvComponent } from './nissan/widgets/tabla-ua-pv/tabla-ua-pv.com
     TablaUtilidadAreaComponent,
     ModalDetalleComponent,
     TablaUaPvComponent,
+    ModalDetallePvComponent,
+    TablaPvAreaComponent,
+    PieChartPvAreaComponent,
   ],
   imports: [
     CommonModule,

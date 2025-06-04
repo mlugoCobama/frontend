@@ -76,4 +76,10 @@ export class AgenciasService {
           environment.apiUrl + "agencias/anual-agencias/" + id_agencia + "/" + anio
         );
       }
+
+    public getMesUaPvs(mes: number, anio: number, subdivision:number): Observable<any> {
+        return this.http.get<any>(
+          environment.apiUrl + "dashboard/utilidad-area-pvs/" + mes + "/" + anio + "/" + subdivision
+        );
+      }  
 }

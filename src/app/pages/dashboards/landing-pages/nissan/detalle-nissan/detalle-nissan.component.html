@@ -102,14 +102,14 @@
     <div class="row" *ngIf="!isLoad">
       <div [ngClass]="conceptos.length === 1 ? 'col-xl-6' : 'col-xl-12'">
         <div class="row">
+          <div class="col-sm-12">
+            <app-tabla [tipo]="tipo" [concepto]="item"></app-tabla>
+          </div>
           <div *ngIf="titulo === 'utilidad area'" class="col-sm-12">
             <app-tabla-utilidad-area 
             [tipo]="tipo" 
             [concepto]="item">
           </app-tabla-utilidad-area>
-          </div>
-          <div class="col-sm-12">
-            <app-tabla [tipo]="tipo" [concepto]="item"></app-tabla>
           </div>
           <div *ngIf="titulo === 'utilidad area'" class="col-sm-12">
             <app-tabla-ua-pv 
