@@ -96,6 +96,8 @@ export class TotalesUtilidadGraficaComponent implements AfterViewInit {
     this.setDataSerie1();
     
     this.totalMes = this.dataMes.find((registro) => registro.estacion === "Total");
+    const  acumuladoMes = this.dataMes.filter((registro) => registro.estacion != "Total");
+    // console.log(acumuladoMes);
     this.totalMesAnt = this.dataMesAnterior.find((registro) => registro.estacion === "Total");
     this.diferencia = this.totalMes[this.concepto] - this.totalMesAnt[this.concepto];
     this.concepto2 = `utilidad_${this.concepto}`

@@ -21,6 +21,8 @@ export class AnualComponent implements OnInit, OnDestroy{
 
   public dataAnualAnt: any = [];
 
+  public dataAnualAnt2: any = [];
+
   Highcharts: typeof Highcharts = Highcharts;
   updateFlag = false;
   chartOptions: Highcharts.Options = {
@@ -108,9 +110,10 @@ export class AnualComponent implements OnInit, OnDestroy{
     this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
     this.serieAnio();
     this.serieAnioAnt();
-    const prediccion2 = this.seriePrediccion(this.dataAnual);
+    this.serieAnioAnt2();
+    // const prediccion2 = this.seriePrediccion(this.dataAnual);
 
-    let serie = [this.dataAnualAnt, this.dataAnual, prediccion2];
+    let serie = [this.dataAnualAnt2, this.dataAnualAnt, this.dataAnual];
     this.chartOptions.series = serie;
     this.chartOptions.title.text =  `Anual: ${this.formatearTexto(this.concepto)} - ${this.setTitle()}`
     this.updateFlag = true;
@@ -120,8 +123,9 @@ export class AnualComponent implements OnInit, OnDestroy{
     this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
     this.serieAnio();
     this.serieAnioAnt();
-    const prediccion2 = this.seriePrediccion(this.dataAnual);
-    let serie = [this.dataAnualAnt, this.dataAnual, prediccion2];
+    this.serieAnioAnt2();
+    // const prediccion2 = this.seriePrediccion(this.dataAnual);
+    let serie = [this.dataAnual, this.dataAnualAnt, this.dataAnualAnt2];
     this.chartOptions.series = serie;
     this.chartOptions.title.text =  `Anual: ${this.formatearTexto(this.concepto)} - ${this.setTitle()}`
     this.updateFlag = true;
@@ -197,6 +201,33 @@ export class AnualComponent implements OnInit, OnDestroy{
       };
     } else {
       this.dataAnualAnt = {
+        name: "sin datos",
+        data: data,
+        type: "line",
+      };
+    }
+  }
+
+  private serieAnioAnt2() {
+    let data: any = [];
+    if (this.dataEnergeticos.totalAnioAnt2.length > 0) {
+      for (let i = 0; i < this.dataEnergeticos.totalAnioAnt2.length; i++) {
+        const element = Number(
+          this.dataEnergeticos.totalAnioAnt2[i][this.concepto]
+        );
+        data.push(element);
+      }
+      this.dataAnualAnt2 = {
+        name: String(
+          new Date(
+            this.dataEnergeticos.totalAnioAnt2[0]["fecha"]
+          ).getFullYear() 
+        ),
+        data: data,
+        type: "line",
+      };
+    } else {
+      this.dataAnualAnt2 = {
         name: "sin datos",
         data: data,
         type: "line",

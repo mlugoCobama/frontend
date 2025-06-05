@@ -39,6 +39,7 @@ import { TablaUaPvComponent } from './nissan/widgets/tabla-ua-pv/tabla-ua-pv.com
 import { ModalDetallePvComponent } from './nissan/widgets/modal-ua-pvs/modal-detalle-pv/modal-detalle-pv.component';
 import { TablaPvAreaComponent } from './nissan/widgets/modal-ua-pvs/tabla-pv-area/tabla-pv-area.component';
 import { PieChartPvAreaComponent } from './nissan/widgets/modal-ua-pvs/pie-chart-pv-area/pie-chart-pv-area.component';
+import { ChartHhistoricaComponent } from './energeticos/widgets/chart-hhistorica/chart-hhistorica.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import { PieChartPvAreaComponent } from './nissan/widgets/modal-ua-pvs/pie-chart
     ModalDetallePvComponent,
     TablaPvAreaComponent,
     PieChartPvAreaComponent,
+    ChartHhistoricaComponent,
   ],
   imports: [
     CommonModule,

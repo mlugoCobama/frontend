@@ -74,7 +74,6 @@ ngAfterViewInit(): void {
   public copiaData:any;
 
     public seleccionar(concepto) {
-      console.log('Click');
       this.actualizarConcepto.emit(concepto);
     }
 }

@@ -69,7 +69,7 @@ export class TablaUaPvComponent implements AfterViewInit {
   }
  }
 
-  public calcularSumas(){
+  public calcularSumas2(){
     let totales = [];
     this.pvs = this.mes.filter((fila) => fila.estacion != 'Total').map(objeto => objeto.estacion);
      for (let i = 0; i < this.pvs.length; i++) {
@@ -99,6 +99,31 @@ export class TablaUaPvComponent implements AfterViewInit {
     this.totalAnioAnt = totalAnioAnt.reduce(function (a,b) {return a + b;});
 
   }
+
+  public calcularSumas() {
+    this.pvs = this.mes.filter(fila => fila.estacion !== 'Total').map(objeto => objeto.estacion);
+
+    this.datos = this.pvs.map((pv, i) => {
+        const obtenerSuma = (data: any[]) => this.areas.map(area => Number(data[i][area] ?? 0)).reduce((a, b) => a + b, 0);
+
+        const sumaMes = obtenerSuma(this.mes);
+        const sumaMesAnt = obtenerSuma(this.mesAnt);
+        const sumaAnioAnt = obtenerSuma(this.anioAnt);
+
+        return (sumaMes || sumaMesAnt || sumaAnioAnt) ? { id: i + 30, pv, mes: sumaMes, mesAnt: sumaMesAnt, anioAnt: sumaAnioAnt } : null;
+    }).filter(Boolean);
+
+    const totales = this.datos.reduce((acc, fila) => {
+        acc.totalMes += fila.mes;
+        acc.totalMesAnt += fila.mesAnt;
+        acc.totalAnioAnt += fila.anioAnt;
+        return acc;
+    }, { totalMes: 0, totalMesAnt: 0, totalAnioAnt: 0 });
+
+    this.totalMes = totales.totalMes;
+    this.totalMesAnt = totales.totalMesAnt;
+    this.totalAnioAnt = totales.totalAnioAnt;
+}
 
   public getDataUaPvs(){
     const fecha = this.recuperarLocalStorage();

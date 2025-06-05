@@ -112,6 +112,7 @@ export class TablaComponent implements OnInit {
                 
                 this.dataEnergeticos.totalAnio = this.dataEstacion.totalAnio;
                 this.dataEnergeticos.totalAnioAnt = this.dataEstacion.totalAnioAnt;
+                this.dataEnergeticos.totalAnioAnt2 = this.dataEstacion.totalAnioAnt2;
                 this.dataEnergeticos.mes = this.copiaData.mes;
                 this.dataEnergeticos.mesAnt = this.copiaData.mesAnt;
                 this.dataEnergeticos.anioAnt = this.copiaData.anioAnt;

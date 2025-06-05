@@ -135,7 +135,6 @@ export class TotalesGraficaComponent {
     for (let i = 0; i < this.totalAnio.length; i++) {
       this.dataSerie.push( [new Date(this.totalAnio[i]['fecha']).getTime() , this.totalAnio[i][this.concepto] || 0] );
       // this.dataSerie.push( [new Date(this.totalAnio[i]['fecha']).getTime() , this.totalAnio[i][this.concepto] || 0] );
-
     }
   }
 }
