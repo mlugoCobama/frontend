@@ -68,7 +68,8 @@ export class ChartHhistoricaComponent implements OnInit {
     },
     
     lang: {
-        locale: 'es'
+        locale: 'es',
+        thousandsSep: ','
     },
 
     series: [
@@ -83,7 +84,7 @@ export class ChartHhistoricaComponent implements OnInit {
         type: "area",
         threshold: null,
         tooltip: {
-          valueDecimals: 5,
+          valueDecimals: 2
         },
         fillColor: {
                 linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
@@ -152,11 +153,15 @@ export class ChartHhistoricaComponent implements OnInit {
     let serie = [this.dataAnualAnt2.concat(this.dataAnualAnt.concat(this.dataAnual))];
     this.chartOptions.series = [
       {
-        name: this.concepto,
+        name: this.formatearTexto(this.concepto),
         data: 
           serie[0],
         
         type: 'areaspline',
+        zones:[{
+          value: 0,
+          color: 'red'
+        }],
         threshold: null,
         tooltip: {
           valueDecimals: 2,
@@ -183,11 +188,15 @@ export class ChartHhistoricaComponent implements OnInit {
     let serie = [this.dataAnualAnt2.concat(this.dataAnualAnt.concat(this.dataAnual))];
     this.chartOptions.series = [
       {
-        name: this.concepto,
+        name: this.formatearTexto(this.concepto),
         data: 
           serie[0],
         
         type: 'areaspline',
+        zones:[{
+          value: 0,
+          color: 'red'
+        }],
         threshold: null,
         tooltip: {
           valueDecimals: 2,
