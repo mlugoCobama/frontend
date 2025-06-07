@@ -79,13 +79,15 @@ export class TablaComponent implements OnInit {
     }   
   }
 
-  
+  /**
+   * Manejo del evento clic de la tabla
+   * @param dato id de la empresa seleccionada
+   * @param evento 
+   */
   public seleccionar(dato: any, evento: any) {
     const mes = this.dataEnergeticos['mes'].find((registro) => registro.id != "Total");
     const periodo =  mes.fecha.split("-");
     let anio = periodo[2];
-
-
 
     if (evento.currentTarget.classList.contains("table-active")) {
       evento.currentTarget.classList.remove("table-active");
@@ -100,26 +102,32 @@ export class TablaComponent implements OnInit {
     }
   }
 
-  public anio:any;
   public dataEstacion
+  /**
+   * Recupera la data anual de la empresa  y sustituye los valores anuales
+   * (al realizar el filtro se genera una copia de la consulta general)
+   * @param id de de la empresa a consulta
+   * @param anio Anio de referencia pra recuperar los datos
+   */
   private sutituirDataAnual(id, anio){
     if(this.tipo === "energeticos"){
       this.gaseras.getAnualEstacion(id, anio).subscribe(
             (data: ResponseEnergeticosGaseras) => {
               if (data.success) {
-                
+                //Data recuperada
                 this.dataEstacion  =  data.data;
-                
+                //Sustitución de la data anual
                 this.dataEnergeticos.totalAnio = this.dataEstacion.totalAnio;
                 this.dataEnergeticos.totalAnioAnt = this.dataEstacion.totalAnioAnt;
                 this.dataEnergeticos.totalAnioAnt2 = this.dataEstacion.totalAnioAnt2;
+                //Reemplazamos los detalles del mes con los de la copia
                 this.dataEnergeticos.mes = this.copiaData.mes;
                 this.dataEnergeticos.mesAnt = this.copiaData.mesAnt;
                 this.dataEnergeticos.anioAnt = this.copiaData.anioAnt;
-               
+               //Actualizamos los datos en local storage
                 this.localStorage.removeItem("DataEnergeticos");
                 this.localStorage.setItem("DataEnergeticos", this.dataEnergeticos);
-
+                //Actualizamos los datos en los demas componentes
                 this.gaseras.actualizarData(); 
               } else {
                 console.log(data.message, data.success);

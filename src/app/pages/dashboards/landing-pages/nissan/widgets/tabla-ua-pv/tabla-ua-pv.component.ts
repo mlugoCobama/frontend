@@ -24,16 +24,21 @@ export class TablaUaPvComponent implements AfterViewInit {
   public totalMesAnt:any;
   public totalAnioAnt:any;
 
-  public pvs:any; 
-  public areas:any; 
+  public pvs:any;
+  public areas:any;
 
-  public datos:any;
+  /**
+   * Datos que se muestran en la tabla
+   */
+  public datos:any; 
   @Input() concepto:any;
 
   public modalRef?: BsModalRef;
 
+  public isLoad: boolean = false;
+
    private actualizarDatosSubscripcion: Subscription;
-  
+
 
   constructor(
     private localStorage: LocalStorageServiceService,
@@ -50,45 +55,65 @@ export class TablaUaPvComponent implements AfterViewInit {
       this.getDataUaPvs();
     });
   }
-  
-  private recuperarLocalStorage(){
-    let dataEnergeticos = this.localStorage.getItem('DataEnergeticos');
+
+  /**
+   * Recupera el mes actual del local storage y obtiene la fecha del periodo actual
+   * @returns fecha del periodo almacenado en el localStorage
+   */
+  private recuperarFechaLocalStorage(){
     this.dataEnergeticos = this.localStorage.getItem('DataEnergeticos');
     this.copiaData = this.dataEnergeticos;
-    let referencia = dataEnergeticos['mes'].find((regsitro) => regsitro.estacion !=  'Total' )
+    let referencia = this.dataEnergeticos['mes'].find((regsitro) => regsitro.estacion !=  'Total' )
     let fecha =  referencia.fecha.split('-');
     return fecha;
   }
 
+  /**
+   *  Asigna sub-conceptos dependiendo el area que se esta obteniendo
+   */
   private asignarAreas(){
-  if(this.concepto === 'area_comercial'){
-    this.areas = ['area_nuevos', 'area_flotillas', 'area_seminuevos'];
+  const asComercial = ['area_nuevos', 'area_flotillas', 'area_seminuevos'];
+  const asPostVenta= ['area_servicio', 'area_refacciones', 'area_hyp'];
+  this.areas = this.concepto === 'area_comercial' ? asComercial : asPostVenta;
   }
-  else{
-    this.areas = ['area_servicio', 'area_refacciones', 'area_hyp'];
-  }
- }
 
-  public calcularSumas2(){
+  /**
+   * Calcula las sumas de la tabla
+   */
+  public calcularSumas(){
     let totales = [];
-    this.pvs = this.mes.filter((fila) => fila.estacion != 'Total').map(objeto => objeto.estacion);
+    // Mapeo del mes para recuperar pvs y ids
+    this.pvs = this.mes.filter((fila) => fila.estacion != 'Total').map(objeto => ({id : objeto.id , estacion : objeto.estacion}));
+
+
      for (let i = 0; i < this.pvs.length; i++) {
-      
-      const pv = this.pvs[i];
+
+      const id = this.pvs[i].id;
+      const pv = this.pvs[i].estacion;
+      //Suma total del conjunto de sub areas: Suma = area a + area b + area c
       const sumaMes = [Number(this.mes[i][this.areas[0]] ?? 0),Number(this.mes[i][this.areas[1]] ?? 0),Number(this.mes[i][this.areas[2]] ?? 0)].reduce(function (a,b) {return a + b;});
       const sumaMesAnt = [Number(this.mesAnt[i][this.areas[0]] ?? 0),Number(this.mesAnt[i][this.areas[1]] ?? 0),Number(this.mesAnt[i][this.areas[2]] ?? 0)].reduce(function (a,b) {return a + b;});
       const sumaAnioAnt = [Number(this.anioAnt[i][this.areas[0]] ?? 0),Number(this.anioAnt[i][this.areas[1]] ?? 0), Number(this.anioAnt[i][this.areas[2]] ?? 0)].reduce(function (a,b) {return a + b;});
-      
-      if(sumaMes != 0 || sumaMesAnt != 0 || sumaAnioAnt != 0){ 
-        totales.push({id: (i + 30) ,pv:pv, mes:sumaMes, mesAnt:sumaMesAnt, anioAnt:sumaAnioAnt}) 
+
+      if(sumaMes != 0 || sumaMesAnt != 0 || sumaAnioAnt != 0){
+        // Estructura de cada fila
+        totales.push({id: id ,pv:pv, mes:sumaMes, mesAnt:sumaMesAnt, anioAnt:sumaAnioAnt})
       };
     }
     this.datos = totales;
+    
+    this.calcularSumasTotales(this.datos);
+  }
 
+  /**
+   * Calcula las sumas totales de mes de la tabla
+   */
+  private calcularSumasTotales(datos){
     let totalMes = [];
     let totalMesAnt = [];
     let totalAnioAnt = [];
-    this.datos.forEach(fila => {
+
+    datos.forEach(fila => {
       totalMes.push(fila.mes)
       totalMesAnt.push(fila.mesAnt)
       totalAnioAnt.push(fila.anioAnt)
@@ -97,36 +122,10 @@ export class TablaUaPvComponent implements AfterViewInit {
     this.totalMes = totalMes.reduce(function (a,b) {return a + b;});
     this.totalMesAnt = totalMesAnt.reduce(function (a,b) {return a + b;});
     this.totalAnioAnt = totalAnioAnt.reduce(function (a,b) {return a + b;});
-
   }
 
-  public calcularSumas() {
-    this.pvs = this.mes.filter(fila => fila.estacion !== 'Total').map(objeto => objeto.estacion);
-
-    this.datos = this.pvs.map((pv, i) => {
-        const obtenerSuma = (data: any[]) => this.areas.map(area => Number(data[i][area] ?? 0)).reduce((a, b) => a + b, 0);
-
-        const sumaMes = obtenerSuma(this.mes);
-        const sumaMesAnt = obtenerSuma(this.mesAnt);
-        const sumaAnioAnt = obtenerSuma(this.anioAnt);
-
-        return (sumaMes || sumaMesAnt || sumaAnioAnt) ? { id: i + 30, pv, mes: sumaMes, mesAnt: sumaMesAnt, anioAnt: sumaAnioAnt } : null;
-    }).filter(Boolean);
-
-    const totales = this.datos.reduce((acc, fila) => {
-        acc.totalMes += fila.mes;
-        acc.totalMesAnt += fila.mesAnt;
-        acc.totalAnioAnt += fila.anioAnt;
-        return acc;
-    }, { totalMes: 0, totalMesAnt: 0, totalAnioAnt: 0 });
-
-    this.totalMes = totales.totalMes;
-    this.totalMesAnt = totales.totalMesAnt;
-    this.totalAnioAnt = totales.totalAnioAnt;
-}
-
   public getDataUaPvs(){
-    const fecha = this.recuperarLocalStorage();
+    const fecha = this.recuperarFechaLocalStorage();
     this.agencias.getMesUaPvs(fecha[1], fecha[2], 3).subscribe(
       (response => {
         const datos =  response.data;
@@ -134,50 +133,31 @@ export class TablaUaPvComponent implements AfterViewInit {
         this.mesAnt =  datos.mesAnt;
         this.anioAnt =  datos.anioAnt;
         this.calcularSumas();
+        this.isLoad = true;
       })
     )
  }
 
-  public seleccionar(dato: any, evento: any) {
-    const mes = this.dataEnergeticos['mes'].find((registro) => registro.id != "Total");
-    const periodo =  mes.fecha.split("-");
-    let anio = periodo[2];
-
-
-
-    if (evento.currentTarget.classList.contains("table-active")) {
-      evento.currentTarget.classList.remove("table-active");
-      this.localStorage.removeItem("DataEnergeticos");
-      this.localStorage.setItem("DataEnergeticos", this.copiaData);
-      this.gaseras.actualizarData(); 
-    } else {
-      const filas = document.querySelectorAll("tbody tr");
-      this.sutituirDataAnual(dato, anio)
-      filas.forEach((fila) => fila.classList.remove("table-active"));
-      evento.currentTarget.classList.add("table-active");
-    }
-  }
-
   public anio:any;
   public dataEstacion
   private sutituirDataAnual(id, anio){
-    
+
       this.agencias.getAnualAgencia(id, anio).subscribe(
             (data: ResponseAgenciasNissan) => {
               if (data.success) {
-                
+
                 this.dataEstacion  =  data.data;
-                
+
                 this.dataEnergeticos.totalAnio = this.dataEstacion.totalAnio;
                 this.dataEnergeticos.totalAnioAnt = this.dataEstacion.totalAnioAnt;
                 this.dataEnergeticos.mes = this.copiaData.mes;
                 this.dataEnergeticos.mesAnt = this.copiaData.mesAnt;
                 this.dataEnergeticos.anioAnt = this.copiaData.anioAnt;
-               
+
                 this.localStorage.removeItem("DataEnergeticos");
                 this.localStorage.setItem("DataEnergeticos", this.dataEnergeticos);
 
-                this.gaseras.actualizarData(); 
+                this.gaseras.actualizarData();
               } else {
                 console.log(data.message, data.success);
               }
@@ -185,7 +165,7 @@ export class TablaUaPvComponent implements AfterViewInit {
             (error) => {
               console.log(error, false);
             }
-          );    
+          );
   }
 
   public openModalNuevo(agencia, id) {
@@ -197,7 +177,7 @@ export class TablaUaPvComponent implements AfterViewInit {
          initialState: {
           agencia: agencia,
           id: id,
-          concepto: this.concepto, 
+          concepto: this.concepto,
           mes: this.mes,
           mesAnt:this.mesAnt,
           anioAnt: this.anioAnt
@@ -207,7 +187,7 @@ export class TablaUaPvComponent implements AfterViewInit {
        this.modalRef = this.modalService.show(ModalDetallePvComponent, initialState);
        this.modalRef.content.closeBtnName = "Close";
       this.modalRef.content.event.subscribe(() => {
-       
+        
       });
   }
 

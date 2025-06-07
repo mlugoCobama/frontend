@@ -121,14 +121,22 @@ export class TotalesGraficaComponent {
         this.money = '$';
         break;
       default:
-        this.title = this.capitalizeFirstLetter(this.concepto);
+        this.title = this.formatearTexto(this.concepto);
         this.money = ''
         break;
     }
   }
 
-  private capitalizeFirstLetter(val) {
-    return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+ /**
+   * Retira del texto "_" y pone la primer letra en mayúscula
+   * @param texto String a formatear
+   * @returns "texto_ejemplo" a "Texto ejemplo"
+   */
+  public formatearTexto(texto) {
+    const capitalCaseText =
+      String(texto).charAt(0).toUpperCase() + String(texto).slice(1);
+    let textoFormateado = capitalCaseText.replace("_", " ");
+    return textoFormateado;
   }
 
   private setDataSerie(){

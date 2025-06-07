@@ -16,8 +16,15 @@ export class TablaUtilidadAreaComponent implements AfterViewInit{
  public areas:any = [];
  public modalRef?: BsModalRef;
 
+ public mes:any;
+ public mesAnt:any;
+ public anioAnt:any;
+
+ public totalMes:any;
+ public totalMesAnt:any;
+ public totalAnioAnt:any;
+
  private actualizarDatosSubscripcion: Subscription;
- 
 
  public dataEnergeticos: any;
 
@@ -35,7 +42,6 @@ export class TablaUtilidadAreaComponent implements AfterViewInit{
     });
  }
 
-
  private construirTablas(){
   this.asignarAreas();
    this.recuperarData();
@@ -48,41 +54,36 @@ export class TablaUtilidadAreaComponent implements AfterViewInit{
   // this.deleteLast();
  }
 
+/**
+ * Asigna las areas a calcular basándose en el concepto dado
+ */
  private asignarAreas(){
-  if(this.concepto === 'area_comercial'){
-    this.areas = ['area_nuevos', 'area_flotillas', 'area_seminuevos'];
-  }
-  else{
-    this.areas = ['area_servicio', 'area_refacciones', 'area_hyp'];
-  }
+  const asComercial = ['area_nuevos', 'area_flotillas', 'area_seminuevos'];
+  const asPostVenta= ['area_servicio', 'area_refacciones', 'area_hyp'];
+  this.areas = this.concepto === 'area_comercial' ? asComercial : asPostVenta;
  }
 
- public mes:any;
- public mesAnt:any;
- public anioAnt:any;
- 
- public totalMes:any;
- public totalMesAnt:any;
- public totalAnioAnt:any;
 
+/**
+ * Recupera los totales y calcula el total acumulado de las areas por mes
+ */
  recuperaTotales(){
-  
-  this.mes = this.dataEnergeticos.mes.filter((agencia) => agencia.estacion === 'Total') 
-  this.mesAnt = this.dataEnergeticos.mesAnt.filter((agencia) => agencia.estacion === 'Total') 
-  this.anioAnt = this.dataEnergeticos.anioAnt.filter((agencia) => agencia.estacion === 'Total') 
+  //Datos de donde se recuperan los totales de cada area
+  this.mes = this.dataEnergeticos.mes.filter((agencia) => agencia.estacion === 'Total');
+  this.mesAnt = this.dataEnergeticos.mesAnt.filter((agencia) => agencia.estacion === 'Total');
+  this.anioAnt = this.dataEnergeticos.anioAnt.filter((agencia) => agencia.estacion === 'Total');
 
-  const arrayMes = [Number(this.mes[0][this.areas[0]] ?? 0) ,Number(this.mes[0][this.areas[1]] ?? 0),Number(this.mes[0][this.areas[2]]) ?? 0].reduce(function (a,b) {return a + b;})
-  const arraymesAnt = [Number(this.mesAnt[0][this.areas[0]] ?? 0),Number(this.mesAnt[0][this.areas[1]] ?? 0),Number(this.mesAnt[0][this.areas[2]] ?? 0)].reduce(function (a,b) {return a + b;})
-  const arrayanioAnt = [Number(this.anioAnt[0][this.areas[0]]?? 0),Number(this.anioAnt[0][this.areas[1]]?? 0),Number(this.anioAnt[0][this.areas[2]]) ?? 0].reduce(function (a,b) {return a + b;})
-
-  this.totalMes = arrayMes;
-  this.totalMesAnt = arraymesAnt;
-  this.totalAnioAnt = arrayanioAnt;
-
-
+  // Calculo del acumulado total de ares por mes
+  this.totalMes = [Number(this.mes[0][this.areas[0]] ?? 0) ,Number(this.mes[0][this.areas[1]] ?? 0),Number(this.mes[0][this.areas[2]]) ?? 0].reduce(function (a,b) {return a + b;});
+  this.totalMesAnt = [Number(this.mesAnt[0][this.areas[0]] ?? 0),Number(this.mesAnt[0][this.areas[1]] ?? 0),Number(this.mesAnt[0][this.areas[2]] ?? 0)].reduce(function (a,b) {return a + b;});
+  this.totalAnioAnt = [Number(this.anioAnt[0][this.areas[0]]?? 0),Number(this.anioAnt[0][this.areas[1]]?? 0),Number(this.anioAnt[0][this.areas[2]]) ?? 0].reduce(function (a,b) {return a + b;});
  }
 
- public openModalNuevo(concepto) {
+ /**
+  * Despliega el modal con los datos de las agencias
+  * @param concepto nombre del area al que se le dio click
+  */
+ public openModalDetalleArea(concepto) {
      const initialState: ModalOptions = {
        initialState: {
          concepto: concepto
@@ -92,7 +93,7 @@ export class TablaUtilidadAreaComponent implements AfterViewInit{
      this.modalRef = this.modalService.show(ModalDetalleComponent, initialState);
      this.modalRef.content.closeBtnName = "Close";
     this.modalRef.content.event.subscribe(() => {
-     
+
     });
    }
 

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import * as Highcharts from "highcharts";
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
 import { EnergeticosGaserasService } from "src/app/core/services/dashboard/energeticos-gaseras.service";
@@ -9,7 +9,7 @@ import { Subject, Subscription } from "rxjs";
   templateUrl: './tendencia.component.html',
   styleUrl: './tendencia.component.css'
 })
-export class TendenciaComponent implements OnInit{
+export class TendenciaComponent implements OnInit, OnDestroy{
   @Input() concepto: string;
 
   private dataEnergeticos: any;
@@ -67,12 +67,24 @@ export class TendenciaComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
-    this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
-    this.recuperarDatos();
+    // this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
+    
     this.inicializarGrfica();
+    this.actualizarDatosSubscripcion = this.gaseras.actualizarData$.subscribe(
+       () => {
+         this.inicializarGrfica();
+       }
+     );
+
   }
+
+  ngOnDestroy(): void {
+    this.actualizarDatosSubscripcion.unsubscribe();
+  }
+  
     private inicializarGrfica() {
-    this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
+    this.recuperarDatos();
+    
     const prediccion2 = this.seriePrediccion(this.dataAnual);
 
     let serie = [prediccion2];
@@ -82,6 +94,7 @@ export class TendenciaComponent implements OnInit{
   }
 
   private recuperarDatos(){
+    this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
     let dataAnual = this.dataEnergeticos.totalAnio.map((dato) => Number(dato[this.concepto]));
     let dataAnualAnt = this.dataEnergeticos.totalAnioAnt.map((dato) => Number(dato[this.concepto]));
 

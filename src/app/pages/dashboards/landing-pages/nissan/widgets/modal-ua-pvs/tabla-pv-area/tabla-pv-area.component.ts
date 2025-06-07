@@ -1,8 +1,5 @@
 import { Component, AfterViewInit, Input, Output, EventEmitter  } from '@angular/core';
-import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
-import { ResponseAgenciasNissan } from 'src/app/core/models/dashboard/agencias-nissan';
-import { AgenciasService } from 'src/app/core/services/dashboard/agencias.service';
-import { EnergeticosGaserasService } from 'src/app/core/services/dashboard/energeticos-gaseras.service';
+
 @Component({
   selector: 'app-tabla-pv-area',
   templateUrl: './tabla-pv-area.component.html',
@@ -22,10 +19,11 @@ public totalMes:any;
 public totalMesAnt:any;
 public totalAnioAnt:any;
 
+ public dataMes:any;
+ public dataMesAnt:any;
+ public dataAnioAnt:any;
+
 constructor(
-  private localStorage:LocalStorageServiceService,
-  private agencias:AgenciasService,
-  private gaseras:EnergeticosGaserasService
 ){}
 public areas:any;
 
@@ -35,19 +33,16 @@ ngAfterViewInit(): void {
 }
 
  private asignarAreas(){
-  if(this.concepto === 'area_comercial'){
-    this.areas = ['area_nuevos', 'area_flotillas', 'area_seminuevos'];
-  }
-  else{
-    this.areas = ['area_servicio', 'area_refacciones', 'area_hyp'];
-  }
+  const asComercial = ['area_nuevos', 'area_flotillas', 'area_seminuevos'];
+  const asPostVenta= ['area_servicio', 'area_refacciones', 'area_hyp'];
+  this.areas = this.concepto === 'area_comercial' ? asComercial : asPostVenta;
  }
 
-
- public dataMes:any;
- public dataMesAnt:any;
- public dataAnioAnt:any;
-
+ /**
+  * Recupera los registros del pv,
+  * suma los valores de cada area 
+  * total de la suma del area a + area b + area c
+  */
  private getData(){
   this.dataMes = this.mes.filter((fila) => fila.id == this.id);
   this.dataMesAnt = this.mesAnt.filter((fila) => fila.id == this.id);
@@ -62,18 +57,17 @@ ngAfterViewInit(): void {
   this.totalAnioAnt = datosAnioAnt.reduce(function (a,b) {return a + b;});
  }
 
-
-
  public formatearTexto(texto){
   const capitalCaseText= String(texto).charAt(0).toUpperCase() + String(texto).slice(1);
   let textoFormateado = capitalCaseText.replace("_", " ")
   return textoFormateado;
   }
 
-  public dataEnergeticos:any;
-  public copiaData:any;
-
-    public seleccionar(concepto) {
-      this.actualizarConcepto.emit(concepto);
-    }
+  /**
+   * Maneja el evento del click en la tabla
+   * @param concepto concepto que recupera de la fila 
+   */
+  public seleccionar(concepto) {
+    this.actualizarConcepto.emit(concepto);
+  }
 }

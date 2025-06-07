@@ -19,7 +19,8 @@
                             <td  *ngIf="dataEnergeticos.mes.length > 1; else celdaVacia" class="text-end" [ngClass]="{'text-danger': dataEnergeticos.mes[i][concepto] < 0 }">{{ dataEnergeticos.mes[i][concepto] || 0 | number }}</td>
                             <td  *ngIf="dataEnergeticos.anioAnt.length > 1; else celdaVacia" class="text-end" [ngClass]="{'text-danger': dataEnergeticos.anioAnt[i][concepto] < 0 }">{{ dataEnergeticos.anioAnt[i][concepto] || 0 | number}}</td>
                             <td class="text-end">
-                            <div *ngIf="( dataEnergeticos.mes[i][concepto]  > (dataTotales[2][0][this.concepto] != null ? dataEnergeticos.anioAnt[i][concepto] : 0) );else templateName" >
+                            <div *ngIf="+dataEnergeticos.mes[i][concepto] > (dataTotales[2][0][this.concepto] !== null && dataTotales[2][0][this.concepto] !== undefined ? +dataEnergeticos.anioAnt[i][concepto] : 0); else templateName">
+                            <!-- <div *ngIf="( dataEnergeticos.mes[i][concepto]  > (dataTotales[2][0][this.concepto] != null ? dataEnergeticos.anioAnt[i][concepto] : 0) );else templateName" > -->
                                 <i class='bx bx-up-arrow-alt fs-3 text-success'></i>
                                 </div>
                                     <ng-template #templateName>

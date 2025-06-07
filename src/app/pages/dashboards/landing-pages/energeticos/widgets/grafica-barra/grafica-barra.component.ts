@@ -37,18 +37,6 @@ export class GraficaBarraComponent implements OnInit, OnDestroy {
       categories: [
         "Servigas del Valle",
         "Gas Urbano",
-        "Gas Multiregional",
-        "Gasamex",
-        "Reyes Gas",
-        "Iztagas y Energia",
-        "Flamamex",
-        "Azteca Gas",
-        "Satelite Gas",
-        "Garza Gas",
-        "Garza Sur",
-        "Segas",
-        "Zugas",
-        "Gas Premio",
       ],
       title: {
         text: null,
@@ -225,9 +213,7 @@ export class GraficaBarraComponent implements OnInit, OnDestroy {
       zones:[
         {value: 0,
          color: '#FF2929' 
-        },// {
-        //   color: '#3D3BF3' 
-        // }
+        },
       ]
     };
   }

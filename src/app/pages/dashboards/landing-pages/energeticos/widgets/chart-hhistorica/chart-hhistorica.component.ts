@@ -1,10 +1,4 @@
-import {
-  Component,
-  Input,
-  OnInit,
-  AfterViewInit,
-  OnDestroy,
-} from "@angular/core";
+import {  Component, Input, OnInit, AfterViewInit, OnDestroy } from "@angular/core";
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
 import { EnergeticosGaserasService } from "src/app/core/services/dashboard/energeticos-gaseras.service";
 import { Subject, Subscription } from "rxjs";
@@ -16,27 +10,25 @@ import * as Highcharts from "highcharts/highstock";
   templateUrl: "./chart-hhistorica.component.html",
   styleUrl: "./chart-hhistorica.component.css",
 })
-export class ChartHhistoricaComponent implements OnInit {
 
+export class ChartHhistoricaComponent implements OnInit, OnDestroy {
   @Input() concepto: string;
   @Input() titulo: string;
-  updateFlag = false;
-  isOpen1:boolean = false;
 
   private dataEnergeticos: any;
 
   private actualizarDatosSubscripcion: Subscription;
- 
-  public dataAnual: any = [];
-
-  public dataAnualAnt: any = [];
-
-  public dataAnualAnt2: any = [];
+  
+  public  isOpen1: boolean = true;
+  public  dataAnual: any = [];
+  public  dataAnualAnt: any = [];
+  public  dataAnualAnt2: any = [];
 
   isHighcharts = typeof Highcharts === "object";
-  title = "UnivHighCharts";
+  updateFlag = false;
   Highcharts: typeof Highcharts = Highcharts;
   chartConstructor: string = "stockChart";
+
   chartOptions: Highcharts.Options = {
     chart: {
       height: 400,
@@ -51,7 +43,7 @@ export class ChartHhistoricaComponent implements OnInit {
       text: "",
     },
     xAxis: {
-      type: 'datetime'
+      type: "datetime",
     },
 
     yAxis: {
@@ -59,22 +51,22 @@ export class ChartHhistoricaComponent implements OnInit {
         text: "Miles de Pesos",
       },
       plotLines: [
-      {
-        color: '#7F8CAA',
-        width: 2,
-        value: 0
-      }
-    ],
+        {
+          color: "#7F8CAA",
+          width: 2,
+          value: 0,
+        },
+      ],
     },
-    
+
     lang: {
-        locale: 'es',
-        thousandsSep: ','
+      locale: "es",
+      thousandsSep: ",",
     },
 
     series: [
       {
-        name: "AAPL Stock Price",
+        name: "Grafico historico",
         data: [
           [String(1685971800000), 179.58],
           [String(1686058200000), 179.21],
@@ -84,29 +76,25 @@ export class ChartHhistoricaComponent implements OnInit {
         type: "area",
         threshold: null,
         tooltip: {
-          valueDecimals: 2
+          valueDecimals: 2,
         },
         fillColor: {
-                linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
-                stops: [
-                // [0, '#003399'],
-                // [1, '#3366AA']
-                [0, '#050C9C'],
-                [1, '#A7E6FF'],
-
-              ]     
-            }
-      } 
+          linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+          stops: [
+            [0, "#007bff"],
+            [1, "#ffffff"],
+          ],
+        },
+      },
     ],
     rangeSelector: {
-        selected: 1,
-        buttons: [
-          // { type: 'month', count: 3, text: '3m' },
-          { type: 'month', count: 6, text: '6 m' },
-          { type: 'year', count: 1, text: '1 A' },
-          { type: 'all', text: 'Todo' }
-        ]
-      },
+      selected: 1,
+      buttons: [
+        { type: "month", count: 6, text: "6 m" },
+        { type: "year", count: 1, text: "1 A" },
+        { type: "all", text: "Todo" },
+      ],
+    },
     responsive: {
       rules: [
         {
@@ -129,8 +117,6 @@ export class ChartHhistoricaComponent implements OnInit {
     },
   };
 
-
-
   constructor(
     private localStorage: LocalStorageServiceService,
     private gaseras: EnergeticosGaserasService
@@ -139,137 +125,165 @@ export class ChartHhistoricaComponent implements OnInit {
   ngOnInit() {
     this.inicializarGrfica();
     this.actualizarDatosSubscripcion = this.gaseras.actualizarData$.subscribe(
-       () => {
-         this.actualizarGrafica();
-       }
-     );
+      () => {
+        this.actualizarGrafica();
+      }
+    );
   }
 
+  ngOnDestroy(): void {
+    this.actualizarDatosSubscripcion.unsubscribe();
+  }
+  /**
+  * Inicializa la gráfica y asigna las opciones al gráfico
+  */
   private inicializarGrfica() {
     this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
     this.serieAnio();
     this.serieAnioAnt();
     this.serieAnioAnt2();
-    let serie = [this.dataAnualAnt2.concat(this.dataAnualAnt.concat(this.dataAnual))];
+    let serie = [
+      this.dataAnualAnt2.concat(this.dataAnualAnt.concat(this.dataAnual)),
+    ];
     this.chartOptions.series = [
       {
         name: this.formatearTexto(this.concepto),
-        data: 
-          serie[0],
-        
-        type: 'areaspline',
-        zones:[{
-          value: 0,
-          color: 'red'
-        }],
+        data: serie[0],
+
+        type: "areaspline",
+        zones: [
+          {
+            value: 0,
+            color: "red",
+          },
+        ],
         threshold: null,
         tooltip: {
           valueDecimals: 2,
         },
         fillColor: {
-        linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
-        stops: [
-          [0, '#007bff'],
-          [1, '#ffffff'],
-        ],
+          linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+          stops: [
+            [0, "#007bff"],
+            [1, "#ffffff"],
+          ],
+        },
       },
-        
-      },
-    ]
-    this.chartOptions.title.text =  `Histórico: ${this.formatearTexto(this.concepto)} - ${this.setTitle()}`
+    ];
+    this.chartOptions.title.text = `Histórico: ${this.formatearTexto(
+      this.concepto
+    )} - ${this.setTitle()}`;
     this.updateFlag = true;
   }
 
+  /**
+  *  Actualiza la gráfica y asigna las opciones al gráfico
+  */
   private actualizarGrafica() {
     this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
     this.serieAnio();
     this.serieAnioAnt();
     this.serieAnioAnt2();
-    let serie = [this.dataAnualAnt2.concat(this.dataAnualAnt.concat(this.dataAnual))];
+    let serie = [
+      this.dataAnualAnt2.concat(this.dataAnualAnt.concat(this.dataAnual)),
+    ];
     this.chartOptions.series = [
       {
         name: this.formatearTexto(this.concepto),
-        data: 
-          serie[0],
-        
-        type: 'areaspline',
-        zones:[{
-          value: 0,
-          color: 'red'
-        }],
+        data: serie[0],
+        type: "areaspline",
+        zones: [
+          {
+            value: 0,
+            color: "red",
+          },
+        ],
         threshold: null,
         tooltip: {
           valueDecimals: 2,
         },
         fillColor: {
-        linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
-        stops: [
-          [0, '#007bff'],
-          [1, '#ffffff'],
-        ],
+          linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+          stops: [
+            [0, "#007bff"],
+            [1, "#ffffff"],
+          ],
+        },
       },
-        
-      },
-    ]
-    this.chartOptions.title.text =  `Histórico: ${this.formatearTexto(this.concepto)} - ${this.setTitle()}`
+    ];
+    this.chartOptions.title.text = `Histórico: ${this.formatearTexto(this.concepto)} - ${this.setTitle()}`;
     this.updateFlag = true;
   }
 
-    public formatearTexto(texto){
-    const capitalCaseText= String(texto).charAt(0).toUpperCase() + String(texto).slice(1);
-    let textoFormateado = capitalCaseText.replace("_", " ")
+  /**
+   * Retira del texto "_" y pone la primer letra en mayúscula
+   * @param texto String a formatear
+   * @returns "texto_ejemplo" a "Texto ejemplo"
+   */
+  public formatearTexto(texto) {
+    const capitalCaseText =
+      String(texto).charAt(0).toUpperCase() + String(texto).slice(1);
+    let textoFormateado = capitalCaseText.replace("_", " ");
     return textoFormateado;
   }
 
-  private serieAnio() {
+  /**
+   * Genera la serie en base a los datos del año dado
+   * @param datos Data anual del año a recuperar
+   * @returns array [[datetime, dato]...] o array [ ] 
+   */
+  private generarSerie(datos:any){
     let data: any = [];
-    if(this.dataEnergeticos.totalAnio.length > 0){
-      for (let i = 0; i < this.dataEnergeticos.totalAnio.length; i++) {
-        data.push( [(new Date(this.dataEnergeticos.totalAnio[i]['fecha']).getTime()) , Number(this.dataEnergeticos.totalAnio[i][this.concepto]) || 0] );
+    if(datos.length > 0){
+      for (let i = 0; i < datos.length; i++) {
+        data.push([
+          new Date(datos[i]["fecha"]).getTime(),
+          Number(datos[i][this.concepto]) || 0,
+        ]);
       }
-      this.dataAnual = data;
+      return data;
     }else{
-      this.dataAnual = [];
+      return data;
     }
   }
 
-  private serieAnioAnt() {
-    let data: any = [];
-    if(this.dataEnergeticos.totalAnioAnt.length > 0){
-      for (let i = 0; i < this.dataEnergeticos.totalAnioAnt.length; i++) {
-      data.push( [(new Date(this.dataEnergeticos.totalAnioAnt[i]['fecha']).getTime()) , Number(this.dataEnergeticos.totalAnioAnt[i][this.concepto]) || 0] );
-    }
-    this.dataAnualAnt = data;
-    }else{
-      this.dataAnualAnt = [];
-    }
-    
+  /**
+   * Genera la serie del año actual o mas reciente
+   */
+  private serieAnio(){
+    this.dataAnual = this.generarSerie(this.dataEnergeticos.totalAnio);
   }
 
-  private serieAnioAnt2() {
-    let data: any = [];
-    if(this.dataEnergeticos.totalAnioAnt2.length){
-      for (let i = 0; i < this.dataEnergeticos.totalAnioAnt2.length; i++) {
-      data.push( [(new Date(this.dataEnergeticos.totalAnioAnt2[i]['fecha']).getTime()) , Number(this.dataEnergeticos.totalAnioAnt2[i][this.concepto]) || 0] );
-    }
-    this.dataAnualAnt2 = data;
-    }else{
-      this.dataAnualAnt2 = [];
-    }
-    
+  /**
+   * Genera la serie a partir de año anterior ,
+   * asigna el resultado a "dataAnualAnt"
+   */
+  private serieAnioAnt(){
+    this.dataAnualAnt = this.generarSerie(this.dataEnergeticos.totalAnioAnt);
+  }
+  /**
+  * Genera la serie a partir de año anterior - 1 ,
+  * asigna el resultado a "dataAnualAnt2"
+  */
+  private serieAnioAnt2(){
+    this.dataAnualAnt2 = this.generarSerie(this.dataEnergeticos.totalAnioAnt2);
   }
 
-  public setTitle(){
 
+  /**
+   * Asigna un titulo a la gráfica
+   * @returns Cadena de texto con el titulo
+   */
+  public setTitle() {
     switch (this.dataEnergeticos.totalAnio[0].estacion) {
       case undefined:
-        return 'Total';
+        return "Total";
         break;
-      case 'Planta':
-        return this.dataEnergeticos.totalAnio[0].entidad
+      case "Planta":
+        return this.dataEnergeticos.totalAnio[0].entidad;
         break;
       default:
-        return this.dataEnergeticos.totalAnio[0].estacion
+        return this.dataEnergeticos.totalAnio[0].estacion;
         break;
     }
   }

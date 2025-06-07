@@ -9,11 +9,14 @@ import { EnergeticosGaserasService } from "src/app/core/services/dashboard/energ
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
 import dataMeses from "src/environments/meses.json";
 
+
+
 @Component({
   selector: 'app-detalle-nissan',
   templateUrl: './detalle-nissan.component.html',
-  styleUrl: './detalle-nissan.component.css'
+  styleUrl: './detalle-nissan.component.css',
 })
+
 export class DetalleNissanComponent implements OnInit {
   public concepto: string;
 
