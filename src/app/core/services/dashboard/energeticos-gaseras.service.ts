@@ -44,6 +44,12 @@ export class EnergeticosGaserasService {
     );
   }
 
+  public getAnualEstacion(id_estacion: number, anio: number): Observable<ResponseEnergeticosGaseras> {
+    return this.http.get<ResponseEnergeticosGaseras>(
+      environment.apiUrl + "energeticos/anual-estacion/" + id_estacion + "/" + anio
+    );
+  }
+
   public getGasolinerias(
     mes: number,
     anio: number

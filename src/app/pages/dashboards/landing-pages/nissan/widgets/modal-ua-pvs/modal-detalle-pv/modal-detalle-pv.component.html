@@ -1,0 +1,48 @@
+<div class="modal-header bg-dark text-white">
+  <h5>Participación por punto de venta - {{agencia}}</h5>
+  <button
+    type="button"
+    class="btn-close btn-close-white"
+    data-bs-dismiss="modal"
+    aria-label="Close"
+    id="close-modal"
+    (click)="modalRef?.hide()"
+  ></button>
+</div>
+<div class="modal-body">
+  <div class="d-flex justify-content-center" *ngIf="isLoad">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  <div class="row" *ngIf="!isLoad">
+      <div class="col-6">
+      <app-tabla-pv-area 
+      [id] =  "id"
+      [mes] = "mes"
+      [mesAnt] = "mesAnt"
+      [anioAnt] = "anioAnt"
+      [tipo]="tipo" 
+      [concepto]="concepto"
+      [concepto2]="concepto2"
+      (actualizarConcepto)="actualizarConcepto($event)"
+      ></app-tabla-pv-area>
+    </div>
+    <div class="col-6">
+      <app-pie-chart-pv-area
+        [concepto]="concepto"
+        [id] =  "id"
+        [mes] = "mes"
+        [mesAnt] = "mesAnt"
+        [anioAnt] = "anioAnt"
+      ></app-pie-chart-pv-area>
+    </div>
+
+    <div class="col-12">
+      <app-anual [concepto]="concepto2"></app-anual>
+    </div>
+  </div>
+</div>
+<div class="modal-footer  bg-dark text-white" >
+    <button (click)="modalRef?.hide()" type="button" class="btn btn-sm btn-secondary bg-dark-subtle text-white" data-dismiss="modal">Cerrar</button>
+</div>

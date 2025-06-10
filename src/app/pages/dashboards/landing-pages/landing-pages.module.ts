@@ -33,6 +33,13 @@ import { DetalleNissanComponent } from './nissan/detalle-nissan/detalle-nissan.c
 import { DetalleReanultComponent } from './renault/detalle-reanult/detalle-reanult.component';
 import { DetalleAntInventarioComponent } from './nissan/widgets/detalle-ant-inventario/detalle-ant-inventario.component';
 import { AntInventarioComponent } from './nissan/widgets/ant-inventario/ant-inventario.component';
+import { TablaUtilidadAreaComponent } from './nissan/widgets/tabla-utilidad-area/tabla-utilidad-area.component';
+import { ModalDetalleComponent } from './nissan/widgets/modal-detalle/modal-detalle.component';
+import { TablaUaPvComponent } from './nissan/widgets/tabla-ua-pv/tabla-ua-pv.component';
+import { ModalDetallePvComponent } from './nissan/widgets/modal-ua-pvs/modal-detalle-pv/modal-detalle-pv.component';
+import { TablaPvAreaComponent } from './nissan/widgets/modal-ua-pvs/tabla-pv-area/tabla-pv-area.component';
+import { PieChartPvAreaComponent } from './nissan/widgets/modal-ua-pvs/pie-chart-pv-area/pie-chart-pv-area.component';
+import { ChartHhistoricaComponent } from './energeticos/widgets/chart-hhistorica/chart-hhistorica.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +70,13 @@ import { AntInventarioComponent } from './nissan/widgets/ant-inventario/ant-inve
     DetalleReanultComponent,
     DetalleAntInventarioComponent,
     AntInventarioComponent,
+    TablaUtilidadAreaComponent,
+    ModalDetalleComponent,
+    TablaUaPvComponent,
+    ModalDetallePvComponent,
+    TablaPvAreaComponent,
+    PieChartPvAreaComponent,
+    ChartHhistoricaComponent,
   ],
   imports: [
     CommonModule,

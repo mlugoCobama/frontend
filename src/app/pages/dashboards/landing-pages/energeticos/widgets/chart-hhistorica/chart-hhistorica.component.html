@@ -1,0 +1,35 @@
+
+<div class="accordion" id="miAcordeon">
+  <div class="accordion-item ">
+    <h2 class="accordion-header ">
+      <button
+        class="accordion-button bg-dark text-white"
+        [ngClass]="{ 'collapsed': !isOpen1 }"
+        (click)="isOpen1 = !isOpen1"
+        type="button"
+        [attr.aria-expanded]="isOpen1"
+        data-bs-toggle="collapse"
+        data-bs-target="#collapseOne"
+      >
+        <strong> Ver resumen histórico de los últimos tres años. </strong>
+      </button>
+    </h2>
+    <div
+      id="collapseOne"
+      class="accordion-collapse collapse"
+      [ngClass]="{ 'show': isOpen1 }"
+      data-bs-parent="#miAcordeon"
+    >
+      <div class="accordion-body"> 
+        <highcharts-chart
+          *ngIf="isHighcharts"
+          [Highcharts]="Highcharts"
+          [constructorType]="chartConstructor"
+          [options]="chartOptions"
+          style="width: 100%; height: 400px; display: block"
+          [(update)]="updateFlag"
+        ></highcharts-chart>
+      </div>
+    </div>
+  </div>
+</div>

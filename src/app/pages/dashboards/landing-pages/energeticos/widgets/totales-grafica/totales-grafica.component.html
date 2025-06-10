@@ -13,10 +13,10 @@
                     <div class="mb-4">
                         <p>Este mes</p>
                         <ng-container *ngIf="totalMes[concepto] > 0; else elseTemplate1">
-                            <h4>$ {{ totalMes[concepto] | number }}</h4>
+                            <h4>{{ money }} {{ totalMes[concepto] | number }}</h4>
                         </ng-container>
                         <ng-template #elseTemplate1>
-                            <h4 class="text-danger">$ {{ totalMes[concepto] | number }}</h4> 
+                            <h4 class="text-danger">{{ money }} {{ totalMes[concepto] | number }}</h4> 
                         </ng-template>
                         
                         <div>
@@ -36,7 +36,7 @@
 
                     <div class="mt-4">
                         <p class="mb-2">El mes pasado:</p>
-                        <h5>$ {{ totalMesAnt[concepto] | number }}</h5>
+                        <h5>{{ money }} {{ totalMesAnt[concepto] | number }}</h5>
                     </div>
 
                 </div>

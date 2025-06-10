@@ -1,0 +1,40 @@
+<div class="card">
+  <div class="card-body">
+    <div class="col-12 table-responsive">
+      <table class="table table-sm table-striped-columns">
+        <thead>
+          <tr>
+            <th scope="col">Area</th>
+            <th scope="col" class="text-center">Mes Anterior</th>
+            <th scope="col" class="text-center">Mes Actual</th>
+            <th scope="col" class="text-center">Mes Año anterior</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr (click)="seleccionar(item)"  *ngFor="let item of areas">
+            <td>{{ formatearTexto(item) }}</td>
+            <td class="text-end">{{ dataMesAnt[0][item] || 0  | number }}</td>
+            <td class="text-end">{{ dataMes[0][item] || 0  | number}}</td>
+            <td class="text-end">{{ dataAnioAnt[0][item] || 0 | number }}</td>
+            <td> 
+            <div *ngIf="(dataMes[0][item] > dataAnioAnt[0][item]);else templateName" >
+                  <i class='bx bx-up-arrow-alt fs-3 text-success'></i>
+                  </div>
+                  <ng-template #templateName>
+                  <i class='bx bx-down-arrow-alt fs-3 text-danger' ></i>
+                  </ng-template>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td><b>Total</b></td>
+            <td class="text-end"><b> {{totalMesAnt || 0 | number}} </b></td>
+            <td class="text-end"><b> {{totalMes || 0 | number}} </b></td>
+            <td class="text-end"><b> {{totalAnioAnt || 0 | number}} </b></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>

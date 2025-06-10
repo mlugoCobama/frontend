@@ -10,7 +10,7 @@ export interface AgenciasNissan {
   // personal? : number,
   // ubo : number,
   // eficiencia? : number,
-
+    id : number,
     planta: string;
     estacion: string;
     fecha: Date;
@@ -45,6 +45,15 @@ export interface AgenciasNissan {
     otros: number;
     descuentos: number;
     area_comercial: number;
+    area_postventa: number;
+
+    area_nuevos: number;
+    area_seminuevos: number;
+    area_flotillas: number;
+    area_servicio: number;
+    area_refacciones: number;
+    area_hyp: number;
+
     ventas_servicio: number;
     total_ventas_ref: number;
     refacciones_servicio: number;

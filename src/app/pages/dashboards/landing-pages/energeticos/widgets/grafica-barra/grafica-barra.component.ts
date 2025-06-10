@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit , OnDestroy} from "@angular/core";
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
 import { EnergeticosGaserasService } from "src/app/core/services/dashboard/energeticos-gaseras.service";
 
@@ -11,7 +11,7 @@ import dataMeses from "src/environments/meses.json";
   templateUrl: "./grafica-barra.component.html",
   styleUrl: "./grafica-barra.component.css",
 })
-export class GraficaBarraComponent implements OnInit {
+export class GraficaBarraComponent implements OnInit, OnDestroy {
   @Input() concepto: string;
 
   private dataEnergeticos: any;
@@ -37,18 +37,6 @@ export class GraficaBarraComponent implements OnInit {
       categories: [
         "Servigas del Valle",
         "Gas Urbano",
-        "Gas Multiregional",
-        "Gasamex",
-        "Reyes Gas",
-        "Iztagas y Energia",
-        "Flamamex",
-        "Azteca Gas",
-        "Satelite Gas",
-        "Garza Gas",
-        "Garza Sur",
-        "Segas",
-        "Zugas",
-        "Gas Premio",
       ],
       title: {
         text: null,
@@ -84,6 +72,10 @@ export class GraficaBarraComponent implements OnInit {
           17.8, 25.6,
         ],
         type: "bar",
+        zones:[{
+          value: 0,
+          color: 'red'
+        }]
       },
     ],
     responsive: {
@@ -130,6 +122,11 @@ export class GraficaBarraComponent implements OnInit {
       }
     );
   }
+
+  ngOnDestroy(): void {
+     this.actualizarDatosSubscripcion.unsubscribe();
+   }
+
   // Inicializa los valores de la gráfica en base al localstorage
   private inicializarGrfica() {
     this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
@@ -176,7 +173,8 @@ export class GraficaBarraComponent implements OnInit {
       this.generarSerie();
       this.chartOptions.series = this.dataMensual;
       this.chartOptions.xAxis["categories"] = this.labels;
-      const tamanioGrafica = 150 + ((this.dataEnergeticos.mes.length - 1) * 28);
+      // const tamanioGrafica = 150 + ((this.dataEnergeticos.mes.length - 1) * 28);
+      const tamanioGrafica = 117 + ((this.dataEnergeticos.mes.length - 1) * 36.87);
       this.chartOptions.chart.height = tamanioGrafica;
     } else {
       this.chartOptions.series = [{
@@ -212,6 +210,11 @@ export class GraficaBarraComponent implements OnInit {
         this.obtenerPeriodo().toUpperCase()
       ),
       type: "bar",
+      zones:[
+        {value: 0,
+         color: '#FF2929' 
+        },
+      ]
     };
   }
 

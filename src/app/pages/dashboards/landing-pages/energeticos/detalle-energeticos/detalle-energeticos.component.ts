@@ -33,6 +33,8 @@ export class DetalleEnergeticosComponent implements OnInit {
 
   private divisionSeleccionada: string = "all";
 
+  public tipo:any = "energeticos";
+
   constructor(
     private route: ActivatedRoute,
     private localStorage: LocalStorageServiceService,

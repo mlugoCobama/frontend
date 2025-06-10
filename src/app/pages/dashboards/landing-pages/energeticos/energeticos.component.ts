@@ -30,6 +30,7 @@ export class EnergeticosComponent implements OnInit {
   public meses = dataMeses;
 
   public actState: boolean = false;
+  
 
   constructor(
     public alertService: AlertErrorService,

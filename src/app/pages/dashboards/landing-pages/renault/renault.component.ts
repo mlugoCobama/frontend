@@ -82,7 +82,7 @@ export class RenaultComponent implements OnInit {
           const mes = this.dataMesActual.find((registro) => registro.id != "Total");
           const periodo =  mes.fecha.split("-")
           this.nombreMes = this.meses[periodo[1]-1]["nombre"];
-          this.anioActual = periodo[0];
+          this.anioActual = periodo[2];
           
         } else {
           this.alertService.alertError(data.message, data.success);

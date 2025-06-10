@@ -9,11 +9,14 @@ import { EnergeticosGaserasService } from "src/app/core/services/dashboard/energ
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
 import dataMeses from "src/environments/meses.json";
 
+
+
 @Component({
   selector: 'app-detalle-nissan',
   templateUrl: './detalle-nissan.component.html',
-  styleUrl: './detalle-nissan.component.css'
+  styleUrl: './detalle-nissan.component.css',
 })
+
 export class DetalleNissanComponent implements OnInit {
   public concepto: string;
 
@@ -21,6 +24,8 @@ export class DetalleNissanComponent implements OnInit {
 
   public titulo: any;
 
+  public tipo:any =  "autos";
+  
   public isLoad: boolean = true;
 
   public dataEnergeticos: any;
@@ -60,8 +65,7 @@ export class DetalleNissanComponent implements OnInit {
       this.mesSeleccionado = this.datepipe.transform(mes, 'MM');
       this.anioSeleccionado = this.datepipe.transform((new Date), 'yyyy');
       this. nombreMes = this.meses[Number(this.mesSeleccionado-1)]["nombre"];
-       
-      this.agencias  = (this.dataEnergeticos['mes']).map((item) => item.estacion).reverse();
+      this.agencias  = (this.dataEnergeticos['mes']).map((item) => item.estacion);
       this.dataAntInventario = this.dataEnergeticos['antInventarios'];
 
       this.filtrarInfo();
@@ -196,7 +200,10 @@ export class DetalleNissanComponent implements OnInit {
         break;
       case "total_ventas_ref":
         this.conceptos = ['ventas_servicio', 'refacciones_servicio', "refacciones_hyp", "refacciones_mostrador"]
-        break;     
+        break;
+      case "personal":
+        this.conceptos = ['personal_ventas', 'personal_usados', "personal_refacciones", "personal_servicios", "personal_admin", "personal_apvs",]
+        break;       
       default:
         this.conceptos = [this.concepto];
         break;

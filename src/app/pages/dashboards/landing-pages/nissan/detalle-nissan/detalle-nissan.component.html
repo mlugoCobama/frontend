@@ -17,11 +17,12 @@
             <li class="breadcrumb-item">
               <a [routerLink]="['../../energeticos']">Home</a>
             </li>
+            <li class="breadcrumb-item active">Nissan</li>
             <li class="breadcrumb-item">
               <a href="javascript: void(0);">Detalle {{ titulo }}</a>
             </li>
 
-            <li class="breadcrumb-item active">Nissan</li>
+            
           </ng-container>
         </ol>
       </div>
@@ -102,7 +103,19 @@
       <div [ngClass]="conceptos.length === 1 ? 'col-xl-6' : 'col-xl-12'">
         <div class="row">
           <div class="col-sm-12">
-            <app-tabla [concepto]="item"></app-tabla>
+            <app-tabla [tipo]="tipo" [concepto]="item"></app-tabla>
+          </div>
+          <div *ngIf="titulo === 'utilidad area'" class="col-sm-12">
+            <app-tabla-utilidad-area 
+            [tipo]="tipo" 
+            [concepto]="item">
+          </app-tabla-utilidad-area>
+          </div>
+          <div  *ngIf="titulo === 'utilidad area'" class="col-sm-12">
+            <app-tabla-ua-pv 
+            [tipo]="tipo" 
+            [concepto]="item">
+          </app-tabla-ua-pv>
           </div>
         </div>
       </div>

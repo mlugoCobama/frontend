@@ -111,3 +111,17 @@
         ></app-porcentaje-eficiencia>
     </div>
 </div>
+
+<div class="row" *ngIf="!isLoad">
+    <div class="col-xl-12">
+        <app-totales-grafica 
+            [dataMes]="dataMesActual" 
+            [dataMesAnterior]="dataMesAnterior" 
+            tipo = "energeticos-detalle"
+            concepto="personal"
+            color = "#f1b44c"
+            [totalAnio]="dataTotalAnio"
+            [totalAnioAnt]="dataTotalAnioAnt"
+        ></app-totales-grafica>
+    </div>
+</div>

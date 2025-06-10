@@ -21,6 +21,7 @@ export class DetalleReanultComponent implements OnInit {
   public titulo: any;
 
   public isLoad: boolean = true;
+  public tipo:any =  "autos";
 
   public dataEnergeticos: any;
 
@@ -47,7 +48,6 @@ export class DetalleReanultComponent implements OnInit {
   ngOnInit(): void {
     this.concepto = this.route.snapshot.paramMap.get("concepto");
     this.subConceptos(this.concepto);
-    console.log(this.conceptos);
     this.isLoad = false;
     this.titulo = this.concepto.replace('_',' ');
     this.recuperarLocalStorage();
