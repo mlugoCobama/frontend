@@ -10,12 +10,23 @@ import { LocalStorageServiceService } from "src/app/core/services/local-storage-
 
 import { DatePipe } from "@angular/common";
 import dataMeses from "src/environments/meses.json";
+import { trigger, transition, animate, style} from "@angular/animations";
+
 
 
 @Component({
   selector: 'app-renault',
   templateUrl: './renault.component.html',
-  styleUrl: './renault.component.css'
+  styleUrl: './renault.component.css',
+    animations: [trigger('fadeSlideInOut', [
+    transition(':enter', [
+      style({ opacity: 0, transform: 'translateY(10px)' }),
+      animate('500ms', style({ opacity: 1, transform: 'translateY(0)' })),
+    ]),
+    transition(':leave', [
+      animate('500ms', style({ opacity: 0, transform: 'translateY(10px)' })),
+    ]),
+  ])],
 })
 export class RenaultComponent implements OnInit {
   public dataMesActual: any;

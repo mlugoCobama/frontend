@@ -94,6 +94,8 @@
             <i class="bx bx-paste"></i>
             Pegar aquí
           </button>
+          <textarea #pasteArea style="position: absolute; top: -10000px; left: -10000; opacity: 0;"
+          ></textarea>
         </div>
       </div>
       <br />
@@ -156,7 +158,7 @@
           <tfoot >
             <tr>
               <th>Totales</th>
-              <th> {{ dataEmpresas[lastIndex].venta_litros | number : '1.2-2'}}</th>
+              <th>{{ dataEmpresas[lastIndex].venta_litros | number : '1.2-2'}}</th>
               <th>{{ dataEmpresas[lastIndex].ventas |number : '1.2-2' }}</th>
               <th>{{ dataEmpresas[lastIndex].eficiencia | number  : '1.2-2'}}</th>
               <th>{{ dataEmpresas[lastIndex].gasto | number : '1.2-2'}}</th>

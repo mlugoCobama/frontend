@@ -22,9 +22,12 @@
                             <div *ngIf="+dataEnergeticos.mes[i][concepto] > (dataTotales[2][0][this.concepto] !== null && dataTotales[2][0][this.concepto] !== undefined ? +dataEnergeticos.anioAnt[i][concepto] : 0); else templateName">
                             <!-- <div *ngIf="( dataEnergeticos.mes[i][concepto]  > (dataTotales[2][0][this.concepto] != null ? dataEnergeticos.anioAnt[i][concepto] : 0) );else templateName" > -->
                                 <i class='bx bx-up-arrow-alt fs-3 text-success'></i>
+                                <!-- <i class='bx bx-caret-up fs-3 text-success'></i> -->
+                                
                                 </div>
                                     <ng-template #templateName>
                                     <i class='bx bx-down-arrow-alt fs-3 text-danger' ></i>
+                                    <!-- <i class='bx bx-caret-down fs-3 text-danger' ></i> -->
                                     </ng-template>
                             </td> 
                             <ng-template #celdaVacia><td class="text-end"> 0 </td></ng-template>
