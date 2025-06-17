@@ -131,7 +131,7 @@ export class GraficaBarrasTotalesComponent implements AfterViewInit {
     switch (this.concepto) {
       case "costos_financieros":
         this.title = "Costos financieros";
-        this.conceptos = ['cnuevos', 'cflotillas', 'refacciones', 'bajio', 'intercias'] 
+        this.conceptos = ['costo_nuevos', 'costo_flotillas', 'refacciones', 'bajio', 'intercias'] 
         this.money = "$";
         break;
       default:
@@ -146,8 +146,8 @@ export class GraficaBarrasTotalesComponent implements AfterViewInit {
     let filaTotales = this.dataMes.find((registro) => registro.estacion === "Total");
     let filaTotalesMesAnt = this.dataMesAnterior.find((registro) => registro.estacion === "Total");
       this.conceptos.forEach( concepto => {
-        const value = Number(filaTotales[concepto]);
-        const valueMA = Number(filaTotalesMesAnt[concepto]);
+        const value = Number(filaTotales[concepto] || 0);
+        const valueMA = Number(filaTotalesMesAnt[concepto] || 0);
         this.dataSerie.push(value);
         this.dataSerieMA.push(valueMA);
       });

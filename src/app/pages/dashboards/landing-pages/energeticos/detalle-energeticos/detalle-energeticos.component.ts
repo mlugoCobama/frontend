@@ -6,6 +6,7 @@ import { AlertErrorService } from "src/app/core/services/alert-error.service";
 import { EnergeticosGaserasService } from "src/app/core/services/dashboard/energeticos-gaseras.service";
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
 import dataMeses from "src/environments/meses.json";
+import { SortDatos } from "src/app/core/helpers/sort-datos";
 
 @Component({
   selector: "app-detalle-energeticos",
@@ -73,7 +74,8 @@ export class DetalleEnergeticosComponent implements OnInit {
           if (data.success) {
             this.localStorage.removeItem("DataEnergeticos");
 
-            this.ordenarDatos(data);
+            SortDatos.ordenarDatos(data, this.concepto);
+            
             this.localStorage.setItem("DataEnergeticos", data.data);
             this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
             this.energerticosGaseras.actualizarData();
@@ -91,40 +93,6 @@ export class DetalleEnergeticosComponent implements OnInit {
           this.alertService.alertError(error, false);
         }
       );
-  }
-
-  /**
-   * Ordena los datos de mayor a menor en base al mes
-   * @param data Datos recuperados de la base de datos
-   */
-  public ordenarDatos(data) {
-    if (data.data["mes"].length > 1) {
-      const arrayMes = data.data["mes"];
-      const arrayReferencia = arrayMes.map((item, index) => ({
-        index,
-        value: item[this.concepto],
-      }));//Genera un array con index y el valor por el cual se va a ordenar
-
-      arrayReferencia.sort((a, b) => b.value - a.value);//Ordena el array de referencia mayor a menor
-      const arrayMes_ordenado = arrayReferencia.map(
-        (item) => arrayMes[item.index] // ordena el array del periodo en base al array de referencia
-      );
-      data.data["mes"] = arrayMes_ordenado;
-      if (data.data["mesAnt"].length > 1) {
-        const arrayMesAnterior = data.data["mesAnt"];
-        const arrayMesAnterior_ordenado = arrayReferencia.map(
-          (item) => arrayMesAnterior[item.index]
-        );
-        data.data["mesAnt"] = arrayMesAnterior_ordenado;
-      }
-      if (data.data["anioAnt"].length > 1) {
-        const arrayAnioAnterior = data.data["anioAnt"];
-        const arrayAnioAnterior_ordenado = arrayReferencia.map(
-          (item) => arrayAnioAnterior[item.index]
-        );
-        data.data["anioAnt"] = arrayAnioAnterior_ordenado;
-      }
-    }
   }
 
   public onChange(select: string, value: any) {

@@ -1,13 +1,12 @@
 import { DatePipe } from "@angular/common";
 import { Component, OnInit, Input } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { ResponseEnergeticosGaseras } from "src/app/core/models/dashboard/energeticos-gaseras";
 import { ResponseAgenciasNissan } from "src/app/core/models/dashboard/agencias-nissan";
 import { AlertErrorService } from "src/app/core/services/alert-error.service";
-import { AgenciasService } from "src/app/core/services/dashboard/agencias.service";
 import { AgenciasRenaultService } from "src/app/core/services/dashboard/agencias-renault.service";
 import { EnergeticosGaserasService } from "src/app/core/services/dashboard/energeticos-gaseras.service";
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
+import { SortDatos } from "src/app/core/helpers/sort-datos";
 import dataMeses from "src/environments/meses.json";
 
 @Component({
@@ -49,7 +48,7 @@ export class DetalleReanultComponent implements OnInit {
     this.concepto = this.route.snapshot.paramMap.get("concepto");
     this.subConceptos(this.concepto);
     this.isLoad = false;
-    this.titulo = this.concepto.replace('_',' ');
+    this.titulo = this.concepto.replace(/_/g, " ");
     this.recuperarLocalStorage();
   }
 
@@ -79,7 +78,9 @@ export class DetalleReanultComponent implements OnInit {
         (data: ResponseAgenciasNissan) => {
           if (data.success) {
             this.localStorage.removeItem("DataEnergeticos");
-            this.ordenarDatos(data);
+
+            SortDatos.ordenarDatos(data, this.concepto);
+          
             this.localStorage.setItem("DataEnergeticos", data.data);
             this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
             this.energerticosGaseras.actualizarData();
@@ -98,40 +99,6 @@ export class DetalleReanultComponent implements OnInit {
           this.alertService.alertError(error, false);
         }
       );
-  }
-
-  /**
-   * Ordena los datos de mayor a menor en base al mes
-   * @param data Datos recuperados de la base de datos
-   */
-  public ordenarDatos(data) {
-    if (data.data["mes"].length > 1) {
-      const arrayMes = data.data["mes"];
-      const arrayReferencia = arrayMes.map((item, index) => ({
-        index,
-        value: item[this.concepto],
-      }));//Genera un array con index y el valor por el cual se va a ordenar
-
-      arrayReferencia.sort((a, b) => b.value - a.value);//Ordena el array de referencia mayor a menor
-      const arrayMes_ordenado = arrayReferencia.map(
-        (item) => arrayMes[item.index] // ordena el array del periodo en base al array de referencia
-      );
-      data.data["mes"] = arrayMes_ordenado;
-      if (data.data["mesAnt"].length > 1) {
-        const arrayMesAnterior = data.data["mesAnt"];
-        const arrayMesAnterior_ordenado = arrayReferencia.map(
-          (item) => arrayMesAnterior[item.index]
-        );
-        data.data["mesAnt"] = arrayMesAnterior_ordenado;
-      }
-      if (data.data["anioAnt"].length > 1) {
-        const arrayAnioAnterior = data.data["anioAnt"];
-        const arrayAnioAnterior_ordenado = arrayReferencia.map(
-          (item) => arrayAnioAnterior[item.index]
-        );
-        data.data["anioAnt"] = arrayAnioAnterior_ordenado;
-      }
-    }
   }
 
   public onChange(select: string, value: any) {
@@ -174,9 +141,6 @@ export class DetalleReanultComponent implements OnInit {
       case "hyp":
         this.conceptos = ['hyp', 'utilidad_hyp']
         break;
-      case "hyp":
-        this.conceptos = ['hyp', 'utilidad_hyp']
-        break;
       case "inventarios":
         this.conceptos = ['inventario_nuevos', 'inventario_seminuevos', "inventario_refacciones"]
         break; 
@@ -193,17 +157,16 @@ export class DetalleReanultComponent implements OnInit {
         this.conceptos = ['plan_piso', 'plan_piso_interes']
         break;
       case "costos_financieros":
-        this.conceptos = ['cnuevos', 'cflotillas', "refacciones", "bajio"]
+        this.conceptos = ['costo_nuevos', 'costo_flotillas', "refacciones", "bajio"]
         break;
-      case "total_ventas_ref":
+      case "ventas_postventa":
         this.conceptos = ['ventas_servicio', 'refacciones_servicio', "refacciones_hyp", "refacciones_mostrador"]
-        break;     
+        break; 
       default:
         this.conceptos = [this.concepto];
         break;
     }
   }
-
 
 }
 

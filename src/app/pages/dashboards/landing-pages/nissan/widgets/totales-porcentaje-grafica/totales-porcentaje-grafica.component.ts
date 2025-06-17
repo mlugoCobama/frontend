@@ -200,7 +200,7 @@ public options = {
 
     private setTitle() {
       switch (this.concepto) {
-          case 'total_ventas_ref':
+          case 'ventas_postventa':
             this.title = 'Ventas de post venta';
             this.conceptos = ['ventas_servicio', 'refacciones_mostrador','refacciones_hyp','refacciones_servicio'];
             this.simbolo = "$"
