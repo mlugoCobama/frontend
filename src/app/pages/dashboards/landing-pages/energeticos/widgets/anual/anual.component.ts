@@ -24,6 +24,10 @@ export class AnualComponent implements OnInit, OnDestroy{
   Highcharts: typeof Highcharts = Highcharts;
   updateFlag = false;
   chartOptions: Highcharts.Options = {
+    credits:{
+      enabled: false,
+      // text: "Dashboard COBAMA"
+    },
     chart:{
       zooming: {
             type: 'x',

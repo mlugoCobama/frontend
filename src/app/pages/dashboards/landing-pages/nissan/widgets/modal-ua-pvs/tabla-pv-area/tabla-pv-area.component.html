@@ -13,9 +13,9 @@
         <tbody>
           <tr (click)="seleccionar(item)"  *ngFor="let item of areas">
             <td>{{ formatearTexto(item) }}</td>
-            <td class="text-end">{{ dataMesAnt[0][item] || 0  | number }}</td>
-            <td class="text-end">{{ dataMes[0][item] || 0  | number}}</td>
-            <td class="text-end">{{ dataAnioAnt[0][item] || 0 | number }}</td>
+            <td class="text-end" [ngClass]="{'text-danger': dataMesAnt[0][item] < 0 }">{{ dataMesAnt[0][item] || 0  | number }}</td>
+            <td class="text-end" [ngClass]="{'text-danger': dataMes[0][item] < 0 }">{{ dataMes[0][item] || 0  | number}}</td>
+            <td class="text-end" [ngClass]="{'text-danger': dataAnioAnt[0][item] < 0 }">{{ dataAnioAnt[0][item] || 0 | number }}</td>
             <td> 
             <div *ngIf="(dataMes[0][item] > dataAnioAnt[0][item]);else templateName" >
                   <i class='bx bx-up-arrow-alt fs-3 text-success'></i>
@@ -29,9 +29,9 @@
         <tfoot>
           <tr>
             <td><b>Total</b></td>
-            <td class="text-end"><b> {{totalMesAnt || 0 | number}} </b></td>
-            <td class="text-end"><b> {{totalMes || 0 | number}} </b></td>
-            <td class="text-end"><b> {{totalAnioAnt || 0 | number}} </b></td>
+            <td class="text-end" [ngClass]="{'text-danger': totalMesAnt < 0 }"><b> {{totalMesAnt || 0 | number}} </b></td>
+            <td class="text-end" [ngClass]="{'text-danger': totalMes < 0 }"><b> {{totalMes || 0 | number}} </b></td>
+            <td class="text-end" [ngClass]="{'text-danger': totalAnioAnt  < 0 }"><b> {{totalAnioAnt || 0 | number}} </b></td>
           </tr>
         </tfoot>
       </table>

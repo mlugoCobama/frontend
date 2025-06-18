@@ -13,9 +13,9 @@
         <tbody>
           <tr (click)="openModalDetalleArea(item)" *ngFor="let item of areas">
             <td>{{ formatearTexto(item) }}</td>
-            <td class="text-end">{{mesAnt[0][item] || 0 | number}}</td>
-            <td class="text-end">{{mes[0][item] || 0 | number}}</td>
-            <td class="text-end">{{anioAnt[0][item] || 0 | number}}</td>
+            <td class="text-end" [ngClass]="{'text-danger': mesAnt[0][item] < 0 }">{{mesAnt[0][item] || 0 | number}}</td>
+            <td class="text-end" [ngClass]="{'text-danger': mes[0][item] < 0 }">{{mes[0][item] || 0 | number}}</td>
+            <td class="text-end" [ngClass]="{'text-danger': anioAnt[0][item] < 0 }">{{anioAnt[0][item] || 0 | number}}</td>
             <td>
             <div *ngIf="(+mes[0][item] > +anioAnt[0][item]); else templateName">
 

@@ -22,7 +22,7 @@
       ></app-porcentajes-graficas>
     </div>
     <div class="col-6">
-      <app-tabla [tipo]="tipo" [concepto]="concepto"></app-tabla>
+      <app-tabla  (filtroGlobal)="filtrarInfo()" [tipo]="tipo"  [concepto]="concepto"></app-tabla>
     </div>
     <div class="col-12">
       <app-anual [concepto]="concepto"></app-anual>

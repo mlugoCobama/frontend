@@ -30,6 +30,10 @@ export class ChartHhistoricaComponent implements OnInit, OnDestroy {
   chartConstructor: string = "stockChart";
 
   chartOptions: Highcharts.Options = {
+    credits:{
+      // enabled: false,
+      // text: "COBAMA"
+    },
     chart: {
       height: 400,
     },

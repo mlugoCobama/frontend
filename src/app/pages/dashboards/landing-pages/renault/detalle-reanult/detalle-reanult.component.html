@@ -110,7 +110,7 @@
             </app-tabla-utilidad-area>
           </div>
           <div class="col-sm-12">
-            <app-tabla [tipo]="tipo" [concepto]="item"></app-tabla>
+            <app-tabla (filtroGlobal)="filtrarInfo()" [tipo]="tipo" [concepto]="item"></app-tabla>
           </div>
         </div>
       </div>

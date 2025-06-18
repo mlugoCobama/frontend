@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, } from '@angular/core';
 import { Config } from 'datatables.net';
 import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
 import { Subject, Subscription } from "rxjs";
@@ -19,6 +19,8 @@ export class TablaComponent implements OnInit {
 
   @Input() concepto: string;
   @Input() tipo: string;
+
+  @Output() filtroGlobal = new EventEmitter<void>();
 
   public dataEnergeticos: any;
 
@@ -57,6 +59,10 @@ export class TablaComponent implements OnInit {
 
     this.isLoad = false;
     // this.reordenarData();
+  }
+
+  setFiltroGlobal() {
+    this.filtroGlobal.emit();
   }
 
   public copiaData:any;

@@ -35,7 +35,7 @@
                         </tr>
                     </tbody>
                     <tfoot>
-                        <tr>
+                        <tr (click)="setFiltroGlobal()">
                             <td><b>Total</b></td>
                             <td class="text-end" [ngClass]="{'text-danger': dataTotales[1][0][this.concepto] < 0 }"><b>{{ dataTotales[1][0][this.concepto] || 0 | number }}</b></td>
                             <td class="text-end" [ngClass]="{'text-danger': dataTotales[0][0][this.concepto] < 0 }"><b>{{ dataTotales[0][0][this.concepto] || 0 | number }}</b></td>
