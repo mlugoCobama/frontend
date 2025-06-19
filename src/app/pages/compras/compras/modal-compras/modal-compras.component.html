@@ -2,7 +2,7 @@
   <h5 class="modal-title" id="exampleModalLabel">
     Nueva Requisición de Compra
   </h5>
-  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="modalRef?.hide()"></button>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="cerrarModal()"></button>
 </div>
 <div class="modal-body">
   <form class="row g-2" [formGroup]="formSolicitudCompra">
@@ -208,7 +208,7 @@
 </div>
 <div class="modal-footer">
   <button
-    type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="modalRef?.hide()"
+    type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="cerrarModal()"
   >
     Cerrar
   </button>

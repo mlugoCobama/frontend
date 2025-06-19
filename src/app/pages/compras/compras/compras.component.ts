@@ -23,6 +23,7 @@ export class ComprasComponent implements OnInit {
 
   public modalRef?: BsModalRef;
 
+  public modalAbierto: boolean = false;
   public showTable: boolean = false;
   public solicitudSelecionada: boolean = false;
   public isLoad: boolean = true;
@@ -66,6 +67,7 @@ export class ComprasComponent implements OnInit {
    * Manejo de componentes
    */
   public openModalNuevo() {
+    this.modalAbierto = true;
     const initialState: ModalOptions = {
       initialState: {
         //Datos que envió al componente
@@ -78,6 +80,9 @@ export class ComprasComponent implements OnInit {
       this.isLoad = true;
       this.getAll();
     });
+    this.modalRef.content.modalCerrado.subscribe(() => {
+        this.modalAbierto = false;
+      });
   }
   // Funcion para llenar la vista con el detalle component
   public openDetallesSolicitud(dato: any, evento: any) {

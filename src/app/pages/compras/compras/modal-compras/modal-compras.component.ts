@@ -58,6 +58,7 @@ export class ModalComprasComponent implements OnInit {
     isAgencia: false
     };
 
+  public modalCerrado: EventEmitter<any> = new EventEmitter();
   public event: EventEmitter<any> = new EventEmitter();
   public tableData: Array<any> = [];
   public formData = new FormData();
@@ -320,6 +321,7 @@ export class ModalComprasComponent implements OnInit {
    */
   public cerrarModal(): void {
     this.modalRef.hide();
+    setTimeout(() => { this.modalCerrado.emit() }, 150);
   }
 
   /**

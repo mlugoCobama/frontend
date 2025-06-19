@@ -1,9 +1,10 @@
-import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input,} from '@angular/core';
 
 import ApexCharts from 'apexcharts';
 import { ResponseEnergeticosGaseras } from 'src/app/core/models/dashboard/energeticos-gaseras';
 import { AlertErrorService } from 'src/app/core/services/alert-error.service';
 import { EnergeticosGaserasService } from 'src/app/core/services/dashboard/energeticos-gaseras.service';
+
 
 @Component({
   selector: 'app-totales',
@@ -146,5 +147,4 @@ export class TotalesComponent implements AfterViewInit {
       this.dataSerie.push( [new Date(this.totalAnio[i]['fecha']).getTime() , this.totalAnio[i][this.concepto] || 0] );
     }
   }
-
 }

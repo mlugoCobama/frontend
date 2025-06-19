@@ -24,6 +24,7 @@ export class ProveedoresComponent implements OnInit {
   public data: any;
   formData: FormData = new FormData();
 
+  public modalAbierto: boolean = false;
   public showTable: boolean = false;
   public isLoad: boolean = true;
   public mostrar: boolean = false;
@@ -56,6 +57,7 @@ export class ProveedoresComponent implements OnInit {
   }
 
   public openModalNuevo() {
+    this.modalAbierto = true;
     const initialState: ModalOptions = {
       initialState: {
         estados: this.estados
@@ -71,9 +73,13 @@ export class ProveedoresComponent implements OnInit {
       this.isLoad = true;
       this.getAll();
     });
+    this.modalRef.content.modalCerrado.subscribe(() => {
+        this.modalAbierto = false;
+      });
   }
 
   public openModalActualizar() {
+    this.modalAbierto = true;
     const initialState: ModalOptions = {
       initialState: {
         proveedor: this.proveedor,
@@ -90,9 +96,13 @@ export class ProveedoresComponent implements OnInit {
       this.isLoad = true;
       this.getAll();
     });
+    this.modalRef.content.modalCerrado.subscribe(() => {
+        this.modalAbierto = false;
+      });
   }
 
   public openModalExpedientes() {
+    this.modalAbierto = true;
     const initialState: ModalOptions = {
       initialState: {
         proveedor: this.proveedor,
@@ -105,6 +115,9 @@ export class ProveedoresComponent implements OnInit {
     );
     this.modalRef.content.closeBtnName = "Close";
     this.modalRef.content.event.subscribe((res: any) => {});
+    this.modalRef.content.modalCerrado.subscribe(() => {
+        this.modalAbierto = false;
+      });
   }
 
   public selectLocalidad() { //LLena el select localidad desde cat_estados.json

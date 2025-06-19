@@ -9,6 +9,7 @@ import { SwalComprsServiceService } from "src/app/core/services/compras/swal-com
 })
 export class ModalShowProveedorComponent implements OnInit {
 
+    public modalCerrado: EventEmitter<any> = new EventEmitter();  
     public event: EventEmitter<any> = new EventEmitter();
     public proveedor: any;
     public expediente: any;
@@ -73,5 +74,7 @@ export class ModalShowProveedorComponent implements OnInit {
 
    public cerrarModal(): void {
     this.bsModalRef.hide();
+    setTimeout(() => {this.modalCerrado.emit();}, 150)
+
   }
 }

@@ -31,6 +31,7 @@ export class CatUnidadesMedidasComponent implements OnInit{
   public showTable: boolean = false;
   public isLoad: boolean = true;
   public mostrar: boolean = false;
+  public modalAbierto: boolean = false;
 
   public data: any;
   
@@ -55,6 +56,7 @@ export class CatUnidadesMedidasComponent implements OnInit{
 
     // Despliega la ventana modal para un nuevo registro
     public openModalNuevo() {
+      this.modalAbierto =  true;
       const initialState: ModalOptions = {
         initialState: {
         },
@@ -67,13 +69,18 @@ export class CatUnidadesMedidasComponent implements OnInit{
       this.modalRef.content.closeBtnName = "Close";
       this.modalRef.content.event.subscribe(() => {
         this.isLoad = true;
+
         this.mostrar = false;
         this.getAll();
+      });
+      this.modalRef.content.modalCerrado.subscribe(() => {
+        this.modalAbierto = false;
       });
     }
   
     // Despliega una ventana modal para actualizar los registros
     public openModalActualizar() {
+      this.modalAbierto =  true;
       const initialState: ModalOptions = {
         initialState: {
           unidad: this.unidad,
@@ -91,6 +98,9 @@ export class CatUnidadesMedidasComponent implements OnInit{
         this.isLoad = true;
         this.mostrar = false;
         this.getAll();
+      });
+      this.modalRef.content.modalCerrado.subscribe(() => {
+        this.modalAbierto = false;
       });
     }
 

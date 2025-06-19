@@ -12,27 +12,27 @@
                 class="btn btn-success btn-sm"
                 (click)="openModalExpedientes()"
                 *ngIf="mostrar"
-                >Expediente</a
+                ><i class="fas fa-folder-open"></i> Expediente</a
               >
               <a
                 href="javascript:void(0);"
                 class="btn btn-danger btn-sm"
                 (click)="destroy()"
                 *ngIf="mostrar"
-                >Eliminar</a
+                ><i class="fas fa-trash"></i> Eliminar</a
               >
               <a
                 href="javascript:void(0);"
                 class="btn btn-warning btn-sm"
                 (click)="openModalActualizar()"
                 *ngIf="mostrar"
-                >Actualizar</a
+                ><i class="fas fa-edit"></i> Actualizar</a
               >
               <a
                 href="javascript:void(0);"
                 class="btn btn-primary btn-sm"
                 (click)="openModalNuevo()"
-                >Nuevo</a
+                ><i class="fas fa-plus"></i> Nuevo</a
               >
             </div>
           </div>
@@ -49,13 +49,13 @@
               <input type="text" class="form-control form-control-sm" placeholder="Buscar..." [(ngModel)]="busqueda"  (input)="filtrarTabla()"/>
             </div>
           </div>
-          <div style="overflow-y: scroll; height: 20rem;">
-            <div class="tab-page-content mt-3 table-responsive">
+          <div >
+            <div class="tab-page-content mt-3 table-responsive" style="overflow-y: scroll; height: 20rem;">
               <table
               class="table table-hover table-sm table-bordered table-responsive"
               *ngIf="!isLoad"
             >
-              <thead class="table-light">
+              <thead class="table-light" [ngClass] = "modalAbierto === false ? 'sticky-top' : '' ">
                 <tr>
                   <th (click)="ordenarPor('nombre')" style="cursor: pointer;" >Nombre <i [ngClass]="getIconoOrden('nombre')"></i></th>
                   <th (click)="ordenarPor('contacto')" style="cursor: pointer;" >Contacto <i [ngClass]="getIconoOrden('contacto')"></i></th>
