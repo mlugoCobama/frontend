@@ -26,6 +26,7 @@ export class ModalUpdtProveedorComponent implements OnInit {
   public submitted: boolean = false;
   public isCredit: boolean = false;
 
+  public modalCerrado: EventEmitter<any> = new EventEmitter();
   public event: EventEmitter<any> = new EventEmitter();
 
   constructor(
@@ -197,5 +198,7 @@ export class ModalUpdtProveedorComponent implements OnInit {
 
   public cerrarModal(): void {
     this.bsModalRef.hide();
+    setTimeout(() => {this.modalCerrado.emit();}, 150)
+
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, } from '@angular/core';
 import { Config } from 'datatables.net';
 import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
 import { Subject, Subscription } from "rxjs";
@@ -6,7 +6,9 @@ import { EnergeticosGaserasService } from 'src/app/core/services/dashboard/energ
 import { AgenciasService } from 'src/app/core/services/dashboard/agencias.service';
 import { ResponseEnergeticosGaseras } from "src/app/core/models/dashboard/energeticos-gaseras";
 import { ResponseAgenciasNissan } from 'src/app/core/models/dashboard/agencias-nissan';
-import { FuncionesTablas } from 'src/app/core/helpers/funciones-tablas';
+import { AlertErrorService } from "src/app/core/services/alert-error.service";
+
+import { SortDatos } from "src/app/core/helpers/sort-datos";
 
 @Component({
   selector: 'app-tabla',
@@ -17,6 +19,8 @@ export class TablaComponent implements OnInit {
 
   @Input() concepto: string;
   @Input() tipo: string;
+
+  @Output() filtroGlobal = new EventEmitter<void>();
 
   public dataEnergeticos: any;
 
@@ -32,6 +36,7 @@ export class TablaComponent implements OnInit {
 
   constructor(
     private localStorage: LocalStorageServiceService,
+    public alertService: AlertErrorService,
     private gaseras: EnergeticosGaserasService,
     private agencias: AgenciasService,
   ) {}
@@ -56,12 +61,19 @@ export class TablaComponent implements OnInit {
     // this.reordenarData();
   }
 
+  setFiltroGlobal() {
+    this.filtroGlobal.emit();
+  }
+
   public copiaData:any;
   //Actualiza o inicializa los datos 
   private recuperarData(){
     this.dataEnergeticos = [];
     this.dataEnergeticos = this.localStorage.getItem('DataEnergeticos');
+
+    this.dataEnergeticos = SortDatos.obtenerDatosOrdenados(this.dataEnergeticos, this.concepto);
     this.copiaData = this.localStorage.getItem('DataEnergeticos');
+
     this.deleteLast();
     // this.reordenarData();
   }
@@ -130,11 +142,12 @@ export class TablaComponent implements OnInit {
                 //Actualizamos los datos en los demas componentes
                 this.gaseras.actualizarData(); 
               } else {
+                
                 console.log(data.message, data.success);
               }
             },
             (error) => {
-              console.log(error, false);
+              this.alertService.alertError(`${error} \n Espera un momento`, false);
             }
           );
     }else{
@@ -159,7 +172,7 @@ export class TablaComponent implements OnInit {
               }
             },
             (error) => {
-              console.log(error, false);
+              this.alertService.alertError(`${error} \n Espera un momento`, false);
             }
           );
     }

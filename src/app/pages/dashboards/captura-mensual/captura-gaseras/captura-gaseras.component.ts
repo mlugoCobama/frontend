@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import Swal from "sweetalert2";
 
@@ -94,6 +94,21 @@ export class CapturaGaserasComponent implements OnInit {
       buttonsStyling: false,
     }).then((result) => {
       if (result.value) {
+        let noId =  this.dataToSend.find(element => element.sucursales_id === null);
+        if(noId !=  undefined){
+          Swal.fire({
+            title: "ERROR",
+            text: "Esta intentando ingresar una gasera no valida",
+            buttonsStyling: false,
+            icon: "warning",
+            customClass: {
+              confirmButton: "btn btn-success px-4",
+              cancelButton: "btn btn- ms-2 px-4",
+            },
+          });
+          return
+        }
+
         this.energerticosGaseras.save(this.dataToSend).subscribe((response) => {
           if (response.status === "success") {
             Swal.fire({
@@ -184,33 +199,34 @@ export class CapturaGaserasComponent implements OnInit {
       ?.readText()
       .then((text) => {
         this.hasDatos = true;
-        const filas = text
-          .split("\n")
-          .map((row) => row.split("\t").map((cell) => cell.trim()));
-        const filasFiltradas = filas.filter((row) =>
-          row.some((cell) => cell.length > 0)
-        );
-        this.headers = filasFiltradas.length > 0 ? filasFiltradas.shift()! : [];
-        this.showInstructions = false;
-        this.dataMesAgencias = filasFiltradas;
+      /**
+        * const filas = text
+        *    .split("\n")
+        *    .map((row) => row.split("\t").map((cell) => cell.trim()));
+        *  const filasFiltradas = filas.filter((row) =>
+        *    row.some((cell) => cell.length > 0)
+        *  );
+        *  this.headers = filasFiltradas.length > 0 ? filasFiltradas.shift()! : [];
+        *  this.showInstructions = false;
+        *  this.dataMesAgencias = filasFiltradas;
 
-        // Transformar en un array de objetos
-        const result = filasFiltradas.map((row) => {
-          const object = this.headers.reduce((acc, header, index) => {
-            if (header === "Planta") {
-              const estacion = this.catEmpresas.find((e) => e.nombre === row[index]);
-              acc["sucursales_id"] = estacion ? estacion.id : null; // Usar el ID o null si no coincide
-            } else {
-              acc[header] = row[index];
-            }
-            return acc;
-          }, {} as Record<string, string | number | boolean | null>);
-          object["fecha"] = fecha;
-          object["isNew"] = !this.existInfo
-          return object;
-        });
-
-        this.dataToSend = result;
+        *  // Transformar en un array de objetos
+        *  const result = filasFiltradas.map((row) => {
+        *    const object = this.headers.reduce((acc, header, index) => {
+        *      if (header === "Planta") {
+        *        const estacion = this.catEmpresas.find((e) => e.nombre === row[index]);
+        *        acc["sucursales_id"] = estacion ? estacion.id : null; // Usar el ID o null si no coincide
+        *      } else {
+        *        acc[header] = row[index];
+        *      }
+        *      return acc;
+        *    }, {} as Record<string, string | number | boolean | null>);
+        *    object["fecha"] = fecha;
+        *    object["isNew"] = !this.existInfo
+        *    return object;
+        *  });
+        */
+        this.dataToSend = this.procesaDatos( text , fecha );
         this.showBtnAccion = true;
         this.mostrar = true;
 
@@ -237,6 +253,7 @@ export class CapturaGaserasComponent implements OnInit {
         console.error("Error al leer del portapapeles:", err);
       });
   }
+
 
   /**
    * ------------------------------------------
@@ -271,4 +288,76 @@ export class CapturaGaserasComponent implements OnInit {
       this.showBtnAccion = false;
     }
   }
+
+@ViewChild('pasteArea') pasteArea!: ElementRef<HTMLTextAreaElement>;
+
+focusTextArea(){
+  this.pasteArea.nativeElement.focus()
+}
+
+public onPasteFromTextarea(event: ClipboardEvent): void {
+  const fecha = `${this.anio}-${this.mes.toString().padStart(2, "0")}-01`;
+  const clipboardData = event.clipboardData;
+  const text = clipboardData?.getData('text');
+
+  if (!text) return;
+
+  this.hasDatos = true;
+ 
+  this.dataToSend = this.procesaDatos( text , fecha );
+  this.showBtnAccion = true;
+  this.mostrar = true;
+
+  if (this.dataMesAgencias.length === 0) {
+    Swal.fire({
+      title: "Falta algo",
+      text: "Selecciona nuevamente el contenido a pegar",
+      buttonsStyling: false,
+      icon: "warning",
+      customClass: {
+        confirmButton: "btn btn-success px-4",
+        cancelButton: "btn btn- ms-2 px-4",
+      },
+    });
+    this.mostrar = false;
+    this.showBtnAccion = false;
+    this.showTable = false;
+    this.verBtnConsulta = true;
+    return;
+  }
+}
+
+/**
+ * Formatea el contenido del texto pegado del portapapeles
+ * @param texto Texto separado por tabulaciones
+ * @param fecha Fecha para el registro del periodo
+ * @returns json valido pra registro de datos de energéticos
+ */
+private procesaDatos(texto, fecha){
+const filas = texto
+    .split("\n")
+    .map((row) => row.split("\t").map((cell) => cell.trim()));
+  const filasFiltradas = filas.filter((row) =>
+    row.some((cell) => cell.length > 0)
+  );
+  this.headers = filasFiltradas.length > 0 ? filasFiltradas.shift()! : [];
+  this.showInstructions = false;
+  this.dataMesAgencias = filasFiltradas;
+
+  const result = filasFiltradas.map((row) => {
+    const object = this.headers.reduce((acc, header, index) => {
+      if (header === "Planta") {
+        const estacion = this.catEmpresas.find((e) => e.nombre === row[index]);
+        acc["sucursales_id"] = estacion ? estacion.id : null;
+      } else {
+        acc[header] = row[index];
+      }
+      return acc;
+    }, {} as Record<string, string | number | boolean | null>);
+    object["fecha"] = fecha;
+    object["isNew"] = !this.existInfo;
+    return object;
+  });
+  return result;
+}
 }

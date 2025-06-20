@@ -24,6 +24,10 @@ export class AnualComponent implements OnInit, OnDestroy{
   Highcharts: typeof Highcharts = Highcharts;
   updateFlag = false;
   chartOptions: Highcharts.Options = {
+    credits:{
+      enabled: false,
+      // text: "Dashboard COBAMA"
+    },
     chart:{
       zooming: {
             type: 'x',
@@ -78,8 +82,8 @@ export class AnualComponent implements OnInit, OnDestroy{
           const diff = y1 - y2;
 
           let color = 'black';
-          if(diff > 0) color = '#16C47F';
-          else if(diff < 0) color =  '#FB4141';
+          if(diff > 0) {color = '#16C47F';}
+          else if(diff < 0){ color =  '#FB4141';};
 
           tooltip += `${name1}-${name2}: <b style="color:${color}">${Number(diff.toFixed(2)).toLocaleString()}</b><br/>`
         }

@@ -8,11 +8,25 @@ import { LocalStorageServiceService } from "src/app/core/services/local-storage-
 
 import { DatePipe } from "@angular/common";
 import dataMeses from "src/environments/meses.json";
+import { trigger, transition, animate, style, query, group} from "@angular/animations";
 
 @Component({
   selector: 'app-gasolinerias',
   templateUrl: './gasolinerias.component.html',
-  styleUrl: './gasolinerias.component.css'
+  styleUrl: './gasolinerias.component.css',
+  animations: [
+  trigger('fadeSlideInOut', [
+  transition(':enter', [
+    style({ opacity: 0, transform: 'translateY(10px)' }),
+    animate('500ms', style({ opacity: 1, transform: 'translateY(0)' })),
+  ]),
+  transition(':leave', [
+    animate('500ms', style({ opacity: 0, transform: 'translateY(10px)' })),
+  ]),
+]),
+
+]
+
 })
 export class GasolineriasComponent implements OnInit {
   public dataMesActual: any;

@@ -83,6 +83,7 @@ export class PorcentajeEficienciaComponent implements OnInit {
   incicializarGrafica(){
     this.promedioMes = this.calcularSerie(this.dataMes);
     this.promedioMesAnt = this.calcularSerie(this.dataMesAnterior);
+
     this.diferencia = this.promedioMes - this.promedioMesAnt
     this.options.series = [Number( this.promedioMes)]
 
@@ -92,7 +93,7 @@ export class PorcentajeEficienciaComponent implements OnInit {
 
   calcularSerie(data){
     let serie  = [];
-    let total;
+    let total : any;
     data.forEach(dato => {
       if(dato.entidad != 'Total'){
         serie.push(dato[this.concepto]);

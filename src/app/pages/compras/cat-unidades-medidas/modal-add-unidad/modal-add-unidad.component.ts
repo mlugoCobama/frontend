@@ -23,6 +23,8 @@ export class ModalAddUnidadComponent implements OnInit {
   public data: any;
 
   public event: EventEmitter<any> = new EventEmitter();
+  public modalCerrado: EventEmitter<any> = new EventEmitter();
+
     public proveedor: any;
     public expediente: any;
     public archivos:any;
@@ -77,6 +79,7 @@ export class ModalAddUnidadComponent implements OnInit {
           (response) => {
             if (response.status === "success") {
               this.event.emit(true);
+              this.modalCerrado.emit();
               console.log(response.message);
               Swal.fire({
                 title: "Guardado",
@@ -105,5 +108,6 @@ export class ModalAddUnidadComponent implements OnInit {
 
   public cerrarModal(): void {
     this.bsModalRef.hide();
+    setTimeout(() => {this.modalCerrado.emit();}, 150)
   }
 }

@@ -22,6 +22,7 @@ export class ModalUpdtUnidadComponent {
   public formUpdateUnidades: FormGroup;
   public data: any;
 
+  public modalCerrado: EventEmitter<any> = new EventEmitter();
   public event: EventEmitter<any> = new EventEmitter();
     public proveedor: any;
     public expediente: any;
@@ -87,6 +88,7 @@ export class ModalUpdtUnidadComponent {
         (response) => {
           if (response.status === "success") {
             this.event.emit(true);
+            this.modalCerrado.emit();
             console.log(response.message);
             Swal.fire({
               title: "Guardado",
@@ -114,5 +116,7 @@ export class ModalUpdtUnidadComponent {
 
   public cerrarModal(): void {
     this.bsModalRef.hide();
+    setTimeout(() => {this.modalCerrado.emit();}, 150)
+    
   }
 }

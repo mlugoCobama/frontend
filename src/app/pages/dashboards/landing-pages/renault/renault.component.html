@@ -21,7 +21,7 @@
     </div>
   </div>
 <!-- Unidades vendidas  -->
-<div class="row" *ngIf="!isLoad">
+<div class="row" *ngIf="!isLoad" @fadeSlideInOut>
     <div class="col-xl-12">
         <div class="row">
             <div class="col-sm-4">
@@ -62,7 +62,7 @@
     </div>
 </div>
 <!-- Ordenes de servicio -->
-<div class="row" *ngIf="!isLoad">
+<div class="row" *ngIf="!isLoad" @fadeSlideInOut>
     <div class="col-xl-12">
         <div class="row">
             <div class="col-sm-6">
@@ -92,13 +92,13 @@
 </div>
 
 <!-- Ventas de post venta, Inventarios -->
-<div class="row" *ngIf="!isLoad">
+<div class="row" *ngIf="!isLoad" @fadeSlideInOut>
     <div class="col-xl-6">
         <app-totales-porcentaje-grafica 
             [dataMes]="dataMesActual" 
             [dataMesAnterior]="dataMesAnterior" 
             tipo = "renault-detalle"
-            concepto="total_ventas_ref"
+            concepto="ventas_postventa"
         ></app-totales-porcentaje-grafica>
     </div>
     <div class="col-xl-6">
@@ -112,7 +112,7 @@
 </div>
 
 <!-- Antiguedad inventario -->
-<div class="row" *ngIf="!isLoad">
+<div class="row" *ngIf="!isLoad" @fadeSlideInOut>
     <div class="col-xl-6">
         <app-stack-grafica
             [dataAntInventario] = "dataAntInventario"
@@ -132,7 +132,7 @@
 </div>
 
 <!-- PRESTAMOS NRF Y PLAN PISO -->
-<div class="row" *ngIf="!isLoad">
+<div class="row" *ngIf="!isLoad" @fadeSlideInOut>
     <div class="col-xl-6">
         <app-card-prestamos
             concepto = "nrf"
@@ -152,7 +152,7 @@
 </div>
 
 <!-- Gastos y costo financiero -->
- <div class="row" *ngIf="!isLoad">
+ <div class="row" *ngIf="!isLoad" @fadeSlideInOut>
     <div class="col-xl-6">
         <app-grafica-donut 
             [dataMes]="dataMesActual" 
@@ -173,7 +173,7 @@
  </div>
 
  <!-- UNO -->
-<div class="row" *ngIf="!isLoad">
+<div class="row" *ngIf="!isLoad" @fadeSlideInOut>
     <div class="col-xl-12">
         <app-totales-grafica 
             [dataMes]="dataMesActual" 
@@ -187,7 +187,7 @@
 </div>
 
 <!-- UTILIDAD AREA Y BONOS MARCAS -->
-<div class="row" *ngIf="!isLoad">
+<div class="row" *ngIf="!isLoad" @fadeSlideInOut>
     <div class="col-xl-6">
         <app-totales-porcentaje-grafica 
             [dataMes]="dataMesActual" 
@@ -207,7 +207,7 @@
 </div>
 
 <!-- OBJETIVOS Y PERSONAL -->
-<div class="row" *ngIf="!isLoad">
+<div class="row" *ngIf="!isLoad" @fadeSlideInOut>
     <div class="col-xl-6">
         <app-barras-horizontales-metas 
             [dataMes]="dataMesActual" 

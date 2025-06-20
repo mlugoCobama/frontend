@@ -13,9 +13,9 @@
         <tbody>
           <tr (click)="openModalNuevo(item.pv, item.id)"  *ngFor="let item of datos">
             <td>{{ item.pv }}</td>
-            <td class="text-end"> {{ item.mesAnt || 0 | number}} </td>
-            <td class="text-end"> {{ item.mes || 0 | number }} </td>
-            <td class="text-end"> {{ item.anioAnt || 0 | number}} </td>
+            <td class="text-end" [ngClass]="{'text-danger': item.mesAnt < 0 }"> {{ item.mesAnt || 0 | number}} </td>
+            <td class="text-end" [ngClass]="{'text-danger': item.mes < 0 }"> {{ item.mes || 0 | number }} </td>
+            <td class="text-end" [ngClass]="{'text-danger': item.anioAnt < 0 }"> {{ item.anioAnt || 0 | number}} </td>
             <td>
             <div *ngIf = "item.mes > item.anioAnt; else templateName">
                   <i class='bx bx-up-arrow-alt fs-3 text-success'></i>

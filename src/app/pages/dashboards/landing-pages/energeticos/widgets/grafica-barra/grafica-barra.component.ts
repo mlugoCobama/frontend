@@ -26,6 +26,10 @@ export class GraficaBarraComponent implements OnInit, OnDestroy {
   updateFlag = false;
 
   chartOptions: Highcharts.Options = {
+    credits:{
+      enabled: false,
+      // text: "Dashboard COBAMA"
+    },
     title: {
       text: "Mensual",
     },
