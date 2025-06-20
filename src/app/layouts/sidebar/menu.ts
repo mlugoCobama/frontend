@@ -82,6 +82,12 @@ export const MENU: MenuItem[] = [
             link: '/nissan/compra-seminuevos',
             parentId: 30
         },
+        {
+            id: 32,
+            label: 'Comisiones',
+            link: '/nissan/comisiones',
+            parentId: 30
+        },
 
       ]
     },

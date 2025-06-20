@@ -11,12 +11,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {CdkStepperModule} from '@angular/cdk/stepper';
 import { NgStepperModule } from 'angular-ng-stepper';
 import { ComprasSeminuevosComponent } from './compras-seminuevos/compras-seminuevos.component';
+import { ComisionesComponent } from './comisiones/comisiones.component';
 
 
 @NgModule({
   declarations: [
     PedidosUnidadesComponent,
-    ComprasSeminuevosComponent
+    ComprasSeminuevosComponent,
+    ComisionesComponent
   ],
   imports: [
     CommonModule,

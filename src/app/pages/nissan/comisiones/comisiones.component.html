@@ -1,0 +1,62 @@
+<app-loader></app-loader>
+<div class="container-fluid">
+
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+
+        <div class="card-body border-bottom">
+          <div class="d-flex align-items-center">
+            <h5 class="mb-0 card-title flex-grow-1">Comisiones</h5>
+            <div class="flex-shrink-0 d-flex gap-1">
+              <!--a href="javascript:void(0);" class="btn btn-primary btn-sm" >Nuevo</a-->
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body border-bottom table-responsive">
+          <!--div class="d-flex justify-content-center" >
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div-->
+          <table class="table table-striped table-hover table-sm table-bordered" >
+            <thead class="table-light">
+              <tr>
+                <th>Fecha</th>
+                <th>Factura</th>
+                <th>Razón Social</th>
+                <th>Inventario</th>
+                <th>Venta</th>
+                <th>Costos</th>
+                <th class="text-nowrap">Bonificaciones Extra</th>
+                <th>Utilidad</th>
+                <th>Vendedor</th>
+                <th>Descripción</th>
+                <th>Serie</th>
+                <th class="text-nowrap">Tipo de Venta</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of data">
+                    <td class="text-nowrap">{{item.fecha_factura}}</td>
+                    <td>{{item.faau_nofactura}}</td>
+                    <td class="text-nowrap">{{item.faau_razonfactura}}</td>
+                    <td class="text-nowrap">{{item.vehi_clas_clave}} {{item.vehi_anio}}-{{item.vehi_numeroinventario}}</td>
+                    <td>{{item.Venta | number}}</td>
+                    <td>{{item.Costo | number}}</td>
+                    <td>{{item.bonificacion | number}}</td>
+                    <td>{{item.Utilidad | number}}</td>
+                    <td>{{item.faau_vend_clave}}</td>
+                    <td class="text-nowrap">{{item.mode_descripcion}}</td>
+                    <td>{{ item.vehi_serie }}</td>
+                    <td>{{item.faau_form_TipoVenta}}</td>
+                </tr>
+            </tbody>
+          </table>
+        </div><!--div.card-body-->
+    </div>
+    </div>
+  </div>
+
+</div> <!-- container-fluid -->

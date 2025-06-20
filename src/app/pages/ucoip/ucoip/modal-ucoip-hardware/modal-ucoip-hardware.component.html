@@ -1,0 +1,26 @@
+<div class="modal-header bg-primary-subtle ">
+  <h5 class="modal-title">Hardware</h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="cerrarModal()"></button>
+</div>
+<div class="modal-body">    
+  <table datatable [dtOptions]="dtOptionsModal" class="table table-striped table-hover table-sm table-bordered" >
+    <thead class="table-light">
+      <th>Tipo</th>
+      <th>Marca</th>
+      <th>Modelo</th>
+      <th>Número de Serie</th>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of dataInventario">
+        <td>{{ item.tipo }}</td>
+        <td>{{ item.marca }}</td>
+        <td>{{ item.modelo }}</td>
+        <td>{{ item.no_serie }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="modal-footer bg-primary-subtle ">
+  <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="cerrarModal()">Cerrar</button>
+</div>
+
