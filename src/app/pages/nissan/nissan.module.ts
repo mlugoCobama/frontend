@@ -7,6 +7,7 @@ import { DataTablesModule } from 'angular-datatables';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { UIModule } from 'src/app/shared/ui/ui.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask'
 
 import {CdkStepperModule} from '@angular/cdk/stepper';
 import { NgStepperModule } from 'angular-ng-stepper';
@@ -30,6 +31,11 @@ import { ComisionesComponent } from './comisiones/comisiones.component';
     ReactiveFormsModule,
     CdkStepperModule,
     NgStepperModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
+  ],
+  providers: [
+    provideNgxMask()
   ]
 })
 export class NissanModule { }
