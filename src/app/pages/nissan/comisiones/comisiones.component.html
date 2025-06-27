@@ -15,59 +15,54 @@
         </div>
 
         <div class="card-body border-bottom table-responsive">
-          <!--div class="d-flex justify-content-center" >
+          <div class="row g-3 mb-1">
+            <div class="col-auto">
+              <label>Agencias</label>
+              <select (change)="onSelectedAgencia($event.target.value)" class="form-select form-select-sm " aria-label=".form-select-sm example">
+                <option value="0"selected>Selecciona uno</option>
+                <option value="1">Universidad</option>
+                <option value="2">Insurgentes</option>
+                <option value="3">Azcapotzalco</option>
+                <option value="3">Campestre</option>
+              </select>
+            </div>
+            <div class="col-auto">
+              <label >Fecha inicial</label>
+              <input (change)="onSelectInicio($event.target.value)" type="date" class="form-control form-control-sm" [max]="hoy">
+            </div>
+            <div class="col-auto">
+              <label>Fecha Final</label>
+              <input (change)="onSelectFin($event.target.value)" type="date" class="form-control form-control-sm" [max]="hoy">
+            </div>
+            <div *ngIf = "!isLoadig && showTable"class="col-auto">
+              <label >Vendedor</label>
+              <select class="form-select form-select-sm " aria-label=".form-select-sm example">
+                <option selected>Selecciona uno</option>
+                <option *ngFor="let item of vendedores" value="+item">{{item}}</option>
+              </select>
+            </div>
+            <div class="col-auto pt-4">
+              <button  *ngIf="ready" type="submit" class="btn btn-sm btn-info mb-3" (click)="getAll()"> <i class="fas fa-search"></i> Buscar</button>
+            </div>
+          </div>        
+
+          <div class="d-flex justify-content-center"  *ngIf = "showTable && isLoadig">
             <div class="spinner-border" role="status">
               <span class="visually-hidden">Loading...</span>
             </div>
-          </div-->
-          <div class="row g-3 mb-1">
-            <div class="col-auto">
-              <label for="validationTooltip02">Empresa</label>
-              <select class="form-select form-select-sm " aria-label=".form-select-sm example">
-                <option selected>Empresa</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </select>
-            </div>
-            <div class="col-auto">
-              <label for="validationTooltip02">Fecha inicial</label>
-              <input type="date" class="form-control form-control-sm" id="validationTooltip02" placeholder="Last name" value="Otto" required>
-            </div>
-            <div class="col-auto">
-              <label for="validationTooltip02">Fecha Final</label>
-              <input type="date" class="form-control form-control-sm" id="validationTooltip02" placeholder="Last name" value="Otto" required>
-            </div>
-            <div class="col-auto">
-              <label for="validationTooltip02">Vendedor</label>
-              <select class="form-select form-select-sm " aria-label=".form-select-sm example">
-                <option selected>Vendedor</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </select>
-            </div>
-            <div class="col-auto pt-4">
-              <button type="submit" class="btn btn-sm btn-info mb-3"> <i class="fas fa-search"></i> Buscar</button>
-            </div>
-            <div class="col-auto pt-4">
-              <button type="submit" class="btn btn-sm btn-success mb-3" (click)="saveFormData()"> <i class="fas fa-save"></i> Guardar</button>
-            </div>
           </div>
-          <div style="overflow-y: auto; height: 30rem">
-             <form [formGroup]="formDatosGastos" >
-            <table class="table table-striped table-hover table-sm table-bordered"  >
+          <div style="overflow-y: auto; height: 30rem"  *ngIf = "showTable && !isLoadig">
+            <form [formGroup]="formDatosGastos" >
+            <table *ngIf = "data.length > 0; else mensaje" class="table table-striped table-hover table-sm table-bordered"  >
             <thead class="table-light sticky-top">
               <tr>
                 <th>Fecha</th>
                 <th>Factura</th>
                 <th>Razón Social</th>
                 <th>Inventario</th>
-               
                 <th>Vendedor</th>
                 <th>Descripción</th>
                 <th>Serie</th>
-                
                  <!-- Valores calculo Utilidad -->
                 <th>Venta</th>
                 <th>Costos</th>
@@ -80,6 +75,7 @@
                 <th>Gasolina</th>
                 <th>Previa</th>
                 <th>Descuentos</th>
+                <th class="text-nowrap">Descuento IMPULSO</th>
                 <th>Traslados</th>
                 <th class="text-nowrap">Total subsidios desembolso</th>
                 <th class="text-nowrap">Descuento de gastos DA adicional</th>
@@ -88,9 +84,9 @@
                 <th>Placas</th>
                 <th class="text-nowrap">Total Gastos</th>
                 <th class="text-nowrap">Utilidad final</th>
-                
                 <!-- <th class="text-nowrap">Comision BDC</th> -->
                 <th class="text-nowrap">Comision APV</th>
+                <th colspan="2"> Acciones </th>
                 
               </tr>
             </thead>
@@ -112,36 +108,71 @@
                     <td class="text-end">
                       {{(findPorcentaje(item.faau_form_TipoVenta) * 100) | number:'1.1-1'}}%
                     </td> 
-                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text" [formControlName]="'otros_'+item.faau_nofactura" placeholder="Otros"></td>
-                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text" [formControlName]="'gasolina_'+item.faau_nofactura" placeholder="Gasolina"></td>
-                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text" [formControlName]="'previa_'+item.faau_nofactura" placeholder="Previa"></td>
-                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text" [formControlName]="'descuentos_'+item.faau_nofactura" placeholder="Descuentos"></td>
-                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text" [formControlName]="'traslados_'+item.faau_nofactura" placeholder="Traslados"></td>
-                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text" [formControlName]="'total_subsidios_'+item.faau_nofactura" placeholder="Total subsidios desembolso"></td>
-                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text" [formControlName]="'descuento_gastos_'+item.faau_nofactura" placeholder="Descuento de gastos DA adicional" [disableControl]="true"></td>
-                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text" [formControlName]="'cortesia_'+item.faau_nofactura" placeholder="Cortesía"></td>
-                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text" [formControlName]="'accesorios_'+item.faau_nofactura" placeholder="Accesorios"></td>
-                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text" [formControlName]="'placas_'+item.faau_nofactura" placeholder="Placas"></td>
+                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'otros_'+item.faau_nofactura" placeholder="Otros"></td>
+                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'gasolina_'+item.faau_nofactura" placeholder="Gasolina"></td>
+                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'previa_'+item.faau_nofactura" placeholder="Previa"></td>
+                    <td><input *ngIf="item.vehi_clas_clave != NU" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'descuentos_'+item.faau_nofactura" placeholder="Descuentos"></td>
+                    <td><input *ngIf="item.vehi_clas_clave === NU" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'descuento_impulso_'+item.faau_nofactura" placeholder="Descuentos IMPULSO"></td>
+                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'traslados_'+item.faau_nofactura" placeholder="Traslados"></td>
+                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'total_subsidios_'+item.faau_nofactura" placeholder="Total subsidios desembolso"></td>
+                    <td><input *ngIf="item.vehi_clas_clave != NU" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'descuento_gastos_'+item.faau_nofactura" placeholder="Descuento de gastos DA adicional"></td>
+                    <td><input *ngIf="item.vehi_clas_clave === NU" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'cortesia_'+item.faau_nofactura" placeholder="Cortesía"></td>
+                    <td><input *ngIf="item.vehi_clas_clave != NU" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'accesorios_'+item.faau_nofactura" placeholder="Accesorios"></td>
+                    <td><input *ngIf="item.vehi_clas_clave != NU" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'placas_'+item.faau_nofactura" placeholder="Placas"></td>
                     
                      <td class="text-end text-danger fw-bold">
-                      {{formatNumber(calcularTotalGastosFila(item.faau_nofactura))}}
+                      {{calcularTotalGastosFila(item.faau_nofactura)  | number: '1.1-2'}}
                     </td> 
                     <td class="text-end text-success fw-bold">
-                      {{formatNumber(calcularUtilidadFinal(item))}}
+                      {{calcularUtilidadFinal(item) | number: '1.1-2'}}
                     </td>
                     <td class="text-end text-primary fw-bold">
-                      {{formatNumber(calcularComisionApv(item))}}
+                      {{calcularComisionApv(item) | number: '1.1-2'}}
                     </td>
-                    
+                    <td class="text-center">
+                      <button *ngIf="item.isNew && calcularTotalGastosFila(item.faau_nofactura) > 0 ; else elseBlock"  type="submit" class="btn btn-sm btn-success" (click)="guardarDatos(item)">
+                         <i class="fas fa-save"></i>
+                      </button>
+                      <ng-template #elseBlock>
+                         <div class="btn btn-sm btn-secondary">
+                        <i class="fas fa-ban"></i>
+                      </div>
+                        <!-- <button  type="submit" class="btn btn-sm btn-warning" (click)="guardarDatos(item)">
+                         <i class="fas fa-save"></i>
+                      </button> -->
+                      </ng-template>
+                    </td>
+                    <td class="text-center">
+                      <button *ngIf="!item.isNew; else deshabilitado" type="submit" class="btn btn-sm btn-primary" (click)="guardarDatos(item)">
+                         <i class="fas fa-file-invoice-dollar"></i>
+                      </button>
+                      <ng-template #deshabilitado>
+                      <div class="btn btn-sm btn-secondary">
+                        <i class="fas fa-ban"></i>
+                      </div>
+                      </ng-template>
+                    </td>
                   </tr>
             </tbody>
           </table>
-          </form>
-          </div>
-
+          </form>  
         </div><!--div.card-body-->
+        <!-- <app-tabla-pagadas
+          *ngIf = "showTable && !isLoadig"
+          [showTable] = "showTable"
+          [isLoadig] = "isLoadig"
+          [data] = "data"
+          [porcentajes] = "porcentajes"
+          ></app-tabla-pagadas> -->
+          </div>
     </div>
     </div>
   </div>
 
 </div> <!-- container-fluid -->
+<ng-template #mensaje>
+  <div class="text-center text-muted pt-5">
+    <Strong>No se encontraron registros para mostrar...</Strong>
+    <p>Intenta filtrar por un periodo distinto<br>ó<br>Revisa en el apartado de comisiones pagadas</p>
+  </div>
+</ng-template>

@@ -13,13 +13,17 @@ import {CdkStepperModule} from '@angular/cdk/stepper';
 import { NgStepperModule } from 'angular-ng-stepper';
 import { ComprasSeminuevosComponent } from './compras-seminuevos/compras-seminuevos.component';
 import { ComisionesComponent } from './comisiones/comisiones.component';
+import { TablaCapturaComponent } from './comisiones/tabla-captura/tabla-captura.component';
+import { TablaPagadasComponent } from './comisiones/tabla-pagadas/tabla-pagadas.component';
 
 
 @NgModule({
   declarations: [
     PedidosUnidadesComponent,
     ComprasSeminuevosComponent,
-    ComisionesComponent
+    ComisionesComponent,
+    TablaCapturaComponent,
+    TablaPagadasComponent
   ],
   imports: [
     CommonModule,

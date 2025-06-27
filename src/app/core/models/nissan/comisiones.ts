@@ -21,6 +21,18 @@ export interface Comision {
     vehi_OtrosCarCont:number;
     bonificacion:number;
     Utilidad:number;
+    otros:number;
+    gasolina:number;
+    previa:number;
+    descuentos:number;
+    traslados:number;
+    descuento_impulso:number;
+    total_subsidios:number;
+    descuento_gastos:number;
+    cortesia:number;
+    accesorios:number;
+    placas:number;
+    isNew:boolean;
 }
 
 export interface ResponseComision {
