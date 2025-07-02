@@ -17,6 +17,7 @@
         <th>Descripción</th>
         <th>Observaciones</th>
         <th>Ref. fotográfica</th>
+        <th>Check</th>
         <th *ngFor="let prov of cotProv" class="text-center">
           <strong> {{ prov.proveedores_id[0].nombre }} </strong>
         </th>
@@ -39,6 +40,11 @@
             <i class="fas fa-eye"></i
           ></a>
         </td>
+        <td class="text-center">
+          <div class="form-check text-center">
+            <input class="form-check-input text-center"  type="checkbox" value="" id="flexCheckCheckedDisabled" [checked]="row.confirmado === 1 ? true : false" [disabled] = "solicitudCompra.estatus < enEsts.Solicitado ? false : true">
+          </div>
+        </td>
         <td *ngFor="let prov of cotProv; let i = index">
           <!-- <td *ngFor="let prov of row.detalles"> -->
           <div class="input-group col-sm-1">
@@ -58,7 +64,7 @@
     </tbody>
     <tfoot *ngIf="mostrarTotal">
       <tr >
-        <td colspan="5" class="text-end">
+        <td colspan="6" class="text-end">
           <Strong>SUB-TOTAL (sin iva)</Strong>
         </td>
         <td

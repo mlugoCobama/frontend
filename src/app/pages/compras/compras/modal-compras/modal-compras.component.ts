@@ -308,6 +308,7 @@ export class ModalComprasComponent implements OnInit {
       },
       (error) => {
         this.alertasService.mostrarAlerta("Error", error, "warning", "warning");
+        return;
       }
     );
 

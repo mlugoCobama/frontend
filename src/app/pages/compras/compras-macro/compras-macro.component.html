@@ -1,0 +1,129 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-body border-bottom">
+          <div class="d-flex align-items-center">
+            <h5 class="mb-0 card-title flex-grow-1"> Solicitudes de <strong>Macrotaller</strong></h5>
+            <div class="flex-shrink-0 d-flex gap-1">
+              <a
+                *ngIf="
+                  status >= enEsts.OrdenCompra || status === enEsts.Cancelado
+                "
+                href="javascript:void(0);"
+                class="btn btn-sm btn-primary"
+                (click)="btnDescargarOC()"
+              >
+                <i class="fas fa-file-download"></i>
+                Descargar Orden de Compra
+              </a>
+              <a
+                *ngIf="status === enEsts.EnCotizacion && mostrarBoton"
+                href="javascript:void(0);"
+                class="btn btn-primary btn-sm"
+                (click)="btnGenerarOC()"
+                >Generar Orden de Compra</a
+              >
+              <a
+                *ngIf="!solicitudSelecionada"
+                href="javascript:void(0);"
+                class="btn btn-primary btn-sm"
+                (click)="openModalNuevo()"
+              >
+                <i class="fas fa-plus"></i>
+                Nuevo
+              </a>
+              <a
+                *ngIf="solicitudSelecionada"
+                href="javascript:void(0);"
+                class="btn btn-dark btn-sm"
+                (click)="regresar()"
+              >
+                <i class="mdi mdi-arrow-left"></i>
+                Volver</a
+              >
+              <a
+                *ngIf="
+                  status === enEsts.Solicitado &&
+                  !comprasService.mostrarCotizacionSource.value
+                "
+                href="javascript:void(0);"
+                class="btn btn-info btn-sm"
+                (click)="mostrarCotizacion()"
+                >Cotizar</a
+              >
+              <a
+                *ngIf="
+                  status >= enEsts.Solicitado &&
+                  status < enEsts.Autorizado &&
+                  !comprasService.mostrarCotizacionSource.value &&
+                  status != enEsts.Cancelado
+                "
+                href="javascript:void(0);"
+                class="btn btn-danger btn-sm"
+                (click)="cancelarSolicitud()"
+                >Cancelar</a
+              >
+            </div>
+          </div>
+        </div>
+          <div *ngIf="!solicitudSelecionada" class="card-body border-bottom">
+            <div class="d-flex justify-content-center"  *ngIf="isLoad">
+              <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+            <div>
+              <div *ngIf="!isLoad" class="row justify-content-end">
+                <div class="col-3">
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    placeholder="Buscar..."
+                  />
+                </div>
+              </div>
+              <div class="table-responsive">
+                <div
+                  class="tab-page-content mt-3 table-responsive"  style="overflow-y: auto; height: 20rem">
+                  <table *ngIf="!isLoad"
+                    class="table table-striped table-hover table-sm table-bordered"
+                  >
+                    <thead class="table-light" [ngClass] = "modalAbierto === false ? 'sticky-top' : '' ">
+                      <tr>
+                        <th style="cursor: pointer">Folio <i></i></th>
+                        <th style="cursor: pointer">Empresa</th>
+                        <th style="cursor: pointer">Solicita</th>
+                        <th style="cursor: pointer">Unidad Destino</th>
+                        <th style="cursor: pointer">Fecha Solicitud</th>
+                        <th class="text-center" style="cursor: pointer">Estatus</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor ="let item of data" (dblclick)="openDetallesSolicitud(item, $event)">
+                        <td>{{ item.folio }}</td>
+                        <td>{{ item.empresa }}</td>
+                        <td>{{ item.usuario_solicita}}</td>
+                        <td>{{ item.usuario_destino }}</td>
+                        <td>{{ item.fecha | date: 'dd/MM/y' }}</td>
+                        <td class="text-center"><span
+                            [ngClass]="'badge rounded-pill font-size-11 ' +item.claseEstado">
+                            {{ item.estado }}
+                          </span></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        <app-detalle-solicitudes-compras
+          [solicitudCompra]="solicitudCompra"
+          [status]="status"
+          *ngIf="solicitudSelecionada"
+          (udtStatus)="updateStatus($event)"
+        ></app-detalle-solicitudes-compras>
+      </div>
+    </div>
+  </div>
+</div>

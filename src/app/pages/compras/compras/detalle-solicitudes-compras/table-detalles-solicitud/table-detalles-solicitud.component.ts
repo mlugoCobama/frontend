@@ -93,6 +93,7 @@ export class TableDetallesSolicitudComponent implements OnInit{
       (response) => {
         if (response) {
           this.detalles = response.data;
+          console.log(this.detalles);
           if (this.solicitudCompra.estatus >= this.enEsts.EnCotizacion) {
 
             this.getProveedoresCotizacion();

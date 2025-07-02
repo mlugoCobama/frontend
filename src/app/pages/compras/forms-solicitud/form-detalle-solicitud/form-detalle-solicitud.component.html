@@ -1,81 +1,4 @@
-<div class="modal-header">
-  <h5 class="modal-title" id="exampleModalLabel">
-    Nueva Requisición de Compra
-  </h5>
-  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="cerrarModal()"></button>
-</div>
-<div class="modal-body">
-  <form class="row g-2" [formGroup]="formSolicitudCompra">
-    <div class="col-md">
-      <label for="empresa" class="form-label form-label-sm">Empresa: *</label>
-      
-      <select
-      *ngIf = "usuarioSolicita.intercompania === 333 ; else nombreEmpresa"
-        class="form-select form-select-sm" aria-label="Default select example" formControlName="empresa" id="empresa"
-        name="empresa" aria-label="empresa"(change)="getUsuarios($event.target.value)">
-        <option value="" selected disabled>Selecciona uno</option>
-        <option *ngIf = "isLoading" value="" [disabled] = "isLoading"> Cargando opciones espera...</option>
-        <option  *ngFor="let item of empresas" [value]="item.intercompania">
-          {{ item.name.toUpperCase() }}
-        </option>
-      </select>
-      <div *ngIf="solicitudCompraFormControl.empresa.touched || submitted || solicitudCompraFormControl.empresa.value === 'Selecciona uno'">
-        <div class="text-danger form-text" *ngIf="solicitudCompraFormControl.empresa.errors?.['required']">
-          Debes de seleccionar una empresa.
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md" *ngIf ="!isAgencia">
-      <label for="usuario_destino" class="form-label">Usuarios: *</label>
-      <select class="form-select form-select-sm" aria-label="Default select example" formControlName="usuario_destino" id="usuario_destino" 
-      name="usuario_destino" aria-label="usuario_destino">
-        <option value="" selected disabled>Selecciona uno</option>
-        <option *ngIf = "!isLoad" value="" [disabled] = "!isLoad"> Cargando opciones espera...</option>
-        <option [disabled] = "disabled" *ngFor="let item of usuarios" [value]="item.id ">
-          {{ item.firstname }} {{ item.realname }} <span>  ({{item.puesto}})</span>
-        </option>
-      </select>
-      <div *ngIf="solicitudCompraFormControl.usuario_destino.touched || submitted">
-        <div
-          class="text-danger form-text" *ngIf="solicitudCompraFormControl.usuario_destino.errors?.['required']">
-          Usuarios es requerido.
-        </div>
-      </div>
-    </div>
-
-    <div *ngIf="isAgencia" class="col-md">
-      <label  class="form-label">Centro de costos *: </label>
-      <select class="form-select form-select-sm" type="text" formControlName="c_c"  
-       id="c_c" name="c_c" aria-label="c_c">
-        <option value="0" selected disabled>Selecciona uno</option>
-        <option *ngFor="let centro of centrosCostos" value="{{ centro.Id }}">
-          {{ centro.Descripcion }}
-        </option>
-      </select>
-    </div>
-
-    <div class="col-md-12">
-      <label for="motivo" class="form-label">Motivo de la compra: *</label>
-      <textarea 
-
-      class="form-control" formControlName="motivo" id="motivo" name="motivo" rows="3"
-      ></textarea>
-
-      <!-- <p [class] = "caracteresRestantes === 0 ? 'text-danger form-text' : 'form-text'">
-        {{longitudMaxima}}/{{caracteresRestantes}}
-      </p> -->
-      <div *ngIf="solicitudCompraFormControl.motivo.touched || submitted">
-        <div
-          class="text-danger form-text" *ngIf="solicitudCompraFormControl.motivo.errors?.['required']">
-          motivo es requerido.
-        </div>
-      </div>
-    </div>
-    <!-- fin primer from -->
-  </form>
-  
-  <h5 class="mb-3 card-title flex-grow-1">Detalle de la Solicitud</h5>
+  <h5 class="mt-2 mb-0 card-title flex-grow-1">Detalle de la Solicitud</h5>
   <form [formGroup]="formDetalleSolicitud" enctype="multipart/form-data">
     <div class="row align-items-center">
       <div class="col-sm-2 my-1">
@@ -83,7 +6,7 @@
         <input
           min="1"
           type="number" formControlName="cantidad" id="cantidad" name="cantidad"
-          aria-label="cantidad" class="form-control form-control-sm" size="4" placeholder="Cantidad"/>
+          aria-label="cantidad" class="form-control form-control-sm" size="4" placeholder="Cantidad *"/>
         <div
           *ngIf="detalleSolicitudFormControl.cantidad.touched || submittedDetail">
           <div class="text-danger form-text" *ngIf="detalleSolicitudFormControl.cantidad.errors?.['required']">
@@ -94,7 +17,7 @@
       <div class="col-sm-2 my-1">
         <select class="form-select form-select-sm" type="text" formControlName="cat_unidades_medida_id" #selectElement 
         (change)="onChange(selectElement)" id="cat_unidades_medida_id" name="cat_unidades_medida_id" aria-label="cat_unidades_medida_id">
-          <option value="" selected disabled>Selecciona una unidad</option>
+          <option value="" selected disabled>Selecciona una unidad *</option>
           <option *ngFor="let item of unidades" value="{{ item.id }}">
             {{ item.nombre }} ({{ item.abreviatura }})
           </option>
@@ -109,7 +32,7 @@
       </div>
       <div class="col-sm-4 my-1">
         <input type="text" formControlName="descripcion" id="descripcion" name="descripcion" aria-label="descripcion" 
-        class="form-control form-control-sm" placeholder="Descripción"/>
+        class="form-control form-control-sm" placeholder="Descripción *"/>
         <div
           *ngIf="detalleSolicitudFormControl.descripcion.touched || submittedDetail">
           <div
@@ -204,21 +127,3 @@
     </tbody>
   </table>
   </div>
-  
-</div>
-<div class="modal-footer">
-  <button
-    type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="cerrarModal()"
-  >
-    Cerrar
-  </button>
-  <button type="button" class="btn btn-primary btn-sm" (click)="save()">
-    Guardar
-  </button>
-</div>
-
-<ng-template #elseBlock ><i class="fas far fa-eye-slash"></i> Sin imagen</ng-template>
-
-<ng-template #nombreEmpresa>
-  <p> <strong>{{ usuarioSolicita.empresa }} </strong> </p>
-</ng-template>

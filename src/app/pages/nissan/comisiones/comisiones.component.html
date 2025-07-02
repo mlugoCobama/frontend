@@ -17,6 +17,14 @@
         <div class="card-body border-bottom table-responsive">
           <div class="row g-3 mb-1">
             <div class="col-auto">
+              <label>Ver</label>
+              <select (change)="onSelectedAgencia($event.target.value)" class="form-select form-select-sm " aria-label=".form-select-sm example">
+                <option value="0"selected>Selecciona uno</option>
+                <option value="1">Pendientes por pagar</option>
+                <option value="2">Pagadas</option>
+              </select>
+            </div>
+            <div class="col-auto">
               <label>Agencias</label>
               <select (change)="onSelectedAgencia($event.target.value)" class="form-select form-select-sm " aria-label=".form-select-sm example">
                 <option value="0"selected>Selecciona uno</option>
@@ -92,7 +100,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="let item of data; let i index">
-                    <td class="text-nowrap">{{item.fecha_factura}}</td>
+                    <td class="text-nowrap">{{item.fecha_factura | date:'d/MM/y'}}</td>
                     <td>{{item.faau_nofactura}}</td>
                     <td class="text-nowrap">{{item.faau_razonfactura}}</td> 
                     <td class="text-nowrap">{{item.vehi_clas_clave}} {{item.vehi_anio}}-{{item.vehi_numeroinventario}}</td>
@@ -108,9 +116,9 @@
                     <td class="text-end">
                       {{(findPorcentaje(item.faau_form_TipoVenta) * 100) | number:'1.1-1'}}%
                     </td> 
-                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'otros_'+item.faau_nofactura" placeholder="Otros"></td>
-                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'gasolina_'+item.faau_nofactura" placeholder="Gasolina"></td>
-                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'previa_'+item.faau_nofactura" placeholder="Previa"></td>
+                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'otros_'+item.faau_nofactura" placeholder="Otros" [disabled]="isDisabled"></td>
+                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'gasolina_'+item.faau_nofactura" placeholder="Gasolina" [disabled]="isDisabled"></td>
+                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'previa_'+item.faau_nofactura" placeholder="Previa" [disabled]="isDisabled"></td>
                     <td><input *ngIf="item.vehi_clas_clave != NU" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'descuentos_'+item.faau_nofactura" placeholder="Descuentos"></td>
                     <td><input *ngIf="item.vehi_clas_clave === NU" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'descuento_impulso_'+item.faau_nofactura" placeholder="Descuentos IMPULSO"></td>
                     <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'traslados_'+item.faau_nofactura" placeholder="Traslados"></td>
