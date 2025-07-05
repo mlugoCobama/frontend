@@ -17,7 +17,7 @@
         <th>Descripción</th>
         <th>Observaciones</th>
         <th>Ref. fotográfica</th>
-        <th>Check</th>
+        <th>Autorizado</th>
         <th *ngFor="let prov of cotProv" class="text-center">
           <strong> {{ prov.proveedores_id[0].nombre }} </strong>
         </th>
@@ -40,14 +40,16 @@
             <i class="fas fa-eye"></i
           ></a>
         </td>
-        <td class="text-center">
-          <div class="form-check text-center">
-            <input class="form-check-input text-center"  type="checkbox" value="" id="flexCheckCheckedDisabled" [checked]="row.confirmado === 1 ? true : false" [disabled] = "solicitudCompra.estatus < enEsts.Solicitado ? false : true">
+        <td class="text-center d-flex align-items-center">
+          <div>
+            <input class="form-check-input"  type="checkbox" value="" id="flexCheckCheckedDisabled" 
+            (change) ="cambioCheck(row, $event)"
+            [checked]="row.confirmado === 1 ? true : false" [disabled] = "solicitudCompra.estatus < enEsts.Solicitado ? false : true">
           </div>
         </td>
         <td *ngFor="let prov of cotProv; let i = index">
           <!-- <td *ngFor="let prov of row.detalles"> -->
-          <div class="input-group col-sm-1">
+          <div *ngIf = "row.confirmado === 1" class="input-group col-sm-1">
             <span class="input-group-text">$</span>
             <input
               type="text"
@@ -79,7 +81,14 @@
       </tr>
     </tfoot>
   </table>
+  <div *ngIf ="solicitudCompra.auto_admin === 0 || solicitudCompra.auto_gg === 0" class="p-2 d-flex justify-content-end">
+     <button class="btn btn-sm btn-warning" (click)="modificarDetalles()">
+    ACTUALIZAR DETALLES
+  </button>
   </div>
+ 
+  </div>
+  
   <ng-template #elseBlock ><i class="fas far fa-eye-slash"></i></ng-template>
   
   <!-- Fin tabla detalle solicitud + precios cotizaciones -->

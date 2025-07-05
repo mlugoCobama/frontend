@@ -60,7 +60,7 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let item of datosFiltrados">
-                    <td><span [ngClass]="item.clase">{{ item.entidad }}</span></td>
+                    <td class="text-center"><span  style="font-size:0.7rem;" [ngClass]="item.clase">{{ item.entidad }}</span></td>
                     <td>{{item.marca_vehiculo}}</td>
                     <td>{{item.submarca}}</td>
                     <td>{{item.modelo}}</td>

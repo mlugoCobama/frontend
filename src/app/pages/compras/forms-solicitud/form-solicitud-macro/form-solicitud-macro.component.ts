@@ -1,9 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UsuariosService } from "src/app/core/services/compras/usuarios.service";
-import {  FormBuilder, FormControl, FormGroup,  Validators, } from "@angular/forms";
+import {  FormBuilder, FormControl, FormGroup,  Validators  } from "@angular/forms";
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
 import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 import { ComprasMacroService } from 'src/app/core/services/compras/compras-macro.service';
+
 
 @Component({
   selector: 'app-form-solicitud-macro',
@@ -31,7 +32,7 @@ export class FormSolicitudMacroComponent implements OnInit{
 
   public empresas:any;
   public usuarios:any;
-  public autotanques: any;
+  public autotanques: any = [];
 
   public isLoad: boolean = false;
   public disabled: boolean = false;
@@ -60,7 +61,7 @@ export class FormSolicitudMacroComponent implements OnInit{
     return new Promise((resolve, reject) => {
       this.formSolicitudCompra = this.formBuilder.group({
         empresa: new FormControl("", Validators.required),
-        usuario_destino: new FormControl(""),
+        usuario_destino: new FormControl("", Validators.required),
         c_c: new FormControl(0),
         motivo: new FormControl(null, Validators.required),
         orden_trabajo: new FormControl(null, Validators.required),
@@ -152,6 +153,7 @@ export class FormSolicitudMacroComponent implements OnInit{
               this.isLoad = true;
               this.disabled = true;
           }
+          // this.autotanquesFormatted(this.autotanques)
           
         } else {
           console.log(response.message);
@@ -180,4 +182,13 @@ export class FormSolicitudMacroComponent implements OnInit{
   resetearFormulario() {
     return this.formSolicitudCompra.reset();
   }
+
+public datosSelect: any;
+public autotanquesFormatted(datos) {
+  this.datosSelect = datos.map(item => ({
+    value: item.id,
+    label: `ECO: ${item.id} ${item.marca_vehiculo} ${item.submarca}(${item.modelo}) PLACAS: ${item.placas}`
+  }));
+}
+
 }
