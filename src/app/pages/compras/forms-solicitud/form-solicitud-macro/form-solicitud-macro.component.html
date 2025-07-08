@@ -1,0 +1,102 @@
+<form class="row g-2" [formGroup]="formSolicitudCompra">
+  <div class="col-md">
+    <label for="empresa" class="form-label form-label-sm">Empresa: *</label>
+
+    <select
+      *ngIf="usuarioSolicita.intercompania === 333; else nombreEmpresa"
+      class="form-select form-select-sm"
+      aria-label="Default select example"
+      formControlName="empresa"
+      id="empresa"
+      name="empresa"
+      aria-label="empresa"
+      (change)="getAutotanques($event.target.value)"
+    >
+      <option value="" selected disabled>Selecciona uno</option>
+      <option *ngIf="isLoading" value="" [disabled]="isLoading">
+        Cargando opciones espera...
+      </option>
+      <option *ngFor="let item of empresas" [value]="item.intercompania">
+        {{ item.name.toUpperCase() }}
+      </option>
+    </select>
+    <div
+      *ngIf="
+        solicitudCompraFormControl.empresa.touched ||
+        submitted ||
+        solicitudCompraFormControl.empresa.value === 'Selecciona uno'
+      "
+    >
+      <div
+        class="text-danger form-text"
+        *ngIf="solicitudCompraFormControl.empresa.errors?.['required']"
+      >
+        Debes de seleccionar una empresa.
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md" *ngIf ="!isAgencia">
+      <label for="usuario_destino" class="form-label">Autotanques: *</label>
+      <select class="form-select form-select-sm" aria-label="Default select example" formControlName="usuario_destino" id="usuario_destino" 
+      name="usuario_destino" aria-label="usuario_destino">
+        <option value="" selected disabled>Selecciona uno</option>
+        <option *ngIf = "!isLoad" value="" [disabled] = "!isLoad"> Cargando opciones espera...</option>
+        <option [disabled] = "disabled" *ngFor="let item of autotanques" [value]="item.id ">
+          ECO: {{ item.id }} {{ item.marca_vehiculo }} {{item.submarca}}({{ item.modelo}}) PLACAS: {{ item.placas }}
+        </option>
+      </select>
+      <div *ngIf="solicitudCompraFormControl.usuario_destino.touched || submitted">
+        <div
+          class="text-danger form-text" *ngIf="solicitudCompraFormControl.usuario_destino.errors?.['required']">
+          Usuarios es requerido.
+        </div>
+      </div>
+       
+    </div>
+
+
+  <div class="col-md-12">
+    <label for="motivo" class="form-label">Motivo de la compra: *</label>
+    <textarea
+      class="form-control"
+      formControlName="motivo"
+      id="motivo"
+      name="motivo"
+      rows="3"
+    ></textarea>
+    <div *ngIf="solicitudCompraFormControl.motivo.touched || submitted">
+      <div
+        class="text-danger form-text"
+        *ngIf="solicitudCompraFormControl.motivo.errors?.['required']"
+      >
+        motivo es requerido.
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Orden de trabajo *</label>
+    <input
+      type="text"
+      class="form-control form-control-sm"
+      id="exampleInputEmail1"
+      formControlName="orden_trabajo"
+      aria-describedby="emailHelp"
+      placeholder="# orden de trabajo"
+    />
+    <div *ngIf="solicitudCompraFormControl.orden_trabajo.touched || submitted">
+      <small
+        *ngIf="solicitudCompraFormControl.motivo.errors?.['required']"
+        id="emailHelp"
+        class="text-danger form-text"
+        >Orden de trabajo es requerido</small
+      >
+    </div>
+  </div>
+  <!-- fin primer from -->
+</form>
+<ng-template #nombreEmpresa>
+  <p>
+    <strong>{{ usuarioSolicita.empresa }} </strong>
+  </p>
+</ng-template>

@@ -23,8 +23,14 @@ export const environment = {
     scrollCollapse: true,
     scrollY: '200px'
   },
+<<<<<<< HEAD
   apiUrl: 'http://backend-dashboard.test/api/',
   //apiUrl: 'http://localhost:8000/api/',
+=======
+  // apiUrl: 'http://192.168.22.226/api/',
+  // apiUrl: 'http://backend-dashboard.test/api/',
+  apiUrl: 'http://localhost:8000/api/',
+>>>>>>> ae5547294f7c7dccc76dd9626374ee4eb1977c6f
   urlApiCodigoPostal: 'https://apicodigospostales.com/v1/'
 };
 

@@ -11,7 +11,7 @@
     <div class="col-md-6">
       <p><strong>Fecha: </strong>{{ solicitudCompra.fecha | date:'dd/MM/yyyy h:mm a'}}</p>
       <p *ngIf="solicitudCompra.c_c === 0">
-        <strong>Usuario Destino: </strong>{{solicitudCompra.usuario_destino}} 
+        <strong>U. Destino: </strong>{{solicitudCompra.usuario_destino}} 
       </p>
       <p *ngIf="solicitudCompra.c_c != 0">
         <strong>Centro de costos: </strong> {{ centrosCostos[solicitudCompra.c_c-1].Descripcion }}

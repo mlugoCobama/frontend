@@ -62,6 +62,7 @@ export class ComisionesComponent implements OnInit {
       (response) => {
         if (response.status) {
           this.porcentajes = response.data;
+          console.log(this.porcentajes);
         } else {
           console.log(response.message);
         }
@@ -111,7 +112,7 @@ export class ComisionesComponent implements OnInit {
         "warning",
         "warning"
       );
-      console.log(this.getRowErrors(item.faau_nofactura));
+      // console.log(this.getRowErrors(item.faau_nofactura));
       return;
     }
       } else if (result.isDenied) {
@@ -156,7 +157,7 @@ public recuperarValoresFactura(nofactura: string): any {
     this.isLoadig = true;
     this.comisionesService.getAll(this.fecha_inicio, this.fecha_fin).subscribe(
       (response) => {
-        console.log(response);
+        // console.log(response);
         if (response.status) {
           this.data = response.data;
           // Filtra los datos para solo mostrar ventas que aun no tiene una comisión calculada
@@ -207,8 +208,9 @@ public recuperarValoresFactura(nofactura: string): any {
       obj[item.tipo_venta] = parseFloat(item.porcentaje_apv);
       return obj;
     }, {});
-    return porcentajes[tipoVenta as keyof typeof porcentajes] || 0;
+    return porcentajes[tipoVenta as keyof typeof porcentajes] || porcentajes["EXTERNO" as keyof typeof porcentajes];
   }
+  
 
   /**
    * Busca el porcentaje para cada tipo de venta
@@ -220,7 +222,7 @@ public recuperarValoresFactura(nofactura: string): any {
       obj[item.tipo_venta] = parseFloat(item.porcentaje_bdc);
       return obj;
     }, {});
-    return porcentajes[tipoVenta as keyof typeof porcentajes] || 0;
+    return porcentajes[tipoVenta as keyof typeof porcentajes] || porcentajes["EXTERNO" as keyof typeof porcentajes];
   }
 
   /**

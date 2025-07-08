@@ -1,47 +1,45 @@
-import { Component, Input, OnInit, EventEmitter, ViewChild } from "@angular/core";
+import { Component,  EventEmitter,  ViewChild } from '@angular/core';
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
+import { ComprasMacroService } from 'src/app/core/services/compras/compras-macro.service';
+import { FormDetalleSolicitudComponent } from '../../forms-solicitud/form-detalle-solicitud/form-detalle-solicitud.component';
+import { FormSolicitudMacroComponent } from '../../forms-solicitud/form-solicitud-macro/form-solicitud-macro.component';
+import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 
-//services
-import { ComprasService } from "src/app/core/services/compras/compras.service";
-import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 
-import { FormDetalleSolicitudComponent } from "../../forms-solicitud/form-detalle-solicitud/form-detalle-solicitud.component";
-import { FormSolicitudComponent } from "../../forms-solicitud/form-solicitud/form-solicitud.component";
-
-import catCentrosCostos from "src/environments/cat_centros_costos.json";
 @Component({
-  selector: "app-modal-compras",
-  templateUrl: "./modal-compras.component.html",
-  styleUrls: ["./modal-compras.component.css"],
+  selector: 'app-modal-compras-macro',
+  templateUrl: './modal-compras-macro.component.html',
+  styleUrl: './modal-compras-macro.component.css'
 })
-export class ModalComprasComponent implements OnInit {
-  
-  public isLoading: boolean = true;
-  public submittedDetail: boolean = false;
-  public isLoad: boolean = false;
-  public showTable: boolean = false;
-  public submitted: boolean = false;
-  public disabled: boolean = false;
-
-  public centrosCostos = catCentrosCostos;
-
-  @ViewChild('formSolicitudMacro') formSolicitudCompra!:  FormSolicitudComponent;
-  @ViewChild('formDetalleSolicitud') tableData!:  FormDetalleSolicitudComponent;
+export class ModalComprasMacroComponent {
 
   public modalCerrado: EventEmitter<any> = new EventEmitter();
   public event: EventEmitter<any> = new EventEmitter();
 
-  /**
-   * variable para regresar el evento
-   */
+  @ViewChild('formSolicitudMacro') formSolicitudCompra!:  FormSolicitudMacroComponent;
+  @ViewChild('formDetalleSolicitud') tableData!:  FormDetalleSolicitudComponent;
+
+  public submitted: boolean = false;
+  public submittedDetail: boolean = false;
+  public isLoad : boolean = false;
+  
   constructor(
-    private alertasService: SwalComprsServiceService,
-    private comprasService: ComprasService,
-    public modalRef: BsModalRef
-  ) {}
+    public modalRef: BsModalRef,
+    public alertasService : SwalComprsServiceService,
+    public comprasMacro : ComprasMacroService
+  ){}
 
-  public ngOnInit(): void {
 
+  ngAfterViewInit() {
+  }
+
+
+  /**
+   * cierra la ventana modal
+   */
+  public cerrarModal(): void {
+    this.modalRef.hide();
+    setTimeout(() => { this.modalCerrado.emit() }, 150);
   }
 
   /**
@@ -54,14 +52,12 @@ export class ModalComprasComponent implements OnInit {
 
     if (!this.formSolicitudCompra.esValido()) {
       this.isLoad = false;
-
       this.alertasService.mostrarAlerta(
         "Alerta",
         "Debes llenar correctamente todos los campos",
         "warning",
         "warning"
       );
-
       return;
     }
 
@@ -70,7 +66,6 @@ export class ModalComprasComponent implements OnInit {
      */
     if (!this.tableData.hasDatos()) {
       this.isLoad = false;
-
       this.alertasService.mostrarAlerta(
         "Alerta",
         "Agrega por lo menos un elemento a la solicitud",
@@ -87,14 +82,6 @@ export class ModalComprasComponent implements OnInit {
       detalles: this.tableData.getDetalles(),
     };
 
-    if(!this.formSolicitudCompra.getIsAgencia()){
-      data.c_c = 0;
-    }
-    
-    if (this.formSolicitudCompra.getIsAgencia()) {
-      data.usuario_destino = this.formSolicitudCompra.obtenerUsuarios();
-    }
-
     const formDataToSend = new FormData();
     formDataToSend.append("data", JSON.stringify(data));
 
@@ -108,7 +95,7 @@ export class ModalComprasComponent implements OnInit {
       }
     });
 
-    this.comprasService.save(formDataToSend).subscribe(
+    this.comprasMacro.save(formDataToSend).subscribe(
       (response) => {
         if (response.status === "success") {
           this.event.emit(true);
@@ -120,6 +107,7 @@ export class ModalComprasComponent implements OnInit {
             "success",
             "success"
           );
+
           this.tableData.limpiarArray();
           this.submitted = false;
           this.formSolicitudCompra.resetearFormulario();
@@ -135,15 +123,6 @@ export class ModalComprasComponent implements OnInit {
         return;
       }
     );
-
-    
   }
 
-  /**
-   * cierra la ventana modal
-   */
-  public cerrarModal(): void {
-    this.modalRef.hide();
-    setTimeout(() => { this.modalCerrado.emit() }, 150);
-  }
 }

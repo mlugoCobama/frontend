@@ -1,0 +1,86 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-body border-bottom">
+          <div class="d-flex align-items-center">
+            <h5 class="mb-0 card-title flex-grow-1">
+              Catalogo de Unidades
+            </h5>
+            <div class="flex-shrink-0 d-flex gap-1">
+              <a
+                href="javascript:void(0);"
+                class="btn btn-danger btn-sm"
+                ><i class="fas fa-trash"></i> Eliminar</a
+              >
+              <a
+                href="javascript:void(0);"
+                class="btn btn-warning btn-sm"
+                ><i class="fas fa-edit"></i> Actualizar</a
+              >
+              <a
+                href="javascript:void(0);"
+                class="btn btn-primary btn-sm"
+                ><i class="fas fa-plus"></i> Nuevo</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body border-bottom">
+
+          <div class="d-flex justify-content-center"  *ngIf = "isLoad">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+
+          <div class="row justify-content-end" *ngIf = "!isLoad">
+            <div class="col-3">
+              <input type="text" class="form-control form-control-sm" placeholder="Buscar..." [(ngModel)]="busqueda"  (input)="filtrarTabla()"/>
+            </div>
+          </div>
+          <div *ngIf = "!isLoad">
+            <div class="tab-page-content mt-3 table-responsive" style="overflow-y: scroll; height: 20rem;">
+              <table  class="table table-hover table-sm table-bordered">
+                <thead class="table-light" [ngClass] = "modalAbierto === false ? 'sticky-top' : '' ">
+                  <tr class="text-center">
+                    <th (click)="ordenarPor('entidad')">Gasera<i [ngClass]="getIconoOrden('entidad')"></i></th>
+                    <th (click)="ordenarPor('marca_vehiculo')">Marca Vehiculo<i [ngClass]="getIconoOrden('marca_vehiculo')"></i></th>
+                    <th (click)="ordenarPor('submarca')">Sub Marca <i [ngClass]="getIconoOrden('submarca')"></i></th>
+                    <th (click)="ordenarPor('modelo')">Modelo <i [ngClass]="getIconoOrden('modelo')"></i></th>
+                    <th (click)="ordenarPor('no_serie')">No. Serie <i [ngClass]="getIconoOrden('no_serie')"></i></th>
+                    <th (click)="ordenarPor('placas')">Placas <i [ngClass]="getIconoOrden('placas')"></i></th>
+                    <th (click)="ordenarPor('marca_tanque')">Marca Tanque <i [ngClass]="getIconoOrden('marca_tanque')"></i></th>
+                    <th (click)="ordenarPor('anio_fabricacion')">Fabricación <i [ngClass]="getIconoOrden('anio_fabricacion')"></i></th>
+                    <th (click)="ordenarPor('capacidad')">Capacidad <i [ngClass]="getIconoOrden('capacidad')"></i></th>
+                    <th (click)="ordenarPor('tipo_medidor')">Serie <i [ngClass]="getIconoOrden('tipo_medidor')"></i></th>
+                    <th (click)="ordenarPor('serie')">Tipo Medidor <i [ngClass]="getIconoOrden('serie')"></i></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of datosFiltrados">
+                    <td class="text-center"><span  style="font-size:0.7rem;" [ngClass]="item.clase">{{ item.entidad }}</span></td>
+                    <td>{{item.marca_vehiculo}}</td>
+                    <td>{{item.submarca}}</td>
+                    <td>{{item.modelo}}</td>
+                    <td>{{item.no_serie}}</td>
+                    <td>{{item.placas}}</td>
+                    <td>{{item.marca_tanque}}</td>
+                    <td>{{item.anio_fabricacion}}</td>
+                    <td>{{item.capacidad}} L</td>
+                    <td>{{item.serie}}</td>
+                    <td>{{item.tipo_medidor}}</td>
+                  </tr>
+                </tbody>
+              </table> 
+            </div>
+          </div>
+          <p *ngIf = "!isLoad" class="text-muted pt-3"> Se muestran {{ totalDatosFiltrados }} de {{ totalDatos }} </p>
+        </div>
+        <!--div.card-body-->
+      </div>
+    </div>
+  </div>
+</div>
+<!-- container-fluid -->

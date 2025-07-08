@@ -52,6 +52,12 @@ export const MENU: MenuItem[] = [
           parentId: 7
         },
         {
+          id: 12,
+          label: 'Compras Macro taller',
+          link: '/compras/compras-macro',
+          parentId: 7
+        },
+        {
           id: 9,
           label: 'Proveedores',
           link: '/compras/proveedores',
@@ -61,6 +67,12 @@ export const MENU: MenuItem[] = [
           id: 10,
           label: 'Unidades de Medida',
           link: '/compras/cat-unidades-medidas',
+          parentId: 7
+        },
+        {
+          id: 11,
+          label: 'Unidades',
+          link: '/compras/cat-unidades',
           parentId: 7
         },
       ]

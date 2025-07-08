@@ -31,6 +31,13 @@ import { BtnsAutorizacionComponent } from './compras/detalle-solicitudes-compras
 import { FormFilesFacturasComponent } from './compras/detalle-solicitudes-compras/form-files-facturas/form-files-facturas.component';
 import { DatosFacturasComponent } from './compras/detalle-solicitudes-compras/datos-facturas/datos-facturas.component';
 import { BtnAutorizacionGerenciaComponent } from './compras/detalle-solicitudes-compras/btn-autorizacion-gerencia/btn-autorizacion-gerencia.component';
+import { CatUnidadesComponent } from './cat-unidades/cat-unidades.component';
+import { ComprasMacroComponent } from './compras-macro/compras-macro.component';
+import { ModalComprasMacroComponent } from './compras-macro/modal-compras-macro/modal-compras-macro.component';
+import { FormSolicitudMacroComponent } from './forms-solicitud/form-solicitud-macro/form-solicitud-macro.component';
+import { FormDetalleSolicitudComponent } from './forms-solicitud/form-detalle-solicitud/form-detalle-solicitud.component';
+import { FormSolicitudComponent } from './forms-solicitud/form-solicitud/form-solicitud.component';
+import { FormActualizarDetalleComponent } from './forms-solicitud/form-actualizar-detalle/form-actualizar-detalle.component';
 
 
 @NgModule({
@@ -59,6 +66,13 @@ import { BtnAutorizacionGerenciaComponent } from './compras/detalle-solicitudes-
     FormFilesFacturasComponent,
     DatosFacturasComponent,
     BtnAutorizacionGerenciaComponent,
+    CatUnidadesComponent,
+    ComprasMacroComponent,
+    ModalComprasMacroComponent,
+    FormSolicitudMacroComponent,
+    FormDetalleSolicitudComponent,
+    FormSolicitudComponent,
+    FormActualizarDetalleComponent,
   ],
   imports: [
     CommonModule,
