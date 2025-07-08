@@ -81,14 +81,20 @@
       </tr>
     </tfoot>
   </table>
-  <div *ngIf ="solicitudCompra.auto_admin === 0 || solicitudCompra.auto_gg === 0" class="p-2 d-flex justify-content-end">
-     <button class="btn btn-sm btn-warning" (click)="modificarDetalles()">
-    ACTUALIZAR DETALLES
-  </button>
-  </div>
- 
-  </div>
   
+    <div *ngIf ="solicitudCompra.auto_admin === 0 || solicitudCompra.auto_gg === 0" class="p-2 d-flex justify-content-end">
+      <button class="btn btn-sm btn-warning" (click)="modificarDetalles()">
+      ACTUALIZAR DETALLES
+    </button>
+    </div>
+  </div>
+  <!-- form para actualizar o quitar detalles -->
+  <!-- <app-form-actualizar-detalle
+  [solicitudCompra]="solicitudCompra"
+  [detalles]="detalles"
+  (updateDetalles)="getDetalles()"
+  ></app-form-actualizar-detalle> -->
+
   <ng-template #elseBlock ><i class="fas far fa-eye-slash"></i></ng-template>
   
   <!-- Fin tabla detalle solicitud + precios cotizaciones -->

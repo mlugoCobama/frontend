@@ -62,7 +62,6 @@ export class TableDetallesSolicitudComponent implements OnInit {
         this.generarOrden();
       }
     );
-    console.group(this.solicitudCompra);
   }
 
   ngOnDestroy(): void {
@@ -409,7 +408,6 @@ export class TableDetallesSolicitudComponent implements OnInit {
 
 cambioCheck(item, event) {
   item.confirmado = event.target.checked ? 1 : 0;
-  console.log(this.detalles);
 }
 
 }

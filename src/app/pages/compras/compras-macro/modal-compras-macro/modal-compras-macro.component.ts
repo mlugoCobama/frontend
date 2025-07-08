@@ -22,7 +22,7 @@ export class ModalComprasMacroComponent {
   public submitted: boolean = false;
   public submittedDetail: boolean = false;
   public isLoad : boolean = false;
-
+  
   constructor(
     public modalRef: BsModalRef,
     public alertasService : SwalComprsServiceService,
@@ -31,7 +31,6 @@ export class ModalComprasMacroComponent {
 
 
   ngAfterViewInit() {
-    
   }
 
 
@@ -52,9 +51,7 @@ export class ModalComprasMacroComponent {
     this.isLoad = true;
 
     if (!this.formSolicitudCompra.esValido()) {
-      console.log(this.formSolicitudCompra.esValido())
       this.isLoad = false;
-
       this.alertasService.mostrarAlerta(
         "Alerta",
         "Debes llenar correctamente todos los campos",

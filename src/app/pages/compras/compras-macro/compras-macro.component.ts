@@ -6,6 +6,7 @@ import { ComprasService } from 'src/app/core/services/compras/compras.service';
 import { OrdenesCompraService } from 'src/app/core/services/compras/ordenesCompra/ordenes-compra.service';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import { EstadoSolicitud } from '../compras/estado-solicitud.enum';
+import { FuncionesTablas } from '../compras/funciones-tablas';
 
 import Swal from "sweetalert2";
 
@@ -27,6 +28,11 @@ export class ComprasMacroComponent implements OnInit{
     public data:any;
     public status:any;
     public enEsts = EstadoSolicitud;
+
+    // varibles funciones tablas
+    datosFiltrados:any[] = [];
+    private ordenador!: FuncionesTablas<any>;
+    busqueda:string = '';
 
   constructor( 
       public ordenesComprasService: OrdenesCompraService,
@@ -76,6 +82,10 @@ export class ComprasMacroComponent implements OnInit{
         (response) => {
           if (response) {
             this.data = response.data;
+
+            this.ordenador = new FuncionesTablas(this.data);
+            this.datosFiltrados = [...this.data];
+
             this.isLoad = false;
           } else {
             console.log(response.message);
@@ -175,4 +185,20 @@ export class ComprasMacroComponent implements OnInit{
     updateStatus(status: any) {
       this.status = status;
     }
+
+    //Funciones de la tabla
+  ordenarPor(columna: keyof any){
+    this.datosFiltrados = this.ordenador.ordenar(columna);
+  }
+
+  getIconoOrden(columna:keyof any):string{
+    return this.ordenador.getIcono(columna)
+  }
+
+  filtrarTabla(){
+    this.datosFiltrados = this.ordenador.filtrar(this.busqueda, [
+      'folio', 'usuario_destino', 'motivo',
+      'fecha', 'usuario_solicita', 'empresa', 'estado'
+    ]);
+  }
 }

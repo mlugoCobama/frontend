@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -18,7 +18,6 @@ export class FormDetalleSolicitudComponent implements OnInit{
   
   public formDetalleSolicitud: FormGroup;
   public submittedDetail: boolean = false;
-  
   public unidades: any;
   public unidad: any;
   public tableData: Array<any> = [];
@@ -91,6 +90,7 @@ export class FormDetalleSolicitudComponent implements OnInit{
       ...this.formDetalleSolicitud.value,
       cat_unidades_medida_id1: this.unidad,
       img_referencia1: valores.img_referencia,
+      confirmado: 1,
       // cat_areas: (this.centrosCostos[this.formSolicitudCompra.value.c_c-1].Clave)
     };
 
@@ -111,6 +111,8 @@ export class FormDetalleSolicitudComponent implements OnInit{
     this.formData.delete("img_referencia");
 
     this.submittedDetail = false;
+
+    console.log(this.tableData);
   }
   
   /**
@@ -137,19 +139,34 @@ export class FormDetalleSolicitudComponent implements OnInit{
       }
     );
   }
-
+  
+  /**
+   * Recupera los datos almacenado en table data
+   * @returns array: tableData
+   */
   public getDetalles(){
     return this.tableData;
   }
 
+  /**
+   * Valida el form que agrega el detalle 
+   * @returns boolean:true or false
+   */
   esValido() {
     return this.formDetalleSolicitud.valid;
   }
 
+  /**
+   * Limpia el array de tableData
+   */
   limpiarArray() {
     this.tableData = [];
   }
 
+  /**
+   * Valida si tiene detalles 
+   * @returns boolean:true or false
+   */
   hasDatos(){
     if(this.tableData.length === 0){
       return false

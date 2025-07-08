@@ -80,6 +80,8 @@
                     type="text"
                     class="form-control form-control-sm"
                     placeholder="Buscar..."
+                    [(ngModel)]="busqueda"
+                    (input)="filtrarTabla()"
                   />
                 </div>
               </div>
@@ -91,16 +93,16 @@
                   >
                     <thead class="table-light" [ngClass] = "modalAbierto === false ? 'sticky-top' : '' ">
                       <tr>
-                        <th style="cursor: pointer">Folio <i></i></th>
-                        <th style="cursor: pointer">Empresa</th>
-                        <th style="cursor: pointer">Solicita</th>
-                        <th style="cursor: pointer">Unidad Destino</th>
-                        <th style="cursor: pointer">Fecha Solicitud</th>
-                        <th class="text-center" style="cursor: pointer">Estatus</th>
+                        <th style="cursor: pointer" (click)="ordenarPor('folio')">Folio <i [ngClass]="getIconoOrden('folio')"></i></th>
+                        <th style="cursor: pointer" (click)="ordenarPor('empresa')" >Empresa <i [ngClass]="getIconoOrden('empresa')"></i></th>
+                        <th style="cursor: pointer" (click)="ordenarPor('usuario_solicita')" >Solicita <i [ngClass]="getIconoOrden('usuario_solicita')"></i></th>
+                        <th style="cursor: pointer" (click)="ordenarPor('usuario_destino')">Unidad Destino <i [ngClass]="getIconoOrden('usuario_destino')"></i></th>
+                        <th style="cursor: pointer" (click)="ordenarPor('fecha')">Fecha Solicitud <i [ngClass]="getIconoOrden('fecha')"></i></th>
+                        <th class="text-center" style="cursor: pointer" (click)="ordenarPor('estado')">Estatus <i [ngClass]="getIconoOrden('estado')"></i></th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor ="let item of data" (dblclick)="openDetallesSolicitud(item, $event)">
+                      <tr *ngFor ="let item of datosFiltrados" (dblclick)="openDetallesSolicitud(item, $event)">
                         <td>{{ item.folio }}</td>
                         <td class="text-center"><span
                             style="font-size:0.65rem;"
@@ -111,7 +113,7 @@
                         <!-- <td>{{ item.empresa }}</td> -->
                         <td>{{ item.usuario_solicita}}</td>
                         <td>{{ item.usuario_destino }}</td>
-                        <td>{{ item.fecha | date: 'dd/MM/y' }}</td>
+                        <td>{{ item.fecha  | date:'dd/MM/yyyy h:mm a'}}</td>
                         <td class="text-center"><span
                             [ngClass]="'badge rounded-pill font-size-11 ' +item.claseEstado">
                             {{ item.estado }}

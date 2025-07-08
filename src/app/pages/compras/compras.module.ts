@@ -36,6 +36,8 @@ import { ComprasMacroComponent } from './compras-macro/compras-macro.component';
 import { ModalComprasMacroComponent } from './compras-macro/modal-compras-macro/modal-compras-macro.component';
 import { FormSolicitudMacroComponent } from './forms-solicitud/form-solicitud-macro/form-solicitud-macro.component';
 import { FormDetalleSolicitudComponent } from './forms-solicitud/form-detalle-solicitud/form-detalle-solicitud.component';
+import { FormSolicitudComponent } from './forms-solicitud/form-solicitud/form-solicitud.component';
+import { FormActualizarDetalleComponent } from './forms-solicitud/form-actualizar-detalle/form-actualizar-detalle.component';
 
 
 @NgModule({
@@ -69,6 +71,8 @@ import { FormDetalleSolicitudComponent } from './forms-solicitud/form-detalle-so
     ModalComprasMacroComponent,
     FormSolicitudMacroComponent,
     FormDetalleSolicitudComponent,
+    FormSolicitudComponent,
+    FormActualizarDetalleComponent,
   ],
   imports: [
     CommonModule,
