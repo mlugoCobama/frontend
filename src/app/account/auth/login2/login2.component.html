@@ -11,11 +11,11 @@
                             <div class="row justify-content-center">
                                 <div class="col-lg-7">
                                     <div class="text-center">
-                                        <h4 class="mb-3"><i class="bx bxs-quote-alt-left text-primary h1 align-middle me-3"></i><span class="text-primary">5k</span>+ Satisfied clients</h4>
+                                        <!--h4 class="mb-3"><i class="bx bxs-quote-alt-left text-primary h1 align-middle me-3"></i><span class="text-primary">5k</span>+ Satisfied clients</h4-->
 
                                         <div dir="ltr">
                                             <ngx-slick-carousel dir="ltr" class="owl-theme auth-review-carousel" [config]="slideConfig">
-                                                <div class="item" ngxSlickItem>
+                                                <!--div class="item" ngxSlickItem>
                                                     <div class="py-3">
                                                         <p class="font-size-16 mb-4">" Fantastic theme with a
                                                             ton of
@@ -32,8 +32,8 @@
                                                             <p class="font-size-14 mb-0">- Skote User</p>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="item" ngxSlickItem>
+                                                </div-->
+                                                <!--div class="item" ngxSlickItem>
                                                     <div class="py-3">
                                                         <p class="font-size-16 mb-4">" If Every Vendor on Envato
                                                             are
@@ -47,7 +47,7 @@
                                                             <p class="font-size-14 mb-0">- Skote User</p>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div-->
                                             </ngx-slick-carousel>
                                         </div>
                                     </div>
@@ -67,29 +67,29 @@
                     <div class="d-flex flex-column h-100">
                         <div class="mb-4 mb-md-5">
                             <a routerLink="/" class="d-block auth-logo">
-                                <img src="assets/images/logo-dark.png" alt="" height="18" class="auth-logo-dark">
-                                <img src="assets/images/logo-light.png" alt="" height="18" class="auth-logo-light">
+                                <img src="assets/images/logo-cobama.png" alt="" height="45" class="auth-logo-dark">
+                                <img src="assets/images/logo-cobama.png" alt="" height="45" class="auth-logo-light">
                             </a>
                         </div>
                         <div class="my-auto">
 
                             <div>
-                                <h5 class="text-primary">Welcome Back !</h5>
+                                <h5 class="text-primary">Bienvenido !</h5>
                             </div>
 
                             <div class="mt-4">
                                 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
                                     <div class="mb-3">
-                                        <label for="email">Email</label>
-                                        <input type="email" class="form-control" id="email" formControlName="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" placeholder="Enter email">
+                                        <label for="email">Correo Electrónico</label>
+                                        <input type="email" class="form-control" id="email" formControlName="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" placeholder="Correo Electrónico">
                                         @if(submitted && f.password.errors){
                                         <div class="invalid-feedback">
                                             @if(f.email.errors.required){
-                                            <div>El email es requerido.</div>
+                                            <div>El Correo es requerido.</div>
                                             }
                                             @if(f.email.errors.email){
-                                            <div>El email debe ser un email valido.
+                                            <div>El Correo debe ser un Correo valido.
                                             </div>}
                                         </div>}
                                     </div>
@@ -97,7 +97,7 @@
                                     <div class="mb-3">
                                         <label for="userpassword">Contraseña</label>
                                         <div class="input-group auth-pass-inputgroup">
-                                            <input type="password" class="form-control" formControlName="password" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" placeholder="Enter password" aria-label="Password" aria-describedby="password-addon">
+                                            <input type="password" class="form-control" formControlName="password" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" placeholder="Contraseña" aria-label="Password" aria-describedby="password-addon">
                                             <button class="btn btn-light " type="button" id="password-addon"><i class="mdi mdi-eye-outline"></i></button>
                                             @if(submitted && f.password.errors){
                                             <div class="invalid-feedback">
@@ -125,7 +125,7 @@
 
                         <div class="mt-4 mt-md-5 text-center">
                             <p class="mb-0">©
-                                {{year}} Cobama. Creado por mlugo</p>
+                                {{year}} Cobama.</p>
                         </div>
                     </div>
                 </div>
