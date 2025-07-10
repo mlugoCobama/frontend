@@ -6,10 +6,13 @@ import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompr
 import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 import { DetallesSolicitudService } from "src/app/core/services/compras/detalles-solicitud.service"; 
 import { EstadoSolicitud } from "../../estado-solicitud.enum";
+import { CatUnidadesMedidasService } from "src/app/core/services/compras/unidadesMedidas/cat-unidades-medidas.service";
 import Swal from 'sweetalert2';
 
 import { Subscription } from "rxjs";
-import {FormGroup} from "@angular/forms";
+// import {FormGroup} from "@angular/forms";
+
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: "app-table-detalles-solicitud",
@@ -30,7 +33,10 @@ export class TableDetallesSolicitudComponent implements OnInit {
 
   public formOrdenCompra: FormGroup;
 
+  public formDetallesSolicitud: FormGroup;
+
   public isLoad: boolean = true;
+  public unidades:any  = [];
 
   public cotProv: any[] = [];
   public totals: any = {};
@@ -52,16 +58,31 @@ export class TableDetallesSolicitudComponent implements OnInit {
     public cotizacionesService: CotizacionesService,
     public ordenesComprasService: OrdenesCompraService,
     public detallesService: DetallesSolicitudService,
-    public alertasService: SwalComprsServiceService
-  ) {}
+    public alertasService: SwalComprsServiceService,
+    public formBuilder: FormBuilder,
+    public catUnidadesMedidasService: CatUnidadesMedidasService
+  ) {
+    this.formDetallesSolicitud = this.formBuilder.group({});
+  }
 
   ngOnInit(): void {
+    this.getUnidades();
     this.getDetalles();
     this.generarOrdenSubscripcion = this.compras.generateOrder$.subscribe(
       () => {
         this.generarOrden();
       }
     );
+  }
+
+  private modelInputs = {
+    id: "",
+    cantidad:  "",
+    descripcion: "",
+    observaciones: "", 
+    unidadMedida: "",
+    img_referencia: "",
+    confirmado: ""
   }
 
   ngOnDestroy(): void {
@@ -402,7 +423,6 @@ export class TableDetallesSolicitudComponent implements OnInit {
 
   validarTamaño() {
   const contador = this.detalles.reduce((acc, detalle) => acc + detalle.confirmado, 0);
-  console.log(contador);
   return contador !== 0;
 }
 
@@ -410,5 +430,19 @@ cambioCheck(item, event) {
   item.confirmado = event.target.checked ? 1 : 0;
 }
 
+  private getUnidades() {
+    this.catUnidadesMedidasService.getAll().subscribe(
+      (response) => {
+        if (response) {
+          this.unidades = response.data;
+        } else {
+          console.log(response.message);
+        }
+      },
+      (error) => {
+        console.error("Error fetching data:", error);
+      }
+    );
+  }
 }
 

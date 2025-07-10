@@ -17,7 +17,7 @@
         <th>Descripción</th>
         <th>Observaciones</th>
         <th>Ref. fotográfica</th>
-        <th>Autorizado</th>
+        <th *ngIf="solicitudCompra.tipo == 2">Autorizado</th>
         <th *ngFor="let prov of cotProv" class="text-center">
           <strong> {{ prov.proveedores_id[0].nombre }} </strong>
         </th>
@@ -26,10 +26,16 @@
     <tbody>
       <!-- datos de la tabla detalle -->
       <tr *ngFor="let row of detalles; let i = index">
-        <td class="text-center">{{ row.cantidad }}</td>
-        <td>{{ row.unidadMedida.nombre }} ({{ row.unidadMedida.abreviatura }})</td>
-        <td>{{ row.descripcion }}</td>
-        <td>{{ row.observaciones }}</td>
+        <td class="text-center"> {{row.cantidad}} </td>
+        <td>
+            {{ row.unidadMedida.nombre }} ({{ row.unidadMedida.abreviatura }})
+    
+        <td>
+          {{row.descripcion}}
+        </td>
+        <td>
+          {{ row.observaciones }}
+        </td>
         <td class="text-center">
           <a
             *ngIf="row.img_referencia; else elseBlock"
@@ -40,7 +46,7 @@
             <i class="fas fa-eye"></i
           ></a>
         </td>
-        <td class="text-center d-flex align-items-center">
+        <td *ngIf="solicitudCompra.tipo === 2" class="text-center d-flex align-items-center">
           <div>
             <input class="form-check-input"  type="checkbox" value="" id="flexCheckCheckedDisabled" 
             (change) ="cambioCheck(row, $event)"
@@ -49,14 +55,14 @@
         </td>
         <td *ngFor="let prov of cotProv; let i = index">
           <!-- <td *ngFor="let prov of row.detalles"> -->
-          <div *ngIf = "row.confirmado === 1" class="input-group col-sm-1">
+          <div *ngIf = "row.confirmado === 1" class="input-group input-group-sm col-sm">
             <span class="input-group-text">$</span>
             <input
               type="text"
               [(ngModel)]="row['precio_' + prov.proveedores_id[0].id]"
               (input)="validateNumberInput($event)"
               placeholder="Precio"
-              class="form-control"
+              class="form-control form-control-sm"
               [disabled]="row['disabled_' + +prov.proveedores_id[0].id]"
               (input)="updateTotals()"
             />
@@ -66,7 +72,7 @@
     </tbody>
     <tfoot *ngIf="mostrarTotal">
       <tr >
-        <td colspan="6" class="text-end">
+        <td [attr.colspan]="solicitudCompra.tipo === 1 ? 5 : 6" class="text-end">
           <Strong>SUB-TOTAL (sin iva)</Strong>
         </td>
         <td
@@ -81,7 +87,6 @@
       </tr>
     </tfoot>
   </table>
-  
     <div *ngIf ="solicitudCompra.auto_admin === 0 || solicitudCompra.auto_gg === 0" class="p-2 d-flex justify-content-end">
       <button class="btn btn-sm btn-warning" (click)="modificarDetalles()">
       ACTUALIZAR DETALLES
@@ -89,11 +94,6 @@
     </div>
   </div>
   <!-- form para actualizar o quitar detalles -->
-  <!-- <app-form-actualizar-detalle
-  [solicitudCompra]="solicitudCompra"
-  [detalles]="detalles"
-  (updateDetalles)="getDetalles()"
-  ></app-form-actualizar-detalle> -->
 
   <ng-template #elseBlock ><i class="fas far fa-eye-slash"></i></ng-template>
   

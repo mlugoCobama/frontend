@@ -87,10 +87,8 @@ export class FormSolicitudComponent implements OnInit{
     const usuarioActivo = this.localStorage.getItem("currentUser");
 
     this.usuariosService.getUserById(usuarioActivo["role"]["email"]).subscribe(
-      // this.usuariosService.getUserById("mlugo@cobama.com.mx").subscribe(
       (response) => {
         if (response.status === "success") {
-
           this.usuarioSolicita = response.data[0];
           this.getUsuarios(this.usuarioSolicita.intercompania);
           this.formSolicitudCompra.patchValue({empresa :  this.usuarioSolicita.intercompania});

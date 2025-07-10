@@ -81,7 +81,6 @@ export class ComisionesComponent implements OnInit {
       confirmButtonText: "Guardar",
       denyButtonText: `Cancelar`
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         if (this.isRowValid(item.faau_nofactura)) {
       const data = {
