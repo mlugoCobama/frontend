@@ -22,6 +22,7 @@ export class ModalComprasComponent implements OnInit {
   public showTable: boolean = false;
   public submitted: boolean = false;
   public disabled: boolean = false;
+  public sending: boolean = false;
 
   public centrosCostos = catCentrosCostos;
 
@@ -51,6 +52,7 @@ export class ModalComprasComponent implements OnInit {
   public save() {
     this.submitted = true;
     this.isLoad = true;
+    this.sending = true;
 
     if (!this.formSolicitudCompra.esValido()) {
       this.isLoad = false;
@@ -61,7 +63,7 @@ export class ModalComprasComponent implements OnInit {
         "warning",
         "warning"
       );
-
+      this.sending = false;
       return;
     }
 
@@ -77,7 +79,7 @@ export class ModalComprasComponent implements OnInit {
         "warning",
         "warning"
       );
-
+      this.sending = false;
       return;
     }
 
@@ -122,6 +124,7 @@ export class ModalComprasComponent implements OnInit {
           );
           this.tableData.limpiarArray();
           this.submitted = false;
+          this.sending = false;
           this.formSolicitudCompra.resetearFormulario();
           this.cerrarModal();
         } else {
@@ -132,6 +135,7 @@ export class ModalComprasComponent implements OnInit {
       },
       (error) => {
         this.alertasService.mostrarAlerta("Error", error, "warning", "warning");
+        this.sending = false;
         return;
       }
     );

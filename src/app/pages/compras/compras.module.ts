@@ -34,6 +34,7 @@ import { FormSolicitudComponent } from './forms-solicitud/form-solicitud/form-so
 import { FormActualizarDetalleComponent } from './forms-solicitud/form-actualizar-detalle/form-actualizar-detalle.component';
 
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+import { TablaDetallesSolicitudComponent } from './compras/detalle-solicitudes-compras/tabla-detalles-solicitud/tabla-detalles-solicitud.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
     FormDetalleSolicitudComponent,
     FormSolicitudComponent,
     FormActualizarDetalleComponent,
+    TablaDetallesSolicitudComponent,
   ],
   imports: [
     CommonModule,
