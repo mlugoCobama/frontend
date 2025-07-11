@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { UsuariosService } from "src/app/core/services/compras/usuarios.service";
 import {  FormBuilder, FormControl, FormGroup,  Validators  } from "@angular/forms";
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
@@ -28,6 +28,8 @@ export class FormSolicitudMacroComponent implements OnInit{
     };
 
   @Input() submitted: boolean;
+  @Output() closeModal = new EventEmitter<void>();
+
   public isLoading: boolean = true;
 
   public empresas:any;
@@ -118,7 +120,7 @@ export class FormSolicitudMacroComponent implements OnInit{
             "warning",
             "warning"
           );
-
+          this.closeModal.emit();
           // this.cerrarModal();
           return;
         }

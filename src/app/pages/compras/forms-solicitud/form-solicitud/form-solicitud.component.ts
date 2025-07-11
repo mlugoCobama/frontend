@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 
 //services
@@ -44,7 +44,7 @@ export class FormSolicitudComponent implements OnInit{
     7102, 7075, 7074, 7072, 7071, 7064, 7063, 7062, 7061, 7051, 712, 710, 706,
   ];
   public isAgencia: boolean = false;
-  
+  @Output() closeModal = new EventEmitter<void>();
   constructor(
     public formBuilder: FormBuilder,
     private localStorage: LocalStorageServiceService,
@@ -103,6 +103,7 @@ export class FormSolicitudComponent implements OnInit{
           );
 
           // this.cerrarModal();
+          this.closeModal.emit();
           return;
         }
       },

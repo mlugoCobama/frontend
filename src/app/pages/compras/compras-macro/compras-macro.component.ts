@@ -7,6 +7,7 @@ import { OrdenesCompraService } from 'src/app/core/services/compras/ordenesCompr
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import { EstadoSolicitud } from '../compras/estado-solicitud.enum';
 import { FuncionesTablas } from '../compras/funciones-tablas';
+import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
 
 import Swal from "sweetalert2";
 
@@ -40,14 +41,22 @@ export class ComprasMacroComponent implements OnInit{
       private modalService  : BsModalService,
       private comprasMacro  : ComprasMacroService,
       public comprasService  : ComprasService,
+      public localStorage : LocalStorageServiceService
    )
   {}
 
   ngOnInit(): void {
+    // this.getUsuarioActivo();
     this.comprasService.mostrarBoton$.subscribe((mostrar) => {
       this.mostrarBoton = mostrar;
     });
     this.getAll();
+
+  }
+
+  public getUsuarioActivo() {
+    const usuarioActivo = this.localStorage.getItem("currentUser");
+      return usuarioActivo['role']['intercompania'];
   }
 
   public openModalNuevo() {
@@ -78,7 +87,7 @@ export class ComprasMacroComponent implements OnInit{
   }
 
     private getAll() {
-      this.comprasMacro.getAll().subscribe(
+      this.comprasMacro.getAll(this.getUsuarioActivo()).subscribe(
         (response) => {
           if (response) {
             this.data = response.data;
