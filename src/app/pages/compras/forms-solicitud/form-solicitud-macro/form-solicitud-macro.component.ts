@@ -79,7 +79,9 @@ export class FormSolicitudMacroComponent implements OnInit{
     this.usuariosService.getEmpresas().subscribe(
       (response) => {
         if (response) {
-          this.empresas = response.data;
+          const rawData = response.data
+          this.empresas = rawData.filter(objeto => objeto.isAgencia === false);
+          
           this.isLoading = false;
         } else {
           console.log(response.message);
