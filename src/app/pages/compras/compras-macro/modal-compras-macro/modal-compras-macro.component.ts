@@ -85,6 +85,7 @@ export class ModalComprasMacroComponent {
       detalles: this.tableData.getDetalles(),
     };
 
+    const archivosCotizacion = this.formSolicitudCompra.obtenerArchivos().get("cotizacion") as File
     const formDataToSend = new FormData();
     formDataToSend.append("data", JSON.stringify(data));
 
@@ -98,6 +99,8 @@ export class ModalComprasMacroComponent {
       }
     });
 
+    formDataToSend.append('file_cotizacion', archivosCotizacion)
+    
     this.comprasMacro.save(formDataToSend).subscribe(
       (response) => {
         if (response.status === "success") {

@@ -75,19 +75,36 @@
     </div>
   </div>
   <div class="form-group">
-    <label for="exampleInputEmail1">Orden de trabajo *</label>
+    <label >Orden de trabajo: *</label>
     <input
       type="text"
       class="form-control form-control-sm"
-      id="exampleInputEmail1"
       formControlName="orden_trabajo"
-      aria-describedby="emailHelp"
+      placeholder="# orden de trabajo"
+    />
+    <div *ngIf="solicitudCompraFormControl.orden_trabajo.touched || submitted">
+      <small
+        *ngIf="solicitudCompraFormControl.orden_trabajo.errors?.['required']"
+
+        class="text-danger form-text"
+        >Orden de trabajo es requerido</small
+      >
+    </div>
+  </div>
+  <div class="form-group">
+    <label >Cotización: </label>
+    <input
+      (change)="onFileChange($event, 'cotizacion')"
+      type="file"
+      name="cotizacion" 
+      formControlName="cotizacion"
+      class="form-control form-control-sm"
       placeholder="# orden de trabajo"
     />
     <div *ngIf="solicitudCompraFormControl.orden_trabajo.touched || submitted">
       <small
         *ngIf="solicitudCompraFormControl.motivo.errors?.['required']"
-        id="emailHelp"
+
         class="text-danger form-text"
         >Orden de trabajo es requerido</small
       >

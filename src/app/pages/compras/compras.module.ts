@@ -35,6 +35,8 @@ import { FormActualizarDetalleComponent } from './forms-solicitud/form-actualiza
 
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { TablaDetallesSolicitudComponent } from './compras/detalle-solicitudes-compras/tabla-detalles-solicitud/tabla-detalles-solicitud.component';
+import { BontonesGeneralesComponent } from './botonera/bontones-generales/bontones-generales.component';
+import { BotnesAdminComponent } from './botonera/botnes-admin/botnes-admin.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +66,8 @@ import { TablaDetallesSolicitudComponent } from './compras/detalle-solicitudes-c
     FormSolicitudComponent,
     FormActualizarDetalleComponent,
     TablaDetallesSolicitudComponent,
+    BontonesGeneralesComponent,
+    BotnesAdminComponent,
   ],
   imports: [
     CommonModule,

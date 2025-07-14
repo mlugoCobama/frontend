@@ -112,7 +112,6 @@ export class FormDetalleSolicitudComponent implements OnInit{
 
     this.submittedDetail = false;
 
-    console.log(this.tableData);
   }
   
   /**
