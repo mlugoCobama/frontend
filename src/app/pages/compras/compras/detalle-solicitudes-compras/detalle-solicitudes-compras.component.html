@@ -41,7 +41,7 @@
       ></app-panel-cotizaciones>
   
       <app-btns-autorizacion
-      *ngIf= "solicitudCompra.estatus === enEsts.OrdenCompra"
+      *ngIf= "solicitudCompra.estatus === enEsts.OrdenCompra "
       [solicitudCompra]="solicitudCompra" 
       (setDataOrdenCompra)="setDataOrdenCompra($event)"
       (actualizarStatus)="updateStatus()"   
@@ -49,6 +49,12 @@
   
       <app-btn-autorizacion-gerencia
       *ngIf="solicitudCompra.estatus === enEsts.EspAutPlanta"
+      (actualizarStatus)="updateStatus()"
+      [solicitudCompra]="solicitudCompra" 
+      ></app-btn-autorizacion-gerencia>
+      
+      <app-btn-autorizacion-gerencia
+      *ngIf="solicitudCompra.estatus === enEsts.EnCotizacion"
       (actualizarStatus)="updateStatus()"
       [solicitudCompra]="solicitudCompra" 
       ></app-btn-autorizacion-gerencia>

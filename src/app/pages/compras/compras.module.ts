@@ -37,6 +37,11 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { TablaDetallesSolicitudComponent } from './compras/detalle-solicitudes-compras/tabla-detalles-solicitud/tabla-detalles-solicitud.component';
 import { BontonesGeneralesComponent } from './botonera/bontones-generales/bontones-generales.component';
 import { BotnesAdminComponent } from './botonera/botnes-admin/botnes-admin.component';
+import { TablaPreciosDetallesComponent } from './forms-solicitud/tabla-precios-detalles/tabla-precios-detalles.component';
+import { ModalAddAutotanqueComponent } from './cat-unidades/modal-add-autotanque/modal-add-autotanque.component';
+import { FormDatosVehiculoComponent } from './cat-unidades/form-datos-vehiculo/form-datos-vehiculo.component';
+import { FormDatosTanqueComponent } from './cat-unidades/form-datos-tanque/form-datos-tanque.component';
+import { ModalUpdtAutotanqueComponent } from './cat-unidades/modal-updt-autotanque/modal-updt-autotanque.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +73,11 @@ import { BotnesAdminComponent } from './botonera/botnes-admin/botnes-admin.compo
     TablaDetallesSolicitudComponent,
     BontonesGeneralesComponent,
     BotnesAdminComponent,
+    TablaPreciosDetallesComponent,
+    ModalAddAutotanqueComponent,
+    FormDatosVehiculoComponent,
+    FormDatosTanqueComponent,
+    ModalUpdtAutotanqueComponent,
   ],
   imports: [
     CommonModule,

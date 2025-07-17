@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { FuncionesTablas } from '../compras/funciones-tablas';
 import { UnidadesService } from 'src/app/core/services/compras/unidades.service';
+import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
+import { ModalAddAutotanqueComponent } from './modal-add-autotanque/modal-add-autotanque.component';
+import { ModalUpdtAutotanqueComponent } from './modal-updt-autotanque/modal-updt-autotanque.component';
 
 @Component({
   selector: 'app-cat-unidades',
@@ -10,7 +13,8 @@ import { UnidadesService } from 'src/app/core/services/compras/unidades.service'
 export class CatUnidadesComponent implements OnInit{
 
   constructor(
-    private unidades : UnidadesService
+    private unidades : UnidadesService,
+    private modalService: BsModalService,
   ){}
 
   ngOnInit(): void {
@@ -21,9 +25,14 @@ export class CatUnidadesComponent implements OnInit{
   private ordenador!: FuncionesTablas<any>;
   busqueda:string = '';
 
+  public unidad:any;
+  public mostrar : boolean = false;
+
   public data:any;
   public modalAbierto:boolean = false;
   public isLoad:boolean = false;
+
+  public modalRef?: BsModalRef;
 
   ordenarPor(columna: keyof any){
     this.datosFiltrados = this.ordenador.ordenar(columna);
@@ -41,6 +50,54 @@ export class CatUnidadesComponent implements OnInit{
       'tipo_medidor', 'serie',
     ]);
     this.contarDatos();
+  }
+
+  // Despliega la ventana modal para un nuevo registro
+  public openModalNuevo() {
+    this.modalAbierto =  true;
+    const initialState: ModalOptions = {
+          initialState: {
+          },
+          class: "modal-lg",
+        };
+        this.modalRef = this.modalService.show(
+          ModalAddAutotanqueComponent,
+          initialState
+        );
+        this.modalRef.content.closeBtnName = "Close";
+        this.modalRef.content.event.subscribe(() => {
+          this.isLoad = true;
+  
+          // this.mostrar = false;
+          this.getCatVehiculos();
+        });
+        this.modalRef.content.modalCerrado.subscribe(() => {
+          this.modalAbierto = false;
+        });
+  }
+
+  // Despliega la ventana modal para un nuevo registro
+  public openModalUpdate() {
+    this.modalAbierto =  true;
+    const initialState: ModalOptions = {
+          initialState: {
+          },
+          class: "modal-lg",
+        };
+        this.modalRef = this.modalService.show(
+          ModalUpdtAutotanqueComponent,
+          initialState
+        );
+        this.modalRef.content.closeBtnName = "Close";
+        this.modalRef.content.event.subscribe(() => {
+          this.isLoad = true;
+  
+          // this.mostrar = false;
+          this.getCatVehiculos();
+        });
+        this.modalRef.content.modalCerrado.subscribe(() => {
+          this.modalAbierto = false;
+        });
   }
 
   public totalDatos:any;
@@ -75,5 +132,19 @@ export class CatUnidadesComponent implements OnInit{
         console.error("Error fetching data:", error);
       }
     );
+  }
+
+  //Recupera los datos del elemento seleccionado
+  public seleccionar(dato: any, evento: any) {
+    this.mostrar = true;
+    this.unidad = dato;
+    if (evento.currentTarget.classList.contains("table-primary")) {
+      evento.currentTarget.classList.remove("table-primary");
+      this.mostrar = false;
+    } else {
+      const filas = document.querySelectorAll("tbody tr");
+      filas.forEach((fila) => fila.classList.remove("table-primary"));
+      evento.currentTarget.classList.add("table-primary");
+    }
   }
 }

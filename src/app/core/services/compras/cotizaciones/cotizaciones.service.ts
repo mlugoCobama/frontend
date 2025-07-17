@@ -22,6 +22,15 @@ export class CotizacionesService {
   }
 
   /**
+   * Recupera la relación entre cotización y proveedores
+   * @param id id de cotización
+   * @returns registros cotización-proveedor
+   */
+  public solicitarAutorizacion(id: number): Observable<any> {
+    return this.http.get(environment.apiUrl + `compras/solicitar-autorizacion/${id}`);
+  }
+
+  /**
    * Guarda los datos y archivos de cotizaciones
    * @param data precios y archivos ligados a la cotización (formData)
    * @returns

@@ -9,18 +9,23 @@
             </h5>
             <div class="flex-shrink-0 d-flex gap-1">
               <a
+                *ngIf = "mostrar"
                 href="javascript:void(0);"
                 class="btn btn-danger btn-sm"
                 ><i class="fas fa-trash"></i> Eliminar</a
               >
               <a
+                *ngIf = "mostrar"
                 href="javascript:void(0);"
                 class="btn btn-warning btn-sm"
+                (click)="openModalUpdate()"
                 ><i class="fas fa-edit"></i> Actualizar</a
               >
               <a
+                *ngIf = "!mostrar"
                 href="javascript:void(0);"
                 class="btn btn-primary btn-sm"
+                (click) = "openModalNuevo()"
                 ><i class="fas fa-plus"></i> Nuevo</a
               >
             </div>
@@ -59,7 +64,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let item of datosFiltrados">
+                  <tr *ngFor="let item of datosFiltrados" (click)="seleccionar(item, $event)">
                     <td class="text-center"><span  style="font-size:0.7rem;" [ngClass]="item.clase">{{ item.entidad }}</span></td>
                     <td>{{item.marca_vehiculo}}</td>
                     <td>{{item.submarca}}</td>

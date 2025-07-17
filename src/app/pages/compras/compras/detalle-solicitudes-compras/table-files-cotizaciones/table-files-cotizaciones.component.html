@@ -20,6 +20,7 @@
           <th *ngIf="solicitudCompra.estatus === enEsts.EnCotizacion">#</th>
           <th>Nombre proveedor</th>
           <th>Archivo cotización</th>
+          <th *ngIf="solicitudCompra.estatus <= 3 ">Autorizado</th>
         </tr>
       </thead>
       <tbody>
@@ -63,8 +64,14 @@
                 (click)="verArchivos(prov.ruta)"
               >
                 <i class="fas fa-file-pdf"></i>
+
               </a>
             </div>
+          </td>
+          <td *ngIf="solicitudCompra.estatus <= 3 && prov?.autorizado != 0;">
+              <div class="text-success">
+                <i class="fas fa-check"></i>
+              </div>
           </td>
         </tr>
       </tbody>

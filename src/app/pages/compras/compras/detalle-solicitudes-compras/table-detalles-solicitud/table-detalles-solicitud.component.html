@@ -59,9 +59,10 @@
             <span class="input-group-text">$</span>
             <input
               type="text"
-              [(ngModel)]="row['precio_' + prov.proveedores_id[0].id]"
-              (input)="validateNumberInput($event)"
+              [(ngModel)]="row['precio_' + prov.proveedores_id[0].id]"   
               placeholder="Precio"
+              mask="separator"
+              thousandSeparator=","
               class="form-control form-control-sm"
               [disabled]="row['disabled_' + +prov.proveedores_id[0].id]"
               (input)="updateTotals()"
@@ -88,7 +89,7 @@
     </tfoot>
   </table>
     <div *ngIf ="solicitudCompra.auto_admin === 0 || solicitudCompra.auto_gg === 0" class="p-2 d-flex justify-content-end">
-      <button class="btn btn-sm btn-warning" (click)="modificarDetalles()">
+      <button *ngIf = "solicitudCompra.estatus < 3" class="btn btn-sm btn-warning" (click)="modificarDetalles()">
       ACTUALIZAR DETALLES
     </button>
     </div>
