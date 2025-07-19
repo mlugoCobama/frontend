@@ -16,9 +16,23 @@ export class UnidadesService {
    * Recupera el catalogo de vehículos
    * @returns colección vehículos 
    */
-    public getVehiculos(): Observable<any> {
-      return this.http.get(environment.apiUrl + "compras/CatalogoUnidades");
+    public getVehiculos(intercompania: number): Observable<any> {
+      return this.http.get(environment.apiUrl + `compras/CatalogoUnidades/${intercompania}`);
     }
+
+    public save(data: any): Observable<any> {
+      return this.http.post(environment.apiUrl + `compras/CatalogoUnidades`, data);
+    }
+
+    public update( id : number ,data: any): Observable<any> {
+      return this.http.put(environment.apiUrl + `compras/CatalogoUnidades/${id}`, data);
+    }
+
+    public delete( id : number): Observable<any> {
+      return this.http.delete(environment.apiUrl + `compras/CatalogoUnidades/${id}`);
+    }
+
+
 
 
 }

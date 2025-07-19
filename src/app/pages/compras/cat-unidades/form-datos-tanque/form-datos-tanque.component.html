@@ -1,57 +1,98 @@
-<form>
+<form [formGroup]="formDatosTanques">
     <div class="row">
         <div class="col-md-6">
-        <label for="nombre" class="form-label">Marca Tanque: *</label>
+        <label for="marca_tanque" class="form-label">Marca Tanque: *</label>
         <input
             type="text"
             class="form-control form-control-sm"
-            id="nombre"
-            name="nombre"
-            aria-label="Nombre"
+            formControlName="marca_tanque"
+            id="marca_tanque"
+            name="marca_tanque"
+            aria-label="marca_tanque"
+            placeholder="Marca del tanque"
         />
         </div>
         <div class="col-md-6">
-        <label for="nombre" class="form-label">Año de fabricación: *</label>
+        <label for="anio_fabricacion" class="form-label">Año de fabricación: *</label>
         <input
             type="text"
             class="form-control form-control-sm"
-            id="nombre"
-            name="nombre"
-            aria-label="Nombre"
+            formControlName="anio_fabricacion"
+            id="anio_fabricacion"
+            name="anio_fabricacion"
+            aria-label="anio_fabricacion"
+            mask="0000"
+            placeholder="Año de fabricacion"
         />
+        <div *ngIf="datosTanqueFormControl.anio_fabricacion.touched || submitted">
+        <div
+            class="text-danger form-text"
+            *ngIf="datosTanqueFormControl.anio_fabricacion.errors?.['required']"
+        >
+            Debes de ingresar un año de fabricacion del tanque.
         </div>
+        <div
+            class="text-danger form-text"
+            *ngIf="datosTanqueFormControl.anio_fabricacion.errors?.['min'] || datosTanqueFormControl.anio_fabricacion.errors?.['max']"
+        >
+            Debes de ingresar un un año de fabricacion del tanque valido.
+        </div>
+        </div>
+        </div>
+        
     </div>
     <div class="row">
         <div class="col-md-6">
-        <label for="nombre" class="form-label">No. Serie</label>
+        <label for="serie" class="form-label">No. Serie</label>
         <input
             type="text"
             class="form-control form-control-sm"
-            id="nombre"
-            name="nombre"
-            aria-label="Nombre"
+            id="serie"
+            name="serie"
+            formControlName="serie"
+            aria-label="serie"
+            placeholder="Serie"
         />
         </div>
         <div class="col-md-6">
-        <label for="nombre" class="form-label">Capacidad: *</label>
+        <label for="capacidad" class="form-label">Capacidad (En litros): *</label>
         <input
             type="text"
             class="form-control form-control-sm"
-            id="nombre"
-            name="nombre"
-            aria-label="Nombre"
+            id="capacidad"
+            formControlName="capacidad"
+            name="capacidad"
+            mask="separator.2" thousandSeparator=","
+            aria-label="capacidad"
+            placeholder="Capacidad (En litros)"
         />
+        <div *ngIf="datosTanqueFormControl.capacidad.touched || submitted">
+        <div
+            class="text-danger form-text"
+            *ngIf="datosTanqueFormControl.capacidad.errors?.['required']"
+        >
+            Debes de ingresar un capacidad de vehiculo.
+        </div>
+        <div
+            class="text-danger form-text"
+            *ngIf="datosTanqueFormControl.capacidad.errors?.['min'] || datosTanqueFormControl.capacidad.errors?.['max']"
+        >
+            Debes de ingresar un capacidad de vehiculo valido.
+        </div>
+        </div>
         </div>
     </div>
         <div class="row">
         <div class="col-md-6">
-        <label for="nombre" class="form-label">Tipo Medidor: *</label>
+        <label for="tipo_medidor" class="form-label">Tipo Medidor: *</label>
         <input
             type="text"
             class="form-control form-control-sm"
-            id="nombre"
-            name="nombre"
-            aria-label="Nombre"
+            id="tipo_medidor"
+            formControlName="tipo_medidor"
+            name="tipo_medidor"
+            aria-label="tipo_medidor"
+            placeholder="Tipo de medidor"
         />
         </div>
     </div>

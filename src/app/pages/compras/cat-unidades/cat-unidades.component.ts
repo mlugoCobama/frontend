@@ -4,6 +4,9 @@ import { UnidadesService } from 'src/app/core/services/compras/unidades.service'
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { ModalAddAutotanqueComponent } from './modal-add-autotanque/modal-add-autotanque.component';
 import { ModalUpdtAutotanqueComponent } from './modal-updt-autotanque/modal-updt-autotanque.component';
+import { UsuariosService } from "src/app/core/services/compras/usuarios.service";
+import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
+import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 
 @Component({
   selector: 'app-cat-unidades',
@@ -13,13 +16,30 @@ import { ModalUpdtAutotanqueComponent } from './modal-updt-autotanque/modal-updt
 export class CatUnidadesComponent implements OnInit{
 
   constructor(
-    private unidades : UnidadesService,
     private modalService: BsModalService,
+    private unidades : UnidadesService,
+    private usuariosService: UsuariosService,
+    private localStorage: LocalStorageServiceService,
+    private alertasService: SwalComprsServiceService,
   ){}
 
   ngOnInit(): void {
-    this.getCatVehiculos();  
+    this.getEmpresas();
+    this.getUsuarioActivo();
   }
+
+  public usuarioSolicita: any = {
+      id: null,
+      firstname: "",
+      realname: "",
+      name: "",
+      puesto: "",
+      Telfono: "",
+      direccion: "",
+      intercompania: 333,
+      empresa: "",
+      isAgencia: false
+  };
 
   datosFiltrados:any[] = [];
   private ordenador!: FuncionesTablas<any>;
@@ -27,12 +47,16 @@ export class CatUnidadesComponent implements OnInit{
 
   public unidad:any;
   public mostrar : boolean = false;
+  public showTable : boolean = false;
 
   public data:any;
   public modalAbierto:boolean = false;
+  public isLoading: boolean = true;
   public isLoad:boolean = false;
 
   public modalRef?: BsModalRef;
+
+  public intercompania:any;
 
   ordenarPor(columna: keyof any){
     this.datosFiltrados = this.ordenador.ordenar(columna);
@@ -41,6 +65,8 @@ export class CatUnidadesComponent implements OnInit{
   getIconoOrden(columna:keyof any):string{
     return this.ordenador.getIcono(columna)
   }
+  
+  public empresas:any;
 
   filtrarTabla(){
     this.datosFiltrados = this.ordenador.filtrar(this.busqueda, [
@@ -57,6 +83,8 @@ export class CatUnidadesComponent implements OnInit{
     this.modalAbierto =  true;
     const initialState: ModalOptions = {
           initialState: {
+            intercompania : this.intercompania,
+            empresas: this.empresas
           },
           class: "modal-lg",
         };
@@ -69,11 +97,11 @@ export class CatUnidadesComponent implements OnInit{
           this.isLoad = true;
   
           // this.mostrar = false;
-          this.getCatVehiculos();
+          this.getCatVehiculos(this.usuarioSolicita.intercompania);
         });
-        this.modalRef.content.modalCerrado.subscribe(() => {
-          this.modalAbierto = false;
-        });
+        // this.modalRef.content.modalCerrado.subscribe(() => {
+        //   this.modalAbierto = false;
+        // });
   }
 
   // Despliega la ventana modal para un nuevo registro
@@ -81,6 +109,9 @@ export class CatUnidadesComponent implements OnInit{
     this.modalAbierto =  true;
     const initialState: ModalOptions = {
           initialState: {
+            datos : this.unidad, 
+            intercompania : this.intercompania,
+            empresas: this.empresas
           },
           class: "modal-lg",
         };
@@ -93,11 +124,11 @@ export class CatUnidadesComponent implements OnInit{
           this.isLoad = true;
   
           // this.mostrar = false;
-          this.getCatVehiculos();
+          this.getCatVehiculos(this.usuarioSolicita.intercompania);
         });
-        this.modalRef.content.modalCerrado.subscribe(() => {
-          this.modalAbierto = false;
-        });
+        // this.modalRef.content.modalCerrado.subscribe(() => {
+        //   this.modalAbierto = false;
+        // });
   }
 
   public totalDatos:any;
@@ -109,9 +140,12 @@ export class CatUnidadesComponent implements OnInit{
     
   }
 
-  private getCatVehiculos() {
+  private getCatVehiculos(intercompania) {
+    this.intercompania =  intercompania;
+    console.log(this.intercompania);
     this.isLoad = true;
-    this.unidades.getVehiculos().subscribe(
+    this.showTable =  false;
+    this.unidades.getVehiculos(intercompania).subscribe(
       (response) => {
         if (response) {
           this.data = response.data;
@@ -119,11 +153,50 @@ export class CatUnidadesComponent implements OnInit{
           this.ordenador = new FuncionesTablas(this.data);
           this.datosFiltrados = [...this.data];
 
-          // console.table(this.datosFiltrados);
           this.contarDatos();
           this.isLoad = false;
-          // this.showTable = true;
+          this.showTable = true;
           
+        } else {
+          console.log(response.message);
+          this.showTable =  false;
+        }
+      },
+      (error) => {
+        this.showTable =  false;
+        console.error("Error fetching data:", error);
+      }
+    );
+    
+  }
+
+  //Recupera los datos del elemento seleccionado
+  public seleccionar(dato: any, evento: any) {
+    this.mostrar = true;
+    this.unidad = dato;
+    console.log(this.unidad);
+    if (evento.currentTarget.classList.contains("table-primary")) {
+      evento.currentTarget.classList.remove("table-primary");
+      this.mostrar = false;
+    } else {
+      const filas = document.querySelectorAll("tbody tr");
+      filas.forEach((fila) => fila.classList.remove("table-primary"));
+      evento.currentTarget.classList.add("table-primary");
+    }
+  }
+
+  /**
+   * Recupera el catalogo de empresas (Select empresa)
+   */
+  public getEmpresas() {
+    this.usuariosService.getEmpresas().subscribe(
+      (response) => {
+        if (response) {
+          const rawData = response.data
+          /**Filtro para solo mostrar las empresas que tienen acceso a macrotaller */
+          this.empresas = rawData.filter(objeto => objeto.isAgencia === false);
+          console.log(this.empresas);
+          this.isLoading = false;
         } else {
           console.log(response.message);
         }
@@ -134,17 +207,34 @@ export class CatUnidadesComponent implements OnInit{
     );
   }
 
-  //Recupera los datos del elemento seleccionado
-  public seleccionar(dato: any, evento: any) {
-    this.mostrar = true;
-    this.unidad = dato;
-    if (evento.currentTarget.classList.contains("table-primary")) {
-      evento.currentTarget.classList.remove("table-primary");
-      this.mostrar = false;
-    } else {
-      const filas = document.querySelectorAll("tbody tr");
-      filas.forEach((fila) => fila.classList.remove("table-primary"));
-      evento.currentTarget.classList.add("table-primary");
-    }
+    public getUsuarioActivo() {
+    const usuarioActivo = this.localStorage.getItem("currentUser");
+
+    this.usuariosService.getUserById(usuarioActivo["role"]["email"]).subscribe(
+      (response) => {
+        if (response.status === "success") {
+
+          this.usuarioSolicita = response.data[0];
+          if(this.usuarioSolicita.intercompania !== 333){
+            this.getCatVehiculos(this.usuarioSolicita.intercompania);
+            // this.intercompania =  this.usuarioSolicita.intercompania;
+          }
+
+        } else {
+          this.alertasService.mostrarAlerta(
+            response.message,
+            "Intente iniciar sesión nuevamente",
+            "warning",
+            "warning"
+          );
+          // this.closeModal.emit();
+          // this.cerrarModal();
+          return;
+        }
+      },
+      (error) => {
+        console.error("Error fetching data:", error);
+      }
+    );
   }
 }

@@ -24,8 +24,8 @@ export class FormSolicitudMacroComponent implements OnInit{
     puesto: "",
     Telfono: "",
     direccion: "",
-    intercompania: 333,
-    empresa: "",
+    intercompania: 153,
+    empresa: "Garza sur",
     isAgencia: false
     };
 

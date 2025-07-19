@@ -5,10 +5,11 @@
         <div class="card-body border-bottom">
           <div class="d-flex align-items-center">
             <h5 class="mb-0 card-title flex-grow-1">
-              Catalogo de Unidades
+              Parque vehicular
             </h5>
             <div class="flex-shrink-0 d-flex gap-1">
               <a
+                [disabled] = "true"
                 *ngIf = "mostrar"
                 href="javascript:void(0);"
                 class="btn btn-danger btn-sm"
@@ -22,7 +23,7 @@
                 ><i class="fas fa-edit"></i> Actualizar</a
               >
               <a
-                *ngIf = "!mostrar"
+                *ngIf = "!mostrar && intercompania != undefined"
                 href="javascript:void(0);"
                 class="btn btn-primary btn-sm"
                 (click) = "openModalNuevo()"
@@ -34,18 +35,43 @@
 
         <div class="card-body border-bottom">
 
+          
+
+          <div class="row justify-content-between" >
+            <div class="col-3">
+              <label for="empresa" class="form-label form-label-sm">Empresa: *</label>
+              <select
+                *ngIf="usuarioSolicita.intercompania === 333; else nombreEmpresa"
+                class="form-select form-select-sm"
+                aria-label="Default select example"
+                id="empresa"
+                name="empresa"
+                aria-label="empresa"
+                (change)="getCatVehiculos($event.target.value)"
+
+              >
+                <option value="" selected disabled>Selecciona uno</option>
+                <option *ngIf="isLoading" value="" [disabled]="isLoading">
+                  Cargando opciones espera...
+                </option>
+                <option *ngFor="let item of empresas" [value]="item.intercompania">
+                  {{ item.name.toUpperCase() }}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-3 pt-4" *ngIf = "!isLoad">
+              <input type="text" class="form-control form-control-sm" placeholder="Buscar..." [(ngModel)]="busqueda"  (input)="filtrarTabla()"/>
+            </div>
+          </div>
+
           <div class="d-flex justify-content-center"  *ngIf = "isLoad">
             <div class="spinner-border" role="status">
               <span class="visually-hidden">Loading...</span>
             </div>
           </div>
-
-          <div class="row justify-content-end" *ngIf = "!isLoad">
-            <div class="col-3">
-              <input type="text" class="form-control form-control-sm" placeholder="Buscar..." [(ngModel)]="busqueda"  (input)="filtrarTabla()"/>
-            </div>
-          </div>
-          <div *ngIf = "!isLoad">
+          
+          <div *ngIf = "!isLoad && showTable">
             <div class="tab-page-content mt-3 table-responsive" style="overflow-y: scroll; height: 20rem;">
               <table  class="table table-hover table-sm table-bordered">
                 <thead class="table-light" [ngClass] = "modalAbierto === false ? 'sticky-top' : '' ">
@@ -71,17 +97,17 @@
                     <td>{{item.modelo}}</td>
                     <td>{{item.no_serie}}</td>
                     <td>{{item.placas}}</td>
-                    <td>{{item.marca_tanque}}</td>
-                    <td>{{item.anio_fabricacion}}</td>
-                    <td>{{item.capacidad}} L</td>
-                    <td>{{item.serie}}</td>
-                    <td>{{item.tipo_medidor}}</td>
+                    <td>{{item.marca_tanque ?? 'No aplica'}}</td>
+                    <td>{{item.anio_fabricacion ?? 'No aplica'}}</td>
+                    <td>{{item.capacidad ?? '0'}} L</td>
+                    <td>{{item.serie ?? 'No aplica'}}</td>
+                    <td>{{item.tipo_medidor ?? 'No aplica'}}</td>
                   </tr>
                 </tbody>
               </table> 
             </div>
           </div>
-          <p *ngIf = "!isLoad" class="text-muted pt-3"> Se muestran {{ totalDatosFiltrados }} de {{ totalDatos }} </p>
+          <p *ngIf = "!isLoad && showTable" class="text-muted pt-3"> Se muestran {{ totalDatosFiltrados }} de {{ totalDatos }} </p>
         </div>
         <!--div.card-body-->
       </div>
@@ -89,3 +115,8 @@
   </div>
 </div>
 <!-- container-fluid -->
+<ng-template #nombreEmpresa>
+  <p>
+    <strong>{{ usuarioSolicita.empresa }} </strong>
+  </p>
+</ng-template>
