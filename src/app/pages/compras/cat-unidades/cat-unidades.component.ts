@@ -7,6 +7,7 @@ import { ModalUpdtAutotanqueComponent } from './modal-updt-autotanque/modal-updt
 import { UsuariosService } from "src/app/core/services/compras/usuarios.service";
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
 import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-cat-unidades',
@@ -142,7 +143,6 @@ export class CatUnidadesComponent implements OnInit{
 
   private getCatVehiculos(intercompania) {
     this.intercompania =  intercompania;
-    console.log(this.intercompania);
     this.isLoad = true;
     this.showTable =  false;
     this.unidades.getVehiculos(intercompania).subscribe(
@@ -174,7 +174,7 @@ export class CatUnidadesComponent implements OnInit{
   public seleccionar(dato: any, evento: any) {
     this.mostrar = true;
     this.unidad = dato;
-    console.log(this.unidad);
+    
     if (evento.currentTarget.classList.contains("table-primary")) {
       evento.currentTarget.classList.remove("table-primary");
       this.mostrar = false;
@@ -195,7 +195,6 @@ export class CatUnidadesComponent implements OnInit{
           const rawData = response.data
           /**Filtro para solo mostrar las empresas que tienen acceso a macrotaller */
           this.empresas = rawData.filter(objeto => objeto.isAgencia === false);
-          console.log(this.empresas);
           this.isLoading = false;
         } else {
           console.log(response.message);
@@ -217,7 +216,7 @@ export class CatUnidadesComponent implements OnInit{
           this.usuarioSolicita = response.data[0];
           if(this.usuarioSolicita.intercompania !== 333){
             this.getCatVehiculos(this.usuarioSolicita.intercompania);
-            // this.intercompania =  this.usuarioSolicita.intercompania;
+            this.intercompania =  this.usuarioSolicita.intercompania;
           }
 
         } else {
@@ -237,4 +236,41 @@ export class CatUnidadesComponent implements OnInit{
       }
     );
   }
+
+  //"Borra" el registro seleccionado
+    public destroy() {
+      this.isLoad = true;
+      Swal.fire({
+        title: "¿Estas seguro?",
+        text: "Se eliminara el registro seleccionado",
+        icon: "error",
+        confirmButtonText: "Eliminiar",
+        showCancelButton: true,
+        customClass: {
+          confirmButton: "btn btn-danger px-4",
+          cancelButton: "btn btn-primary ms-2 px-4",
+        },
+        buttonsStyling: false,
+      }).then((result) => {
+        if (result.value) {
+          this.unidades.delete(this.unidad.id).subscribe(
+            (response) => {
+              if (response.status === "success") {
+                this.getCatVehiculos(this.intercompania);
+                this.alertasService.mostrarAlerta("Borrado!", 
+                  "El registro ha sido borrado.", "success", "danger")
+              } else {
+                this.alertasService.mostrarAlerta("Error!", 
+                  response.message, "success", "danger")
+              }
+            },
+            (error) => {
+              this.alertasService.mostrarAlerta("Error fetching data:", 
+                error, "success", "danger")
+            }
+          );
+        }
+        this.isLoad = false;
+      });
+    }
 }

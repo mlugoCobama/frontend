@@ -104,7 +104,7 @@
             type="text"
             class="form-control form-control-sm"
             formControlName="placas"
-             mask="AAA-000"
+             mask="AAA-AAA"
             id="placas"
             name="placas"
             aria-label="placas"
@@ -127,14 +127,16 @@
         </div>
         <div class="col-md-6">
         <label for="tipo_vehiculo" class="form-label">Uso Vehículo: *</label>
-        <input
-            type="text"
-            class="form-control form-control-sm"
-            formControlName="tipo_vehiculo"
-            id="tipo_vehiculo"
-            name="tipo_vehiculo"
-            aria-label="tipo_vehiculo"
-        />
+        <select 
+        class="form-select form-select-sm" 
+        formControlName="tipo_vehiculo"
+        id="tipo_vehiculo"
+        name="tipo_vehiculo"
+        aria-label="tipo_vehiculo">
+        <option value = "">Selecciona uno</option>
+        <option value="reparto">Reparto</option>
+        <option value="utilitario">Utilitario</option>
+        </select>
         <div *ngIf="datosVehiculoFormControl.tipo_vehiculo.touched || submitted">
             <div
                 class="text-danger form-text"

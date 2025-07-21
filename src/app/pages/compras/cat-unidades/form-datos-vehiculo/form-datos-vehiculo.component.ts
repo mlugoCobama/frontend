@@ -41,7 +41,7 @@ export class FormDatosVehiculoComponent {
                                     ]),
         no_serie: new FormControl(null, [Validators.required, Validators.minLength(17)]),
         placas: new FormControl(null, [Validators.required]),
-        tipo_vehiculo: new FormControl(null, [Validators.required]),
+        tipo_vehiculo: new FormControl("", [Validators.required]),
       });
       resolve(true);
     });
