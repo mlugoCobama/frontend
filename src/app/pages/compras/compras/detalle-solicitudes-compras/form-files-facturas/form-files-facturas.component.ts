@@ -109,11 +109,11 @@ export class FormFilesFacturasComponent implements OnInit {
             this.hasComprobantePago = true;
           }
         } else {
-          console.log(response.message);
+          this.alertasService.mostrarAlerta('error', response.message, 'error', 'danger');
         }
       },
       (error) => {
-        console.error("Error fetching data:", error);
+        this.alertasService.mostrarAlerta('error',` "Error:" ${error}`, 'error', 'danger');
       }
     );
   }
@@ -148,11 +148,12 @@ export class FormFilesFacturasComponent implements OnInit {
           this.formDocsOrdenCompra.reset();
 
         } else {
-          console.log(response.message);
+          this.alertasService.mostrarAlerta('error', response.message, 'error', 'danger');
         }
       },
       (error) => {
-        console.error("Error fetching data:", error);
+        this.alertasService.mostrarAlerta('error',` "Error:" ${error}`, 'error', 'danger');
+        
       }
     );
   }
@@ -182,11 +183,12 @@ export class FormFilesFacturasComponent implements OnInit {
             this.formData = new FormData();
             this.formDocsOrdenCompra.reset();
           } else {
-            console.log(response.message);
+            this.alertasService.mostrarAlerta('error', response.message, 'error', 'danger');
           }
         },
         (error) => {
-          console.error("Error fetching data:", error);
+          this.alertasService.mostrarAlerta('error',` "Error:" ${error}`, 'error', 'danger');
+
         }
       );
     } else {
@@ -209,11 +211,11 @@ export class FormFilesFacturasComponent implements OnInit {
             this.isLoad = false;
             this.actualizarStatus.emit();
           } else {
-            console.log(response.message);
+            this.alertasService.mostrarAlerta('error', response.message, 'error', 'danger');
           }
         },
         (error) => {
-          console.error("Error fetching data:", error);
+          this.alertasService.mostrarAlerta('error',` "Error:" ${error}`, 'error', 'danger');
         }
       );
   }
@@ -233,7 +235,9 @@ export class FormFilesFacturasComponent implements OnInit {
           this.factura = response.factura;
           this.checkMetodoPago();
         }
-    });
+    },(error) => {
+          this.alertasService.mostrarAlerta('error',` "Error:" ${error}`, 'error', 'danger');
+      });
     this.mostrarDtsFac = true;
   }
 
@@ -266,6 +270,9 @@ export class FormFilesFacturasComponent implements OnInit {
         link.download = `Facturas_${this.ordenCompra.folio_oc}.zip`;
         link.click();
         window.URL.revokeObjectURL(url);
+      },
+      (error) => {
+          this.alertasService.mostrarAlerta('error',` "Error:" ${error}`, 'error', 'danger');
       });
   }
 
@@ -304,7 +311,8 @@ export class FormFilesFacturasComponent implements OnInit {
       const tipo = comprobante.getAttribute("TipoDeComprobante");
       console.log("Tipo de comprobante:", tipo);
     } else {
-      this.alertasService.mostrarAlerta('No valido', 'El archivo que intentas subir no es un CFDI','error', 'danger');
+      this.alertasService.mostrarAlerta('No valido', 'El archivo que intentas subir no es un CFDI'+
+        "\n No se encontró el nodo 'cfdi:Comprobante'.",'error', 'danger');
       this.formDocsOrdenCompra.reset();
       console.warn("No se encontró el nodo 'cfdi:Comprobante'.");
     }

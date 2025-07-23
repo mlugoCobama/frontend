@@ -89,7 +89,6 @@ export class FormActualizarDetalleComponent {
 }
 private fromatearNuevosDetalles(){
   const dataOriginal = this.detalles.slice();
-
   if(this.tableData.hasDatos()){
     const datos =  this.tableData.getDetalles();
     datos.forEach(dato => {
@@ -100,6 +99,7 @@ private fromatearNuevosDetalles(){
   } 
   return dataOriginal;
 }
+
 
 
 }

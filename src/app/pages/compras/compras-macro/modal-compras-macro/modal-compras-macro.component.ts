@@ -22,7 +22,8 @@ export class ModalComprasMacroComponent {
   public submitted: boolean = false;
   public submittedDetail: boolean = false;
   public isLoad : boolean = false;
-  
+  public sending: boolean = false;
+
   constructor(
     public modalRef: BsModalRef,
     public alertasService : SwalComprsServiceService,
@@ -49,6 +50,7 @@ export class ModalComprasMacroComponent {
   public save() {
     this.submitted = true;
     this.isLoad = true;
+    this.sending = true;
 
     if (!this.formSolicitudCompra.esValido()) {
       this.isLoad = false;
@@ -58,6 +60,7 @@ export class ModalComprasMacroComponent {
         "warning",
         "warning"
       );
+      this.sending = false;
       return;
     }
 
@@ -72,7 +75,7 @@ export class ModalComprasMacroComponent {
         "warning",
         "warning"
       );
-
+      this.sending = false;
       return;
     }
 
@@ -82,6 +85,7 @@ export class ModalComprasMacroComponent {
       detalles: this.tableData.getDetalles(),
     };
 
+    const archivosCotizacion = this.formSolicitudCompra.obtenerArchivos().get("cotizacion") as File
     const formDataToSend = new FormData();
     formDataToSend.append("data", JSON.stringify(data));
 
@@ -95,6 +99,8 @@ export class ModalComprasMacroComponent {
       }
     });
 
+    formDataToSend.append('file_cotizacion', archivosCotizacion)
+    
     this.comprasMacro.save(formDataToSend).subscribe(
       (response) => {
         if (response.status === "success") {
@@ -111,15 +117,17 @@ export class ModalComprasMacroComponent {
           this.tableData.limpiarArray();
           this.submitted = false;
           this.formSolicitudCompra.resetearFormulario();
+          this.sending = false;
           this.cerrarModal();
         } else {
           this.alertasService.mostrarAlerta("Error", response.message, "warning", "warning");
-
+          this.sending = false;
           return;
         }
       },
       (error) => {
         this.alertasService.mostrarAlerta("Error", error, "warning", "warning");
+        this.sending = false;
         return;
       }
     );

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { UsuariosService } from "src/app/core/services/compras/usuarios.service";
 import {  FormBuilder, FormControl, FormGroup,  Validators  } from "@angular/forms";
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
@@ -14,6 +14,8 @@ import { ComprasMacroService } from 'src/app/core/services/compras/compras-macro
 export class FormSolicitudMacroComponent implements OnInit{
 
   public formSolicitudCompra: FormGroup;
+  public formData = new FormData();
+
     public usuarioSolicita: any = {
     id: null,
     firstname: "",
@@ -22,12 +24,14 @@ export class FormSolicitudMacroComponent implements OnInit{
     puesto: "",
     Telfono: "",
     direccion: "",
-    intercompania: 333,
-    empresa: "",
+    intercompania: 153,
+    empresa: "Garza sur",
     isAgencia: false
     };
 
   @Input() submitted: boolean;
+  @Output() closeModal = new EventEmitter<void>();
+
   public isLoading: boolean = true;
 
   public empresas:any;
@@ -65,6 +69,7 @@ export class FormSolicitudMacroComponent implements OnInit{
         c_c: new FormControl(0),
         motivo: new FormControl(null, Validators.required),
         orden_trabajo: new FormControl(null, Validators.required),
+        cotizacion: new FormControl(null)
       });
       resolve(true);
     });
@@ -77,7 +82,10 @@ export class FormSolicitudMacroComponent implements OnInit{
     this.usuariosService.getEmpresas().subscribe(
       (response) => {
         if (response) {
-          this.empresas = response.data;
+          const rawData = response.data
+          /**Filtro para solo mostrar las empresas que tienen acceso a macrotaller */
+          this.empresas = rawData.filter(objeto => objeto.isAgencia === false);
+          
           this.isLoading = false;
         } else {
           console.log(response.message);
@@ -97,9 +105,7 @@ export class FormSolicitudMacroComponent implements OnInit{
     return this.formSolicitudCompra;
   }
 
-
-
-    public getUsuarioActivo() {
+  public getUsuarioActivo() {
     const usuarioActivo = this.localStorage.getItem("currentUser");
 
     this.usuariosService.getUserById(usuarioActivo["role"]["email"]).subscribe(
@@ -118,7 +124,7 @@ export class FormSolicitudMacroComponent implements OnInit{
             "warning",
             "warning"
           );
-
+          this.closeModal.emit();
           // this.cerrarModal();
           return;
         }
@@ -129,6 +135,12 @@ export class FormSolicitudMacroComponent implements OnInit{
     );
   }
 
+  onFileChange(event: any, fieldName: string) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      this.formData.append(fieldName, file);
+    }
+  }
   
   /**
    * Recupera los usuarios que pertenecen a las empresas (Select usuario)
@@ -171,9 +183,14 @@ export class FormSolicitudMacroComponent implements OnInit{
    * { empresa, usuario_destino, c_c, motivo, orden_trabajo }
    */
   obtenerValores() {
-    return this.formSolicitudCompra.value;
+    const value = this.formSolicitudCompra.value;
+    return value;
   }
 
+  obtenerArchivos() {
+    
+    return this.formData;
+  }
   /**
    * Recupera el valor de usuario solicita
    * @returns int: id -> usuario solicita 
@@ -195,7 +212,8 @@ export class FormSolicitudMacroComponent implements OnInit{
    * @returns true
    */
   resetearFormulario() {
-    return this.formSolicitudCompra.reset();
+    this.formSolicitudCompra.reset();
+    this.formData = new FormData();
   }
 
 public datosSelect: any;

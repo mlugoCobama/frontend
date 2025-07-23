@@ -1,0 +1,71 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Gastos del vehiculo : {{ unidad.marca_vehiculo }} {{ unidad.submarca }} ({{unidad.modelo}})  No Serie: {{ unidad.no_serie }} </h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="cerrarModal()"
+    ></button>
+</div>
+
+<div class="modal-body">
+    <div class="d-flex justify-content-center"  *ngIf = "isLoad">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+    <div *ngIf = "!isLoad && showTable">
+            <div class="tab-page-content mt-3 table-responsive" style="overflow-y: scroll; height: 20rem;">
+              <table  class="table table-hover table-sm table-bordered">
+                <thead class="table-light" >
+                  <tr class="text-center">
+                    <th >SOLICITUD</th>
+                    <th >ORDEN</th>
+                    <th >CANTIDAD</th>
+                    <th >TIPO</th>
+                    <th >DESCRIPCIÓN</th>
+                    <th >IMP. U</th>
+                    <th >SUB TOTAL</th>
+                    <th >IVA</th>
+                    <th >TOTAL</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor = "let gasto of gastos">
+                    <td>{{gasto.solicitud_compra}}</td>
+                    <td>{{gasto.orden_compra}}</td>
+                    <td>{{gasto.cantidad}}</td>
+                    <td>{{gasto.abreviatura}}</td>
+                    <td>{{gasto.descripcion}}</td>
+                    <td class="text-end" >{{gasto.importe_unitario | currency}}</td>
+                    <td class="text-end" [ngClass] = "gasto.descripcion === 'TOTAL GENERAL' ? fw-bold : ''">{{gasto.total | currency}}</td>
+                    <td class="text-end" [ngClass] = "gasto.descripcion === 'TOTAL GENERAL' ? fw-bold : ''">{{gasto.iva | currency}}</td>
+                    <td class="text-end" [ngClass] = "gasto.descripcion === 'TOTAL GENERAL' ? fw-bold : ''">{{gasto.total_detalle | currency}}</td>
+                  </tr>
+                </tbody>
+              </table> 
+            </div>
+          </div>
+</div>
+
+
+<div class="modal-footer">
+    <button
+     [disabled] = "deshabilitado"
+      type="button"
+      class="btn btn-secondary btn-sm"
+      data-bs-dismiss="modal"
+      (click)="cerrarModal()"
+    >
+      Cerrar
+    </button>
+    <button
+    [disabled] = "deshabilitado"
+    type="button"
+    class="btn btn-primary btn-sm">
+      Descargar
+    </button>
+</div>
+

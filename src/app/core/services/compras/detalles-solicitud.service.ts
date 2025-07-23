@@ -10,9 +10,7 @@ import { Subject } from "rxjs";
 })
 export class DetallesSolicitudService {
 
-  constructor(private http: HttpClient) {
-
-   }
+  constructor(private http: HttpClient) {}
 
   public edit(id: number, data: any): Observable<any> {
     return this.http.put(environment.apiUrl + `compras/DetallesSolicitud/${id}`, data);

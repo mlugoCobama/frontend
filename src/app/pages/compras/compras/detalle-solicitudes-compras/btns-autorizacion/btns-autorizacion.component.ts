@@ -60,7 +60,7 @@ export class BtnsAutorizacionComponent implements OnInit {
             }
           },
           (error) => {
-            console.error("Error fetching data:", error);
+            this.alertasService.mostrarAlerta("Error!",`Error fetching data: ${error}`, "error", "danger");
           }
         );
       }
@@ -102,7 +102,7 @@ export class BtnsAutorizacionComponent implements OnInit {
             }
           },
           (error) => {
-            console.error("Error fetching data:", error);
+            this.alertasService.mostrarAlerta("Error!",`Error fetching data: ${error}`, "error", "danger");
           }
         );
       } else if (result.isDenied) {
@@ -112,12 +112,11 @@ export class BtnsAutorizacionComponent implements OnInit {
               this.alertasService.mostrarAlerta("Orden autorizada", "La orden sera marcada como autorizada","success","success");
               this.actualizarStatus.emit();
             } else {
-              console.log(response.message);
               this.alertasService.mostrarAlerta("Error!", response.message,"error","danger");
             }
           },
           (error) => {
-            console.error("Error fetching data:", error);
+            this.alertasService.mostrarAlerta("Error!",`Error fetching data: ${error}`, "error", "danger");
           }
         );
       }
@@ -135,11 +134,11 @@ export class BtnsAutorizacionComponent implements OnInit {
           this.setOrdenCompra(this.ordenCompra);
           this.isLoad = true;
         } else {
-          console.log(response.message);
+          this.alertasService.mostrarAlerta("Error!", response.message,"error","danger");
         }
       },
       (error) => {
-        console.error("Error fetching data:", error);
+        this.alertasService.mostrarAlerta("Error!",`Error fetching data: ${error}`, "error", "danger");
       }
     );
   }  

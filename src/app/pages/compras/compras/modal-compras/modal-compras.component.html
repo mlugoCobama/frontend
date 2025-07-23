@@ -7,6 +7,7 @@
 <div class="modal-body">
   <app-form-solicitud
   #formSolicitudMacro
+  (closeModal)="cerrarModal()"
   ></app-form-solicitud>
 
   <app-form-detalle-solicitud
@@ -16,11 +17,14 @@
 </div>
 <div class="modal-footer">
   <button
+   [disabled]="sending"
     type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="cerrarModal()"
   >
     Cerrar
   </button>
-  <button type="button" class="btn btn-primary btn-sm" (click)="save()">
+  <button 
+  [disabled]="sending"
+  type="button" class="btn btn-primary btn-sm" (click)="save()">
     Guardar
   </button>
 </div>

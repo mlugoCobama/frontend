@@ -6,10 +6,13 @@ import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompr
 import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 import { DetallesSolicitudService } from "src/app/core/services/compras/detalles-solicitud.service"; 
 import { EstadoSolicitud } from "../../estado-solicitud.enum";
+import { CatUnidadesMedidasService } from "src/app/core/services/compras/unidadesMedidas/cat-unidades-medidas.service";
 import Swal from 'sweetalert2';
 
 import { Subscription } from "rxjs";
-import {FormGroup} from "@angular/forms";
+// import {FormGroup} from "@angular/forms";
+
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: "app-table-detalles-solicitud",
@@ -30,7 +33,10 @@ export class TableDetallesSolicitudComponent implements OnInit {
 
   public formOrdenCompra: FormGroup;
 
+  public formDetallesSolicitud: FormGroup;
+
   public isLoad: boolean = true;
+  public unidades:any  = [];
 
   public cotProv: any[] = [];
   public totals: any = {};
@@ -52,16 +58,31 @@ export class TableDetallesSolicitudComponent implements OnInit {
     public cotizacionesService: CotizacionesService,
     public ordenesComprasService: OrdenesCompraService,
     public detallesService: DetallesSolicitudService,
-    public alertasService: SwalComprsServiceService
-  ) {}
+    public alertasService: SwalComprsServiceService,
+    public formBuilder: FormBuilder,
+    public catUnidadesMedidasService: CatUnidadesMedidasService
+  ) {
+    this.formDetallesSolicitud = this.formBuilder.group({});
+  }
 
   ngOnInit(): void {
+    this.getUnidades();
     this.getDetalles();
     this.generarOrdenSubscripcion = this.compras.generateOrder$.subscribe(
       () => {
         this.generarOrden();
       }
     );
+  }
+
+  private modelInputs = {
+    id: "",
+    cantidad:  "",
+    descripcion: "",
+    observaciones: "", 
+    unidadMedida: "",
+    img_referencia: "",
+    confirmado: ""
   }
 
   ngOnDestroy(): void {
@@ -95,7 +116,6 @@ export class TableDetallesSolicitudComponent implements OnInit {
       (response) => {
         if (response) {
           this.detalles = response.data;
-          console.log(this.detalles);
           if (this.solicitudCompra.estatus >= this.enEsts.EnCotizacion) {
             this.getProveedoresCotizacion();
             this.addProveedorColumns();
@@ -105,11 +125,11 @@ export class TableDetallesSolicitudComponent implements OnInit {
           }
           this.isLoad = false;
         } else {
-          console.log(response.message);
+          this.alertasService.mostrarAlerta("Error guardando los datos:", response.message, "error", "danger");
         }
       },
       (error) => {
-        console.error("Error fetching data:", error);
+        this.alertasService.mostrarAlerta("Error guardando los datos:", error, "error", "danger");
       }
     );
   }
@@ -130,11 +150,11 @@ export class TableDetallesSolicitudComponent implements OnInit {
           this.addProveedorColumns();
           this.isLoad = false;
         } else {
-          console.log(response.message);
+          this.alertasService.mostrarAlerta("Error guardando los datos:", response.message, "error", "danger");
         }
       },
       (error) => {
-        console.error("Error fetching data:", error);
+        this.alertasService.mostrarAlerta("Error guardando los datos:", error, "error", "danger");
       }
     );
   }
@@ -239,12 +259,14 @@ export class TableDetallesSolicitudComponent implements OnInit {
         archivosIngresados = true;
       }
     });
-    if (!datosIngresados || !archivosIngresados) {
-      const mensaje =
-        "Recuerda que ademas de los precios también debes de adjuntar el archivo de la cotización ";
-      this.alertasService.mostrarAlerta("Error", mensaje, "warning", "warning");
-      return;
-    }
+    
+    // if (!datosIngresados || !archivosIngresados) {
+    if (!datosIngresados) {
+       const mensaje =
+         "Recuerda que ademas de los precios también debes de adjuntar el archivo de la cotización ";
+       this.alertasService.mostrarAlerta("Error", mensaje, "warning", "warning");
+       return;
+     }
 
     this.cotizacionesService.save(formData).subscribe(
       (response) => {
@@ -259,11 +281,11 @@ export class TableDetallesSolicitudComponent implements OnInit {
           this.cotizacionesService.clearFiles();
           this.isLoad = false;
         } else {
-          console.log(response.message);
+          this.alertasService.mostrarAlerta("Error guardando los datos:", response.message, "error", "danger");
         }
       },
       (error) => {
-        console.error("Error guardando los datos:", error);
+        this.alertasService.mostrarAlerta("Error guardando los datos:", error, "error", "danger");
       }
     );
   }
@@ -273,9 +295,27 @@ export class TableDetallesSolicitudComponent implements OnInit {
    */
   public manejoCheck(prov: any) {
     const proveedorSleccionado = prov;
-    this.proveedorSelec = proveedorSleccionado;
-    this.compras.setMostrarBoton(true);
-    this.mostrarObs = true;
+    if(this.totalCotizacion(proveedorSleccionado) > 50000 && prov.autorizado === 0){
+      this.solicitarAutorizacion();
+      this.compras.setMostrarBoton(false);
+      this.mostrarObs = false;
+    }else{
+      this.proveedorSelec = proveedorSleccionado;
+      this.compras.setMostrarBoton(true);
+      this.mostrarObs = true;
+    }
+
+    
+  }
+
+  totalCotizacion(prov){
+      const detalles = prov.detalles
+      let totalCotizacion = 0;
+      detalles.forEach(detalle => {
+        const total = Number(detalle.importe_unitario) * Number(detalle.detalle_solicitud.cantidad)
+        totalCotizacion = totalCotizacion + total
+      });
+      return (totalCotizacion);
   }
 
   /**
@@ -336,11 +376,12 @@ export class TableDetallesSolicitudComponent implements OnInit {
             "warning",
             "warning"
           );
-          console.log(response.message);
+          // console.log(response.message);
         }
       },
       (error) => {
-        console.error("Error enviando datos:", error);
+        this.alertasService.mostrarAlerta("Error guardando los datos:", error, "error", "danger");
+        // console.error("Error enviando datos:", error);
       }
     );
 
@@ -402,7 +443,6 @@ export class TableDetallesSolicitudComponent implements OnInit {
 
   validarTamaño() {
   const contador = this.detalles.reduce((acc, detalle) => acc + detalle.confirmado, 0);
-  console.log(contador);
   return contador !== 0;
 }
 
@@ -410,5 +450,58 @@ cambioCheck(item, event) {
   item.confirmado = event.target.checked ? 1 : 0;
 }
 
+  private getUnidades() {
+    this.catUnidadesMedidasService.getAll().subscribe(
+      (response) => {
+        if (response) {
+          this.unidades = response.data;
+        } else {
+          this.alertasService.mostrarAlerta("Error guardando los datos:", response.message, "error", "danger");
+        }
+      },
+      (error) => {
+        this.alertasService.mostrarAlerta("Error guardando los datos:", error, "error", "danger");
+      }
+    );
+  }
+
+  private solicitarAutorizacion(){
+    Swal.fire({
+        title: "La cotización supera el limite establecido",
+        text: "Es necesario que la planta autorice esto \n ¿Deseas solicitar autorizacion ahora?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si",
+        cancelButtonText: "No, intentar con otra cotización",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.enviarSolAutorizacion();
+        }
+      });
+  }
+
+  private enviarSolAutorizacion(){
+    this.cotizacionesService.solicitarAutorizacion(this.solicitudCompra.id).subscribe(
+     (response) => {
+        if (response.status === "success") {
+          this.alertasService.mostrarAlerta(
+            "Enviado",
+            "Se ha solicitado la autorización por parte de la planta",
+            "success",
+            "success"
+          );
+          this.actualizarStatus.emit();
+        } else {
+          this.alertasService.mostrarAlerta("Error guardando los datos:", response.message, "error", "danger");
+        }
+      },
+      (error) => {
+        this.alertasService.mostrarAlerta("Error guardando los datos:", error, "error", "danger");
+        // console.error("Error guardando los datos:", error);
+      }
+    );
+  }
 }
 

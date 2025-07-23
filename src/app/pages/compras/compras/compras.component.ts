@@ -13,6 +13,8 @@ import { ComprasService } from "src/app/core/services/compras/compras.service";
 import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompra/ordenes-compra.service";
 import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 
+import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
+
 @Component({
   selector: "app-compras",
   templateUrl: "./compras.component.html",
@@ -49,7 +51,8 @@ export class ComprasComponent implements OnInit {
     public ordenesComprasService: OrdenesCompraService,
     public alertasService: SwalComprsServiceService,
     public comprasService: ComprasService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private localStorage: LocalStorageServiceService
   ) {}
 
   public ngOnInit(): void {
@@ -57,12 +60,19 @@ export class ComprasComponent implements OnInit {
       this.mostrarBoton = mostrar;
     });
     this.dtOptions = environment.dataTables;
+    this.getUsuarioActivo();
     this.getAll();
   }
 
   ngOnDestroy():void{
 
   }
+
+    public getUsuarioActivo() {
+    const usuarioActivo = this.localStorage.getItem("currentUser");
+      return usuarioActivo['role']['intercompania'];
+  }
+
   /**
    * Manejo de componentes
    */
@@ -102,7 +112,7 @@ export class ComprasComponent implements OnInit {
 
   //Recupera todos los registros de solicitudes de compras
   private getAll() {
-    this.comprasService.getAll().subscribe(
+    this.comprasService.getAll(this.getUsuarioActivo()).subscribe(
       (response) => {
         if (response) {
           this.data = response.data;
@@ -166,7 +176,7 @@ export class ComprasComponent implements OnInit {
             }
           },
           (error) => {
-            console.error("Error fetching data:", error);
+            this.alertasService.mostrarAlerta("Error!", error, "error","error");
           }
         );
       }

@@ -7,6 +7,7 @@
       ></app-info-solicitud>
   
       <app-table-detalles-solicitud
+      *ngIf ="solicitudCompra.estatus > enEsts.Solicitado"
       [solicitudCompra]="solicitudCompra"
       [ordenCompra]="ordenCompra"
       (openModal)="openModal(content, $event)"
@@ -14,6 +15,12 @@
       (setDataCotizacion)="setDataCotizacion($event)"
       (actualizarStatus)="updateStatus()"       
       ></app-table-detalles-solicitud>
+
+      <app-tabla-detalles-solicitud
+      *ngIf="solicitudCompra.estatus <= enEsts.Solicitado"
+      [solicitudCompra]="solicitudCompra"
+      (openModal)="openModal(content, $event)"
+      ></app-tabla-detalles-solicitud>
 
        <!-- Se muestra si el estatus es orden de compra o posterior-->
       <app-form-files-facturas
@@ -34,7 +41,7 @@
       ></app-panel-cotizaciones>
   
       <app-btns-autorizacion
-      *ngIf= "solicitudCompra.estatus === enEsts.OrdenCompra"
+      *ngIf= "solicitudCompra.estatus === enEsts.OrdenCompra "
       [solicitudCompra]="solicitudCompra" 
       (setDataOrdenCompra)="setDataOrdenCompra($event)"
       (actualizarStatus)="updateStatus()"   
@@ -42,6 +49,12 @@
   
       <app-btn-autorizacion-gerencia
       *ngIf="solicitudCompra.estatus === enEsts.EspAutPlanta"
+      (actualizarStatus)="updateStatus()"
+      [solicitudCompra]="solicitudCompra" 
+      ></app-btn-autorizacion-gerencia>
+      
+      <app-btn-autorizacion-gerencia
+      *ngIf="solicitudCompra.estatus === enEsts.EnCotizacion"
       (actualizarStatus)="updateStatus()"
       [solicitudCompra]="solicitudCompra" 
       ></app-btn-autorizacion-gerencia>

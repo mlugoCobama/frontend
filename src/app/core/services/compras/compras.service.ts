@@ -25,9 +25,12 @@ export class ComprasService {
    * Recupera todas las solicitudes compra
    * @returns colección con las ordenes de compra
    */
-  public getAll(): Observable<any> {
-    return this.http.get(environment.apiUrl + "compras/SolicitudesCompras");
+  public getAll(intercompania): Observable<any> {
+    return this.http.get(environment.apiUrl + `compras/Solicitudes/${intercompania}`);
   }
+  // public getAll(): Observable<any> {
+  //   return this.http.get(environment.apiUrl + "compras/SolicitudesCompras");
+  // }
 
   /**
    * Recupera los datos de la solicitud de compra seleccionado
@@ -52,6 +55,7 @@ export class ComprasService {
   public save(data: any): Observable<any> {
     return this.http.post(environment.apiUrl + "compras/SolicitudesCompras", data);
   }
+  
 
   public edit(id: number, data: any): Observable<any> {
     return this.http.put(environment.apiUrl + `compras/SolicitudesCompras/${id}`, data);

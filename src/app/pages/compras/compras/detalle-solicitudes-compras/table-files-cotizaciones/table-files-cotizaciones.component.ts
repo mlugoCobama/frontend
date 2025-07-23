@@ -4,6 +4,7 @@ import { UsuariosService } from 'src/app/core/services/compras/usuarios.service'
 import { CotizacionesService } from "src/app/core/services/compras/cotizaciones/cotizaciones.service";
 import {FormBuilder, FormControl, FormGroup, Validators, } from "@angular/forms";
 import { EstadoSolicitud } from '../../estado-solicitud.enum';
+import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 
 @Component({
   selector: 'app-table-files-cotizaciones',
@@ -39,6 +40,7 @@ constructor(
   private cotizacionesService: CotizacionesService,
   private usuariosService: UsuariosService,
   public formBuilder: FormBuilder,
+  private alertasService: SwalComprsServiceService
 ){}
 
 ngOnInit(): void {
@@ -124,13 +126,17 @@ public getEmpresas() {
           this.empresas = response.data;
           this.isLoading = false;
         } else {
-          console.log(response.message);
+          this.alertasService.mostrarAlerta("Error", response.message, "error", "danger");
         }
       },
       (error) => {
-        console.error("Error fetching data:", error);
+        this.alertasService.mostrarAlerta("Error", error, "error", "danger");
       }
     );
   }
+}
+
+public autorizarCotizacion(prov){
+  console.log(prov.id, prov.autorizado, prov.seleccionado)
 }
 }

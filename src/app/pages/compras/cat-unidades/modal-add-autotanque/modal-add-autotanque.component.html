@@ -1,0 +1,43 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Nuevo Vehiculo : {{ setTitle() }} </h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="cerrarModal()"
+    ></button>
+</div>
+
+<div class="modal-body">
+    <h5>Datos del Vehiculo</h5>
+    <app-form-datos-vehiculo
+    #formDatosVehiculo
+    ></app-form-datos-vehiculo>
+    <h5 class="pt-2">Datos del Tanque</h5>
+    <app-form-datos-tanque
+    #formDatosTanque
+    ></app-form-datos-tanque>
+
+</div>
+
+
+<div class="modal-footer">
+    <button
+     [disabled] = "deshabilitado"
+      type="button"
+      class="btn btn-secondary btn-sm"
+      data-bs-dismiss="modal"
+      (click)="cerrarModal()"
+    >
+      Cerrar
+    </button>
+    <button
+    [disabled] = "deshabilitado"
+     (click)="guardar()" 
+     type="button"
+      class="btn btn-primary btn-sm">
+      Guardar
+    </button>
+</div>

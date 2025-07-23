@@ -62,13 +62,12 @@ export class ComisionesComponent implements OnInit {
       (response) => {
         if (response.status) {
           this.porcentajes = response.data;
-          console.log(this.porcentajes);
         } else {
-          console.log(response.message);
+           this.swal.mostrarAlerta("Error", `Error fetching data: ${response.message}`, "error" , "danger" );
         }
       },
       (error) => {
-        console.error("Error fetching data:", error);
+        this.swal.mostrarAlerta("Error", `Error fetching data: ${error}`, "error" , "danger" );
       }
     );
   }
@@ -81,7 +80,6 @@ export class ComisionesComponent implements OnInit {
       confirmButtonText: "Guardar",
       denyButtonText: `Cancelar`
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         if (this.isRowValid(item.faau_nofactura)) {
       const data = {
@@ -171,11 +169,11 @@ public recuperarValoresFactura(nofactura: string): any {
           // console.log(this.data.length)
           this.isLoadig = false;
         } else {
-          console.log(response.message);
+          this.swal.mostrarAlerta("Error", `${response.message}`, "error" , "danger" );
         }
       },
       (error) => {
-        console.error("Error fetching data:", error);
+        this.swal.mostrarAlerta("Error", `Error fetching data: ${error}`, "error" , "danger" );
       }
     );
   }

@@ -1,0 +1,150 @@
+<form [formGroup]="formDatosVehiculo">
+    <div class="row">
+        <div class="col-md-6">
+        <label for="marca" class="form-label">Marca Vehiculo:  *</label>
+        <input
+            type="text"
+            class="form-control form-control-sm"
+            formControlName="marca"
+            id="marca"
+            name="marca"
+            aria-label="marca"
+            placeholder="Marca"
+        />
+        <div *ngIf="datosVehiculoFormControl.marca.touched || submitted">
+        <div
+            class="text-danger form-text"
+            *ngIf="datosVehiculoFormControl.marca.errors?.['required']"
+        >
+            Debes de ingresar una marca de vehiculo.
+        </div>
+        </div>
+        </div>
+        <div class="col-md-6">
+        <label for="submarca" class="form-label">Submarca: *</label>
+        <input
+            placeholder="Submarca"
+            type="text"
+            class="form-control form-control-sm"
+            formControlName="submarca"
+            id="submarca"
+            name="submarca"
+            aria-label="submarca"
+        />
+        <div *ngIf="datosVehiculoFormControl.submarca.touched || submitted">
+        <div
+            class="text-danger form-text"
+            *ngIf="datosVehiculoFormControl.submarca.errors?.['required']"
+        >
+            Debes de ingresar una submarca de vehiculo.
+        </div>
+        </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+        <label for="modelo" class="form-label">Modelo: *</label>
+        <input
+            type="text"
+            class="form-control form-control-sm"
+            formControlName="modelo"
+            mask="0000"
+            id="modelo"
+            name="modelo"
+            aria-label="modelo"
+            placeholder="Modelo"
+        />
+        <div *ngIf="datosVehiculoFormControl.modelo.touched || submitted">
+        <div
+            class="text-danger form-text"
+            *ngIf="datosVehiculoFormControl.modelo.errors?.['required']"
+        >
+            Debes de ingresar un modelo de vehiculo.
+        </div>
+        <div
+            class="text-danger form-text"
+            *ngIf="datosVehiculoFormControl.modelo.errors?.['min'] || datosVehiculoFormControl.modelo.errors?.['max']"
+        >
+            Debes de ingresar un modelo de vehiculo valido.
+        </div>
+        </div>
+        </div>
+        <div class="col-md-6">
+        <label for="no_serie" class="form-label">No. Serie: *</label>
+        <input
+            type="text"
+            class="form-control form-control-sm"
+            mask="AAA AAAAA A A A AAAAAA"
+            formControlName="no_serie"
+            id="no_serie"
+            name="no_serie"
+            aria-label="no_serie"
+            placeholder="Numero de serie"
+        />
+        <div *ngIf="datosVehiculoFormControl.no_serie.touched || submitted">
+        <div
+            class="text-danger form-text"
+            *ngIf="datosVehiculoFormControl.no_serie.errors?.['required']"
+        >
+            Debes de ingresar un numero de serie.
+        </div>
+        <div
+            class="text-danger form-text"
+            *ngIf="datosVehiculoFormControl.no_serie.errors?.['minlength']"
+        >
+            Debes de ingresar un numero de serie valido (17 caracteres).
+        </div>
+        </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+        <label for="placas" class="form-label">Placas: *</label>
+        <input
+            type="text"
+            class="form-control form-control-sm"
+            formControlName="placas"
+             mask="AAA-AAA"
+            id="placas"
+            name="placas"
+            aria-label="placas"
+            placeholder="Numero de serie"
+        />
+        <div *ngIf="datosVehiculoFormControl.placas.touched || submitted">
+        <div
+            class="text-danger form-text"
+            *ngIf="datosVehiculoFormControl.placas.errors?.['required']"
+        >
+            Debes de ingresar un numero de placa valido.
+        </div>
+        <div
+            class="text-danger form-text"
+            *ngIf="datosVehiculoFormControl.placas.errors?.['pattern']"
+        >
+            Ingresa un numero de placa valido.
+        </div>
+        </div>
+        </div>
+        <div class="col-md-6">
+        <label for="tipo_vehiculo" class="form-label">Uso Vehículo: *</label>
+        <select 
+        class="form-select form-select-sm" 
+        formControlName="tipo_vehiculo"
+        id="tipo_vehiculo"
+        name="tipo_vehiculo"
+        aria-label="tipo_vehiculo">
+        <option value = "">Selecciona uno</option>
+        <option value="reparto">Reparto</option>
+        <option value="utilitario">Utilitario</option>
+        </select>
+        <div *ngIf="datosVehiculoFormControl.tipo_vehiculo.touched || submitted">
+            <div
+                class="text-danger form-text"
+                *ngIf="datosVehiculoFormControl.tipo_vehiculo.errors?.['required']"
+            >
+                Debes de seleccionar un tipo de uso de vehículo.
+            </div>
+        </div>
+        </div>
+    </div>
+</form>

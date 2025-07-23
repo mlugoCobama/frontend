@@ -82,7 +82,7 @@ export const MENU: MenuItem[] = [
         },
         {
           id: 11,
-          label: 'Unidades',
+          label: 'Parque Vehicular',
           link: '/compras/cat-unidades',
           parentId: 7,
           permission: 'view parque vehicular',

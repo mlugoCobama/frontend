@@ -4,7 +4,6 @@ import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-com
 import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
 import { UsuariosService } from 'src/app/core/services/compras/usuarios.service';
 
-
 @Component({
   selector: 'app-btn-autorizacion-gerencia',
   templateUrl: './btn-autorizacion-gerencia.component.html',
@@ -12,6 +11,7 @@ import { UsuariosService } from 'src/app/core/services/compras/usuarios.service'
 })
 export class BtnAutorizacionGerenciaComponent{
 
+@Input() tipoAutorizacion :any;  
 @Input() solicitudCompra:any;
 @Output() actualizarStatus = new EventEmitter<void>();
 
@@ -28,7 +28,7 @@ constructor(
 // }
 
 ngOnChanges(changes: SimpleChanges) { 
-  if(changes !=  null){
+  if(changes !=  null && this.solicitudCompra.estatus === 1 ){
     this.enviarSolicitud();  
   }
 }
@@ -40,7 +40,16 @@ public isGG:boolean = true;
 public isGA:boolean = true;
 
 public autorizar(gerencia){
-  const data = { campo: gerencia, value: 1  }
+  if(this.solicitudCompra.estatus === 1 ){
+    this.autorizarSolicitud(gerencia);
+  }
+  else if(this.solicitudCompra.estatus === 3 ){
+    this.autorizarCotizacion(gerencia);
+  }
+} 
+
+public autorizarSolicitud(gerencia){
+const data = { campo: gerencia, value: 1  }
   this.comprasService.edit(this.solicitudCompra.id, data).subscribe(
     (response) => {
       if (response.status === "success"){
@@ -51,10 +60,28 @@ public autorizar(gerencia){
       } 
     },
     (error) => {
-      console.error("Error fetching data:", error);
+      this.alertasService.mostrarAlerta("Error!",`Error fetching data: ${error}`, "error", "danger");
     }
   );
-} 
+}
+
+public autorizarCotizacion(gerencia){
+const data = { campo: gerencia, value: 1  }
+  this.comprasService.edit(this.solicitudCompra.id, data).subscribe(
+    (response) => {
+      if (response.status === "success"){
+        this.alertasService.mostrarAlerta("Listo!","Autorización Notificada", "success", "success");
+        this.enviarSolicitud();
+        this.actualizarStatus.emit();
+      }else{
+        this.alertasService.mostrarAlerta("Error!","Hubo un error", "error", "danger");
+      } 
+    },
+    (error) => {
+      this.alertasService.mostrarAlerta("Error!",`Error fetching data: ${error}`, "error", "danger");
+    }
+  );
+}
 
 public enviarSolicitud(){
    const auto_admin =  this.solicitudCompra.auto_admin;
@@ -71,7 +98,7 @@ public enviarSolicitud(){
         } 
       },
       (error) => {
-        console.error("Error fetching data:", error);
+        this.alertasService.mostrarAlerta("Error!",`Error fetching data: ${error}`, "error", "danger");
       }
     );
    }
@@ -100,7 +127,7 @@ public enviarSolicitud(){
         }
       },
       (error) => {
-        console.error("Error fetching data:", error);
+        this.alertasService.mostrarAlerta("Error!",`Error fetching data: ${error}`, "error", "danger");
       }
     );
   }
