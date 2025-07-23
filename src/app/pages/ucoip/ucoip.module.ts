@@ -11,12 +11,12 @@ import { ModalInventarioComponent } from './inventario/modal-inventario/modal-in
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-
 @NgModule({
   declarations: [
     UcoipComponent,
     InventarioComponent,
-    ModalInventarioComponent
+    ModalInventarioComponent,
+    
   ],
   imports: [
     CommonModule,

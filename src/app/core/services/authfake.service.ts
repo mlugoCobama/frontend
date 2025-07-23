@@ -29,6 +29,7 @@ export class AuthfakeauthenticationService {
                 if (user.success && user.token) {
                   // store user details and jwt token in local storage to keep user logged in between page refreshes
                     localStorage.setItem('currentUser', JSON.stringify(user));
+                    localStorage.setItem('permisos', JSON.stringify(user.permisos));
                     this.currentUserSubject.next(user);
                 } else {
                   this.toastr.error(user.error);
@@ -44,6 +45,7 @@ export class AuthfakeauthenticationService {
         localStorage.removeItem('gaseras');
         localStorage.removeItem('token');
         localStorage.removeItem('module');
+        localStorage.removeItem('permisos');
         this.currentUserSubject.next(null);
     }
 }

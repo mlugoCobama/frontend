@@ -1,0 +1,95 @@
+<div class="modal-header">
+    <h5 class="modal-title">Permiso</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (onClick)="cerrarModal()"></button>
+</div>
+<div class="modal-body">
+    
+    <form [formGroup]="formModalPermisos">
+        <div class="row">
+          <div class="col-sm-12 col-md-12 mb-2">
+            <div class="form-group">
+              <label class="form-label requerido">Modulo: *</label>
+              <div>
+                <select 
+                  class="form-select form-select-sm !ng-invalid" 
+                  formControlName="modulo"
+                  aria-label="Default select example"
+                >
+                  <option value="" selected>Selecciona un modulo</option>
+                  <option value="{{item.id}}" *ngFor="let item of dataModulos">{{item.nombre}}</option>
+                  
+                </select>
+
+              </div>
+              <div class="text-danger">
+                <div *ngIf="formModalPermisos.controls['nombre'].errors?.required">
+                  {{ this.mensajeCampoRequerido }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Marca -->
+          <div class="col-sm-12 col-md-12 mb-2">
+            <div class="form-group">
+              <label class="form-label requerido">Nombre: *</label>
+              <div>
+                <input
+                  class="form-control form-control-sm ng-dirty !ng-invalid"
+                  formControlName="nombre"
+                  placeholder="Ingresa Nombre"
+                  maxlength="255"
+                  [style]="{ width: '100%' }"
+                />
+              </div>
+              <div class="text-danger">
+                <div *ngIf="formModalPermisos.controls['nombre'].errors?.required">
+                  {{ this.mensajeCampoRequerido }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-12 col-md-12">
+            <div class="form-group">
+              <label class="form-label requerido">Clave: *</label>
+              <div>
+                <input
+                  class="form-control form-control-sm ng-dirty !ng-invalid"
+                  formControlName="descripcion"
+                  placeholder="create permiso"
+                  maxlength="255"
+                  [style]="{ width: '100%' }"
+                />
+              </div>
+              <div class="text-danger">
+                <div *ngIf="formModalPermisos.controls['descripcion'].errors?.required">
+                  {{ this.mensajeCampoRequerido }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </form>
+
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (onClick)="cerrarModal()">Cerrar</button>
+    <button
+        [disabled]="formModalPermisos.invalid"
+        *ngIf="tipo == 'agregar'"
+        class="btn btn-primary btn-sm"
+        type="submit"
+        (click)="save()"
+      >
+        <i class="fa fa-check-circle"></i> Guardar
+      </button>
+      <button
+        [disabled]="formModalPermisos.invalid"
+        *ngIf="tipo != 'agregar'"
+        class="btn btn-primary btn-sm"
+        type="submit"
+        (click)="update()"
+      >
+        <i class="fa fa-check-circle"></i> Guardar
+      </button>
+</div>

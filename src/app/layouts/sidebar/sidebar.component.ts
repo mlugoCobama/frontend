@@ -26,6 +26,8 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnChanges {
 
   menuItems: MenuItem[] = [];
 
+  permisos: string[] = [];
+
   @ViewChild('sideMenu') sideMenu: ElementRef;
 
   constructor(private eventService: EventService, private router: Router, public translate: TranslateService, private http: HttpClient) {
@@ -40,6 +42,10 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnChanges {
   ngOnInit() {
     this.initialize();
     this._scrollElement();
+
+    const permisosRaw = JSON.parse(localStorage.getItem('permisos') || '[]');
+    this.permisos = permisosRaw.map((p: any) => p.name); 
+    
   }
 
   ngAfterViewInit() {
@@ -148,5 +154,10 @@ export class SidebarComponent implements OnInit, AfterViewInit, OnChanges {
    */
   hasItems(item: MenuItem) {
     return item.subItems !== undefined ? item.subItems.length > 0 : false;
+  }
+
+  tienePermiso(permiso: string): boolean {
+    if (!permiso) return true;
+    return this.permisos.includes(permiso);
   }
 }

@@ -1,8 +1,10 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Permisos } from 'src/app/core/models/ucoip/permisos';
 import { AlertErrorService } from 'src/app/core/services/alert-error.service';
 import { AreasDepartamentosService } from 'src/app/core/services/ucoip/areas-departamentos.service';
+import { PermisosService } from 'src/app/core/services/ucoip/permisos.service';
 
 @Component({
   selector: 'app-modal-ucoip',
@@ -23,6 +25,10 @@ export class ModalUcoipComponent implements OnInit  {
   public dataDepto: any;
 
   public dataPuesto: any;
+
+  public dataPermisos: Permisos[];
+
+  public isLoad: boolean = true;
     
   public event: EventEmitter<any> = new EventEmitter();
   
@@ -32,11 +38,18 @@ export class ModalUcoipComponent implements OnInit  {
     public modalService: BsModalService,
     public alertService: AlertErrorService,
     private areasDeptosService: AreasDepartamentosService,
+    private permisosService: PermisosService
   ) {}
 
   public ngOnInit(): void {
-    this.getAreas();
+
+    this.tipo = this.listaDatos[0].tipo;
+    this.data = this.listaDatos[0].data;
+    this.getPermisos();
     this.buildFormModal();
+
+    console.log(this.dataPermisos);
+    
   }
 
   private buildFormModal() {
@@ -103,6 +116,20 @@ export class ModalUcoipComponent implements OnInit  {
       }
     );
     
+  }
+
+  private getPermisos() {
+    this.permisosService.getModulo(1).subscribe({
+      next: async (resp) => {
+        if (resp.success) {
+          this.dataPermisos = resp.data;
+          this.isLoad = false;
+        }
+      },
+      error: (err) => {
+        console.error('Error cargando módulos', err);
+      }
+    });
   }
 
   

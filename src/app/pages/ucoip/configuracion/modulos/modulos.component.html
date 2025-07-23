@@ -1,1 +1,48 @@
-<p>modulos works!</p>
+<div class="container-fluid">
+
+    <div class="row">
+      <div class="col-xl-12">
+        <div class="card">
+  
+            <div class="card-body border-bottom border-primary border-2">
+                <div class="d-flex align-items-center">
+                    <h5 class="mb-0 card-title flex-grow-1">Catalogo de Menus</h5>
+
+                    <div class="flex-shrink-0 d-flex gap-1">
+                        <a class="btn btn-primary btn-sm" (click)="openModal()">Nuevo</a>
+                    </div>
+                </div>
+            </div>
+      
+  
+          <div class="card-body border-bottom">
+  
+            <div class="d-flex justify-content-center" *ngIf="isLoad">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+  
+            <div class="table-responsive">
+              <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" #dtElement class="table table-sm table-striped" *ngIf="!isLoad">
+                <thead >
+                  <tr class="text-center">
+                    <th scope="col">Id</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Descripcion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of dataModulos" (dblclick)="openEdit(item)">
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.nombre }}</td>
+                    <td>{{ item.descripcion }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  

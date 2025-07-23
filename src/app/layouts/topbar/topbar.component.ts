@@ -80,7 +80,7 @@ export class TopbarComponent implements OnInit {
     
     this.userName = this.localStorage.getItem('currentUser');
     //Genera las iniciales para mostrar el perfil del usuario
-    this.inciales =  this.userName.role.name.split(" ").slice(0,2).reduce((acumulador, palabra) => acumulador + palabra.charAt(0), '').toUpperCase();
+    //this.inciales =  this.userName.role.name.split(" ").slice(0,2).reduce((acumulador, palabra) => acumulador + palabra.charAt(0), '').toUpperCase();
     // recupera la inicial del nombre del usuario
     // this.inciales = this.userName.role.name.charAt(0);
 

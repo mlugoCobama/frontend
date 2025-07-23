@@ -26,7 +26,7 @@ import { TranslateModule } from '@ngx-translate/core';
     RouterModule,
     BsDropdownModule.forRoot(),
     UIModule,
-    SimplebarAngularModule
+    SimplebarAngularModule,
   ],
   providers: [LanguageService]
 })
