@@ -60,7 +60,7 @@ const data = { campo: gerencia, value: 1  }
       } 
     },
     (error) => {
-      console.error("Error fetching data:", error);
+      this.alertasService.mostrarAlerta("Error!",`Error fetching data: ${error}`, "error", "danger");
     }
   );
 }
@@ -78,7 +78,7 @@ const data = { campo: gerencia, value: 1  }
       } 
     },
     (error) => {
-      console.error("Error fetching data:", error);
+      this.alertasService.mostrarAlerta("Error!",`Error fetching data: ${error}`, "error", "danger");
     }
   );
 }
@@ -98,7 +98,7 @@ public enviarSolicitud(){
         } 
       },
       (error) => {
-        console.error("Error fetching data:", error);
+        this.alertasService.mostrarAlerta("Error!",`Error fetching data: ${error}`, "error", "danger");
       }
     );
    }
@@ -127,7 +127,7 @@ public enviarSolicitud(){
         }
       },
       (error) => {
-        console.error("Error fetching data:", error);
+        this.alertasService.mostrarAlerta("Error!",`Error fetching data: ${error}`, "error", "danger");
       }
     );
   }

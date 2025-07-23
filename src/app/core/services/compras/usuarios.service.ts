@@ -17,6 +17,7 @@ export class UsuariosService {
   public getEmpresas(): Observable<any> {
     return this.http.get(environment.apiUrl + "compras/Usuarios");
   }
+  
   /**
    * Recupera un colección de usuarios por num intercompaia
    * @param intercompania num intercompania de la empresa

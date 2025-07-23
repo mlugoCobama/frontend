@@ -57,12 +57,12 @@ export class TablaDetallesSolicitudComponent implements OnInit {
           this.toggleModoLectura();
           this.isLoad = false;
         } else {
-          console.log(response.message);
+          this.alertasService.mostrarAlerta("Error!",response.message, "error", "danger" );
           this.isLoad = false;
         }
       },
       (error) => {
-        console.error("Error fetching data:", error);
+        this.alertasService.mostrarAlerta("Error!",`Error fetching data: ${error}`, "error", "danger" );
         this.isLoad = false;
       }
     );
@@ -77,11 +77,11 @@ export class TablaDetallesSolicitudComponent implements OnInit {
         if (response) {
           this.unidadMedidas = response.data;
         } else {
-          console.log(response.message);
+          this.alertasService.mostrarAlerta("Error!",response.message, "error", "danger" );
         }
       },
       (error) => {
-        console.error("Error fetching data:", error);
+        this.alertasService.mostrarAlerta("Error!",`Error fetching data: ${error}`, "error", "danger" );
       }
     );
   }

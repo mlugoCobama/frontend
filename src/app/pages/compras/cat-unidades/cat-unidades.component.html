@@ -9,6 +9,13 @@
             </h5>
             <div class="flex-shrink-0 d-flex gap-1">
               <a
+                *ngIf = "mostrar"
+                href="javascript:void(0);"
+                class="btn btn-info btn-sm"
+                (click) = "openModalInfo()"
+                ><i class="fas fa-donate"></i> Gastos vehículo</a
+              >
+              <a
                 [disabled] = "true"
                 *ngIf = "mostrar"
                 href="javascript:void(0);"
@@ -30,6 +37,7 @@
                 (click) = "openModalNuevo()"
                 ><i class="fas fa-plus"></i> Nuevo</a
               >
+              
             </div>
           </div>
         </div>

@@ -69,11 +69,11 @@ export class PanelCotizacionesComponent implements OnInit {
           this.proveedores = response.data;
           this.isLoad = false;
         } else {
-          console.log(response.message);
+          this.alertasService.mostrarAlerta("Error!", response.message ?? "desconocido", "error", "danger" );
         }
       },
       (error) => {
-        console.error("Error fetching data:", error);
+        this.alertasService.mostrarAlerta("Error!", error ?? "desconocido", "error", "danger" );
       }
     );
   }
@@ -131,13 +131,13 @@ export class PanelCotizacionesComponent implements OnInit {
           }
         },
         (error) => {
-          console.error("Error enviando datos:", error);
+          this.alertasService.mostrarAlerta("Error!", error ?? "desconocido",  "error", "danger" );
         }
       );
       this.isLoad = false;
       this.isDisabled = false;
     } catch (error) {
-      console.error("Error obteniendo detalles:", error);
+      this.alertasService.mostrarAlerta("Error!", error ?? "desconocido", "error", "danger" );
     }
 
     this.submitted = false;

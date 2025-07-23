@@ -37,7 +37,7 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
     public cerrarModal(): void {
     this.bsModalRef.hide();
     // setTimeout(() => {this.modalCerrado.emit();}, 150)
-  }
+    }
 
   setTitle(){
     const dato = this.empresas.find(item => +item.intercompania === +this.intercompania);
@@ -89,9 +89,9 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
     const datos = {
       intercompania: this.intercompania,
       datosVehiculo: this.formDatosVehiculo.obtenerValores(),
-      datosTanque: this.formDatosTanque.obtenerValores()
+      datosTanque: this.formDatosTanque.obtenerValores() 
     }
-
+    
     return datos;
   }
 }

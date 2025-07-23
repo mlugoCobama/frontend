@@ -32,6 +32,9 @@ export class UnidadesService {
       return this.http.delete(environment.apiUrl + `compras/CatalogoUnidades/${id}`);
     }
 
+    public getGastosVehiculo(id: number): Observable<any> {
+      return this.http.get(environment.apiUrl + `compras/recuperar-gastos-vehiculo/${id}`);
+    }
 
 
 

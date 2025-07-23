@@ -55,6 +55,7 @@ export class ComprasService {
   public save(data: any): Observable<any> {
     return this.http.post(environment.apiUrl + "compras/SolicitudesCompras", data);
   }
+  
 
   public edit(id: number, data: any): Observable<any> {
     return this.http.put(environment.apiUrl + `compras/SolicitudesCompras/${id}`, data);

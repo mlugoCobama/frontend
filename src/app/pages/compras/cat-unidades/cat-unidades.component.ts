@@ -2,8 +2,11 @@ import { Component, OnInit} from '@angular/core';
 import { FuncionesTablas } from '../compras/funciones-tablas';
 import { UnidadesService } from 'src/app/core/services/compras/unidades.service';
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
+
 import { ModalAddAutotanqueComponent } from './modal-add-autotanque/modal-add-autotanque.component';
 import { ModalUpdtAutotanqueComponent } from './modal-updt-autotanque/modal-updt-autotanque.component';
+import { ModalCostosUnidadComponent } from './modal-costos-unidad/modal-costos-unidad.component';
+
 import { UsuariosService } from "src/app/core/services/compras/usuarios.service";
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
 import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
@@ -105,6 +108,31 @@ export class CatUnidadesComponent implements OnInit{
         // });
   }
 
+  public openModalInfo() {
+    console.log(this.unidad)
+    this.modalAbierto =  true;
+    const initialState: ModalOptions = {
+          initialState: {
+            unidad : this.unidad
+          },
+          class: "modal-lg",
+        };
+        this.modalRef = this.modalService.show(
+          ModalCostosUnidadComponent,
+          initialState
+        );
+        this.modalRef.content.closeBtnName = "Close";
+        this.modalRef.content.event.subscribe(() => {
+          this.isLoad = true;
+  
+          // this.mostrar = false;
+          this.getCatVehiculos(this.usuarioSolicita.intercompania);
+        });
+        // this.modalRef.content.modalCerrado.subscribe(() => {
+        //   this.modalAbierto = false;
+        // });
+  }
+
   // Despliega la ventana modal para un nuevo registro
   public openModalUpdate() {
     this.modalAbierto =  true;
@@ -158,13 +186,13 @@ export class CatUnidadesComponent implements OnInit{
           this.showTable = true;
           
         } else {
-          console.log(response.message);
+          this.alertasService.mostrarAlerta("Error", response.message, "error" , "danger" );
           this.showTable =  false;
         }
       },
       (error) => {
+        this.alertasService.mostrarAlerta("Error", `Error fetching data: ${error}`, "error" , "danger" );
         this.showTable =  false;
-        console.error("Error fetching data:", error);
       }
     );
     
@@ -197,11 +225,11 @@ export class CatUnidadesComponent implements OnInit{
           this.empresas = rawData.filter(objeto => objeto.isAgencia === false);
           this.isLoading = false;
         } else {
-          console.log(response.message);
+          this.alertasService.mostrarAlerta("Error", response.message, "error" , "danger" );
         }
       },
       (error) => {
-        console.error("Error fetching data:", error);
+        this.alertasService.mostrarAlerta("Error", `Error fetching data: ${error}`, "error" , "danger" );
       }
     );
   }
@@ -232,7 +260,7 @@ export class CatUnidadesComponent implements OnInit{
         }
       },
       (error) => {
-        console.error("Error fetching data:", error);
+        this.alertasService.mostrarAlerta("Error", `Error fetching data: ${error}`, "error" , "danger" );
       }
     );
   }

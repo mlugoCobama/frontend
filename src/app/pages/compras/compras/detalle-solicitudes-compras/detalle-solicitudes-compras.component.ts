@@ -2,6 +2,7 @@ import { Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { ComprasService } from 'src/app/core/services/compras/compras.service';
 import { EstadoSolicitud } from '../estado-solicitud.enum';
+import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 
 @Component({
   selector: 'app-detalle-solicitudes-compras',
@@ -27,6 +28,7 @@ export class DetalleSolicitudesComprasComponent implements OnInit{
  constructor(
      private modalService: BsModalService,
      private comprasService: ComprasService,
+     private alertasService: SwalComprsServiceService
    ) {}
 
    ngOnInit(): void {
@@ -78,7 +80,7 @@ public updateStatus() {
       } 
     },
     (error) => {
-      console.error("Error fetching data:", error);
+      this.alertasService.mostrarAlerta("Error", error, "error", "danger");
     }
   )
 }  

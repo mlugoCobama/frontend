@@ -176,7 +176,7 @@ export class ComprasComponent implements OnInit {
             }
           },
           (error) => {
-            console.error("Error fetching data:", error);
+            this.alertasService.mostrarAlerta("Error!", error, "error","error");
           }
         );
       }

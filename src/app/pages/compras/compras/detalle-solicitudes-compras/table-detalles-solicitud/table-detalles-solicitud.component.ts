@@ -125,11 +125,11 @@ export class TableDetallesSolicitudComponent implements OnInit {
           }
           this.isLoad = false;
         } else {
-          console.log(response.message);
+          this.alertasService.mostrarAlerta("Error guardando los datos:", response.message, "error", "danger");
         }
       },
       (error) => {
-        console.error("Error fetching data:", error);
+        this.alertasService.mostrarAlerta("Error guardando los datos:", error, "error", "danger");
       }
     );
   }
@@ -150,11 +150,11 @@ export class TableDetallesSolicitudComponent implements OnInit {
           this.addProveedorColumns();
           this.isLoad = false;
         } else {
-          console.log(response.message);
+          this.alertasService.mostrarAlerta("Error guardando los datos:", response.message, "error", "danger");
         }
       },
       (error) => {
-        console.error("Error fetching data:", error);
+        this.alertasService.mostrarAlerta("Error guardando los datos:", error, "error", "danger");
       }
     );
   }
@@ -281,11 +281,11 @@ export class TableDetallesSolicitudComponent implements OnInit {
           this.cotizacionesService.clearFiles();
           this.isLoad = false;
         } else {
-          console.log(response.message);
+          this.alertasService.mostrarAlerta("Error guardando los datos:", response.message, "error", "danger");
         }
       },
       (error) => {
-        console.error("Error guardando los datos:", error);
+        this.alertasService.mostrarAlerta("Error guardando los datos:", error, "error", "danger");
       }
     );
   }
@@ -376,11 +376,12 @@ export class TableDetallesSolicitudComponent implements OnInit {
             "warning",
             "warning"
           );
-          console.log(response.message);
+          // console.log(response.message);
         }
       },
       (error) => {
-        console.error("Error enviando datos:", error);
+        this.alertasService.mostrarAlerta("Error guardando los datos:", error, "error", "danger");
+        // console.error("Error enviando datos:", error);
       }
     );
 
@@ -455,11 +456,11 @@ cambioCheck(item, event) {
         if (response) {
           this.unidades = response.data;
         } else {
-          console.log(response.message);
+          this.alertasService.mostrarAlerta("Error guardando los datos:", response.message, "error", "danger");
         }
       },
       (error) => {
-        console.error("Error fetching data:", error);
+        this.alertasService.mostrarAlerta("Error guardando los datos:", error, "error", "danger");
       }
     );
   }
@@ -493,11 +494,12 @@ cambioCheck(item, event) {
           );
           this.actualizarStatus.emit();
         } else {
-          console.log(response.message);
+          this.alertasService.mostrarAlerta("Error guardando los datos:", response.message, "error", "danger");
         }
       },
       (error) => {
-        console.error("Error guardando los datos:", error);
+        this.alertasService.mostrarAlerta("Error guardando los datos:", error, "error", "danger");
+        // console.error("Error guardando los datos:", error);
       }
     );
   }

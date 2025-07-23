@@ -42,6 +42,7 @@ import { ModalAddAutotanqueComponent } from './cat-unidades/modal-add-autotanque
 import { FormDatosVehiculoComponent } from './cat-unidades/form-datos-vehiculo/form-datos-vehiculo.component';
 import { FormDatosTanqueComponent } from './cat-unidades/form-datos-tanque/form-datos-tanque.component';
 import { ModalUpdtAutotanqueComponent } from './cat-unidades/modal-updt-autotanque/modal-updt-autotanque.component';
+import { ModalCostosUnidadComponent } from './cat-unidades/modal-costos-unidad/modal-costos-unidad.component';
 
 @NgModule({
   declarations: [
@@ -78,6 +79,7 @@ import { ModalUpdtAutotanqueComponent } from './cat-unidades/modal-updt-autotanq
     FormDatosVehiculoComponent,
     FormDatosTanqueComponent,
     ModalUpdtAutotanqueComponent,
+    ModalCostosUnidadComponent,
   ],
   imports: [
     CommonModule,
