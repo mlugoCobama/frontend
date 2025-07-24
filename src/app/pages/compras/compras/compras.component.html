@@ -6,65 +6,25 @@
           <div class="d-flex align-items-center">
             <h5 class="mb-0 card-title flex-grow-1">Solicitudes de Compra</h5>
             <div class="flex-shrink-0 d-flex gap-1">
-              <a
-                *ngIf="
-                  status >= enEsts.OrdenCompra || status === enEsts.Cancelado
-                "
-                href="javascript:void(0);"
-                class="btn btn-sm btn-primary"
-                (click)="btnDescargarOC()"
-              >
-                <i class="fas fa-file-download"></i>
-                Descargar Orden de Compra
-              </a>
-              <a
-                *ngIf="status === enEsts.EnCotizacion && mostrarBoton"
-                href="javascript:void(0);"
-                class="btn btn-primary btn-sm"
-                (click)="btnGenerarOC()"
-                >
-                 Generar Orden de Compra
-              </a>
-              <a
-                *ngIf="!solicitudSelecionada"
-                href="javascript:void(0);"
-                class="btn btn-primary btn-sm"
-                (click)="openModalNuevo()"
-              >
-                <i class="fas fa-plus"></i>
-                Nuevo
-              </a>
-              <a
-                *ngIf="solicitudSelecionada"
-                href="javascript:void(0);"
-                class="btn btn-dark btn-sm"
-                (click)="regresar()"
-              >
-                <i class="mdi mdi-arrow-left"></i>
-                Volver</a
-              >
-              <a
-                *ngIf="
-                  status === enEsts.Solicitado &&
-                  !comprasService.mostrarCotizacionSource.value
-                "
-                href="javascript:void(0);"
-                class="btn btn-info btn-sm"
-                (click)="mostrarCotizacion()"
-                >Cotizar</a
-              >
-              <a
-                *ngIf="
-                  status >= enEsts.Solicitado &&
-                  status < enEsts.Autorizado &&
-                  !comprasService.mostrarCotizacionSource.value &&
-                  status != enEsts.Cancelado
-                "
-                href="javascript:void(0);"
-                class="btn btn-danger btn-sm"
-                (click)="cancelarSolicitud()"
-                >Cancelar</a
-              >
+
+              <app-botnes-admin
+              [status] = "status"
+              [mostrarBoton] = "mostrarBoton"
+              [solicitudSelecionada] = "solicitudSelecionada"
+              (btnGenerarOC)="btnGenerarOC()"
+              (mostrarCotizacion)="mostrarCotizacion()"
+              (cancelarSolicitud)="cancelarSolicitud()"
+              ></app-botnes-admin>
+
+              <app-bontones-generales
+              [status] = "status"
+              [mostrarBoton] = "mostrarBoton"
+              [solicitudSelecionada] = "solicitudSelecionada"
+              (btnDescargarOC)="btnDescargarOC()"
+              (regresar)="regresar()"
+              (openModalNuevo)="openModalNuevo()"
+              ></app-bontones-generales>
+              
             </div>
           </div>
         </div>
