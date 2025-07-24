@@ -51,8 +51,8 @@ export class PanelCotizacionesComponent implements OnInit {
   private buildForm() {
     this.formProveedoresCotizacion = this.formBuilder.group({
       proveedor1: new FormControl("", Validators.required),
-      proveedor2: new FormControl("", Validators.required),
-      proveedor3: new FormControl("", Validators.required),
+      proveedor2: new FormControl(""),
+      proveedor3: new FormControl(""),
       consideraciones: new FormControl(null),
     });
   }
@@ -78,35 +78,22 @@ export class PanelCotizacionesComponent implements OnInit {
     );
   }
 
-  // Valida la longitud de los text area
-  // public contarCaracteres() {
-  //   this.caracteresRestantes = this.longitudMaxima - this.text.length;
-  // }
-
   // Guarda el registro de la cotización y llama al servicio para enviar correos
   public enviarSolicitudCotizacion() {
     this.submitted = true;
     this.isDisabled = true;
-    if (this.formProveedoresCotizacion.invalid) {
-      this.isLoad = false;
-
-      this.alertasService.mostrarAlerta("Algo anda mal", "Debes llenar correctamente todos los campos", "warning",  "warning");
-
-      this.isDisabled = false;
-      return;
-    }
 
     let data = this.formProveedoresCotizacion.value;
 
-    if (
-      data.proveedor1 === data.proveedor2 || data.proveedor2 === data.proveedor3 || data.proveedor1 === data.proveedor3
-    ) {
+    if (this.formProveedoresCotizacion.invalid || !this.validarProveedores(data)) {
+      this.isLoad = false;
 
-      this.alertasService.mostrarAlerta("Algo anda mal", "Debes de seleccionar proveedores distintos", "warning",  "warning");
+      // this.alertasService.mostrarAlerta("Algo anda mal", "Debes Selecciona la menos un proveedor", "warning",  "warning");
 
       this.isDisabled = false;
       return;
     }
+
     try {
       const idSolicitud = this.solicitudCompra.id;
 
@@ -144,4 +131,32 @@ export class PanelCotizacionesComponent implements OnInit {
     this.formProveedoresCotizacion.reset();
   }  
 
+  validarProveedores(data: any): boolean {
+    // Verificar que al menos uno esté presente
+    if (!data.proveedor1 && !data.proveedor2 && !data.proveedor3) {
+      this.alertasService.mostrarAlerta(
+        "Algo anda mal",
+        "Debes seleccionar al menos un proveedor",
+        "warning",
+        "warning"
+      );
+      return false;
+    }
+
+    // Verificar que los proveedores seleccionados no sean iguales
+    if (
+      (data.proveedor1 && data.proveedor2 && data.proveedor1 === data.proveedor2) ||
+      (data.proveedor2 && data.proveedor3 && data.proveedor2 === data.proveedor3) ||
+      (data.proveedor1 && data.proveedor3 && data.proveedor1 === data.proveedor3)
+    ) {
+      this.alertasService.mostrarAlerta(
+        "Algo anda mal",
+        "Debes seleccionar proveedores distintos",
+        "warning",
+        "warning"
+      );
+      return false;
+    }
+    return true;
+  }
 }
