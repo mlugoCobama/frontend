@@ -17,7 +17,7 @@
         <th>Descripción</th>
         <th>Observaciones</th>
         <th>Ref. fotográfica</th>
-        <th *ngIf="solicitudCompra.tipo == 2">Autorizado</th>
+        <th>Autorizado</th>
         <th *ngFor="let prov of cotProv" class="text-center">
           <strong> {{ prov.proveedores_id[0].nombre }} </strong>
         </th>
@@ -46,9 +46,9 @@
             <i class="fas fa-eye"></i
           ></a>
         </td>
-        <td *ngIf="solicitudCompra.tipo === 2" class="text-center d-flex align-items-center">
+        <td class="text-center d-flex align-items-center">
           <div>
-            <input class="form-check-input"  type="checkbox" value="" id="flexCheckCheckedDisabled" 
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckCheckedDisabled" 
             (change) ="cambioCheck(row, $event)"
             [checked]="row.confirmado === 1 ? true : false" [disabled] = "solicitudCompra.estatus < enEsts.Solicitado ? false : true">
           </div>
