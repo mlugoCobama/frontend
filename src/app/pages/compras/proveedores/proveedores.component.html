@@ -55,7 +55,7 @@
               class="table table-hover table-sm table-bordered table-responsive"
               *ngIf="!isLoad"
             >
-              <thead class="table-light" [ngClass] = "modalAbierto === false ? 'sticky-top' : '' ">
+              <thead  class="table-light" [ngClass] = "modalAbierto === false ? 'sticky-top' : '' ">
                 <tr>
                   <th (click)="ordenarPor('nombre')" style="cursor: pointer;" >Nombre <i [ngClass]="getIconoOrden('nombre')"></i></th>
                   <th (click)="ordenarPor('contacto')" style="cursor: pointer;" >Contacto <i [ngClass]="getIconoOrden('contacto')"></i></th>

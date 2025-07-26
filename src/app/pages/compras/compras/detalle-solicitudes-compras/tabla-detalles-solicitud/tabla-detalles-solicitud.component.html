@@ -16,7 +16,7 @@
           <th>Descripción</th>
           <th>Observaciones</th>
           <th>Ref. fotográfica</th>
-          <th *ngIf="solicitudCompra.tipo == 2">Autorizado</th>
+          <th>Autorizado</th>
           <th *ngIf="mostrarTotal">Quitar</th>
         </tr>
       </thead>
@@ -142,7 +142,6 @@
           </td>
           <td
             style="width: 6rem"
-            *ngIf="solicitudCompra.tipo === 2"
             class="text-center"
           >
             <input
@@ -166,7 +165,7 @@
       <tfoot *ngIf="mostrarTotal">
         <tr>
           <td
-            [attr.colspan]="solicitudCompra.tipo === 1 ? 5 : 6"
+            [attr.colspan]="6"
             class="text-end"
           >
             <Strong>SUB-TOTAL (sin iva)</Strong>
