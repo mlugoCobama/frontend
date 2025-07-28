@@ -43,6 +43,7 @@ import { FormDatosVehiculoComponent } from './cat-unidades/form-datos-vehiculo/f
 import { FormDatosTanqueComponent } from './cat-unidades/form-datos-tanque/form-datos-tanque.component';
 import { ModalUpdtAutotanqueComponent } from './cat-unidades/modal-updt-autotanque/modal-updt-autotanque.component';
 import { ModalCostosUnidadComponent } from './cat-unidades/modal-costos-unidad/modal-costos-unidad.component';
+import { HasPermissionPipe } from 'src/app/pipes/has-permission.pipe';
 
 @NgModule({
   declarations: [
@@ -80,6 +81,7 @@ import { ModalCostosUnidadComponent } from './cat-unidades/modal-costos-unidad/m
     FormDatosTanqueComponent,
     ModalUpdtAutotanqueComponent,
     ModalCostosUnidadComponent,
+    HasPermissionPipe
   ],
   imports: [
     CommonModule,
@@ -91,8 +93,10 @@ import { ModalCostosUnidadComponent } from './cat-unidades/modal-costos-unidad/m
     ReactiveFormsModule,
     TabsModule.forRoot(),
     NgxMaskDirective,
-    NgxMaskPipe,
-
+    NgxMaskPipe
+  ],
+  exports: [
+    HasPermissionPipe
   ],
   providers: [
     provideNgxMask()
