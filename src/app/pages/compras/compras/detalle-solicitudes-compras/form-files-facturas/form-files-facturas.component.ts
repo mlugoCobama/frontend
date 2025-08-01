@@ -24,6 +24,7 @@ export class FormFilesFacturasComponent implements OnInit {
   public isLoad: boolean = true;
   public mostrarDtsFac: boolean = false;
   public enEsts= EstadoSolicitud;
+  public tipoFactura:any;
 
   public hasFiles: boolean = false;
   factura: any = {
@@ -88,7 +89,7 @@ export class FormFilesFacturasComponent implements OnInit {
 
           if (this.ordenCompra.documentos.length > 0) {
             this.hasFiles = true;
-
+            console.log(this.ordenCompra.documentos);
             this.leerXML();
 
             this.hasFacturas = true;
@@ -233,6 +234,7 @@ export class FormFilesFacturasComponent implements OnInit {
         if(response){
           // console.log(response);
           this.factura = response.factura;
+          console.log(this.factura);
           this.checkMetodoPago();
         }
     },(error) => {
@@ -247,6 +249,7 @@ export class FormFilesFacturasComponent implements OnInit {
    */
   checkMetodoPago() {
     this.metodoPago = this.factura.metodoPago?.metodoPago;
+    console.log(this.metodoPago)
     if (this.metodoPago === "PPD") {
       this.habilitado = true;
     } else {

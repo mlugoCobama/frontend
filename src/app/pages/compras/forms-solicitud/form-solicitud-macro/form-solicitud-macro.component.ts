@@ -24,8 +24,8 @@ export class FormSolicitudMacroComponent implements OnInit{
     puesto: "",
     Telfono: "",
     direccion: "",
-    intercompania: 153,
-    empresa: "Garza sur",
+    intercompania: 0,
+    empresa: "Cargando. . .",
     isAgencia: false
     };
 
@@ -136,9 +136,11 @@ export class FormSolicitudMacroComponent implements OnInit{
   }
 
   onFileChange(event: any, fieldName: string) {
-    if (event.target.files.length > 0) {
+    if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
-      this.formData.append(fieldName, file);
+      this.formData.set(fieldName, file);
+    }else{
+      this.formData.delete(fieldName);
     }
   }
   

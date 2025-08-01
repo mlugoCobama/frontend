@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { Observable } from "rxjs";
+import { BehaviorSubject } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +11,6 @@ import { Observable } from "rxjs";
 export class ComprasMacroService {
 
   constructor(private http: HttpClient) {}
-
-
   /**
    * Recupera todas las solicitudes compra
    * @returns colección con las ordenes de compra
@@ -35,4 +35,21 @@ export class ComprasMacroService {
   public save(data: any): Observable<any> {
     return this.http.post(environment.apiUrl + "compras/SolicitudesMacro", data);
   }
+
+  public edit(id: number, data: any): Observable<any> {
+    return this.http.put(environment.apiUrl + `compras/SolicitudesMacro/${id}`, data);
+  }
+
+  private formDataSubject = new BehaviorSubject<any>(null);
+  formData$ = this.formDataSubject.asObservable();
+
+  actualizarFormData(data: any) {
+    this.formDataSubject.next(data);
+  }
+
+  obtenerDatosActuales() {
+    return this.formDataSubject.getValue();
+  }
+
+
 }

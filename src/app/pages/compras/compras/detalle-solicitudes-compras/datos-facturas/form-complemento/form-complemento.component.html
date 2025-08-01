@@ -1,0 +1,34 @@
+<form class="row g-2"  enctype="multipart/form-data" [formGroup]="formComplemento">
+  <div class="mb-3">
+    <label for="complemento_pago_xml" class="form-label">Complemento de pago <strong>XML*</strong></label>
+    <input class="form-control form-control-sm" 
+    (change)="onFileChange($event, 'complemento_pago_xml')"
+    formControlName="complemento_pago_xml"
+    name="complemento_pago_xml"
+    id="complemento_pago_xml" 
+    type="file" 
+    accept="application/xml"
+    />
+    <div *ngIf="solicitudCompraFormControl.complemento_pago_xml.touched || submitted">
+        <div class="text-danger form-text" *ngIf="solicitudCompraFormControl.complemento_pago_xml.errors?.['required']">
+            Este archivo es requerido.
+          </div>
+    </div>
+  </div>
+  <div class="mb-3">
+    <label for="complemento_pago_pdf" class="form-label">Complemento de pago <strong>PDF*</strong></label>
+    <input class="form-control form-control-sm" 
+    (change)="onFileChange($event, 'complemento_pago_pdf')"
+    formControlName="complemento_pago_pdf"
+    name="complemento_pago_pdf"
+    id="complemento_pago_pdf" 
+    type="file"
+    accept="application/pdf"
+     />
+    <div *ngIf="solicitudCompraFormControl.complemento_pago_pdf.touched || submitted">
+        <div class="text-danger form-text" *ngIf="solicitudCompraFormControl.complemento_pago_pdf.errors?.['required']">
+            Este archivo es requerido.
+          </div>
+    </div>
+  </div>
+</form>

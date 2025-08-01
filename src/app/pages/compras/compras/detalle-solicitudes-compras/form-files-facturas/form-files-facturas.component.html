@@ -50,13 +50,10 @@ class="row g-2"
           <strong> Comprobante de pago * </strong>
         </td>
         <td >
-          <input *ngIf="!hasComprobantePago" class="form-control form-control-sm" id="comprobante_pago" type="file" accept="application/pdf" (change)="onFileChange1($event, 'comprobante_pago')" formControlName="comprobante_pago"/>
+          <input *ngIf="!hasComprobantePago" class="form-control form-control-sm" id="comprobante_pago" 
+          type="file" accept="application/pdf,image/jpeg,image/png"
+          (change)="onFileChange1($event, 'comprobante_pago')" formControlName="comprobante_pago"/>
         </td>
-        <!-- <td>
-          <a class="btn btn-sm btn-danger" *ngFor="let documento of ordenCompra.documentos" (click)="verArchivos(documento.comprobante_pago)">
-            <i class="fas fa-file-pdf"></i>
-          </a>
-        </td> -->
       </tr>
     </tbody>
   </table>
@@ -92,6 +89,8 @@ class="row g-2"
   [mostrarDtsFac]="mostrarDtsFac"
   [ordenCompra]="ordenCompra"
   [factura]="factura"
+  [metodoPago] = "metodoPago"
+  (getOrdenCompra) = "getOrdenCompra()"
   ></app-datos-facturas>
 </div>
 </form>

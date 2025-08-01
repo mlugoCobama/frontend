@@ -1,0 +1,65 @@
+
+<form [formGroup]="formSistemaMantenimiento" class="pb-2">
+  <div class="row g-2">
+    <div class="col">
+      <label for="sistema" class="form-label">Sistema del vehículo:</label>
+      <select
+        (change)="selectChange()"
+        class="form-select form-select-sm"
+        formControlName="sistema"
+        name="sistema"
+        id="sistema"
+      >
+        <option value="" selected>Seleccione un sistema</option>
+        <option *ngFor="let sistema of sistemas" [value]="sistema.id">
+          {{ sistema.sistema }}
+        </option>
+      </select>
+      <div *ngIf="sisteMantenimientoFormControl.sistema.touched || submitted">
+        <div
+          class="text-danger form-text"
+          *ngIf="sisteMantenimientoFormControl.sistema.errors?.['required']"
+        >
+          Sistema es requerido.
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <label for="tipoMantenimiento" class="form-label">Tipo de mantenimiento:</label>
+      <select
+      (change)="selectChange()"
+        class="form-select form-select-sm"
+        formControlName="tipoMantenimiento"
+        name="tipoMantenimiento"
+        id="tipoMantenimiento"
+      >
+        <option value="" selected>Seleccione tipo</option>
+        <option *ngFor="let tipo of tiposMantenimiento" [value]="tipo">
+          {{ tipo }}
+        </option>
+      </select>
+      <div *ngIf="sisteMantenimientoFormControl.tipoMantenimiento.touched || submitted">
+        <div
+          class="text-danger form-text"
+          *ngIf="sisteMantenimientoFormControl.tipoMantenimiento.errors?.['required']"
+        >
+          Tipo de mantenimiento es requerido.
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="col-auto d-flex align-items-end">
+      <button
+        *ngIf="formSistemaMantenimiento.enabled"
+        class="btn btn-primary btn-sm"
+        (click)="onSubmit()"
+        type="submit"
+      >
+        Enviar
+      </button>
+    </div> -->
+  </div>
+</form>
+
+
