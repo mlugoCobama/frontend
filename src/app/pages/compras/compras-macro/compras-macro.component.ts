@@ -56,7 +56,10 @@ export class ComprasMacroComponent implements OnInit{
 
   public getUsuarioActivo() {
     const usuarioActivo = this.localStorage.getItem("currentUser");
-      return usuarioActivo['role']['intercompania'];
+      return {
+        intercompania :usuarioActivo['role']['intercompania'],
+        idUser :usuarioActivo['role']['id']
+      };
   }
 
   public openModalNuevo() {
@@ -87,7 +90,8 @@ export class ComprasMacroComponent implements OnInit{
   }
 
     private getAll() {
-      this.comprasMacro.getAll(this.getUsuarioActivo()).subscribe(
+      const user = this.getUsuarioActivo();
+      this.comprasMacro.getAll(user.intercompania, user.idUser).subscribe(
         (response) => {
           if (response) {
             this.data = response.data;

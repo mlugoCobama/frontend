@@ -66,8 +66,7 @@
                       <tr *ngFor ="let item of datosFiltrados" (dblclick)="openDetallesSolicitud(item, $event)">
                         <td>{{ item.folio }}</td>
                         <td class="text-center"><span
-                            style="font-size:0.65rem;"
-                            [ngClass]="item.claseEmpresa">
+                            >
                             {{ item.empresa }}
                           </span>
                         </td>

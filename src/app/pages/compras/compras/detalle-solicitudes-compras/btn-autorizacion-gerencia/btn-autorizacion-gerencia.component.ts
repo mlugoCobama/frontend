@@ -30,9 +30,9 @@ export class BtnAutorizacionGerenciaComponent {
     private comprasMacro: ComprasMacroService
   ) {}
 
-  // ngOnInit(): void {
-  //   this.getUsuarioActivo();
-  // }
+  ngOnInit(): void {
+    this.getUsuarioActivo();
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes != null && this.solicitudCompra.estatus === 1) {
@@ -45,6 +45,7 @@ export class BtnAutorizacionGerenciaComponent {
 
   public isGG: boolean = true;
   public isGA: boolean = true;
+  public isMacro: boolean = false;
 
   public autorizar(gerencia) {
     if (this.solicitudCompra.estatus === 1) {
@@ -174,7 +175,8 @@ export class BtnAutorizacionGerenciaComponent {
       (response) => {
         if (response.status === "success") {
           this.usuarioActivo = response.data[0];
-          //this.validarGerencia(response.data[0]);
+          
+          this.validarGerencia(response.data[0]);
         } else {
           this.alertasService.mostrarAlerta(
             response.message,
@@ -203,11 +205,16 @@ export class BtnAutorizacionGerenciaComponent {
     const posicion = puesto.indexOf(patron);
     const patron2 = "Gerente Administrativo";
     const posicion2 = puesto.indexOf(patron2);
+     const patron3 = "Jefe de Taller";
+    const posicion3 = puesto.indexOf(patron3);
     if (posicion !== -1) {
       this.isGA = true;
     }
     if (posicion2 !== -1) {
       this.isGG = true;
+    }
+    if (posicion3 !== -1) {
+      this.isMacro = true;
     }
   }
 

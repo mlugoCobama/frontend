@@ -142,7 +142,6 @@ export class TablaDetallesSolicitudComponent implements OnInit {
       ...dato,
       confirmado: dato.confirmado ? 1 : 0
     }));
-    console.log(datos)
     return datos;
   }
 
@@ -222,9 +221,9 @@ toggleModoLectura() {
 
   this.detalles.controls.forEach(control => {
     if (this.modoLectura) {
-      control.disable();
+      control?.disable();
     } else {
-      control.enable();
+      control?.enable();
     }
   });
 }

@@ -15,8 +15,8 @@ export class ComprasMacroService {
    * Recupera todas las solicitudes compra
    * @returns colección con las ordenes de compra
    */
-  public getAll(intercompania: number): Observable<any> {
-    return this.http.get(environment.apiUrl + `compras/Solicitudes/Macro/${intercompania}`);
+  public getAll(intercompania: number, id: number): Observable<any> {
+    return this.http.get(environment.apiUrl + `compras/Solicitudes/Macro/${intercompania}/${id}`);
   }
 
   /**
