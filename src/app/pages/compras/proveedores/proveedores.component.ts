@@ -11,15 +11,12 @@ import { FuncionesTablas } from "../compras/funciones-tablas";
 import { ModalAddProveedorComponent } from "./modal-add-proveedor/modal-add-proveedor.component";
 import { ModalUpdtProveedorComponent } from "./modal-updt-proveedor/modal-updt-proveedor.component";
 import { ModalShowProveedorComponent } from "./modal-show-proveedor/modal-show-proveedor.component";
-
-
 @Component({
   selector: "app-proveedores",
   templateUrl: "./proveedores.component.html",
   styleUrls: ["./proveedores.component.css"],
 })
 export class ProveedoresComponent implements OnInit {
-
   estados: any[] = [];
   public data: any;
   formData: FormData = new FormData();
@@ -29,21 +26,19 @@ export class ProveedoresComponent implements OnInit {
   public isLoad: boolean = true;
   public mostrar: boolean = false;
   public isCredit: boolean = false;
-
   dtOptions: Config = {};
-
   public modalRef?: BsModalRef;
   public submitted: boolean = false;
 
   public proveedor: any;
   public expediente: any;
   public archivos: any;
-  public tamanioExp:any;
+  public tamanioExp: any;
 
   //Variables funciones tablas
-  datosFiltrados:any[] = [];
+  datosFiltrados: any[] = [];
   private ordenador!: FuncionesTablas<any>;
-  busqueda:string = '';
+  busqueda: string = "";
 
   constructor(
     private proveedoresService: ProveedoresService,
@@ -60,7 +55,7 @@ export class ProveedoresComponent implements OnInit {
     this.modalAbierto = true;
     const initialState: ModalOptions = {
       initialState: {
-        estados: this.estados
+        estados: this.estados,
       },
       class: "modal-lg",
     };
@@ -74,8 +69,8 @@ export class ProveedoresComponent implements OnInit {
       this.getAll();
     });
     this.modalRef.content.modalCerrado.subscribe(() => {
-        this.modalAbierto = false;
-      });
+      this.modalAbierto = false;
+    });
   }
 
   public openModalActualizar() {
@@ -97,8 +92,8 @@ export class ProveedoresComponent implements OnInit {
       this.getAll();
     });
     this.modalRef.content.modalCerrado.subscribe(() => {
-        this.modalAbierto = false;
-      });
+      this.modalAbierto = false;
+    });
   }
 
   public openModalExpedientes() {
@@ -116,17 +111,19 @@ export class ProveedoresComponent implements OnInit {
     this.modalRef.content.closeBtnName = "Close";
     this.modalRef.content.event.subscribe((res: any) => {});
     this.modalRef.content.modalCerrado.subscribe(() => {
-        this.modalAbierto = false;
-      });
+      this.modalAbierto = false;
+    });
   }
 
-  public selectLocalidad() { //LLena el select localidad desde cat_estados.json
+  //LLena el select localidad desde cat_estados.json
+  public selectLocalidad() {
     this.catEstadosService.getData().subscribe((data) => {
       this.estados = data;
     });
   }
 
-  private getAll() { //Recupera todos los registros de los proveedores
+  //Recupera todos los registros de los proveedores
+  private getAll() {
     this.proveedoresService.getAll().subscribe(
       (response) => {
         if (response) {
@@ -147,23 +144,26 @@ export class ProveedoresComponent implements OnInit {
     );
   }
 
-  ordenarPor(columna: keyof any){
+  ordenarPor(columna: keyof any) {
     this.datosFiltrados = this.ordenador.ordenar(columna);
   }
 
-  getIconoOrden(columna:keyof any):string{
-    return this.ordenador.getIcono(columna)
+  getIconoOrden(columna: keyof any): string {
+    return this.ordenador.getIcono(columna);
   }
 
-  filtrarTabla(){
+  filtrarTabla() {
     this.datosFiltrados = this.ordenador.filtrar(this.busqueda, [
-      'nombre', 'contacto', 'telefono',
-      'localidad', 'condiciones'
+      "nombre",
+      "contacto",
+      "telefono",
+      "localidad",
+      "condiciones",
     ]);
   }
 
+  //Actualiza el estatus del registro a 0
   public destroy() {
-    //Actualiza el estatus del registro a 0
     this.mostrar = false;
     this.isLoad = true;
     Swal.fire({
@@ -216,8 +216,8 @@ export class ProveedoresComponent implements OnInit {
     });
   }
 
+  //Función para resaltar el elemento seleccionado
   public seleccionar(dato: any, evento: any) {
-    //Función para resaltar el elemento seleccionado
     this.mostrar = true;
     this.proveedor = dato;
     this.isCredit = false;

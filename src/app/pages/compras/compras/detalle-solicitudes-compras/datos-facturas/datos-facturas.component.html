@@ -39,7 +39,8 @@
             <th>TOTAL</th>
             <th>MONEDA</th>
             <th>FAC.</th>
-            <th>C.PAGO</th>
+            <th>COMPR.</th>
+            <th *ngIf = "factura.metodoPago?.metodoPago === 'PPD'">COMPL.</th>
           </tr>
         </thead>
         <tbody>
@@ -52,16 +53,42 @@
             <td>$ {{ comprobante.total - comprobante.subTotal| number}}</td>
             <td>$ {{ comprobante.total | number }}</td>
             <td>{{ comprobante.moneda }}</td>
-            <td>
-              <a *ngIf="ordenCompra.documentos[i].ruta_pdf_factura; else noArchivo"  class="btn btn-sm btn-danger" (click)="verArchivos(ordenCompra.documentos[i].ruta_pdf_factura)">
-                <i class="fas fa-file-pdf"></i>
-              </a>
+            <td >
+              <div class="d-flex justify-content-center gap-2">
+                <a *ngIf="ordenCompra.documentos[i].ruta_pdf_factura; else noArchivo"  class="btn btn-sm btn-danger" (click)="verArchivos(ordenCompra.documentos[i].ruta_pdf_factura )">
+                  <i class="fas fa-file-pdf"></i>
+                </a>
+                <a *ngIf="ordenCompra.documentos[i].ruta_pdf_factura; else noArchivo"  class="btn btn-sm btn-primary" (click)="descargarXML(ordenCompra.documentos[i].ruta_xml_factura, 'factura', comprobante.folio)">
+                  <i class="fas fa-file-code"></i>
+                </a>
+              </div>
             </td>
             <td>
-              <a *ngIf="ordenCompra.documentos[i].comprobante_pago; else noArchivo" class="btn btn-sm btn-info" (click)="verArchivos(ordenCompra.documentos[i].comprobante_pago)">
-                <i class="fas fa-file-pdf"></i>
+              <!-- <a *ngIf="ordenCompra.documentos[i].comprobante_pago; else noArchivo" class="btn btn-sm btn-info" (click)="verArchivos(ordenCompra.documentos[i].comprobante_pago)">
+                <i class="fas fa-file "></i>
+              </a> -->
+              <a *ngIf="ordenCompra.documentos[i].comprobante_pago; else noArchivo" class="btn btn-sm btn-success" (click)="descargarXML(ordenCompra.documentos[i].comprobante_pago, 'comprobante', comprobante.folio)">
+                <i class="fas fa-file "></i>
               </a>
             </td>
+            <td *ngIf = "factura.metodoPago?.metodoPago === 'PPD'">
+              <div class="d-flex justify-content-center gap-2">
+                <a *ngIf="ordenCompra.documentos[i].complemento_pago_pdf; else noComplemento" class="btn btn-sm btn-info" (click)="verArchivos(ordenCompra.documentos[i].complemento_pago_pdf)">
+                  <i class="fas fa-file-pdf"></i>
+                </a>
+                <a *ngIf="ordenCompra.documentos[i].complemento_pago_xml; else noComplemento"  class="btn btn-sm btn-primary" (click)="descargarXML(ordenCompra.documentos[i].complemento_pago_xml, 'complemento', comprobante.folio)">
+                  <i class="fas fa-file-code"></i>
+                </a>
+              </div>
+            </td>
+            <ng-template #noArchivo>
+              
+              <span class="badge badge-pill fs-4 badge-soft-secondary"><i class="fas fa-ban"></i></span>
+            </ng-template>
+            <ng-template #noComplemento>
+              <a (click)="openModalAddFile(comprobante.idRuta)" class="btn btn-sm btn-secondary"><i class="fas fa-upload"></i></a>
+              <!-- <span class="badge badge-pill fs-4 badge-soft-secondary"><i class="fas fa-ban"></i></span> -->
+            </ng-template>
           </tr>
         </tbody>
         <tfoot>
@@ -81,6 +108,3 @@
       <hr />
     </div>
 </div>
-<ng-template #noArchivo>
-  <span class="badge badge-pill fs-4 badge-soft-secondary"><i class="fas fa-ban"></i></span>
-</ng-template>

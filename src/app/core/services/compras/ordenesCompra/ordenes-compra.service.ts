@@ -139,4 +139,11 @@ export class OrdenesCompraService {
       { responseType: "blob" }
     );
   }
+
+    downloadXML(file:string) {
+    return this.http.get(
+      environment.apiUrl + `compras/download-xml/${file}`, {
+      responseType: 'blob'
+    });
+  }
 }

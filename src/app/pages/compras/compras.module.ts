@@ -43,6 +43,11 @@ import { FormDatosVehiculoComponent } from './cat-unidades/form-datos-vehiculo/f
 import { FormDatosTanqueComponent } from './cat-unidades/form-datos-tanque/form-datos-tanque.component';
 import { ModalUpdtAutotanqueComponent } from './cat-unidades/modal-updt-autotanque/modal-updt-autotanque.component';
 import { ModalCostosUnidadComponent } from './cat-unidades/modal-costos-unidad/modal-costos-unidad.component';
+import { ModalAddComprobanteComponent } from './compras/detalle-solicitudes-compras/datos-facturas/modal-add-comprobante/modal-add-comprobante.component';
+import { ModalAddComplementoComponent } from './compras/detalle-solicitudes-compras/datos-facturas/modal-add-complemento/modal-add-complemento.component';
+import { FormComplementoComponent } from './compras/detalle-solicitudes-compras/datos-facturas/form-complemento/form-complemento.component';
+import { FormComprobanteComponent } from './compras/detalle-solicitudes-compras/datos-facturas/form-comprobante/form-comprobante.component';
+import { SelectSistemaMantenimientoComponent } from './compras-macro/select-sistema-mantenimiento/select-sistema-mantenimiento.component';
 
 @NgModule({
   declarations: [
@@ -79,7 +84,16 @@ import { ModalCostosUnidadComponent } from './cat-unidades/modal-costos-unidad/m
     FormDatosVehiculoComponent,
     FormDatosTanqueComponent,
     ModalUpdtAutotanqueComponent,
+<<<<<<< HEAD
     ModalCostosUnidadComponent
+=======
+    ModalCostosUnidadComponent,
+    ModalAddComprobanteComponent,
+    ModalAddComplementoComponent,
+    FormComplementoComponent,
+    FormComprobanteComponent,
+    SelectSistemaMantenimientoComponent,
+>>>>>>> bfabefa42d7455fe9a2b1a8c3b60b46830482c4f
   ],
   imports: [
     CommonModule,

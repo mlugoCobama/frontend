@@ -23,9 +23,9 @@ export class BotnesAdminComponent implements OnInit{
   ){}
 
   public ngOnInit(): void {
-      this.comprasService.mostrarBoton$.subscribe((mostrar) => {
-        this.mostrarBoton = mostrar;
-      });
+      // this.comprasService.mostrarBoton$.subscribe((mostrar) => {
+      //   this.mostrarBoton = mostrar;
+      // });
      
   }
       
