@@ -35,8 +35,8 @@
         id="tipoMantenimiento"
       >
         <option value="" selected>Seleccione tipo</option>
-        <option *ngFor="let tipo of tiposMantenimiento" [value]="tipo">
-          {{ tipo }}
+        <option *ngFor="let tipo of tiposMantenimiento" [value]="tipo.id">
+          {{ tipo.nombre }}
         </option>
       </select>
       <div *ngIf="sisteMantenimientoFormControl.tipoMantenimiento.touched || submitted">

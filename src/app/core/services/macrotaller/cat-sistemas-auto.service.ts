@@ -19,4 +19,8 @@ export class CatSistemasAutoService {
   public getAll(): Observable<any> {
     return this.http.get(environment.apiUrl + 'compras/CatalogoSistemasAuto');
   } 
+
+  public getTiposMantenimiento(): Observable<any> {
+    return this.http.get(environment.apiUrl + 'compras/CatalogoTiposMantenimiento');
+  } 
 }

@@ -25,7 +25,7 @@ export class SelectSistemaMantenimientoComponent implements OnInit{
   public submitted: boolean = false;
 
   sistemas = [];
-  tiposMantenimiento = ['Preventivo', 'Correctivo', 'De Auxilio'];
+  tiposMantenimiento = [];
   
   formSistemaMantenimiento: FormGroup;
 
@@ -40,6 +40,7 @@ export class SelectSistemaMantenimientoComponent implements OnInit{
   ngOnInit(): void {
     this.buildForm();
     this.getAll();
+    this.getTiposMantenimiento();
     this.selectChange();
   }
 
@@ -78,6 +79,26 @@ export class SelectSistemaMantenimientoComponent implements OnInit{
       (response) => {
         if (response) {
           this.sistemas = response.data;
+          this.isLoad = false;
+        } else {
+          console.log(response.message);
+          this.isLoad = false;
+        }
+      },
+      (error) => {
+        console.error("Error fetching data:", error);
+        this.isLoad = false;
+      }
+    );
+  }
+
+  private getTiposMantenimiento() {
+    this.isLoad = true;
+    this.CatSistemasAuto.getTiposMantenimiento().subscribe(
+      (response) => {
+        if (response) {
+          this.tiposMantenimiento = response.data;
+          console.log(response.data)
           this.isLoad = false;
         } else {
           console.log(response.message);
