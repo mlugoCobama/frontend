@@ -37,7 +37,7 @@ export class FormFilesFacturasComponent implements OnInit {
     metodoPago: {},
   };
 
-  metodoPago: string;
+  metodoPago: string = '';
 
   public hasFacturas: boolean = false;
   public hasComprobantePago: boolean = false;

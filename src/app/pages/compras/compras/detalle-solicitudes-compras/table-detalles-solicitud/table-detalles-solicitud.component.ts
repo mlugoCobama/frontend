@@ -142,7 +142,7 @@ export class TableDetallesSolicitudComponent implements OnInit {
       (response) => {
         if (response) {
           this.cotProv = response.data;
-
+          console.log(this.cotProv);
           this.cotizacion = response.dataCotizacion;
 
           this.setCotizacion(this.cotizacion);

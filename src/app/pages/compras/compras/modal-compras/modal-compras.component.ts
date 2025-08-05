@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, EventEmitter, ViewChild } from "@angular/core";
+import { Component, Input, OnInit, EventEmitter, ViewChild, AfterViewInit } from "@angular/core";
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 
 //services
@@ -14,7 +14,8 @@ import catCentrosCostos from "src/environments/cat_centros_costos.json";
   templateUrl: "./modal-compras.component.html",
   styleUrls: ["./modal-compras.component.css"],
 })
-export class ModalComprasComponent implements OnInit {
+export class ModalComprasComponent implements AfterViewInit
+ {
   
   public isLoading: boolean = true;
   public submittedDetail: boolean = false;
@@ -26,8 +27,8 @@ export class ModalComprasComponent implements OnInit {
 
   public centrosCostos = catCentrosCostos;
 
-  @ViewChild('formSolicitudMacro') formSolicitudCompra!:  FormSolicitudComponent;
-  @ViewChild('formDetalleSolicitud') tableData!:  FormDetalleSolicitudComponent;
+  @ViewChild('formSolicitud', { static: false }) formSolicitudCompra!:  FormSolicitudComponent;
+  @ViewChild('formDetalleSolicitud', { static: false }) tableData!:  FormDetalleSolicitudComponent;
 
   public modalCerrado: EventEmitter<any> = new EventEmitter();
   public event: EventEmitter<any> = new EventEmitter();
@@ -41,9 +42,12 @@ export class ModalComprasComponent implements OnInit {
     public modalRef: BsModalRef
   ) {}
 
-  public ngOnInit(): void {
+  // public ngOnInit(): void {
 
-  }
+  // }
+   public ngAfterViewInit(): void {
+    
+   }
 
   /**
    * Guarda el contenido del la solicitud y detalles

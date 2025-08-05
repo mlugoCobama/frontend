@@ -10,7 +10,7 @@ export class BotnesAdminComponent implements OnInit{
 
   public enEsts = EstadoSolicitud;
   
-  @Input() status:any;
+  @Input() status:any = false;
   @Input() mostrarBoton;
   @Input() solicitudSelecionada:any;
 
@@ -23,6 +23,9 @@ export class BotnesAdminComponent implements OnInit{
   ){}
 
   public ngOnInit(): void {
+    console.log('status',this.status);
+    console.log('mostrarBoton',this.mostrarBoton);
+    console.log('solicitudSelecionada',this.solicitudSelecionada);
       // this.comprasService.mostrarBoton$.subscribe((mostrar) => {
       //   this.mostrarBoton = mostrar;
       // });

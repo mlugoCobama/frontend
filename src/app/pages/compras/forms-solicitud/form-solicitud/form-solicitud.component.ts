@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 
 //services
@@ -19,13 +19,14 @@ export class FormSolicitudComponent implements OnInit{
   public submittedDetail: boolean = false;
   public isLoad: boolean = false;
   public showTable: boolean = false;
-  public submitted: boolean = false;
+  
   public disabled: boolean = false;
+  public isAgencia: boolean = false;
 
   public formSolicitudCompra: FormGroup;
   public centrosCostos = catCentrosCostos;
-  public usuarios:any;
-  public empresas:any;
+  public usuarios:any = [];
+  public empresas:any = [];
 
   public usuarioSolicita: any = {
     id: null,
@@ -35,16 +36,19 @@ export class FormSolicitudComponent implements OnInit{
     puesto: "",
     Telfono: "",
     direccion: "",
-    intercompania: 333,
-    empresa: "",
+    intercompania: 0,
+    empresa: "Cargando. . .",
     isAgencia: false
     };
 
   public interAgencias = [
     7102, 7075, 7074, 7072, 7071, 7064, 7063, 7062, 7061, 7051, 712, 710, 706,
   ];
-  public isAgencia: boolean = false;
+
+  
+  @Input() submitted: boolean = false;
   @Output() closeModal = new EventEmitter<void>();
+
   constructor(
     public formBuilder: FormBuilder,
     private localStorage: LocalStorageServiceService,
@@ -92,7 +96,7 @@ export class FormSolicitudComponent implements OnInit{
           this.usuarioSolicita = response.data[0];
           this.getUsuarios(this.usuarioSolicita.intercompania);
           this.formSolicitudCompra.patchValue({empresa :  this.usuarioSolicita.intercompania});
-          // console.log(this.usuarioSolicita);
+          console.log(this.usuarioSolicita);
 
         } else {
           this.alertasService.mostrarAlerta(

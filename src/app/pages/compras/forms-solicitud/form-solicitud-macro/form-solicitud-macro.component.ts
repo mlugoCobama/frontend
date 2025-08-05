@@ -29,13 +29,13 @@ export class FormSolicitudMacroComponent implements OnInit{
     isAgencia: false
     };
 
-  @Input() submitted: boolean;
+  @Input() submitted: boolean = false;
   @Output() closeModal = new EventEmitter<void>();
 
   public isLoading: boolean = true;
 
-  public empresas:any;
-  public usuarios:any;
+  public empresas:any = [];
+  public usuarios:any = [];
   public autotanques: any = [];
 
   public isLoad: boolean = false;
@@ -75,6 +75,9 @@ export class FormSolicitudMacroComponent implements OnInit{
     });
   }
 
+  public get solicitudCompraFormControl() {
+    return this.formSolicitudCompra.controls;
+  }
   /**
    * Recupera el catalogo de empresas (Select empresa)
    */
@@ -97,9 +100,7 @@ export class FormSolicitudMacroComponent implements OnInit{
     );
   }
 
-  public get solicitudCompraFormControl() {
-    return this.formSolicitudCompra.controls;
-  }
+
 
   public getForm(): FormGroup {
     return this.formSolicitudCompra;

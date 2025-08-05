@@ -50,7 +50,7 @@
             <td>{{ comprobante.serie }}</td>
             <td>{{ comprobante.tComprobanteDesc }}</td>
             <td>$ {{ comprobante.subTotal | number }}</td>
-            <td>$ {{ comprobante.total - comprobante.subTotal| number}}</td>
+            <td>$ {{ +comprobante.total - +comprobante.subTotal| number}}</td>
             <td>$ {{ comprobante.total | number }}</td>
             <td>{{ comprobante.moneda }}</td>
             <td >
