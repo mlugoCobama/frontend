@@ -84,16 +84,12 @@ import { SelectSistemaMantenimientoComponent } from './compras-macro/select-sist
     FormDatosVehiculoComponent,
     FormDatosTanqueComponent,
     ModalUpdtAutotanqueComponent,
-<<<<<<< HEAD
-    ModalCostosUnidadComponent
-=======
     ModalCostosUnidadComponent,
     ModalAddComprobanteComponent,
     ModalAddComplementoComponent,
     FormComplementoComponent,
     FormComprobanteComponent,
     SelectSistemaMantenimientoComponent,
->>>>>>> bfabefa42d7455fe9a2b1a8c3b60b46830482c4f
   ],
   imports: [
     CommonModule,
