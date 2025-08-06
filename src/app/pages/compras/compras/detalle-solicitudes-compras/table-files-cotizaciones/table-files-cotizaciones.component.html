@@ -1,9 +1,9 @@
-<div *ngIf ="cotProv.length > 0" class="row">
+<div *ngIf ="cotProv?.length > 0" class="row">
   <div class="alert alert-warning text-center" role="alert">
     Marca la casilla de la fila con el proveedor seleccionado para generar la
     orden de compra
   </div>
-  <div class="col-1" *ngIf="solicitudCompra.estatus >= enEsts.OrdenCompra"></div>
+  <div class="col-1" *ngIf="solicitudCompra?.estatus >= enEsts.OrdenCompra"></div>
   <div class="col-10">
     <div class="d-flex justify-content-center" *ngIf="!isLoad">
       <div class="spinner-border" role="status">
@@ -12,24 +12,24 @@
     </div>
     <!--Tabla documentos cotizaciones-->
     <table
-      *ngIf="isLoad "
+      *ngIf="isLoad"
       class="table  table-hover table-sm table-bordered table-responsive"
     >
       <thead class="table-light" >
         <tr class="text-center">
-          <th *ngIf="solicitudCompra.estatus === enEsts.EnCotizacion">#</th>
+          <th *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion">#</th>
           <th>Nombre proveedor</th>
           <th>Archivo cotización</th>
-          <th *ngIf="solicitudCompra.estatus <= 3 ">Autorizado</th>
+          <th *ngIf="solicitudCompra?.estatus <= 3 ">Autorizado</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let prov of cotProv; let i = index" class="text-center">
-          <td [ngClass] = "prov.ruta ? 'bg-secondary-subtle bg-opacity-75' : '' "
-          *ngIf="solicitudCompra.estatus === enEsts.EnCotizacion">
+          <td [ngClass] = "prov?.ruta ? 'bg-secondary-subtle bg-opacity-75' : '' "
+          *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion">
             <div class="col align-self-center">
               <input
-                *ngIf="prov.ruta"
+                *ngIf="prov?.ruta"
                 (change)="manejoCheck(prov)"
                 name="radioProveedor"
                 class="form-check-input form-radio-success "
@@ -38,9 +38,9 @@
             </div>
           </td>
           <td>
-            {{ prov.proveedores_id[0].nombre }}
+            {{ prov?.proveedores_id[0].nombre }}
             <i
-              *ngIf="prov.seleccionado === 1"
+              *ngIf="prov?.seleccionado === 1"
               class="fas fa-check-circle"
               style="color: green"
             >
@@ -50,25 +50,25 @@
           <td>
             <div>
               <input
-                *ngIf="!prov.ruta"
+                *ngIf="!prov?.ruta"
                 accept="application/pdf"
-                (change)="onFileChange($event, prov.id)"
+                (change)="onFileChange($event, prov?.id)"
                 class="form-control form-control-sm"
-                id="prov.id"
-                name="prov.id"
+                id="prov?.id"
+                name="prov?.id"
                 type="file"
               />
               <a
                 class="btn btn-sm btn-danger"
-                *ngIf="prov.ruta"
-                (click)="verArchivos(prov.ruta)"
+                *ngIf="prov?.ruta"
+                (click)="verArchivos(prov?.ruta)"
               >
                 <i class="fas fa-file-pdf"></i>
 
               </a>
             </div>
           </td>
-          <td *ngIf="solicitudCompra.estatus <= 3 && prov?.autorizado != 0;">
+          <td *ngIf="solicitudCompra?.estatus <= 3 && prov?.autorizado != 0;">
               <div class="text-success">
                 <i class="fas fa-check"></i>
               </div>
@@ -91,8 +91,8 @@
             <option *ngIf="isLoading" value="" [disabled]="isLoading">
               Cargando opciones espera...
             </option>
-            <option *ngFor="let item of empresas" [value]="item.intercompania">
-              {{ item.name }}
+            <option *ngFor="let item of empresas" [value]="item?.intercompania">
+              {{ item?.name }}
             </option>
           </select>
           <div
@@ -133,7 +133,7 @@
       </div>
     </form>
     <!-- form observaciones orden de compra -->
-    <div *ngIf="solicitudCompra.estatus >= enEsts.OrdenCompra" class="row">
+    <div *ngIf="solicitudCompra?.estatus >= enEsts.OrdenCompra" class="row">
       <div *ngIf="ordenCompra">
         <p>
           <strong>Observaciones: </strong> {{ ordenCompra?.observaciones ?? ' Sin observaciones '}}
@@ -146,7 +146,7 @@
 
   <div class="col-2 d-flex align-items-start">
     <button
-      *ngIf="solicitudCompra.estatus === enEsts.EnCotizacion && !mostrarObs"
+      *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && !mostrarObs"
       type="submit"
       class="btn btn-sm btn-success"
       (click)="guardarPrecios()"

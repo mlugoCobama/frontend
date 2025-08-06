@@ -84,6 +84,7 @@ export class ComprasService {
    * @param mostrar true:muestra el div, false: oculta el div
    */
   cambiarEstadoCotizacion(mostrar: boolean) {
+    console.log("cambiarEstadoCotizacion",mostrar);
     this.mostrarCotizacionSource.next(mostrar);
   }
   /**
@@ -106,6 +107,7 @@ export class ComprasService {
    * @param mostrar true:muestra el boton, false: oculta el boton
    */
   setMostrarBoton(mostrar: boolean) {
+    console.log('setMostrarBoton',mostrar);
     this.mostrarBotonSource.next(mostrar);
   }
 
@@ -113,6 +115,7 @@ export class ComprasService {
   status$ = this.status.asObservable();
 
   setValor(value: any){
+    console.log(value)
     this.status.next(value);
   }
 

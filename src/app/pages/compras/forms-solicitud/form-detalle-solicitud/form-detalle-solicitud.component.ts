@@ -29,10 +29,8 @@ export class FormDetalleSolicitudComponent implements OnInit{
   ){}
 
   ngOnInit(): void {
-
     this.getUnidades();
     this.buildForm();
-    
   }
   
   private buildForm() {

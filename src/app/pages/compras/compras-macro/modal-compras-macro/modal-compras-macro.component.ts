@@ -1,4 +1,4 @@
-import { Component,  EventEmitter,  ViewChild } from '@angular/core';
+import { AfterViewInit, Component,  EventEmitter,  ViewChild } from '@angular/core';
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { ComprasMacroService } from 'src/app/core/services/compras/compras-macro.service';
 import { FormDetalleSolicitudComponent } from '../../forms-solicitud/form-detalle-solicitud/form-detalle-solicitud.component';
@@ -11,13 +11,13 @@ import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-com
   templateUrl: './modal-compras-macro.component.html',
   styleUrl: './modal-compras-macro.component.css'
 })
-export class ModalComprasMacroComponent {
+export class ModalComprasMacroComponent implements AfterViewInit {
 
   public modalCerrado: EventEmitter<any> = new EventEmitter();
   public event: EventEmitter<any> = new EventEmitter();
 
-  @ViewChild('formSolicitudMacro') formSolicitudCompra!:  FormSolicitudMacroComponent;
-  @ViewChild('formDetalleSolicitud') tableData!:  FormDetalleSolicitudComponent;
+  @ViewChild('formSolicitudMacro', { static: false }) formSolicitudCompra!:  FormSolicitudMacroComponent;
+  @ViewChild('formDetalleSolicitud' , { static: false }) tableData!:  FormDetalleSolicitudComponent;
 
   public submitted: boolean = false;
   public submittedDetail: boolean = false;
@@ -32,6 +32,7 @@ export class ModalComprasMacroComponent {
 
 
   ngAfterViewInit() {
+
   }
 
 

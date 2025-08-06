@@ -1,23 +1,30 @@
 <div class="flex-shrink-0 d-flex gap-1">
-    <a 
+  <a
     *ngIf="!solicitudSelecionada"
-    (click) = "clickNuevo()"
-    href="javascript:void(0);" class="btn btn-primary btn-sm">
-        <i class="fas fa-plus"></i>
-         Nuevo
-    </a>
-    <a
-    *ngIf="status >= enEsts.OrdenCompra || status === enEsts.Cancelado" 
-    (click) = "clickDescargar()"
-    href="javascript:void(0);" class="btn btn-sm btn-primary">
-        <i class="fas fa-file-download"></i> 
-        Descargar Orden de Compra
-    </a>
-    <a 
+    href="javascript:void(0);"
+    class="btn btn-primary btn-sm"
+    (click)="clickNuevo()"
+  >
+    <i class="fas fa-plus"></i>
+    Nuevo
+  </a>
+
+  <a
+    *ngIf="status >= enEsts.OrdenCompra || status === enEsts.Cancelado"
+    href="javascript:void(0);"
+    class="btn btn-sm btn-primary"
+    (click)="clickDescargar()"
+  >
+    <i class="fas fa-file-download"></i>
+    Descargar Orden de Compra
+  </a>
+  <a
     *ngIf="solicitudSelecionada"
-    (click) = "clickRegresar()"
-    href="javascript:void(0);" class="btn btn-dark btn-sm">
-        <i class="mdi mdi-arrow-left"></i>
-         Volver
-    </a>
+    href="javascript:void(0);"
+    class="btn btn-dark btn-sm"
+    (click)="clickRegresar()"
+  >
+    <i class="mdi mdi-arrow-left"></i>
+    Volver</a
+  >
 </div>

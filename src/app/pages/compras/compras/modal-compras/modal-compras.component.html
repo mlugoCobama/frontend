@@ -6,7 +6,8 @@
 </div>
 <div class="modal-body">
   <app-form-solicitud
-  #formSolicitudMacro
+  #formSolicitud
+  [submitted]="submitted"
   (closeModal)="cerrarModal()"
   ></app-form-solicitud>
 

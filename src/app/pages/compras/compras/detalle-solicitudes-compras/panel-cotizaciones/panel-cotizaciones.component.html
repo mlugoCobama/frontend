@@ -8,8 +8,8 @@
       <select
         class="form-select form-select-sm" formControlName="proveedor1" id="proveedor1" aria-label="Default select example">
         <option value="" selected disabled> Selecciona una opción</option>
-        <option *ngFor="let item of proveedores" [value]="item.id">
-          {{ item.nombre }}
+        <option *ngFor="let item of proveedores" [value]="item?.id">
+          {{ item?.nombre }}
         </option>
       </select>
       <div *ngIf="solicitudCotizacionFormControl.proveedor1.touched || submitted">
@@ -23,8 +23,8 @@
       <label for="proveedor2" class="form-label form-label-sm"> Proveedor 2: *</label>
       <select class="form-select form-select-sm" formControlName="proveedor2" id="proveedor2" aria-label="Default select example">
         <option value="" selected disabled> Selecciona una opción</option>
-        <option *ngFor="let item of proveedores" [value]="item.id">
-          {{ item.nombre }}
+        <option *ngFor="let item of proveedores" [value]="item?.id">
+          {{ item?.nombre }}
         </option>
       </select>
       <div *ngIf="solicitudCotizacionFormControl.proveedor2.touched || submitted">
@@ -37,8 +37,8 @@
       <label for="proveedor3" class="form-label form-label-sm">Proveedor 3: *</label>
       <select class="form-select form-select-sm" formControlName="proveedor3" id="proveedor3" aria-label="Default select example">
         <option value="" selected disabled> Selecciona una opción</option>
-        <option *ngFor="let item of proveedores" [value]="item.id">
-          {{ item.nombre }}
+        <option *ngFor="let item of proveedores" [value]="item?.id">
+          {{ item?.nombre }}
         </option>
       </select>
       <div *ngIf="solicitudCotizacionFormControl.proveedor3.touched || submitted">
@@ -63,14 +63,15 @@
       </div>
     </div>
     <div class="col-sm-2">
-      <button class="btn btn-sm btn-primary" type="button" (click)="enviarSolicitudCotizacion()" [disabled]="isDisabled">
-        <div *ngIf="!isDisabled">Solicitar Cotización</div>
-        <div *ngIf="isDisabled">
-          Trabajando
-          <div class="spinner-grow spinner-grow-sm" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-        </div>
+      <button
+        class="btn btn-sm btn-primary" type="button" (click)="enviarSolicitudCotizacion()" [disabled]="isDisabled" >
+        <span>
+          {{ isDisabled ? 'Trabajando' : 'Solicitar Cotización' }}
+        </span>
+        <span *ngIf="isDisabled" class="spinner-grow spinner-grow-sm ms-2" role="status" aria-hidden="true"></span>
+        <span class="visually-hidden" *ngIf="isDisabled">
+          Cargando…
+        </span>
       </button>
     </div>
   </form>

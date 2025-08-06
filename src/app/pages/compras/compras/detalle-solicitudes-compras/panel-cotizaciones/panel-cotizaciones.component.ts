@@ -16,7 +16,7 @@ import { ComprasService } from "src/app/core/services/compras/compras.service";
   styleUrl: "./panel-cotizaciones.component.css",
 })
 export class PanelCotizacionesComponent implements OnInit {
-  @Input() solicitudCompra: any;
+  @Input() solicitudCompra: any =  null;
 
   @Output() actualizarStatus = new EventEmitter<void>();
 
@@ -26,7 +26,7 @@ export class PanelCotizacionesComponent implements OnInit {
 
   public isDisabled: boolean = false;
 
-  public proveedores: any;
+  public proveedores: any = [];
 
   public isLoad: boolean = true;
 
@@ -39,22 +39,32 @@ export class PanelCotizacionesComponent implements OnInit {
     public proveedoresService: ProveedoresService,
     public comprasService: ComprasService,
     public alertasService: SwalComprsServiceService
-  ) {}
+  ) {
+
+    // this.buildForm();
+
+  }
 
   ngOnInit(): void {
-
-    
-    this.getProveedores();
     this.buildForm();
+    this.getProveedores();
+    
+    console.log(this.solicitudCompra)
+    console.log('btn disabled', this.isDisabled)
   }
 
   private buildForm() {
-    this.formProveedoresCotizacion = this.formBuilder.group({
+    return new Promise((resolve, reject) => {
+      this.formProveedoresCotizacion = this.formBuilder.group({
       proveedor1: new FormControl("", Validators.required),
       proveedor2: new FormControl(""),
       proveedor3: new FormControl(""),
       consideraciones: new FormControl(null),
     });
+    resolve(true);
+    console.log('form construido panel cotizaciones')
+    });
+    
   }
 
   get solicitudCotizacionFormControl() {
@@ -67,13 +77,14 @@ export class PanelCotizacionesComponent implements OnInit {
       (response) => {
         if (response) {
           this.proveedores = response.data;
+          console.log(this.proveedores)
           this.isLoad = false;
         } else {
-          this.alertasService.mostrarAlerta("Error!", response.message ?? "desconocido", "error", "danger" );
+          this.alertasService.mostrarAlerta("Error!", response.message, "error", "danger" );
         }
       },
       (error) => {
-        this.alertasService.mostrarAlerta("Error!", error ?? "desconocido", "error", "danger" );
+        this.alertasService.mostrarAlerta("Error!", error, "error", "danger" );
       }
     );
   }

@@ -59,7 +59,7 @@ export class ComprasComponent implements OnInit {
     this.comprasService.mostrarBoton$.subscribe((mostrar) => {
       this.mostrarBoton = mostrar;
     });
-    this.dtOptions = environment.dataTables;
+
     this.getUsuarioActivo();
     this.getAll();
   }
@@ -208,7 +208,7 @@ export class ComprasComponent implements OnInit {
           this.alertasService.mostrarAlerta("Error!", "La orden de compra no existe", "error","danger");
         }
       },(error) => {
-        this.alertasService.mostrarAlerta("Error!", "No es posible descargar la orden de compra", "error","danger");
+        this.alertasService.mostrarAlerta("Error!", error , "error","danger");
       });
   }
 
