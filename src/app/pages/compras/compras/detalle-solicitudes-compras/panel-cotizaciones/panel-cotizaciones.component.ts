@@ -15,7 +15,7 @@ import { ComprasService } from "src/app/core/services/compras/compras.service";
   templateUrl: "./panel-cotizaciones.component.html",
   styleUrl: "./panel-cotizaciones.component.css",
 })
-export class PanelCotizacionesComponent implements AfterViewInit {
+export class PanelCotizacionesComponent implements OnInit {
   @Input() solicitudCompra: any =  null;
 
   @Output() actualizarStatus = new EventEmitter<void>();
@@ -39,11 +39,16 @@ export class PanelCotizacionesComponent implements AfterViewInit {
     public proveedoresService: ProveedoresService,
     public comprasService: ComprasService,
     public alertasService: SwalComprsServiceService
-  ) {}
+  ) {
 
-  ngAfterViewInit(): void {
-    this.getProveedores();
+    // this.buildForm();
+
+  }
+
+  ngOnInit(): void {
     this.buildForm();
+    this.getProveedores();
+    
     console.log(this.solicitudCompra)
     console.log('btn disabled', this.isDisabled)
   }
@@ -56,8 +61,8 @@ export class PanelCotizacionesComponent implements AfterViewInit {
       proveedor3: new FormControl(""),
       consideraciones: new FormControl(null),
     });
-    console.log('form construido')
     resolve(true);
+    console.log('form construido panel cotizaciones')
     });
     
   }
