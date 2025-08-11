@@ -23,18 +23,5 @@ export class InfoSolicitudComponent implements OnInit{
 
   ngOnInit(): void {
     this.comprasService.actualizarEstatus$.subscribe(valor => { this.solicitudCompra.estatus =  valor } );
-    console.log(this.solicitudCompra);
-    
-    // console.log(this.solicitudCompra);
   }
-
-  //  ngOnChanges(changes: SimpleChanges): void {
-  //    if(changes != null){
-  //      console.log('SOLICITUD COMPRA',this.solicitudCompra);
-  //      console.log('COTIZACION',this.cotizacion);
-  //      console.log('BANDERA MOSTRAR TOTAL',this.mostrarTotal);
-
-  //    }
-  //  }
-
 }

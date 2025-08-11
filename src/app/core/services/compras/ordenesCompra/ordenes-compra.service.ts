@@ -55,6 +55,14 @@ export class OrdenesCompraService {
   }
 
   /**
+   * Almacena documentos adjuntos a la factura cargada
+   * @param data archivos pdf y xml
+   * @returns
+   */
+  public saveFacturaDocs(data: any): Observable<any> {
+    return this.http.post(environment.apiUrl + `compras/save-files-factura`, data);
+  }
+  /**
    * Actualiza la tupla de documentos orden compra
    * @param data archivo de comporbante de pago 
    * @returns

@@ -70,7 +70,7 @@ class="row g-2"
         <i class="fas fa-file-upload"></i>
         Guardar Archivos
       </button>
-      <button *ngIf="ordenCompra?.documentos[0]?.comprobante_pago && solicitudCompra.estatus < enEsts.Pagada"
+      <button *ngIf="hasComprobantePago && ordenCompra.documentos.length > 0 && solicitudCompra.estatus < enEsts.Pagada"
         type="submit" (click)="marcarComoPagada()" class="btn btn-primary btn-sm">
         <i class="fas fa-check"></i>
         Marcar como pagada

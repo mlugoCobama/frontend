@@ -10,8 +10,6 @@ export class HasPermissionPipe implements PipeTransform {
     
     if (!permiso) return true;
 
-    console.log(permiso);
-    
     const permisosRaw = localStorage.getItem('permisos');
     if (!permisosRaw) return false;
 

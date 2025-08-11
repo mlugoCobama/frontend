@@ -23,13 +23,9 @@ export class BotnesAdminComponent implements OnInit{
   ){}
 
   public ngOnInit(): void {
-    console.log('status',this.status);
-    console.log('mostrarBoton',this.mostrarBoton);
-    console.log('solicitudSelecionada',this.solicitudSelecionada);
       // this.comprasService.mostrarBoton$.subscribe((mostrar) => {
       //   this.mostrarBoton = mostrar;
       // });
-     
   }
       
   clickGenerarOrden() {

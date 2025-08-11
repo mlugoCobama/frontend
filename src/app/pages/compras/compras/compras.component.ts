@@ -70,7 +70,10 @@ export class ComprasComponent implements OnInit {
 
     public getUsuarioActivo() {
     const usuarioActivo = this.localStorage.getItem("currentUser");
-      return usuarioActivo['role']['intercompania'];
+      return {
+        intercompania :usuarioActivo['role']['intercompania'],
+        idUser :usuarioActivo['role']['id']
+      };
   }
 
   /**
@@ -112,7 +115,8 @@ export class ComprasComponent implements OnInit {
 
   //Recupera todos los registros de solicitudes de compras
   private getAll() {
-    this.comprasService.getAll(this.getUsuarioActivo()).subscribe(
+    const user = this.getUsuarioActivo();
+    this.comprasService.getAll(user.intercompania, user.idUser).subscribe(
       (response) => {
         if (response) {
           this.data = response.data;

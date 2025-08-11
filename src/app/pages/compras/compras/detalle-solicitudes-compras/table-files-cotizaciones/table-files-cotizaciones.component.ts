@@ -46,9 +46,7 @@ constructor(
 ngAfterViewInit(): void {
   this.getEmpresas();
   this.buildForm();
-  console.log(this.cotProv);
 }
-
 
 guardarPrecios() {
   this.savePrices.emit();
@@ -67,7 +65,6 @@ private buildForm() {
     entrega: new FormControl("", Validators.required),
     observaciones: new FormControl(null),
   });
-  console.log('form construido')
     resolve(true);
     });
 }
@@ -104,12 +101,12 @@ onFileChange(event: Event, proveedorId: number) {
 }
 
 //Recupera los archivos de los input file de la tabla proveedores
-onFileChange1(event: Event, proveedorId: number) {  
-  const input = event.target as HTMLInputElement;
-  if (input.files && input.files.length > 0) {
-    this.selectedFiles[proveedorId] = input.files[0];
-  }
-}
+// onFileChange1(event: Event, proveedorId: number) {  
+//   const input = event.target as HTMLInputElement;
+//   if (input.files && input.files.length > 0) {
+//     this.selectedFiles[proveedorId] = input.files[0];
+//   }
+// }
 
 /**
  * abre los archivos en una pestaña nueva

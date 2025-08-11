@@ -41,39 +41,42 @@ export class ModalAddComplementoComponent {
     }
     
     const data = this.getData();
+    console.log(data);
+    this.ordenesComprasService.saveFacturaDocs(data).subscribe(
+      (response) => {
+        if (response) {
 
-      this.ordenesComprasService.saveDocs1(this.id, data).subscribe(
-        (response) => {
-          if (response.status === "success") {
+    // this.getOrdenCompra();
+          this.alertasService.mostrarAlerta("Guardado", "Documentos guardados correctamente", "success", "success");
 
-            // this.getOrdenCompra();
-            this.alertasService.mostrarAlerta("Guardado", "Documentos guardados correctamente", "success", "success");
-
-            this.formComplemento.resetearFormulario();
-            this.submitted = false;
-            this.event.emit();
-            this.cerrarModal();
-        
-          } else {
-            this.submitted = false;
-            this.alertasService.mostrarAlerta('error', response.message, 'error', 'danger');
-          }
-        },
-        (error) => {
+          this.formComplemento.resetearFormulario();
           this.submitted = false;
-          this.alertasService.mostrarAlerta('error',` "Error:" ${error}`, 'error', 'danger');
+          this.event.emit();
+          this.cerrarModal();
+            
+        } else {
+          this.submitted = false;
+          this.alertasService.mostrarAlerta('error', response.message, 'error', 'danger');
         }
-      );
+      },
+      (error) => {
+        this.submitted = false;
+        this.alertasService.mostrarAlerta('error',` "Error:" ${error}`, 'error', 'danger');
+      }
+    );
   }
 
   private getData(){
     const formData = new FormData;
     
-    const files = this.formComplemento.obtenerValores()
-    formData.append('id', this.id);
-    formData.append('complemento_pago_xml', files.get('complemento_pago_xml'));
-    formData.append('complemento_pago_pdf', files.get('complemento_pago_pdf'));
-    formData.append("_method", "PUT");
+    const files = this.formComplemento.obtenerValores();
+    const tipo_documento =  this.formComplemento.obtenerSelect();
+
+    formData.append('idFactura', this.id);
+    formData.append('tipo_documento', tipo_documento);
+    formData.append('archivo_xml', files.get('archivo_xml'));
+    formData.append('archivo', files.get('archivo'));
+    // formData.append("_method", "PUT");
     formData.append("orden_compra_id", this.idOrdenCompra);
     
     return formData;
