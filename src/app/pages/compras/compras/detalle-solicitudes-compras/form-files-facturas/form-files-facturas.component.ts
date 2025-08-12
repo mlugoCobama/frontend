@@ -171,13 +171,14 @@ export class FormFilesFacturasComponent implements OnInit {
       const idOrdenCompra = this.ordenCompra.id;
       const idDocOC = this.ordenCompra.documentos[0].id;
 
+      this.formData.append('archivo', this.formData.get('comprobante_pago'));
       this.formData.append('tipo_documento', 'comprobante_pago');
       this.formData.append("orden_compra_id", this.ordenCompra.id);
       this.formData.append("idFactura", idDocOC);
       
       this.ordenesComprasService.saveFacturaDocs(this.formData).subscribe(
         (response) => {
-          if (response.status === "success") {
+          if (response) {
 
             this.getOrdenCompra();
             this.alertasService.mostrarAlerta("Guardado", "Documentos guardados correctamente", "success", "success");
