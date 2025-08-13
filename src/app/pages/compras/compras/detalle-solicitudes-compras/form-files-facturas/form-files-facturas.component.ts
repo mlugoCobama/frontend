@@ -89,7 +89,7 @@ export class FormFilesFacturasComponent implements OnInit {
 
           if (this.ordenCompra.documentos.length > 0) {
             this.hasFiles = true;
-            console.log(this.ordenCompra.documentos);
+            // console.log(this.ordenCompra.documentos);
             this.leerXML();
 
             this.hasFacturas = true;
@@ -104,6 +104,7 @@ export class FormFilesFacturasComponent implements OnInit {
               this.idDocOrdC = ultimoId;
             }
           }
+
           if (this.ordenCompra.documentos.length === 0) {
             this.habilitado = true;
             this.hasFacturas = false;
@@ -168,14 +169,16 @@ export class FormFilesFacturasComponent implements OnInit {
     if (this.formData.has("comprobante_pago")) {
 
       const idOrdenCompra = this.ordenCompra.id;
-      const idDocOC = this.idDocOrdC;
+      const idDocOC = this.ordenCompra.documentos[0].id;
 
-      this.formData.append("_method", "PUT");
-      this.formData.append("orden_compra_id", idOrdenCompra);
-
-      this.ordenesComprasService.saveDocs1(idDocOC, this.formData).subscribe(
+      this.formData.append('archivo', this.formData.get('comprobante_pago'));
+      this.formData.append('tipo_documento', 'comprobante_pago');
+      this.formData.append("orden_compra_id", this.ordenCompra.id);
+      this.formData.append("idFactura", idDocOC);
+      
+      this.ordenesComprasService.saveFacturaDocs(this.formData).subscribe(
         (response) => {
-          if (response.status === "success") {
+          if (response) {
 
             this.getOrdenCompra();
             this.alertasService.mostrarAlerta("Guardado", "Documentos guardados correctamente", "success", "success");
@@ -234,7 +237,16 @@ export class FormFilesFacturasComponent implements OnInit {
         if(response){
           // console.log(response);
           this.factura = response.factura;
-          console.log(this.factura);
+
+          const tiposNecesarios = ["INGRESO", "COMPROBANTE PAGO"];
+
+          if (this.validarTiposComprobante(this.factura.comprobantes, tiposNecesarios)) {
+            this.hasComprobantePago = true;
+          } else {
+            this.hasComprobantePago = false;
+          }
+
+
           this.checkMetodoPago();
         }
     },(error) => {
@@ -243,13 +255,19 @@ export class FormFilesFacturasComponent implements OnInit {
     this.mostrarDtsFac = true;
   }
 
+  private validarTiposComprobante(comprobantes, tiposRequeridos) {
+    return tiposRequeridos.every(tipo =>
+      comprobantes.some(c => c.tComprobanteDesc === tipo)
+    );
+  }
+
   /**
    * Verifica cual es el método de pago
    * PPD o PUE del xml
    */
   checkMetodoPago() {
     this.metodoPago = this.factura.metodoPago?.metodoPago;
-    console.log(this.metodoPago)
+    // console.log(this.metodoPago)
     if (this.metodoPago === "PPD") {
       this.habilitado = true;
     } else {

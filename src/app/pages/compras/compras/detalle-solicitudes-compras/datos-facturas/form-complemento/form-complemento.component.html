@@ -1,32 +1,57 @@
 <form class="row g-2"  enctype="multipart/form-data" [formGroup]="formComplemento">
+
   <div class="mb-3">
-    <label for="complemento_pago_xml" class="form-label">Complemento de pago <strong>XML*</strong></label>
+      <label for="tipo_documento" class="form-label">Tipo de documento:</label>
+      <select
+        class="form-select form-select-sm"
+        formControlName="tipo_documento"
+        name="tipo_documento"
+        id="tipo_documento"
+      >
+        <option value="" selected disabled>Seleccione un tipo de documento *</option>
+        <option *ngFor="let tipo of tiposDocumentos" [value]="tipo.id">
+          {{ tipo.tipo_documento }}
+        </option>
+      </select>
+      <div *ngIf="complementoFormControl.tipo_documento.touched || submitted">
+        <div
+          class="text-danger form-text"
+          *ngIf="complementoFormControl.tipo_documento.errors?.['required']"
+        >
+          Tipo de documento es requerido.
+        </div>
+      </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="archivo_xml" class="form-label">Archivo <strong>XML*</strong></label>
     <input class="form-control form-control-sm" 
-    (change)="onFileChange($event, 'complemento_pago_xml')"
-    formControlName="complemento_pago_xml"
-    name="complemento_pago_xml"
-    id="complemento_pago_xml" 
+    (change)="onFileChange($event, 'archivo_xml')"
+    formControlName="archivo_xml"
+    name="archivo_xml"
+    id="archivo_xml" 
     type="file" 
     accept="application/xml"
     />
-    <div *ngIf="solicitudCompraFormControl.complemento_pago_xml.touched || submitted">
-        <div class="text-danger form-text" *ngIf="solicitudCompraFormControl.complemento_pago_xml.errors?.['required']">
+    <div *ngIf="complementoFormControl.archivo_xml.touched || submitted">
+        <div class="text-danger form-text" *ngIf="complementoFormControl.archivo_xml.errors?.['required']">
             Este archivo es requerido.
           </div>
     </div>
   </div>
+
   <div class="mb-3">
-    <label for="complemento_pago_pdf" class="form-label">Complemento de pago <strong>PDF*</strong></label>
+    <label for="archivo" class="form-label">Representación Impresa <strong>PDF*</strong></label>
     <input class="form-control form-control-sm" 
-    (change)="onFileChange($event, 'complemento_pago_pdf')"
-    formControlName="complemento_pago_pdf"
-    name="complemento_pago_pdf"
-    id="complemento_pago_pdf" 
+    (change)="onFileChange($event, 'archivo')"
+    formControlName="archivo"
+    name="archivo"
+    id="archivo" 
     type="file"
     accept="application/pdf"
      />
-    <div *ngIf="solicitudCompraFormControl.complemento_pago_pdf.touched || submitted">
-        <div class="text-danger form-text" *ngIf="solicitudCompraFormControl.complemento_pago_pdf.errors?.['required']">
+    <div *ngIf="complementoFormControl.archivo.touched || submitted">
+        <div class="text-danger form-text" *ngIf="complementoFormControl.archivo.errors?.['required']">
             Este archivo es requerido.
           </div>
     </div>

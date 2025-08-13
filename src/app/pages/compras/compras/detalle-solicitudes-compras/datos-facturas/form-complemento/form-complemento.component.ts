@@ -24,14 +24,26 @@ export class FormComplementoComponent implements OnInit {
   public submitted:boolean = false;
   public formData = new FormData();
 
+  tiposDocumentos = [
+    {id: "comprobante_pago",  tipo_documento:"Comprobante de pago"},
+    {id: "complemento_pago",  tipo_documento:"Complemento de pago"},
+    {id: "factura_adjunta",   tipo_documento:"Factura x concepto extra"},
+    {id: "nota_crédito",   tipo_documento:"Nota de crédito"},
+  ];
+
   private buildForm() {
     return new Promise((resolve, reject) => {
       this.formComplemento = this.formBuilder.group({
-        complemento_pago_xml: new FormControl("", Validators.required),
-        complemento_pago_pdf: new FormControl("", Validators.required),
+        tipo_documento: new FormControl("", Validators.required),
+        archivo_xml: new FormControl(""),
+        archivo: new FormControl(""),
       });
       resolve(true);
     });
+  }
+
+    get complementoFormControl() {
+    return this.formComplemento.controls;
   }
 
   onFileChange(event: any, controlName: string): void {
@@ -45,8 +57,8 @@ export class FormComplementoComponent implements OnInit {
     return this.formData;
   }
 
-  get solicitudCompraFormControl() {
-    return this.formComplemento.controls;
+  obtenerSelect(){
+    return this.formComplemento.value.tipo_documento;
   }
 
   esValido() {

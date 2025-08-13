@@ -21,17 +21,33 @@ export class BontonesGeneralesComponent {
       
   clickDescargar() {
       this.btnDescargarOC.emit();
-      console.info('clickDescargar')
   }
 
   clickRegresar() {
       this.regresar.emit();
-      console.info('clickRegresar')
   }
 
   clickNuevo() {
-      console.info('clickNuevo')
       this.openModalNuevo.emit();
   }
 
+  puedeCrearSolicitud(): boolean {
+  return !this.solicitudSelecionada && this.tienePermiso('create solicitud compra');
+}
+
+public tienePermiso(permiso: string): boolean {
+  // Aquí puedes reutilizar la lógica de tu pipe o usar un servicio
+  const permisosRaw = localStorage.getItem('permisos');
+  if (!permisosRaw) return false;
+  
+  try {
+    const permisos = JSON.parse(permisosRaw);
+    const lista = permisos.map((p: any) => p.name);
+    console.log(lista.includes(permiso))
+    return lista.includes(permiso);
+  } catch {
+    console.log(false);
+    return false;
+  }
+}
 }
