@@ -77,7 +77,7 @@ export class CatUnidadesComponent implements OnInit{
       'entidad', 'marca_vehiculo', 'submarca', 
       'modelo', 'no_serie', 'placas',
       'marca_tanque', 'anio_fabricacion', 'capacidad',
-      'tipo_medidor', 'serie',
+      'tipo_medidor', 'serie','eco',
     ]);
     this.contarDatos();
   }
@@ -100,16 +100,11 @@ export class CatUnidadesComponent implements OnInit{
         this.modalRef.content.event.subscribe(() => {
           this.isLoad = true;
   
-          // this.mostrar = false;
           this.getCatVehiculos(this.usuarioSolicita.intercompania);
         });
-        // this.modalRef.content.modalCerrado.subscribe(() => {
-        //   this.modalAbierto = false;
-        // });
   }
 
   public openModalInfo() {
-    console.log(this.unidad)
     this.modalAbierto =  true;
     const initialState: ModalOptions = {
           initialState: {
@@ -125,12 +120,8 @@ export class CatUnidadesComponent implements OnInit{
         this.modalRef.content.event.subscribe(() => {
           this.isLoad = true;
   
-          // this.mostrar = false;
           this.getCatVehiculos(this.usuarioSolicita.intercompania);
         });
-        // this.modalRef.content.modalCerrado.subscribe(() => {
-        //   this.modalAbierto = false;
-        // });
   }
 
   // Despliega la ventana modal para un nuevo registro
@@ -151,13 +142,9 @@ export class CatUnidadesComponent implements OnInit{
         this.modalRef.content.closeBtnName = "Close";
         this.modalRef.content.event.subscribe(() => {
           this.isLoad = true;
-  
-          // this.mostrar = false;
+
           this.getCatVehiculos(this.usuarioSolicita.intercompania);
         });
-        // this.modalRef.content.modalCerrado.subscribe(() => {
-        //   this.modalAbierto = false;
-        // });
   }
 
   public totalDatos:any;
@@ -254,8 +241,7 @@ export class CatUnidadesComponent implements OnInit{
             "warning",
             "warning"
           );
-          // this.closeModal.emit();
-          // this.cerrarModal();
+
           return;
         }
       },

@@ -202,6 +202,7 @@ export class TableDetallesSolicitudComponent implements OnInit {
       let total = 0;
       const proveedorId = cotizacion.proveedores_id[0].id;
       this.detalles.forEach((detalle) => {
+        // const precio = Number(detalle["precio_" + proveedorId]);
         const precio = parseFloat(detalle["precio_" + proveedorId]);
         if (!isNaN(precio)) {
           total += precio * detalle.cantidad;

@@ -84,7 +84,7 @@ export class FormActualizarDetalleComponent {
   validarTamaño() {
     // this.fromatearNuevosDetalles();
     const contador = this.detalles.reduce((acc, detalle) => acc + detalle.confirmado, 0);
-    console.log(contador);
+    // console.log(contador);
     return contador !== 0;
 }
 private fromatearNuevosDetalles(){

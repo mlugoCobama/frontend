@@ -83,11 +83,11 @@ export class BtnsAutorizacionComponent implements OnInit {
       text: "Deseas enviar la solicitud de surtido al proveedor?",
       icon: "info",
       showDenyButton: true,
-      confirmButtonText: " SI ",
-      denyButtonText: `NO`,
+      confirmButtonText: " SI, Enviar... ",
+      denyButtonText: `NO, Solo autorizar`,
       customClass: {
         confirmButton: "btn btn-success px-4",
-        denyButton: "btn btn-danger ms-2 px-4",
+        denyButton: "btn btn-info ms-2 px-4",
       },
       buttonsStyling: false,
     }).then((result) => {

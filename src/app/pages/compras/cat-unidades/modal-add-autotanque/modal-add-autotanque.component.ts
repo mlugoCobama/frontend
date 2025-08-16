@@ -22,7 +22,7 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
 
   
   ngAfterViewInit(): void {
-    // console.log(this.setTitle())
+    
   }
 
    @ViewChild('formDatosTanque') formDatosTanque!:  FormDatosTanqueComponent;
@@ -36,7 +36,6 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
 
     public cerrarModal(): void {
     this.bsModalRef.hide();
-    // setTimeout(() => {this.modalCerrado.emit();}, 150)
     }
 
   setTitle(){
@@ -61,10 +60,7 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
               (response) => {
                 if (response.status === "success") {
                   
-                  // this.modalCerrado.emit();
-                  // console.log(response.message);
                   this.alertasService.mostrarAlerta("Guardado", "Unidad registrada correctamente", "success", "success");
-                  // this.event.emit(false);
                   this.event.emit(true);
                   this.cerrarModal();
                   this.formDatosTanque.resetearFormulario();
@@ -78,7 +74,6 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
               },
               (error) => {
                 this.alertasService.mostrarAlerta("Error", `Error fetching data: ${error}`, "error", "danger");
-                // console.error();
                 this.deshabilitado = false;
               }
             );

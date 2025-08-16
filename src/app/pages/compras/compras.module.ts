@@ -46,7 +46,6 @@ import { ModalCostosUnidadComponent } from './cat-unidades/modal-costos-unidad/m
 import { ModalAddComprobanteComponent } from './compras/detalle-solicitudes-compras/datos-facturas/modal-add-comprobante/modal-add-comprobante.component';
 import { ModalAddComplementoComponent } from './compras/detalle-solicitudes-compras/datos-facturas/modal-add-complemento/modal-add-complemento.component';
 import { FormComplementoComponent } from './compras/detalle-solicitudes-compras/datos-facturas/form-complemento/form-complemento.component';
-import { FormComprobanteComponent } from './compras/detalle-solicitudes-compras/datos-facturas/form-comprobante/form-comprobante.component';
 import { SelectSistemaMantenimientoComponent } from './compras-macro/select-sistema-mantenimiento/select-sistema-mantenimiento.component';
 
 @NgModule({
@@ -88,7 +87,6 @@ import { SelectSistemaMantenimientoComponent } from './compras-macro/select-sist
     ModalAddComprobanteComponent,
     ModalAddComplementoComponent,
     FormComplementoComponent,
-    FormComprobanteComponent,
     SelectSistemaMantenimientoComponent,
   ],
   imports: [

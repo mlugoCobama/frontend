@@ -1,6 +1,5 @@
 import { Component, OnInit} from '@angular/core';
 
-
 import { FuncionesTablas } from '../compras/funciones-tablas';
 import { environment } from 'src/environments/environment';
 
@@ -19,6 +18,7 @@ import { CatUnidadesMedidasService } from "src/app/core/services/compras/unidade
 import { ModalAddUnidadComponent } from "./modal-add-unidad/modal-add-unidad.component";
 import { ModalUpdtUnidadComponent } from './modal-updt-unidad/modal-updt-unidad.component';
 
+import { ResponseUnidadMedida, UnidadMedida } from 'src/app/core/models/compras/unidad-medida';
 
 
 @Component({
@@ -33,13 +33,14 @@ export class CatUnidadesMedidasComponent implements OnInit{
   public mostrar: boolean = false;
   public modalAbierto: boolean = false;
 
-  public data: any;
+  public data: UnidadMedida[] = [];
+
   
   public modalRef?: BsModalRef;
-  public unidad: any;
+  public unidad!: UnidadMedida;
   dtOptions: Config = {};
 
-  datosFiltrados:any[] = [];
+  datosFiltrados: UnidadMedida[] = [];
   private ordenador!: FuncionesTablas<any>;
   busqueda:string = '';
 
@@ -107,7 +108,7 @@ export class CatUnidadesMedidasComponent implements OnInit{
   // Recupera todos los regsitros de las unidades en la bse de datos 
   private getAll() {
     this.catUnidadesMedidasService.getAll().subscribe(
-      (response) => {
+      (response: ResponseUnidadMedida) => {
         if (response) {
           this.data = response.data;
 
@@ -140,7 +141,7 @@ export class CatUnidadesMedidasComponent implements OnInit{
     ]);
   }
 //Recupera los datos del elemento seleccionado
-  public seleccionar(dato: any, evento: any) {
+  public seleccionar(dato: UnidadMedida, evento: any) {
     this.mostrar = true;
     this.unidad = dato;
     if (evento.currentTarget.classList.contains("table-primary")) {

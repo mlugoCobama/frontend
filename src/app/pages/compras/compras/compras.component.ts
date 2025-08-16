@@ -32,20 +32,20 @@ export class ComprasComponent implements OnInit {
   public mostrarBoton = false;
   public habilitarDescarga = false;
 
-  public centrosCostos : any = catCentrosCostos; 
-  
+  public centrosCostos: any = catCentrosCostos;
+
   /**
    * Objeto que envió al componente detallesSolicitudCompra
    */
-  public solicitudCompra: any; 
+  public solicitudCompra: any;
   public status: any;
   public data: any;
   public enEsts = EstadoSolicitud;
 
   // varibles funciones tablas
-    datosFiltrados:any[] = [];
-    private ordenador!: FuncionesTablas<any>;
-    busqueda:string = '';
+  datosFiltrados: any[] = [];
+  private ordenador!: FuncionesTablas<any>;
+  busqueda: string = "";
 
   constructor(
     public ordenesComprasService: OrdenesCompraService,
@@ -64,16 +64,14 @@ export class ComprasComponent implements OnInit {
     this.getAll();
   }
 
-  ngOnDestroy():void{
+  ngOnDestroy(): void {}
 
-  }
-
-    public getUsuarioActivo() {
+  public getUsuarioActivo() {
     const usuarioActivo = this.localStorage.getItem("currentUser");
-      return {
-        intercompania :usuarioActivo['role']['intercompania'],
-        idUser :usuarioActivo['role']['id']
-      };
+    return {
+      intercompania: usuarioActivo["role"]["intercompania"],
+      idUser: usuarioActivo["role"]["id"],
+    };
   }
 
   /**
@@ -94,8 +92,8 @@ export class ComprasComponent implements OnInit {
       this.getAll();
     });
     this.modalRef.content.modalCerrado.subscribe(() => {
-        this.modalAbierto = false;
-      });
+      this.modalAbierto = false;
+    });
   }
   // Funcion para llenar la vista con el detalle component
   public openDetallesSolicitud(dato: any, evento: any) {
@@ -174,13 +172,28 @@ export class ComprasComponent implements OnInit {
           (response) => {
             if (response.status === "success") {
               this.regresar();
-              this.alertasService.mostrarAlerta("Cancelada!", "La solicitud ha sido cancelada.", "success","success");
+              this.alertasService.mostrarAlerta(
+                "Cancelada!",
+                "La solicitud ha sido cancelada.",
+                "success",
+                "success"
+              );
             } else {
-              this.alertasService.mostrarAlerta("Error!", "Ocurrió un error inesperado", "error","error");
+              this.alertasService.mostrarAlerta(
+                "Error!",
+                "Ocurrió un error inesperado",
+                "error",
+                "error"
+              );
             }
           },
           (error) => {
-            this.alertasService.mostrarAlerta("Error!", error, "error","error");
+            this.alertasService.mostrarAlerta(
+              "Error!",
+              error,
+              "error",
+              "error"
+            );
           }
         );
       }
@@ -197,44 +210,55 @@ export class ComprasComponent implements OnInit {
   btnDescargarOC() {
     this.ordenesComprasService
       .pdfOrdenCompra(this.solicitudCompra.id)
-      .subscribe((response) => {
-        
-        if (response) {
-          const blob = new Blob([response], { type: "application/pdf" });
-          const url = window.URL.createObjectURL(blob);
-          const link = document.createElement("a");
-          link.href = url;
-          link.download = "orden_compra.pdf";
-          link.click();
-          window.URL.revokeObjectURL(url);
-          // this.alertasService.mostrarAlerta("Descargando", "Revisa el apartado de descargas en tu explorar de archivos", "success","success");
-        } else {
-          this.alertasService.mostrarAlerta("Error!", "La orden de compra no existe", "error","danger");
+      .subscribe(
+        (response) => {
+          if (response) {
+            const blob = new Blob([response], { type: "application/pdf" });
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "orden_compra.pdf";
+            link.click();
+            window.URL.revokeObjectURL(url);
+            // this.alertasService.mostrarAlerta("Descargando", "Revisa el apartado de descargas en tu explorar de archivos", "success","success");
+          } else {
+            this.alertasService.mostrarAlerta(
+              "Error!",
+              "La orden de compra no existe",
+              "error",
+              "danger"
+            );
+          }
+        },
+        (error) => {
+          this.alertasService.mostrarAlerta("Error!", error, "error", "danger");
         }
-      },(error) => {
-        this.alertasService.mostrarAlerta("Error!", error , "error","danger");
-      });
+      );
   }
 
   updateStatus(status: any) {
     this.status = status;
   }
 
-
-
   //Funciones de la tabla
-  ordenarPor(columna: keyof any){
+  ordenarPor(columna: keyof any) {
     this.datosFiltrados = this.ordenador.ordenar(columna);
   }
 
-  getIconoOrden(columna:keyof any):string{
-    return this.ordenador.getIcono(columna)
+  getIconoOrden(columna: keyof any): string {
+    return this.ordenador.getIcono(columna);
   }
 
-  filtrarTabla(){
+  filtrarTabla() {
     this.datosFiltrados = this.ordenador.filtrar(this.busqueda, [
-      'folio', 'usuario_destino', 'motivo',
-      'fecha', 'usuario_solicita', 'empresa', 'estado', 'centro_costo'
+      "folio",
+      "usuario_destino",
+      "motivo",
+      "fecha",
+      "usuario_solicita",
+      "empresa",
+      "estado",
+      "centro_costo",
     ]);
   }
 }

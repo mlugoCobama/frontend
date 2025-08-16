@@ -34,7 +34,7 @@ export class ModalCostosUnidadComponent implements OnInit{
 
   public cerrarModal(): void {
     this.bsModalRef.hide();
-    // setTimeout(() => {this.modalCerrado.emit();}, 150)
+    
     }
 
   private getCatVehiculos(id) {
@@ -45,7 +45,6 @@ export class ModalCostosUnidadComponent implements OnInit{
       (response) => {
             if (response) {
               this.gastos = response.data;
-              console.log(this.gastos);
               this.isLoad = false;
               this.showTable = true;
               

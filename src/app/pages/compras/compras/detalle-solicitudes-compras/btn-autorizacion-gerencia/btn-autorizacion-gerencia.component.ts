@@ -236,7 +236,7 @@ export class BtnAutorizacionGerenciaComponent {
          this.alertasService.mostrarAlerta("Listo", error, "success", "success");
        });
     
-    console.log(datos)
+    // console.log(datos)
     
   }
 

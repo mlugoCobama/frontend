@@ -96,7 +96,7 @@ export class FormSolicitudComponent implements OnInit{
           this.usuarioSolicita = response.data[0];
           this.getUsuarios(this.usuarioSolicita.intercompania);
           this.formSolicitudCompra.patchValue({empresa :  this.usuarioSolicita.intercompania});
-          console.log(this.usuarioSolicita);
+          // console.log(this.usuarioSolicita);
 
         } else {
           this.alertasService.mostrarAlerta(

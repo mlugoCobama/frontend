@@ -39,10 +39,10 @@
                     <td>{{gasto.cantidad}}</td>
                     <td>{{gasto.abreviatura}}</td>
                     <td>{{gasto.descripcion}}</td>
-                    <td class="text-end" >{{gasto.importe_unitario | currency}}</td>
-                    <td class="text-end" [ngClass] = "gasto.descripcion === 'TOTAL GENERAL' ? fw-bold : ''">{{gasto.total | currency}}</td>
-                    <td class="text-end" [ngClass] = "gasto.descripcion === 'TOTAL GENERAL' ? fw-bold : ''">{{gasto.iva | currency}}</td>
-                    <td class="text-end" [ngClass] = "gasto.descripcion === 'TOTAL GENERAL' ? fw-bold : ''">{{gasto.total_detalle | currency}}</td>
+                    <td class="text-end" >{{+gasto?.importe_unitario | currency}}</td>
+                    <td class="text-end" [ngClass] = "gasto.descripcion === 'TOTAL GENERAL' ? fw-bold : ''">{{+gasto?.total | currency}}</td>
+                    <td class="text-end" [ngClass] = "gasto.descripcion === 'TOTAL GENERAL' ? fw-bold : ''">{{+gasto?.iva | currency}}</td>
+                    <td class="text-end" [ngClass] = "gasto.descripcion === 'TOTAL GENERAL' ? fw-bold : ''">{{+gasto?.total_detalle | currency}}</td>
                   </tr>
                 </tbody>
               </table> 
