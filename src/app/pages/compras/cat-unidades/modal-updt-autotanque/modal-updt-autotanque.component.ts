@@ -16,8 +16,8 @@ import { UnidadesService } from 'src/app/core/services/compras/unidades.service'
 })
 export class ModalUpdtAutotanqueComponent implements AfterViewInit {
 
-   @ViewChild('formDatosTanque') formDatosTanque!:  FormDatosTanqueComponent;
-   @ViewChild('formDatosVehiculo') formDatosVehiculo!:  FormDatosVehiculoComponent;
+   @ViewChild('formUdtDatosTanque', { static: false }) formDatosTanque!:  FormDatosTanqueComponent;
+   @ViewChild('formUdtDatosVehiculo', { static: false }) formDatosVehiculo!:  FormDatosVehiculoComponent;
 
   constructor(
     public bsModalRef: BsModalRef,

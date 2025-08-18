@@ -157,6 +157,7 @@ export class CatUnidadesComponent implements OnInit{
   }
 
   private getCatVehiculos(intercompania) {
+    this.mostrar = false;
     this.intercompania =  intercompania;
     this.isLoad = true;
     this.showTable =  false;
