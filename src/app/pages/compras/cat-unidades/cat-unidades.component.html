@@ -86,6 +86,7 @@
                 <thead class="table-light" [ngClass] = "modalAbierto === false ? 'sticky-top' : '' ">
                   <tr class="text-center">
                     <th (click)="ordenarPor('entidad')">Gasera<i [ngClass]="getIconoOrden('entidad')"></i></th>
+                    <th (click)="ordenarPor('eco')">Nro. Eco.<i [ngClass]="getIconoOrden('eco')"></i></th>
                     <th (click)="ordenarPor('marca_vehiculo')">Marca Vehiculo<i [ngClass]="getIconoOrden('marca_vehiculo')"></i></th>
                     <th (click)="ordenarPor('submarca')">Sub Marca <i [ngClass]="getIconoOrden('submarca')"></i></th>
                     <th (click)="ordenarPor('modelo')">Modelo <i [ngClass]="getIconoOrden('modelo')"></i></th>
@@ -101,6 +102,7 @@
                 <tbody>
                   <tr *ngFor="let item of datosFiltrados" (click)="seleccionar(item, $event)">
                     <td class="text-center"><span  style="font-size:0.7rem;" [ngClass]="item.clase">{{ item.entidad }}</span></td>
+                    <td>{{item.eco}}</td>
                     <td>{{item.marca_vehiculo}}</td>
                     <td>{{item.submarca}}</td>
                     <td>{{item.modelo}}</td>

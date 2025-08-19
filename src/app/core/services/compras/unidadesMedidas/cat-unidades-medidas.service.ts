@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { UnidadMedida, ResponseUnidadMedida } from 'src/app/core/models/compras/unidad-medida';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +15,8 @@ export class CatUnidadesMedidasService {
    * Recupera los registros de cat_unidades_medida
    * @returns coleccion de unidades de medidas
    */
-  public getAll(): Observable<any> {
-    return this.http.get(environment.apiUrl + 'compras/CatalogoUnidadesMedida');
+  public getAll(): Observable<ResponseUnidadMedida> {
+    return this.http.get<ResponseUnidadMedida>(environment.apiUrl + 'compras/CatalogoUnidadesMedida');
   } 
 
   /**

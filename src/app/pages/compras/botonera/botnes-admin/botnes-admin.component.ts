@@ -10,9 +10,9 @@ export class BotnesAdminComponent implements OnInit{
 
   public enEsts = EstadoSolicitud;
   
-  @Input() status:any = false;
-  @Input() mostrarBoton;
-  @Input() solicitudSelecionada:any;
+  @Input() status :  any = false;
+  @Input() mostrarBoton :  any;
+  @Input() solicitudSelecionada :  any;
 
   @Output() btnGenerarOC = new EventEmitter<void>();
   @Output() mostrarCotizacion = new EventEmitter<void>();
@@ -23,9 +23,7 @@ export class BotnesAdminComponent implements OnInit{
   ){}
 
   public ngOnInit(): void {
-      // this.comprasService.mostrarBoton$.subscribe((mostrar) => {
-      //   this.mostrarBoton = mostrar;
-      // });
+    
   }
       
   clickGenerarOrden() {

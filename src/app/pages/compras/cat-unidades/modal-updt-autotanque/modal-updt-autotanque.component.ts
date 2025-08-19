@@ -16,8 +16,8 @@ import { UnidadesService } from 'src/app/core/services/compras/unidades.service'
 })
 export class ModalUpdtAutotanqueComponent implements AfterViewInit {
 
-   @ViewChild('formDatosTanque') formDatosTanque!:  FormDatosTanqueComponent;
-   @ViewChild('formDatosVehiculo') formDatosVehiculo!:  FormDatosVehiculoComponent;
+   @ViewChild('formUdtDatosTanque', { static: false }) formDatosTanque!:  FormDatosTanqueComponent;
+   @ViewChild('formUdtDatosVehiculo', { static: false }) formDatosVehiculo!:  FormDatosVehiculoComponent;
 
   constructor(
     public bsModalRef: BsModalRef,
@@ -38,7 +38,6 @@ export class ModalUpdtAutotanqueComponent implements AfterViewInit {
 
     public cerrarModal(): void {
     this.bsModalRef.hide();
-    // setTimeout(() => {this.modalCerrado.emit();}, 150)
   }
 
   public guardarCambios(){
@@ -55,10 +54,7 @@ export class ModalUpdtAutotanqueComponent implements AfterViewInit {
               (response) => {
                 if (response.status === "success") {
                   
-                  // this.modalCerrado.emit();
-                  // console.log(response.message);
                   this.alertasService.mostrarAlerta("Actualizado", "Unidad actualizada correctamente", "success", "success");
-                  // this.event.emit(false);
                   this.event.emit(true);
                   this.cerrarModal();
                   this.formDatosTanque.resetearFormulario();
@@ -72,7 +68,6 @@ export class ModalUpdtAutotanqueComponent implements AfterViewInit {
               },
               (error) => {
                 this.alertasService.mostrarAlerta("Error", `Error fetching data: ${error}`, "error", "danger");
-                // console.error();
                 this.deshabilitado = false;
               }
             );

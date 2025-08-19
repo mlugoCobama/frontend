@@ -330,7 +330,7 @@ export class FormFilesFacturasComponent implements OnInit {
     const comprobante = xmlDoc.getElementsByTagName("cfdi:Comprobante")[0];
     if (comprobante) {
       const tipo = comprobante.getAttribute("TipoDeComprobante");
-      console.log("Tipo de comprobante:", tipo);
+      // console.log("Tipo de comprobante:", tipo);
     } else {
       this.alertasService.mostrarAlerta('No valido', 'El archivo que intentas subir no es un CFDI'+
         "\n No se encontró el nodo 'cfdi:Comprobante'.",'error', 'danger');

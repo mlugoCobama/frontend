@@ -138,6 +138,6 @@ public getEmpresas() {
 }
 
 public autorizarCotizacion(prov){
-  console.log(prov.id, prov.autorizado, prov.seleccionado)
+  // console.log(prov.id, prov.autorizado, prov.seleccionado)
 }
 }

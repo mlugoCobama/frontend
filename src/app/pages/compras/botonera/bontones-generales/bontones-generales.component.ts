@@ -36,7 +36,6 @@ export class BontonesGeneralesComponent {
 }
 
 public tienePermiso(permiso: string): boolean {
-  // Aquí puedes reutilizar la lógica de tu pipe o usar un servicio
   const permisosRaw = localStorage.getItem('permisos');
   if (!permisosRaw) return false;
   

@@ -159,7 +159,7 @@ export class ModalAddProveedorComponent implements OnInit {
     }
   }
 
-  public onChange(selectElement: any) {
+    public onChange(selectElement: any) {
     // Función que muestra y oculta el campo días crédito
     let selectedText = selectElement.options[selectElement.selectedIndex].text;
     if (selectedText === "Credito") {
@@ -167,6 +167,7 @@ export class ModalAddProveedorComponent implements OnInit {
     } else {
       this.isCredit = false;
     }
+    console.log(this.isCredit)
   }
 
   validateNumberInput(event: any) {

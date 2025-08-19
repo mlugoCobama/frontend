@@ -49,8 +49,8 @@ export class PanelCotizacionesComponent implements OnInit {
     this.buildForm();
     this.getProveedores();
     
-    console.log(this.solicitudCompra)
-    console.log('btn disabled', this.isDisabled)
+    // console.log(this.solicitudCompra)
+    // console.log('btn disabled', this.isDisabled)
   }
 
   private buildForm() {
@@ -62,7 +62,7 @@ export class PanelCotizacionesComponent implements OnInit {
       consideraciones: new FormControl(null),
     });
     resolve(true);
-    console.log('form construido panel cotizaciones')
+    // console.log('form construido panel cotizaciones')
     });
     
   }
@@ -77,7 +77,7 @@ export class PanelCotizacionesComponent implements OnInit {
       (response) => {
         if (response) {
           this.proveedores = response.data;
-          console.log(this.proveedores)
+          // console.log(this.proveedores)
           this.isLoad = false;
         } else {
           this.alertasService.mostrarAlerta("Error!", response.message, "error", "danger" );
@@ -119,7 +119,7 @@ export class PanelCotizacionesComponent implements OnInit {
             this.alertasService.mostrarAlerta("Listo", "Tu solicitud de cotización se ha enviado con éxito", "success",  "success");
 
             // this.comprasService.cambiarEstadoCotizacion(true);
-            this.actualizarStatus.emit()
+            this.formProveedoresCotizacion.reset();
             this.isLoad = false;
             this.isDisabled = false;
           } else {
@@ -139,7 +139,8 @@ export class PanelCotizacionesComponent implements OnInit {
     }
 
     this.submitted = false;
-    this.formProveedoresCotizacion.reset();
+    // this.formProveedoresCotizacion.reset();
+    this.actualizarStatus.emit();
   }  
 
   validarProveedores(data: any): boolean {

@@ -43,7 +43,7 @@
         <option value="" selected disabled>Selecciona uno</option>
         <option *ngIf = "!isLoad" value="" [disabled] = "!isLoad"> Cargando opciones espera...</option>
         <option [disabled] = "disabled" *ngFor="let item of autotanques" [value]="item.id ">
-          ECO: {{ item.id }} {{ item.marca_vehiculo }} {{item.submarca}}({{ item.modelo}}) PLACAS: {{ item.placas }}
+          ECO: {{ item.eco }} {{ item.marca_vehiculo }} {{item.submarca}}({{ item.modelo}}) PLACAS: {{ item.placas }}
         </option>
       </select>
       <div *ngIf="solicitudCompraFormControl.usuario_destino.touched || submitted">
