@@ -73,6 +73,23 @@
           </div>
         </div>
       </div>
+      <div *ngIf = "+destino === 602" class="col-sm my-1">
+        <label for="vehiculo" class="form-label"> Autotanque *: </label>
+        <select class="form-select form-select-sm" aria-label="Default select example" formControlName="vehiculo" id="vehiculo" 
+      name="vehiculo" aria-label="vehiculo">
+        <option value="" selected disabled>Selecciona uno</option>
+        <!-- <option *ngIf = "!isLoad" value="" [disabled] = "!isLoad"> Cargando opciones espera...</option> -->
+        <option [disabled] = "disabled" *ngFor="let item of autotanques" [value]="item.id ">
+          ECO: {{ item.eco }} {{ item.marca_vehiculo }} {{item.submarca}}({{ item.modelo}}) PLACAS: {{ item.placas }}
+        </option>
+      </select>
+      <div *ngIf="detalleSolicitudFormControl.vehiculo.touched || submittedDetail">
+        <div
+          class="text-danger form-text" *ngIf="detalleSolicitudFormControl.vehiculo.errors?.['required']">
+          Autotanques es requerido.
+        </div>
+      </div>
+      </div>
 
       <!-- <div *ngIf="isAgencia" class="col-sm-3 my-1">
         <label  class="form-label">Centro de costos: </label>
@@ -105,6 +122,7 @@
         <th>Unidad de Medida</th>
         <th>Descripción</th>
         <th>Observaciones</th>
+        <th *ngIf = "+destino === 602">Autotanque</th>
         <th>Imagen</th>
         <!-- <th *ngIf="isAgencia">C. Costos</th> -->
       </tr>
@@ -116,8 +134,10 @@
         <td>{{ row.cat_unidades_medida_id1 }}</td>
         <td>{{ row.descripcion }}</td>
         <td>{{ row.observaciones }}</td>
+        <td *ngIf = "+destino === 602"> ECO: {{ row.label }}</td>
         <td class="text-center"><img *ngIf="row.img_referencia1;else elseBlock" src="{{ row.img_referencia1 }}" alt="Sin imagen de referencia" width="100"/></td>
         <!-- <td *ngIf="isAgencia">{{row.cat_areas}}</td> -->
+        
         <td>
           <button type="button" class="btn btn-danger btn-sm" (click)="removeDetalle(i)">
             Quitar

@@ -1,0 +1,113 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">
+    {{ tipo | titlecase }} Técnico.
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="cerrarModal()"></button>
+</div>
+  <div class="modal-body">
+    <form class="row g-2" [formGroup]="formDatosTecnico">
+      <div class="col-md-12">
+        <label for="empresa" class="form-label">Empresa: *</label>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          formControlName="empresa"
+          id="empresa"
+          name="empresa"
+          aria-label="empresa"
+        />
+        <div *ngIf="datosTecnicoFormControl.empresa.touched || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="datosTecnicoFormControl.empresa.errors?.['required']"
+          >
+            Empresa es requerido.
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <label for="nombre" class="form-label form-label-sm"
+          >Nombre: *</label
+        >
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          formControlName="nombre"
+          id="nombre"
+          name="nombre"
+          aria-label="nombre"
+        />
+        <div *ngIf="datosTecnicoFormControl.nombre.touched || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="datosTecnicoFormControl.nombre.errors?.['required']"
+          >
+            Nombre es requerido.
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <label for="apellidos" class="form-label form-label-sm"
+          >Apellidos: *</label
+        >
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          formControlName="apellidos"
+          id="apellidos"
+          name="apellidos"
+          aria-label="apellidos"
+        />
+        <div *ngIf="datosTecnicoFormControl.apellidos.touched || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="datosTecnicoFormControl.apellidos.errors?.['required']"
+          >
+            Apellidos es requerido.
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <label for="tipo" class="form-label form-label-sm"
+          >Tipo: *</label
+        >
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          formControlName="tipo"
+          id="tipo"
+          name="tipo"
+          aria-label="tipo"
+        />
+        <div *ngIf="datosTecnicoFormControl.tipo.touched || submitted">
+          <div
+            class="text-danger form-text"
+            *ngIf="datosTecnicoFormControl.tipo.errors?.['required']"
+          >
+            Tipo es requerido.
+          </div>
+        </div>
+      </div>
+    </form>
+
+
+  </div>
+<div class="modal-footer">
+  <button
+  type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="cerrarModal()">
+    Cerrar
+  </button>
+
+  <button 
+  *ngIf = "tipo === 'agregar'; else actualizar"
+  type="button" class="btn btn-primary btn-sm">
+    Guardar
+  </button>
+
+  <ng-template #actualizar>
+    <button type="button" class="btn btn-primary btn-sm">
+        Actualizar
+    </button>
+  </ng-template>
+</div>
+

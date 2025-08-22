@@ -23,6 +23,8 @@ export class ModalComprasMacroComponent implements AfterViewInit {
   public submittedDetail: boolean = false;
   public isLoad : boolean = false;
   public sending: boolean = false;
+  public autotanques:any = [];
+  public destino: any = null;
 
   constructor(
     public modalRef: BsModalRef,
@@ -134,4 +136,12 @@ export class ModalComprasMacroComponent implements AfterViewInit {
     );
   }
 
+  getData(data:any) {
+    this.autotanques = data.slice(1);
+  }
+
+  getDato(dato:any) {
+    this.destino = dato;
+    console.log(dato);
+  }
 }

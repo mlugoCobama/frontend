@@ -80,12 +80,34 @@ export const MENU: MenuItem[] = [
           parentId: 7,
           permission: 'view unidades de medida',
         },
+      ]
+    },
+    {
+      id: 7,
+      label: 'Macro Taller',
+      icon: 'bx-wrench',
+      permission: 'view compras macro taller',
+      subItems: [
         {
           id: 11,
           label: 'Parque Vehicular',
           link: '/compras/cat-unidades',
           parentId: 7,
-          permission: 'view parque vehicular',
+          permission: 'view compras macro taller',
+        },
+        {
+          id: 8,
+          label: 'Técnicos',
+          link: '/macro/tecnicos',
+          parentId: 7,
+          permission: 'view compras macro taller',
+        },
+        {
+          id: 12,
+          label: 'Almacén',
+          link: '/macro/almacen',
+          parentId: 7,
+          permission: 'view compras macro taller',
         },
       ]
     },

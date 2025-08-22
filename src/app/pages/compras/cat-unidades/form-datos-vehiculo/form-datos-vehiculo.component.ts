@@ -13,10 +13,10 @@ import {
 })
 export class FormDatosVehiculoComponent {
 
-  @Input() datos: any;
+  @Input() datos: any = [];
   public formDatosVehiculo: FormGroup;
   public submitted:boolean = false;
-  public intercompania:any;
+  public intercompania:any = 0;
   
   constructor(
     public formBuilder: FormBuilder,
@@ -24,14 +24,18 @@ export class FormDatosVehiculoComponent {
 
   ngOnInit(): void {
     this.buildForm();
+    console.log(this.datos);
+    console.log(this.intercompania);
   }
 
     private buildForm() {
+      console.log('form datos tanque construido')
     return new Promise((resolve, reject) => {
       this.formDatosVehiculo = this.formBuilder.group({
         id: new FormControl( null),
         id_sucursal: new FormControl( null),
         marca: new FormControl(null, Validators.required),
+        nro_economico: new FormControl(null, Validators.required),
         submarca: new FormControl( null, Validators.required),
         modelo: new FormControl(null, [Validators.required,
                                       Validators.pattern(/^\d{4}$/),
@@ -42,6 +46,8 @@ export class FormDatosVehiculoComponent {
         no_serie: new FormControl(null, [Validators.required, Validators.minLength(17)]),
         placas: new FormControl(null, [Validators.required]),
         tipo_vehiculo: new FormControl("", [Validators.required]),
+        tipo_combustible: new FormControl("", [Validators.required]),
+        estatus: new FormControl("", [Validators.required]),
       });
       resolve(true);
     });
@@ -52,8 +58,10 @@ export class FormDatosVehiculoComponent {
   }
 
   public llenarForm(){
+    console.log('llenado de datos' + this.datos);
     this.formDatosVehiculo.patchValue({
       id: this.datos.id,
+      nro_economico: this.datos.eco,
       id_sucursal: this.datos.id,
       marca: this.datos.marca_vehiculo,
       submarca: this.datos.submarca,
@@ -61,6 +69,8 @@ export class FormDatosVehiculoComponent {
       no_serie: this.datos.no_serie,
       placas: this.datos.placas,
       tipo_vehiculo: this.datos.tipo_vehiculo,
+      tipo_combustible: this.datos.tipo_combustible,
+      estatus: this.datos.estatus,
     });
   }
 
@@ -72,6 +82,7 @@ export class FormDatosVehiculoComponent {
   obtenerValores() {
     this.submitted = true;
     const value = this.formDatosVehiculo.value;
+    console.log(value);
     return value;
   }
 
@@ -80,6 +91,7 @@ export class FormDatosVehiculoComponent {
    * @returns boolean:  true ->valido, false ->no valido
    */
   esValido() {
+    console.log(this.formDatosVehiculo.valid)
     return this.formDatosVehiculo.valid;
   }
 
