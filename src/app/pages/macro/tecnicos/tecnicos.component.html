@@ -1,0 +1,73 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-body border-bottom">
+          <div class="d-flex align-items-center">
+            <h5 class="mb-0 card-title flex-grow-1">
+              Técnicos
+            </h5>
+            <div class="flex-shrink-0 d-flex gap-1">
+              <a
+                href="javascript:void(0);"
+                class="btn btn-danger btn-sm"
+                *ngIf = "mostrar"
+                ><i class="fas fa-trash"></i> Eliminar</a
+              >
+              <a
+                href="javascript:void(0);"
+                class="btn btn-warning btn-sm"
+                (click) = "openModalUpdt()"
+                *ngIf = "mostrar"
+                ><i class="fas fa-edit"></i> Actualizar</a
+              >
+              <a
+                href="javascript:void(0);"
+                class="btn btn-primary btn-sm"
+                (click) = "openModalNuevo()" 
+                *ngIf = "!mostrar"
+                ><i class="fas fa-plus"></i> Nuevo</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body border-bottom">
+          <!-- <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div> -->
+
+          <div class="row justify-content-end">
+            <div class="col-3">
+              <input type="text" class="form-control form-control-sm"/>
+            </div>
+          </div>
+          <div >
+            <div class="tab-page-content mt-3 table-responsive">
+              <table class="table table-hover table-sm table-bordered">
+                <thead class="table-light">
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Tipo</th>
+                    <th>Empresa</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor = "let item of mecanicos" (dblclick)="seleccionar(item, $event)">
+                    <td>{{ item.nombre }} {{ item.apellidos }}</td>
+                    <td> {{ item.tipo }}</td>
+                    <td> {{ item.empresa }} </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!--div.card-body-->
+      </div>
+    </div>
+  </div>
+</div>
+<!-- container-fluid -->

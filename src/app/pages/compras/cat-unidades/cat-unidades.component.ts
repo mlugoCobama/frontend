@@ -60,7 +60,7 @@ export class CatUnidadesComponent implements OnInit{
 
   public modalRef?: BsModalRef;
 
-  public intercompania:any;
+  public intercompania:any = null;
 
   ordenarPor(columna: keyof any){
     this.datosFiltrados = this.ordenador.ordenar(columna);
@@ -100,7 +100,7 @@ export class CatUnidadesComponent implements OnInit{
         this.modalRef.content.event.subscribe(() => {
           this.isLoad = true;
   
-          this.getCatVehiculos(this.usuarioSolicita.intercompania);
+          this.getCatVehiculos(this.intercompania);
         });
   }
 
@@ -120,7 +120,7 @@ export class CatUnidadesComponent implements OnInit{
         this.modalRef.content.event.subscribe(() => {
           this.isLoad = true;
   
-          this.getCatVehiculos(this.usuarioSolicita.intercompania);
+          this.getCatVehiculos(this.intercompania);
         });
   }
 
@@ -142,8 +142,7 @@ export class CatUnidadesComponent implements OnInit{
         this.modalRef.content.closeBtnName = "Close";
         this.modalRef.content.event.subscribe(() => {
           this.isLoad = true;
-
-          this.getCatVehiculos(this.usuarioSolicita.intercompania);
+          this.getCatVehiculos(this.intercompania);
         });
   }
 
@@ -161,14 +160,15 @@ export class CatUnidadesComponent implements OnInit{
     this.intercompania =  intercompania;
     this.isLoad = true;
     this.showTable =  false;
+    console.log(intercompania);
     this.unidades.getVehiculos(intercompania).subscribe(
       (response) => {
         if (response) {
           this.data = response.data;
-
+          console.log(response.data)
           this.ordenador = new FuncionesTablas(this.data);
           this.datosFiltrados = [...this.data];
-
+          console.log(this.datosFiltrados)
           this.contarDatos();
           this.isLoad = false;
           this.showTable = true;

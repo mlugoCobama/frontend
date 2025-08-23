@@ -21,7 +21,12 @@ export class FormDetalleSolicitudComponent implements OnInit{
   public unidades: any;
   public unidad: any;
   public tableData: Array<any> = [];
+
+  
   public formData = new FormData();
+
+  @Input() autotanques = [];
+  @Input() destino = null;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -42,6 +47,7 @@ export class FormDetalleSolicitudComponent implements OnInit{
         observaciones: new FormControl(null, []),
         img_referencia: new FormControl(null),
         cat_areas: new FormControl(""),
+        vehiculo: new FormControl(""),
       });
       resolve(true);
     });
@@ -77,17 +83,25 @@ export class FormDetalleSolicitudComponent implements OnInit{
    *  Agrega los detalles a el array detalle para después mostrarlo en la tabla
    */
   public addDetalle() {
+    console.log(this.destino);
     if (this.formDetalleSolicitud.invalid) {
       this.submittedDetail = true;
       return;
     }
 
     const valores = this.formDetalleSolicitud.value;
+    let dato = null;
+
+    if(+this.destino === 602){
+      dato = this.autotanques.find(objeto => +objeto.id === +valores.vehiculo);
+    }
+    
 
     const newDetalle = {
       ...this.formDetalleSolicitud.value,
       cat_unidades_medida_id1: this.unidad,
       img_referencia1: valores.img_referencia,
+      label: dato?.eco ?? null,
       confirmado: 1,
       // cat_areas: (this.centrosCostos[this.formSolicitudCompra.value.c_c-1].Clave)
     };
@@ -110,6 +124,7 @@ export class FormDetalleSolicitudComponent implements OnInit{
 
     this.submittedDetail = false;
 
+    console.log(this.tableData)
   }
   
   /**

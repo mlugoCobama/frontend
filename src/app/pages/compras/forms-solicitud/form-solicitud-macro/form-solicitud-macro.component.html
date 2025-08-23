@@ -16,6 +16,7 @@
       <option *ngIf="isLoading" value="" [disabled]="isLoading">
         Cargando opciones espera...
       </option>
+      
       <option *ngFor="let item of empresas" [value]="item.intercompania">
         {{ item.name.toUpperCase() }}
       </option>
@@ -39,7 +40,7 @@
   <div class="col-md" *ngIf ="!isAgencia">
       <label for="usuario_destino" class="form-label">Autotanques: *</label>
       <select class="form-select form-select-sm" aria-label="Default select example" formControlName="usuario_destino" id="usuario_destino" 
-      name="usuario_destino" aria-label="usuario_destino">
+      name="usuario_destino" aria-label="usuario_destino" (change)="setDato($event.target.value)">
         <option value="" selected disabled>Selecciona uno</option>
         <option *ngIf = "!isLoad" value="" [disabled] = "!isLoad"> Cargando opciones espera...</option>
         <option [disabled] = "disabled" *ngFor="let item of autotanques" [value]="item.id ">
@@ -49,10 +50,9 @@
       <div *ngIf="solicitudCompraFormControl.usuario_destino.touched || submitted">
         <div
           class="text-danger form-text" *ngIf="solicitudCompraFormControl.usuario_destino.errors?.['required']">
-          Usuarios es requerido.
+          Autotanques es requerido.
         </div>
       </div>
-       
     </div>
 
 
@@ -92,8 +92,10 @@
     </div>
   </div>
   <div class="form-group">
-    <label >Cotización: </label>
+    <label >Cotización: <small> (Opcional) </small>  </label>
     <input
+      data-toggle="tooltip" 
+      title="Cotización en formato PDF."
       (change)="onFileChange($event, 'cotizacion')"
       accept="application/pdf"
       type="file"

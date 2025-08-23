@@ -9,11 +9,15 @@
     #formSolicitudMacro
     [submitted]="submitted"
     (closeModal)="cerrarModal()"
+    (setData)="getData($event)"
+    (setDestino)="getDato($event)"
     >
     </app-form-solicitud-macro>
 
     <app-form-detalle-solicitud
     #formDetalleSolicitud
+    [autotanques]="autotanques"
+    [destino]="destino"
     >
     </app-form-detalle-solicitud>
   </div>

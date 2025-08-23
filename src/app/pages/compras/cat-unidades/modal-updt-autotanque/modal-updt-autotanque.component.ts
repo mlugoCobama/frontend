@@ -30,13 +30,14 @@ export class ModalUpdtAutotanqueComponent implements AfterViewInit {
     this.formDatosVehiculo.llenarForm();
   }
 
-    public intercompania:any;
-    public datos: any;
-    public empresas: any;
+    public intercompania:any = 0;
+    public datos: any = [];
+    public empresas: any = [];
     public deshabilitado: boolean = false;
     public event: EventEmitter<any> = new EventEmitter();
 
     public cerrarModal(): void {
+      this.deshabilitado = false;
     this.bsModalRef.hide();
   }
 
@@ -44,10 +45,11 @@ export class ModalUpdtAutotanqueComponent implements AfterViewInit {
     this.deshabilitado = true;
     if(!this.formDatosTanque.esValido() || !this.formDatosVehiculo.esValido()){
       this.alertasService.mostrarAlerta("Llena le formualrio correctamente", "Falta información importante, ingresala para continuar", "warning", "warning");
-      this.event.emit(false);
+      // this.event.emit(false);
       this.deshabilitado = false;
       return
     }
+
     const data = this.getDatos();
 
     this.unidadesService.update(+this.intercompania ,data).subscribe(

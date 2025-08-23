@@ -16,8 +16,10 @@
         <th>Unidad de Medida</th>
         <th>Descripción</th>
         <th>Observaciones</th>
+        <th *ngIf = "solicitudCompra.usuario_destino == 'ECO: - MOD: MULTIPLES UNIDADES - PLACAS: -'" >AT</th>
         <th>Ref. fotográfica</th>
         <th>Autorizado</th>
+          
         <th *ngFor="let prov of cotProv" class="text-center">
           <strong> {{ prov.proveedores_id[0].nombre }} </strong>
         </th>
@@ -35,6 +37,9 @@
         </td>
         <td>
           {{ row.observaciones }}
+        </td>
+        <td *ngIf = "row.DetalleAutotanque != null" >
+          {{ row.DetalleAutotanque.DatosVehiculo.eco }}
         </td>
         <td class="text-center">
           <a
@@ -73,7 +78,7 @@
     </tbody>
     <tfoot *ngIf="mostrarTotal">
       <tr >
-        <td [attr.colspan]="6" class="text-end">
+        <td [attr.colspan]="solicitudCompra.usuario_destino == 'ECO: - MOD: MULTIPLES UNIDADES - PLACAS: -' ? 7 : 6" class="text-end">
           <Strong>SUB-TOTAL (sin iva)</Strong>
         </td>
         <td

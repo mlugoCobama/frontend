@@ -26,11 +26,14 @@ export class FormSolicitudMacroComponent implements OnInit{
     direccion: "",
     intercompania: 0,
     empresa: "Cargando. . .",
-    isAgencia: false
+    isAgencia: false,
+    idVehiculo: null,
     };
 
   @Input() submitted: boolean = false;
   @Output() closeModal = new EventEmitter<void>();
+  @Output() setData = new EventEmitter<any>();
+  @Output() setDestino = new EventEmitter<any>();
 
   public isLoading: boolean = true;
 
@@ -169,7 +172,7 @@ export class FormSolicitudMacroComponent implements OnInit{
               this.disabled = true;
           }
           // this.autotanquesFormatted(this.autotanques)
-          
+          this.setData.emit(this.autotanques);
         } else {
           console.log(response.message);
         }
@@ -217,6 +220,10 @@ export class FormSolicitudMacroComponent implements OnInit{
   resetearFormulario() {
     this.formSolicitudCompra.reset();
     this.formData = new FormData();
+  }
+
+  setDato(dato){
+    this.setDestino.emit(dato);
   }
 
 public datosSelect: any;

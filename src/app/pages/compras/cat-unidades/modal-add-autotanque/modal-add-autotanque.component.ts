@@ -25,11 +25,11 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
     
   }
 
-   @ViewChild('formDatosTanque') formDatosTanque!:  FormDatosTanqueComponent;
-   @ViewChild('formDatosVehiculo') formDatosVehiculo!:  FormDatosVehiculoComponent;
+   @ViewChild('formDatosTanque', { static: false }) formDatosTanque!:  FormDatosTanqueComponent;
+   @ViewChild('formDatosVehiculo', { static: false }) formDatosVehiculo!:  FormDatosVehiculoComponent;
      
-    public empresas: any;
-    public intercompania: any;
+    public empresas: any = [];
+    public intercompania: any = 0;
     public deshabilitado: boolean = false;
 
     public event: EventEmitter<any> = new EventEmitter();
@@ -50,7 +50,7 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
                                         "Falta información importante, ingresala para continuar",
                                         "warning", 
                                         "warning");
-      this.event.emit(false);
+      // this.event.emit(false);
       this.deshabilitado = false;
       return
     }
