@@ -37,13 +37,8 @@ export class ComprasComponent implements OnInit {
   /**
    * Objeto que envió al componente detallesSolicitudCompra
    */
-<<<<<<< HEAD
   public solicitudCompra: any; 
   public status: any = false;
-=======
-  public solicitudCompra: any;
-  public status: any;
->>>>>>> eb55d49493bceda84cced0281a98ca693c92f833
   public data: any;
   public enEsts = EstadoSolicitud;
 
