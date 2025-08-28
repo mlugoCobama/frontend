@@ -8,14 +8,19 @@
     <form class="row g-2" [formGroup]="formDatosTecnico">
       <div class="col-md-12">
         <label for="empresa" class="form-label">Empresa: *</label>
-        <input
-          type="text"
-          class="form-control form-control-sm"
-          formControlName="empresa"
-          id="empresa"
-          name="empresa"
-          aria-label="empresa"
-        />
+        <select
+                class="form-select form-select-sm"
+                aria-label="Default select example"
+                id="empresa"
+                name="empresa"
+                aria-label="empresa"
+                formControlName="empresa"
+              >
+                <option value="" selected disabled>Selecciona uno</option>
+                <option *ngFor="let item of empresas" [value]="item.intercompania">
+                  {{ item.name.toUpperCase() }}
+                </option>
+          </select>
         <div *ngIf="datosTecnicoFormControl.empresa.touched || submitted">
           <div
             class="text-danger form-text"
@@ -100,12 +105,13 @@
 
   <button 
   *ngIf = "tipo === 'agregar'; else actualizar"
+  (click) = "save()"
   type="button" class="btn btn-primary btn-sm">
     Guardar
   </button>
 
   <ng-template #actualizar>
-    <button type="button" class="btn btn-primary btn-sm">
+    <button (click) = "save()" type="button" class="btn btn-primary btn-sm">
         Actualizar
     </button>
   </ng-template>

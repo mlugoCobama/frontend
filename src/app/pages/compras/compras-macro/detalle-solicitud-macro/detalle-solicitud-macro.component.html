@@ -1,0 +1,101 @@
+<div class="card-body">
+  <!-- Inicia vista final  -->
+      <app-info-solicitud
+      [solicitudCompra]="solicitudCompra"
+      [mostrarTotal]="mostrarTotal"  
+      [cotizacion]="cotizacion"     
+      ></app-info-solicitud>
+  
+      <app-select-sistema-mantenimiento
+      [solicitudCompra]="solicitudCompra"
+      *ngIf ="solicitudCompra.tipo === 2 && solicitudCompra.auto_gg === 1 && solicitudCompra.auto_admin === 1"
+      ></app-select-sistema-mantenimiento>
+
+      <app-table-detalles-solicitud
+      *ngIf ="solicitudCompra.estatus > enEsts.Solicitado"
+      [solicitudCompra]="solicitudCompra"
+      [ordenCompra]="ordenCompra"
+      (openModal)="openModal(content, $event)"
+      (showTotal) = "setMostrarTotal($event)"
+      (setDataCotizacion)="setDataCotizacion($event)"
+      (actualizarStatus)="updateStatus()"       
+      ></app-table-detalles-solicitud>
+
+      <app-tabla-detalles-solicitud
+      *ngIf="solicitudCompra.estatus < enEsts.Solicitado"
+      [modifica] = "modifica"
+      [solicitudCompra]="solicitudCompra"
+      (openModal)="openModal(content, $event)"
+      ></app-tabla-detalles-solicitud>
+
+       <!-- Se muestra si el estatus es orden de compra o posterior-->
+      <app-form-files-facturas
+      *ngIf = "solicitudCompra.estatus >= enEsts.OrdenCompra"
+      [solicitudCompra]="solicitudCompra"
+      (setDataOrdenCompra)="setDataOrdenCompra($event)"
+      (actualizarStatus)="updateStatus()" 
+      ></app-form-files-facturas>
+  
+  <!-- Fin vista final  -->
+  
+  <!-- Inicia paneles temporales -->
+      <app-panel-cotizaciones
+      *ngIf="mostrarCotizacionFlag && solicitudCompra.estatus === enEsts.Solicitado"
+      [solicitudCompra]="solicitudCompra"
+      (actualizarStatus)="updateStatus()"
+      (showTotal)="showTotal()"         
+      ></app-panel-cotizaciones>
+  
+      <app-btns-autorizacion
+      *ngIf= "solicitudCompra.estatus === enEsts.OrdenCompra "
+      [solicitudCompra]="solicitudCompra" 
+      (setDataOrdenCompra)="setDataOrdenCompra($event)"
+      (actualizarStatus)="updateStatus()"   
+      ></app-btns-autorizacion>
+  
+      <app-btn-autorizacion-gerencia
+      *ngIf="solicitudCompra.estatus === enEsts.EspAutPlanta"
+      (actualizarStatus)="updateStatus()"
+      [solicitudCompra]="solicitudCompra" 
+      ></app-btn-autorizacion-gerencia>
+      
+      <app-btn-autorizacion-gerencia
+      *ngIf="solicitudCompra.estatus === enEsts.EnCotizacion"
+      (actualizarStatus)="updateStatus()"
+      [solicitudCompra]="solicitudCompra" 
+      ></app-btn-autorizacion-gerencia>
+  <!-- Inicia paneles temporales -->
+  
+  </div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLabel">Img. referencia</h5>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+        id="close-modal"
+        (click)="modalRef?.hide()"
+      ></button>
+    </div>
+    <div class="modal-body">
+      <img
+        [src]="selectedImage"
+        class="img-fluid rounded"
+        style="max-width: 100%; height: auto"
+        alt="Imagen de referencia"
+      />
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-secondary btn-sm"
+        data-bs-dismiss="modal"
+        (click)="modalRef?.hide()"
+      >
+        Cerrar
+      </button>
+    </div>
+</ng-template>

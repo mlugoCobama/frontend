@@ -1,52 +1,50 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { FormTecnicoComponent } from '../forms/form-tecnico/form-tecnico.component';
-import { data } from 'jquery';
+import { FuncionesTablas } from '../../compras/compras/funciones-tablas';
+
+import { TecnicosService } from 'src/app/core/services/macrotaller/tecnicos.service';
+import { UsuariosService } from 'src/app/core/services/compras/usuarios.service';
+
+
 @Component({
   selector: 'app-tecnicos',
   templateUrl: './tecnicos.component.html',
   styleUrl: './tecnicos.component.css'
 })
-export class TecnicosComponent {
+export class TecnicosComponent implements OnInit{
   
+  public isLoad:  boolean =  true;
+  public showTable: boolean = false;
+
+
   public modalRef?: BsModalRef;
   public mostrar =  false;
   public dato = [];
 
+  public empresas = [];
+
 
   constructor(
     private modalService  : BsModalService,
+    private tecnicos : TecnicosService,
+    private usuarios  : UsuariosService
   ){}
-  public mecanicos = [
-        { nombre: "JORGE", apellidos: "PALOMINO", tipo: "MECANICO", empresa: "SATELITE", },
-        { nombre: "GREGORIO", apellidos: "CAMPA", tipo: "MECANICO", empresa: "SATELITE", },
-        { nombre: "GERARDO", apellidos: "LUNA", tipo: "MECANICO", empresa: "FLAMAZUL", },
-        { nombre: "REFUGIO", apellidos: "CASTELLANOS", tipo: "MECANICO", empresa: "SERVIGAS", },
-        { nombre: "RAFAEL", apellidos: "VITE", tipo: "MECANICO", empresa: "SERVIGAS", },
-        { nombre: "IVAN", apellidos: "PORRAS", tipo: "AYUDANTE", empresa: "SERVIGAS", },
-        { nombre: "ALBERTO", apellidos: "ESTUDILLO", tipo: "MECANICO", empresa: "SERVIGAS" },
-        { nombre: "ANGEL", apellidos: "FLORES", tipo: "MECANICO", empresa: "GAS PREMIO" },
-        { nombre: "NORBERTO", apellidos: "COLIN", tipo: "MECANICO", empresa: "GAS PREMIO" },
-        { nombre: "EDGAR", apellidos: "PENDIENTE", tipo: "MECANICO", empresa: "GAS URBANO" },
-        { nombre: "ISRAEL", apellidos: "PENDIENTE", tipo: "AYUDANTE", empresa: "GAS URBANO" },
-        { nombre: "PENDIENTE", apellidos: "PENDIENTE", tipo: "MECANICO", empresa: "GARZA SUR" },
-        { nombre: "PENDIENTE", apellidos: "PENDIENTE", tipo: "MECANICO", empresa: "GARZA SUR" },
-        { nombre: "PENDIENTE", apellidos: "PENDIENTE", tipo: "MECANICO", empresa: "GARZA SUR" },
-        { nombre: "PENDIENTE", apellidos: "PENDIENTE", tipo: "MECANICO", empresa: "GARZA SUR" },
-        { nombre: "FEDERICO", apellidos: "RODRIGUEZ", tipo: "MECANICO", empresa: "TANQUES GARZA GAS" },
-        { nombre: "FRANCISCO", apellidos: "NONINGO", tipo: "MECANICO", empresa: "TANQUES GARZA GAS" },
-        { nombre: "JUAN CARLOS", apellidos: "PICHARDO", tipo: "MECANICO", empresa: "TANQUES GARZA GAS" },
-        { nombre: "JOSE LUIS ", apellidos: "ISIDRO MARTINEZ", tipo: "MECANICO", empresa: "TANQUES GARZA GAS" },
-        { nombre: "VICENTE", apellidos: "DELGADO", tipo: "MECANICO", empresa: "TANQUES GARZA GAS" },
-        { nombre: "SEVERO", apellidos: "CERON", tipo: "MECANICO", empresa: "TANQUES GARZA GAS" },
-        { nombre: "ALBERTO", apellidos: "SILVA", tipo: "MECANICO", empresa: "TANQUES GARZA GAS" }
-    ];
+
+  ngOnInit(): void {
+    // this.getEmpresas();
+    this.getAll();
+  }
+
+
+  public mecanicos = [];
 
     public openModalNuevo() {
       // this.modalAbierto = true;
       const initialState: ModalOptions = {
         initialState: {
           tipo : 'agregar',
+          empresas : this.empresas,
           //Datos que envió al componente
         },
         class: "modal-md",
@@ -82,7 +80,8 @@ export class TecnicosComponent {
       const initialState: ModalOptions = {
         initialState: {
           tipo : 'actualizar',
-          datos : this.dato
+          datos : this.dato,
+          empresas : this.empresas,
           //Datos que envió al componente
         },
         class: "modal-md",
@@ -97,4 +96,58 @@ export class TecnicosComponent {
       //     this.modalAbierto = false;
       //   });
     }
+
+    private getAll() {
+        // const user = this.getUsuarioActivo();
+        this.tecnicos.getAll().subscribe(
+          (response) => {
+            if (response) {
+              this.mecanicos = response.data;
+              this.empresas = response.empresas
+              console.log(this.mecanicos)
+              console.log(this.empresas)
+              // this.ordenador = new FuncionesTablas(this.data);
+              // this.datosFiltrados = [...this.data];
+    
+              this.isLoad = false;
+              this.showTable = true;
+            } else {
+              console.log(response.message);
+            }
+          },
+          (error) => {
+            console.error("Error fetching data:", error);
+          }
+        );
+      }
+
+        /**
+   * Recupera el catalogo de empresas (Select empresa)
+   */
+  public getEmpresas() {
+    this.usuarios.getEmpresas().subscribe(
+      (response) => {
+        if (response) {
+          const rawData = response.data
+          /**Filtro para solo mostrar las empresas que tienen acceso a macrotaller */
+          this.empresas = rawData.filter(objeto => objeto.isAgencia === false);
+          // this.isLoading = false;
+          console.log(this.empresas);
+        } else {
+          // this.alertasService.mostrarAlerta("Error", response.message, "error" , "danger" );
+        }
+      },
+      (error) => {
+        // this.alertasService.mostrarAlerta("Error", `Error fetching data: ${error}`, "error" , "danger" );
+      }
+    );
+  }
+
+  public getEmpresa(intercompania){
+    if(this.empresas.length > 0){
+      const empresa = this.empresas.find(empresa => empresa.intercompania == intercompania);
+    return empresa.name ?? "Fuera del catalogo";
+    }
+    
+  }
 }

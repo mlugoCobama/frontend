@@ -28,6 +28,7 @@ export class TablaDetallesSolicitudComponent implements OnInit {
   @Output() openModal = new EventEmitter<string>();
 
   @Input() solicitudCompra:any;
+  @Input() modifica:any;
 
     constructor(
     public compras: ComprasService,
@@ -42,6 +43,7 @@ export class TablaDetallesSolicitudComponent implements OnInit {
     this.getDetalles();
     this.getUnidades();
     this.buildForm();
+    console.log(this.modifica)
   }
    
   /**

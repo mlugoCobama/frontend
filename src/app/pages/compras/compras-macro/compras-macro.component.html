@@ -86,12 +86,13 @@
               </div>
             </div>
           </div>
-        <app-detalle-solicitudes-compras
+        <app-detalle-solicitud-macro
           [solicitudCompra]="solicitudCompra"
           [status]="status"
+          [modifica]="modifica"
           *ngIf="solicitudSelecionada"
           (udtStatus)="updateStatus($event)"
-        ></app-detalle-solicitudes-compras>
+        ></app-detalle-solicitud-macro>  
       </div>
     </div>
   </div>

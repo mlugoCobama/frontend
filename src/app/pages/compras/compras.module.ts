@@ -47,6 +47,7 @@ import { ModalAddComprobanteComponent } from './compras/detalle-solicitudes-comp
 import { ModalAddComplementoComponent } from './compras/detalle-solicitudes-compras/datos-facturas/modal-add-complemento/modal-add-complemento.component';
 import { FormComplementoComponent } from './compras/detalle-solicitudes-compras/datos-facturas/form-complemento/form-complemento.component';
 import { SelectSistemaMantenimientoComponent } from './compras-macro/select-sistema-mantenimiento/select-sistema-mantenimiento.component';
+import { DetalleSolicitudMacroComponent } from './compras-macro/detalle-solicitud-macro/detalle-solicitud-macro.component';
 
 @NgModule({
   declarations: [
@@ -88,6 +89,7 @@ import { SelectSistemaMantenimientoComponent } from './compras-macro/select-sist
     ModalAddComplementoComponent,
     FormComplementoComponent,
     SelectSistemaMantenimientoComponent,
+    DetalleSolicitudMacroComponent,
   ],
   imports: [
     CommonModule,

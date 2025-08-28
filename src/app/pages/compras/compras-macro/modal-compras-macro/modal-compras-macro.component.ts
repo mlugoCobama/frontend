@@ -3,6 +3,7 @@ import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { ComprasMacroService } from 'src/app/core/services/compras/compras-macro.service';
 import { FormDetalleSolicitudComponent } from '../../forms-solicitud/form-detalle-solicitud/form-detalle-solicitud.component';
 import { FormSolicitudMacroComponent } from '../../forms-solicitud/form-solicitud-macro/form-solicitud-macro.component';
+import { SelectSistemaMantenimientoComponent } from '../select-sistema-mantenimiento/select-sistema-mantenimiento.component';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 
 
@@ -18,6 +19,7 @@ export class ModalComprasMacroComponent implements AfterViewInit {
 
   @ViewChild('formSolicitudMacro', { static: false }) formSolicitudCompra!:  FormSolicitudMacroComponent;
   @ViewChild('formDetalleSolicitud' , { static: false }) tableData!:  FormDetalleSolicitudComponent;
+  @ViewChild('formSelectsSistemaManteniemiento' , { static: false }) formSelectsSistemaManteniemiento!:  SelectSistemaMantenimientoComponent;
 
   public submitted: boolean = false;
   public submittedDetail: boolean = false;
@@ -84,11 +86,13 @@ export class ModalComprasMacroComponent implements AfterViewInit {
 
     const data = {
       ...this.formSolicitudCompra.obtenerValores(),
+      ...this.formSelectsSistemaManteniemiento.obtenerValores(),
       usuario_solicita: this.formSolicitudCompra.obtenerUsuarios(),
       detalles: this.tableData.getDetalles(),
     };
 
     const archivosCotizacion = this.formSolicitudCompra.obtenerArchivos().get("cotizacion") as File
+    const archivosOrden = this.formSolicitudCompra.obtenerArchivos().get("orden_trabajo") as File
     const formDataToSend = new FormData();
     formDataToSend.append("data", JSON.stringify(data));
 
@@ -103,6 +107,7 @@ export class ModalComprasMacroComponent implements AfterViewInit {
     });
 
     formDataToSend.append('file_cotizacion', archivosCotizacion)
+    formDataToSend.append('file_orden', archivosOrden)
     
     this.comprasMacro.save(formDataToSend).subscribe(
       (response) => {
@@ -142,6 +147,5 @@ export class ModalComprasMacroComponent implements AfterViewInit {
 
   getDato(dato:any) {
     this.destino = dato;
-    console.log(dato);
   }
 }
