@@ -22,8 +22,8 @@
       ></app-table-detalles-solicitud>
 
       <app-tabla-detalles-solicitud
+      *ngIf="solicitudCompra.estatus < enEsts.Solicitado"
       [modifica] = "modifica"
-      *ngIf="solicitudCompra.estatus <= enEsts.Solicitado"
       [solicitudCompra]="solicitudCompra"
       (openModal)="openModal(content, $event)"
       ></app-tabla-detalles-solicitud>

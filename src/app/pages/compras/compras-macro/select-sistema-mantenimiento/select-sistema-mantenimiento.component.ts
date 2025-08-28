@@ -44,24 +44,16 @@ export class SelectSistemaMantenimientoComponent implements OnInit{
     this.selectChange();
   }
 
-  // public buildForm(){
-  //    return new Promise((resolve, reject) => {
-  //       this.formSistemaMantenimiento = this.formBuilder.group({
-  //       sistema:  new FormControl([this.solicitudCompra?.sistema ?? ''], Validators.required),
-  //       tipoMantenimiento:  new FormControl([this.solicitudCompra?.tipo_mantenimiento ?? ''], Validators.required),
-  //     });
-  //     resolve(true);
-  //    });
-  // }
 
   public buildForm() {
   return new Promise((resolve, reject) => {
+    const disabled = this.solicitudCompra?.auto_macro === 1 ? true: false;
     const sistemaValue = this.solicitudCompra?.sistema ?? '';
     const tipoValue = this.solicitudCompra?.tipo_mantenimiento ?? '';
 
     this.formSistemaMantenimiento = this.formBuilder.group({
-      sistema: new FormControl({ value: sistemaValue, disabled: !!sistemaValue }, Validators.required),
-      tipoMantenimiento: new FormControl({ value: tipoValue, disabled: !!tipoValue }, Validators.required),
+      sistema: new FormControl({ value: sistemaValue,disabled: disabled }, Validators.required),
+      tipoMantenimiento: new FormControl({ value: tipoValue, disabled: disabled }, Validators.required),
     });
 
     resolve(true);
@@ -113,9 +105,23 @@ export class SelectSistemaMantenimientoComponent implements OnInit{
   }
 
   selectChange() {
-    const valores = this.formSistemaMantenimiento.value;
-    this.ComprasMacro.actualizarFormData(valores);
+    this.ComprasMacro.actualizarFormData(this.obtenerValores());
   }
 
+    /**
+   * Recupera los Valores del formulario
+   * @returns object: valores del formulario ->
+   * { empresa, usuario_destino, c_c, motivo, orden_trabajo }
+   */
+  obtenerValores() {
+    return this.formSistemaMantenimiento.value;
+  }
+  /**
+   * Verifica que el fomulario sea valido
+   * @returns boolean:  true ->valido, false ->no valido
+   */
+  esValido() {
+    return this.formSistemaMantenimiento.valid;
+  }
 
 }

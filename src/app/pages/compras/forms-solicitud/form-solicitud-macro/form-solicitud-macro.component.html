@@ -70,11 +70,11 @@
         class="text-danger form-text"
         *ngIf="solicitudCompraFormControl.motivo.errors?.['required']"
       >
-        motivo es requerido.
+        Motivo es requerido.
       </div>
     </div>
   </div>
-  <div class="form-group">
+  <div class="form-group col-md-6">
     <label >Orden de trabajo: *</label>
     <input
       type="text"
@@ -91,6 +91,45 @@
       >
     </div>
   </div>
+  <div class="form-group col-md-6">
+    <label >Folio de requisición: *</label>
+    <input
+      type="text"
+      class="form-control form-control-sm"
+      formControlName="folio_requisicion"
+      placeholder="# Folio requisición"
+    />
+    <div *ngIf="solicitudCompraFormControl.folio_requisicion.touched || submitted">
+      <small
+        *ngIf="solicitudCompraFormControl.folio_requisicion.errors?.['required']"
+
+        class="text-danger form-text"
+        >Folio de requisición es requerido</small
+      >
+    </div>
+  </div>
+  <div class="form-group">
+    <label >Formato de orden de trabajo: <small> *</small>  </label>
+    <input
+      data-toggle="tooltip" 
+      title="Cotización en formato PDF."
+      (change)="onFileChange($event, 'orden_trabajo')"
+      accept="application/pdf"
+      type="file"
+      name="formato_orden_trabajo" 
+      formControlName="formato_orden_trabajo"
+      class="form-control form-control-sm"
+      placeholder="# orden de trabajo"
+    />
+    <div *ngIf="solicitudCompraFormControl.formato_orden_trabajo.touched || submitted">
+      <small
+        *ngIf="solicitudCompraFormControl.formato_orden_trabajo.errors?.['required']"
+
+        class="text-danger form-text"
+        >Formato de orden de trabajo es requerido</small
+      >
+    </div>
+  </div>
   <div class="form-group">
     <label >Cotización: <small> (Opcional) </small>  </label>
     <input
@@ -104,12 +143,12 @@
       class="form-control form-control-sm"
       placeholder="# orden de trabajo"
     />
-    <div *ngIf="solicitudCompraFormControl.orden_trabajo.touched || submitted">
+    <div *ngIf="solicitudCompraFormControl.cotizacion.touched || submitted">
       <small
-        *ngIf="solicitudCompraFormControl.motivo.errors?.['required']"
+        *ngIf="solicitudCompraFormControl.cotizacion.errors?.['required']"
 
         class="text-danger form-text"
-        >Orden de trabajo es requerido</small
+        >Cotización</small
       >
     </div>
   </div>

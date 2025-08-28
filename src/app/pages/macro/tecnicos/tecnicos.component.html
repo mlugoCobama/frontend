@@ -33,19 +33,19 @@
         </div>
 
         <div class="card-body border-bottom">
-          <!-- <div class="d-flex justify-content-center">
+          <div *ngIf="isLoad" class="d-flex justify-content-center">
             <div class="spinner-border" role="status">
               <span class="visually-hidden">Loading...</span>
             </div>
-          </div> -->
+          </div>
 
-          <div class="row justify-content-end">
+          <div *ngIf="!isLoad" class="row justify-content-end">
             <div class="col-3">
               <input type="text" class="form-control form-control-sm"/>
             </div>
           </div>
           <div >
-            <div class="tab-page-content mt-3 table-responsive">
+            <div *ngIf="!isLoad" class="tab-page-content mt-3 table-responsive">
               <table class="table table-hover table-sm table-bordered">
                 <thead class="table-light">
                   <tr>
@@ -55,9 +55,9 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor = "let item of mecanicos" (dblclick)="seleccionar(item, $event)">
-                    <td>{{ item.nombre }} {{ item.apellidos }}</td>
-                    <td> {{ item.tipo }}</td>
+                  <tr *ngFor = "let item of mecanicos" (dblclick)="seleccionar(item.tecnico, $event)">
+                    <td>{{ item.tecnico.nombre }} {{ item.tecnico.apellidos }}</td>
+                    <td> {{ item.tecnico.tipo }}</td>
                     <td> {{ item.empresa }} </td>
                   </tr>
                 </tbody>

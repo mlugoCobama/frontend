@@ -72,7 +72,9 @@ export class FormSolicitudMacroComponent implements OnInit{
         c_c: new FormControl(0),
         motivo: new FormControl(null, Validators.required),
         orden_trabajo: new FormControl(null, Validators.required),
-        cotizacion: new FormControl(null)
+        folio_requisicion: new FormControl(null, Validators.required),
+        formato_orden_trabajo: new FormControl(null, Validators.required),
+        cotizacion: new FormControl(null),
       });
       resolve(true);
     });
