@@ -1,0 +1,30 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">
+    Entrada de material
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="cerrarModal()"></button>
+</div>
+  <div class="modal-body">
+    <app-form-entrada-almacen
+    (enviarDatos)="getDatos($event)"
+    [submitted]="submitted"
+    ></app-form-entrada-almacen>
+    <hr>
+    <app-form-table-entradas
+    #formTableEntradas
+    [detalles]="detalles"
+    [submittDetail]="submittDetail"
+    ></app-form-table-entradas>
+</div>
+<div class="modal-footer">
+  <button
+  type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="cerrarModal()">
+    Cerrar
+  </button>
+
+  <button 
+  (click) = "generarEntrada()"
+  type="button" class="btn btn-primary btn-sm">
+    Guardar
+  </button>
+</div>

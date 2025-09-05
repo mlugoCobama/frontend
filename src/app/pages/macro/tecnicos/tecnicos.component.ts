@@ -1,8 +1,11 @@
-import { Component, OnInit, } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Config } from 'datatables.net';
+import { Subject } from 'rxjs';
+import { DataTableDirective } from 'angular-datatables';
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { FormTecnicoComponent } from '../forms/form-tecnico/form-tecnico.component';
 import { FuncionesTablas } from '../../compras/compras/funciones-tablas';
-
+import Swal from 'sweetalert2';
 import { TecnicosService } from 'src/app/core/services/macrotaller/tecnicos.service';
 import { UsuariosService } from 'src/app/core/services/compras/usuarios.service';
 
@@ -13,16 +16,19 @@ import { UsuariosService } from 'src/app/core/services/compras/usuarios.service'
   styleUrl: './tecnicos.component.css'
 })
 export class TecnicosComponent implements OnInit{
-  
   public isLoad:  boolean =  true;
   public showTable: boolean = false;
 
 
   public modalRef?: BsModalRef;
   public mostrar =  false;
-  public dato = [];
+  public dato:any = [];
 
   public empresas = [];
+
+    datosFiltrados: any[] = [];
+    private ordenador!: FuncionesTablas<any>;
+    busqueda:string = '';
 
 
   constructor(
@@ -39,6 +45,7 @@ export class TecnicosComponent implements OnInit{
 
   public mecanicos = [];
 
+
     public openModalNuevo() {
       // this.modalAbierto = true;
       const initialState: ModalOptions = {
@@ -52,8 +59,9 @@ export class TecnicosComponent implements OnInit{
       this.modalRef = this.modalService.show(FormTecnicoComponent, initialState);
       this.modalRef.content.closeBtnName = "Close";
       this.modalRef.content.event.subscribe(() => {
-        // this.isLoad = true;
-        // this.getAll();
+        this.isLoad = true;
+        
+        this.getAll();
       });
       // this.modalRef.content.modalCerrado.subscribe(() => {
       //     this.modalAbierto = false;
@@ -64,7 +72,8 @@ export class TecnicosComponent implements OnInit{
   public seleccionar(dato: any, evento: any) {
     this.mostrar = true;
     this.dato = dato;
-    
+    console.log(dato)
+
     if (evento.currentTarget.classList.contains("table-primary")) {
       evento.currentTarget.classList.remove("table-primary");
       this.mostrar = false;
@@ -89,8 +98,8 @@ export class TecnicosComponent implements OnInit{
       this.modalRef = this.modalService.show(FormTecnicoComponent, initialState);
       this.modalRef.content.closeBtnName = "Close";
       this.modalRef.content.event.subscribe(() => {
-        // this.isLoad = true;
-        // this.getAll();
+        this.isLoad = true;
+        this.getAll();
       });
       // this.modalRef.content.modalCerrado.subscribe(() => {
       //     this.modalAbierto = false;
@@ -104,13 +113,13 @@ export class TecnicosComponent implements OnInit{
             if (response) {
               this.mecanicos = response.data;
               this.empresas = response.empresas
-              console.log(this.mecanicos)
-              console.log(this.empresas)
-              // this.ordenador = new FuncionesTablas(this.data);
-              // this.datosFiltrados = [...this.data];
-    
+
+              this.ordenador = new FuncionesTablas(this.mecanicos);
+              this.datosFiltrados = [...this.mecanicos];
+
               this.isLoad = false;
               this.showTable = true;
+
             } else {
               console.log(response.message);
             }
@@ -120,7 +129,6 @@ export class TecnicosComponent implements OnInit{
           }
         );
       }
-
         /**
    * Recupera el catalogo de empresas (Select empresa)
    */
@@ -148,6 +156,73 @@ export class TecnicosComponent implements OnInit{
       const empresa = this.empresas.find(empresa => empresa.intercompania == intercompania);
     return empresa.name ?? "Fuera del catalogo";
     }
-    
+  }
+
+  //"Borra" el registro seleccionado
+    public destroy() {
+      this.isLoad = true;
+      Swal.fire({
+        title: "¿Estas seguro?",
+        text: "Se eliminara el registro seleccionado",
+        icon: "error",
+        confirmButtonText: "Eliminiar",
+        showCancelButton: true,
+        customClass: {
+          confirmButton: "btn btn-danger px-4",
+          cancelButton: "btn btn-primary ms-2 px-4",
+        },
+        buttonsStyling: false,
+      }).then((result) => {
+        if (result.value) {
+          this.tecnicos.destroy(this.dato.id).subscribe(
+            (response) => {
+              if (response.status === "success") {
+                console.log(response.message);
+                this.getAll();
+                Swal.fire({
+                  title: "Borrado!",
+                  text: "El registro ha sido borrado.",
+                  buttonsStyling: false,
+                  icon: "success",
+                  customClass: {
+                    confirmButton: "btn btn-danger px-4",
+                    cancelButton: "btn btn- ms-2 px-4",
+                  },
+                });
+              } else {
+                console.log(response.message);
+                Swal.fire({
+                  title: "Error!",
+                  text: "Your file has been deleted.",
+                  buttonsStyling: false,
+                  icon: "success",
+                  customClass: {
+                    confirmButton: "btn btn-danger px-4",
+                    cancelButton: "btn btn- ms-2 px-4",
+                  },
+                });
+              }
+            },
+            (error) => {
+              console.error("Error fetching data:", error);
+            }
+          );
+        }
+        this.isLoad = false;
+      });
+    }
+
+  ordenarPor(columna: keyof any){
+    this.datosFiltrados = this.ordenador.ordenar(columna);
+  }
+
+  getIconoOrden(columna:keyof any):string{
+    return this.ordenador.getIcono(columna)
+  }
+
+  filtrarTabla(){
+    this.datosFiltrados = this.ordenador.filtrar(this.busqueda, [
+      'nombre', 'apellidos', 'tipo', 'empresa',
+    ]);
   }
 }

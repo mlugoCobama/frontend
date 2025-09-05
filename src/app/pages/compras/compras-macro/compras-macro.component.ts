@@ -97,7 +97,6 @@ export class ComprasMacroComponent implements OnInit{
           if (response) {
             this.data = response.data;
             this.modifica =  response.tipo == "macro" ? true : false;
-            console.log( response.tipo, this.modifica)
             this.ordenador = new FuncionesTablas(this.data);
             this.datosFiltrados = [...this.data];
 

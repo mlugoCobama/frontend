@@ -26,4 +26,8 @@ export class TecnicosService {
   public save(data:any): Observable<any> {
     return this.http.post(environment.apiUrl + 'macrotaller/tecnico', data);
   }
+
+  public destroy(id:number): Observable<any> {
+    return this.http.delete(environment.apiUrl + `macrotaller/tecnico/${id}`);
+  }
 }

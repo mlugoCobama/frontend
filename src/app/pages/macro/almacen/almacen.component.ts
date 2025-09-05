@@ -1,36 +1,120 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
+
+import { ModalEntradaAlmacenComponent } from './modal-entrada-almacen/modal-entrada-almacen.component';
+import { ModalSalidasMacroComponent } from './modal-salidas-macro/modal-salidas-macro.component';
+
+import { AlmacenService } from 'src/app/core/services/macrotaller/almacen.service';
+import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
+
+import { FuncionesTablas } from '../../compras/compras/funciones-tablas';
 
 @Component({
   selector: 'app-almacen',
   templateUrl: './almacen.component.html',
   styleUrl: './almacen.component.css'
 })
-export class AlmacenComponent {
-    public mecanicos = [
-        { nombre: "JORGE PALOMINO", tipo: "MECANICO", empresa: "SATELITE" },
-        { nombre: "GREGORIO CAMPA", tipo: "MECANICO", empresa: "SATELITE" },
-        { nombre: "GERARDO LUNA", tipo: "MECANICO", empresa: "FLAMAZUL" },
-        { nombre: "REFUGIO CASTELLANOS", tipo: "MECANICO", empresa: "SERVIGAS" },
-        { nombre: "RAFAEL VITE", tipo: "MECANICO", empresa: "SERVIGAS" },
-        { nombre: "IVAN PORRAS (AYUDANTE)", tipo: "AYUDANTE", empresa: "SERVIGAS" },
-        { nombre: "ALBERTO ESTUDILLO", tipo: "MECANICO", empresa: "SERVIGAS" },
-        { nombre: "ANGEL FLORES", tipo: "MECANICO", empresa: "GAS PREMIO" },
-        { nombre: "NORBERTO COLIN", tipo: "MECANICO", empresa: "GAS PREMIO" },
-        { nombre: "EDGAR", tipo: "MECANICO", empresa: "GAS URBANO" },
-        { nombre: "ISRAEL (AYUDANTE)", tipo: "AYUDANTE", empresa: "GAS URBANO" },
-        { nombre: "PENDIENTE", tipo: "MECANICO", empresa: "GARZA SUR" },
-        { nombre: "PENDIENTE", tipo: "MECANICO", empresa: "GARZA SUR" },
-        { nombre: "PENDIENTE", tipo: "MECANICO", empresa: "GARZA SUR" },
-        { nombre: "PENDIENTE", tipo: "MECANICO", empresa: "GARZA SUR" },
-        { nombre: "FEDERICO RODRIGUEZ", tipo: "MECANICO", empresa: "TANQUES GARZA GAS" },
-        { nombre: "FRANCISCO NONINGO", tipo: "MECANICO", empresa: "TANQUES GARZA GAS" },
-        { nombre: "JUAN CARLOS PICHARDO", tipo: "MECANICO", empresa: "TANQUES GARZA GAS" },
-        { nombre: "JOSE LUIS ISIDRO MARTINEZ", tipo: "MECANICO", empresa: "TANQUES GARZA GAS" },
-        { nombre: "VICENTE DELGADO", tipo: "MECANICO", empresa: "TANQUES GARZA GAS" },
-        { nombre: "SEVERO CERON", tipo: "MECANICO", empresa: "TANQUES GARZA GAS" },
-        { nombre: "ALBERTO SILVA", tipo: "MECANICO", empresa: "TANQUES GARZA GAS" }
-    ];
+export class AlmacenComponent implements OnInit {
 
+  public modalRef?: BsModalRef;
 
+  public data: any =  [];
+
+  public isLoad : boolean =  true;
+
+  datosFiltrados: any[] = [];
+  private ordenador!: FuncionesTablas<any>;
+  busqueda:string = '';
+
+  constructor(
+    private modalService  : BsModalService,
+    private alerta:  SwalComprsServiceService,
+    private almacen:  AlmacenService,
+
+  ){}
+
+  ngOnInit(): void {
+    this.getAlmacen();
+  }
+
+public openModalEntrada() {
+      // this.modalAbierto = true;
+      const initialState: ModalOptions = {
+        initialState: {
+          tipo : 'agregar',
+          // empresas : this.empresas,
+          //Datos que envió al componente
+        },
+        class: "modal-xl",
+      };
+      this.modalRef = this.modalService.show(ModalEntradaAlmacenComponent, initialState);
+      this.modalRef.content.closeBtnName = "Close";
+      this.modalRef.content.event.subscribe(() => {
+        this.isLoad = true;
+        this.getAlmacen();
+      });
+      // this.modalRef.content.modalCerrado.subscribe(() => {
+      //     this.modalAbierto = false;
+      //   });
+    }
+
+    public openModalSalida() {
+      // this.modalAbierto = true;
+      const initialState: ModalOptions = {
+        initialState: {
+          tipo : 'agregar',
+          // empresas : this.empresas,
+          //Datos que envió al componente
+        },
+        class: "modal-xl",
+      };
+      this.modalRef = this.modalService.show(ModalSalidasMacroComponent, initialState);
+      this.modalRef.content.closeBtnName = "Close";
+      this.modalRef.content.event.subscribe(() => {
+        this.isLoad = true;
+        this.getAlmacen();
+      });
+      // this.modalRef.content.modalCerrado.subscribe(() => {
+      //     this.modalAbierto = false;
+      //   });
+    }
+
+      private getAlmacen() {
+        this.isLoad =  true;
+        this.almacen.getAlmacen().subscribe(
+          (response) => {
+            if (response) {
+              this.data = response.data;
+
+              this.ordenador = new FuncionesTablas(this.data);
+              this.datosFiltrados = [...this.data];
+
+              this.isLoad =  false;
+            } else {
+              this.alerta.mostrarAlerta("Error", response.message, "error" , "danger" );
+              this.isLoad =  false;
+            }
+          },
+          (error) => {
+            this.isLoad =  false;
+            this.alerta.mostrarAlerta("Error", `Error fetching data: ${error}`, "error" , "danger" );
+          }
+        );
+        
+      }
+
+  ordenarPor(columna: keyof any){
+    this.datosFiltrados = this.ordenador.ordenar(columna);
+  }
+
+  getIconoOrden(columna:keyof any):string{
+    return this.ordenador.getIcono(columna)
+  }
+
+  filtrarTabla(){
+    this.datosFiltrados = this.ordenador.filtrar(this.busqueda, [
+      'fecha_entrada', 'empresa', 'descripcion', 'nombre', 'observaciones', 'existencia', 'eco'
+    ]);
+  }
 
 }
