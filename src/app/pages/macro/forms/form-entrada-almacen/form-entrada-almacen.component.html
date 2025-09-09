@@ -52,6 +52,7 @@
       <div class="col-lg-4">
         <label for="referencia" class="form-label"> Selecciona una opción: *</label>
         <select
+
                 class="form-select form-select-sm"
                 aria-label="Default select example"
                 id="referencia"
@@ -74,4 +75,11 @@
           </div>
         </div>
       </div>
-    </form>
+</form>
+<div *ngIf="finding" class="d-flex pt-1 pb-0 m-0 bd-highlight text-primary">
+<div class="spinner-grow pt-0 pb-0 m-0" style="width: 1rem; height: 1rem;" role="status">
+  <span class="sr-only">Loading...</span>
+</div>
+<p class="m-0">Buscando</p>
+</div>
+

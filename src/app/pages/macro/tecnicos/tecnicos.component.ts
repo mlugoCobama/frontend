@@ -129,7 +129,7 @@ export class TecnicosComponent implements OnInit{
           }
         );
       }
-        /**
+  /**
    * Recupera el catalogo de empresas (Select empresa)
    */
   public getEmpresas() {

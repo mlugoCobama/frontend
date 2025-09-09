@@ -10,6 +10,7 @@ import { MacroService } from 'src/app/core/services/macrotaller/macro.service';
 export class FormSalidasAlmacenComponent implements OnInit{
 
   @Output() enviarDatos = new EventEmitter<any>();
+  @Input() submitted: boolean = false;
 
   public gaseras: any = []; 
   public tecnicos: any = []; 
@@ -17,7 +18,7 @@ export class FormSalidasAlmacenComponent implements OnInit{
   public referencias: any = [];
   public detalles: any = [];
   public formSalida: FormGroup;
-  @Input() submitted: boolean = false;
+  public finding : boolean = false;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -28,16 +29,18 @@ export class FormSalidasAlmacenComponent implements OnInit{
     this.buildForm();
     this.getGaseras();
     this.getTecnicos(); 
+    this.disableFields();
   }
 
   public tiposBusqueda : any = [
     {id:  1, tipo:'Orden de trabajo', key:'orden_trabajo'},
-    {id:  2, tipo:'Autotanque', key:'nro_economico'},
-    // {id:  3, tipo:'Orden Compra', key:'folio_oc'},
-    // {id:  4, tipo:'Solicitud Compra', key:'folio_sc'}
-    
+    {id:  2, tipo:'Autotanque', key:'nro_economico'},    
   ];
 
+  /**
+   * metodo que construye le formulario
+   * @returns 
+   */
   private buildForm() {
     return new Promise((resolve, reject) => {
       this.formSalida = this.formBuilder.group({
@@ -54,6 +57,9 @@ export class FormSalidasAlmacenComponent implements OnInit{
     return this.formSalida.controls;
   }
 
+  /**
+   * Método que obtiene el listado de gaseras
+   */
   private getGaseras(){
     this.macro.getGaseras().subscribe((response)=>{
       if(response.status){
@@ -66,11 +72,14 @@ export class FormSalidasAlmacenComponent implements OnInit{
     })
   }
 
+  /**
+   * Método que obtiene el listado de técnicos
+   */
   private getTecnicos(){
     this.macro.getTecnicos().subscribe((response)=>{
       if(response.status){
         this.tecnicos = response.data;
-        console.log(this.tecnicos)
+
       }else{
         console.log(response.message);
       }
@@ -79,13 +88,24 @@ export class FormSalidasAlmacenComponent implements OnInit{
     })
   }
 
+  /**
+   * Método que recupera las compras que tienen detalles en almacén
+   */
   public getCompras(intercompania){
-    this.salidaFormControl.tipo.reset("");
-    this.salidaFormControl.referencia.reset("");
+    this.finding = true;
+
+    this.resetFields();
+    this.disableFields();
+    
     this.enviarDatos.emit(this.detalles);
     this.macro.getComprasAlmacenadas(intercompania).subscribe((response)=>{
       if(response.status){
         this.compras = response.data;
+        if(this.compras.length > 0){
+          this.enableFields()
+          this.finding = false;
+        }
+        this.finding = false;
         
       }else{
         console.log(response.message);
@@ -95,17 +115,41 @@ export class FormSalidasAlmacenComponent implements OnInit{
     })
   }
 
+  /**
+   * Método que llena el select de referencias
+   */
   public setValues(parametro) {
     this.referencias = [];
     this.enviarDatos.emit(this.detalles);
-    if (this.compras.length > 0 && parametro != "" ) {
-      this.referencias = this.compras.map(compra => ({id : compra.id ,  label : compra[parametro]}));
+    if(parametro === "nro_economico"){
+      this.obtenerValores();
+      const resultado = this.filtrarUnicos(this.compras, "nro_economico");
+      this.mapearResultado( resultado, 'id_autotanque', 'nro_economico');
+    }else{
+      this.mapearResultado(this.compras, 'id', 'orden_trabajo');
     }
   }
 
+  /**
+   * Mapea los datos para llenar el select tipo
+   * @param compras datos a procesar
+   * @param pId parámetro de donde se obtiene el id
+   * @param pLabel parámetro que sera la etiqueta que muestra el select
+   */
+  public mapearResultado( compras ,pId, pLabel){
+    if (compras.length > 0 && pLabel != "" ) {
+      this.referencias = compras.map(compra => ({id : compra[pId] ,  label : compra[pLabel]}));
+    }
+  }
+
+  /**
+   * Método que recupera los detalles con existencia en el almacén
+   */
   public buscarDetalles(idSolicitud){
     this.detalles = [];
-    this.macro.getDetalleSalida(idSolicitud).subscribe((response)=>{
+    const tipo = this.salidaFormControl.tipo.value;
+    
+    this.macro.getDetalleSalida(idSolicitud, tipo).subscribe((response)=>{
       if(response.status){
         // this.detalles = response.data;
         this.enviarDatos.emit(response.data);
@@ -123,6 +167,7 @@ export class FormSalidasAlmacenComponent implements OnInit{
    */
   obtenerValores() {
     const value = this.formSalida.value;
+    console.log(value);
     return value;
   }
   /**
@@ -139,4 +184,46 @@ export class FormSalidasAlmacenComponent implements OnInit{
   resetearFormulario() {
     this.formSalida.reset();
   }
+
+  // funcion que filtra los datos para evitar duplicados
+  filtrarUnicos<T>(array: T[], propiedad: keyof T): T[] {
+  const vistos = new Set();
+  return array.filter(item => {
+    const valor = item[propiedad];
+    if (vistos.has(valor)) return false;
+    vistos.add(valor);
+    return true;
+  });
+}
+
+  /**
+   * Deshabilita los campos de tipo y referencia
+   */
+  private disableFields(){
+    this.salidaFormControl.tipo.disable();
+    this.salidaFormControl.referencia.disable();
+    this.salidaFormControl.tecnico.disable();
+  }
+
+  /**
+   * Habilita los campos de tipo y referencia
+   */
+  private enableFields(){
+    this.salidaFormControl.tipo.enable();
+    this.salidaFormControl.referencia.enable();
+    this.salidaFormControl.tecnico.enable();
+
+  }
+
+  /**
+   * Resetea los campos de tipo y referencia
+   */
+  private resetFields(){
+    this.referencias = [];
+    this.salidaFormControl.tipo.reset("");
+    this.salidaFormControl.referencia.reset("");
+    this.salidaFormControl.tecnico.reset("");
+  }
+
+
 }

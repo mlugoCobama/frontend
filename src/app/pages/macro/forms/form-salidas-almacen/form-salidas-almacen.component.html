@@ -1,102 +1,112 @@
 <form class="row g-2" [formGroup]="formSalida">
-      <div class="col-lg-3">
-        <label for="empresa" class="form-label">Empresa: *</label>
-        <select
-                class="form-select form-select-sm"
-                aria-label="Default select example"
-                id="empresa"
-                name="empresa"
-                aria-label="empresa"
-                formControlName="empresa"
-                (change)="getCompras($event.target.value)"
-              >
-                <option value="" selected disabled>Selecciona uno</option>
-                <option  *ngFor="let item of gaseras" [value]="item.intercompania">
-                  {{ item.name }}
-                </option>
-          </select>
-        <div *ngIf="salidaFormControl.empresa.touched || submitted">
-          <div
-            class="text-danger form-text"
-            *ngIf="salidaFormControl.empresa.errors?.['required']"
-          >
-            Empresa es requerido.
-          </div>
-        </div>
+  <div class="col-lg-3">
+    <label for="empresa" class="form-label">Empresa: *</label>
+    <select
+      class="form-select form-select-sm"
+      aria-label="Default select example"
+      id="empresa"
+      name="empresa"
+      aria-label="empresa"
+      formControlName="empresa"
+      (change)="getCompras($event.target.value)"
+    >
+      <option value="" selected disabled>Selecciona uno</option>
+      <option *ngFor="let item of gaseras" [value]="item.intercompania">
+        {{ item.name }}
+      </option>
+    </select>
+    <div *ngIf="salidaFormControl.empresa.touched || submitted">
+      <div
+        class="text-danger form-text"
+        *ngIf="salidaFormControl.empresa.errors?.['required']"
+      >
+        Empresa es requerido.
       </div>
-      <div class="col-lg-3">
-        <label for="tipo" class="form-label">Buscar por: *</label>
-        <select
-                class="form-select form-select-sm"
-                aria-label="Default select example"
-                id="tipo"
-                name="tipo"
-                aria-label="tipo"
-                formControlName="tipo"
-                (change)="setValues($event.target.value)"
-              >
-                <option value="">Selecciona uno</option>
-                <option *ngFor="let item of tiposBusqueda" [value]="item.key">
-                  {{ item.tipo }}
-                </option>
-          </select>
-        <div *ngIf="salidaFormControl.tipo.touched || submitted">
-          <div
-            class="text-danger form-text"
-            *ngIf="salidaFormControl.tipo.errors?.['required']"
-          >
-            Tipo es requerido.
-          </div>
-        </div>
+    </div>
+  </div>
+  <div class="col-lg-3">
+    <label for="tipo" class="form-label">Buscar por: *</label>
+    <select
+      class="form-select form-select-sm"
+      aria-label="Default select example"
+      id="tipo"
+      name="tipo"
+      aria-label="tipo"
+      formControlName="tipo"
+      (change)="setValues($event.target.value)"
+    >
+      <option value="">Selecciona uno</option>
+      <option *ngFor="let item of tiposBusqueda" [value]="item.key">
+        {{ item.tipo }}
+      </option>
+    </select>
+    <div *ngIf="salidaFormControl.tipo.touched || submitted">
+      <div
+        class="text-danger form-text"
+        *ngIf="salidaFormControl.tipo.errors?.['required']"
+      >
+        Tipo es requerido.
       </div>
-      <div class="col-lg-3">
-        <label for="referencia" class="form-label"> Selecciona una opción: *</label>
-        <select
-                class="form-select form-select-sm"
-                aria-label="Default select example"
-                id="referencia"
-                name="referencia"
-                aria-label="referencia"
-                formControlName="referencia"
-                (change)="buscarDetalles($event.target.value)"
-              >
-                <option value="">Selecciona uno</option>
-                <option *ngFor="let item of referencias" [value]="item.id">
-                  {{ item.label }}
-                </option>
-          </select>
-        <div *ngIf="salidaFormControl.referencia.touched || submitted">
-          <div
-            class="text-danger form-text"
-            *ngIf="salidaFormControl.referencia.errors?.['required']"
-          >
-            Referencia es requerido.
-          </div>
-        </div>
+    </div>
+  </div>
+  <div class="col-lg-3">
+    <label for="referencia" class="form-label"> Selecciona una opción: *</label>
+    <select
+      class="form-select form-select-sm"
+      aria-label="Default select example"
+      id="referencia"
+      name="referencia"
+      aria-label="referencia"
+      formControlName="referencia"
+      (change)="buscarDetalles($event.target.value)"
+    >
+      <option value="">Selecciona uno</option>
+      <option *ngFor="let item of referencias" [value]="item.id">
+        {{ item.label }}
+      </option>
+    </select>
+    <div *ngIf="salidaFormControl.referencia.touched || submitted">
+      <div
+        class="text-danger form-text"
+        *ngIf="salidaFormControl.referencia.errors?.['required']"
+      >
+        Referencia es requerido.
       </div>
-      <div class="col-lg-3">
-        <label for="tecnico" class="form-label"> Asignar técnico: *</label>
-        <select
-                class="form-select form-select-sm"
-                aria-label="Default select example"
-                id="tecnico"
-                name="tecnico"
-                aria-label="tecnico"
-                formControlName="tecnico"
-              >
-                <option value="">Selecciona uno</option>
-                <option *ngFor="let item of tecnicos" [value]="item.id">
-                  {{ item.nombre }} {{ item.apellidos }} ({{ item.tipo.substring(0, 3) }}) - {{ item.empresa }}
-                </option>
-          </select>
-        <div *ngIf="salidaFormControl.tecnico.touched || submitted">
-          <div
-            class="text-danger form-text"
-            *ngIf="salidaFormControl.tecnico.errors?.['required']"
-          >
-            Tecnico es requerido.
-          </div>
-        </div>
+    </div>
+  </div>
+  <div class="col-lg-3">
+    <label for="tecnico" class="form-label"> Asignar técnico: *</label>
+    <select
+      class="form-select form-select-sm"
+      aria-label="Default select example"
+      id="tecnico"
+      name="tecnico"
+      aria-label="tecnico"
+      formControlName="tecnico"
+    >
+      <option value="">Selecciona uno</option>
+      <option *ngFor="let item of tecnicos" [value]="item.id">
+        {{ item.nombre }} {{ item.apellidos }} ({{ item.tipo.substring(0, 3) }})
+        - {{ item.empresa }}
+      </option>
+    </select>
+    <div *ngIf="salidaFormControl.tecnico.touched || submitted">
+      <div
+        class="text-danger form-text"
+        *ngIf="salidaFormControl.tecnico.errors?.['required']"
+      >
+        Tecnico es requerido.
       </div>
-      
-    </form>
+    </div>
+  </div>
+</form>
+<div *ngIf="finding" class="d-flex pt-1 pb-0 m-0 bd-highlight text-primary">
+  <div
+    class="spinner-grow pt-0 pb-0 m-0"
+    style="width: 1rem; height: 1rem"
+    role="status"
+  >
+    <span class="sr-only">Loading...</span>
+  </div>
+  <p class="m-0">Buscando</p>
+</div>

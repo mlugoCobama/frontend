@@ -8,9 +8,7 @@ import { Observable } from "rxjs";
 })
 export class CatSistemasAutoService {
 
-  constructor(private http: HttpClient) { 
-
-  }
+  constructor(private http: HttpClient) { }
 
   /**
    * Recupera los registros de catalogo_sistemas_auto
@@ -20,6 +18,10 @@ export class CatSistemasAutoService {
     return this.http.get(environment.apiUrl + 'compras/CatalogoSistemasAuto');
   } 
 
+   /**
+   * Recupera los registros de tipos de mantenimiento
+   * @returns tipos de mantenimiento
+   */
   public getTiposMantenimiento(): Observable<any> {
     return this.http.get(environment.apiUrl + 'compras/CatalogoTiposMantenimiento');
   } 
