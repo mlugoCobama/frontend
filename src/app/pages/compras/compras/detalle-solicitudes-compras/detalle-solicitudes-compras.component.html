@@ -12,6 +12,7 @@
       ></app-select-sistema-mantenimiento>
 
       <app-table-detalles-solicitud
+      [tipo] = "tipo"
       *ngIf ="solicitudCompra.estatus > enEsts.Solicitado"
       [solicitudCompra]="solicitudCompra"
       [ordenCompra]="ordenCompra"

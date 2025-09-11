@@ -23,6 +23,7 @@ export class TableDetallesSolicitudComponent implements OnInit {
   @Input() mostrarTotal: boolean = false;
   @Input() solicitudCompra: any;
   @Input() ordenCompra: any;
+  @Input() tipo: any;
 
   @Output() openModal = new EventEmitter<string>();
   @Output() showTotal = new EventEmitter<boolean>();

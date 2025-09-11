@@ -120,7 +120,6 @@ export class ComprasComponent implements OnInit {
         if (response) {
           this.data = response.data;
           this.modifica =  (response.tipo == "compras" || response.tipo == "RT") ? true : false;
-          console.log( response.tipo, this.modifica)
           this.ordenador = new FuncionesTablas(this.data);
           this.datosFiltrados = [...this.data];
 

@@ -83,7 +83,6 @@ export class FormDetalleSolicitudComponent implements OnInit{
    *  Agrega los detalles a el array detalle para después mostrarlo en la tabla
    */
   public addDetalle() {
-    console.log(this.destino);
     if (this.formDetalleSolicitud.invalid) {
       this.submittedDetail = true;
       return;
@@ -123,8 +122,6 @@ export class FormDetalleSolicitudComponent implements OnInit{
     this.formData.delete("img_referencia");
 
     this.submittedDetail = false;
-
-    console.log(this.tableData)
   }
   
   /**

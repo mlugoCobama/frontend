@@ -18,7 +18,8 @@
       (openModal)="openModal(content, $event)"
       (showTotal) = "setMostrarTotal($event)"
       (setDataCotizacion)="setDataCotizacion($event)"
-      (actualizarStatus)="updateStatus()"       
+      (actualizarStatus)="updateStatus()"
+      [tipo] = "tipo"       
       ></app-table-detalles-solicitud>
 
       <app-tabla-detalles-solicitud
