@@ -91,6 +91,11 @@ export class FormDetalleSolicitudComponent implements OnInit{
     const valores = this.formDetalleSolicitud.value;
     let dato = null;
 
+    if(+this.destino === 602 && valores.vehiculo){
+      this.submittedDetail = true;
+      return;
+    }
+
     if(+this.destino === 602){
       dato = this.autotanques.find(objeto => +objeto.id === +valores.vehiculo);
     }

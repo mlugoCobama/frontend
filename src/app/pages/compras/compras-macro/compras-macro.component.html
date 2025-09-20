@@ -35,7 +35,21 @@
               </div>
             </div>
             <div>
-              <div *ngIf="!isLoad" class="row justify-content-end">
+              <div *ngIf="!isLoad" class="row" [ngClass]="!modifica ?  'justify-content-between' : 'justify-content-end'">
+                <div *ngIf="!modifica" class="col-3">
+                <label for="empresa" class="form-label form-label-sm">Empresa: *</label>
+                <select *ngIf="usuarioSolicita?.multiselect === true; else nombreEmpresa" class="form-select form-select-sm"
+                  aria-label="Default select example" id="empresa" name="empresa" aria-label="empresa"
+                  (change)="getAll($event.target.value)">
+                  <option value="" selected disabled>Selecciona uno</option>
+                  <option *ngIf="isLoading" value="" [disabled]="isLoading">
+                    Cargando opciones espera...
+                  </option>
+                  <option *ngFor="let item of empresas" [value]="item.intercompania">
+                    {{ item.name.toUpperCase() }}
+                  </option>
+                </select>
+              </div>
                 <div class="col-3">
                   <input
                     type="text"

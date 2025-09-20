@@ -3,7 +3,7 @@
       <label for="empresa" class="form-label form-label-sm">Empresa: *</label>
       
       <select
-      *ngIf = "usuarioSolicita?.intercompania === 333; else nombreEmpresa"
+      *ngIf = "usuarioSolicita?.multiselect === true; else nombreEmpresa"
         class="form-select form-select-sm" aria-label="Default select example" formControlName="empresa" id="empresa"
         name="empresa" aria-label="empresa" (change)="getUsuarios($event.target.value)">
         <option value="" selected disabled>Selecciona uno</option>
