@@ -86,7 +86,7 @@ export const MENU: MenuItem[] = [
       id: 7,
       label: 'Macro Taller',
       icon: 'bx-wrench',
-      permission: 'view compras macro taller',
+      permission: 'view modulo compras macro taller',
       subItems: [
         {
           id: 11,
