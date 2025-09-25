@@ -1,0 +1,26 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">
+        Actualizar: Puesto
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+        (click)="cerrarModal()"></button>
+</div>
+<div class="modal-body">
+    <div class="d-flex justify-content-center" *ngIf="isLoad">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <app-form-asignar-modulos *ngIf="!isLoad" #formAsignarModulos [data]="data"
+        [nombrePuesto]="nombrePuesto"></app-form-asignar-modulos>
+</div>
+<div class="modal-footer">
+    <button [disabled]="sending" type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"
+        (click)="cerrarModal()">
+        Cerrar
+    </button>
+
+    <button [disabled]="sending" type="button" class="btn btn-primary btn-sm" (click)="save()">
+        Actualizar
+    </button>
+</div>

@@ -1,0 +1,62 @@
+<form [formGroup]="permisosForm" class="container" *ngIf="formReady">
+   <!-- Campo único: Puesto -->
+  <div class="form-group">
+    <label for="puesto">Puesto:</label>
+    <input id="puesto" type="text" class="form-control form-control-sm" formControlName="puesto" />
+    <div *ngIf="puesto.invalid && puesto.touched" class="text-danger">
+      <small>El campo puesto es obligatorio.</small>
+    </div>
+  </div>
+  <hr>
+  <small>Selecciona las opciones disponibles para el puesto</small>
+  <!-- Iteración de módulos -->
+  <div formArrayName="modulos">
+    <div *ngFor="let modulo of modulos.controls; let i = index" [formGroupName]="i" class="mb-3">
+      
+      <!-- Módulo -->
+      <div class="form-check">
+        <input type="checkbox" formControlName="activo" class="form-check-input" id="moduloCheck{{ i }}" />
+        <label class="form-check-label fw-bold border-bottom border-dark-subtle" [for]="'moduloCheck' + i">
+          {{ modulo.get('nombre')?.value || 'Módulo' | titlecase }}
+        </label>
+      </div>
+
+      <!-- Submódulos -->
+      <div *ngIf="modulo.get('activo')?.value" class="ms-4 mt-2">
+        <div formArrayName="submodulos">
+          <div *ngFor="let submodulo of getSubmodulos(modulo).controls; let j = index" [formGroupName]="j" class="mb-2">
+            <div class="form-check">
+              <input type="checkbox" formControlName="activo" class="form-check-input" id="submoduloCheck{{ i }}-{{ j }}" />
+              <label class="form-check-label border-start border-bottom border-dark-subtle" [for]="'submoduloCheck' + i + '-' + j">
+                {{ submodulo.get('nombre')?.value || 'Submódulo' | titlecase }}
+              </label>
+            </div>
+
+            <!-- Funciones -->
+            <div *ngIf="submodulo.get('activo')?.value && getFunciones(submodulo).length > 0" class="ms-4 mt-1">
+              <div formArrayName="funciones">
+                <div *ngFor="let funcion of getFunciones(submodulo).controls; let k = index" [formGroupName]="k" class="form-check">
+                  <input type="checkbox" formControlName="activo" class="form-check-input" id="funcionCheck{{ i }}-{{ j }}-{{ k }}" />
+                  <label class="form-check-label border-start border-bottom border-dark-subtle" [for]="'funcionCheck' + i + '-' + j + '-' + k">
+                    {{ funcion.get('nombre')?.value || 'Función' | titlecase }}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="permisosForm.errors?.jerarquiaInvalida" class="error">
+    <small>Cada módulo activo debe tener al menos un submódulo activo con una función activa.</small>
+  </div>
+
+  <div *ngIf="faltanOpciones" class="error">
+    <small>Debes seleccionar por lo menos un modulo (cada módulo activo debe tener al menos un submódulo activo con una función activa).</small>
+  </div>
+
+
+
+
+</form>

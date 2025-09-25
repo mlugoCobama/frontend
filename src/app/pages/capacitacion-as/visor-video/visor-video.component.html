@@ -1,0 +1,15 @@
+<div class="embed-responsive embed-responsive-16by9">
+  <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/zpOULjyy-n8?rel=0" allowfullscreen></iframe>
+</div>
+<video class="ratio ratio-16x9" width="100%" controls [src]="videoUrl" type="video/mp4">
+  Tu navegador no soporta el video.
+</video>
+
+
+<p>Visor de video</p>
+
+<h5 class="pt-1">{{ tab.heading | uppercase }} </h5>
+        <div class="ratio ratio-16x9" style="max-height: 100%;">
+          <iframe [src]="getSafeUrl(tab.video)" frameborder="0" allowfullscreen></iframe>
+        </div>
+<p class="pt-1" > {{ tab.content | titlecase}} </p>

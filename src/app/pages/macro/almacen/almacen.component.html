@@ -8,19 +8,21 @@
               Almacén
             </h5>
             <div class="flex-shrink-0 d-flex gap-1">
-              <a
+              <!-- <a
                 href="javascript:void(0);"
                 class="btn btn-danger btn-sm"
                 ><i class="fas fa-trash"></i> Eliminar</a
-              >
+              > -->
               <a
                 href="javascript:void(0);"
                 class="btn btn-warning btn-sm"
+                (click) = "openModalSalida()"
                 ><i class="fas fa-edit"></i> Generar Salida</a
               >
               <a
                 href="javascript:void(0);"
                 class="btn btn-primary btn-sm"
+                (click) = "openModalEntrada()"
                 ><i class="fas fa-plus"></i> Agregar Entrada</a
               >
             </div>
@@ -28,29 +30,47 @@
         </div>
 
         <div class="card-body border-bottom">
-          <!-- <div class="d-flex justify-content-center">
+          <div *ngIf = "isLoad" class="d-flex justify-content-center">
             <div class="spinner-border" role="status">
               <span class="visually-hidden">Loading...</span>
             </div>
-          </div> -->
+          </div>
 
-          <div class="row justify-content-end">
+          <div *ngIf = "!isLoad" class="row justify-content-end">
             <div class="col-3">
-              <input type="text" class="form-control form-control-sm"/>
+              <input type="text" class="form-control form-control-sm" placeholder="Buscar..." [(ngModel)]="busqueda"  (input)="filtrarTabla()"/>
             </div>
           </div>
-          <div >
-            <div class="tab-page-content mt-3 table-responsive">
+          <div *ngIf = "!isLoad">
+            <div class="tab-page-content mt-3 table-responsive" style="overflow-y: scroll; height: 20rem;">
               <table class="table table-hover table-sm table-bordered">
                 <thead class="table-light">
                   <tr>
-                    <th>Fecha</th>
-                    <th>Planta</th>
-                    <th>Descripción</th>
-                    <th>Autotanque</th>
+                    <th (click)="ordenarPor('fecha_entrada')">Fecha de entrada <i [ngClass]="getIconoOrden('fecha_entrada')"></i></th>
+                    <th (click)="ordenarPor('empresa')">Empresa <i [ngClass]="getIconoOrden('empresa')"></i></th>
+                    <th (click)="ordenarPor('cantidad')" class="text-center">Cant <i [ngClass]="getIconoOrden('cantidad')"></i></th>
+                    <th (click)="ordenarPor('nombre')">Unidad <i [ngClass]="getIconoOrden('nombre')"></i></th>
+                    <th (click)="ordenarPor('descripcion')">Descripcion <i [ngClass]="getIconoOrden('descripcion')"></i></th>
+                    <th (click)="ordenarPor('cant_recibida')" class="text-center">Recibido<i [ngClass]="getIconoOrden('cant_recibida')"></i></th>
+                    <th (click)="ordenarPor('observaciones')">Observaciones<i [ngClass]="getIconoOrden('observaciones')"></i></th>
+                    <th (click)="ordenarPor('existencia')" class="text-center">Existencia<i [ngClass]="getIconoOrden('existencia')"></i></th>
+                    <th (click)="ordenarPor('eco')">Destino<i [ngClass]="getIconoOrden('eco')"></i></th>
                   </tr>
                 </thead>
                 <tbody>
+                  <tr *ngFor = "let item of datosFiltrados">
+                    <td>{{item.fecha_entrada}}</td>
+                    <td>{{item.empresa }}</td>
+                    <td class="text-center fw-semibold">{{item.cantidad }}</td>
+                    <td>{{item.nombre }}</td>
+                    <td>{{item.descripcion }}</td>
+                    <td class="text-center fw-semibold" [ngClass] ="+item.cant_recibida == +item.cantidad ? 'text-success' : 'text-warning'">{{item.cant_recibida }}</td>
+                    <td>{{item.observaciones }}</td>
+                    <td class="text-center fw-semibold" [ngClass] ="+item.existencia > 0 ? 'text-primary' : 'text-danger'">
+                       {{ item.existencia > 0 ? item.existencia : 'Agotado'}}
+                    </td>
+                    <td>{{item.eco }} {{item.unidad }}</td>
+                  </tr>
                 </tbody>
               </table>
             </div>

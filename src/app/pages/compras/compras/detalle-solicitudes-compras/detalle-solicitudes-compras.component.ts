@@ -14,6 +14,7 @@ export class DetalleSolicitudesComprasComponent implements OnInit{
  @Input() solicitudCompra:any;
  @Input() status:any;
  @Input() modifica:any;
+ public tipo =  null;
 
  @Output() udtStatus = new EventEmitter<number>();
 

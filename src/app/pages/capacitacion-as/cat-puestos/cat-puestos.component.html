@@ -1,0 +1,77 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-body border-bottom">
+          <div class="d-flex align-items-center">
+            <h5 class="mb-0 card-title flex-grow-1">
+              Catalogo de puestos
+            </h5>
+            <div class="flex-shrink-0 d-flex gap-1">
+              <a
+                *ngIf="mostrar"
+                href="javascript:void(0);"
+                class="btn btn-danger btn-sm"
+                (click) = "destroy()"
+                ><i class="fas fa-trash"></i> Eliminar</a
+              >
+              <a
+                *ngIf="mostrar"
+                href="javascript:void(0);"
+                class="btn btn-warning btn-sm"
+                (click) = "openModalUpdt()"
+                ><i class="fas fa-edit"></i> Actualizar</a
+              >
+              <a
+                *ngIf = "ready && !mostrar"
+                href="javascript:void(0);"
+                class="btn btn-primary btn-sm"
+                (click) = "openModalNuevo()"
+                ><i class="fas fa-plus"></i> Nuevo</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body border-bottom">
+          <div class="d-flex justify-content-center" *ngIf="isLoad">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+
+          <div *ngIf="!isLoad" class="row justify-content-end">
+            <div class="col-3">
+              <input type="text" class="form-control form-control-sm" placeholder="Buscar..." [(ngModel)]="busqueda"  (input)="filtrarTabla()"/>
+            </div>
+          </div>
+          <div *ngIf="!isLoad">
+            <div class="tab-page-content mt-3 table-responsive" style="overflow-y: scroll; height: 20rem;">
+              <table class="table table-hover table-sm table-bordered text-center">
+                <thead class="table-light">
+                  <tr >
+                    <th (click)="ordenarPor('nombre')">Nombre  <i [ngClass]="getIconoOrden('nombre')"></i> </th>
+                    <th>Modulos</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr  *ngFor="let item of datosFiltrados" (dblclick)="seleccionar(item, $event)">
+                    <td>{{ item.nombre }}</td>
+                    <td><a
+                          href="javascript:void(0);"
+                          class="btn btn-primary btn-sm"
+                          (click) = "openModalVerPermisos(item.id, item.nombre)"
+                        ><i class="fas fa-eye"></i> Ver opciones del puesto </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!--div.card-body-->
+      </div>
+    </div>
+  </div>
+</div>
+<!-- container-fluid -->

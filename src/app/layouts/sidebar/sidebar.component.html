@@ -41,13 +41,13 @@
             @for (subitem of item.subItems; track $index) {
             <li>
               @if(hasItems(subitem)){
-              <a class="side-nav-link-a-ref has-arrow" href="javascript:void(0);" [attr.data-parent]="subitem.parentId">
+              <a class="side-nav-link-a-ref has-arrow" *ngIf="tienePermiso(subitem.permission)" href="javascript:void(0);" [attr.data-parent]="subitem.parentId">
                 {{ subitem.label | translate}}
               </a>
               <ul class="sub-menu mm-collapse" aria-expanded="false">
                 @for (subSubitem of subitem.subItems; track $index) {
                 <li>
-                  <a [attr.data-parent]="subSubitem.parentId" routerLink="{{subSubitem.link}}" routerLinkActive="active" class="side-nav-link-ref">
+                  <a [attr.data-parent]="subSubitem.parentId" *ngIf="tienePermiso(subSubitem.permission)" routerLink="{{subSubitem.link}}" routerLinkActive="active" class="side-nav-link-ref">
                     {{ subSubitem.label | translate }}
                   </a>
                 </li>

@@ -83,7 +83,6 @@ export class FormDetalleSolicitudComponent implements OnInit{
    *  Agrega los detalles a el array detalle para después mostrarlo en la tabla
    */
   public addDetalle() {
-    console.log(this.destino);
     if (this.formDetalleSolicitud.invalid) {
       this.submittedDetail = true;
       return;
@@ -91,6 +90,11 @@ export class FormDetalleSolicitudComponent implements OnInit{
 
     const valores = this.formDetalleSolicitud.value;
     let dato = null;
+
+    if(+this.destino === 602 && valores.vehiculo){
+      this.submittedDetail = true;
+      return;
+    }
 
     if(+this.destino === 602){
       dato = this.autotanques.find(objeto => +objeto.id === +valores.vehiculo);
@@ -123,8 +127,6 @@ export class FormDetalleSolicitudComponent implements OnInit{
     this.formData.delete("img_referencia");
 
     this.submittedDetail = false;
-
-    console.log(this.tableData)
   }
   
   /**

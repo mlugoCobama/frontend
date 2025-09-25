@@ -160,15 +160,12 @@ export class CatUnidadesComponent implements OnInit{
     this.intercompania =  intercompania;
     this.isLoad = true;
     this.showTable =  false;
-    console.log(intercompania);
     this.unidades.getVehiculos(intercompania).subscribe(
       (response) => {
         if (response) {
           this.data = response.data;
-          console.log(response.data)
           this.ordenador = new FuncionesTablas(this.data);
           this.datosFiltrados = [...this.data];
-          console.log(this.datosFiltrados)
           this.contarDatos();
           this.isLoad = false;
           this.showTable = true;

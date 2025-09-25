@@ -23,11 +23,9 @@ export class FormDatosTanqueComponent implements OnInit {
 
   ngOnInit(): void {
     this.buildForm();
-    console.log(this.datos)
   }
 
     private buildForm() {
-    console.log('form datos tanque construido');
     return new Promise((resolve, reject) => {
       this.formDatosTanques = this.formBuilder.group({
         id: new FormControl( null),
@@ -54,7 +52,6 @@ export class FormDatosTanqueComponent implements OnInit {
   }
 
   public llenarForm(){
-    console.log('llenado de datos' + this.datos)
     this.formDatosTanques.patchValue({
       id: this.datos.id_tanque,
       id_sucursal: this.datos.id_sucursal,
@@ -74,7 +71,6 @@ export class FormDatosTanqueComponent implements OnInit {
   obtenerValores() {
     this.submitted = true;
     const value = this.formDatosTanques.value;
-    console.log(value)
     return value;
   }
 
@@ -83,7 +79,6 @@ export class FormDatosTanqueComponent implements OnInit {
    * @returns boolean:  true ->valido, false ->no valido
    */
   esValido() {
-    console.log('form_datos_Tanque' + this.formDatosTanques.valid)
     return this.formDatosTanques.valid;
   }
 

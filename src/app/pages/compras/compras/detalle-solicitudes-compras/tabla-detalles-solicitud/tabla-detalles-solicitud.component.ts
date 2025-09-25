@@ -43,7 +43,6 @@ export class TablaDetallesSolicitudComponent implements OnInit {
     this.getDetalles();
     this.getUnidades();
     this.buildForm();
-    console.log(this.modifica)
   }
    
   /**

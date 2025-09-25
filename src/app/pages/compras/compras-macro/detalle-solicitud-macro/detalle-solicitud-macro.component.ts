@@ -14,6 +14,7 @@ export class DetalleSolicitudMacroComponent {
  @Input() solicitudCompra:any;
  @Input() status:any;
  @Input() modifica:any;
+ public tipo = 'macro';
 
  @Output() udtStatus = new EventEmitter<number>();
 
@@ -35,7 +36,6 @@ export class DetalleSolicitudMacroComponent {
    ngOnInit(): void {
     this.comprasService.actualizarEstatus$.subscribe((valor) => { this.solicitudCompra.estatus =  valor } );
     this.comprasService.mostrarCotizacion$.subscribe((mostrar) => { this.mostrarCotizacionFlag = mostrar; });
-    console.log(this.modifica);
   }
 
  /**

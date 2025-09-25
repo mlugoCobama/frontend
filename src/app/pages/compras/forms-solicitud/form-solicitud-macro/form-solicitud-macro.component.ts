@@ -119,6 +119,9 @@ export class FormSolicitudMacroComponent implements OnInit{
         if (response.status === "success") {
 
           this.usuarioSolicita = response.data[0];
+          if(this.usuarioSolicita.empresas !=  null){
+            this.filtrarEmpresas( this.empresas ,this.usuarioSolicita.empresas);
+          }
           this.getAutotanques(this.usuarioSolicita.intercompania);
           this.formSolicitudCompra.patchValue({empresa :  this.usuarioSolicita.intercompania});
           // console.log(this.usuarioSolicita);
@@ -183,6 +186,12 @@ export class FormSolicitudMacroComponent implements OnInit{
         console.error("Error fetching data:", error);
       }
     );
+  }
+
+  filtrarEmpresas(data, empRel){
+    this.empresas = data.filter(empresa =>
+                empRel.includes(empresa.intercompania)
+  );
   }
 
   /**

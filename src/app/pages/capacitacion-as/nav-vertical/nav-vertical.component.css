@@ -1,0 +1,8 @@
+tabset {
+  display: block;
+}
+
+.nav-pills .nav-link {
+  cursor: pointer;
+}
+

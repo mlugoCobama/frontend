@@ -12,6 +12,7 @@ import catCentrosCostos from "src/environments/cat_centros_costos.json";
 import { ComprasService } from "src/app/core/services/compras/compras.service";
 import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompra/ordenes-compra.service";
 import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
+import { UsuariosService } from "src/app/core/services/compras/usuarios.service";
 
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
 
@@ -34,6 +35,12 @@ export class ComprasComponent implements OnInit {
   public modifica:boolean =  false;
 
   public centrosCostos: any = catCentrosCostos;
+  public empresas:any = [];
+  public usuarioSolicita:any;
+
+ 
+
+
 
   /**
    * Objeto que envió al componente detallesSolicitudCompra
@@ -48,31 +55,60 @@ export class ComprasComponent implements OnInit {
   private ordenador!: FuncionesTablas<any>;
   busqueda: string = "";
 
+
+
   constructor(
     public ordenesComprasService: OrdenesCompraService,
     public alertasService: SwalComprsServiceService,
     public comprasService: ComprasService,
     private modalService: BsModalService,
-    private localStorage: LocalStorageServiceService
+    private localStorage: LocalStorageServiceService,
+    private usuariosService: UsuariosService,
   ) {}
 
   public ngOnInit(): void {
     this.comprasService.mostrarBoton$.subscribe((mostrar) => {
       this.mostrarBoton = mostrar;
     });
-
+    this.getEmpresas()
     this.getUsuarioActivo();
-    this.getAll();
   }
 
   ngOnDestroy(): void {}
 
   public getUsuarioActivo() {
     const usuarioActivo = this.localStorage.getItem("currentUser");
-    return {
-      intercompania: usuarioActivo["role"]["intercompania"],
-      idUser: usuarioActivo["role"]["id"],
-    };
+     this.usuariosService.getUserById(usuarioActivo["role"]["email"]).subscribe(
+      (response) => {
+        if (response.status === "success") {
+          this.usuarioSolicita = response.data[0];
+          if(this.usuarioSolicita.empresas !=  null){
+            this.filtrarEmpresas( this.empresas ,this.usuarioSolicita.empresas);
+          }
+          this.getAll(this.usuarioSolicita?.intercompania);
+          // this.formSolicitudCompra.patchValue({empresa :  this.usuarioSolicita.intercompania});
+          // console.log(this.usuarioSolicita);
+
+        } else {
+          this.alertasService.mostrarAlerta(
+            response.message,
+            "Intente iniciar sesión nuevamente",
+            "warning",
+            "warning"
+          );
+          return;
+        }
+      },
+      (error) => {
+        console.error("Error fetching data:", error);
+      }
+    );
+  }
+
+  filtrarEmpresas(data, empRel){
+    this.empresas = data.filter(empresa =>
+                empRel.includes(empresa.intercompania)
+  );
   }
 
   /**
@@ -90,7 +126,7 @@ export class ComprasComponent implements OnInit {
     this.modalRef.content.closeBtnName = "Close";
     this.modalRef.content.event.subscribe(() => {
       this.isLoad = true;
-      this.getAll();
+      this.getAll(this.usuarioSolicita.intercompania);
     });
     this.modalRef.content.modalCerrado.subscribe(() => {
       this.modalAbierto = false;
@@ -113,14 +149,12 @@ export class ComprasComponent implements OnInit {
   }
 
   //Recupera todos los registros de solicitudes de compras
-  private getAll() {
-    const user = this.getUsuarioActivo();
-    this.comprasService.getAll(user.intercompania, user.idUser).subscribe(
+  private getAll(intercompania) {
+    this.comprasService.getAll(intercompania, this.usuarioSolicita?.id).subscribe(
       (response) => {
         if (response) {
           this.data = response.data;
           this.modifica =  (response.tipo == "compras" || response.tipo == "RT") ? true : false;
-          console.log( response.tipo, this.modifica)
           this.ordenador = new FuncionesTablas(this.data);
           this.datosFiltrados = [...this.data];
 
@@ -136,6 +170,25 @@ export class ComprasComponent implements OnInit {
     );
   }
 
+      /**
+   * Recupera el catalogo de empresas (Select empresa)
+   */
+  public getEmpresas() {
+    this.usuariosService.getEmpresas().subscribe(
+      (response) => {
+        if (response) {
+          
+          this.empresas = response.data;
+          // this.isLoading = false;
+        } else {
+          console.log(response.message);
+        }
+      },
+      (error) => {
+        console.error("Error fetching data:", error);
+      }
+    );
+  } 
   /**
    * Funciones Botonera
    */
@@ -145,7 +198,7 @@ export class ComprasComponent implements OnInit {
     this.solicitudSelecionada = false;
     this.status = null;
     this.mostrarBoton = false;
-    this.getAll();
+    this.getAll(this.usuarioSolicita.intercompania);
   }
   //Muestra u oculta el panel de cotizaciones
   mostrarCotizacion() {

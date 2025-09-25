@@ -1,0 +1,31 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">
+    Salida de material
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="cerrarModal()"></button>
+</div>
+  <div class="modal-body">
+    <app-form-salidas-almacen
+    #formSalidas
+    (enviarDatos)="getDatos($event)"
+    [submitted]="submitted"
+    ></app-form-salidas-almacen>
+    <hr>
+    <app-form-table-salidas
+    #formTableSalidas
+    [detalles]="detalles"
+    [submittDetail]="submittDetail"
+    ></app-form-table-salidas>
+</div>
+<div class="modal-footer">
+  <button
+  type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="cerrarModal()">
+    Cerrar
+  </button>
+
+  <button 
+  (click) = "generarSalidas()"
+  type="button" class="btn btn-primary btn-sm">
+    Guardar
+  </button>
+</div>

@@ -24,12 +24,9 @@ export class FormDatosVehiculoComponent {
 
   ngOnInit(): void {
     this.buildForm();
-    console.log(this.datos);
-    console.log(this.intercompania);
   }
 
     private buildForm() {
-      console.log('form datos tanque construido')
     return new Promise((resolve, reject) => {
       this.formDatosVehiculo = this.formBuilder.group({
         id: new FormControl( null),
@@ -58,7 +55,6 @@ export class FormDatosVehiculoComponent {
   }
 
   public llenarForm(){
-    console.log('llenado de datos' + this.datos);
     this.formDatosVehiculo.patchValue({
       id: this.datos.id,
       nro_economico: this.datos.eco,
@@ -82,7 +78,6 @@ export class FormDatosVehiculoComponent {
   obtenerValores() {
     this.submitted = true;
     const value = this.formDatosVehiculo.value;
-    console.log(value);
     return value;
   }
 
@@ -91,7 +86,6 @@ export class FormDatosVehiculoComponent {
    * @returns boolean:  true ->valido, false ->no valido
    */
   esValido() {
-    console.log(this.formDatosVehiculo.valid)
     return this.formDatosVehiculo.valid;
   }
 

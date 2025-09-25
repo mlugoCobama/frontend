@@ -1,8 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders} from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { Observable } from "rxjs";
 import { BehaviorSubject } from 'rxjs';
+
+const token = localStorage.getItem('token');
+
+const headers = new HttpHeaders({
+  'Authorization': `Bearer ${token}`
+});
 
 
 @Injectable({
@@ -16,7 +22,7 @@ export class ComprasMacroService {
    * @returns colección con las ordenes de compra
    */
   public getAll(intercompania: number, id: number): Observable<any> {
-    return this.http.get(environment.apiUrl + `compras/Solicitudes/Macro/${intercompania}/${id}`);
+    return this.http.get(environment.apiUrl + `compras/Solicitudes/Macro/${intercompania}/${id}`, {headers});
   }
 
   /**
@@ -24,7 +30,7 @@ export class ComprasMacroService {
    * @returns dat auto-tanques
    */
   public getAutotanques(intercompania: number): Observable<any> {
-    return this.http.get(environment.apiUrl + `compras/recuperar-autotanques/${intercompania}`);
+    return this.http.get(environment.apiUrl + `compras/recuperar-autotanques/${intercompania}`, {headers});
   }
 
   /**
@@ -33,11 +39,11 @@ export class ComprasMacroService {
    * @returns 
    */
   public save(data: any): Observable<any> {
-    return this.http.post(environment.apiUrl + "compras/SolicitudesMacro", data);
+    return this.http.post(environment.apiUrl + "compras/SolicitudesMacro", data, {headers});
   }
 
   public edit(id: number, data: any): Observable<any> {
-    return this.http.put(environment.apiUrl + `compras/SolicitudesMacro/${id}`, data);
+    return this.http.put(environment.apiUrl + `compras/SolicitudesMacro/${id}`, data, {headers});
   }
 
   private formDataSubject = new BehaviorSubject<any>(null);

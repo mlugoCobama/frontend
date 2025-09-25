@@ -90,7 +90,6 @@ export class SelectSistemaMantenimientoComponent implements OnInit{
       (response) => {
         if (response) {
           this.tiposMantenimiento = response.data;
-          console.log(response.data)
           this.isLoad = false;
         } else {
           console.log(response.message);

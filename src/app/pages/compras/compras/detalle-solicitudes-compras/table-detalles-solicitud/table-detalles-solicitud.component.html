@@ -106,6 +106,7 @@
   <!-- Fin tabla detalle solicitud + precios cotizaciones -->
   <app-table-files-cotizaciones
     *ngIf="(mostrarTotal && solicitudCompra.estatus > enEsts.Solicitado)"
+    [tipo] = "tipo"
     [ordenCompra]="ordenCompra"
     [solicitudCompra]="solicitudCompra"
     [cotProv]="cotProv"

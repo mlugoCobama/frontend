@@ -17,6 +17,8 @@ export class TableFilesCotizacionesComponent implements AfterViewInit{
 @Input() detalles: any = [];
 @Input() mostrarObs: any = [];
 @Input() ordenCompra: any = {};
+
+@Input() tipo: any = null;
 // @Input() isLoad: any;
 
 @Output() savePrices = new EventEmitter<void>();
@@ -124,7 +126,16 @@ public getEmpresas() {
     this.usuariosService.getEmpresas().subscribe(
       (response) => {
         if (response) {
-          this.empresas = response.data;
+          const rawData = response.data;
+
+          if(this.tipo != null ){
+            /**Filtro para solo mostrar las empresas que tienen acceso a macrotaller */
+          this.empresas = rawData.filter(objeto => objeto.isAgencia === false);
+          }else{
+            this.empresas = rawData;
+          }
+          
+
           this.isLoading = false;
         } else {
           this.alertasService.mostrarAlerta("Error", response.message, "error", "danger");
