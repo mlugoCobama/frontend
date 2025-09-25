@@ -1,0 +1,73 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-body border-bottom">
+          <div class="d-flex align-items-center">
+            <h5 class="mb-0 card-title flex-grow-1">
+              Administración de puestos
+            </h5>
+            <div class="flex-shrink-0 d-flex gap-1">
+              <a
+                *ngIf="mostrar"
+                (click) = "destroy()"
+                href="javascript:void(0);"
+                class="btn btn-danger btn-sm"
+                ><i class="fas fa-trash"></i> Eliminar</a
+              >
+              <a
+                *ngIf="mostrar"
+                (click) = "openModalAct()"
+                href="javascript:void(0);"
+                class="btn btn-warning btn-sm"
+                ><i class="fas fa-edit"></i> Actualizar</a
+              >
+              <a
+              *ngIf = "havePuestos && haveEmpresas"
+                href="javascript:void(0);"
+                class="btn btn-primary btn-sm"
+                (click) = "openModalNuevo()"
+                ><i class="fas fa-plus"></i> Nuevo</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body border-bottom">
+          <div class="d-flex justify-content-center" *ngIf="isLoad">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+
+          <div *ngIf="!isLoad" class="row justify-content-end">
+            <div class="col-3">
+              <input type="text" class="form-control form-control-sm" placeholder="Buscar..."  [(ngModel)]="busqueda"  (input)="filtrarTabla()"/>
+            </div>
+          </div>
+          <div *ngIf="!isLoad">
+            <div class="tab-page-content mt-3 table-responsive" style="overflow-y: scroll; height: 20rem;">
+              <table class="table table-hover table-sm table-bordered text-center">
+                <thead class="table-light">
+                  <tr >
+                    <th (click)="ordenarPor('puesto')">Puesto <i [ngClass]="getIconoOrden('puesto')"></i></th>
+                    <th (click)="ordenarPor('empresa')">Empresa <i [ngClass]="getIconoOrden('empresa')"></i></th>
+                    <th (click)="ordenarPor('usuario')">Usuario <i [ngClass]="getIconoOrden('usuario')"></i></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor = "let item of datosFiltrados" (dblclick)="seleccionar(item, $event)">
+                    <td><strong> {{item.puesto}} </strong></td>
+                    <td>{{item.empresa}}</td>
+                    <td>{{item.usuario}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!--div.card-body-->
+      </div>
+    </div>
+  </div>
+</div>

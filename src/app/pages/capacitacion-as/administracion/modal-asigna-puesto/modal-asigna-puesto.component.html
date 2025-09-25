@@ -1,0 +1,78 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">
+   {{tipo | titlecase}} : Asignación de puesto
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="cerrarModal()"></button>
+</div>
+  <div class="modal-body">
+    <form class="row g-2" [formGroup]="formAsignarPuesto" >
+    <div class="col-md-12">
+      <label for="empresa" class="form-label form-label-sm">Empresa: *</label>
+      <select
+        class="form-select form-select-sm" aria-label="Default select example" formControlName="empresa" id="empresa"
+        name="empresa" aria-label="empresa" (change)="getUsuarios($event.target.value)">
+        <option value="" selected disabled>Selecciona uno</option>
+        <!-- <option *ngIf = "isLoading" value="" [disabled] = "isLoading"> Cargando opciones espera...</option> -->
+        <option  *ngFor="let item of empresas" [value]="+item.intercompania">
+          {{ item.name.toUpperCase() }}
+        </option>
+      </select>
+      <div *ngIf="asignarPuestoFormControl.empresa.touched || submitted || asignarPuestoFormControl.empresa.value === 'Selecciona uno'">
+        <div class="text-danger form-text" *ngIf="asignarPuestoFormControl.empresa.errors?.['required']">
+          Debes de seleccionar una empresa.
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <label for="usuario" class="form-label">Usuarios: *</label>
+      <select class="form-select form-select-sm" aria-label="Default select example" formControlName="usuario" id="usuario" 
+      name="usuario" aria-label="usuario">
+        <option value="" selected disabled>Selecciona uno</option>
+        <option *ngIf = "!isLoad" value="" [disabled] = "!isLoad"> Cargando opciones espera...</option>
+        <option [disabled] = "disabled" *ngFor="let item of usuarios" [value]="+item.id ">
+          {{ item.firstname }} {{ item.realname }} <span>  ({{item.puesto}})</span>
+        </option>
+      </select>
+      <div *ngIf="asignarPuestoFormControl.usuario.touched || submitted">
+        <div
+          class="text-danger form-text" *ngIf="asignarPuestoFormControl.usuario.errors?.['required']">
+          Usuarios es requerido.
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <label for="puesto" class="form-label">Puesto: *</label>
+      <select class="form-select form-select-sm" aria-label="Default select example" formControlName="puesto" id="puesto" 
+      name="puesto" aria-label="puesto">
+        <option value="" selected disabled>Selecciona uno</option>
+        <option *ngIf = "!isLoad" value="" [disabled] = "!isLoad"> Cargando opciones espera...</option>
+        <option [disabled] = "disabled" *ngFor="let item of puestos" [value]="item.id ">
+          {{ item.nombre }}
+        </option>
+      </select>
+      <div *ngIf="asignarPuestoFormControl.puesto.touched || submitted">
+        <div
+          class="text-danger form-text" *ngIf="asignarPuestoFormControl.puesto.errors?.['required']">
+          Puesto es requerido.
+        </div>
+      </div>
+    </div>
+    <!-- fin primer from -->
+  </form>
+
+  </div>
+<div class="modal-footer">
+  <button
+  (click)="cerrarModal()"
+  type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
+    Cerrar
+  </button>
+
+  <button 
+  (click)="guardar()"
+  type="button" class="btn btn-primary btn-sm">
+    {{tipo | titlecase}}
+  </button>
+</div>

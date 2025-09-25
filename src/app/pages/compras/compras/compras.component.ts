@@ -38,6 +38,10 @@ export class ComprasComponent implements OnInit {
   public empresas:any = [];
   public usuarioSolicita:any;
 
+ 
+
+
+
   /**
    * Objeto que envió al componente detallesSolicitudCompra
    */
@@ -51,13 +55,15 @@ export class ComprasComponent implements OnInit {
   private ordenador!: FuncionesTablas<any>;
   busqueda: string = "";
 
+
+
   constructor(
     public ordenesComprasService: OrdenesCompraService,
     public alertasService: SwalComprsServiceService,
     public comprasService: ComprasService,
     private modalService: BsModalService,
     private localStorage: LocalStorageServiceService,
-    private usuariosService: UsuariosService
+    private usuariosService: UsuariosService,
   ) {}
 
   public ngOnInit(): void {

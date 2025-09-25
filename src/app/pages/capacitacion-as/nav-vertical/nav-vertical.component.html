@@ -1,0 +1,24 @@
+<div class="row">
+<div class="col-md-9">
+    <div class="flex-grow-1">
+    <div *ngFor="let tab of tabs">
+      <div class="text-center" *ngIf="tab.active">
+        <h5 class="pt-1">{{ tab.heading | uppercase }} </h5>
+
+        <video class="ratio ratio-16x9" width="100%" controls [src]="tab.video" type="video/mp4">
+          Tu navegador no soporta el video.
+        </video>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-md-3 overflow-auto border-start border-end border-secondary-subtle" style="max-height:100%;">
+  <ul class="nav flex-column nav-pills me-3" role="tablist">
+    <li class="nav-item" role="presentation">
+      <a class="nav-link" [hidden]="!tienePermiso(tab.permiso)" [class.active]="tab.active" (click)="selectTab(tab)" *ngFor="let tab of tabs" >
+        <i class="bx bx-notepad"></i> &nbsp;{{ tab.heading | titlecase }} 
+      </a>
+    </li>
+  </ul>
+</div>
+</div>

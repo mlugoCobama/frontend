@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { Observable } from "rxjs";
+
+const token = localStorage.getItem('token');
+
+const headers = new HttpHeaders({
+  'Authorization': `Bearer ${token}`
+});
 
 @Injectable({
   providedIn: "root",
@@ -14,7 +20,7 @@ export class TecnicosService {
    * @returns colección con el catalogo de técnicos
    */
   public getAll(): Observable<any> {
-    return this.http.get(environment.apiUrl + `macrotaller/tecnico`);
+    return this.http.get(environment.apiUrl + `macrotaller/tecnico`, {headers});
   }
 
   /**
@@ -23,7 +29,7 @@ export class TecnicosService {
    * @returns
    */
   public save(data: any): Observable<any> {
-    return this.http.post(environment.apiUrl + "macrotaller/tecnico", data);
+    return this.http.post(environment.apiUrl + "macrotaller/tecnico", data, {headers});
   }
 
   /**
@@ -32,6 +38,6 @@ export class TecnicosService {
    * @returns 
    */
   public destroy(id: number): Observable<any> {
-    return this.http.delete(environment.apiUrl + `macrotaller/tecnico/${id}`);
+    return this.http.delete(environment.apiUrl + `macrotaller/tecnico/${id}`, {headers});
   }
 }

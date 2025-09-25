@@ -13,6 +13,7 @@ const routes: Routes = [
   { path: 'dashboard', component: LayoutComponent, loadChildren: () => import('./pages/dashboards/dashboards.module').then(m => m.DashboardsModule), canActivate: [AuthGuard] },
   { path: 'compras', component: LayoutComponent, loadChildren: () => import('./pages/compras/compras.module').then(m => m.ComprasModule), canActivate: [AuthGuard] },
   { path: 'macro', component: LayoutComponent, loadChildren: () => import('./pages/macro/macro.module').then(m => m.MacroModule), canActivate: [AuthGuard] },
+  { path: 'capacitacion-as', component: LayoutComponent, loadChildren: () => import('./pages/capacitacion-as/capacitacion-as.module').then(m => m.CapacitacionAsModule), canActivate: [AuthGuard] },
   { path: 'nissan', component: LayoutComponent, loadChildren: () => import('./pages/nissan/nissan.module').then(m => m.NissanModule), canActivate: [AuthGuard] },
   { path: 'renault', component: LayoutComponent, loadChildren: () => import('./pages/renault/renault.module').then(m => m.RenaultModule), canActivate: [AuthGuard] },
   { path: '**', component: Page404Component },

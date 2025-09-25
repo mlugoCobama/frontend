@@ -165,7 +165,7 @@ export class FormSolicitudComponent implements OnInit{
     }
   }
 
-    /**
+  /**
    * Recupera el catalogo de empresas (Select empresa)
    */
   public getEmpresas() {

@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { Observable } from "rxjs";
+
+const token = localStorage.getItem('token');
+
+const headers = new HttpHeaders({
+  'Authorization': `Bearer ${token}`
+});
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +21,7 @@ export class CatSistemasAutoService {
    * @returns colección de sistemas de autos
    */
   public getAll(): Observable<any> {
-    return this.http.get(environment.apiUrl + 'compras/CatalogoSistemasAuto');
+    return this.http.get(environment.apiUrl + 'compras/CatalogoSistemasAuto', {headers});
   } 
 
    /**
@@ -23,6 +29,6 @@ export class CatSistemasAutoService {
    * @returns tipos de mantenimiento
    */
   public getTiposMantenimiento(): Observable<any> {
-    return this.http.get(environment.apiUrl + 'compras/CatalogoTiposMantenimiento');
+    return this.http.get(environment.apiUrl + 'compras/CatalogoTiposMantenimiento', {headers});
   } 
 }

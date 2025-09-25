@@ -1,0 +1,30 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-body border-bottom">
+          <div class="d-flex align-items-center">
+            <h5 class="mb-0 card-title flex-grow-1">
+              Capacitacion: {{modulo | titlecase}} - {{ submodulo  | titlecase }}
+            </h5>
+            <div class="flex-shrink-0 d-flex gap-1">
+              <a
+                href="javascript:void(0);"
+                class="btn btn-dark btn-sm"
+                ><i class="fas fa-back"></i> Atrás</a
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body border-bottom">
+            <app-nav-vertical
+            [tabs] = "tabs">
+            </app-nav-vertical>
+        </div>
+        <!--div.card-body-->
+      </div>
+    </div>
+  </div>
+</div>
+

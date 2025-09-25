@@ -1,270 +1,566 @@
 import { MenuItem } from './menu.model';
 
 export const MENU: MenuItem[] = [
-    {
-      id: 1,
-      label: 'UCoIP',
-      icon: 'bx-user',
-      permission: 'view modulo ucoip',
-      subItems: [
-        {
-          id: 2,
-          label: 'UcoIP',
-          link: '/ucoip',
-          parentId: 1,
-          permission: 'view ucoip'
-        },
-        {
-          id: 2,
-          label: 'Inventario',
-          link: '/ucoip/inventario',
-          parentId: 1,
-          permission: 'view inventario'
-        },
-        {
-          id: 3,
-          label: 'Configuración',
-          link: '/ucoip/configuracion',
-          parentId: 1,
-          permission: 'view configuracion',
-          subItems: [
-            {
-                id: 35,
-                label: 'Permisos',
-                link: '/ucoip/configuracion/permisos',
-                parentId: 34,
-                permission: 'view permisos'
-            },
-            {
-                id: 36,
-                label: 'Modulos',
-                link: '/ucoip/configuracion/modulos',
-                parentId: 34,
-                permission: 'view modulos'
-            },
-          ]
-        },
-      ]
-    },
-    {
-      id: 7,
-      label: 'Compras',
-      icon: 'bx-tone',
-      permission: 'view modulo compras',
-      subItems: [
-        {
-          id: 8,
-          label: 'Compras',
-          link: '/compras',
-          parentId: 7,
-          permission: 'view compras',
-        },
-        {
-          id: 12,
-          label: 'Compras Macro taller',
-          link: '/compras/compras-macro',
-          parentId: 7,
-          permission: 'view compras macro taller',
-        },
-        {
-          id: 9,
-          label: 'Proveedores',
-          link: '/compras/proveedores',
-          parentId: 7,
-          permission: 'view proveedores',
-        },
-        {
-          id: 10,
-          label: 'Unidades de Medida',
-          link: '/compras/cat-unidades-medidas',
-          parentId: 7,
-          permission: 'view unidades de medida',
-        },
-      ]
-    },
-    {
-      id: 7,
-      label: 'Macro Taller',
-      icon: 'bx-wrench',
-      permission: 'view compras macro taller',
-      subItems: [
-        {
-          id: 11,
-          label: 'Parque Vehicular',
-          link: '/compras/cat-unidades',
-          parentId: 7,
-          permission: 'view compras macro taller',
-        },
-        {
-          id: 8,
-          label: 'Técnicos',
-          link: '/macro/tecnicos',
-          parentId: 7,
-          permission: 'view compras macro taller',
-        },
-        {
-          id: 12,
-          label: 'Almacén',
-          link: '/macro/almacen',
-          parentId: 7,
-          permission: 'view compras macro taller',
-        },
-      ]
-    },
-    {
-      id: 30,
-      label: 'Nissan',
-      icon: 'bx-customize',
-      permission: 'view modulo nissan',
-      subItems: [
-        {
-            id: 31,
-            label: 'Pedido Unidades',
-            link: '/nissan/pedido-unidades',
-            parentId: 30,
-            permission: 'view pedido unidades',
-        },
-        {
-            id: 32,
-            label: 'Compra Seminuevos',
-            link: '/nissan/compra-seminuevos',
-            parentId: 30,
-            permission: 'view compra seminuevos',
-        },
-        {
-            id: 32,
-            label: 'Comisiones',
-            link: '/nissan/comisiones',
-            parentId: 30,
-            permission: 'view comisiones',
-        },
+  {
+    id: 1,
+    label: "UCoIP",
+    icon: "bx-user",
+    permission: "view modulo ucoip",
+    subItems: [
+      {
+        id: 2,
+        label: "UcoIP",
+        link: "/ucoip",
+        parentId: 1,
+        permission: "view ucoip",
+      },
+      {
+        id: 2,
+        label: "Inventario",
+        link: "/ucoip/inventario",
+        parentId: 1,
+        permission: "view inventario",
+      },
+      {
+        id: 3,
+        label: "Configuración",
+        link: "/ucoip/configuracion",
+        parentId: 1,
+        permission: "view configuracion",
+        subItems: [
+          {
+            id: 35,
+            label: "Permisos",
+            link: "/ucoip/configuracion/permisos",
+            parentId: 34,
+            permission: "view permisos",
+          },
+          {
+            id: 36,
+            label: "Modulos",
+            link: "/ucoip/configuracion/modulos",
+            parentId: 34,
+            permission: "view modulos",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 7,
+    label: "Compras",
+    icon: "bx-tone",
+    permission: "view modulo compras",
+    subItems: [
+      {
+        id: 8,
+        label: "Compras",
+        link: "/compras",
+        parentId: 7,
+        permission: "view compras",
+      },
+      {
+        id: 12,
+        label: "Compras Macro taller",
+        link: "/compras/compras-macro",
+        parentId: 7,
+        permission: "view compras macro taller",
+      },
+      {
+        id: 9,
+        label: "Proveedores",
+        link: "/compras/proveedores",
+        parentId: 7,
+        permission: "view proveedores",
+      },
+      {
+        id: 10,
+        label: "Unidades de Medida",
+        link: "/compras/cat-unidades-medidas",
+        parentId: 7,
+        permission: "view unidades de medida",
+      },
+    ],
+  },
+  {
+    id: 7,
+    label: "Macro Taller",
+    icon: "bx-wrench",
+    permission: "view compras macro taller",
+    subItems: [
+      {
+        id: 11,
+        label: "Parque Vehicular",
+        link: "/compras/cat-unidades",
+        parentId: 7,
+        permission: "view compras macro taller",
+      },
+      {
+        id: 8,
+        label: "Técnicos",
+        link: "/macro/tecnicos",
+        parentId: 7,
+        permission: "view compras macro taller",
+      },
+      {
+        id: 12,
+        label: "Almacén",
+        link: "/macro/almacen",
+        parentId: 7,
+        permission: "view compras macro taller",
+      },
+    ],
+  },
+  {
+    id: 30,
+    label: "Nissan",
+    icon: "bx-customize",
+    permission: "view modulo nissan",
+    subItems: [
+      {
+        id: 31,
+        label: "Pedido Unidades",
+        link: "/nissan/pedido-unidades",
+        parentId: 30,
+        permission: "view pedido unidades",
+      },
+      {
+        id: 32,
+        label: "Compra Seminuevos",
+        link: "/nissan/compra-seminuevos",
+        parentId: 30,
+        permission: "view compra seminuevos",
+      },
+      {
+        id: 32,
+        label: "Comisiones",
+        link: "/nissan/comisiones",
+        parentId: 30,
+        permission: "view comisiones",
+      },
+    ],
+  },
+  {
+    id: 30,
+    label: "Renault",
+    icon: "bx-customize",
+    permission: "view modulo renault",
+    subItems: [
+      {
+        id: 31,
+        label: "Visor de Citas",
+        link: "",
+        parentId: 30,
+        permission: "view visor citas",
+        subItems: [
+          {
+            id: 35,
+            label: "Azcapotzalco",
+            link: "/renault/visor-citas/1",
+            permission: "view visor citas azcapotzalco",
+            parentId: 34,
+          },
+          {
+            id: 36,
+            label: "Ecatepec",
+            link: "/renault/visor-citas/2",
+            permission: "view visor citas ecatepec",
+            parentId: 34,
+          },
+          {
+            id: 36,
+            label: "Pachuca",
+            link: "/renault/visor-citas/3",
+            permission: "view visor citas pachuca",
+            parentId: 34,
+          },
+          {
+            id: 36,
+            label: "Vallejo",
+            link: "/renault/visor-citas/4",
+            permission: "view visor citas vallejo",
+            parentId: 34,
+          },
+        ],
+      },
+      {
+        id: 32,
+        label: "Sabana de Control",
+        link: "/renault/sabana-control",
+        permission: "view sabana control",
+        parentId: 30,
+      },
+    ],
+  },
+  {
+    id: 1,
+    label: "Dashboard",
+    icon: "bx-user",
+    permission: "view modulo dashboard",
+    subItems: [
+      {
+        id: 4,
+        label: "Gaseras",
+        link: "/dashboard/landing-page/energeticos",
+        permission: "view landing energeticos",
+        parentId: 1,
+      },
 
-      ]
-    },
-    {
-      id: 30,
-      label: 'Renault',
-      icon: 'bx-customize',
-      permission: 'view modulo renault',
-      subItems: [
-        {
-          id: 31,
-          label: 'Visor de Citas',
-          link: '',
-          parentId: 30,
-          permission: 'view visor citas',
-          subItems: [
-            {
-                id: 35,
-                label: 'Azcapotzalco',
-                link: '/renault/visor-citas/1',
-                permission: 'view visor citas azcapotzalco',
-                parentId: 34
-            },
-            {
-                id: 36,
-                label: 'Ecatepec',
-                link: '/renault/visor-citas/2',
-                permission: 'view visor citas ecatepec',
-                parentId: 34
-            },
-            {
-              id: 36,
-              label: 'Pachuca',
-              link: '/renault/visor-citas/3',
-              permission: 'view visor citas pachuca',
-              parentId: 34
-            },
-            {
-              id: 36,
-              label: 'Vallejo',
-              link: '/renault/visor-citas/4',
-              permission: 'view visor citas vallejo',
-              parentId: 34
-            },
-          ]
-        },
-        {
-            id: 32,
-            label: 'Sabana de Control',
-            link: '/renault/sabana-control',
-            permission: 'view sabana control',
-            parentId: 30
-        },
-      ]
-    },
-    {
-      id: 1,
-      label: 'Dashboard',
-      icon: 'bx-user',
-      permission: 'view modulo dashboard',
-      subItems: [
-        {
-          id: 4,
-          label: 'Gaseras',
-          link: '/dashboard/landing-page/energeticos',
-          permission: 'view landing energeticos',
-          parentId: 1
-        },
-        
-        {
-          id: 5,
-          label: 'Gasolinerias',
-          link: '/dashboard/landing-page/gasolinerias',
-          permission: 'view landing gasolinerias',
-          parentId: 1
-        },
-        {
-          id: 6,
-          label: 'Nissan',
-          link: '/dashboard/landing-page/nissan',
-          permission: 'view landing nissan',
-          parentId: 1
-        },
-        {
-          id: 7,
-          label: 'Renault',
-          link: '/dashboard/landing-page/reanult',
-          permission: 'view landing reanult',
-          parentId: 1
-        },
-        {
-          id: 3,
-          label: 'Captura',
-          parentId: 1,
-          permission: 'view captura',
-          subItems: [
-            {
-              id: 35,
-              label: 'Captura Gaseras',
-              link: '/dashboard/captura/gaseras',
-              permission: 'view captura gaseras',
-              parentId: 34
-            },
-            {
-              id: 36,
-              label: 'Captura Gasolinerias',
-              link: '/dashboard/captura/gasolinerias',
-              permission: 'view captura gasolinerias',
-              parentId: 34
-            },
-            {
-              id: 37,
-              label: 'Captura Nissan',
-              link: '/dashboard/captura/agencias-nissan',
-              permission: 'view captura nissan',
-              parentId: 34
-            },
-            {
-              id: 38,
-              label: 'Captura Renault',
-              link: '/dashboard/captura/agencias-renault',
-              permission: 'view captura renault',
-              parentId: 34
-            },
-          ]
-        },
-      ]
-    },
+      {
+        id: 5,
+        label: "Gasolinerias",
+        link: "/dashboard/landing-page/gasolinerias",
+        permission: "view landing gasolinerias",
+        parentId: 1,
+      },
+      {
+        id: 6,
+        label: "Nissan",
+        link: "/dashboard/landing-page/nissan",
+        permission: "view landing nissan",
+        parentId: 1,
+      },
+      {
+        id: 7,
+        label: "Renault",
+        link: "/dashboard/landing-page/reanult",
+        permission: "view landing reanult",
+        parentId: 1,
+      },
+      {
+        id: 3,
+        label: "Captura",
+        parentId: 1,
+        permission: "view captura",
+        subItems: [
+          {
+            id: 35,
+            label: "Captura Gaseras",
+            link: "/dashboard/captura/gaseras",
+            permission: "view captura gaseras",
+            parentId: 34,
+          },
+          {
+            id: 36,
+            label: "Captura Gasolinerias",
+            link: "/dashboard/captura/gasolinerias",
+            permission: "view captura gasolinerias",
+            parentId: 34,
+          },
+          {
+            id: 37,
+            label: "Captura Nissan",
+            link: "/dashboard/captura/agencias-nissan",
+            permission: "view captura nissan",
+            parentId: 34,
+          },
+          {
+            id: 38,
+            label: "Captura Renault",
+            link: "/dashboard/captura/agencias-renault",
+            permission: "view captura renault",
+            parentId: 34,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 40,
+    label: "Capacitancion AS",
+    icon: "bxs-book",
+    permission: "view modulo capacitacion as",
+    subItems: [
+      {
+        id: 41,
+        label: "Administración",
+        link: "/capacitacion-as/admin-capacitacion",
+        parentId: 40,
+        permission: "view admin capacitacion as",
+      },
+      {
+        id: 42,
+        label: "Catalogo Puestos",
+        link: "/capacitacion-as/catalogo-puestos",
+        parentId: 40,
+        permission: "view catalogo puestos as",
+      },
+      {
+        id: 43,
+        label: "Bancos",
+        parentId: 40,
+        permission: "view bancos",
+        subItems: [
+          {
+            id: 8,
+            label: "Catálogos",
+            link: "/capacitacion-as/ver/bancos/catalogos",
+            parentId: 43,
+            permission: "view bancos catalogos",
+          },
+          {
+            id: 12,
+            label: "Procesos",
+            link: "/capacitacion-as/ver/bancos/procesos",
+            parentId: 43,
+            permission: "view bancos procesos",
+          },
+          {
+            id: 9,
+            label: "Reportes",
+            link: "/capacitacion-as/ver/bancos/reportes",
+            parentId: 43,
+            permission: "view bancos reportes",
+          },
+        ],
+      },
+      {
+        id: 44,
+        label: "Caja",
+        parentId: 40,
+        permission: "view caja",
+        subItems: [
+          {
+            id: 8,
+            label: "Catálogos",
+            link: "/capacitacion-as/ver/caja/catalogos",
+            parentId: 44,
+            permission: "view caja catalogos",
+          },
+          {
+            id: 12,
+            label: "Procesos",
+            link: "/capacitacion-as/ver/caja/procesos",
+            parentId: 44,
+            permission: "view caja procesos",
+          },
+          {
+            id: 9,
+            label: "Reportes",
+            link: "/capacitacion-as/ver/caja/reportes",
+            parentId: 44,
+            permission: "view caja reportes",
+          },
+          {
+            id: 9,
+            label: "Recibos de caja",
+            link: "/capacitacion-as/ver/caja/recibos de caja",
+            parentId: 44,
+            permission: "view caja recibos",
+          },
+        ],
+      },
+      {
+        id: 45,
+        label: "Compras",
+        parentId: 40,
+        permission: "view compras as",
+        subItems: [
+          {
+            id: 8,
+            label: "Catálogos",
+            link: "/capacitacion-as/ver/compras/catalogos",
+            parentId: 45,
+            permission: "view compras as catalogos",
+          },
+          {
+            id: 12,
+            label: "Procesos",
+            link: "/capacitacion-as/ver/compras/procesos",
+            parentId: 45,
+            permission: "view compras as procesos",
+          },
+          {
+            id: 9,
+            label: "Reportes",
+            link: "/capacitacion-as/ver/compras/reportes",
+            parentId: 45,
+            permission: "view compras as reportes",
+          },
+        ],
+      },
+      {
+        id: 46,
+        label: "Contabilidad",
+        parentId: 40,
+        permission: "view contabilidad",
+        subItems: [
+          {
+            id: 8,
+            label: "Catálogos",
+            link: "/capacitacion-as/ver/contabilidad/catalogos",
+            parentId: 46,
+            permission: "view contabilidad catalogos",
+          },
+          {
+            id: 12,
+            label: "Procesos",
+            link: "/capacitacion-as/ver/contabilidad/procesos",
+            parentId: 46,
+            permission: "view contabilidad catalogos",
+          },
+          {
+            id: 9,
+            label: "Reportes",
+            link: "/capacitacion-as/ver/contabilidad/reportes",
+            parentId: 46,
+            permission: "view contabilidad reportes",
+          },
+          {
+            id: 9,
+            label: "Utilerias",
+            link: "/capacitacion-as/ver/contabilidad/utilerias",
+            parentId: 46,
+            permission: "view contabilidad utilerias",
+          },
+        ],
+      },
+      {
+        id: 47,
+        label: "CXC",
+        parentId: 40,
+        permission: "view cxc",
+        subItems: [
+          {
+            id: 12,
+            label: "Procesos",
+            link: "/capacitacion-as/ver/cxc/procesos",
+            parentId: 47,
+            permission: "view cxc porcesos",
+          },
+          {
+            id: 9,
+            label: "Reportes",
+            link: "/capacitacion-as/ver/cxc/reportes",
+            parentId: 47,
+            permission: "view cxc reportes",
+          },
+        ],
+      },
+      {
+        id: 48,
+        label: "Refacciones",
+        parentId: 40,
+        permission: "view refacciones catalogos",
+        subItems: [
+          {
+            id: 8,
+            label: "Catálogos",
+            link: "/capacitacion-as/ver/refacciones/catalogos",
+            parentId: 48,
+            permission: "view compras",
+          },
+          {
+            id: 12,
+            label: "Procesos",
+            link: "/capacitacion-as/ver/refacciones/procesos",
+            parentId: 48,
+            permission: "view refacciones procesos",
+          },
+          {
+            id: 9,
+            label: "Reportes",
+            link: "/capacitacion-as/ver/refacciones/reportes",
+            parentId: 48,
+            permission: "view refacciones reportes",
+          },
+        ],
+      },
+      {
+        id: 49,
+        label: "Seguridad",
+        parentId: 40,
+        permission: "view seguridad",
+        subItems: [
+          {
+            id: 8,
+            label: "Catálogos",
+            link: "/capacitacion-as/ver/seguridad/catalogos",
+            parentId: 49,
+            permission: "view seguridad catalogos",
+          },
+          {
+            id: 12,
+            label: "Procesos",
+            link: "/capacitacion-as/ver/seguridad/procesos",
+            parentId: 49,
+            permission: "view seguridad procesos",
+          },
+        ],
+      },
+      {
+        id: 50,
+        label: "Servicio",
+        parentId: 40,
+        permission: "view servicio",
+        subItems: [
+          {
+            id: 8,
+            label: "Garantias",
+            link: "/capacitacion-as/ver/servicio/garantias",
+            parentId: 50,
+            permission: "view servicio garantias",
+          },
+          {
+            id: 12,
+            label: "Procesos",
+            link: "/capacitacion-as/ver/servicio/procesos",
+            parentId: 50,
+            permission: "view servicio proceso",
+          },
+          {
+            id: 12,
+            label: "Reportes",
+            link: "/capacitacion-as/ver/servicio/reportes",
+            parentId: 50,
+            permission: "view sercvicio reportes",
+          },
+          {
+            id: 12,
+            label: "Catalogo",
+            link: "/capacitacion-as/ver/servicio/catalogos",
+            parentId: 50,
+            permission: "view servicio catalogos",
+          },
+          {
+            id: 12,
+            label: "Utilerias",
+            link: "/capacitacion-as/ver/servicio/utilerias",
+            parentId: 50,
+            permission: "view servicio utilerias",
+          },
+        ],
+      },
+      {
+        id: 51,
+        label: "Ventas",
+        parentId: 40,
+        permission: "view ventas",
+        subItems: [
+          {
+            id: 8,
+            label: "Catálogos",
+            link: "/capacitacion-as/ver/ventas/catalogos",
+            parentId: 51,
+            permission: "view ventas catalogos",
+          },
+          {
+            id: 12,
+            label: "Procesos",
+            link: "/capacitacion-as/ver/ventas/procesos",
+            parentId: 51,
+            permission: "view ventas porcesos",
+          },
+          {
+            id: 9,
+            label: "Reportes",
+            link: "/capacitacion-as/ver/ventas/reportes",
+            parentId: 51,
+            permission: "view ventas porcesos",
+          },
+        ],
+      },
+    ],
+  },
 ];
 

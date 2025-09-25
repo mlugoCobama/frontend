@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { Observable } from "rxjs";
+
+const token = localStorage.getItem('token');
+
+const headers = new HttpHeaders({
+  'Authorization': `Bearer ${token}`
+});
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +22,7 @@ export class MacroService {
    */
 
   public getGaseras(): Observable<any> {
-      return this.http.get(environment.apiUrl + `macrotaller/get-gaseras`);
+      return this.http.get(environment.apiUrl + `macrotaller/get-gaseras`, {headers});
   }
 
   /**
@@ -25,7 +31,7 @@ export class MacroService {
    * @returns compras marcadas como autorizadas o superior 
    */
   public getCompras(intercompania: number): Observable<any> {
-      return this.http.get(environment.apiUrl + `macrotaller/get-compra/${intercompania}`);
+      return this.http.get(environment.apiUrl + `macrotaller/get-compra/${intercompania}`, {headers});
   }
 
   /**
@@ -34,7 +40,7 @@ export class MacroService {
    * @returns compras marcadas como autorizadas o superior 
    */
   public getComprasAlmacenadas(intercompania: number): Observable<any> {
-      return this.http.get(environment.apiUrl + `macrotaller/get-compras-almacenadas/${intercompania}`);
+      return this.http.get(environment.apiUrl + `macrotaller/get-compras-almacenadas/${intercompania}`, {headers});
   }
 
   /**
@@ -42,7 +48,7 @@ export class MacroService {
    * @returns colección con el catalogo de técnicos
    */
   public getTecnicos(): Observable<any> {
-      return this.http.get(environment.apiUrl + `macrotaller/tecnico`);
+      return this.http.get(environment.apiUrl + `macrotaller/tecnico`, {headers});
     }
 
 /**
@@ -51,7 +57,7 @@ export class MacroService {
  * @returns detalles de la solicitud sin ingresar al almacen 
  */
   public getDetalleEntrada(idSolicitud: number): Observable<any> {
-      return this.http.get(environment.apiUrl + `macrotaller/almacen/${idSolicitud}`);
+      return this.http.get(environment.apiUrl + `macrotaller/almacen/${idSolicitud}`, {headers});
   }
 
   /**
@@ -61,7 +67,7 @@ export class MacroService {
    * @returns lista de detalles disponibles en el almacen 
    */
   public getDetalleSalida(idSolicitud: number, tipo: any): Observable<any> {
-      return this.http.get(environment.apiUrl + `macrotaller/almacen-activo/${tipo}/${idSolicitud}`);
+      return this.http.get(environment.apiUrl + `macrotaller/almacen-activo/${tipo}/${idSolicitud}`, {headers});
   }
 
 }
