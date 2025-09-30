@@ -23,6 +23,7 @@ export class NavVerticalComponent implements OnInit {
 
   selectTab(selectedTab: any) {
     this.tabs.forEach(tab => tab.active = false);
+    
     selectedTab.active = true;
   }
 

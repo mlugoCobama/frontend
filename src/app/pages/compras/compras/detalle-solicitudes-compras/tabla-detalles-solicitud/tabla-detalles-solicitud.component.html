@@ -121,6 +121,7 @@
               type="text"
               formControlName="descripcion"
               class="form-control form-control-sm"
+              data-bs-toggle="tooltip" data-bs-placement="top" [attr.title]="getDetalleControl(i, 'descripcion')?.value"
             />
             <div
               *ngIf="
@@ -144,6 +145,7 @@
               type="text"
               formControlName="observaciones"
               class="form-control form-control-sm"
+              data-bs-toggle="tooltip" data-bs-placement="top" [attr.title]="getDetalleControl(i, 'observaciones')?.value"
             />
             <div
               *ngIf="

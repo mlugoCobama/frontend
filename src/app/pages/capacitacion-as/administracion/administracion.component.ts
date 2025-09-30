@@ -36,11 +36,11 @@ export class AdministracionComponent implements OnInit {
     this.getData();
     this.getEmpresas();
     this.getPuestos();
-    navigator.geolocation.getCurrentPosition((position) => {
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
-      console.log(`Lat: ${latitude}, Lon: ${longitude}`);
-});
+    // navigator.geolocation.getCurrentPosition((position) => {
+    //   const latitude = position.coords.latitude;
+    //   const longitude = position.coords.longitude;
+    //   console.log(`Lat: ${latitude}, Lon: ${longitude}`);
+    // });
 
 
   }
@@ -62,8 +62,8 @@ export class AdministracionComponent implements OnInit {
     );
     this.modalRef.content.closeBtnName = "Close";
     this.modalRef.content.event.subscribe(() => {
-      // this.isLoad = true;
-      // this.getAll();
+      this.isLoad = true;
+      this.getData();
     });
     // this.modalRef.content.modalCerrado.subscribe(() => {
     //     this.modalAbierto = false;
@@ -140,6 +140,7 @@ export class AdministracionComponent implements OnInit {
     this.administracion.getEmpresas().subscribe(
       (response) => {
         if (response) {
+          console.log(response.data)
           this.empresas = this.filtrarEmpresas(response.data);
           this.haveEmpresas = true;
         } else {
@@ -153,8 +154,15 @@ export class AdministracionComponent implements OnInit {
   }
 
   filtrarEmpresas(data) {
-    return data.filter((empresa) => +empresa.intercompania >= 700 || +empresa.intercompania === 333);
-  }
+  const excluirEmpresas = [706, 7074, 2000, 7072, 7075, 7102];
+  return data.filter((empresa) => {
+    const cumpleCondicion = +empresa.intercompania >= 700 || +empresa.intercompania === 333;
+    const noExcluida = !excluirEmpresas.includes(empresa.intercompania);
+    return cumpleCondicion && noExcluida;
+  });
+}
+
+
 
   public seleccionar(dato: any, evento: any) {
     this.mostrar = true;
