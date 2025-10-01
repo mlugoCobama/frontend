@@ -199,7 +199,7 @@ export class ComprasMacroComponent implements OnInit{
     }
   
     // Cancela la solicitud desde un botón en la botonera
-    public cancelarSolicitud() {
+    public cancelarSolicitud1() {
       this.isLoad = true;
       Swal.fire({
         title: "¿Estas seguro?",
@@ -230,6 +230,73 @@ export class ComprasMacroComponent implements OnInit{
           );
         }
         this.isLoad = false;
+      });
+    }
+
+    public cancelarSolicitud() {
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'La solicitud será marcada como cancelada. Por favor ingresa la razón:',
+        input: 'textarea',
+        inputAttributes: {
+          autocapitalize: 'off'
+        },
+        icon: 'warning',
+        confirmButtonText: 'Sí, cancelar',
+        showCancelButton: true,
+        cancelButtonText: 'No',
+        customClass: {
+          confirmButton: 'btn btn-danger px-4',
+          cancelButton: 'btn btn-primary ms-2 px-4',
+        },
+        buttonsStyling: false,
+        preConfirm: (razon) => {
+          if (!razon || razon.trim() === '') {
+            Swal.showValidationMessage('Debes ingresar una razón válida');
+            return false;
+          }
+          return razon;
+        }
+      }).then((result) => {
+        if (result.isConfirmed && result.value) {
+          this.isLoad = true;
+    
+          const payload = {
+            id: this.solicitudCompra.id,
+            razonCancelacion: result.value
+          };
+    
+          this.comprasService.destroy(payload).subscribe(
+            (response) => {
+              this.isLoad = false;
+              if (response.status === 'success') {
+                this.regresar();
+                this.alertasService.mostrarAlerta(
+                  'Cancelada!',
+                  'La solicitud ha sido cancelada.',
+                  'success',
+                  'success'
+                );
+              } else {
+                this.alertasService.mostrarAlerta(
+                  'Error!',
+                  'Ocurrió un error inesperado',
+                  'error',
+                  'error'
+                );
+              }
+            },
+            (error) => {
+              this.isLoad = false;
+              this.alertasService.mostrarAlerta(
+                'Error!',
+                error,
+                'error',
+                'error'
+              );
+            }
+          );
+        }
       });
     }
   
@@ -279,5 +346,5 @@ export class ComprasMacroComponent implements OnInit{
       'folio', 'usuario_destino', 'motivo',
       'fecha', 'usuario_solicita', 'empresa', 'estado'
     ]);
-  }
+  }  
 }
