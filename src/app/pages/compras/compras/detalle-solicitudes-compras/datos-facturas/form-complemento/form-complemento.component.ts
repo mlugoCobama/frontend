@@ -35,8 +35,8 @@ export class FormComplementoComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.formComplemento = this.formBuilder.group({
         tipo_documento: new FormControl("", Validators.required),
-        archivo_xml: new FormControl(""),
-        archivo: new FormControl(""),
+        archivo_xml: new FormControl(null),
+        archivo: new FormControl(null),
       });
       resolve(true);
     });
@@ -46,12 +46,24 @@ export class FormComplementoComponent implements OnInit {
     return this.formComplemento.controls;
   }
 
+  // onFileChange(event: any, controlName: string): void {
+  //   if(event.target.files && event.target.files.length > 0 ){
+  //     const file = event.target.files[0];
+  //     this.formData.set(controlName, file);
+  //   }
+  // }
+
   onFileChange(event: any, controlName: string): void {
-    if(event.target.files && event.target.files.length > 0 ){
-      const file = event.target.files[0];
+  const files = event.target.files;
+  if (files && files.length > 0) {
+    const file = files[0];
+    if (file && file.size > 0) {
       this.formData.set(controlName, file);
     }
   }
+}
+
+
 
   obtenerValores() {
     return this.formData;

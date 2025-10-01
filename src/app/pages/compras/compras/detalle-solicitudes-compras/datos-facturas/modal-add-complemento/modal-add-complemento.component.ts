@@ -74,7 +74,9 @@ export class ModalAddComplementoComponent {
 
     formData.append('idFactura', this.id);
     formData.append('tipo_documento', tipo_documento);
-    formData.append('archivo_xml', files.get('archivo_xml'));
+    if(tipo_documento != 'comprobante_pago'){
+      formData.append('archivo_xml', files.get('archivo_xml'));
+    }
     formData.append('archivo', files.get('archivo'));
     // formData.append("_method", "PUT");
     formData.append("orden_compra_id", this.idOrdenCompra);

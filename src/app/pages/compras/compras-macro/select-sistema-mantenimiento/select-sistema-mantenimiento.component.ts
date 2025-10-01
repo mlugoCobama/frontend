@@ -120,7 +120,13 @@ export class SelectSistemaMantenimientoComponent implements OnInit{
    * @returns boolean:  true ->valido, false ->no valido
    */
   esValido() {
-    return this.formSistemaMantenimiento.valid;
+    let bandera = this.formSistemaMantenimiento.valid;
+    if(bandera === true){
+      return bandera;
+    }else{
+      this.submitted = true;
+      return bandera;
+    }
   }
 
 }

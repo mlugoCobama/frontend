@@ -20,7 +20,7 @@ export class ProveedoresService {
    * @returns colección de datos de proveedores
    */
   public getAll(): Observable<any> {
-    return this.http.get(environment.apiUrl + 'compras/Proveedores');
+    return this.http.get(environment.apiUrl + 'compras/Proveedores', {headers});
   } 
   
   /**
@@ -28,7 +28,7 @@ export class ProveedoresService {
    * @returns colección de datos {nombre, id}
    */
   public getProveedores(): Observable<any> {
-    return this.http.get(environment.apiUrl + 'compras/getProveedores');
+    return this.http.get(environment.apiUrl + 'compras/getProveedores', {headers});
   } 
 
   /**
@@ -46,7 +46,7 @@ export class ProveedoresService {
    * @returns rutas delos archivos del expediente del proveedor
    */
   public getExp(id:number): Observable<any> {
-    return this.http.get(environment.apiUrl + `compras/Proveedores/${id}`);
+    return this.http.get(environment.apiUrl + `compras/Proveedores/${id}`, {headers});
   }
 
   /**
@@ -55,7 +55,7 @@ export class ProveedoresService {
    * @returns respuesta del servidor "success"
    */
   public save(data:any): Observable<any> {
-    return this.http.post(environment.apiUrl + 'compras/Proveedores', data);
+    return this.http.post(environment.apiUrl + 'compras/Proveedores', data, {headers});
   }
 
   /**
@@ -65,7 +65,7 @@ export class ProveedoresService {
    * @returns respuesta del servidor con datos actualizados
    */
   public edit(id:number, data:any): Observable<any> {
-    return this.http.post(environment.apiUrl + `compras/Proveedores/${id}`, data);
+    return this.http.post(environment.apiUrl + `compras/Proveedores/${id}`, data, {headers});
   }
 
   /**
@@ -74,7 +74,7 @@ export class ProveedoresService {
    * @returns 
    */
   public destroy(id:number): Observable<any> {
-    return this.http.delete(environment.apiUrl + `compras/Proveedores/${id}`);
+    return this.http.delete(environment.apiUrl + `compras/Proveedores/${id}`, {headers});
   }
  /**
   * Envía una petición al servidor para recuperar un zip con el expediente del proveedor
@@ -82,6 +82,6 @@ export class ProveedoresService {
   * @returns archivo zip 
   */
   public descargarExpediente(id:number): Observable<any> {
-    return this.http.get(environment.apiUrl + `compras/descargar-expediente/${id}`,{ responseType: 'blob' });
+    return this.http.get(environment.apiUrl + `compras/descargar-expediente/${id}`,{ responseType: 'blob' } );
   }
 }

@@ -61,7 +61,19 @@ export class ModalComprasMacroComponent implements AfterViewInit {
       this.isLoad = false;
       this.alertasService.mostrarAlerta(
         "Alerta",
-        "Debes llenar correctamente todos los campos",
+        "Debes llenar correctamente todos los campos marcados en rojo",
+        "warning",
+        "warning"
+      );
+      this.sending = false;
+      return;
+    }
+
+    if (!this.formSelectsSistemaManteniemiento.esValido()) {
+      this.isLoad = false;
+      this.alertasService.mostrarAlerta(
+        "Alerta",
+        "Debes seleccionar un sistema de vehículo y un tipo de mantenimiento",
         "warning",
         "warning"
       );
