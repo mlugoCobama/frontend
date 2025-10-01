@@ -1,145 +1,6 @@
 import { MenuItem } from './menu.model';
 
 export const MENU: MenuItem[] = [
-<<<<<<< HEAD
-    {
-      id: 1,
-      label: 'UCoIP',
-      icon: 'bx-user',
-      permission: 'view modulo ucoip',
-      subItems: [
-        {
-          id: 2,
-          label: 'UcoIP',
-          link: '/ucoip',
-          parentId: 1,
-          permission: 'view ucoip'
-        },
-        {
-          id: 2,
-          label: 'Inventario',
-          link: '/ucoip/inventario',
-          parentId: 1,
-          permission: 'view inventario'
-        },
-        {
-          id: 3,
-          label: 'Configuración',
-          link: '/ucoip/configuracion',
-          parentId: 1,
-          permission: 'view configuracion',
-          subItems: [
-            {
-                id: 35,
-                label: 'Permisos',
-                link: '/ucoip/configuracion/permisos',
-                parentId: 34,
-                permission: 'view permisos'
-            },
-            {
-                id: 36,
-                label: 'Modulos',
-                link: '/ucoip/configuracion/modulos',
-                parentId: 34,
-                permission: 'view modulos'
-            },
-          ]
-        },
-      ]
-    },
-    {
-      id: 7,
-      label: 'Compras',
-      icon: 'bx-tone',
-      permission: 'view modulo compras',
-      subItems: [
-        {
-          id: 8,
-          label: 'Compras',
-          link: '/compras',
-          parentId: 7,
-          permission: 'view compras',
-        },
-        {
-          id: 12,
-          label: 'Compras Macro taller',
-          link: '/compras/compras-macro',
-          parentId: 7,
-          permission: 'view compras macro taller',
-        },
-        {
-          id: 9,
-          label: 'Proveedores',
-          link: '/compras/proveedores',
-          parentId: 7,
-          permission: 'view proveedores',
-        },
-        {
-          id: 10,
-          label: 'Unidades de Medida',
-          link: '/compras/cat-unidades-medidas',
-          parentId: 7,
-          permission: 'view unidades de medida',
-        },
-      ]
-    },
-    {
-      id: 7,
-      label: 'Macro Taller',
-      icon: 'bx-wrench',
-      permission: 'view modulo compras macro taller',
-      subItems: [
-        {
-          id: 11,
-          label: 'Parque Vehicular',
-          link: '/compras/cat-unidades',
-          parentId: 7,
-          permission: 'view compras macro taller',
-        },
-        {
-          id: 8,
-          label: 'Técnicos',
-          link: '/macro/tecnicos',
-          parentId: 7,
-          permission: 'view compras macro taller',
-        },
-        {
-          id: 12,
-          label: 'Almacén',
-          link: '/macro/almacen',
-          parentId: 7,
-          permission: 'view compras macro taller',
-        },
-      ]
-    },
-    {
-      id: 30,
-      label: 'Nissan',
-      icon: 'bx-customize',
-      permission: 'view modulo nissan',
-      subItems: [
-        {
-            id: 31,
-            label: 'Pedido Unidades',
-            link: '/nissan/pedido-unidades',
-            parentId: 30,
-            permission: 'view pedido unidades',
-        },
-        {
-            id: 32,
-            label: 'Compra Seminuevos',
-            link: '/nissan/compra-seminuevos',
-            parentId: 30,
-            permission: 'view compra seminuevos',
-        },
-        {
-            id: 32,
-            label: 'Comisiones',
-            link: '/nissan/comisiones',
-            parentId: 30,
-            permission: 'view comisiones',
-        },
-=======
   {
     id: 1,
     label: "UCoIP",
@@ -225,28 +86,28 @@ export const MENU: MenuItem[] = [
     id: 7,
     label: "Macro Taller",
     icon: "bx-wrench",
-    permission: "view compras macro taller",
+    permission: "view modulo macro taller",
     subItems: [
       {
         id: 11,
         label: "Parque Vehicular",
         link: "/compras/cat-unidades",
         parentId: 7,
-        permission: "view compras macro taller",
+        permission: "view parque vehicular",
       },
       {
         id: 8,
         label: "Técnicos",
         link: "/macro/tecnicos",
         parentId: 7,
-        permission: "view compras macro taller",
+        permission: "view tecnicos",
       },
       {
         id: 12,
         label: "Almacén",
         link: "/macro/almacen",
         parentId: 7,
-        permission: "view compras macro taller",
+        permission: "view almacen",
       },
     ],
   },
@@ -344,7 +205,6 @@ export const MENU: MenuItem[] = [
         permission: "view landing energeticos",
         parentId: 1,
       },
->>>>>>> c4e303b59e6a4eb79f3f0d732115f5e7fa9235dc
 
       {
         id: 5,
