@@ -11,6 +11,7 @@ import { SwalComprsServiceService } from "src/app/core/services/compras/swal-com
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
 import { UsuariosService } from "src/app/core/services/compras/usuarios.service";
 import { ComprasMacroService } from "src/app/core/services/compras/compras-macro.service";
+import { PermisosService } from "src/app/core/services/permisos.service";
 
 @Component({
   selector: "app-btn-autorizacion-gerencia",
@@ -27,17 +28,27 @@ export class BtnAutorizacionGerenciaComponent {
     private alertasService: SwalComprsServiceService,
     private localStorage: LocalStorageServiceService,
     private usuariosService: UsuariosService,
-    private comprasMacro: ComprasMacroService
+    private comprasMacro: ComprasMacroService,
+    private permisosService: PermisosService
+
   ) {}
 
   ngOnInit(): void {
     this.getUsuarioActivo();
   }
 
+  
+ 
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes != null && this.solicitudCompra.estatus === 1) {
       this.enviarSolicitud();
     }
+  }
+
+  tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
   }
 
   public usuarioActivo: any;

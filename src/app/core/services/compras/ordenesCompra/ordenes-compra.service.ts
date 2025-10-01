@@ -82,10 +82,11 @@ export class OrdenesCompraService {
    * @param id is_solicitudes_compras
    * @returns
    */
-  public destroy(id: number): Observable<any> {
-    return this.http.delete(
-      environment.apiUrl + `compras/OrdenesCompras/${id}`, {headers} 
-    );
+  public destroy(data: any): Observable<any> {
+    return this.http.post(environment.apiUrl + `compras/rechazar-orden-compra`, data , {headers} );
+    // return this.http.delete(
+    //   environment.apiUrl + `compras/OrdenesCompras/${id}`, {headers} 
+    // );
   }
 
   /**

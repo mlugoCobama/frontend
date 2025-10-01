@@ -77,8 +77,9 @@ export class ComprasService {
    * @param id id del elemento a cancelar
    * @returns solicitud con estatus cancelada
    */
-  public destroy(id: number): Observable<any> {
-    return this.http.delete(environment.apiUrl + `compras/SolicitudesCompras/${id}`, {headers});
+  public destroy(data: any): Observable<any> {
+    // return this.http.delete(environment.apiUrl + `compras/SolicitudesCompras/${id}`, {headers});
+    return this.http.post(environment.apiUrl + `compras/cancelar-solicitud`, data ,{headers});
   }
 
   /**

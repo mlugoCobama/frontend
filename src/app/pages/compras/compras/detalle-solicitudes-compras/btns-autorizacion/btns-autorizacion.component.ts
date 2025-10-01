@@ -35,7 +35,7 @@ export class BtnsAutorizacionComponent implements OnInit {
   /**
    * Maneja la función de cancelar una orden
    */ 
-  public  cancelarOrden() {
+  public  cancelarOrden1() {
     Swal.fire({
       title: "¿Estas seguro?",
       text: "La orden será cancelada",
@@ -67,6 +67,74 @@ export class BtnsAutorizacionComponent implements OnInit {
 
     });
   }  
+
+  public cancelarOrden() {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'La orden de compra sera rechazada. Por favor ingresa la razón:',
+      input: 'textarea',
+      inputAttributes: {
+        autocapitalize: 'off'
+      },
+      icon: 'warning',
+      confirmButtonText: 'Sí, rechazar',
+      showCancelButton: true,
+      cancelButtonText: 'No',
+      customClass: {
+        confirmButton: 'btn btn-danger px-4',
+        cancelButton: 'btn btn-primary ms-2 px-4',
+      },
+      buttonsStyling: false,
+      preConfirm: (razon) => {
+        if (!razon || razon.trim() === '') {
+          Swal.showValidationMessage('Debes ingresar una razón válida');
+          return false;
+        }
+        return razon;
+      }
+    }).then((result) => {
+      if (result.isConfirmed && result.value) {
+        this.isLoad = true;
+  
+        const payload = {
+          id: this.solicitudCompra.id,
+          razonCancelacion: result.value
+        };
+  
+        this.ordenesComprasService.destroy(payload).subscribe(
+          (response) => {
+            this.isLoad = false;
+            if (response.status === 'success') {
+              this.actualizarStatus.emit();
+    
+              this.alertasService.mostrarAlerta(
+                'Cancelada!',
+                'La orden ha sido cancelada.',
+                'success',
+                'success'
+              );
+            } else {
+              this.alertasService.mostrarAlerta(
+                'Error!',
+                'Ocurrió un error inesperado',
+                'error',
+                'error'
+              );
+            }
+          },
+          (error) => {
+            this.isLoad = false;
+            this.alertasService.mostrarAlerta(
+              'Error!',
+              error,
+              'error',
+              'error'
+            );
+          }
+        );
+      }
+    });
+  }
   
   /**
   * Maneja la función de autorizar una orden
