@@ -59,8 +59,9 @@ export class FormSolicitudComponent implements OnInit{
 
   ngOnInit(): void {
     this.getEmpresas();
-    this.getUsuarioActivo();
+    
     this.buildForm();
+    this.getUsuarioActivo();
   }
 
    /**
@@ -87,37 +88,59 @@ export class FormSolicitudComponent implements OnInit{
     /**
    * Recupera el usuario activo en el local storage
    */
+  // public getUsuarioActivo() {
+  //   const usuarioActivo = this.localStorage.getItem("currentUser");
+
+  //   this.usuariosService.getUserById(usuarioActivo["role"]["email"]).subscribe(
+  //     (response) => {
+  //       if (response.status === "success") {
+  //         this.usuarioSolicita = response.data[0];
+  //         if(this.usuarioSolicita.empresas !=  null){
+  //           this.filtrarEmpresas( this.empresas ,this.usuarioSolicita.empresas);
+  //         }
+  //         this.getUsuarios(this.usuarioSolicita.intercompania);
+  //         this.formSolicitudCompra.patchValue({empresa :  this.usuarioSolicita.intercompania});
+  //         // console.log(this.usuarioSolicita);
+
+  //       } else {
+  //         this.alertasService.mostrarAlerta(
+  //           response.message,
+  //           "Intente iniciar sesión nuevamente",
+  //           "warning",
+  //           "warning"
+  //         );
+
+  //         // this.cerrarModal();
+  //         this.closeModal.emit();
+  //         return;
+  //       }
+  //     },
+  //     (error) => {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   );
+  // }
+
   public getUsuarioActivo() {
     const usuarioActivo = this.localStorage.getItem("currentUser");
-
-    this.usuariosService.getUserById(usuarioActivo["role"]["email"]).subscribe(
-      (response) => {
-        if (response.status === "success") {
-          this.usuarioSolicita = response.data[0];
-          if(this.usuarioSolicita.empresas !=  null){
-            this.filtrarEmpresas( this.empresas ,this.usuarioSolicita.empresas);
-          }
-          this.getUsuarios(this.usuarioSolicita.intercompania);
-          this.formSolicitudCompra.patchValue({empresa :  this.usuarioSolicita.intercompania});
-          // console.log(this.usuarioSolicita);
-
-        } else {
-          this.alertasService.mostrarAlerta(
-            response.message,
+    this.usuarioSolicita = usuarioActivo["usuarioActivo"][0];
+    if(this.usuarioSolicita){
+      if (this.usuarioSolicita.empresas != null) {
+      this.filtrarEmpresas(this.empresas, this.usuarioSolicita.empresas);
+    }
+    this.getUsuarios(this.usuarioSolicita.intercompania);
+    this.formSolicitudCompra.patchValue({empresa :  this.usuarioSolicita.intercompania});
+    }else{
+      this.alertasService.mostrarAlerta(
+            'error',
             "Intente iniciar sesión nuevamente",
             "warning",
             "warning"
           );
-
-          // this.cerrarModal();
-          this.closeModal.emit();
-          return;
-        }
-      },
-      (error) => {
-        console.error("Error fetching data:", error);
-      }
-    );
+      this.closeModal.emit();
+      return;
+    }
+    
   }
 
     /**

@@ -1,0 +1,24 @@
+<div class="card d-flex align-items-center">
+<div class="card-body" >
+    <h4 class="card-title mb-5"> Seguimiento de tu solicitud de compra</h4>
+    <ul class="verti-timeline list-unstyled">
+        <li class="event-list" *ngFor = "let event of events; let i = index">
+            <div class="event-timeline-dot"><i
+                    class="bx bx-right-arrow-circle font-size-18"></i></div>
+            <div class="d-flex">
+                <div class="flex-shrink-0 me-3">
+                    <h5 class="font-size-14"> {{event.fecha | date: 'dd/MM/yyyy h:mm a' }} <i
+                            class="bx bx-right-arrow-alt font-size-16 text-primary align-middle ms-2"></i></h5>
+                </div>
+                <div class="flex-grow-1">
+                    <div> {{event.mensaje}} </div>
+                </div>
+                <small>
+                    Diferencia con anterior: {{ getDayDifference(i) }}
+                </small>
+            </div>
+        </li>
+    </ul>
+</div>
+</div>
+

@@ -18,6 +18,7 @@ export class ModalEntradaAlmacenComponent implements AfterViewInit {
   public event: EventEmitter<any> = new EventEmitter();
 
   public detalles: any = [];
+  public isLoad: boolean;
 
   public submitted: boolean = false;
   public submittDetail: boolean = false;

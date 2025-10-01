@@ -24,7 +24,10 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-4">
+      <div class="col-lg-8 text-center pt-4" [hidden] = "compras.length > 0">
+          <strong class="pt-3">Aun no hay resultados, selecciona un empresa para buscar tu compra</strong>
+      </div>
+      <div class="col-lg-4" [hidden] = "compras.length === 0">
         <label for="tipo" class="form-label">Buscar por: *</label>
         <select
                 class="form-select form-select-sm"
@@ -49,7 +52,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-4">
+      <div class="col-lg-4" [hidden] = "compras.length === 0">
         <label for="referencia" class="form-label"> Selecciona una opción: *</label>
         <select
 
@@ -76,10 +79,10 @@
         </div>
       </div>
 </form>
-<div *ngIf="finding" class="d-flex pt-1 pb-0 m-0 bd-highlight text-primary">
+<div *ngIf="finding" class="d-flex align-items-center pt-1 pb-0 m-0 bd-highlight text-primary">
 <div class="spinner-grow pt-0 pb-0 m-0" style="width: 1rem; height: 1rem;" role="status">
   <span class="sr-only">Loading...</span>
 </div>
-<p class="m-0">Buscando</p>
+  <p class="m-0">Buscando</p>
 </div>
 

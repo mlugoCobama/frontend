@@ -32,15 +32,11 @@ export class ComprasComponent implements OnInit {
   public isLoad: boolean = true;
   public mostrarBoton = false;
   public habilitarDescarga = false;
-  public modifica:boolean =  false;
+  public modifica: boolean = false;
 
   public centrosCostos: any = catCentrosCostos;
-  public empresas:any = [];
-  public usuarioSolicita:any;
-
- 
-
-
+  public empresas: any = [];
+  public usuarioSolicita: any;
 
   /**
    * Objeto que envió al componente detallesSolicitudCompra
@@ -54,8 +50,7 @@ export class ComprasComponent implements OnInit {
   datosFiltrados: any[] = [];
   private ordenador!: FuncionesTablas<any>;
   busqueda: string = "";
-
-
+  busqueda2: string = "";
 
   constructor(
     public ordenesComprasService: OrdenesCompraService,
@@ -63,14 +58,14 @@ export class ComprasComponent implements OnInit {
     public comprasService: ComprasService,
     private modalService: BsModalService,
     private localStorage: LocalStorageServiceService,
-    private usuariosService: UsuariosService,
+    private usuariosService: UsuariosService
   ) {}
 
   public ngOnInit(): void {
     this.comprasService.mostrarBoton$.subscribe((mostrar) => {
       this.mostrarBoton = mostrar;
     });
-    this.getEmpresas()
+    this.getEmpresas();
     this.getUsuarioActivo();
   }
 
@@ -78,37 +73,17 @@ export class ComprasComponent implements OnInit {
 
   public getUsuarioActivo() {
     const usuarioActivo = this.localStorage.getItem("currentUser");
-     this.usuariosService.getUserById(usuarioActivo["role"]["email"]).subscribe(
-      (response) => {
-        if (response.status === "success") {
-          this.usuarioSolicita = response.data[0];
-          if(this.usuarioSolicita.empresas !=  null){
-            this.filtrarEmpresas( this.empresas ,this.usuarioSolicita.empresas);
-          }
-          this.getAll(this.usuarioSolicita?.intercompania);
-          // this.formSolicitudCompra.patchValue({empresa :  this.usuarioSolicita.intercompania});
-          // console.log(this.usuarioSolicita);
-
-        } else {
-          this.alertasService.mostrarAlerta(
-            response.message,
-            "Intente iniciar sesión nuevamente",
-            "warning",
-            "warning"
-          );
-          return;
-        }
-      },
-      (error) => {
-        console.error("Error fetching data:", error);
-      }
-    );
+    this.usuarioSolicita = usuarioActivo["usuarioActivo"][0];
+    if (this.usuarioSolicita.empresas != null) {
+      this.filtrarEmpresas(this.empresas, this.usuarioSolicita.empresas);
+    }
+    this.getAll(this.usuarioSolicita?.intercompania);
   }
 
-  filtrarEmpresas(data, empRel){
-    this.empresas = data.filter(empresa =>
-                empRel.includes(empresa.intercompania)
-  );
+  filtrarEmpresas(data, empRel) {
+    this.empresas = data.filter((empresa) =>
+      empRel.includes(empresa.intercompania)
+    );
   }
 
   /**
@@ -150,45 +125,63 @@ export class ComprasComponent implements OnInit {
 
   //Recupera todos los registros de solicitudes de compras
   private getAll(intercompania) {
-    this.comprasService.getAll(intercompania, this.usuarioSolicita?.id).subscribe(
-      (response) => {
-        if (response) {
-          this.data = response.data;
-          this.modifica =  (response.tipo == "compras" || response.tipo == "RT") ? true : false;
-          this.ordenador = new FuncionesTablas(this.data);
-          this.datosFiltrados = [...this.data];
+    this.comprasService
+      .getAll(intercompania, this.usuarioSolicita?.id)
+      .subscribe(
+        (response) => {
+          if (response) {
+            this.data = response.data;
+            this.modifica =
+              response.tipo == "compras" || response.tipo == "RT"
+                ? true
+                : false;
+            this.ordenador = new FuncionesTablas(this.data);
+            this.datosFiltrados = [...this.data];
 
-          this.isLoad = false;
-          this.showTable = true;
-        } else {
-          console.log(response.message);
+            this.isLoad = false;
+            this.showTable = true;
+          } else {
+            this.alertasService.mostrarAlerta(
+              "Error!",
+              response.message,
+              "error",
+              "danger"
+            );
+            console.log(response.message);
+          }
+        },
+        (error) => {
+          this.alertasService.mostrarAlerta("Error!", error, "error", "danger");
+          console.error("Error fetching data:", error);
         }
-      },
-      (error) => {
-        console.error("Error fetching data:", error);
-      }
-    );
+      );
   }
 
-      /**
+  /**
    * Recupera el catalogo de empresas (Select empresa)
    */
   public getEmpresas() {
     this.usuariosService.getEmpresas().subscribe(
       (response) => {
         if (response) {
-          
           this.empresas = response.data;
           // this.isLoading = false;
         } else {
+          this.alertasService.mostrarAlerta(
+            "Error!",
+            response.message,
+            "error",
+            "danger"
+          );
           console.log(response.message);
         }
       },
       (error) => {
-        console.error("Error fetching data:", error);
+        this.alertasService.mostrarAlerta("Error!", error, "error", "danger");
+        // console.error("Error fetching data:", error);
       }
     );
-  } 
+  }
   /**
    * Funciones Botonera
    */
@@ -207,11 +200,17 @@ export class ComprasComponent implements OnInit {
   }
 
   // Cancela la solicitud desde un botón en la botonera
-  public cancelarSolicitud() {
+  public cancelarSolicitud1() {
     this.isLoad = true;
     Swal.fire({
       title: "¿Estas seguro?",
       text: "La solicitud será marcada como cancelada",
+      input: 'text',
+    inputAttributes: {
+      autocapitalize: 'off'
+    },
+
+
       icon: "error",
       confirmButtonText: " SI ",
       showCancelButton: true,
@@ -255,6 +254,72 @@ export class ComprasComponent implements OnInit {
       this.isLoad = false;
     });
   }
+  public cancelarSolicitud() {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: 'La solicitud será marcada como cancelada. Por favor ingresa la razón:',
+    input: 'textarea',
+    inputAttributes: {
+      autocapitalize: 'off'
+    },
+    icon: 'warning',
+    confirmButtonText: 'Sí, cancelar',
+    showCancelButton: true,
+    cancelButtonText: 'No',
+    customClass: {
+      confirmButton: 'btn btn-danger px-4',
+      cancelButton: 'btn btn-primary ms-2 px-4',
+    },
+    buttonsStyling: false,
+    preConfirm: (razon) => {
+      if (!razon || razon.trim() === '') {
+        Swal.showValidationMessage('Debes ingresar una razón válida');
+        return false;
+      }
+      return razon;
+    }
+  }).then((result) => {
+    if (result.isConfirmed && result.value) {
+      this.isLoad = true;
+
+      const payload = {
+        id: this.solicitudCompra.id,
+        razonCancelacion: result.value
+      };
+
+      this.comprasService.destroy(payload).subscribe(
+        (response) => {
+          this.isLoad = false;
+          if (response.status === 'success') {
+            this.regresar();
+            this.alertasService.mostrarAlerta(
+              'Cancelada!',
+              'La solicitud ha sido cancelada.',
+              'success',
+              'success'
+            );
+          } else {
+            this.alertasService.mostrarAlerta(
+              'Error!',
+              'Ocurrió un error inesperado',
+              'error',
+              'error'
+            );
+          }
+        },
+        (error) => {
+          this.isLoad = false;
+          this.alertasService.mostrarAlerta(
+            'Error!',
+            error,
+            'error',
+            'error'
+          );
+        }
+      );
+    }
+  });
+}
 
   //Botón que genera la orden  de compra
   btnGenerarOC() {
@@ -305,7 +370,22 @@ export class ComprasComponent implements OnInit {
   }
 
   filtrarTabla() {
+    this.busqueda2 = "";
     this.datosFiltrados = this.ordenador.filtrar(this.busqueda, [
+      "folio",
+      "usuario_destino",
+      "motivo",
+      "fecha",
+      "usuario_solicita",
+      "empresa",
+      "estado",
+      "centro_costo",
+    ]);
+  }
+
+  filtrarTabla2() {
+    this.busqueda = "";
+    this.datosFiltrados = this.ordenador.filtrar(this.busqueda2, [
       "folio",
       "usuario_destino",
       "motivo",

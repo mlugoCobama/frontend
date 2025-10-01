@@ -11,7 +11,7 @@ export class FormTableEntradasComponent implements OnInit {
 
   entradaForm: FormGroup;
   @Input() detalles: any = [];
-  @Input() isLoad: boolean =  true; 
+  @Input() isLoad: boolean; 
   @Input() submittDetail: boolean = false;
 
   constructor(

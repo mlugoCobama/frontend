@@ -36,7 +36,7 @@
             </div>
           </div>
           <div>
-            <div *ngIf="!isLoad" class="row" [ngClass]="!modifica ?  'justify-content-between' : 'justify-content-end'">
+            <div *ngIf="!isLoad" class="row" [ngClass]="'justify-content-between'">
           
               <div *ngIf="!modifica" class="col-3">
                 <label for="empresa" class="form-label form-label-sm">Empresa: *</label>
@@ -48,6 +48,22 @@
                     Cargando opciones espera...
                   </option>
                   <option *ngFor="let item of empresas" [value]="item.intercompania">
+                    {{ item.name.toUpperCase() }}
+                  </option>
+                </select>
+              </div>
+              <div class="col-3">
+                <label for="empresa" class="form-label form-label-sm">Empresa: *</label>
+                <select *ngIf="usuarioSolicita?.multiselect === true; else nombreEmpresa" class="form-select form-select-sm"
+                  aria-label="Default select example" id="empresa" name="empresa" aria-label="empresa"
+                  [(ngModel)]="busqueda2"
+                  (change)="filtrarTabla2()"
+                  >
+                  <option value="" selected>Todas</option>
+                  <option *ngIf="isLoading" value="" [disabled]="isLoading">
+                    Cargando opciones espera...
+                  </option>
+                  <option *ngFor="let item of empresas" [value]="item.name">
                     {{ item.name.toUpperCase() }}
                   </option>
                 </select>
