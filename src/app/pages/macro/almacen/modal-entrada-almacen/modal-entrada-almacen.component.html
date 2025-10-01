@@ -12,9 +12,18 @@
     <hr>
     <app-form-table-entradas
     #formTableEntradas
+    [hidden]="this.detalles.length === 0"
+    [isLoad] = "isLoad"
     [detalles]="detalles"
     [submittDetail]="submittDetail"
     ></app-form-table-entradas>
+    
+     
+      <div [hidden]="this.detalles.length > 0" 
+      class="text-center text-mutted">
+        <strong>Aun no hay datos</strong>
+      </div>
+      
 </div>
 <div class="modal-footer">
   <button
