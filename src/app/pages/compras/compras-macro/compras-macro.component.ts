@@ -35,6 +35,7 @@ export class ComprasMacroComponent implements OnInit{
     datosFiltrados:any[] = [];
     private ordenador!: FuncionesTablas<any>;
     busqueda:string = '';
+    busqueda2: string = "";
     public usuarioSolicita:any = [];
     public empresas:any = [];
 
@@ -156,6 +157,7 @@ export class ComprasMacroComponent implements OnInit{
   }
 
     private getAll(intercomania) {
+      this.isLoad = true;
       // const user = this.getUsuarioActivo();
       this.comprasMacro.getAll(intercomania, this.usuarioSolicita.id).subscribe(
         (response) => {
@@ -199,7 +201,7 @@ export class ComprasMacroComponent implements OnInit{
     }
   
     // Cancela la solicitud desde un botón en la botonera
-    public cancelarSolicitud() {
+    public cancelarSolicitud1() {
       this.isLoad = true;
       Swal.fire({
         title: "¿Estas seguro?",
@@ -230,6 +232,73 @@ export class ComprasMacroComponent implements OnInit{
           );
         }
         this.isLoad = false;
+      });
+    }
+
+    public cancelarSolicitud() {
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: 'La solicitud será marcada como cancelada. Por favor ingresa la razón:',
+        input: 'textarea',
+        inputAttributes: {
+          autocapitalize: 'off'
+        },
+        icon: 'warning',
+        confirmButtonText: 'Sí, cancelar',
+        showCancelButton: true,
+        cancelButtonText: 'No',
+        customClass: {
+          confirmButton: 'btn btn-danger px-4',
+          cancelButton: 'btn btn-primary ms-2 px-4',
+        },
+        buttonsStyling: false,
+        preConfirm: (razon) => {
+          if (!razon || razon.trim() === '') {
+            Swal.showValidationMessage('Debes ingresar una razón válida');
+            return false;
+          }
+          return razon;
+        }
+      }).then((result) => {
+        if (result.isConfirmed && result.value) {
+          this.isLoad = true;
+    
+          const payload = {
+            id: this.solicitudCompra.id,
+            razonCancelacion: result.value
+          };
+    
+          this.comprasService.destroy(payload).subscribe(
+            (response) => {
+              this.isLoad = false;
+              if (response.status === 'success') {
+                this.regresar();
+                this.alertasService.mostrarAlerta(
+                  'Cancelada!',
+                  'La solicitud ha sido cancelada.',
+                  'success',
+                  'success'
+                );
+              } else {
+                this.alertasService.mostrarAlerta(
+                  'Error!',
+                  'Ocurrió un error inesperado',
+                  'error',
+                  'error'
+                );
+              }
+            },
+            (error) => {
+              this.isLoad = false;
+              this.alertasService.mostrarAlerta(
+                'Error!',
+                error,
+                'error',
+                'error'
+              );
+            }
+          );
+        }
       });
     }
   
@@ -275,9 +344,24 @@ export class ComprasMacroComponent implements OnInit{
   }
 
   filtrarTabla(){
+    this.busqueda2 = "";
     this.datosFiltrados = this.ordenador.filtrar(this.busqueda, [
       'folio', 'usuario_destino', 'motivo',
       'fecha', 'usuario_solicita', 'empresa', 'estado'
+    ]);
+  }  
+
+  filtrarTabla2() {
+    this.busqueda = "";
+    this.datosFiltrados = this.ordenador.filtrar(this.busqueda2, [
+      "folio",
+      "usuario_destino",
+      "motivo",
+      "fecha",
+      "usuario_solicita",
+      "empresa",
+      "estado",
+      "centro_costo",
     ]);
   }
 }

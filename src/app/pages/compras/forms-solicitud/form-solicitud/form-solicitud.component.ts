@@ -61,7 +61,7 @@ export class FormSolicitudComponent implements OnInit{
     this.getEmpresas();
     
     this.buildForm();
-    this.getUsuarioActivo();
+    
   }
 
    /**
@@ -197,6 +197,7 @@ export class FormSolicitudComponent implements OnInit{
         if (response) {
           
           this.empresas = response.data;
+          this.getUsuarioActivo();
           this.isLoading = false;
         } else {
           console.log(response.message);
