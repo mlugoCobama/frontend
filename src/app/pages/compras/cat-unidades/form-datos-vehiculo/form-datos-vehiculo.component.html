@@ -128,7 +128,6 @@
             type="text"
             class="form-control form-control-sm"
             formControlName="placas"
-             mask="AAA-AAA"
             id="placas"
             name="placas"
             aria-label="placas"
@@ -140,12 +139,6 @@
             *ngIf="datosVehiculoFormControl.placas.errors?.['required']"
         >
             Debes de ingresar un numero de placa valido.
-        </div>
-        <div
-            class="text-danger form-text"
-            *ngIf="datosVehiculoFormControl.placas.errors?.['pattern']"
-        >
-            Ingresa un numero de placa valido.
         </div>
         </div>
         </div>

@@ -91,6 +91,10 @@ export class ComprasService {
     return this.http.post(environment.apiUrl + "compras/enviar-solicitud-cotizacion", data, {headers});
   }
 
+   public getSeguimientoSolicitud(id: number): Observable<any> {
+    return this.http.get(environment.apiUrl + `compras/get-seguimiento-solicitud/${id}`, {headers});
+  }
+
   /**
    * Servicio para mostrar el apartado de cotización
    * @param mostrar true:muestra el div, false: oculta el div

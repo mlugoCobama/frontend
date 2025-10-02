@@ -16,7 +16,7 @@
         <th>Unidad de Medida</th>
         <th>Descripción</th>
         <th>Observaciones</th>
-        <th *ngIf = "solicitudCompra.usuario_destino == 'ECO: - MOD: MULTIPLES UNIDADES - PLACAS: -'" >AT</th>
+        <th *ngIf = "solicitudCompra.multiUnidad" >AT</th>
         <th>Ref. fotográfica</th>
         <th>Autorizado</th>
           
@@ -78,7 +78,7 @@
     </tbody>
     <tfoot *ngIf="mostrarTotal">
       <tr >
-        <td [attr.colspan]="solicitudCompra.usuario_destino == 'ECO: - MOD: MULTIPLES UNIDADES - PLACAS: -' ? 7 : 6" class="text-end">
+        <td [attr.colspan]="solicitudCompra.multiUnidad ? 7 : 6" class="text-end">
           <Strong>SUB-TOTAL (sin iva)</Strong>
         </td>
         <td

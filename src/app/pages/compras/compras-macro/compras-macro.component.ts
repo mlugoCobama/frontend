@@ -35,6 +35,7 @@ export class ComprasMacroComponent implements OnInit{
     datosFiltrados:any[] = [];
     private ordenador!: FuncionesTablas<any>;
     busqueda:string = '';
+    busqueda2: string = "";
     public usuarioSolicita:any = [];
     public empresas:any = [];
 
@@ -156,6 +157,7 @@ export class ComprasMacroComponent implements OnInit{
   }
 
     private getAll(intercomania) {
+      this.isLoad = true;
       // const user = this.getUsuarioActivo();
       this.comprasMacro.getAll(intercomania, this.usuarioSolicita.id).subscribe(
         (response) => {
@@ -342,9 +344,24 @@ export class ComprasMacroComponent implements OnInit{
   }
 
   filtrarTabla(){
+    this.busqueda2 = "";
     this.datosFiltrados = this.ordenador.filtrar(this.busqueda, [
       'folio', 'usuario_destino', 'motivo',
       'fecha', 'usuario_solicita', 'empresa', 'estado'
     ]);
   }  
+
+  filtrarTabla2() {
+    this.busqueda = "";
+    this.datosFiltrados = this.ordenador.filtrar(this.busqueda2, [
+      "folio",
+      "usuario_destino",
+      "motivo",
+      "fecha",
+      "usuario_solicita",
+      "empresa",
+      "estado",
+      "centro_costo",
+    ]);
+  }
 }

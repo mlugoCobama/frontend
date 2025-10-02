@@ -38,9 +38,9 @@
           <div>
             <div *ngIf="!isLoad" class="row" [ngClass]="'justify-content-between'">
           
-              <div *ngIf="!modifica" class="col-3">
-                <label for="empresa" class="form-label form-label-sm">Empresa: *</label>
-                <select *ngIf="usuarioSolicita?.multiselect === true; else nombreEmpresa" class="form-select form-select-sm"
+              <div class="col-3">
+                <label *ngIf="usuarioSolicita?.multiselect === true" for="empresa" class="form-label form-label-sm">Empresa: *</label>
+                <select *ngIf="usuarioSolicita?.multiselect === true && !modifica" class="form-select form-select-sm"
                   aria-label="Default select example" id="empresa" name="empresa" aria-label="empresa"
                   (change)="getAll($event.target.value)">
                   <option value="" selected disabled>Selecciona uno</option>
@@ -51,10 +51,8 @@
                     {{ item.name.toUpperCase() }}
                   </option>
                 </select>
-              </div>
-              <div class="col-3">
-                <label for="empresa" class="form-label form-label-sm">Empresa: *</label>
-                <select *ngIf="usuarioSolicita?.multiselect === true; else nombreEmpresa" class="form-select form-select-sm"
+              
+                <select *ngIf="usuarioSolicita?.multiselect === true && modifica" class="form-select form-select-sm"
                   aria-label="Default select example" id="empresa" name="empresa" aria-label="empresa"
                   [(ngModel)]="busqueda2"
                   (change)="filtrarTabla2()"
@@ -63,12 +61,12 @@
                   <option *ngIf="isLoading" value="" [disabled]="isLoading">
                     Cargando opciones espera...
                   </option>
-                  <option *ngFor="let item of empresas" [value]="item.name">
+                  <option *ngFor="let item of rawEmpresas" [value]="item.name">
                     {{ item.name.toUpperCase() }}
                   </option>
                 </select>
               </div>
-              <div class="col-3">
+              <div class="col-3 pt-4">
                 <input type="text" class="form-control form-control-sm" placeholder="Buscar..." [(ngModel)]="busqueda"
                   (input)="filtrarTabla()" />
               </div>

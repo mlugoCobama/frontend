@@ -1,21 +1,45 @@
-import { Component } from '@angular/core';
-
+import { Component, Input, OnInit } from '@angular/core';
+import { ComprasService } from 'src/app/core/services/compras/compras.service';
 @Component({
   selector: 'app-timeline-solicitud',
   templateUrl: './timeline-solicitud.component.html',
   styleUrl: './timeline-solicitud.component.css'
 })
-export class TimelineSolicitudComponent {
-  public events: any[] = [
-  { fecha: '2025-09-01 10:00:00', mensaje: "Solicitud de compra generada" },
-  { fecha: '2025-09-02 14:30:00', mensaje: "Autorización por Gerencia General" },
-  { fecha: '2025-09-04 09:15:00', mensaje: "Autorización por Gerencia Administrativa" },
-  { fecha: '2025-09-05 16:45:00', mensaje: "Notificación a departamento de compras" },
-  { fecha: '2025-09-07 11:00:00', mensaje: "Inicio de cotización" },
-  { fecha: '2025-09-10 08:20:00', mensaje: "Orden de compra generada" },
-  { fecha: '2025-09-12 13:50:00', mensaje: "Orden de compra autorizada" },
-  { fecha: '2025-09-15 17:10:00', mensaje: "Orden de compra pagada" },
-];
+export class TimelineSolicitudComponent implements OnInit{
+
+  constructor(
+    private compras: ComprasService
+  ){}
+
+  @Input() solicitudCompra:any;
+  public isLoad: boolean = true;
+  public showList: boolean = false
+
+  ngOnInit(): void {
+    this.getSeguimiento();
+  }
+
+  public events: any[] = [];
+
+  private getSeguimiento(){
+        this.compras.getSeguimientoSolicitud( this.solicitudCompra?.id).subscribe(
+          (response) => {
+            if (response) {
+              this.events = response.data;
+    
+              this.isLoad = false;
+              this.showList = true;
+            } else {
+              console.log(response.message);
+            }
+          },
+          (error) => {
+            console.error("Error fetching data:", error);
+          }
+        );
+  }
+
+  
 
 
 

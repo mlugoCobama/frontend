@@ -36,6 +36,7 @@ export class ComprasComponent implements OnInit {
 
   public centrosCostos: any = catCentrosCostos;
   public empresas: any = [];
+  public rawEmpresas: any = [];
   public usuarioSolicita: any;
 
   /**
@@ -65,17 +66,83 @@ export class ComprasComponent implements OnInit {
     this.comprasService.mostrarBoton$.subscribe((mostrar) => {
       this.mostrarBoton = mostrar;
     });
+
     this.getEmpresas();
-    this.getUsuarioActivo();
+    
   }
 
   ngOnDestroy(): void {}
 
+    /**
+   * Recupera el catalogo de empresas (Select empresa)
+   */
+  public getEmpresas() {
+    this.usuariosService.getEmpresas().subscribe(
+      (response) => {
+        if (response) {
+          this.rawEmpresas = response.data;
+          this.getUsuarioActivo();
+          console.log(response.data)
+          // this.isLoading = false;
+        } else {
+          this.alertasService.mostrarAlerta(
+            "Error!",
+            response.message,
+            "error",
+            "danger"
+          );
+          console.log(response.message);
+        }
+      },
+      (error) => {
+        this.alertasService.mostrarAlerta("Error!", error, "error", "danger");
+        // console.error("Error fetching data:", error);
+      }
+    );
+  }
+
+  //Recupera todos los registros de solicitudes de compras
+  private getAll(intercompania) {
+    this.isLoad = true;
+    this.comprasService
+      .getAll(intercompania, this.usuarioSolicita?.id)
+      .subscribe(
+        (response) => {
+          if (response) {
+            this.data = response.data;
+            this.modifica =
+              response.tipo == "compras" || response.tipo == "RT"
+                ? true
+                : false;
+            this.ordenador = new FuncionesTablas(this.data);
+            this.datosFiltrados = [...this.data];
+
+            this.isLoad = false;
+            this.showTable = true;
+          } else {
+            this.alertasService.mostrarAlerta(
+              "Error!",
+              response.message,
+              "error",
+              "danger"
+            );
+            console.log(response.message);
+          }
+        },
+        (error) => {
+          this.alertasService.mostrarAlerta("Error!", error, "error", "danger");
+          console.error("Error fetching data:", error);
+        }
+      );
+  }
+
   public getUsuarioActivo() {
     const usuarioActivo = this.localStorage.getItem("currentUser");
     this.usuarioSolicita = usuarioActivo["usuarioActivo"][0];
+    console.log(this.usuarioSolicita.empresas)
+    console.log(this.rawEmpresas)
     if (this.usuarioSolicita.empresas != null) {
-      this.filtrarEmpresas(this.empresas, this.usuarioSolicita.empresas);
+      this.filtrarEmpresas(this.rawEmpresas, this.usuarioSolicita.empresas);
     }
     this.getAll(this.usuarioSolicita?.intercompania);
   }
@@ -123,65 +190,6 @@ export class ComprasComponent implements OnInit {
     }
   }
 
-  //Recupera todos los registros de solicitudes de compras
-  private getAll(intercompania) {
-    this.comprasService
-      .getAll(intercompania, this.usuarioSolicita?.id)
-      .subscribe(
-        (response) => {
-          if (response) {
-            this.data = response.data;
-            this.modifica =
-              response.tipo == "compras" || response.tipo == "RT"
-                ? true
-                : false;
-            this.ordenador = new FuncionesTablas(this.data);
-            this.datosFiltrados = [...this.data];
-
-            this.isLoad = false;
-            this.showTable = true;
-          } else {
-            this.alertasService.mostrarAlerta(
-              "Error!",
-              response.message,
-              "error",
-              "danger"
-            );
-            console.log(response.message);
-          }
-        },
-        (error) => {
-          this.alertasService.mostrarAlerta("Error!", error, "error", "danger");
-          console.error("Error fetching data:", error);
-        }
-      );
-  }
-
-  /**
-   * Recupera el catalogo de empresas (Select empresa)
-   */
-  public getEmpresas() {
-    this.usuariosService.getEmpresas().subscribe(
-      (response) => {
-        if (response) {
-          this.empresas = response.data;
-          // this.isLoading = false;
-        } else {
-          this.alertasService.mostrarAlerta(
-            "Error!",
-            response.message,
-            "error",
-            "danger"
-          );
-          console.log(response.message);
-        }
-      },
-      (error) => {
-        this.alertasService.mostrarAlerta("Error!", error, "error", "danger");
-        // console.error("Error fetching data:", error);
-      }
-    );
-  }
   /**
    * Funciones Botonera
    */
