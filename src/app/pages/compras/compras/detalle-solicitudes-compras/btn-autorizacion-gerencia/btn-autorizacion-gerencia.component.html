@@ -6,7 +6,7 @@
     <button *ngIf="solicitudCompra.auto_admin === 0 && tienePermiso('view btn autorizacion ga')" class="btn btn-info col-md-4" type="button" (click)="autorizar('auto_admin')">
       <strong> Autoriza: Gerencia administrativa </strong>
     </button>
-    <button *ngIf="solicitudCompra.auto_macro === 0  && solicitudCompra.auto_gg === 1 && solicitudCompra.auto_admin === 1 && tienePermiso('view btn autorizacion macro')" class="btn btn-warning col-md-4" type="button" (click)="guardar('auto_macro')">
+    <button *ngIf="solicitudCompra.auto_macro === 0  && solicitudCompra.auto_gg === 1 && solicitudCompra.auto_admin === 1 && tienePermiso('view btn autorizacion macro') && solicitudCompra.tipo === 2" class="btn btn-warning col-md-4" type="button" (click)="guardar('auto_macro')">
       <strong> Autoriza: Macro taller </strong>
     </button>
   </div>

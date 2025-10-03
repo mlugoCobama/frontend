@@ -3,6 +3,7 @@ import { OrdenesCompraService } from 'src/app/core/services/compras/ordenesCompr
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 
 import Swal from 'sweetalert2';
+import { PermisosService } from 'src/app/core/services/permisos.service';
 
 @Component({
   selector: 'app-btns-autorizacion',
@@ -21,7 +22,8 @@ export class BtnsAutorizacionComponent implements OnInit {
 
   constructor(
     public ordenesComprasService: OrdenesCompraService,
-    private alertasService:SwalComprsServiceService
+    private alertasService:SwalComprsServiceService,
+    private permisosService: PermisosService,
   ){}
 
   ngOnInit(): void {
@@ -210,4 +212,9 @@ export class BtnsAutorizacionComponent implements OnInit {
       }
     );
   }  
+
+  tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
+  }
 }

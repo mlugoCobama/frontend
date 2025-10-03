@@ -17,7 +17,7 @@
     >
       <thead class="table-light" >
         <tr class="text-center">
-          <th *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion">#</th>
+          <th *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && tienePermiso('view btn save precios')">#</th>
           <th>Nombre proveedor</th>
           <th>Archivo cotización</th>
           <th *ngIf="solicitudCompra?.estatus <= 3 ">Autorizado</th>
@@ -26,7 +26,7 @@
       <tbody>
         <tr *ngFor="let prov of cotProv; let i = index" class="text-center">
           <td [ngClass] = "prov?.ruta ? 'bg-secondary-subtle bg-opacity-75' : '' "
-          *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion">
+          *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && tienePermiso('view btn save precios')">
             <div class="col align-self-center">
               <input
                 *ngIf="prov?.ruta"
@@ -146,7 +146,7 @@
 
   <div class="col-2 d-flex align-items-start">
     <button
-      *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && !mostrarObs"
+      *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && !mostrarObs && tienePermiso('view btn save precios')"
       type="submit"
       class="btn btn-sm btn-success"
       (click)="guardarPrecios()"
