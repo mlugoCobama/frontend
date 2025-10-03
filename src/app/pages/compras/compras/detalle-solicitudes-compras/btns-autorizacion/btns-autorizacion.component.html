@@ -1,5 +1,5 @@
 <!-- botones aceptar o rechazar orden -->
-<div *ngIf = "isLoad" class="row justify-content-around">
+<div *ngIf = "isLoad && tienePermiso('view panel auto orden compra') " class="row justify-content-around">
     <button
       class="btn btn-danger col-md-5"
       (click)="cancelarOrden()"

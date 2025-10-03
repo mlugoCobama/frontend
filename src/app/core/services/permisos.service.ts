@@ -9,7 +9,7 @@ export class PermisosService {
 
   constructor() {
     this.mapearPermisos();
-   }
+   } 
    private mapearPermisos(): void {
     const permisosRaw = JSON.parse(localStorage.getItem('permisos') || '[]');
     this.permisos = permisosRaw.map((p: any) => p.name);

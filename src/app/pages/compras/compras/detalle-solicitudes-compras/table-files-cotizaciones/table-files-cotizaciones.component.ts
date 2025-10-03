@@ -5,6 +5,7 @@ import { CotizacionesService } from "src/app/core/services/compras/cotizaciones/
 import {FormBuilder, FormControl, FormGroup, Validators, } from "@angular/forms";
 import { EstadoSolicitud } from '../../estado-solicitud.enum';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
+import { PermisosService } from 'src/app/core/services/permisos.service';
 
 @Component({
   selector: 'app-table-files-cotizaciones',
@@ -42,7 +43,8 @@ constructor(
   private cotizacionesService: CotizacionesService,
   private usuariosService: UsuariosService,
   public formBuilder: FormBuilder,
-  private alertasService: SwalComprsServiceService
+  private alertasService: SwalComprsServiceService,
+  private permisosService: PermisosService
 ){}
 
 ngAfterViewInit(): void {
@@ -151,4 +153,9 @@ public getEmpresas() {
 public autorizarCotizacion(prov){
   // console.log(prov.id, prov.autorizado, prov.seleccionado)
 }
+
+tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
+  }
 }

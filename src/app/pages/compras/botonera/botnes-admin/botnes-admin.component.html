@@ -1,21 +1,21 @@
 <div class="flex-shrink-0 d-flex gap-1">
     <a 
     (click) = "clickGenerarOrden()"
-    *ngIf="status === enEsts.EnCotizacion && mostrarBoton"
+    *ngIf="status === enEsts.EnCotizacion && mostrarBoton && tienePermiso('view btn generar orden')"
     href="javascript:void(0);" class="btn btn-primary btn-sm">
         <i class="fas fa-file-import"></i>
          Generar Orden de Compra
     </a>
     <a 
     (click) = "clickCotizar()"
-    *ngIf="status === enEsts.Solicitado && !comprasService.mostrarCotizacionSource.value"
+    *ngIf="status === enEsts.Solicitado && !comprasService.mostrarCotizacionSource.value && tienePermiso('view btn cotizar')"
     href="javascript:void(0);" class="btn btn-info btn-sm">
         <i class="fas fa-receipt"></i>
          Cotizar
     </a>
     <a 
     (click) = "clickCancelar()"
-    *ngIf="status >= enEsts.Solicitado && status < enEsts.Autorizado && !comprasService.mostrarCotizacionSource.value && status != enEsts.Cancelado"
+    *ngIf="status >= enEsts.Solicitado && status < enEsts.Autorizado && !comprasService.mostrarCotizacionSource.value && status != enEsts.Cancelado && tienePermiso('view btn cancelar')"
     href="javascript:void(0);" class="btn btn-danger btn-sm">
         <i class="fas fa-ban"></i>
         Cancelar Solicitud

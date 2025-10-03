@@ -1,6 +1,8 @@
 import { Component, Input, EventEmitter, Output, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { EstadoSolicitud } from '../../compras/estado-solicitud.enum';
 import { ComprasService } from 'src/app/core/services/compras/compras.service';
+import { PermisosService } from 'src/app/core/services/permisos.service';
+
 @Component({
   selector: 'app-botnes-admin',
   templateUrl: './botnes-admin.component.html',
@@ -19,7 +21,8 @@ export class BotnesAdminComponent implements OnInit{
   @Output() cancelarSolicitud = new EventEmitter<void>();
 
   constructor(
-    public comprasService: ComprasService
+    public comprasService: ComprasService,
+    private permisosService: PermisosService
   ){}
 
   public ngOnInit(): void {
@@ -36,6 +39,11 @@ export class BotnesAdminComponent implements OnInit{
 
   clickCancelar() {
       this.cancelarSolicitud.emit();
+  }
+
+  tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
   }
 
 }
