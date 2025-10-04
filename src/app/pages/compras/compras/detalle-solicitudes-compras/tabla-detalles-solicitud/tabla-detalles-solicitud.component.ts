@@ -1,10 +1,13 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from "@angular/forms";
 
+import { EstadoSolicitud } from "../../estado-solicitud.enum";
+
 import { ComprasService } from 'src/app/core/services/compras/compras.service';
 import { DetallesSolicitudService } from 'src/app/core/services/compras/detalles-solicitud.service';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import { CatUnidadesMedidasService } from 'src/app/core/services/compras/unidadesMedidas/cat-unidades-medidas.service';
+import { CotizacionesService } from 'src/app/core/services/compras/cotizaciones/cotizaciones.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -18,6 +21,10 @@ export class TablaDetallesSolicitudComponent implements OnInit {
 
   public unidadMedidas = [];
   public datos = [];
+  public cotProv: any[] = [];
+  public cotizacion: any;
+
+  public enEsts = EstadoSolicitud;
   
   public mostrarTotal = false;
   public formDisabled: boolean = false; 
@@ -36,6 +43,7 @@ export class TablaDetallesSolicitudComponent implements OnInit {
     private detallesService: DetallesSolicitudService,
     private alertasService: SwalComprsServiceService,
     private catUnidadesMedidasService: CatUnidadesMedidasService,
+    private cotizacionesService: CotizacionesService
 
   ) {}
 
@@ -56,6 +64,7 @@ export class TablaDetallesSolicitudComponent implements OnInit {
           this.datos = response.data;
           this.cargarDatos();
           this.toggleModoLectura();
+          this.getProveedoresCotizacion()
           this.isLoad = false;
         } else {
           this.alertasService.mostrarAlerta("Error!",response.message, "error", "danger" );
@@ -112,6 +121,8 @@ export class TablaDetallesSolicitudComponent implements OnInit {
       unidadMedida: [dato?.unidadMedida?.id ?? null, Validators.required],
       img_referencia: [dato?.img_referencia ?? null],
       solicitudes_compra_id: [dato?.solicitudes_compra_id ?? null],
+      autotanque: [dato?.DetalleAutotanque?.DatosVehiculo?.eco ?? null],
+      no_serie: [dato?.DetalleAutotanque?.DatosVehiculo?.no_serie ?? null],
       confirmado: [dato?.confirmado ?? 0]
     });
   }
@@ -234,6 +245,26 @@ toggleModoLectura() {
  */
   verReferencia(image: string) {
     this.openModal.emit(image);
+  }
+
+  /**
+   * Recupera proveedores-cotizacion
+   */
+  public getProveedoresCotizacion() {
+    this.cotizacionesService.getOne(this.solicitudCompra.id).subscribe(
+      (response) => {
+        if (response) {
+          this.cotProv = response.data;
+          this.cotizacion = response.dataCotizacion;
+          this.isLoad = false;
+        } else {
+          this.alertasService.mostrarAlerta("Error guardando los datos:", response.message, "error", "danger");
+        }
+      },
+      (error) => {
+        this.alertasService.mostrarAlerta("Error guardando los datos:", error, "error", "danger");
+      }
+    );
   }
 
 }
