@@ -38,7 +38,8 @@
               <div *ngIf="!isLoad" class="row" [ngClass]="'justify-content-between'">
                 <div class="col-3">
                 <label *ngIf="usuarioSolicita?.multiselect === true" for="empresa" class="form-label form-label-sm">Empresa: *</label>
-                <select *ngIf="usuarioSolicita?.multiselect === true && !modifica" class="form-select form-select-sm"
+
+                <select *ngIf="usuarioSolicita?.multiselect  &&  !modifica " class="form-select form-select-sm"
                   aria-label="Default select example" id="empresa" name="empresa" aria-label="empresa"
                   (change)="getAll($event.target.value)">
                   <option value="" selected disabled>Selecciona uno</option>
@@ -50,7 +51,7 @@
                   </option>
                 </select>
               
-                <select *ngIf="usuarioSolicita?.multiselect === true && modifica" class="form-select form-select-sm"
+                <select *ngIf="usuarioSolicita?.multiselect === true && (tipo === 'macro' || tipo === 'compras')" class="form-select form-select-sm"
                   aria-label="Default select example" id="empresa" name="empresa" aria-label="empresa"
                   [(ngModel)]="busqueda2"
                   (change)="filtrarTabla2()"
