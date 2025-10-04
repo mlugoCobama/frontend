@@ -38,8 +38,11 @@
         <td>
           {{ row.observaciones }}
         </td>
-        <td *ngIf = "row.DetalleAutotanque != null" >
-          {{ row.DetalleAutotanque.DatosVehiculo.eco }}
+        <td *ngIf = "solicitudCompra.multiUnidad" >
+          <span
+             data-bs-toggle="tooltip" data-bs-placement="top" [attr.title]="row.DetalleAutotanque.DatosVehiculo.no_serie">
+              {{ row.DetalleAutotanque.DatosVehiculo.eco }}
+            </span>
         </td>
         <td class="text-center">
           <a
