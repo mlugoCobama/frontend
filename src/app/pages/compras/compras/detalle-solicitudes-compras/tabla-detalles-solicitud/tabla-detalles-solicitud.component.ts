@@ -267,4 +267,16 @@ toggleModoLectura() {
     );
   }
 
+  copiarTexto(texto: string): void {
+    navigator.clipboard.writeText(texto)
+      .then(() => {
+        // console.log(`Texto copiado: ${texto}`);
+      })
+      .catch(err => {
+        console.error('Error al copiar al portapapeles', err);
+      });
+  }
+
+
+
 }

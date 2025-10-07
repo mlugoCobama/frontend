@@ -40,7 +40,7 @@
         </td>
         <td *ngIf = "solicitudCompra.multiUnidad" >
           <span
-             data-bs-toggle="tooltip" data-bs-placement="top" [attr.title]="row.DetalleAutotanque.DatosVehiculo.no_serie">
+             data-bs-toggle="tooltip" data-bs-placement="top" (click)="copiarTexto(row.DetalleAutotanque.DatosVehiculo.eco)" [attr.title]="row.DetalleAutotanque.DatosVehiculo.no_serie">
               {{ row.DetalleAutotanque.DatosVehiculo.eco }}
             </span>
         </td>

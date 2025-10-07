@@ -28,6 +28,7 @@ export class ComprasMacroComponent implements OnInit{
     public solicitudCompra: any;
     public data:any;
     public modifica:boolean =  false;
+    public tipo:any =  "";
     public status:any;
     public enEsts = EstadoSolicitud;
 
@@ -163,6 +164,7 @@ export class ComprasMacroComponent implements OnInit{
         (response) => {
           if (response) {
             this.data = response.data;
+            this.tipo = response.tipo;
             this.modifica =  response.tipo == "macro" ? true : false;
             this.ordenador = new FuncionesTablas(this.data);
             this.datosFiltrados = [...this.data];

@@ -134,6 +134,10 @@
     </form>
     <!-- form observaciones orden de compra -->
     <div *ngIf="solicitudCompra?.estatus >= enEsts.OrdenCompra" class="row">
+      <div *ngIf="ordenCompra" class="alert alert-primary text-center" role="alert">
+          ORDEN DE COMPRA:
+          <strong>{{ ordenCompra?.folio_oc }}</strong>
+        </div>
       <div *ngIf="ordenCompra">
         <p>
           <strong>Observaciones: </strong> {{ ordenCompra?.observaciones ?? ' Sin observaciones '}}

@@ -36,7 +36,7 @@ export class ProveedoresService {
    * @param rutaArchivo ruta al archivo del documento
    */
   public abrirArchivo(rutaArchivo: string){
-    const url =  (environment.apiUrl + `compras/${rutaArchivo}`);
+    const url =  ('http://cobamaservices.homelinux.org/api/' + `compras/${rutaArchivo}`);
      window.open(url , '_blank')
   }
 

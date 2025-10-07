@@ -43,7 +43,7 @@ export class DetalleSolicitudMacroComponent {
   */
  public openModal(content: any, imgReferencia: string) {
   this.selectedImage = imgReferencia;
-  this.modalRef = this.modalService.show(content, { class: "modal-sm" });
+  this.modalRef = this.modalService.show(content, { class: "modal-lg" });
 }
 
 /**
