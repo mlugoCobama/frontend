@@ -5,7 +5,7 @@ class="row g-2"
 >
 <div class="col-md-1"></div>
 <div class="col-md-10" *ngIf="ordenCompra">
-  <div *ngIf = "solicitudCompra.estatus != enEsts.Pagada" class="alert alert-primary text-center" role="alert">
+  <div *ngIf = "solicitudCompra.estatus != enEsts.Pagada" class="alert alert-secondary text-center" role="alert">
     Adjunta los siguientes archivos para la orden de compra:
     <strong>{{ ordenCompra.folio_oc }}</strong>
   </div>
