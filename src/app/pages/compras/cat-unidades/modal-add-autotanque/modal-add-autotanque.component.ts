@@ -3,7 +3,7 @@ import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 
 import { FormDatosTanqueComponent } from '../form-datos-tanque/form-datos-tanque.component';
 import { FormDatosVehiculoComponent } from '../form-datos-vehiculo/form-datos-vehiculo.component';
-
+import { FormDatosPolizaComponent } from '../form-datos-poliza/form-datos-poliza.component';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import { UnidadesService } from 'src/app/core/services/compras/unidades.service';
 
@@ -27,6 +27,7 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
 
    @ViewChild('formDatosTanque', { static: false }) formDatosTanque!:  FormDatosTanqueComponent;
    @ViewChild('formDatosVehiculo', { static: false }) formDatosVehiculo!:  FormDatosVehiculoComponent;
+   @ViewChild('formDatosPoliza', { static: false }) formDatosPoliza!:  FormDatosPolizaComponent;
      
     public empresas: any = [];
     public intercompania: any = 0;
@@ -45,7 +46,7 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
 
   public guardar(){
     this.deshabilitado = true;
-    if(!this.formDatosTanque.esValido() || !this.formDatosVehiculo.esValido()){
+    if(!this.formDatosTanque.esValido() || !this.formDatosVehiculo.esValido() || !this.formDatosPoliza.esValido()){
       this.alertasService.mostrarAlerta("Llena le formualrio correctamente",
                                         "Falta información importante, ingresala para continuar",
                                         "warning", 
@@ -84,7 +85,8 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
     const datos = {
       intercompania: this.intercompania,
       datosVehiculo: this.formDatosVehiculo.obtenerValores(),
-      datosTanque: this.formDatosTanque.obtenerValores() 
+      datosTanque: this.formDatosTanque.obtenerValores(),
+      datosPoliza: this.formDatosPoliza.obtenerValores(),
     }
     
     return datos;

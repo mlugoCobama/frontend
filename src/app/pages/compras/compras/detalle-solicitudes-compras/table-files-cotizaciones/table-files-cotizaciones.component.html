@@ -145,6 +145,9 @@
         <p> <strong>Se entrega en:</strong> {{ordenCompra?.entrega.EMPRESA ?? ' '}} </p>
         <p> <strong>Ubicada en:</strong> {{ordenCompra?.entrega.DIRECCION ?? ' '}}, {{ordenCompra?.entrega.COLONIA ?? ' '}}, {{ordenCompra?.entrega["CIUDAD/DELEG/ESTADO"] ?? ' '}}, C.P. {{ordenCompra?.entrega["C.P."] ?? ' '}}   </p>
       </div>
+      <div *ngIf="ordenCompra?.tipo_pago">
+        <p> <strong>Tipo de pago: </strong>  {{ ordenCompra?.tipo_pago | uppercase }} </p>
+      </div>
     </div>
   </div>
 

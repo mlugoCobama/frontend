@@ -167,6 +167,7 @@ export class BtnsAutorizacionComponent implements OnInit {
             if (response.status === "success") {
               this.alertasService.mostrarAlerta("Enviada!!", "La orden de compra ha sido autorizada y enviada al proveedor.","success","success");
               this.actualizarStatus.emit();
+              this.getOrdenCompra();
             } else {
               this.alertasService.mostrarAlerta("Error!", response.message,"error","danger");
             }
@@ -181,6 +182,7 @@ export class BtnsAutorizacionComponent implements OnInit {
             if (response.status === "success") {
               this.alertasService.mostrarAlerta("Orden autorizada", "La orden sera marcada como autorizada","success","success");
               this.actualizarStatus.emit();
+              this.getOrdenCompra();
             } else {
               this.alertasService.mostrarAlerta("Error!", response.message,"error","danger");
             }

@@ -84,32 +84,49 @@ export class FormFilesFacturasComponent implements OnInit {
         if (response) {
           this.ordenCompra = response.data;
           this.setOrdenCompra(this.ordenCompra);
-          
           this.isLoad = false;
+
+          
 
           if (this.ordenCompra.documentos.length > 0) {
             this.hasFiles = true;
-            // console.log(this.ordenCompra.documentos);
+            
+            console.log('Documento de orden de compra;', this.ordenCompra.documentos);
+            
+            const ultimoIndex = this.ordenCompra.documentos.length;
+            const ultimoId = this.ordenCompra.documentos[ultimoIndex - 1].id;
+            const comprobantePago = this.ordenCompra.documentos[ultimoIndex - 1].comprobante_pago;
+
+            if (comprobantePago) {
+              this.hasComprobantePago = true;
+              this.habilitado = true;
+            }
+
             this.leerXML();
 
             this.hasFacturas = true;
-            const ultimoIndex = this.ordenCompra.documentos.length;
-            const comprobantePago =
-              this.ordenCompra.documentos[ultimoIndex - 1].comprobante_pago;
-            const ultimoId = this.ordenCompra.documentos[ultimoIndex - 1].id;
+
             if (comprobantePago) {
               this.hasComprobantePago = true;
+              this.habilitado = true;
             } else {
               this.hasComprobantePago = false;
               this.idDocOrdC = ultimoId;
             }
           }
 
+          
+
           if (this.ordenCompra.documentos.length === 0) {
             this.habilitado = true;
             this.hasFacturas = false;
             this.hasComprobantePago = true;
           }
+
+          if(this.ordenCompra.tipo_pago === 'Contado' && this.ordenCompra.documentos.length === 0 ){
+              this.hasComprobantePago = false;
+          }
+
         } else {
           this.alertasService.mostrarAlerta('error', response.message, 'error', 'danger');
         }
@@ -169,32 +186,64 @@ export class FormFilesFacturasComponent implements OnInit {
     if (this.formData.has("comprobante_pago")) {
 
       const idOrdenCompra = this.ordenCompra.id;
-      const idDocOC = this.ordenCompra.documentos[0].id;
 
-      this.formData.append('archivo', this.formData.get('comprobante_pago'));
-      this.formData.append('tipo_documento', 'comprobante_pago');
-      this.formData.append("orden_compra_id", this.ordenCompra.id);
-      this.formData.append("idFactura", idDocOC);
-      
-      this.ordenesComprasService.saveFacturaDocs(this.formData).subscribe(
-        (response) => {
-          if (response) {
+      console.log(this.ordenCompra?.documentos[0]?.id)
+      const idDocOC = this.ordenCompra?.documentos[0]?.id === undefined ? null : this.ordenCompra?.documentos[0]?.id;
 
-            this.getOrdenCompra();
-            this.alertasService.mostrarAlerta("Guardado", "Documentos guardados correctamente", "success", "success");
+      if(idDocOC){
+        this.formData.append('archivo', this.formData.get('comprobante_pago'));
+        this.formData.append('tipo_documento', 'comprobante_pago');
+        this.formData.append("orden_compra_id", this.ordenCompra.id);
+        this.formData.append("idFactura", idDocOC);
+        
+        this.ordenesComprasService.saveFacturaDocs(this.formData).subscribe(
+          (response) => {
+            if (response) {
 
-            this.isLoad = false;
-            this.formData = new FormData();
-            this.formDocsOrdenCompra.reset();
-          } else {
-            this.alertasService.mostrarAlerta('error', response.message, 'error', 'danger');
+              this.getOrdenCompra();
+              this.alertasService.mostrarAlerta("Guardado", "Documentos guardados correctamente", "success", "success");
+
+              this.isLoad = false;
+              this.formData = new FormData();
+              this.formDocsOrdenCompra.reset();
+            } else {
+              this.alertasService.mostrarAlerta('error', response.message, 'error', 'danger');
+            }
+          },
+          (error) => {
+            this.alertasService.mostrarAlerta('error',` "Error:" ${error}`, 'error', 'danger');
+
           }
-        },
-        (error) => {
-          this.alertasService.mostrarAlerta('error',` "Error:" ${error}`, 'error', 'danger');
+        );
+      }else{
 
+        this.formData.append("orden_compra_id", idOrdenCompra);
+
+    this.ordenesComprasService.saveDocs(this.formData).subscribe(
+      (response) => {
+        if (response.status === "success") {
+
+          this.getOrdenCompra();
+          this.alertasService.mostrarAlerta("Guardado", "Documentos guardados correctamente", "success", "success");
+
+          this.isLoad = false;
+          this.formData = new FormData();
+          this.submitted = false;
+          this.formDocsOrdenCompra.reset();
+
+        } else {
+          this.alertasService.mostrarAlerta('error', response.message, 'error', 'danger');
         }
-      );
+      },
+      (error) => {
+        this.alertasService.mostrarAlerta('error',` "Error:" ${error}`, 'error', 'danger');
+        
+      }
+    );
+
+      }
+
+      
     } else {
       this.alertasService.mostrarAlerta("Alerta", "Debes adjuntar el comprobante pago", "warning", "warning");
       this.isLoad = false;
@@ -240,12 +289,13 @@ export class FormFilesFacturasComponent implements OnInit {
 
           const tiposNecesarios = ["INGRESO", "COMPROBANTE PAGO"];
 
-          if (this.validarTiposComprobante(this.factura.comprobantes, tiposNecesarios)) {
-            this.hasComprobantePago = true;
-          } else {
-            this.hasComprobantePago = false;
+          if(this.ordenCompra.tipo_pago === "Credito"){
+            if (this.validarTiposComprobante(this.factura.comprobantes, tiposNecesarios)) {
+             this.hasComprobantePago = true;
+           } else {
+             this.hasComprobantePago = false;
+           }
           }
-
 
           this.checkMetodoPago();
         }
@@ -266,9 +316,11 @@ export class FormFilesFacturasComponent implements OnInit {
    * PPD o PUE del xml
    */
   checkMetodoPago() {
+
     this.metodoPago = this.factura.metodoPago?.metodoPago;
+    console.log('METODO PAGO:', this.metodoPago);
     // console.log(this.metodoPago)
-    if (this.metodoPago === "PPD") {
+    if (this.metodoPago === "PPD" || this.metodoPago === '' || this.metodoPago === undefined || this.metodoPago === null) {
       this.habilitado = true;
     } else {
       this.habilitado = false;
@@ -341,4 +393,10 @@ export class FormFilesFacturasComponent implements OnInit {
 
   reader.readAsText(file);
 }
+
+public actualizadorEstatus(){
+  this.actualizarStatus.emit();
+  this.getOrdenCompra();
+}
+
 }

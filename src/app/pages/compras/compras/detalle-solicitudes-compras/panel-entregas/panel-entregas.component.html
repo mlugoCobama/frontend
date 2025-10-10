@@ -1,0 +1,50 @@
+<div class="row">
+  <div *ngIf="mostrarBtnSolicitud()" class="d-flex justify-content-evenly gap-2 col-9 mx-auto">
+    <button (click)="solicitarSurtido()" class="btn btn-info col-md-4" type="button">
+      <strong> Solicitar al proveedor que surta la orden de compra</strong>
+    </button>
+  </div>
+</div>
+
+<div class="container mt-2">
+  <form [formGroup]="acuseForm"  enctype="multipart/form-data">
+    <div class="row align-items-end g-2">
+      <div class="col-sm-4">
+        <label for="archivo" class="form-label">Archivo de acuse</label>
+        <input type="file" id="archivo" (change)="onFileChange($event)" class="form-control form-control-sm" />
+      </div>
+
+      <div class="col-sm-6">
+        <label for="observaciones" class="form-label">Observaciones</label>
+        <input type="text" id="observaciones" formControlName="observaciones" class="form-control form-control-sm" />
+      </div>
+
+      <div class="col-sm-2 d-grid">
+        <button (click)="guardar()"  class="btn btn-primary btn-sm">Guardar</button>
+      </div>
+    </div>
+  </form>
+  <hr />
+  <table *ngIf="ordenCompra?.acuses_entrega?.length > 0"  class="table table-bordered table-sm mt-2 text-center">
+    <thead class="table-light ">
+      <tr>
+        <th>#</th>
+        <th>Archivo</th>
+        <th>Fecha</th>
+        <th>Observaciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let acuse of acusesGuardados; let i = index">
+        <td>{{ i + 1}}</td>
+        <td>
+        <a (click) ="verArchivos(acuse.ruta)"  class="btn btn-sm btn-danger">
+          <i class="fas fa-file-pdf"></i> Ver Acuse
+            </a>
+        </td>
+        <td> Entregado: {{ acuse.fecha | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ acuse.comentario }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
