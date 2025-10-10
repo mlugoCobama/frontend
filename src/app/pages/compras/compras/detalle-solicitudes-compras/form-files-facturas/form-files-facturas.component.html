@@ -1,3 +1,19 @@
+<<<<<<< Updated upstream
+=======
+<div *ngIf="(ordenCompra?.estatus === 2 && !ordenCompra?.tipo_pago) || solicitudCompra.estatus == enEsts.Autorizado"  class="d-flex justify-content-evenly gap-2 col-10 mx-auto pb-2">
+        <app-btn-atorizar-a-pago
+        [ordenCompra] = "ordenCompra" 
+        (actualizarStatus1)="actualizadorEstatus()" >       
+        </app-btn-atorizar-a-pago>
+</div>
+
+<app-panel-entregas
+*ngIf="ordenCompra && ordenCompra?.estatus > 2"
+  [ordenCompra] = "ordenCompra"
+  (actualizarStatus1)="actualizadorEstatus()" 
+></app-panel-entregas>
+
+>>>>>>> Stashed changes
 <form
 class="row g-2"
 [formGroup]="formDocsOrdenCompra"

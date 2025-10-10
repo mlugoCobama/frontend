@@ -1,9 +1,9 @@
-import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core";
+import { Component, Input, Output, EventEmitter, OnInit, ViewChild } from "@angular/core";
 import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompra/ordenes-compra.service";
 import { EstadoSolicitud } from "../../estado-solicitud.enum";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
-
+import { PanelEntregasComponent } from "../panel-entregas/panel-entregas.component";
 
 @Component({
   selector: "app-form-files-facturas",
@@ -84,12 +84,28 @@ export class FormFilesFacturasComponent implements OnInit {
         if (response) {
           this.ordenCompra = response.data;
           this.setOrdenCompra(this.ordenCompra);
+<<<<<<< Updated upstream
           
+=======
+>>>>>>> Stashed changes
           this.isLoad = false;
 
           if (this.ordenCompra.documentos.length > 0) {
             this.hasFiles = true;
+<<<<<<< Updated upstream
             // console.log(this.ordenCompra.documentos);
+=======
+
+            const ultimoIndex = this.ordenCompra.documentos.length;
+            const ultimoId = this.ordenCompra.documentos[ultimoIndex - 1].id;
+            const comprobantePago = this.ordenCompra.documentos[ultimoIndex - 1].comprobante_pago;
+
+            if (comprobantePago) {
+              this.hasComprobantePago = true;
+              this.habilitado = true;
+            }
+
+>>>>>>> Stashed changes
             this.leerXML();
 
             this.hasFacturas = true;
@@ -171,10 +187,71 @@ export class FormFilesFacturasComponent implements OnInit {
       const idOrdenCompra = this.ordenCompra.id;
       const idDocOC = this.ordenCompra.documentos[0].id;
 
+<<<<<<< Updated upstream
       this.formData.append('archivo', this.formData.get('comprobante_pago'));
       this.formData.append('tipo_documento', 'comprobante_pago');
       this.formData.append("orden_compra_id", this.ordenCompra.id);
       this.formData.append("idFactura", idDocOC);
+=======
+      console.log(this.ordenCompra?.documentos[0]?.id)
+      const idDocOC = this.ordenCompra?.documentos[0]?.id === undefined ? null : this.ordenCompra?.documentos[0]?.id;
+
+      if(idDocOC){
+        this.formData.append('archivo', this.formData.get('comprobante_pago'));
+        this.formData.append('tipo_documento', 'comprobante_pago');
+        this.formData.append("orden_compra_id", this.ordenCompra.id);
+        this.formData.append("idFactura", idDocOC);
+        
+        this.ordenesComprasService.saveFacturaDocs(this.formData).subscribe(
+          (response) => {
+            if (response) {
+
+              this.getOrdenCompra();
+              this.alertasService.mostrarAlerta("Guardado", "Documentos guardados correctamente", "success", "success");
+
+              this.isLoad = false;
+              this.formData = new FormData();
+              this.formDocsOrdenCompra.reset();
+            } else {
+              this.alertasService.mostrarAlerta('error', response.message, 'error', 'danger');
+            }
+          },
+          (error) => {
+            this.alertasService.mostrarAlerta('error',` "Error:" ${error}`, 'error', 'danger');
+
+          }
+        );
+
+        
+      }else{
+
+        this.formData.append("orden_compra_id", idOrdenCompra);
+
+    this.ordenesComprasService.saveDocs(this.formData).subscribe(
+      (response) => {
+        if (response.status === "success") {
+
+          this.getOrdenCompra();
+          this.alertasService.mostrarAlerta("Guardado", "Documentos guardados correctamente", "success", "success");
+
+          this.isLoad = false;
+          this.formData = new FormData();
+          this.submitted = false;
+          this.formDocsOrdenCompra.reset();
+
+        } else {
+          this.alertasService.mostrarAlerta('error', response.message, 'error', 'danger');
+        }
+      },
+      (error) => {
+        this.alertasService.mostrarAlerta('error',` "Error:" ${error}`, 'error', 'danger');
+        
+      }
+    );
+
+      }
+
+>>>>>>> Stashed changes
       
       this.ordenesComprasService.saveFacturaDocs(this.formData).subscribe(
         (response) => {
@@ -341,4 +418,15 @@ export class FormFilesFacturasComponent implements OnInit {
 
   reader.readAsText(file);
 }
+<<<<<<< Updated upstream
+=======
+
+public actualizadorEstatus(){
+  
+  this.actualizarStatus.emit();
+  this.ordenCompra = [];
+  this.getOrdenCompra();
+}
+
+>>>>>>> Stashed changes
 }

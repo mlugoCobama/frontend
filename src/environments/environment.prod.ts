@@ -18,11 +18,12 @@ export const environment = {
     scrollCollapse: true,
     scrollY: '200px'
   },
-  //* Back produccion
+  //* Produccion 
   // apiUrl: 'http://192.168.22.226:8080/api/',
-  //* Back Pruebas
+  //* Test
   apiUrl: 'http://192.168.22.226:8081/api/',
-  //* Back local
+  // apiUrl: 'http://backend.test/api/',
+  //* Local
   // apiUrl: 'http://localhost:8000/api/',
   urlApiCodigoPostal: 'https://apicodigospostales.com/v1/'
 };

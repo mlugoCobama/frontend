@@ -25,10 +25,10 @@ export const environment = {
   },
   //* Produccion 
   // apiUrl: 'http://192.168.22.226:8080/api/',
-  //* Semiproduccion 
-  //apiUrl: 'http://192.168.22.226:8080/api/',
+  //* Test
+  //apiUrl: 'http://192.168.22.226:8081/api/',
   // apiUrl: 'http://backend.test/api/',
-  //* Pruebas 
+  //* Local
   apiUrl: 'http://localhost:8000/api/',
   urlApiCodigoPostal: 'https://apicodigospostales.com/v1/'
 };

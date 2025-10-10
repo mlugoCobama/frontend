@@ -1,7 +1,7 @@
 import { Component, OnInit, NgModule, OnDestroy } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { ModalComprasComponent } from "./modal-compras/modal-compras.component";
-
+import { ModalSeguimientoComponent } from "./modal-seguimiento/modal-seguimiento.component";
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { Config } from "datatables.net";
 import Swal from "sweetalert2";
@@ -403,5 +403,24 @@ export class ComprasComponent implements OnInit {
       "estado",
       "centro_costo",
     ]);
+  }
+
+  openModalSeguimiento(item){
+   this.modalAbierto = true;
+    const initialState: ModalOptions = {
+      initialState: {
+        solicitudCompra: item
+      },
+      class: "modal-lg",
+    };
+    this.modalRef = this.modalService.show(ModalSeguimientoComponent, initialState);
+    this.modalRef.content.closeBtnName = "Close";
+    this.modalRef.content.event.subscribe(() => {
+      this.isLoad = true;
+      this.getAll(this.usuarioSolicita.intercompania);
+    });
+    this.modalRef.content.modalCerrado.subscribe(() => {
+      this.modalAbierto = false;
+    });
   }
 }

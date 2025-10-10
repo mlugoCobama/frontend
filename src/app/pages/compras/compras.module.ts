@@ -49,6 +49,7 @@ import { FormComplementoComponent } from './compras/detalle-solicitudes-compras/
 import { SelectSistemaMantenimientoComponent } from './compras-macro/select-sistema-mantenimiento/select-sistema-mantenimiento.component';
 import { DetalleSolicitudMacroComponent } from './compras-macro/detalle-solicitud-macro/detalle-solicitud-macro.component';
 import { TimelineSolicitudComponent } from './timeline-solicitud/timeline-solicitud.component';
+import { ModalSeguimientoComponent } from './compras/modal-seguimiento/modal-seguimiento.component';
 
 @NgModule({
   declarations: [
@@ -92,6 +93,10 @@ import { TimelineSolicitudComponent } from './timeline-solicitud/timeline-solici
     SelectSistemaMantenimientoComponent,
     DetalleSolicitudMacroComponent,
     TimelineSolicitudComponent,
+    FormDatosPolizaComponent,
+    BtnAtorizarAPagoComponent,
+    PanelEntregasComponent,
+    ModalSeguimientoComponent,
   ],
   imports: [
     CommonModule,

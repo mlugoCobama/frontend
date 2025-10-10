@@ -1,0 +1,25 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">
+    Seguimiento de tu solicitud con folio: {{ solicitudCompra.folio }}
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="cerrarModal()"></button>
+</div>
+<div class="modal-body">
+<app-info-solicitud
+      [solicitudCompra]="solicitudCompra"   
+></app-info-solicitud>
+
+<hr>
+<app-timeline-solicitud
+      [solicitudCompra]="solicitudCompra" 
+></app-timeline-solicitud>
+
+
+</div>
+<div class="modal-footer">
+  <button
+    type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="cerrarModal()"
+  >
+    Cerrar
+  </button>
+</div>

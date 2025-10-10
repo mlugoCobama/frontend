@@ -102,7 +102,7 @@
                   </thead>
                   <tbody>
                     <tr *ngFor="let item of datosFiltrados" (dblclick)="openDetallesSolicitud(item, $event)">
-                      <td>{{ item.folio }}</td>
+                      <td class="d-flex justify-content-between">{{ item.folio }} <i class="fas fa-info-circle" style="cursor: pointer" (click) = "openModalSeguimiento(item)"></i> </td>
                       <td>{{ item.empresa || "CAS" }}</td>
                       <td>{{ item.usuario_solicita }}</td>
                       <td *ngIf="item.c_c === 0">{{ item.usuario_destino }}</td>

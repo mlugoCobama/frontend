@@ -45,7 +45,11 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
 
   public guardar(){
     this.deshabilitado = true;
-    if(!this.formDatosTanque.esValido() || !this.formDatosVehiculo.esValido()){
+    if(
+       !this.formDatosVehiculo.esValido()
+      //  || !this.formDatosTanque.esValido() 
+      //  || !this.formDatosPoliza.esValido()
+    ){
       this.alertasService.mostrarAlerta("Llena le formualrio correctamente",
                                         "Falta información importante, ingresala para continuar",
                                         "warning", 
@@ -84,7 +88,8 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
     const datos = {
       intercompania: this.intercompania,
       datosVehiculo: this.formDatosVehiculo.obtenerValores(),
-      datosTanque: this.formDatosTanque.obtenerValores() 
+      datosTanque: this.formDatosTanque.obtenerValores(),
+      datosPoliza: this.formDatosPoliza.obtenerValores(),
     }
     
     return datos;
