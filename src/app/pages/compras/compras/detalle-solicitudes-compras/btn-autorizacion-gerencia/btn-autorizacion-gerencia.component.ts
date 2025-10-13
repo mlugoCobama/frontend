@@ -134,7 +134,7 @@ export class BtnAutorizacionGerenciaComponent {
     const tipo_solicitud = this.solicitudCompra.tipo;
     const auto_macro = this.solicitudCompra.auto_macro;
     const data = { campo: "estatus", value: 2 };
-    if (auto_admin === 1 && auto_gral === 1 && tipo_solicitud === 1) {
+    if (auto_admin === 1 && auto_gral === 1 && (tipo_solicitud === 1 || tipo_solicitud === 3)) {
       this.actualizarDatos(data);
     }
     if (
@@ -242,7 +242,7 @@ export class BtnAutorizacionGerenciaComponent {
 
     Swal.fire({
       title: "La solicitud sera autorizada y enviada a compras",
-      text: "Por favor ingresa tus observaciones (opcional):",
+      text: "Por favor ingresa tus observaciones, información o consideraciones que deba de conocer el area de compras para continuar con el proceso de solicitud",
       input: "textarea",
       inputAttributes: {
         autocapitalize: "off",
@@ -257,18 +257,22 @@ export class BtnAutorizacionGerenciaComponent {
       },
       buttonsStyling: false,
       preConfirm: (razon) => {
-        return razon;
+        if (!razon || razon.trim() === '') {
+                Swal.showValidationMessage('Debes agregar tus observaciones acerca de la solicitud para el area de compras');
+                return false;
+              }
+              return razon;
       },
     }).then((result) => {
       if (result.isConfirmed) {
         const payload = {
           ...datos,
-          observacion: result.value ?? null,
+          observacion: result.value,
         };
         this.comprasMacro.edit(id, payload).subscribe(
           (response) => {
             if ((response.status = "success")) {
-              this.autorizarSolicitud(gerencia);
+              this.enviarSolicitud();
               this.alertasService.mostrarAlerta(
                 "Listo",
                 response.message,

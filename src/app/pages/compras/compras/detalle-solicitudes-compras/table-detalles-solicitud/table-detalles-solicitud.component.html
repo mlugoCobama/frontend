@@ -82,7 +82,7 @@
     <tfoot *ngIf="mostrarTotal">
       <tr >
         <td [attr.colspan]="solicitudCompra.multiUnidad ? 7 : 6" class="text-end">
-          <Strong>SUB-TOTAL (sin iva)</Strong>
+          <Strong> SUB-TOTAL (sin iva) </Strong>
         </td>
         <td
           *ngFor="let prov of cotProv"
@@ -91,6 +91,20 @@
         >
           <strong>
             {{ totals["precio_" + prov.proveedores_id[0].id] | currency }}
+          </strong>
+        </td>
+      </tr>
+      <tr >
+        <td [attr.colspan]="solicitudCompra.multiUnidad ? 7 : 6" class="text-end">
+          <Strong>TOTAL</Strong>
+        </td>
+        <td
+          *ngFor="let prov of cotProv"
+          [ngClass]="{'bg-primary text-white': totals['precio_' + prov.proveedores_id[0].id] === totalMasBajo}"
+          class="text-center"
+        >
+          <strong>
+            {{ totals["precio_" + prov.proveedores_id[0].id] * 1.16 | currency }}
           </strong>
         </td>
       </tr>

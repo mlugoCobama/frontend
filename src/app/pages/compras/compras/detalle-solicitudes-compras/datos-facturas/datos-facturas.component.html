@@ -1,28 +1,28 @@
 
 <div *ngIf="mostrarDtsFac">
-    <div class="row" *ngIf="ordenCompra.documentos[0].ruta_xml_factura">
+    <div class="row" *ngIf="ordenCompra?.documentos[0]">
       <h5>Datos de facturación</h5>
 
       <div class="col-6">
         <h5><strong>RECEPTOR</strong></h5>
-        <p><strong>RFC:</strong> {{ factura.receptor?.rfc }}</p>
-        <p><strong>NOMBRE: </strong> {{ factura.receptor?.nombre }}</p>
-        <p><strong>USO CFDI: </strong> {{ factura.receptor?.usoCFDIDesc }} ({{ factura.receptor?.usoCFDI }})</p>
+        <p><strong>RFC:</strong> {{ factura.receptor?.rfc || 'Esperando Factura'}}</p>
+        <p><strong>NOMBRE: </strong> {{ factura.receptor?.nombre || 'Esperando Factura' }}</p>
+        <p><strong>USO CFDI: </strong> {{ factura.receptor?.usoCFDIDesc }} ({{ factura.receptor?.usoCFDI || 'Esperando Factura' }})</p>
         <p>
           <strong>DOMICILIO FISCAL: </strong>
-          {{ factura.receptor?.domicilioFiscalReceptor }}
+          {{ factura.receptor?.domicilioFiscalReceptor || 'Esperando Factura' }}
         </p>
       </div>
       <div class="col-6">
         <h5><strong>EMISOR: </strong></h5>
-        <p><strong>RFC: </strong> {{ factura.emisor?.rfc }}</p>
-        <p><strong>NOMBRE: </strong> {{ factura.emisor?.nombre }}</p>
+        <p><strong>RFC: </strong> {{ factura.emisor?.rfc || 'Esperando Factura' }}</p>
+        <p><strong>NOMBRE: </strong> {{ factura.emisor?.nombre || 'Esperando Factura' }}</p>
         <p>
           <strong>REGIMEN FISCAL: </strong>
-          {{ factura.emisor?.regimenFiscalDesc }} ({{ factura.emisor?.regimenFiscal }}) 
+          {{ factura.emisor?.regimenFiscalDesc }} ({{ factura.emisor?.regimenFiscal || 'Esperando Factura' }}) 
         </p>
         <p>
-          <strong>MET. PAGO: </strong> {{ factura.metodoPago?.metodoPagoDesc }} ({{ factura.metodoPago?.metodoPago }})
+          <strong>MET. PAGO: </strong> {{ factura.metodoPago?.metodoPagoDesc }} ({{ factura.metodoPago?.metodoPago || 'Esperando Factura'}})
         </p>
       </div>
       <table
