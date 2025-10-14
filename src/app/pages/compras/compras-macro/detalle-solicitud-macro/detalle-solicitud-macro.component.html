@@ -12,7 +12,7 @@
       ></app-select-sistema-mantenimiento>
 
       <app-table-detalles-solicitud
-      *ngIf ="solicitudCompra.estatus > enEsts.Solicitado"
+      *ngIf ="solicitudCompra.estatus > enEsts.Solicitado && solicitudCompra.estado != 'ESP. AUT. MACRO'"
       [solicitudCompra]="solicitudCompra"
       [ordenCompra]="ordenCompra"
       (openModal)="openModal(content, $event)"
@@ -23,7 +23,7 @@
       ></app-table-detalles-solicitud>
 
       <app-tabla-detalles-solicitud
-      *ngIf="solicitudCompra.estatus <= enEsts.Solicitado"
+      *ngIf="solicitudCompra.estatus <= enEsts.Solicitado  || solicitudCompra.estado === 'ESP. AUT. MACRO'"
       [modifica] = "modifica"
       [solicitudCompra]="solicitudCompra"
       (openModal)="openModal(content, $event)"

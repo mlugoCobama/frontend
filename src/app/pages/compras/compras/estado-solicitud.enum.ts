@@ -5,8 +5,16 @@ export enum EstadoSolicitud{
     Cancelado = 4,
     OrdenCompra = 5,
     Autorizado = 6,
-    EnSurtido = 7,
-    Entregada = 8,
-    Pagando = 9,
-    Pagada = 10,
+
+    AutorizadoAPago = 7,
+
+    EnSurtido = 8,
+    Entregada = 9,
+    Facturado = 10,
+
+    SolicitadoPago = 11,
+    Pagada = 12,
+    CargarComplemento = 13,
+
+    Finalizada = 14
 }

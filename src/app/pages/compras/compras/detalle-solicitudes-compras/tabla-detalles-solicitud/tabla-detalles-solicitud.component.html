@@ -48,6 +48,7 @@
           <th>Unidad de Medida</th>
           <th>Descripción</th>
           <th>Observaciones</th>
+          <th class="text-center" *ngIf= "solicitudCompra?.multiUnidad">AT</th>
           <th>Ref. fotográfica</th>
           <th *ngIf = "modifica">Autorizado</th>
           <th *ngIf="mostrarTotal">Quitar</th>
@@ -160,6 +161,15 @@
               </div>
             </div>
           </td>
+
+          <td *ngIf="solicitudCompra?.multiUnidad" style="width: 3.5rem" (click)="copiarTexto(getDetalleControl(i, 'no_serie')?.value)" class="text-center">
+            <span
+             data-bs-toggle="tooltip" data-bs-placement="top" [attr.title]="getDetalleControl(i, 'no_serie')?.value">
+              {{ getDetalleControl(i, 'autotanque')?.value }}
+            </span>
+          </td>
+
+
           <td style="width: 7.5rem" class="text-center">
             <a
               *ngIf="
@@ -209,3 +219,13 @@
   </form>
   <ng-template #elseBlock><i class="fas far fa-eye-slash"></i></ng-template>
 </div>
+
+  <!-- Fin tabla detalle solicitud + precios cotizaciones -->
+  <app-table-files-cotizaciones
+    *ngIf="cotProv.length > 0"
+    [tipo] = "tipo"
+    [ordenCompra]="ordenCompra"
+    [solicitudCompra]="solicitudCompra"
+    [cotProv]="cotProv"
+    [mostrarObs]="mostrarObs"    
+  ></app-table-files-cotizaciones>

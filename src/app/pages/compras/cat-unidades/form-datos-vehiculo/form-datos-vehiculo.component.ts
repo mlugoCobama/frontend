@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -6,17 +6,37 @@ import {
   Validators,
 } from "@angular/forms";
 
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-form-datos-vehiculo',
   templateUrl: './form-datos-vehiculo.component.html',
   styleUrl: './form-datos-vehiculo.component.css'
 })
-export class FormDatosVehiculoComponent {
+export class FormDatosVehiculoComponent implements OnInit{
+
+  @Output() cambioSelect = new EventEmitter<any>();
+
+  etatusVehiculo = [
+    {"numero": 1 , "descripcion": "Activa"},
+    {"numero": 0 , "descripcion": "Fuera de circulación"},
+    {"numero": 2, "descripcion": "En taller"},
+    {"numero": 3, "descripcion": "Vendida"},
+    {"numero": 4, "descripcion": "No identificada"},
+    {"numero": 5, "descripcion": "Descompuesta"},
+    {"numero": 6, "descripcion": "En Fiscalia"},
+    {"numero": 7, "descripcion": "En Deposito vehicular"},
+    {"numero": 8, "descripcion": "Chatarra"},
+    {"numero": 9, "descripcion": "Vendida como chatarra"},
+    {"numero": 10, "descripcion": "Baja"},
+  ]
 
   @Input() datos: any = [];
   public formDatosVehiculo: FormGroup;
   public submitted:boolean = false;
   public intercompania:any = 0;
+  private valorOriginalEstatus: any = this.datos?.estatus;
+
   
   constructor(
     public formBuilder: FormBuilder,
@@ -31,6 +51,7 @@ export class FormDatosVehiculoComponent {
       this.formDatosVehiculo = this.formBuilder.group({
         id: new FormControl( null),
         id_sucursal: new FormControl( null),
+        id_cre: new FormControl( null),
         marca: new FormControl(null, Validators.required),
         nro_economico: new FormControl(null, Validators.required),
         submarca: new FormControl( null, Validators.required),
@@ -38,14 +59,31 @@ export class FormDatosVehiculoComponent {
                                       Validators.pattern(/^\d{4}$/),
                                       Validators.min(1900),
                                       Validators.max(new Date().getFullYear())
-
                                     ]),
         no_serie: new FormControl(null, [Validators.required, Validators.minLength(17)]),
         placas: new FormControl(null, [Validators.required]),
+        observacion: new FormControl(null),
         tipo_vehiculo: new FormControl("", [Validators.required]),
         tipo_combustible: new FormControl("", [Validators.required]),
         estatus: new FormControl("", [Validators.required]),
       });
+
+      this.valorOriginalEstatus = this.formDatosVehiculo.get('estatus')?.value || '';
+
+    // Suscripción para detectar cambios
+    this.formDatosVehiculo.get('estatus')?.valueChanges.subscribe(valor => {
+      const observacionControl = this.formDatosVehiculo.get('observacion');
+
+      if (valor !== this.valorOriginalEstatus) {
+        observacionControl?.setValidators([Validators.required]);
+      } else {
+        observacionControl?.clearValidators();
+      }
+
+      observacionControl?.updateValueAndValidity();
+    });
+
+
       resolve(true);
     });
   }
@@ -56,17 +94,18 @@ export class FormDatosVehiculoComponent {
 
   public llenarForm(){
     this.formDatosVehiculo.patchValue({
-      id: this.datos.id,
-      nro_economico: this.datos.eco,
-      id_sucursal: this.datos.id,
-      marca: this.datos.marca_vehiculo,
-      submarca: this.datos.submarca,
-      modelo: this.datos.modelo,
-      no_serie: this.datos.no_serie,
-      placas: this.datos.placas,
-      tipo_vehiculo: this.datos.tipo_vehiculo,
-      tipo_combustible: this.datos.tipo_combustible,
-      estatus: this.datos.estatus,
+      id: this.datos?.id,
+      id_cre: this.datos?.id_cre,
+      nro_economico: this.datos?.eco,
+      id_sucursal: this.datos?.id_sucursal,
+      marca: this.datos?.marca_vehiculo,
+      submarca: this.datos?.submarca,
+      modelo: this.datos?.modelo,
+      no_serie: this.datos?.no_serie,
+      placas: this.datos?.placas,
+      tipo_vehiculo: this.datos?.tipo_vehiculo,
+      tipo_combustible: this.datos?.tipo_combustible,
+      estatus: this.datos?.estatus,
     });
   }
 
@@ -86,6 +125,8 @@ export class FormDatosVehiculoComponent {
    * @returns boolean:  true ->valido, false ->no valido
    */
   esValido() {
+    // this.mostrarErroresFormulario();
+    console.log(this.formDatosVehiculo.controls)
     return this.formDatosVehiculo.valid;
   }
 
@@ -97,5 +138,52 @@ export class FormDatosVehiculoComponent {
     this.submitted = false;
     this.formDatosVehiculo.reset();
   }
+
+  selectChange() {
+    // Emite el evento con el valor "Hola desde el hijo"
+    this.cambioSelect.emit();
+  }
+
+  mostrarErroresFormulario() {
+  const errores: string[] = [];
+ console.log(errores);
+  Object.keys(this.formDatosVehiculo.controls).forEach(campo => {
+    const control = this.formDatosVehiculo.get(campo);
+
+    if (control && control.invalid) {
+      const nombreCampo = campo.replace(/_/g, ' '); // opcional: más legible
+
+      if (control.errors?.['required']) {
+        errores.push(`El campo "${nombreCampo}" es obligatorio.`);
+      }
+
+      if (control.errors?.['minlength']) {
+        errores.push(`"${nombreCampo}" debe tener al menos ${control.errors['minlength'].requiredLength} caracteres.`);
+      }
+
+      if (control.errors?.['pattern']) {
+        errores.push(`"${nombreCampo}" tiene un formato inválido.`);
+      }
+
+      if (control.errors?.['min']) {
+        errores.push(`"${nombreCampo}" debe ser mayor o igual a ${control.errors['min'].min}.`);
+      }
+
+      if (control.errors?.['max']) {
+        errores.push(`"${nombreCampo}" debe ser menor o igual a ${control.errors['max'].max}.`);
+      }
+    }
+  });
+
+  if (errores.length > 0) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Errores en el formulario',
+      html: `<ul style="text-align:left;">${errores.map(e => `<li>${e}</li>`).join('')}</ul>`,
+    });
+  }
+}
+
+
 
 }

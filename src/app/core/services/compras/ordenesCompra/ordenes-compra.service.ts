@@ -128,6 +128,13 @@ export class OrdenesCompraService {
     );
   }
 
+  public autorizarPagoOrdenCompra(data: any): Observable<any> {
+    return this.http.post(
+      environment.apiUrl + "compras/autorizar-apago-orden-compra",
+      data , {headers} 
+    );
+  }
+
   /**
    * Peticin para leer un archivo xml
    * @param id orden de compra id

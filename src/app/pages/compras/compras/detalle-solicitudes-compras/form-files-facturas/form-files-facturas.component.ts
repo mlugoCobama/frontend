@@ -84,17 +84,14 @@ export class FormFilesFacturasComponent implements OnInit {
         if (response) {
           this.ordenCompra = response.data;
           this.setOrdenCompra(this.ordenCompra);
-<<<<<<< Updated upstream
           
-=======
->>>>>>> Stashed changes
           this.isLoad = false;
+
+          
 
           if (this.ordenCompra.documentos.length > 0) {
             this.hasFiles = true;
-<<<<<<< Updated upstream
             // console.log(this.ordenCompra.documentos);
-=======
 
             const ultimoIndex = this.ordenCompra.documentos.length;
             const ultimoId = this.ordenCompra.documentos[ultimoIndex - 1].id;
@@ -105,27 +102,31 @@ export class FormFilesFacturasComponent implements OnInit {
               this.habilitado = true;
             }
 
->>>>>>> Stashed changes
             this.leerXML();
 
             this.hasFacturas = true;
-            const ultimoIndex = this.ordenCompra.documentos.length;
-            const comprobantePago =
-              this.ordenCompra.documentos[ultimoIndex - 1].comprobante_pago;
-            const ultimoId = this.ordenCompra.documentos[ultimoIndex - 1].id;
+
             if (comprobantePago) {
               this.hasComprobantePago = true;
+              this.habilitado = true;
             } else {
               this.hasComprobantePago = false;
               this.idDocOrdC = ultimoId;
             }
           }
 
+          
+
           if (this.ordenCompra.documentos.length === 0) {
             this.habilitado = true;
             this.hasFacturas = false;
             this.hasComprobantePago = true;
           }
+
+          if(this.ordenCompra.tipo_pago === 'Contado' && this.ordenCompra.documentos.length === 0 ){
+              this.hasComprobantePago = false;
+          }
+
         } else {
           this.alertasService.mostrarAlerta('error', response.message, 'error', 'danger');
         }
@@ -185,26 +186,19 @@ export class FormFilesFacturasComponent implements OnInit {
     if (this.formData.has("comprobante_pago")) {
 
       const idOrdenCompra = this.ordenCompra.id;
-      const idDocOC = this.ordenCompra.documentos[0].id;
 
-<<<<<<< Updated upstream
-      this.formData.append('archivo', this.formData.get('comprobante_pago'));
-      this.formData.append('tipo_documento', 'comprobante_pago');
-      this.formData.append("orden_compra_id", this.ordenCompra.id);
-      this.formData.append("idFactura", idDocOC);
-=======
       console.log(this.ordenCompra?.documentos[0]?.id)
       const idDocOC = this.ordenCompra?.documentos[0]?.id === undefined ? null : this.ordenCompra?.documentos[0]?.id;
 
       if(idDocOC){
-        this.formData.append('archivo', this.formData.get('comprobante_pago'));
-        this.formData.append('tipo_documento', 'comprobante_pago');
-        this.formData.append("orden_compra_id", this.ordenCompra.id);
-        this.formData.append("idFactura", idDocOC);
-        
-        this.ordenesComprasService.saveFacturaDocs(this.formData).subscribe(
-          (response) => {
-            if (response) {
+      this.formData.append('archivo', this.formData.get('comprobante_pago'));
+      this.formData.append('tipo_documento', 'comprobante_pago');
+      this.formData.append("orden_compra_id", this.ordenCompra.id);
+      this.formData.append("idFactura", idDocOC);
+      
+      this.ordenesComprasService.saveFacturaDocs(this.formData).subscribe(
+        (response) => {
+          if (response) {
 
               this.getOrdenCompra();
               this.alertasService.mostrarAlerta("Guardado", "Documentos guardados correctamente", "success", "success");
@@ -221,11 +215,9 @@ export class FormFilesFacturasComponent implements OnInit {
 
           }
         );
-
-        
       }else{
 
-        this.formData.append("orden_compra_id", idOrdenCompra);
+    this.formData.append("orden_compra_id", idOrdenCompra);
 
     this.ordenesComprasService.saveDocs(this.formData).subscribe(
       (response) => {
@@ -251,27 +243,7 @@ export class FormFilesFacturasComponent implements OnInit {
 
       }
 
->>>>>>> Stashed changes
       
-      this.ordenesComprasService.saveFacturaDocs(this.formData).subscribe(
-        (response) => {
-          if (response) {
-
-            this.getOrdenCompra();
-            this.alertasService.mostrarAlerta("Guardado", "Documentos guardados correctamente", "success", "success");
-
-            this.isLoad = false;
-            this.formData = new FormData();
-            this.formDocsOrdenCompra.reset();
-          } else {
-            this.alertasService.mostrarAlerta('error', response.message, 'error', 'danger');
-          }
-        },
-        (error) => {
-          this.alertasService.mostrarAlerta('error',` "Error:" ${error}`, 'error', 'danger');
-
-        }
-      );
     } else {
       this.alertasService.mostrarAlerta("Alerta", "Debes adjuntar el comprobante pago", "warning", "warning");
       this.isLoad = false;
@@ -317,12 +289,13 @@ export class FormFilesFacturasComponent implements OnInit {
 
           const tiposNecesarios = ["INGRESO", "COMPROBANTE PAGO"];
 
-          if (this.validarTiposComprobante(this.factura.comprobantes, tiposNecesarios)) {
-            this.hasComprobantePago = true;
-          } else {
-            this.hasComprobantePago = false;
+          if(this.ordenCompra.tipo_pago === "Credito"){
+            if (this.validarTiposComprobante(this.factura.comprobantes, tiposNecesarios)) {
+             this.hasComprobantePago = true;
+           } else {
+             this.hasComprobantePago = false;
+           }
           }
-
 
           this.checkMetodoPago();
         }
@@ -343,9 +316,11 @@ export class FormFilesFacturasComponent implements OnInit {
    * PPD o PUE del xml
    */
   checkMetodoPago() {
+
     this.metodoPago = this.factura.metodoPago?.metodoPago;
+    console.log('METODO PAGO:', this.metodoPago);
     // console.log(this.metodoPago)
-    if (this.metodoPago === "PPD") {
+    if (this.metodoPago === "PPD" || this.metodoPago === '' || this.metodoPago === undefined || this.metodoPago === null) {
       this.habilitado = true;
     } else {
       this.habilitado = false;
@@ -418,8 +393,6 @@ export class FormFilesFacturasComponent implements OnInit {
 
   reader.readAsText(file);
 }
-<<<<<<< Updated upstream
-=======
 
 public actualizadorEstatus(){
   
@@ -428,5 +401,4 @@ public actualizadorEstatus(){
   this.getOrdenCompra();
 }
 
->>>>>>> Stashed changes
 }

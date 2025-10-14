@@ -139,10 +139,8 @@ export class ComprasComponent implements OnInit {
   public getUsuarioActivo() {
     const usuarioActivo = this.localStorage.getItem("currentUser");
     this.usuarioSolicita = usuarioActivo["usuarioActivo"][0];
-    console.log(this.usuarioSolicita.empresas)
-    console.log(this.rawEmpresas)
-    if (this.usuarioSolicita.empresas != null) {
-      this.filtrarEmpresas(this.rawEmpresas, this.usuarioSolicita.empresas);
+    if (this.usuarioSolicita?.empresas != null) {
+      this.filtrarEmpresas(this.rawEmpresas, this.usuarioSolicita?.empresas);
     }
     this.getAll(this.usuarioSolicita?.intercompania);
   }

@@ -1,45 +1,41 @@
 <div class="modal-header">
-    <h5 class="modal-title" id="exampleModalLabel">Actualizar Vehiculo</h5>
-    <button
-      type="button"
-      class="btn-close"
-      data-bs-dismiss="modal"
-      aria-label="Close"
-      id="close-modal"
-      (click)="cerrarModal()"
-    ></button>
+  <h5 class="modal-title" id="exampleModalLabel">Actualizar Vehiculo</h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+    (click)="cerrarModal()"></button>
 </div>
 
 <div class="modal-body">
-    <h5>Datos del Vehiculo</h5>
-    <app-form-datos-vehiculo
-    [datos]="datos"
-    #formUdtDatosVehiculo
-    ></app-form-datos-vehiculo>
+  <h5>Datos del Vehiculo</h5>
+  <app-form-datos-vehiculo [datos]="datos" #formUdtDatosVehiculo
+    (cambioSelect)="mostrarFormTanque()"></app-form-datos-vehiculo>
 
-
+  <div [hidden]="!openFormTanque">
     <h5 class="pt-2">Datos del Tanque</h5>
-    <app-form-datos-tanque
-    [datos]="datos"
-    #formUdtDatosTanque
-    ></app-form-datos-tanque>
+    <app-form-datos-tanque [datos]="datos" #formUdtDatosTanque></app-form-datos-tanque>
+  </div>
+
+
+  <div class="pt-2">
+    <label>
+      <input type="checkbox" [(ngModel)]="mostrarFormulario" />
+      <strong> Agregar información del seguro</strong>
+    </label>
+  </div>
+
+  <div [hidden]="!mostrarFormulario">
+    <h5 class="pt-2">Datos de poliza de seguro</h5>
+    <app-form-datos-poliza [datos]="datos" #formUdtDatosPoliza></app-form-datos-poliza>
+  </div>
+
+
 </div>
 
 <div class="modal-footer">
-    <button
-      [disabled] = "deshabilitado"
-      type="button"
-      class="btn btn-secondary btn-sm"
-      data-bs-dismiss="modal"
-      (click)="cerrarModal()"
-    >
-      Cerrar
-    </button>
-    <button 
-    [disabled] = "deshabilitado"
-    (click)="guardarCambios()" 
-    type="button" 
-    class="btn btn-primary btn-sm">
-      Guardar
-    </button>
+  <button [disabled]="deshabilitado" type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"
+    (click)="cerrarModal()">
+    Cerrar
+  </button>
+  <button [disabled]="deshabilitado" (click)="guardarCambios()" type="button" class="btn btn-primary btn-sm">
+    Guardar
+  </button>
 </div>

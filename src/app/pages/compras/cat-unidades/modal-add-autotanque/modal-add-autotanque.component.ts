@@ -3,7 +3,7 @@ import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 
 import { FormDatosTanqueComponent } from '../form-datos-tanque/form-datos-tanque.component';
 import { FormDatosVehiculoComponent } from '../form-datos-vehiculo/form-datos-vehiculo.component';
-
+import { FormDatosPolizaComponent } from '../form-datos-poliza/form-datos-poliza.component';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import { UnidadesService } from 'src/app/core/services/compras/unidades.service';
 
@@ -13,6 +13,10 @@ import { UnidadesService } from 'src/app/core/services/compras/unidades.service'
   styleUrl: './modal-add-autotanque.component.css'
 })
 export class ModalAddAutotanqueComponent implements AfterViewInit{
+
+  public openFormTanque: boolean = false;
+  public mostrarFormulario: boolean = false;
+
 
   constructor(
     public bsModalRef: BsModalRef,
@@ -27,6 +31,7 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
 
    @ViewChild('formDatosTanque', { static: false }) formDatosTanque!:  FormDatosTanqueComponent;
    @ViewChild('formDatosVehiculo', { static: false }) formDatosVehiculo!:  FormDatosVehiculoComponent;
+   @ViewChild('formDatosPoliza', { static: false }) formDatosPoliza!:  FormDatosPolizaComponent;
      
     public empresas: any = [];
     public intercompania: any = 0;
@@ -47,9 +52,10 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
     this.deshabilitado = true;
     if(
        !this.formDatosVehiculo.esValido()
-      //  || !this.formDatosTanque.esValido() 
-      //  || !this.formDatosPoliza.esValido()
+      || !this.formDatosTanque.esValido() 
+      || !this.formDatosPoliza.esValido()
     ){
+      this.formDatosVehiculo.mostrarErroresFormulario();
       this.alertasService.mostrarAlerta("Llena le formualrio correctamente",
                                         "Falta información importante, ingresala para continuar",
                                         "warning", 
@@ -89,9 +95,23 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
       intercompania: this.intercompania,
       datosVehiculo: this.formDatosVehiculo.obtenerValores(),
       datosTanque: this.formDatosTanque.obtenerValores(),
+      hasDatosSeguro : this.mostrarFormulario,
       datosPoliza: this.formDatosPoliza.obtenerValores(),
     }
     
     return datos;
+  }
+
+  public mostrarFormTanque(){
+
+   const tipoCombustible =  this.formDatosVehiculo.datosVehiculoFormControl.tipo_combustible.value
+   const tipoVehiculo = this.formDatosVehiculo.datosVehiculoFormControl.tipo_vehiculo.value
+
+   if(tipoVehiculo == 'autotanque' || tipoVehiculo == 'reparto' 
+    || tipoCombustible == 'gas_natural' || tipoCombustible == 'gas_lp'){
+      this.openFormTanque = true;
+    }else{
+      this.openFormTanque = false;
+    }
   }
 }

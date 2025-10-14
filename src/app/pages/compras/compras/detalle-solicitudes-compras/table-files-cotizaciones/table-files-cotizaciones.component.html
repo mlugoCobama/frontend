@@ -134,12 +134,19 @@
     </form>
     <!-- form observaciones orden de compra -->
     <div *ngIf="solicitudCompra?.estatus >= enEsts.OrdenCompra" class="row">
+      <div *ngIf="ordenCompra" class="alert alert-primary text-center" role="alert">
+          ORDEN DE COMPRA:
+          <strong>{{ ordenCompra?.folio_oc }}</strong>
+        </div>
       <div *ngIf="ordenCompra">
         <p>
           <strong>Observaciones: </strong> {{ ordenCompra?.observaciones ?? ' Sin observaciones '}}
         </p>
         <p> <strong>Se entrega en:</strong> {{ordenCompra?.entrega.EMPRESA ?? ' '}} </p>
         <p> <strong>Ubicada en:</strong> {{ordenCompra?.entrega.DIRECCION ?? ' '}}, {{ordenCompra?.entrega.COLONIA ?? ' '}}, {{ordenCompra?.entrega["CIUDAD/DELEG/ESTADO"] ?? ' '}}, C.P. {{ordenCompra?.entrega["C.P."] ?? ' '}}   </p>
+      </div>
+      <div *ngIf="ordenCompra?.tipo_pago">
+        <p> <strong>Tipo de pago: </strong>  {{ ordenCompra?.tipo_pago | uppercase }} </p>
       </div>
     </div>
   </div>

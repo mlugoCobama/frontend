@@ -6,6 +6,7 @@ import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { ModalAddAutotanqueComponent } from './modal-add-autotanque/modal-add-autotanque.component';
 import { ModalUpdtAutotanqueComponent } from './modal-updt-autotanque/modal-updt-autotanque.component';
 import { ModalCostosUnidadComponent } from './modal-costos-unidad/modal-costos-unidad.component';
+import { ModalHistorialComentariosComponent } from './modal-historial-comentarios/modal-historial-comentarios.component';
 
 import { UsuariosService } from "src/app/core/services/compras/usuarios.service";
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
@@ -114,6 +115,26 @@ export class CatUnidadesComponent implements OnInit{
         };
         this.modalRef = this.modalService.show(
           ModalCostosUnidadComponent,
+          initialState
+        );
+        this.modalRef.content.closeBtnName = "Close";
+        this.modalRef.content.event.subscribe(() => {
+          this.isLoad = true;
+  
+          this.getCatVehiculos(this.intercompania);
+        });
+  }
+
+  public openModalHistorial() {
+    this.modalAbierto =  true;
+    const initialState: ModalOptions = {
+          initialState: {
+            unidad : this.unidad
+          },
+          class: "modal-md",
+        };
+        this.modalRef = this.modalService.show(
+          ModalHistorialComentariosComponent,
           initialState
         );
         this.modalRef.content.closeBtnName = "Close";

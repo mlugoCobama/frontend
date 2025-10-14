@@ -1,0 +1,88 @@
+<form [formGroup]="formDatosPoliza">
+    <div class="row">
+        <div class="col-md-4">
+        <label for="aseguradora" class="form-label">Aseguradora: *</label>
+        <input
+            type="text"
+            class="form-control form-control-sm"
+            formControlName="aseguradora"
+            id="aseguradora"
+            name="aseguradora"
+            aria-label="aseguradora"
+            placeholder="Aseguradora"
+        />
+        </div>
+        <div class="col-md-4">
+        <label for="inciso_vehiculo" class="form-label">Inciso Vehiculo: *</label>
+        <input
+            type="text"
+            class="form-control form-control-sm"
+            formControlName="inciso_vehiculo"
+            id="inciso_vehiculo"
+            name="inciso_vehiculo"
+            aria-label="inciso_vehiculo"
+            placeholder="# Inciso Vehiculo"
+        />
+        </div>
+        <div class="col-md-4">
+        <label for="cobertura" class="form-label">Cobertura: *</label>
+        <input
+            type="text"
+            class="form-control form-control-sm"
+            formControlName="cobertura"
+            id="cobertura"
+            name="cobertura"
+            aria-label="cobertura"
+            placeholder="Cobertura"
+        />
+        </div>
+        <div class="col-md-3">
+        <label for="inicio_vigencia" class="form-label">Inicio Vigencia: *</label>
+        <input
+            type="date"
+            class="form-control form-control-sm"
+            formControlName="inicio_vigencia"
+            id="inicio_vigencia"
+            name="inicio_vigencia"
+            aria-label="inicio_vigencia"
+            placeholder="Inicio vigencia"
+        />
+        </div>
+        <div class="col-md-3">
+        <label for="fin_vigencia" class="form-label">Fin Vigencia: *</label>
+        <input
+            type="date"
+            class="form-control form-control-sm"
+            formControlName="fin_vigencia"
+            id="fin_vigencia"
+            name="fin_vigencia"
+            aria-label="fin_vigencia"
+            placeholder="Fin vigencia"
+        />
+        </div>
+        <div class="col-md-3">
+        <label for="flotilla" class="form-label">Flotilla: *</label>
+        <input
+            type="text"
+            class="form-control form-control-sm"
+            formControlName="flotilla"
+            id="flotilla"
+            name="flotilla"
+            aria-label="flotilla"
+            placeholder="Flotilla"
+        />
+        </div>
+        <div class="col-md-3">
+        <label for="inciso_foltilla" class="form-label">Inciso Flotilla: *</label>
+        <input
+            type="text"
+            class="form-control form-control-sm"
+            formControlName="inciso_foltilla"
+            id="inciso_foltilla"
+            name="inciso_foltilla"
+            aria-label="inciso_foltilla"
+            placeholder="# Inciso flotilla"
+        />
+        </div>
+    </div>
+</form>

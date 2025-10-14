@@ -1,0 +1,45 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel"> Historial de comentarios </h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="cerrarModal()"
+    ></button>
+</div>
+
+<div class="modal-body">
+<div class="d-flex justify-content-center" *ngIf="isLoad">
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<div *ngIf="!isLoad && showTable" class="list-group">
+    <a *ngFor=" let item of comentarios; let i = index"
+        class="list-group-item list-group-item-action flex-column align-items-start" [ngClass]=" i == 0 ? 'active': ''">
+        <div class="d-flex w-100 justify-content-end">
+            <strong> <small>Agregado el: {{ item.fecha }}</small> </strong>
+        </div>
+        <p class="mb-1">{{ item.observacion }}</p>
+        <strong> <small>{{ item.usuario }}</small> </strong> 
+    </a>
+
+    <p *ngIf="comentarios.length == 0" class="text-muted text-center"><strong>Aun no hay comentarios...</strong></p>
+</div>
+</div>
+
+
+<div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      data-bs-dismiss="modal"
+      (click)="cerrarModal()"
+    >
+      Cerrar
+    </button>
+</div>
+

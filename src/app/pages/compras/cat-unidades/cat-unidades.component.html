@@ -11,6 +11,13 @@
               <a
                 *ngIf = "mostrar"
                 href="javascript:void(0);"
+                class="btn btn-primary btn-sm"
+                (click) = "openModalHistorial()"
+                ><i class="bx bx-time-five"></i> Historial de comentarios</a
+              >
+              <a
+                *ngIf = "mostrar"
+                href="javascript:void(0);"
                 class="btn btn-info btn-sm"
                 (click) = "openModalInfo()"
                 ><i class="fas fa-donate"></i> Gastos vehículo</a
@@ -102,7 +109,7 @@
                 <tbody>
                   <tr *ngFor="let item of datosFiltrados" (click)="seleccionar(item, $event)">
                     <td class="text-center"><span  style="font-size:0.7rem;" [ngClass]="item.clase">{{ item.entidad }}</span></td>
-                    <td>{{item.eco}}</td>
+                    <td class="text-center" [ngClass] = "item.estatus == 1 ? 'text-primary' : '' "> <strong> {{item.eco}} </strong></td>
                     <td>{{item.marca_vehiculo}}</td>
                     <td>{{item.submarca}}</td>
                     <td>{{item.modelo}}</td>

@@ -4,6 +4,7 @@ import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 
 import { FormDatosTanqueComponent } from '../form-datos-tanque/form-datos-tanque.component';
 import { FormDatosVehiculoComponent } from '../form-datos-vehiculo/form-datos-vehiculo.component';
+import { FormDatosPolizaComponent } from '../form-datos-poliza/form-datos-poliza.component';
 
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import { UnidadesService } from 'src/app/core/services/compras/unidades.service';
@@ -16,8 +17,12 @@ import { UnidadesService } from 'src/app/core/services/compras/unidades.service'
 })
 export class ModalUpdtAutotanqueComponent implements AfterViewInit {
 
-   @ViewChild('formUdtDatosTanque', { static: false }) formDatosTanque!:  FormDatosTanqueComponent;
-   @ViewChild('formUdtDatosVehiculo', { static: false }) formDatosVehiculo!:  FormDatosVehiculoComponent;
+  public openFormTanque: boolean = false;
+  public mostrarFormulario: boolean = false;
+
+  @ViewChild('formUdtDatosTanque', { static: false }) formDatosTanque!:  FormDatosTanqueComponent;
+  @ViewChild('formUdtDatosVehiculo', { static: false }) formDatosVehiculo!:  FormDatosVehiculoComponent;
+  @ViewChild('formUdtDatosPoliza', { static: false }) formDatosPoliza!:  FormDatosPolizaComponent;
 
   constructor(
     public bsModalRef: BsModalRef,
@@ -28,6 +33,9 @@ export class ModalUpdtAutotanqueComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.formDatosTanque.llenarForm();
     this.formDatosVehiculo.llenarForm();
+    this.formDatosPoliza.llenarForm();
+    this.mostrarFormTanque();
+    this.hasDatosSeguro();
   }
 
     public intercompania:any = 0;
@@ -78,9 +86,30 @@ export class ModalUpdtAutotanqueComponent implements AfterViewInit {
   public getDatos(){
     const datos = {
       datosVehiculo: this.formDatosVehiculo.obtenerValores(),
-      datosTanque: this.formDatosTanque.obtenerValores()
+      datosTanque: this.formDatosTanque.obtenerValores(),
+      hasDatosSeguro : this.mostrarFormulario,
+      datosPoliza: this.formDatosPoliza.obtenerValores(),
     }
 
     return datos;
+  }
+
+  public mostrarFormTanque(){
+
+   const tipoCombustible =  this.formDatosVehiculo.datosVehiculoFormControl.tipo_combustible.value
+   const tipoVehiculo = this.formDatosVehiculo.datosVehiculoFormControl.tipo_vehiculo.value
+
+   if(tipoVehiculo == 'autotanque' || tipoVehiculo == 'reparto' 
+    || tipoCombustible == 'gas_natural' || tipoCombustible == 'gas_lp'){
+      this.openFormTanque = true;
+    }else{
+      this.openFormTanque = false;
+    }
+  }
+
+  public hasDatosSeguro(){
+    if(this.datos?.idSeguro !=  null){
+      this.mostrarFormulario = true;
+    }
   }
 }

@@ -9,6 +9,7 @@ import { EstadoSolicitud } from '../compras/estado-solicitud.enum';
 import { FuncionesTablas } from '../compras/funciones-tablas';
 import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
 import { UsuariosService } from "src/app/core/services/compras/usuarios.service";
+import { ModalSeguimientoComponent } from '../compras/modal-seguimiento/modal-seguimiento.component';
 import Swal from "sweetalert2";
 
 @Component({
@@ -28,6 +29,7 @@ export class ComprasMacroComponent implements OnInit{
     public solicitudCompra: any;
     public data:any;
     public modifica:boolean =  false;
+    public tipo:any =  "";
     public status:any;
     public enEsts = EstadoSolicitud;
 
@@ -163,6 +165,7 @@ export class ComprasMacroComponent implements OnInit{
         (response) => {
           if (response) {
             this.data = response.data;
+            this.tipo = response.tipo;
             this.modifica =  response.tipo == "macro" ? true : false;
             this.ordenador = new FuncionesTablas(this.data);
             this.datosFiltrados = [...this.data];
@@ -364,4 +367,23 @@ export class ComprasMacroComponent implements OnInit{
       "centro_costo",
     ]);
   }
+
+    openModalSeguimiento(item){
+     this.modalAbierto = true;
+      const initialState: ModalOptions = {
+        initialState: {
+          solicitudCompra: item
+        },
+        class: "modal-lg",
+      };
+      this.modalRef = this.modalService.show(ModalSeguimientoComponent, initialState);
+      this.modalRef.content.closeBtnName = "Close";
+      this.modalRef.content.event.subscribe(() => {
+        this.isLoad = true;
+        this.getAll(this.usuarioSolicita.intercompania);
+      });
+      this.modalRef.content.modalCerrado.subscribe(() => {
+        this.modalAbierto = false;
+      });
+    }
 }

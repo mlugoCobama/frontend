@@ -262,12 +262,12 @@ export class TableDetallesSolicitudComponent implements OnInit {
     });
     
     // if (!datosIngresados || !archivosIngresados) {
-    if (!datosIngresados) {
-       const mensaje =
-         "Recuerda que ademas de los precios también debes de adjuntar el archivo de la cotización ";
-       this.alertasService.mostrarAlerta("Error", mensaje, "warning", "warning");
-       return;
-     }
+    // if (!datosIngresados) {
+    //    const mensaje =
+    //      "Recuerda que ademas de los precios también debes de adjuntar el archivo de la cotización ";
+    //    this.alertasService.mostrarAlerta("Error", mensaje, "warning", "warning");
+    //    return;
+    //  }
 
     this.cotizacionesService.save(formData).subscribe(
       (response) => {
@@ -503,6 +503,16 @@ cambioCheck(item, event) {
         // console.error("Error guardando los datos:", error);
       }
     );
+  }
+
+  copiarTexto(texto: string): void {
+    navigator.clipboard.writeText(texto)
+      .then(() => {
+        // console.log(`Texto copiado: ${texto}`);
+      })
+      .catch(err => {
+        console.error('Error al copiar al portapapeles', err);
+      });
   }
 }
 

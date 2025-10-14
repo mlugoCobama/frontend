@@ -42,6 +42,10 @@ export class UnidadesService {
       return this.http.get(environment.apiUrl + `compras/recuperar-gastos-vehiculo/${id}`, {headers});
     }
 
+    public getComentarios(id: number): Observable<any> {
+      return this.http.get(environment.apiUrl + `compras/recuperar-comentarios-vehiculo/${id}`, {headers});
+    }
+
 
 
 }
