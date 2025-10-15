@@ -46,6 +46,10 @@ export class UnidadesService {
       return this.http.get(environment.apiUrl + `compras/recuperar-comentarios-vehiculo/${id}`, {headers});
     }
 
+    public autorizarVehiculo(data: any): Observable<any> {
+      return this.http.post(environment.apiUrl + `compras/autorizar-alta-vehiculo`, data, {headers});
+    }
+
 
 
 }

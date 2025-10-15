@@ -51,8 +51,10 @@ export class ModalUpdtAutotanqueComponent implements AfterViewInit {
 
   public guardarCambios(){
     this.deshabilitado = true;
-    if(!this.formDatosTanque.esValido() || !this.formDatosVehiculo.esValido()){
-      this.alertasService.mostrarAlerta("Llena le formualrio correctamente", "Falta información importante, ingresala para continuar", "warning", "warning");
+    if( !this.formDatosVehiculo.esValido()
+      || (this.openFormTanque  &&  !this.formDatosTanque.esValido())
+      || (this.mostrarFormulario &&  !this.formDatosPoliza.esValido())){
+      this.alertasService.mostrarAlerta("Llena le formualrio correctamente", `Falta información importante, ingresala para continuar: ${this.formDatosVehiculo.mostrarErroresFormulario() || 'Campos marcados en rojo'}`, "warning", "warning");
       // this.event.emit(false);
       this.deshabilitado = false;
       return
@@ -102,14 +104,21 @@ export class ModalUpdtAutotanqueComponent implements AfterViewInit {
    if(tipoVehiculo == 'autotanque' || tipoVehiculo == 'reparto' 
     || tipoCombustible == 'gas_natural' || tipoCombustible == 'gas_lp'){
       this.openFormTanque = true;
+      this.formDatosTanque.actualizarValidadoresTanque();
     }else{
       this.openFormTanque = false;
+      this.formDatosTanque.actualizarValidadoresTanque();
     }
   }
 
   public hasDatosSeguro(){
     if(this.datos?.idSeguro !=  null){
       this.mostrarFormulario = true;
+      this.formDatosPoliza.actualizarValidadoresPoliza();
     }
+  }
+
+  public onCheckboxChange(){
+    this.formDatosPoliza.actualizarValidadoresPoliza();
   }
 }

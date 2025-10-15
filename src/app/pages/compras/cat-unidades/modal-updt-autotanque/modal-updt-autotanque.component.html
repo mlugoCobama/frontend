@@ -11,20 +11,20 @@
 
   <div [hidden]="!openFormTanque">
     <h5 class="pt-2">Datos del Tanque</h5>
-    <app-form-datos-tanque [datos]="datos" #formUdtDatosTanque></app-form-datos-tanque>
+    <app-form-datos-tanque [datos]="datos" [openFormTanque] = "openFormTanque" #formUdtDatosTanque></app-form-datos-tanque>
   </div>
 
 
   <div class="pt-2">
     <label>
-      <input type="checkbox" [(ngModel)]="mostrarFormulario" />
+      <input  (change)="onCheckboxChange()" type="checkbox" [(ngModel)]="mostrarFormulario" />
       <strong> Agregar información del seguro</strong>
     </label>
   </div>
 
   <div [hidden]="!mostrarFormulario">
     <h5 class="pt-2">Datos de poliza de seguro</h5>
-    <app-form-datos-poliza [datos]="datos" #formUdtDatosPoliza></app-form-datos-poliza>
+    <app-form-datos-poliza [datos]="datos"  [mostrarFormulario] = "mostrarFormulario" #formUdtDatosPoliza></app-form-datos-poliza>
   </div>
 
 

@@ -11,6 +11,7 @@ import { ModalHistorialComentariosComponent } from './modal-historial-comentario
 import { UsuariosService } from "src/app/core/services/compras/usuarios.service";
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
 import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
+  import { PermisosService } from 'src/app/core/services/permisos.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -26,11 +27,12 @@ export class CatUnidadesComponent implements OnInit{
     private usuariosService: UsuariosService,
     private localStorage: LocalStorageServiceService,
     private alertasService: SwalComprsServiceService,
+    private permisosService: PermisosService,
   ){}
 
   ngOnInit(): void {
     this.getEmpresas();
-    this.getUsuarioActivo();
+    // this.getUsuarioActivo();
   }
 
   public usuarioSolicita: any = {
@@ -72,6 +74,7 @@ export class CatUnidadesComponent implements OnInit{
   }
   
   public empresas:any;
+  public rawEmpresas:any;
 
   filtrarTabla(){
     this.datosFiltrados = this.ordenador.filtrar(this.busqueda, [
@@ -228,7 +231,8 @@ export class CatUnidadesComponent implements OnInit{
         if (response) {
           const rawData = response.data
           /**Filtro para solo mostrar las empresas que tienen acceso a macrotaller */
-          this.empresas = rawData.filter(objeto => objeto.isAgencia === false);
+          this.rawEmpresas = rawData.filter(objeto => objeto.isAgencia === false);
+          this.getUsuarioActivo();
           this.isLoading = false;
         } else {
           this.alertasService.mostrarAlerta("Error", response.message, "error" , "danger" );
@@ -241,32 +245,32 @@ export class CatUnidadesComponent implements OnInit{
   }
 
     public getUsuarioActivo() {
-    const usuarioActivo = this.localStorage.getItem("currentUser");
+    const currentUser = this.localStorage.getItem("currentUser");
+    const usuarioActivo = currentUser['usuarioActivo'][0];
+    const multiselect = usuarioActivo.multiselect;
+    const intercompania = usuarioActivo.intercompania;
+    const enpresa = usuarioActivo.empresa;
+    const enpresas = usuarioActivo.empresas;
+    this.usuarioSolicita = usuarioActivo;
 
-    this.usuariosService.getUserById(usuarioActivo["role"]["email"]).subscribe(
-      (response) => {
-        if (response.status === "success") {
-
-          this.usuarioSolicita = response.data[0];
-          if(this.usuarioSolicita.intercompania !== 333){
-            this.getCatVehiculos(this.usuarioSolicita.intercompania);
-            this.intercompania =  this.usuarioSolicita.intercompania;
+          if(intercompania !== 333 && !multiselect){
+             this.getCatVehiculos(intercompania);
+             this.intercompania =  intercompania;
           }
 
-        } else {
-          this.alertasService.mostrarAlerta(
-            response.message,
-            "Intente iniciar sesión nuevamente",
-            "warning",
-            "warning"
-          );
+          if(intercompania == 333 || multiselect){
+            if(enpresas !=  null){
+              this.filtrarEmpresas(this.rawEmpresas, enpresas);
+            }
+            else{
+              this.empresas = this.rawEmpresas;
+            } 
+          }
+  }
 
-          return;
-        }
-      },
-      (error) => {
-        this.alertasService.mostrarAlerta("Error", `Error fetching data: ${error}`, "error" , "danger" );
-      }
+  filtrarEmpresas(data, empRel) {
+    this.empresas = data.filter((empresa) =>
+      empRel.includes(empresa.intercompania)
     );
   }
 
@@ -306,4 +310,66 @@ export class CatUnidadesComponent implements OnInit{
         this.isLoad = false;
       });
     }
+
+
+      public openAutorizar() {
+        Swal.fire({
+          title: "¿Deseas autorizar esta unidad?",
+          text: "Ingresa tus comentarios u observaciones acerca de esta unidad",
+          input: "textarea",
+          inputAttributes: {
+            autocapitalize: "off",
+          },
+          icon: "info",
+          confirmButtonText: "Sí, autorizar",
+          showCancelButton: true,
+          cancelButtonText: "No",
+          customClass: {
+            confirmButton: "btn btn-success px-4",
+            cancelButton: "btn btn-danger ms-2 px-4",
+          },
+          buttonsStyling: false,
+          preConfirm: (razon) => {
+            if (!razon || razon.trim() === '') {
+                    Swal.showValidationMessage('Debes de agregar tus comentarios al autorizar la unidad');
+                    return false;
+                  }
+                  return razon;
+          },
+        }).then((result) => {
+          if (result.isConfirmed) {
+            const payload = {
+              idVehiculo: this.unidad?.id,
+              observacion: result.value,
+            };
+
+            this.unidades.autorizarVehiculo(payload).subscribe(
+              (response) => {
+                if ((response.status = "success")) {
+                   this.alertasService.mostrarAlerta(
+                     "Listo",
+                     response.message,
+                     "success",
+                     "success"
+                   );
+                   this.getCatVehiculos(this.intercompania);
+                 }
+               },
+               (error) => {
+                 this.alertasService.mostrarAlerta(
+                   "Error",
+                   error,
+                   "error",
+                   "danger"
+                 );
+               }
+              );
+          }
+        });
+      }
+
+    tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
+  }
 }

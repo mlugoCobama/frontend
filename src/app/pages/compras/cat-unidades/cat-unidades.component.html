@@ -9,6 +9,13 @@
             </h5>
             <div class="flex-shrink-0 d-flex gap-1">
               <a
+                *ngIf = "mostrar && unidad?.activo == 2 && tienePermiso('view bnt autorizar vehiculo')"
+                href="javascript:void(0);"
+                class="btn btn-success btn-sm"
+                (click)="openAutorizar()"
+                ><i class="bx bx-check "></i> Autorizar</a
+              >
+              <a
                 *ngIf = "mostrar"
                 href="javascript:void(0);"
                 class="btn btn-primary btn-sm"
@@ -57,7 +64,7 @@
             <div class="col-3">
               <label for="empresa" class="form-label form-label-sm">Empresa: *</label>
               <select
-                *ngIf="usuarioSolicita.intercompania === 333; else nombreEmpresa"
+                *ngIf="usuarioSolicita.intercompania == 333 || usuarioSolicita.multiselect; else nombreEmpresa"
                 class="form-select form-select-sm"
                 aria-label="Default select example"
                 id="empresa"
@@ -104,12 +111,16 @@
                     <th (click)="ordenarPor('capacidad')">Capacidad <i [ngClass]="getIconoOrden('capacidad')"></i></th>
                     <th (click)="ordenarPor('tipo_medidor')">Serie <i [ngClass]="getIconoOrden('tipo_medidor')"></i></th>
                     <th (click)="ordenarPor('serie')">Tipo Medidor <i [ngClass]="getIconoOrden('serie')"></i></th>
+                    <th (click)="ordenarPor('estatus')">Estatus <i [ngClass]="getIconoOrden('estatus')"></i></th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let item of datosFiltrados" (click)="seleccionar(item, $event)">
+                  <tr *ngFor="let item of datosFiltrados" (dblclick)="seleccionar(item, $event)">
                     <td class="text-center"><span  style="font-size:0.7rem;" [ngClass]="item.clase">{{ item.entidad }}</span></td>
-                    <td class="text-center" [ngClass] = "item.estatus == 1 ? 'text-primary' : '' "> <strong> {{item.eco}} </strong></td>
+                    <td class="text-center" >
+                       <strong [ngClass] = "item.estatus == 1 ? 'text-primary' : '' " > {{item.eco}} </strong>
+                       <i *ngIf="item.activo == 2" class="bx bx-error-alt  text-danger" (click)="openAutorizar(item)" > </i>
+                    </td>
                     <td>{{item.marca_vehiculo}}</td>
                     <td>{{item.submarca}}</td>
                     <td>{{item.modelo}}</td>
@@ -120,6 +131,20 @@
                     <td>{{item.capacidad ?? '0'}} L</td>
                     <td>{{item.serie ?? 'No aplica'}}</td>
                     <td>{{item.tipo_medidor ?? 'No aplica'}}</td>
+                    <td class="text-center">
+                      <span
+                          [ngStyle]="{
+                            'width': '0.8rem',
+                            'height': '0.8rem',
+                            'border-radius': '50%',
+                            'display': 'inline-block',
+                            'background-color': item.color_estatus
+                          }"
+                        [title]="item.status_dsc"
+                        ></span>
+                    </td>
+
+
                   </tr>
                 </tbody>
               </table> 

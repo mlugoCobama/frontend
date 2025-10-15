@@ -68,13 +68,12 @@ export class FormDatosVehiculoComponent implements OnInit{
         estatus: new FormControl("", [Validators.required]),
       });
 
-      this.valorOriginalEstatus = this.formDatosVehiculo.get('estatus')?.value || '';
-
+    this.valorOriginalEstatus = this.formDatosVehiculo.get('estatus')?.value || '' || this.datos?.estatus;
     // Suscripción para detectar cambios
     this.formDatosVehiculo.get('estatus')?.valueChanges.subscribe(valor => {
       const observacionControl = this.formDatosVehiculo.get('observacion');
 
-      if (valor !== this.valorOriginalEstatus) {
+      if (valor !== this.valorOriginalEstatus && (Object.keys(this.datos).length > 0 || this.datos.length > 0) ) {
         observacionControl?.setValidators([Validators.required]);
       } else {
         observacionControl?.clearValidators();
@@ -125,8 +124,7 @@ export class FormDatosVehiculoComponent implements OnInit{
    * @returns boolean:  true ->valido, false ->no valido
    */
   esValido() {
-    // this.mostrarErroresFormulario();
-    console.log(this.formDatosVehiculo.controls)
+    this.mostrarErroresFormulario();
     return this.formDatosVehiculo.valid;
   }
 
@@ -146,7 +144,7 @@ export class FormDatosVehiculoComponent implements OnInit{
 
   mostrarErroresFormulario() {
   const errores: string[] = [];
- console.log(errores);
+
   Object.keys(this.formDatosVehiculo.controls).forEach(campo => {
     const control = this.formDatosVehiculo.get(campo);
 
@@ -176,11 +174,13 @@ export class FormDatosVehiculoComponent implements OnInit{
   });
 
   if (errores.length > 0) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Errores en el formulario',
-      html: `<ul style="text-align:left;">${errores.map(e => `<li>${e}</li>`).join('')}</ul>`,
-    });
+
+    return errores[0];
+    // Swal.fire({
+    //   icon: 'error',
+    //   title: 'Errores en el formulario',
+    //   html: `<ul style="text-align:left;">${errores.map(e => `<li>${e}</li>`).join('')}</ul>`,
+    // });
   }
 }
 

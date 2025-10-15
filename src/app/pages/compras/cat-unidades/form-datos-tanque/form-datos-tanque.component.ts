@@ -14,6 +14,7 @@ import {
 export class FormDatosTanqueComponent implements OnInit {
   
   @Input() datos: any = [];
+  @Input() openFormTanque: any;
   public formDatosTanques: FormGroup;
   public submitted:boolean =  false;
 
@@ -46,6 +47,24 @@ export class FormDatosTanqueComponent implements OnInit {
       resolve(true);
     });
   }
+
+  public actualizarValidadoresTanque(): void {
+  const campos = ['marca_tanque', 'anio_fabricacion', 'serie', 'capacidad', 'tipo_medidor'];
+
+  campos.forEach(campo => {
+    const control = this.formDatosTanques.get(campo);
+    if (control) {
+      if (this.openFormTanque) {
+        control.setValidators([Validators.required]);
+      } else {
+        control.clearValidators();
+      }
+      control.updateValueAndValidity();
+    }
+  });
+}
+
+
 
   get datosTanqueFormControl() {
     return this.formDatosTanques.controls;

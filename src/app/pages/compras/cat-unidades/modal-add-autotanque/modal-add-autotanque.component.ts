@@ -52,12 +52,11 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
     this.deshabilitado = true;
     if(
        !this.formDatosVehiculo.esValido()
-      || !this.formDatosTanque.esValido() 
-      || !this.formDatosPoliza.esValido()
+      || (this.openFormTanque  &&  !this.formDatosTanque.esValido())
+      || (this.mostrarFormulario &&  !this.formDatosPoliza.esValido())
     ){
-      this.formDatosVehiculo.mostrarErroresFormulario();
       this.alertasService.mostrarAlerta("Llena le formualrio correctamente",
-                                        "Falta información importante, ingresala para continuar",
+                                         `Falta información importante, ingresala para continuar: ${this.formDatosVehiculo.mostrarErroresFormulario() || 'Campos marcados en rojo'}`,
                                         "warning", 
                                         "warning");
       // this.event.emit(false);
@@ -110,8 +109,14 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
    if(tipoVehiculo == 'autotanque' || tipoVehiculo == 'reparto' 
     || tipoCombustible == 'gas_natural' || tipoCombustible == 'gas_lp'){
       this.openFormTanque = true;
+      this.formDatosTanque.actualizarValidadoresTanque();
     }else{
       this.openFormTanque = false;
+      this.formDatosTanque.actualizarValidadoresTanque();
     }
+  }
+
+  public onCheckboxChange(){
+    this.formDatosPoliza.actualizarValidadoresPoliza();
   }
 }

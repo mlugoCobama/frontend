@@ -11,6 +11,14 @@
             aria-label="marca_tanque"
             placeholder="Marca del tanque"
         />
+        <div *ngIf="datosTanqueFormControl.marca_tanque.touched || submitted">
+        <div
+            class="text-danger form-text"
+            *ngIf="datosTanqueFormControl.marca_tanque.errors?.['required']"
+        >
+            Debes de ingresar una marca de tanque
+        </div>
+        </div>
         </div>
         <div class="col-md-6">
         <label for="anio_fabricacion" class="form-label">Año de fabricación: *</label>
@@ -29,13 +37,13 @@
             class="text-danger form-text"
             *ngIf="datosTanqueFormControl.anio_fabricacion.errors?.['required']"
         >
-            Debes de ingresar un año de fabricacion del tanque.
+            Debes de ingresar un año de fabricación del tanque.
         </div>
         <div
             class="text-danger form-text"
             *ngIf="datosTanqueFormControl.anio_fabricacion.errors?.['min'] || datosTanqueFormControl.anio_fabricacion.errors?.['max']"
         >
-            Debes de ingresar un un año de fabricacion del tanque valido.
+            Debes de ingresar un un año de fabricación del tanque valido.
         </div>
         </div>
         </div>
@@ -53,6 +61,14 @@
             aria-label="serie"
             placeholder="Serie"
         />
+        <div *ngIf="datosTanqueFormControl.serie.touched || submitted">
+        <div
+            class="text-danger form-text"
+            *ngIf="datosTanqueFormControl.serie.errors?.['required']"
+        >
+            Debes de ingresar un numero de serie
+        </div>
+        </div>
         </div>
         <div class="col-md-6">
         <label for="capacidad" class="form-label">Capacidad (En litros): *</label>
@@ -71,13 +87,13 @@
             class="text-danger form-text"
             *ngIf="datosTanqueFormControl.capacidad.errors?.['required']"
         >
-            Debes de ingresar un capacidad de vehiculo.
+            Debes de ingresar una capacidad.
         </div>
         <div
             class="text-danger form-text"
             *ngIf="datosTanqueFormControl.capacidad.errors?.['min'] || datosTanqueFormControl.capacidad.errors?.['max']"
         >
-            Debes de ingresar un capacidad de vehiculo valido.
+            Debes de ingresar una capacidad valido.
         </div>
         </div>
         </div>
@@ -94,6 +110,14 @@
             aria-label="tipo_medidor"
             placeholder="Tipo de medidor"
         />
+        </div>
+        <div *ngIf="datosTanqueFormControl.tipo_medidor.touched || submitted">
+        <div
+            class="text-danger form-text"
+            *ngIf="datosTanqueFormControl.tipo_medidor.errors?.['required']"
+        >
+            Debes de ingresar un tipo de medidor
+        </div>
         </div>
     </div>
 </form>

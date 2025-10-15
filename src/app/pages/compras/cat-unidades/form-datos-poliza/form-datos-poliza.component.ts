@@ -16,6 +16,7 @@ export class FormDatosPolizaComponent {
   @Input() datos: any = [];
   public formDatosPoliza: FormGroup;
   public submitted:boolean =  false;
+  @Input() mostrarFormulario: any;
 
   constructor(
       public formBuilder: FormBuilder,
@@ -43,6 +44,23 @@ export class FormDatosPolizaComponent {
       resolve(true);
     });
   }
+
+  public actualizarValidadoresPoliza(): void {
+  const campos = ['inciso_vehiculo', 'aseguradora', 'cobertura', 'inicio_vigencia', 'fin_vigencia', 'flotilla', 'inciso_foltilla'];
+
+  campos.forEach(campo => {
+    const control = this.formDatosPoliza.get(campo);
+    if (control) {
+      if (!this.mostrarFormulario) {
+        
+        control.setValidators([Validators.required]);
+      } else {
+        control.clearValidators();
+      }
+      control.updateValueAndValidity();
+    }
+  });
+}
 
   get datosPolizaFormControl() {
     return this.formDatosPoliza.controls;

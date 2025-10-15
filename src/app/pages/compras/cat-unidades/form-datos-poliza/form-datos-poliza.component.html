@@ -11,6 +11,14 @@
             aria-label="aseguradora"
             placeholder="Aseguradora"
         />
+        <div *ngIf="datosPolizaFormControl.aseguradora.touched || submitted">
+        <div
+            class="text-danger form-text"
+            *ngIf="datosPolizaFormControl.aseguradora.errors?.['required']"
+        >
+            Debes de ingresar una aseguradora
+        </div>
+        </div>
         </div>
         <div class="col-md-4">
         <label for="inciso_vehiculo" class="form-label">Inciso Vehiculo: *</label>
@@ -23,6 +31,14 @@
             aria-label="inciso_vehiculo"
             placeholder="# Inciso Vehiculo"
         />
+        <div *ngIf="datosPolizaFormControl.inciso_vehiculo.touched || submitted">
+        <div
+            class="text-danger form-text"
+            *ngIf="datosPolizaFormControl.inciso_vehiculo.errors?.['required']"
+        >
+            Debes de ingresar un inciso
+        </div>
+        </div>
         </div>
         <div class="col-md-4">
         <label for="cobertura" class="form-label">Cobertura: *</label>
@@ -35,6 +51,14 @@
             aria-label="cobertura"
             placeholder="Cobertura"
         />
+        <div *ngIf="datosPolizaFormControl.cobertura.touched || submitted">
+        <div
+            class="text-danger form-text"
+            *ngIf="datosPolizaFormControl.cobertura.errors?.['required']"
+        >
+            Debes de ingresar una cobertura
+        </div>
+        </div>
         </div>
         <div class="col-md-3">
         <label for="inicio_vigencia" class="form-label">Inicio Vigencia: *</label>
@@ -47,6 +71,14 @@
             aria-label="inicio_vigencia"
             placeholder="Inicio vigencia"
         />
+        <div *ngIf="datosPolizaFormControl.inicio_vigencia.touched || submitted">
+        <div
+            class="text-danger form-text"
+            *ngIf="datosPolizaFormControl.inicio_vigencia.errors?.['required']"
+        >
+            Debes de ingresar un inicio de vigencia
+        </div>
+        </div>
         </div>
         <div class="col-md-3">
         <label for="fin_vigencia" class="form-label">Fin Vigencia: *</label>
@@ -59,6 +91,14 @@
             aria-label="fin_vigencia"
             placeholder="Fin vigencia"
         />
+        <div *ngIf="datosPolizaFormControl.fin_vigencia.touched || submitted">
+        <div
+            class="text-danger form-text"
+            *ngIf="datosPolizaFormControl.fin_vigencia.errors?.['required']"
+        >
+            Debes de ingresar un fin de vigencia
+        </div>
+        </div>
         </div>
         <div class="col-md-3">
         <label for="flotilla" class="form-label">Flotilla: *</label>
@@ -71,6 +111,14 @@
             aria-label="flotilla"
             placeholder="Flotilla"
         />
+        <div *ngIf="datosPolizaFormControl.flotilla.touched || submitted">
+        <div
+            class="text-danger form-text"
+            *ngIf="datosPolizaFormControl.flotilla.errors?.['required']"
+        >
+            Debes de ingresar una flotilla
+        </div>
+        </div>
         </div>
         <div class="col-md-3">
         <label for="inciso_foltilla" class="form-label">Inciso Flotilla: *</label>
@@ -83,6 +131,14 @@
             aria-label="inciso_foltilla"
             placeholder="# Inciso flotilla"
         />
+        </div>
+        <div *ngIf="datosPolizaFormControl.inciso_foltilla.touched || submitted">
+        <div
+            class="text-danger form-text"
+            *ngIf="datosPolizaFormControl.inciso_foltilla.errors?.['required']"
+        >
+            Debes de ingresar un inciso
+        </div>
         </div>
     </div>
 </form>
