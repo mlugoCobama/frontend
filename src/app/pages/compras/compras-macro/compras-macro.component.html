@@ -84,16 +84,21 @@
                     <thead class="table-light" [ngClass] = "modalAbierto === false ? 'sticky-top' : '' ">
                       <tr>
                         <th style="cursor: pointer" (click)="ordenarPor('folio')">Folio <i [ngClass]="getIconoOrden('folio')"></i></th>
+                        <th style="cursor: pointer" (click)="ordenarPor('folio_oc')">Folio OC<i [ngClass]="getIconoOrden('folio_oc')"></i></th>
                         <th style="cursor: pointer" (click)="ordenarPor('empresa')" >Empresa <i [ngClass]="getIconoOrden('empresa')"></i></th>
                         <th style="cursor: pointer" (click)="ordenarPor('usuario_solicita')" >Solicita <i [ngClass]="getIconoOrden('usuario_solicita')"></i></th>
                         <th style="cursor: pointer" (click)="ordenarPor('usuario_destino')">Unidad Destino <i [ngClass]="getIconoOrden('usuario_destino')"></i></th>
-                        <th style="cursor: pointer" (click)="ordenarPor('fecha')">Fecha Solicitud <i [ngClass]="getIconoOrden('fecha')"></i></th>
+                        <th style="cursor: pointer" (click)="ordenarPor('fecha')">Fecha<i [ngClass]="getIconoOrden('fecha')"></i></th>
+                        <th style="cursor: pointer" (click)="ordenarPor('proveedor')">Proveedor <i [ngClass]="getIconoOrden('proveedor')"></i></th>
+                        <th style="cursor: pointer" (click)="ordenarPor('total_orden')">Total <i [ngClass]="getIconoOrden('total_orden')"></i></th>
+
                         <th class="text-center" style="cursor: pointer" (click)="ordenarPor('estado')">Estatus <i [ngClass]="getIconoOrden('estado')"></i></th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr *ngFor ="let item of datosFiltrados" (dblclick)="openDetallesSolicitud(item, $event)">
                         <td class="d-flex justify-content-between">{{ item.folio }} <i class="fas fa-info-circle" style="cursor: pointer" (click) = "openModalSeguimiento(item)"></i> </td>
+                        <td> <strong> {{ item.folio_oc}} </strong></td>
                         <td class="text-center"><span
                             >
                             {{ item.empresa }}
@@ -101,8 +106,10 @@
                         </td>
                         <!-- <td>{{ item.empresa }}</td> -->
                         <td>{{ item.usuario_solicita}}</td>
-                        <td>{{ item.usuario_destino }}</td>
-                        <td>{{ item.fecha  | date:'dd/MM/yyyy h:mm a'}}</td>
+                        <td [title]="item.usuario_destino">{{ item.eco + ' '+ item.serie }} </td>
+                        <td>{{ item.fecha  | date:'dd/MM/yyyy'}}</td>
+                        <td>{{ item.proveedor }}</td>
+                        <td class="text-center"><strong> {{ item.total_orden | currency }} </strong></td>
                         <td class="text-center"><span
                             [ngClass]="'badge rounded-pill font-size-11 ' +item.claseEstado">
                             {{ item.estado }}

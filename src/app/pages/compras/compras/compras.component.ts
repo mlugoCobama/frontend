@@ -380,12 +380,15 @@ export class ComprasComponent implements OnInit {
     this.datosFiltrados = this.ordenador.filtrar(this.busqueda, [
       "folio",
       "usuario_destino",
-      "motivo",
+      // "motivo",
       "fecha",
       "usuario_solicita",
       "empresa",
       "estado",
       "centro_costo",
+      "proveedor",
+      "total_orden",
+      "folio_oc"
     ]);
   }
 
@@ -394,12 +397,15 @@ export class ComprasComponent implements OnInit {
     this.datosFiltrados = this.ordenador.filtrar(this.busqueda2, [
       "folio",
       "usuario_destino",
-      "motivo",
+      // "motivo",
       "fecha",
       "usuario_solicita",
       "empresa",
       "estado",
       "centro_costo",
+      "proveedor",
+      "total_orden",
+      "folio_oc"
     ]);
   }
 

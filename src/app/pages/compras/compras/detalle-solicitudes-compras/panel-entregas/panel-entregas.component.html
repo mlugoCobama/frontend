@@ -1,12 +1,18 @@
-<div class="row">
+<div class="card border">
+  <div class=" card-header bg-dark-subtle text-center">
+    <p *ngIf = "mostrarBtnSolicitud()" class="m-0">  Da click en el siguiente botón si deseas solicitar el surtido de tu orden de compra </p>
+    <p *ngIf = "!mostrarBtnSolicitud()" class="m-0"> Carga en el siguiente formulario tus acuses o comprobantes cuando el proveedor te entregue lo solicitado </p>
+  </div>
+  <div class="card-body">
   <div *ngIf="mostrarBtnSolicitud()" class="d-flex justify-content-evenly gap-2 col-9 mx-auto">
     <button (click)="solicitarSurtido()" class="btn btn-info col-md-4" type="button">
       <strong> Solicitar al proveedor que surta la orden de compra</strong>
     </button>
   </div>
-</div>
-
-<div class="container mt-2">
+  <div *ngIf="!mostrarBtnSolicitud()">
+  <!-- <div class="alert alert-dark" role="alert">
+  Carga en el siguiente formulario tu acuse o comprobante de entrega
+  </div> -->
   <form [formGroup]="acuseForm"  enctype="multipart/form-data">
     <div class="row align-items-end g-2">
       <div class="col-sm-4">
@@ -48,3 +54,18 @@
     </tbody>
   </table>
 </div>
+
+  </div>
+
+</div>
+<!-- <div class="container p-1">
+  <div class="alert alert-dark" role="alert">
+  Da click en el siguiente botón si deseas solicitar el surtido de tu orden de compra
+  </div>
+  <div *ngIf="mostrarBtnSolicitud()" class="d-flex justify-content-evenly gap-2 col-9 mx-auto">
+    <button (click)="solicitarSurtido()" class="btn btn-info col-md-4" type="button">
+      <strong> Solicitar al proveedor que surta la orden de compra</strong>
+    </button>
+  </div>
+</div> -->
+

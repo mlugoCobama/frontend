@@ -13,7 +13,6 @@ import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-com
   styleUrl: "./panel-entregas.component.css",
 })
 export class PanelEntregasComponent implements OnInit {
-  
   @Input() ordenCompra: any;
   @Output() actualizarStatus1 = new EventEmitter<void>();
 
@@ -25,11 +24,12 @@ export class PanelEntregasComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private acuseRecibido: AcuseRecibidoService,
-    private alertasService: SwalComprsServiceService, 
+    private alertasService: SwalComprsServiceService,
     private proveedoresService: ProveedoresService
   ) {}
 
   ngOnInit(): void {
+    console.log(this.ordenCompra)
     this.buildForm();
     this.cargarAcuses();
   }
@@ -103,7 +103,7 @@ export class PanelEntregasComponent implements OnInit {
     // Simulación de datos desde la base de datos
     if (this.ordenCompra?.acuses_entrega?.length > 0) {
       this.acusesGuardados = this.ordenCompra?.acuses_entrega;
-    } 
+    }
   }
 
   solicitarSurtido(): void {
@@ -113,12 +113,14 @@ export class PanelEntregasComponent implements OnInit {
       showCancelButton: true,
       confirmButtonText: "Sí",
       cancelButtonText: "No",
+      reverseButtons: true
     }).then((resultado) => {
       if (resultado.isConfirmed) {
         Swal.fire({
           title:
             "¿Deseas enviarle la solicitud de cotización por correo al proveedor?",
           icon: "question",
+          reverseButtons: true,
           showCancelButton: true,
           confirmButtonText: "Sí",
           cancelButtonText: "No, lo contactaré por otro medio",
@@ -167,19 +169,14 @@ export class PanelEntregasComponent implements OnInit {
   }
 
   mostrarBtnSolicitud() {
-    if (this.ordenCompra?.acuses_entrega?.length === 0) {
-      return true;
-    }
-
-    return false;
+     return this.ordenCompra?.surtido_solicitado === 0 ? true : false; 
   }
 
   /**
- * abre los archivos en una pestaña nueva
- * @param prov ruta del archivo
- */
-verArchivos(prov: any) {
-  this.proveedoresService.abrirArchivo(prov);
-}
-
+   * abre los archivos en una pestaña nueva
+   * @param prov ruta del archivo
+   */
+  verArchivos(prov: any) {
+    this.proveedoresService.abrirArchivo(prov);
+  }
 }

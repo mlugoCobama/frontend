@@ -30,13 +30,14 @@ export class BtnAtorizarAPagoComponent {
         inputAttributes: {
           autocapitalize: 'off'
         },
+        reverseButtons: true,
         icon: 'info',
-        confirmButtonText: 'Sí, autorizar a pago',
         showCancelButton: true,
         cancelButtonText: 'No',
+        confirmButtonText: 'Sí, autorizar a pago',
         customClass: {
-          confirmButton: 'btn btn-success px-4',
           cancelButton: 'btn btn-primary ms-2 px-4',
+          confirmButton: 'btn btn-success ms-2 px-4 ',
         },
         buttonsStyling: false,
         preConfirm: (razon) => {

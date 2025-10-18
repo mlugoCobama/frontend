@@ -1,8 +1,10 @@
-<div class="alert alert-info" style="text-align: center" role="alert">
+<div class="card border">
+  <div class="card-header bg-primary-subtle text-center">
     Seleccione los proveedores con los que se realizara la cotización.
-</div>
+  </div>
 
-<form class="row g-2" [formGroup]="formProveedoresCotizacion">
+  <div class="card-body"> 
+    <form class="row g-2" [formGroup]="formProveedoresCotizacion">
     <div class="col-md-4">
       <label for="proveedor1" class="form-label form-label-sm">Proveedor 1: *</label>
       <select
@@ -75,3 +77,7 @@
       </button>
     </div>
   </form>
+  </div>
+
+</div>
+

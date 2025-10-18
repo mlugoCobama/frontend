@@ -1,6 +1,6 @@
 <form [formGroup]="formDatosPoliza">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
         <label for="aseguradora" class="form-label">Aseguradora: *</label>
         <input
             type="text"
@@ -17,6 +17,26 @@
             *ngIf="datosPolizaFormControl.aseguradora.errors?.['required']"
         >
             Debes de ingresar una aseguradora
+        </div>
+        </div>
+        </div>
+        <div class="col-md-6">
+        <label for="cobertura" class="form-label">Cobertura: *</label>
+        <input
+            type="text"
+            class="form-control form-control-sm"
+            formControlName="cobertura"
+            id="cobertura"
+            name="cobertura"
+            aria-label="cobertura"
+            placeholder="Cobertura"
+        />
+        <div *ngIf="datosPolizaFormControl.cobertura.touched || submitted">
+        <div
+            class="text-danger form-text"
+            *ngIf="datosPolizaFormControl.cobertura.errors?.['required']"
+        >
+            Debes de ingresar una cobertura
         </div>
         </div>
         </div>
@@ -40,67 +60,8 @@
         </div>
         </div>
         </div>
+
         <div class="col-md-4">
-        <label for="cobertura" class="form-label">Cobertura: *</label>
-        <input
-            type="text"
-            class="form-control form-control-sm"
-            formControlName="cobertura"
-            id="cobertura"
-            name="cobertura"
-            aria-label="cobertura"
-            placeholder="Cobertura"
-        />
-        <div *ngIf="datosPolizaFormControl.cobertura.touched || submitted">
-        <div
-            class="text-danger form-text"
-            *ngIf="datosPolizaFormControl.cobertura.errors?.['required']"
-        >
-            Debes de ingresar una cobertura
-        </div>
-        </div>
-        </div>
-        <div class="col-md-3">
-        <label for="inicio_vigencia" class="form-label">Inicio Vigencia: *</label>
-        <input
-            type="date"
-            class="form-control form-control-sm"
-            formControlName="inicio_vigencia"
-            id="inicio_vigencia"
-            name="inicio_vigencia"
-            aria-label="inicio_vigencia"
-            placeholder="Inicio vigencia"
-        />
-        <div *ngIf="datosPolizaFormControl.inicio_vigencia.touched || submitted">
-        <div
-            class="text-danger form-text"
-            *ngIf="datosPolizaFormControl.inicio_vigencia.errors?.['required']"
-        >
-            Debes de ingresar un inicio de vigencia
-        </div>
-        </div>
-        </div>
-        <div class="col-md-3">
-        <label for="fin_vigencia" class="form-label">Fin Vigencia: *</label>
-        <input
-            type="date"
-            class="form-control form-control-sm"
-            formControlName="fin_vigencia"
-            id="fin_vigencia"
-            name="fin_vigencia"
-            aria-label="fin_vigencia"
-            placeholder="Fin vigencia"
-        />
-        <div *ngIf="datosPolizaFormControl.fin_vigencia.touched || submitted">
-        <div
-            class="text-danger form-text"
-            *ngIf="datosPolizaFormControl.fin_vigencia.errors?.['required']"
-        >
-            Debes de ingresar un fin de vigencia
-        </div>
-        </div>
-        </div>
-        <div class="col-md-3">
         <label for="flotilla" class="form-label">Flotilla: *</label>
         <input
             type="text"
@@ -120,7 +81,7 @@
         </div>
         </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
         <label for="inciso_foltilla" class="form-label">Inciso Flotilla: *</label>
         <input
             type="text"
@@ -131,7 +92,6 @@
             aria-label="inciso_foltilla"
             placeholder="# Inciso flotilla"
         />
-        </div>
         <div *ngIf="datosPolizaFormControl.inciso_foltilla.touched || submitted">
         <div
             class="text-danger form-text"
@@ -140,5 +100,68 @@
             Debes de ingresar un inciso
         </div>
         </div>
+        </div>
+        
+        <div class="col-md-4">
+        <label for="inicio_vigencia" class="form-label">Inicio Vigencia: *</label>
+        <input
+            type="date"
+            class="form-control form-control-sm"
+            formControlName="inicio_vigencia"
+            id="inicio_vigencia"
+            name="inicio_vigencia"
+            aria-label="inicio_vigencia"
+            placeholder="Inicio vigencia"
+        />
+        <div *ngIf="datosPolizaFormControl.inicio_vigencia.touched || submitted">
+        <div
+            class="text-danger form-text"
+            *ngIf="datosPolizaFormControl.inicio_vigencia.errors?.['required']"
+        >
+            Debes de ingresar un inicio de vigencia
+        </div>
+        </div>
+        </div>
+        <div class="col-md-4">
+        <label for="fin_vigencia" class="form-label">Fin Vigencia: *</label>
+        <input
+            type="date"
+            class="form-control form-control-sm"
+            formControlName="fin_vigencia"
+            id="fin_vigencia"
+            name="fin_vigencia"
+            aria-label="fin_vigencia"
+            placeholder="Fin vigencia"
+        />
+        <div *ngIf="datosPolizaFormControl.fin_vigencia.touched || submitted">
+        <div
+            class="text-danger form-text"
+            *ngIf="datosPolizaFormControl.fin_vigencia.errors?.['required']"
+        >
+            Debes de ingresar un fin de vigencia
+        </div>
+        </div>
+        </div>
+        <div class="col-md-4">
+        <label for="fecha_renovacion" class="form-label">Fecha Renovación : *</label>
+        <input
+            type="date"
+            class="form-control form-control-sm"
+            formControlName="fecha_renovacion"
+            id="fecha_renovacion"
+            name="fecha_renovacion"
+            aria-label="fecha_renovacion"
+            placeholder="Fin vigencia"
+        />
+        <div *ngIf="datosPolizaFormControl.fecha_renovacion.touched || submitted">
+        <div
+            class="text-danger form-text"
+            *ngIf="datosPolizaFormControl.fecha_renovacion.errors?.['required']"
+        >
+            Debes de ingresar la fecha de renovación de la póliza
+        </div>
+        </div>
+        </div>
+        
     </div>
 </form>

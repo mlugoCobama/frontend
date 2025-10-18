@@ -54,6 +54,7 @@ import { BtnAtorizarAPagoComponent } from './compras/detalle-solicitudes-compras
 import { PanelEntregasComponent } from './compras/detalle-solicitudes-compras/panel-entregas/panel-entregas.component';
 import { ModalSeguimientoComponent } from './compras/modal-seguimiento/modal-seguimiento.component';
 import { ModalHistorialComentariosComponent } from './cat-unidades/modal-historial-comentarios/modal-historial-comentarios.component';
+import { ModalHistorialPolizasComponent } from './cat-unidades/modal-historial-polizas/modal-historial-polizas.component';
 
 @NgModule({
   declarations: [
@@ -102,6 +103,7 @@ import { ModalHistorialComentariosComponent } from './cat-unidades/modal-histori
     PanelEntregasComponent,
     ModalSeguimientoComponent,
     ModalHistorialComentariosComponent,
+    ModalHistorialPolizasComponent,
   ],
   imports: [
     CommonModule,

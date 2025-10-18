@@ -80,6 +80,9 @@
                       <th (click)="ordenarPor('folio')" style="cursor: pointer">
                         Folio <i [ngClass]="getIconoOrden('folio')"></i>
                       </th>
+                      <th (click)="ordenarPor('folio_oc')" style="cursor: pointer">
+                        Folio OC <i [ngClass]="getIconoOrden('folio_oc')"></i>
+                      </th>
                       <th (click)="ordenarPor('empresa')" style="cursor: pointer">
                         Empresa <i [ngClass]="getIconoOrden('empresa')"></i>
                       </th>
@@ -95,6 +98,14 @@
                         Fecha Solicitud
                         <i [ngClass]="getIconoOrden('fecha')"></i>
                       </th>
+                      <th (click)="ordenarPor('proveedor')" style="cursor: pointer">
+                        Proveedor
+                        <i [ngClass]="getIconoOrden('proveedor')"></i>
+                      </th>
+                      <th (click)="ordenarPor('total_orden')" style="cursor: pointer">
+                        Total
+                        <i [ngClass]="getIconoOrden('total_orden')"></i>
+                      </th>
                       <th (click)="ordenarPor('estado')" class="text-center" style="cursor: pointer">
                         Estatus <i [ngClass]="getIconoOrden('estado')"></i>
                       </th>
@@ -103,11 +114,14 @@
                   <tbody>
                     <tr *ngFor="let item of datosFiltrados" (dblclick)="openDetallesSolicitud(item, $event)">
                       <td class="d-flex justify-content-between">{{ item.folio }} <i class="fas fa-info-circle" style="cursor: pointer" (click) = "openModalSeguimiento(item)"></i> </td>
+                      <td> <strong> {{ item.folio_oc }} </strong> </td>
                       <td>{{ item.empresa || "CAS" }}</td>
                       <td>{{ item.usuario_solicita }}</td>
                       <td *ngIf="item.c_c === 0">{{ item.usuario_destino }}</td>
                       <td *ngIf="item.c_c > 0">{{ item.centro_costo }}</td>
                       <td>{{ item.fecha | date : "dd/MM/yyyy h:mm a" }}</td>
+                      <td>{{ item.proveedor }}</td>
+                      <td> <strong> {{ item.total_orden | currency }} </strong></td>
                       <td>
                         <div class="text-center">
                           <span [ngClass]="'badge rounded-pill font-size-11 ' + item.claseEstado">

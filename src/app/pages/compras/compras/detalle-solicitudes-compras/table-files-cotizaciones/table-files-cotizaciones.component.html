@@ -1,8 +1,13 @@
-<div *ngIf ="cotProv?.length > 0" class="row">
-  <div class="alert alert-warning text-center" role="alert">
+<div class="card">
+  <div class="card-header bg-warning-subtle text-center">
     Marca la casilla de la fila con el proveedor seleccionado para generar la
     orden de compra
   </div>
+  <div class="card-body">
+    <div *ngIf ="cotProv?.length > 0" class="row">
+  <!-- <div class="alert alert-warning text-center" role="alert">
+    
+  </div> -->
   <div class="col-1" *ngIf="solicitudCompra?.estatus >= enEsts.OrdenCompra"></div>
   <div class="col-10">
     <div class="d-flex justify-content-center" *ngIf="!isLoad">
@@ -162,4 +167,7 @@
     </button>
   </div>
 </div>
+  </div>
+</div>
+
 <hr />

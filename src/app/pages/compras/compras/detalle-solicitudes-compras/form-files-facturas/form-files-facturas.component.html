@@ -1,4 +1,4 @@
-<div *ngIf="(ordenCompra?.estatus === 2 && !ordenCompra?.tipo_pago) || solicitudCompra.estatus == enEsts.Autorizado"  class="d-flex justify-content-evenly gap-2 col-10 mx-auto pb-2">
+<div *ngIf="(ordenCompra?.estatus === 2 && !ordenCompra?.tipo_pago) || solicitudCompra.estatus == enEsts.Autorizado">
         <app-btn-atorizar-a-pago
         [ordenCompra] = "ordenCompra" 
         (actualizarStatus1)="actualizadorEstatus()" >       
@@ -11,17 +11,22 @@
   (actualizarStatus1)="actualizadorEstatus()" 
 ></app-panel-entregas>
 
-<form
+<div class="card border">
+  <div class="card-header bg-secondary-subtle text-center" *ngIf="solicitudCompra.estatus >= enEsts.Autorizado && ordenCompra?.tipo_pago">
+    <p *ngIf = "solicitudCompra.estatus != enEsts.Finalizada" class="m-0">
+    Adjunta los siguientes archivos para la orden de compra:
+    <strong>{{ ordenCompra?.folio_oc }}</strong>
+  </p>
+  </div>
+  <div class="card-body">
+    <form
 class="row g-2"
 [formGroup]="formDocsOrdenCompra"
 *ngIf="solicitudCompra.estatus >= enEsts.Autorizado && ordenCompra?.tipo_pago"
 >
 <div class="col-md-1"></div>
 <div class="col-md-10" *ngIf="ordenCompra">
-  <div *ngIf = "solicitudCompra.estatus != enEsts.Finalizada" class="alert alert-secondary text-center" role="alert">
-    Adjunta los siguientes archivos para la orden de compra:
-    <strong>{{ ordenCompra.folio_oc }}</strong>
-  </div>
+  
   <table *ngIf = "solicitudCompra.estatus != enEsts.Finalizada" class="table table-sm table-borderless table-responsive">
     <thead class="table-light">
       <tr class="text-center">
@@ -83,11 +88,11 @@ class="row g-2"
         <i class="fas fa-file-upload"></i>
         Guardar Archivos
       </button>
-      <button *ngIf="hasComprobantePago && ordenCompra.documentos.length > 0 && solicitudCompra.estatus < enEsts.Finalizada"
+      <!-- <button *ngIf="hasComprobantePago && ordenCompra.documentos.length > 0 && solicitudCompra.estatus < enEsts.Finalizada"
         type="submit" (click)="marcarComoPagada()" class="btn btn-primary btn-sm">
         <i class="fas fa-check"></i>
         Marcar como pagada
-      </button>
+      </button> -->
       <a *ngIf="hasFiles" class="btn btn-sm btn-info" (click)="descargarFacturas()">
         <i class="fas fa-cloud-download-alt"></i>
         Descargar Facturas
@@ -107,3 +112,10 @@ class="row g-2"
   ></app-datos-facturas>
 </div>
 </form>
+  </div>
+</div>
+
+
+
+
+

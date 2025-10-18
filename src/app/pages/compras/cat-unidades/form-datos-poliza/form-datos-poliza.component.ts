@@ -11,7 +11,8 @@ import {
   templateUrl: './form-datos-poliza.component.html',
   styleUrl: './form-datos-poliza.component.css'
 })
-export class FormDatosPolizaComponent {
+export class FormDatosPolizaComponent implements OnInit{
+
 
   @Input() datos: any = [];
   public formDatosPoliza: FormGroup;
@@ -29,6 +30,10 @@ export class FormDatosPolizaComponent {
 
 
   private buildForm() {
+
+    const fechaActual = new Date();
+    const fechaFormateada = fechaActual.toISOString().split('T')[0];
+
     return new Promise((resolve, reject) => {
       this.formDatosPoliza = this.formBuilder.group({
         idSeguro: new FormControl( null),
@@ -40,13 +45,14 @@ export class FormDatosPolizaComponent {
         fin_vigencia: new FormControl(null, Validators.required),
         flotilla: new FormControl(null, Validators.required),
         inciso_foltilla: new FormControl(null, Validators.required),
+        fecha_renovacion: new FormControl( fechaFormateada , Validators.required),
       });
       resolve(true);
     });
   }
 
   public actualizarValidadoresPoliza(): void {
-  const campos = ['inciso_vehiculo', 'aseguradora', 'cobertura', 'inicio_vigencia', 'fin_vigencia', 'flotilla', 'inciso_foltilla'];
+  const campos = ['inciso_vehiculo', 'aseguradora', 'cobertura', 'inicio_vigencia', 'fin_vigencia', 'flotilla', 'inciso_foltilla', 'fecha_renovacion'];
 
   campos.forEach(campo => {
     const control = this.formDatosPoliza.get(campo);
@@ -68,16 +74,17 @@ export class FormDatosPolizaComponent {
 
   public llenarForm(){
     this.formDatosPoliza.patchValue({
-      idSeguro: this.datos.idSeguro,
-      id_vehiculo_seguro: this.datos.id_com_datos_vehiculo,
-      inciso_vehiculo: this.datos.inciso_vehiculo,
-      aseguradora: this.datos.aseguradora,
-      cobertura: this.datos.cobertura,
-      inicio_vigencia: this.datos.inicio_vigencia,
-      fin_vigencia: this.datos.fin_vigencia,
-      tipo_vehiculo: this.datos.tipo_vehiculo,
-      flotilla: this.datos.flotilla,
-      inciso_foltilla: this.datos.inciso_foltilla,
+      idSeguro: this.datos?.idSeguro,
+      id_vehiculo_seguro: this.datos?.id_com_datos_vehiculo,
+      inciso_vehiculo: this.datos?.inciso_vehiculo,
+      aseguradora: this.datos?.aseguradora,
+      cobertura: this.datos?.cobertura,
+      inicio_vigencia: this.datos?.inicio_vigencia,
+      fin_vigencia: this.datos?.fin_vigencia,
+      tipo_vehiculo: this.datos?.tipo_vehiculo,
+      flotilla: this.datos?.flotilla,
+      inciso_foltilla: this.datos?.inciso_foltilla,
+      fecha_renovacion: this.datos?.fecha_renovacion
     });
   }
 

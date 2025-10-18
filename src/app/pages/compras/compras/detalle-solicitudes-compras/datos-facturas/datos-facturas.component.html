@@ -1,5 +1,9 @@
-
-<div *ngIf="mostrarDtsFac">
+<div class="card border" *ngIf="mostrarDtsFac">
+  <div class="card-header bg-info-subtle text-center">
+   <strong> Datos de facturación</strong>  
+  </div>
+  <div class="card-body">
+    <div >
     <div class="row" *ngIf="ordenCompra?.documentos[0]">
       <h5>Datos de facturación</h5>
 
@@ -121,4 +125,6 @@
       <br />
       <hr />
     </div>
+</div>
+  </div>
 </div>

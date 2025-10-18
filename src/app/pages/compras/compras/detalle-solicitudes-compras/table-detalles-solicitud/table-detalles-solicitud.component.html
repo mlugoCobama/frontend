@@ -1,3 +1,5 @@
+<div class="card border">
+  <div class="card-body">
 <div class="d-flex justify-content-center" *ngIf="isLoad">
     <div class="spinner-border" role="status">
       <span class="visually-hidden">Loading...</span>
@@ -119,6 +121,8 @@
   <!-- form para actualizar o quitar detalles -->
 
   <ng-template #elseBlock ><i class="fas far fa-eye-slash"></i></ng-template>
+  </div>
+</div>
   
   <!-- Fin tabla detalle solicitud + precios cotizaciones -->
   <app-table-files-cotizaciones

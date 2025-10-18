@@ -1,4 +1,9 @@
-<div class="row"> <!--Inicia div datos solicitud -->
+<div class="card mb-3 border border">
+  <div class="card-header text-center text-muted">
+    Información general de la solicitud de compra.
+  </div>
+  <div class="card-body">
+    <div class="row"> <!--Inicia div datos solicitud -->
     <div class="col-md-6">
       <p><strong>Folio: </strong>{{ solicitudCompra.folio }}</p>
       <p >
@@ -33,3 +38,6 @@
       <p *ngIf="solicitudCompra.observaciones"> <strong>Observaciones: </strong> {{solicitudCompra.observaciones}}</p>
     </div>
   </div> <!--Fin div datos solicitud -->
+  </div>
+</div>
+

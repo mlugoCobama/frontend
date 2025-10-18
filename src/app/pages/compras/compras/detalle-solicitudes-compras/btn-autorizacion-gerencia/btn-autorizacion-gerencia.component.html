@@ -1,13 +1,26 @@
-<div class="row">
-  <div class="d-flex justify-content-evenly gap-2 col-9 mx-auto">
-    <button *ngIf="solicitudCompra.auto_gg === 0 && tienePermiso('view btn autorizacion gg')" class="btn btn-primary col-md-4" type="button" (click)="autorizar('auto_gg')">
-      <strong> Autoriza: Gerencia general </strong>
-    </button>
-    <button *ngIf="solicitudCompra.auto_admin === 0 && tienePermiso('view btn autorizacion ga')" class="btn btn-info col-md-4" type="button" (click)="autorizar('auto_admin')">
-      <strong> Autoriza: Gerencia administrativa </strong>
-    </button>
-    <button *ngIf="solicitudCompra.auto_macro === 0  && solicitudCompra.auto_gg === 1 && solicitudCompra.auto_admin === 1 && tienePermiso('view btn autorizacion macro') && solicitudCompra.tipo === 2" class="btn btn-warning col-md-4" type="button" (click)="guardar('auto_macro')">
-      <strong> Autoriza: Macro taller </strong>
-    </button>
+<div class="card border">
+  <div class="card-header text-center bg-primary-subtle">
+    Da click en tu botón para autorizar la solicitud y continuar con el proceso
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="d-flex justify-content-evenly gap-2 col-9 mx-auto">
+        <button *ngIf="solicitudCompra.auto_gg === 0 && tienePermiso('view btn autorizacion gg')"
+          class="btn btn-primary col-md-4" type="button" (click)="autorizar('auto_gg')">
+          <strong> Autoriza: Gerencia general </strong>
+        </button>
+        <button *ngIf="solicitudCompra.auto_admin === 0 && tienePermiso('view btn autorizacion ga')"
+          class="btn btn-info col-md-4" type="button" (click)="autorizar('auto_admin')">
+          <strong> Autoriza: Gerencia administrativa </strong>
+        </button>
+        <button
+          *ngIf="solicitudCompra.auto_macro === 0  && solicitudCompra.auto_gg === 1 && solicitudCompra.auto_admin === 1 && tienePermiso('view btn autorizacion macro') && solicitudCompra.tipo === 2"
+          class="btn btn-warning col-md-4" type="button" (click)="guardar('auto_macro')">
+          <strong> Autoriza: Macro taller </strong>
+        </button>
+      </div>
+    </div>
   </div>
 </div>
+
+

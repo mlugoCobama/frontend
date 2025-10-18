@@ -1,5 +1,10 @@
 <!-- botones aceptar o rechazar orden -->
-<div *ngIf = "isLoad && tienePermiso('view panel auto orden compra') " class="row justify-content-around">
+ <div class="card border">
+    <div class="card-header bg-success-subtle">
+      Da click en el botón "aceptar" para marcar la solicitud como aprobada o "rechazada" para marcarla como rechazada
+    </div>
+    <div class="card-body ">
+      <div *ngIf = "isLoad && tienePermiso('view panel auto orden compra') " class="row justify-content-around">
     <button
       class="btn btn-danger col-md-5"
       (click)="cancelarOrden()"
@@ -13,3 +18,5 @@
       Orden de compra autorizada
     </button>
 </div>
+    </div>
+ </div>
