@@ -12,9 +12,9 @@
 ></app-panel-entregas>
 
 <div class="card border">
-  <div class="card-header bg-secondary-subtle text-center" *ngIf="solicitudCompra.estatus >= enEsts.Autorizado && ordenCompra?.tipo_pago">
+  <div class="card-header bg-primary text-center text-white" *ngIf="solicitudCompra.estatus >= enEsts.Autorizado && ordenCompra?.tipo_pago">
     <p *ngIf = "solicitudCompra.estatus != enEsts.Finalizada" class="m-0">
-    Adjunta los siguientes archivos para la orden de compra:
+    <strong> Adjunta los siguientes archivos para la orden de compra: </strong>
     <strong>{{ ordenCompra?.folio_oc }}</strong>
   </p>
   </div>
@@ -95,7 +95,7 @@ class="row g-2"
       </button> -->
       <a *ngIf="hasFiles" class="btn btn-sm btn-info" (click)="descargarFacturas()">
         <i class="fas fa-cloud-download-alt"></i>
-        Descargar Facturas
+        Descargar Archivos
       </a>
     </div>
   </div>

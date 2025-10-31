@@ -1,0 +1,111 @@
+<div class="card border">
+    <div class="card-header">
+        <div class="d-flex  justify-content-between">
+            <strong>Contactos del proveedor</strong>
+            <button type="button" class="btn btn-primary btn-sm" (click)="agregarContacto()"> <i
+                    class="fas fa-plus"></i> Agregar contacto</button>
+            <!-- <button type="submit" class="btn btn-success">Guardar</button> -->
+        </div>
+
+
+    </div>
+    <div class="card card-body m-0">
+        <form [formGroup]="proveedorForm">
+            <table *ngIf="contactos.controls.length > 0; else elseBlock"
+                class="table table-bordered table-striped table-sm m-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                        <th>Zona</th>
+                        <th>Notas</th>
+                        <th class="text-center">-</th>
+                    </tr>
+                </thead>
+                <tbody formArrayName="contactos">
+                    <tr *ngFor="let contacto of contactos.controls; let i = index" [formGroupName]="i">
+                        <!-- Nombre -->
+                        <td>
+                            <input type="text" placeholder="Nombre" class="form-control form-control-sm"
+                                formControlName="nombre"
+                                [ngClass]="{'is-invalid': contacto.get('nombre')?.invalid && contacto.get('nombre')?.touched}" />
+                            <div *ngIf="contacto.get('nombre')?.touched && contacto.get('nombre')?.errors"
+                                class="text-danger text-sm">
+                                <small *ngIf="contacto.get('nombre')?.errors['required']">El nombre es
+                                    obligatorio.</small>
+                            </div>
+                        </td>
+
+                        <!-- Correo -->
+                        <td>
+                            <input type="email" placeholder="Correo" class="form-control form-control-sm"
+                                formControlName="correo"
+                                [ngClass]="{'is-invalid': contacto.get('correo')?.invalid && contacto.get('correo')?.touched}" />
+                            <div *ngIf="contacto.get('correo')?.touched && contacto.get('correo')?.errors"
+                                class="text-danger text-sm">
+                                <small *ngIf="contacto.get('correo')?.errors['required']">El correo es
+                                    obligatorio.</small>
+                                <small *ngIf="contacto.get('correo')?.hasError('invalidEmails') && contacto.get('correo')?.touched">
+                                    Correos inválidos: {{ contacto.get('correo')?.errors?.['invalidEmails'] }}
+                                </small>
+                            </div>
+                        </td>
+
+                        <!-- Teléfono -->
+                        <td>
+                            <input type="text" placeholder="Teléfono" class="form-control form-control-sm"
+                                formControlName="telefono"
+                                [ngClass]="{'is-invalid': contacto.get('telefono')?.invalid && contacto.get('telefono')?.touched}" />
+                            <div *ngIf="contacto.get('telefono')?.touched && contacto.get('telefono')?.errors"
+                                class="text-danger text-sm">
+                                <small *ngIf="contacto.get('telefono')?.errors['required']">El telefono es
+                                    obligatorio.</small>
+                                <small *ngIf="contacto.get('telefono')?.errors['pattern']">El teléfono debe contener
+                                    solo números.</small>
+                            </div>
+                        </td>
+
+                        <!-- Zona -->
+                        <td>
+                            <select class="form-select form-select-sm" formControlName="zona"
+                                [ngClass]="{'is-invalid': contacto.get('zona')?.invalid && contacto.get('zona')?.touched}">
+                                <option value="" selected disabled>Selec. zona</option>
+                                <option value="Universal">Todas</option>
+                                <option value="Centro">Centro</option>
+                                <option value="Norte">Norte</option>
+                                <option value="Sur">Sur</option>
+                                <option value="Este">Este</option>
+                                <option value="Oeste">Oeste</option>
+                            </select>
+                            <div *ngIf="contacto.get('zona')?.touched && contacto.get('zona')?.errors"
+                                class="text-danger text-sm">
+                                <small *ngIf="contacto.get('zona')?.errors['required']">La zona es obligatoria.</small>
+                            </div>
+                        </td>
+
+                        <!-- Notas -->
+                        <td>
+                            <input type="text" placeholder="Notas" class="form-control form-control-sm"
+                                formControlName="notas"
+                                [ngClass]="{'is-invalid': contacto.get('notas')?.invalid && contacto.get('notas')?.touched}"/>
+                        </td>
+
+                        <!-- Acciones -->
+                        <td class="text-center">
+                            <button type="button" class="btn btn-danger btn-sm" (click)="eliminarContacto(i)">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <ng-template #elseBlock>
+                <p class="text-center text-muted"><strong>Aún no hay contactos guardados para este proveedor.</strong>
+                </p>
+            </ng-template>
+        </form>   
+    </div>
+
+</div>

@@ -56,7 +56,7 @@
             <i class="fas fa-eye"></i
           ></a>
         </td>
-        <td class="text-center d-flex align-items-center">
+        <td class="text-center d-flex justify-content-center">
           <div>
             <input class="form-check-input" type="checkbox" value="" id="flexCheckCheckedDisabled" 
             (change) ="cambioCheck(row, $event)"
@@ -112,9 +112,12 @@
       </tr>
     </tfoot>
   </table>
-    <div *ngIf ="solicitudCompra.auto_admin === 0 || solicitudCompra.auto_gg === 0" class="p-2 d-flex justify-content-end">
-      <button *ngIf = "solicitudCompra.estatus < 3" class="btn btn-sm btn-warning" (click)="modificarDetalles()">
+  <div class="p-2 d-flex justify-content-end" *ngIf="tienePermiso('view btn save precios') && !mostrarObs">
+      <!-- <button *ngIf = "solicitudCompra.estatus < 3" class="btn btn-sm btn-warning" (click)="modificarDetalles()">
       ACTUALIZAR DETALLES
+    </button> -->
+    <button *ngIf= "solicitudCompra.estatus === enEsts.EnCotizacion && !isLoad" class="btn btn-sm btn-primary" (click)="guardarPrecios()">
+      <i class="fas fa-money-check-alt"></i> Guardar Precios
     </button>
     </div>
   </div>

@@ -94,6 +94,28 @@
             >
           </td>
         </tr>
+        <tr>
+          <td>Opinion de cumplimiento</td>
+          <td *ngIf="archivos?.poder_notarial; else noArchivo">
+            <a
+              class="btn btn-sm btn-info"
+              href="javascript:void(0)"
+              (click)="openFile(archivos?.poder_notarial)"
+              >Abrir</a
+            >
+          </td>
+        </tr>
+        <tr>
+          <td>Contrato</td>
+          <td *ngIf="archivos?.poder_notarial; else noArchivo">
+            <a
+              class="btn btn-sm btn-info"
+              href="javascript:void(0)"
+              (click)="openFile(archivos?.poder_notarial)"
+              >Abrir</a
+            >
+          </td>
+        </tr>
       </tbody>
     </table>
     <p>Ultima actualizacion: {{ archivos?.updated_at | date:'dd/MM/yyyy h:mm a'}}</p>

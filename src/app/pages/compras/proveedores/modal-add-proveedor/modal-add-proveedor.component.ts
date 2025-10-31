@@ -1,9 +1,14 @@
-import { Component, Input, OnInit, EventEmitter } from "@angular/core";
+import { Component, Input, OnInit, EventEmitter, ViewChild, AfterViewInit } from "@angular/core";
 
+import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 import { ProveedoresService } from "src/app/core/services/compras/proveedores/proveedores.service";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 
 import Swal from "sweetalert2";
+
+import { FormDatosProveedorComponent } from "../forms/form-datos-proveedor/form-datos-proveedor.component";
+import { FormExpedienteProveedorComponent } from "../forms/form-expediente-proveedor/form-expediente-proveedor.component";
+import { FormProveedorContactosComponent } from "../forms/form-proveedor-contactos/form-proveedor-contactos.component";
 
 import {
   FormBuilder,
@@ -12,12 +17,13 @@ import {
   Validators,
 } from "@angular/forms";
 
+
 @Component({
   selector: "app-modal-add-proveedor",
   templateUrl: "./modal-add-proveedor.component.html",
   styleUrls: ["./modal-add-proveedor.component.css"],
 })
-export class ModalAddProveedorComponent implements OnInit {
+export class ModalAddProveedorComponent implements AfterViewInit {
   public estados: any;
 
   public formProveedores: FormGroup;
@@ -29,14 +35,19 @@ export class ModalAddProveedorComponent implements OnInit {
   public modalCerrado: EventEmitter<any> = new EventEmitter();
   public event: EventEmitter<any> = new EventEmitter();
 
+  @ViewChild("formDatosProveedor", { static: false }) formDatosProveedor!: FormDatosProveedorComponent;
+  @ViewChild("formExpedienteProveedor", { static: false }) formExpedienteProveedor!: FormExpedienteProveedorComponent;
+  @ViewChild("formProveedorContactos", { static: false }) formProveedorContactos!: FormProveedorContactosComponent;
+
   constructor(
     public formBuilder: FormBuilder,
     private proveedoresService: ProveedoresService,
     private modalService: BsModalService,
-    public bsModalRef: BsModalRef
+    public bsModalRef: BsModalRef,
+    private alertas : SwalComprsServiceService,
   ) {}
 
-  public ngOnInit(): void {
+  public ngAfterViewInit(): void {
     this.buildForm();
   }
 
@@ -45,9 +56,12 @@ export class ModalAddProveedorComponent implements OnInit {
       this.formProveedores = this.formBuilder.group({
         nombre: new FormControl(null, Validators.required),
         contacto: new FormControl(null, [Validators.required]),
-        telefono: new FormControl(null, [Validators.required, Validators.pattern("^[0-9]*$"),]),
-        localidad: new FormControl('Selecciona uno', Validators.required),
-        condiciones: new FormControl('Selecciona uno', Validators.required),
+        telefono: new FormControl(null, [
+          Validators.required,
+          Validators.pattern("^[0-9]*$"),
+        ]),
+        localidad: new FormControl("Selecciona uno", Validators.required),
+        condiciones: new FormControl("Selecciona uno", Validators.required),
         servicios: new FormControl(null, Validators.required),
         correo: new FormControl(null, [Validators.required, Validators.email]),
         horario_atencion: new FormControl(null, Validators.required),
@@ -69,85 +83,33 @@ export class ModalAddProveedorComponent implements OnInit {
   }
 
   public save() {
-    // this.submitted = true;
-    // this.isLoad = true;
-    if (this.formProveedores.invalid) {
-      // this.isLoad = false;
-      Swal.fire({
-        title: "Alerta",
-        text: "Debes llenar correctamente todos los campos",
-        buttonsStyling: false,
-        icon: "warning",
-        customClass: {
-          confirmButton: "btn btn-warning px-4",
-          cancelButton: "btn btn- ms-2 px-4",
-        },
-      });
+    if (!this.formDatosProveedor.isValid() || !this.formProveedorContactos.isValid() ) {
+      this.alertas.mostrarAlerta("Alerta", "Debes llenar correctamente todos los campos", "warning", "warning");
       return;
     }
 
-    //this.data = this.formProveedores.value;
-    const formValues = this.formProveedores.value;
-    // Comprueba si días crédito es igual a null
-    //  y si lo es le asigna el valor de 0
-    if (formValues.condiciones != "Credito") {
-      formValues.dias_credito = 0;
-    }
+    const data = this.valoresFormatedos();
 
-    for (let key in formValues) {
-      //Procesa el formulario y los archivos para armar el payload
-      if (formValues.hasOwnProperty(key) && formValues[key] !== null) {
-        this.formData.append(key, formValues[key]);
-      }
-    }
-
-    this.proveedoresService.save(this.formData).subscribe(
-      // this.proveedoresService.save(this.data).subscribe(
+    console.log(data);
+    
+    this.proveedoresService.save(data).subscribe(
       (response) => {
         if (response.status === "success") {
           this.event.emit(true);
-          Swal.fire({
-            title: "Guardado",
-            text: "Proveedor registrado correctamente",
-            buttonsStyling: false,
-            icon: "success",
-            customClass: {
-              confirmButton: "btn btn-success px-4",
-              cancelButton: "btn btn- ms-2 px-4",
-            },
-          });
-          //this.isLoad = false;
+          this.alertas.mostrarAlerta("Guardado", "Proveedor registrado correctamente", "success", "success");
+          this.cerrarModal();
+          this.formProveedores.reset();
+          this.formData = new FormData();
         } else {
-          this.mostrarErrores(response.errors)
-          // Swal.fire({
-          //   title: "Ocurrio un error",
-          //   text: response.message,
-          //   buttonsStyling: false,
-          //   icon: "error",
-          //   customClass: {
-          //     confirmButton: "btn btn-danger px-4",
-          //   },
-          // });
+          this.alertas.mostrarAlerta("Error fetching data:", response.message, "error", "danger");
+          return;
         }
       },
       (error) => {
-        Swal.fire({
-          title: "Error fetching data:",
-          text: error,
-          buttonsStyling: false,
-          icon: "error",
-          customClass: {
-            confirmButton: "btn btn-danger px-4",
-          },
-        });
+        this.alertas.mostrarAlerta("Error fetching data:", error, "error", "danger");
+        return;
       }
     );
-
-    this.cerrarModal();
-    // this.submitted = false;
-    this.formProveedores.reset();
-
-    this.formData = new FormData();
   }
 
   onFileChange(event: any, fieldName: string) {
@@ -159,7 +121,7 @@ export class ModalAddProveedorComponent implements OnInit {
     }
   }
 
-    public onChange(selectElement: any) {
+  public onChange(selectElement: any) {
     // Función que muestra y oculta el campo días crédito
     let selectedText = selectElement.options[selectElement.selectedIndex].text;
     if (selectedText === "Credito") {
@@ -167,7 +129,7 @@ export class ModalAddProveedorComponent implements OnInit {
     } else {
       this.isCredit = false;
     }
-    console.log(this.isCredit)
+    console.log(this.isCredit);
   }
 
   validateNumberInput(event: any) {
@@ -182,22 +144,29 @@ export class ModalAddProveedorComponent implements OnInit {
 
   public cerrarModal(): void {
     this.bsModalRef.hide();
-    setTimeout(() => {this.modalCerrado.emit();}, 150)
+    setTimeout(() => {
+      this.modalCerrado.emit();
+    }, 150);
   }
 
-  mostrarErrores(errores: any){
-      let mensajes = '';
-      for (let campo in errores){
-        mensajes += `• ${errores[campo].join(', ')} \n`
-      }
-  
-      Swal.fire({
-        icon: 'error',
-        title: 'Errores de validación',
-        text: mensajes,
-      customClass:{
-       popup : 'text-start'
-      }
-        })
-    }
+  valoresFormatedos(): FormData {
+    const formData = new FormData();
+    const proveedor = this.formDatosProveedor.getFormValues();
+    const contactos = this.formProveedorContactos.guardar();
+    const expediente = this.formExpedienteProveedor.getFormValues(); // objeto con archivos
+
+    formData.append("proveedor", JSON.stringify(proveedor));
+    formData.append("contactos", JSON.stringify(contactos));
+
+    // Agregar archivos del expediente solo si existen
+    Object.keys(expediente).forEach((key) => {
+        const file = expediente[key];
+        if (file instanceof File) {
+          formData.append(key, file, file.name);
+        }
+      });
+    
+    return formData;
+  }
+
 }

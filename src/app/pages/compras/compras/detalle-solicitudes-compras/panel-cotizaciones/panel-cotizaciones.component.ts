@@ -4,6 +4,7 @@ import {
   FormControl,
   FormGroup,
   Validators,
+  FormArray
 } from "@angular/forms";
 
 import { ProveedoresService } from "src/app/core/services/compras/proveedores/proveedores.service";
@@ -16,75 +17,95 @@ import { ComprasService } from "src/app/core/services/compras/compras.service";
   styleUrl: "./panel-cotizaciones.component.css",
 })
 export class PanelCotizacionesComponent implements OnInit {
-  @Input() solicitudCompra: any =  null;
-
+  @Input() solicitudCompra: any = null;
+  @Input() cotProv: any = null;
   @Output() actualizarStatus = new EventEmitter<void>();
 
   public formProveedoresCotizacion: FormGroup;
-
   public submitted: boolean = false;
-
   public isDisabled: boolean = false;
-
   public proveedores: any = [];
-
   public isLoad: boolean = true;
-
-  // text: string = "";
-  // longitudMaxima: number = 600;
-  // caracteresRestantes: number = this.longitudMaxima;
 
   constructor(
     public formBuilder: FormBuilder,
     public proveedoresService: ProveedoresService,
     public comprasService: ComprasService,
     public alertasService: SwalComprsServiceService
-  ) {
-
-    // this.buildForm();
-
-  }
+  ) {}
 
   ngOnInit(): void {
     this.buildForm();
     this.getProveedores();
-    
-    // console.log(this.solicitudCompra)
-    // console.log('btn disabled', this.isDisabled)
   }
 
   private buildForm() {
-    return new Promise((resolve, reject) => {
-      this.formProveedoresCotizacion = this.formBuilder.group({
-      proveedor1: new FormControl("", Validators.required),
-      proveedor2: new FormControl(""),
-      proveedor3: new FormControl(""),
+    this.formProveedoresCotizacion = this.formBuilder.group({
+      proveedores: this.formBuilder.array([this.crearProveedorControl()]),
       consideraciones: new FormControl(null),
     });
-    resolve(true);
-    // console.log('form construido panel cotizaciones')
-    });
-    
+  }
+
+  // Crea un nuevo FormControl para un proveedor
+  private crearProveedorControl(): FormControl {
+    return new FormControl("", Validators.required);
+  }
+
+  // Getter para acceder al FormArray
+  get proveedoresArray(): FormArray {
+    return this.formProveedoresCotizacion.get("proveedores") as FormArray;
   }
 
   get solicitudCotizacionFormControl() {
     return this.formProveedoresCotizacion.controls;
   }
 
-  // Recupera los registro de proveedores (ID, NOMBRE)
+  // Agregar un nuevo proveedor al FormArray
+  agregarProveedor() {
+    if (this.proveedoresArray.length < 3) { // Límite opcional
+      this.proveedoresArray.push(this.crearProveedorControl());
+    } else {
+      this.alertasService.mostrarAlerta(
+        "Límite alcanzado",
+        "No puedes agregar más de 3 proveedores",
+        "warning",
+        "warning"
+      );
+    }
+  }
+
+  // Eliminar un proveedor del FormArray
+  eliminarProveedor(index: number) {
+    if (this.proveedoresArray.length > 1) {
+      this.proveedoresArray.removeAt(index);
+    } else {
+      this.alertasService.mostrarAlerta(
+        "Acción no permitida",
+        "Debes tener al menos un proveedor",
+        "warning",
+        "warning"
+      );
+    }
+  }
+
+  // Recupera los registro de proveedores (ID, NOMBRE, SERVICIOS)
   private getProveedores() {
     this.proveedoresService.getProveedores().subscribe(
       (response) => {
         if (response) {
           this.proveedores = response.data;
-          // console.log(this.proveedores)
           this.isLoad = false;
         } else {
-          this.alertasService.mostrarAlerta("Error!", response.message, "error", "danger" );
+          this.alertasService.mostrarAlerta(
+            "Error!",
+            response.message,
+            "error",
+            "danger"
+          );
         }
       },
       (error) => {
-        this.alertasService.mostrarAlerta("Error!", error, "error", "danger" );
+        this.alertasService.mostrarAlerta("Error!", error, "error", "danger");
       }
     );
   }
@@ -94,58 +115,83 @@ export class PanelCotizacionesComponent implements OnInit {
     this.submitted = true;
     this.isDisabled = true;
 
-    let data = this.formProveedoresCotizacion.value;
-
-    if (this.formProveedoresCotizacion.invalid || !this.validarProveedores(data)) {
+    if (this.formProveedoresCotizacion.invalid || !this.validarProveedores()) {
       this.isLoad = false;
-
-      // this.alertasService.mostrarAlerta("Algo anda mal", "Debes Selecciona la menos un proveedor", "warning",  "warning");
-
       this.isDisabled = false;
       return;
     }
 
     try {
       const idSolicitud = this.solicitudCompra.id;
-
-      data = {
-        ...data,
+      const proveedoresSeleccionados = this.proveedoresArray.value.filter((p: string) => p !== "");
+      
+      const data = {
+        proveedores: proveedoresSeleccionados,
+        consideraciones: this.formProveedoresCotizacion.value.consideraciones,
         solicitudes_compra_id: idSolicitud,
       };
 
+      console.log(data);
+      
       this.comprasService.sendMail(data).subscribe(
         (response) => {
           if (response.status === "success") {
-            this.alertasService.mostrarAlerta("Listo", "Tu solicitud de cotización se ha enviado con éxito", "success",  "success");
-
-            // this.comprasService.cambiarEstadoCotizacion(true);
+            this.alertasService.mostrarAlerta(
+              "Listo",
+              "Tu solicitud de cotización se ha enviado con éxito",
+              "success",
+              "success"
+            );
             this.formProveedoresCotizacion.reset();
+            // Reiniciar el FormArray con un solo campo
+            while (this.proveedoresArray.length > 1) {
+              this.proveedoresArray.removeAt(1);
+            }
             this.isLoad = false;
             this.isDisabled = false;
           } else {
-            this.alertasService.mostrarAlerta(response.message, "Revisa que el proveedor tenga un correo asignado", "error",  "danger");
+            this.alertasService.mostrarAlerta(
+              response.message,
+              "Revisa que el proveedor tenga un correo asignado",
+              "error",
+              "danger"
+            );
             console.log(response.errors);
             this.isDisabled = false;
           }
         },
         (error) => {
-          this.alertasService.mostrarAlerta("Error!", error ?? "desconocido",  "error", "danger" );
+          this.alertasService.mostrarAlerta(
+            "Error!",
+            error ?? "desconocido",
+            "error",
+            "danger"
+          );
+          this.isDisabled = false;
         }
       );
       this.isLoad = false;
-      this.isDisabled = false;
     } catch (error) {
-      this.alertasService.mostrarAlerta("Error!", error ?? "desconocido", "error", "danger" );
+      this.alertasService.mostrarAlerta(
+        "Error!",
+        error ?? "desconocido",
+        "error",
+        "danger"
+      );
+      this.isDisabled = false;
     }
-
+    
     this.submitted = false;
-    // this.formProveedoresCotizacion.reset();
     this.actualizarStatus.emit();
-  }  
+  }
 
-  validarProveedores(data: any): boolean {
+  validarProveedores(): boolean {
+    const proveedoresSeleccionados = this.proveedoresArray.value.filter(
+      (p: string) => p !== ""
+    );
+
     // Verificar que al menos uno esté presente
-    if (!data.proveedor1 && !data.proveedor2 && !data.proveedor3) {
+    if (proveedoresSeleccionados.length === 0) {
       this.alertasService.mostrarAlerta(
         "Algo anda mal",
         "Debes seleccionar al menos un proveedor",
@@ -156,11 +202,8 @@ export class PanelCotizacionesComponent implements OnInit {
     }
 
     // Verificar que los proveedores seleccionados no sean iguales
-    if (
-      (data.proveedor1 && data.proveedor2 && data.proveedor1 === data.proveedor2) ||
-      (data.proveedor2 && data.proveedor3 && data.proveedor2 === data.proveedor3) ||
-      (data.proveedor1 && data.proveedor3 && data.proveedor1 === data.proveedor3)
-    ) {
+    const proveedoresUnicos = new Set(proveedoresSeleccionados);
+    if (proveedoresUnicos.size !== proveedoresSeleccionados.length) {
       this.alertasService.mostrarAlerta(
         "Algo anda mal",
         "Debes seleccionar proveedores distintos",
@@ -169,6 +212,7 @@ export class PanelCotizacionesComponent implements OnInit {
       );
       return false;
     }
+
     return true;
   }
 }

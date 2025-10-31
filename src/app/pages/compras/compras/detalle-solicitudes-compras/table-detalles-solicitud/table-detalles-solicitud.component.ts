@@ -7,6 +7,7 @@ import { SwalComprsServiceService } from "src/app/core/services/compras/swal-com
 import { DetallesSolicitudService } from "src/app/core/services/compras/detalles-solicitud.service"; 
 import { EstadoSolicitud } from "../../estado-solicitud.enum";
 import { CatUnidadesMedidasService } from "src/app/core/services/compras/unidadesMedidas/cat-unidades-medidas.service";
+import { PermisosService } from "src/app/core/services/permisos.service";
 import Swal from 'sweetalert2';
 
 import { Subscription } from "rxjs";
@@ -61,7 +62,8 @@ export class TableDetallesSolicitudComponent implements OnInit {
     public detallesService: DetallesSolicitudService,
     public alertasService: SwalComprsServiceService,
     public formBuilder: FormBuilder,
-    public catUnidadesMedidasService: CatUnidadesMedidasService
+    public catUnidadesMedidasService: CatUnidadesMedidasService, 
+    public permisosService: PermisosService
   ) {
     this.formDetallesSolicitud = this.formBuilder.group({});
   }
@@ -123,8 +125,10 @@ export class TableDetallesSolicitudComponent implements OnInit {
 
             this.mostrarTotal = true;
             this.udtShowTotal(true);
+          }else{
+            this.isLoad = false;
           }
-          this.isLoad = false;
+          
         } else {
           this.alertasService.mostrarAlerta("Error guardando los datos:", response.message, "error", "danger");
         }
@@ -213,6 +217,7 @@ export class TableDetallesSolicitudComponent implements OnInit {
       this.totals["precio_" + proveedorId] = total;
     });
     this.totalMasBajo = this.getTotalMasBajo();
+    this.isLoad = false;
   }
 
   /**
@@ -294,20 +299,31 @@ export class TableDetallesSolicitudComponent implements OnInit {
   /**
    *Recupera los valores del check
    */
-  public manejoCheck(prov: any) {
-    const proveedorSleccionado = prov;
-    if(this.totalCotizacion(proveedorSleccionado) > 50000 && prov.autorizado === 0){
-      this.solicitarAutorizacion();
-      this.compras.setMostrarBoton(false);
-      this.mostrarObs = false;
-    }else{
-      this.proveedorSelec = proveedorSleccionado;
-      this.compras.setMostrarBoton(true);
-      this.mostrarObs = true;
-    }
+  public manejoCheck(prov: any): void {
+  const total = this.totalCotizacion(prov);
+  const noAutorizado = prov.autorizado === 0;
 
-    
+  if (total > 50000 && noAutorizado) {
+    this.solicitarAutorizacion();
+    return;
   }
+
+  if (total === 0 && noAutorizado) {
+    this.compras.setMostrarBoton(false);
+    this.mostrarObs = false;
+    this.alertasService.mostrarAlerta(
+      "El total de la cotización debe ser mayor a 0",
+      "Carga los precios y da click en el botón de guardar precios",
+      "info",
+      "info"
+    );
+    return;
+  }
+
+  this.proveedorSelec = prov;
+  this.compras.setMostrarBoton(true);
+  this.mostrarObs = true;
+}
 
   totalCotizacion(prov){
       const detalles = prov.detalles
@@ -513,6 +529,11 @@ cambioCheck(item, event) {
       .catch(err => {
         console.error('Error al copiar al portapapeles', err);
       });
+  }
+
+  tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
   }
 }
 

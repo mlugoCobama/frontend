@@ -55,6 +55,13 @@ import { PanelEntregasComponent } from './compras/detalle-solicitudes-compras/pa
 import { ModalSeguimientoComponent } from './compras/modal-seguimiento/modal-seguimiento.component';
 import { ModalHistorialComentariosComponent } from './cat-unidades/modal-historial-comentarios/modal-historial-comentarios.component';
 import { ModalHistorialPolizasComponent } from './cat-unidades/modal-historial-polizas/modal-historial-polizas.component';
+import { FormProveedorContactosComponent } from './proveedores/forms/form-proveedor-contactos/form-proveedor-contactos.component';
+import { FormDatosProveedorComponent } from './proveedores/forms/form-datos-proveedor/form-datos-proveedor.component';
+import { FormExpedienteProveedorComponent } from './proveedores/forms/form-expediente-proveedor/form-expediente-proveedor.component';
+import { ModalPreviewOrdenCompraComponent } from './compras/modal-preview-orden-compra/modal-preview-orden-compra.component';
+import { PdfPreviewComponent } from './compras/modal-preview-orden-compra/pdf-preview/pdf-preview.component';
+import { TableDetallesSolicitudSegComponent } from './compras/modal-seguimiento/table-detalles-solicitud-seg/table-detalles-solicitud-seg.component';
+import { ComprasKanbanComponent } from './compras/compras-kanban/compras-kanban.component';
 
 @NgModule({
   declarations: [
@@ -104,6 +111,13 @@ import { ModalHistorialPolizasComponent } from './cat-unidades/modal-historial-p
     ModalSeguimientoComponent,
     ModalHistorialComentariosComponent,
     ModalHistorialPolizasComponent,
+    FormProveedorContactosComponent,
+    FormDatosProveedorComponent,
+    FormExpedienteProveedorComponent,
+    ModalPreviewOrdenCompraComponent,
+    PdfPreviewComponent,
+    TableDetallesSolicitudSegComponent,
+    ComprasKanbanComponent,
   ],
   imports: [
     CommonModule,

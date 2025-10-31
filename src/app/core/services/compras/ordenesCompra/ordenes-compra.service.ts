@@ -103,6 +103,18 @@ export class OrdenesCompraService {
     );
   }
 
+   /**
+   * Obtiene la URL para previsualizar el PDF en un iframe.
+   */
+  getPreviewUrl(ordenId : any) {
+    return this.http.get(
+      environment.apiUrl + `compras/preview-orden-compra-pdf/${ordenId}`,
+      { 
+        responseType: "blob",
+       }
+    );
+  }
+
   /**
    * Petición pra realizar el update de orden compras a autorizado
    * Invoca el metodo en el backend para enviar un correo al proveedor

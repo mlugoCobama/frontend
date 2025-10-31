@@ -1,7 +1,7 @@
 <!-- botones aceptar o rechazar orden -->
  <div class="card border">
-    <div class="card-header bg-success-subtle">
-      Da click en el botón "aceptar" para marcar la solicitud como aprobada o "rechazada" para marcarla como rechazada
+    <div class="card-header bg-primary text-white text-center">
+      <strong> Da click en el botón "Aceptar" para marcar la solicitud como aprobada o "Rechazada" para marcarla como rechazada. </strong>
     </div>
     <div class="card-body ">
       <div *ngIf = "isLoad && tienePermiso('view panel auto orden compra') " class="row justify-content-around">
@@ -9,13 +9,13 @@
       class="btn btn-danger col-md-5"
       (click)="cancelarOrden()"
     >
-      Orden de compra rechazada
+      Orden de compra <strong> Rechazada </strong>
     </button>
     <button
       class="btn btn-success col-md-5"
       (click)="autorizarOrden()"
     >
-      Orden de compra autorizada
+      Orden de compra <strong>  Autorizada </strong>
     </button>
 </div>
     </div>

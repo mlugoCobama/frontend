@@ -1,6 +1,6 @@
 <div class="card mb-3 border border">
-  <div class="card-header text-center text-muted">
-    Información general de la solicitud de compra.
+  <div class="card-header bg-primary text-center text-white">
+   <strong>Información general de la solicitud de compra. </strong> 
   </div>
   <div class="card-body">
     <div class="row"> <!--Inicia div datos solicitud -->
@@ -22,7 +22,7 @@
 
     <div class="col-md-6">
       <p *ngIf="solicitudCompra.tipo === 2"> <strong>Folio Requisicion: </strong> {{ solicitudCompra.folio_requisicion ?? 'No especificada' }}</p>
-      <p><strong>Fecha: </strong>{{ solicitudCompra.fecha | date:'dd/MM/yyyy h:mm a'}}</p>
+      <p><strong>Fecha: </strong>{{ solicitudCompra.fecha}}</p>
       <p *ngIf="solicitudCompra.c_c === 0">
         <strong>U. Destino: </strong>{{solicitudCompra.usuario_destino}} 
       </p>

@@ -1,0 +1,131 @@
+<!-- form-expediente-proveedor.component.html -->
+<div class="card border">
+    <div class="card-header">
+        <strong class="text-center"> Expediente del Proveedor </strong>
+    </div>
+    <div class="card-body">
+        <form [formGroup]="expedienteForm" enctype="multipart/form-data">
+            <div class="row">
+                <!-- Constancia de situación fiscal -->
+                <div class="col-md-6">
+                    <div class="mb-2">
+                        <label class="form-label">Constancia de situación fiscal</label>
+                        <div class="d-flex justify-content-between">
+                            <input type="file" class="form-control form-control-sm" accept="application/pdf"
+                                (change)="onFileChange($event, 'constancia_fiscal')">
+                            <i *ngIf="tipo === 'Actualizar'" class="mx-1 my-2 fas" style="cursor: pointer;"
+                                (click)="openFile(datos?.constancia_fiscal)"
+                                [ngClass]="datos?.constancia_fiscal ? 'fa-check text-success' : 'fa-info-circle text-danger'"
+                                [title]="datos?.constancia_fiscal ? 'Cargado' : 'Falta cargar'"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INE -->
+                <div class="col-md-6">
+                    <div class="mb-2">
+                        <label class="form-label">INE</label>
+                        <div class="d-flex justify-content-between">
+                            <input type="file" class="form-control form-control-sm"  accept="application/pdf"
+                                (change)="onFileChange($event, 'ine')">
+                            <i *ngIf="tipo === 'Actualizar'" class="mx-1 my-2 fas" style="cursor: pointer;"
+                                (click)="openFile(datos?.ine)"
+                                [ngClass]="datos?.ine ? 'fa-check text-success' : 'fa-info-circle text-danger'"
+                                [title]="datos?.ine ? 'Cargado' : 'Falta cargar'"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comprobante de domicilio -->
+                <div class="col-md-6">
+                    <div class="mb-2">
+                        <label class="form-label">Comprobante de domicilio</label>
+                        <div class="d-flex justify-content-between">
+                            <input type="file" class="form-control form-control-sm" accept="application/pdf"
+                                (change)="onFileChange($event, 'comprobante_domicilio')">
+                            <i *ngIf="tipo === 'Actualizar'" class="mx-1 my-2 fas" style="cursor: pointer;"
+                                (click)="openFile(datos?.comprobante_domicilio)"
+                                [ngClass]="datos?.comprobante_domicilio ? 'fa-check text-success' : 'fa-info-circle text-danger'"
+                                [title]="datos?.comprobante_domicilio ? 'Cargado' : 'Falta cargar'"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estado de cuenta -->
+                <div class="col-md-6">
+                    <div class="mb-2">
+                        <label class="form-label">Estado de cuenta</label>
+                        <div class="d-flex justify-content-between">
+                            <input type="file" class="form-control form-control-sm" accept="application/pdf"
+                                (change)="onFileChange($event, 'estado_cuenta')">
+                            <i *ngIf="tipo === 'Actualizar'" class="mx-1 my-2 fas" style="cursor: pointer;"
+                                (click)="openFile(datos?.estado_cuenta)"
+                                [ngClass]="datos?.estado_cuenta ? 'fa-check text-success' : 'fa-info-circle text-danger'"
+                                [title]="datos?.estado_cuenta ? 'Cargado' : 'Falta cargar'"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Acta constitutiva -->
+                <div class="col-md-6">
+                    <div class="mb-2">
+                        <label class="form-label">Acta constitutiva</label>
+                        <div class="d-flex justify-content-between">
+                            <input type="file" class="form-control form-control-sm" accept="application/pdf"
+                                (change)="onFileChange($event, 'acta_constitutiva')">
+                            <i *ngIf="tipo === 'Actualizar'" class="mx-1 my-2 fas" style="cursor: pointer;"
+                                (click)="openFile(datos?.acta_constitutiva)"
+                                [ngClass]="datos?.acta_constitutiva ? 'fa-check text-success' : 'fa-info-circle text-danger'"
+                                [title]="datos?.acta_constitutiva ? 'Cargado' : 'Falta cargar'"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Poder notarial -->
+                <div class="col-md-6">
+                    <div class="mb-2">
+                        <label class="form-label">Poder notarial</label>
+                        <div class="d-flex justify-content-between">
+                            <input type="file" class="form-control form-control-sm" accept="application/pdf"
+                                (change)="onFileChange($event, 'poder_notarial')">
+                            <i *ngIf="tipo === 'Actualizar'" class="mx-1 my-2 fas" style="cursor: pointer;"
+                                (click)="openFile(datos?.poder_notarial)"
+                                [ngClass]="datos?.poder_notarial ? 'fa-check text-success' : 'fa-info-circle text-danger'"
+                                [title]="datos?.poder_notarial ? 'Cargado' : 'Falta cargar'"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contrato -->
+                <div class="col-md-6">
+                    <div class="mb-2">
+                        <label class="form-label">Contrato</label>
+                        <div class="d-flex justify-content-between">
+                            <input type="file" class="form-control form-control-sm" accept="application/pdf"
+                                (change)="onFileChange($event, 'contrato')">
+                            <i *ngIf="tipo === 'Actualizar'" class="mx-1 my-2 fas" style="cursor: pointer;"
+                                (click)="openFile(datos?.contrato)"
+                                [ngClass]="datos?.contrato ? 'fa-check text-success' : 'fa-info-circle text-danger'"
+                                [title]="datos?.contrato ? 'Cargado' : 'Falta cargar'"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Opinión de cumplimiento -->
+                <div class="col-md-6">
+                    <div class="mb-2">
+                        <label class="form-label">Opinión de cumplimiento</label>
+                        <div class="d-flex justify-content-between">
+                            <input type="file" class="form-control form-control-sm" accept="application/pdf"
+                                (change)="onFileChange($event, 'opinion_cumplimiento')">
+                            <i *ngIf="tipo === 'Actualizar'" class="mx-1 my-2 fas" style="cursor: pointer;"
+                                (click)="openFile(datos?.opinion_cumplimiento)"
+                                [ngClass]="datos?.opinion_cumplimiento ? 'fa-check text-success' : 'fa-info-circle text-danger'"
+                                [title]="datos?.opinion_cumplimiento ? 'Cargado' : 'Falta cargar'"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

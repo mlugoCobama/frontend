@@ -43,10 +43,12 @@ export class ModalUpdtAutotanqueComponent implements AfterViewInit {
     public empresas: any = [];
     public deshabilitado: boolean = false;
     public event: EventEmitter<any> = new EventEmitter();
+    public modalCerrado: EventEmitter<any> = new EventEmitter();
 
     public cerrarModal(): void {
       this.deshabilitado = false;
     this.bsModalRef.hide();
+    setTimeout(() => { this.modalCerrado.emit() }, 150);
   }
 
   public guardarCambios(){

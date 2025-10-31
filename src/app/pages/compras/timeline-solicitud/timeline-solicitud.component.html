@@ -1,6 +1,6 @@
 <div class="card  border">
-    <div class="card-header bg-info-subtle text-center">
-        Seguimiento de tu solicitud de compra
+    <div class="card-header bg-info  text-center text-white">
+        <strong> Seguimiento de tu solicitud de compra </strong>
     </div>
     <div class="card-body ">
         <div class="d-flex justify-content-center" *ngIf="isLoad">
@@ -36,5 +36,5 @@
 </div>
 
 <ng-template #noData>
-    <h5 class="text-muted">Aun no hay datos de seguimiento <i class="bx bx-upside-down "></i></h5>
+    <h5 class="text-muted text-center">Aun no hay datos de seguimiento <i class="bx bx-upside-down "></i></h5>
 </ng-template>

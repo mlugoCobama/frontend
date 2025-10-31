@@ -10,6 +10,7 @@ import { FuncionesTablas } from '../compras/funciones-tablas';
 import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
 import { UsuariosService } from "src/app/core/services/compras/usuarios.service";
 import { ModalSeguimientoComponent } from '../compras/modal-seguimiento/modal-seguimiento.component';
+import { ModalPreviewOrdenCompraComponent } from '../compras/modal-preview-orden-compra/modal-preview-orden-compra.component';
 import Swal from "sweetalert2";
 
 @Component({
@@ -18,7 +19,8 @@ import Swal from "sweetalert2";
   styleUrl: './compras-macro.component.css'
 })
 export class ComprasMacroComponent implements OnInit{
-
+  vistaKanban: boolean = false;
+  private readonly STORAGE_KEY_VISTA = 'vistaComprasKanban';
     public modalRef?: BsModalRef;
 
     public isLoad: boolean = true;
@@ -57,6 +59,12 @@ export class ComprasMacroComponent implements OnInit{
     this.comprasService.mostrarBoton$.subscribe((mostrar) => {
       this.mostrarBoton = mostrar;
     });
+
+    const vistaGuardada = this.localStorage.getItem(this.STORAGE_KEY_VISTA);
+    if (vistaGuardada !== null && vistaGuardada !== undefined) {
+      this.vistaKanban = JSON.parse(String (vistaGuardada));
+    }
+    
     this.getEmpresas();
     this.getUsuarioActivo();
     // this.getAll(this.usuarioSolicita.intercompania);
@@ -182,19 +190,19 @@ export class ComprasMacroComponent implements OnInit{
     }
 
       // Funcion para llenar la vista con el detalle component
-  public openDetallesSolicitud(dato: any, evento: any) {
-    this.solicitudSelecionada = true;
-    if (evento.currentTarget.classList.contains("table-primary")) {
-      evento.currentTarget.classList.remove("table-primary");
-      this.solicitudSelecionada = false;
-    } else {
-      const filas = document.querySelectorAll("tbody tr");
-      filas.forEach((fila) => fila.classList.remove("table-primary"));
-      evento.currentTarget.classList.add("table-primary");
+  public openDetallesSolicitud(dato: any, evento: any = null) {
+    // this.solicitudSelecionada = true;
+    // if (evento.currentTarget.classList.contains("table-primary")) {
+    //   evento.currentTarget.classList.remove("table-primary");
+    //   this.solicitudSelecionada = false;
+    // } else {
+    //   const filas = document.querySelectorAll("tbody tr");
+    //   filas.forEach((fila) => fila.classList.remove("table-primary"));
+    //   evento.currentTarget.classList.add("table-primary");
       this.solicitudSelecionada = true;
       this.solicitudCompra = dato; // Objeto que se envía al detalleSolicitudCompra
       this.status = this.solicitudCompra.estatus;
-    }
+    // }
   }
 
     //Muestra u oculta el panel de cotizaciones
@@ -386,4 +394,35 @@ export class ComprasMacroComponent implements OnInit{
         this.modalAbierto = false;
       });
     }
+
+      public openModalOC(item) {
+        if(item.folio_oc != "-"){
+          this.modalAbierto = true;
+        const initialState: ModalOptions = {
+          initialState: {
+            solicitudCompra : item
+          },
+          class: "modal-lg",
+        };
+        this.modalRef = this.modalService.show(ModalPreviewOrdenCompraComponent, initialState);
+        this.modalRef.content.closeBtnName = "Close";
+        this.modalRef.content.event.subscribe(() => {
+          // this.isLoad = true;
+          // this.getAll(this.usuarioSolicita.intercompania);
+        });
+        this.modalRef.content.modalCerrado.subscribe(() => {
+          this.modalAbierto = false;
+        });
+        }
+        
+      }
+
+      public alternarVista(): void {
+    this.vistaKanban = !this.vistaKanban;
+
+    this.localStorage.setItem(
+      this.STORAGE_KEY_VISTA,
+      JSON.stringify(this.vistaKanban)
+    );
+  }
 }

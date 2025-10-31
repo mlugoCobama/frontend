@@ -7,6 +7,19 @@
             <h5 class="mb-0 card-title flex-grow-1"> Solicitudes de <strong>Macrotaller</strong></h5>
             <div class="flex-shrink-0 d-flex gap-1">
 
+              <button
+                *ngIf ="!solicitudSelecionada"
+                class="btn btn-outline-primary btn-sm"
+                type="button"
+                (click)="vistaKanban = !vistaKanban"
+              >
+                <i
+                  class="fas"
+                  [ngClass]="vistaKanban ? 'fa-table' : 'fa-th-large'"
+                ></i>
+                {{ vistaKanban ? 'Ver como tabla' : 'Ver como kanban' }}
+              </button>
+
               <app-botnes-admin
               [status] = "status"
               [mostrarBoton] = "mostrarBoton"
@@ -75,7 +88,7 @@
                   />
                 </div>
               </div>
-              <div class="table-responsive">
+              <div *ngIf="!vistaKanban" class="table-responsive">
                 <div
                   class="tab-page-content mt-3 table-responsive"  style="overflow-y: auto; height: 20rem">
                   <table *ngIf="!isLoad && datosFiltrados.length > 0; else elseBlock"
@@ -97,8 +110,8 @@
                     </thead>
                     <tbody>
                       <tr *ngFor ="let item of datosFiltrados" (dblclick)="openDetallesSolicitud(item, $event)">
-                        <td class="d-flex justify-content-between">{{ item.folio }} <i class="fas fa-info-circle" style="cursor: pointer" (click) = "openModalSeguimiento(item)"></i> </td>
-                        <td> <strong> {{ item.folio_oc}} </strong></td>
+                        <td class="d-flex justify-content-between">{{ item.folio }} <i class="fas fa-info-circle" [title]="'Vista rápida solicitud'" style="cursor: pointer" (click) = "openModalSeguimiento(item)"></i> </td>
+                        <td> <strong style="cursor: pointer" [title]="'Vista previa de la orden de compra'" (click)="openModalOC(item)"> {{ item.folio_oc}} </strong></td>
                         <td class="text-center"><span
                             >
                             {{ item.empresa }}
@@ -107,7 +120,7 @@
                         <!-- <td>{{ item.empresa }}</td> -->
                         <td>{{ item.usuario_solicita}}</td>
                         <td [title]="item.usuario_destino">{{ item.eco + ' '+ item.serie }} </td>
-                        <td>{{ item.fecha  | date:'dd/MM/yyyy'}}</td>
+                        <td>{{ item.fecha }}</td>
                         <td>{{ item.proveedor }}</td>
                         <td class="text-center"><strong> {{ item.total_orden | currency }} </strong></td>
                         <td class="text-center"><span
@@ -121,6 +134,15 @@
                 </div>
               </div>
             </div>
+            <div *ngIf="vistaKanban  && !isLoad" class="pt-3">
+            <app-compras-kanban
+            *ngIf="datosFiltrados.length > 0; else elseBlock"
+            (btnModalSeguimiento) = "openModalSeguimiento($event)"
+            (btnModalOC) = "openModalOC($event)"
+            (btnOpenDetalleSolicitud)= "openDetallesSolicitud($event)"
+            [datos] = "datosFiltrados"
+            ></app-compras-kanban>
+          </div>
           </div>
         <app-detalle-solicitud-macro
           [solicitudCompra]="solicitudCompra"

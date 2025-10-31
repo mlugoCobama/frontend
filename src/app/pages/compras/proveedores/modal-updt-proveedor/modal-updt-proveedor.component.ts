@@ -1,27 +1,27 @@
-import { Component, Input, OnInit, EventEmitter } from "@angular/core";
+import { Component, Input, OnInit, EventEmitter, ViewChild, AfterViewInit} from "@angular/core";
 
 import { ProveedoresService } from "src/app/core/services/compras/proveedores/proveedores.service";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import Swal from "sweetalert2";
 
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from "@angular/forms";
+import { FormDatosProveedorComponent } from "../forms/form-datos-proveedor/form-datos-proveedor.component";
+import { FormExpedienteProveedorComponent } from "../forms/form-expediente-proveedor/form-expediente-proveedor.component";
+import { FormProveedorContactosComponent } from "../forms/form-proveedor-contactos/form-proveedor-contactos.component";
+import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
+
+import { FormBuilder, FormControl, FormGroup, Validators,} from "@angular/forms";
 
 @Component({
   selector: "app-modal-updt-proveedor",
   templateUrl: "./modal-updt-proveedor.component.html",
   styleUrls: ["./modal-updt-proveedor.component.css"],
 })
-export class ModalUpdtProveedorComponent implements OnInit {
+export class ModalUpdtProveedorComponent implements AfterViewInit {
   public estados: any;
   public proveedor: any;
+  public tipo:any = 'Actualizar';
 
-  public formUpdateProveedores: FormGroup;
-  formData: FormData = new FormData();
+
   public modalRef?: BsModalRef;
   public submitted: boolean = false;
   public isCredit: boolean = false;
@@ -32,168 +32,54 @@ export class ModalUpdtProveedorComponent implements OnInit {
   constructor(
     public formBuilder: FormBuilder,
     private proveedoresService: ProveedoresService,
+    private alertas : SwalComprsServiceService,
     private modalService: BsModalService,
     public bsModalRef: BsModalRef
-  ) {}
+  ) { }
 
-  public ngOnInit(): void {
-    this.buildForm();
-    this.llenarForm();
+
+  ngAfterViewInit(): void {
   }
 
-  private buildForm() {
-    return new Promise((resolve, reject) => {
-      this.formUpdateProveedores = this.formBuilder.group({
-        id: new FormControl(null),
-        nombre: new FormControl(null, Validators.required),
-        contacto: new FormControl(null, Validators.required),
-        // telefono: new FormControl(null, Validators.required),
-        telefono: new FormControl(null, [
-          Validators.required,
-          Validators.pattern("^[0-9]*$"),
-        ]),
-        localidad: new FormControl(null, Validators.required),
-        condiciones: new FormControl(null, Validators.required),
-        correo: new FormControl(null, Validators.required),
-        horario_atencion: new FormControl(null, Validators.required),
-        tiempo_entrega: new FormControl(null, Validators.required),
-        dias_credito: new FormControl(null, [Validators.pattern("^[0-9]*$")]),
-        servicios: new FormControl(null, Validators.required),
-        constancia_fiscal: new FormControl(null),
-        ine: new FormControl(null),
-        comprobante_domicilio: new FormControl(null),
-        estado_cuenta: new FormControl(null),
-        acta_constitutiva: new FormControl(null),
-        poder_notarial: new FormControl(null),
-      });
-      resolve(true);
-    });
-  }
-
-  get proveedoresFormControlUpdate() {
-    return this.formUpdateProveedores.controls;
-  }
-
-  llenarForm() {
-    this.formUpdateProveedores.patchValue({
-      nombre: this.proveedor.nombre,
-      contacto: this.proveedor.contacto,
-      telefono: this.proveedor.telefono,
-      localidad: this.proveedor.localidad,
-      condiciones: this.proveedor.condiciones,
-      servicios: this.proveedor.servicios,
-      correo: this.proveedor.correo,
-      dias_credito: this.proveedor.dias_credito,
-      horario_atencion: this.proveedor.horario_atencion,
-      tiempo_entrega: this.proveedor.tiempo_entrega,
-      id: this.proveedor.id,
-    });
-    if (this.proveedor.condiciones === "Credito") {
-      this.isCredit = true;
-    }
-  }
-
-  validateNumberInput(event: any) {
-    // Valida que unicamente se tecleen números sobre el campo
-    const inputValue = event.target.value;
-    const validNumber = /^[0-9]*\.?[0-9]{0,2}$/.test(inputValue);
-
-    if (!validNumber) {
-      event.target.value = inputValue.slice(0, -1);
-    }
-  }
-
-  public onChange(selectElement: any) {
-    // Función que muestra y oculta el campo días crédito
-    let selectedText = selectElement.options[selectElement.selectedIndex].text;
-    if (selectedText === "Credito") {
-      this.isCredit = true;
-    } else {
-      this.isCredit = false;
-    }
-  }
-
-  onFileChange(event: any, fieldName: string) {
-    // Obtiene el archivo del input
-    this.formData.delete(fieldName);
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.formData.append(fieldName, file);
-    }
-  }
+  @ViewChild('formDatosProveedor', { static: false }) formDatosProveedor!:  FormDatosProveedorComponent;
+  @ViewChild('formExpedienteProveedor', { static: false }) formExpedienteProveedor!:  FormExpedienteProveedorComponent;
+  @ViewChild('formProveedorContactos', { static: false }) formProveedorContactos!:  FormProveedorContactosComponent;
 
   public edit() {
     //Actualiza los valores del registro
     // this.isLoad = true;
     this.submitted = true;
-    if (this.formUpdateProveedores.invalid) {
+    if (!this.formDatosProveedor.isValid() || !this.formProveedorContactos.isValid() ) {
+      this.alertas.mostrarAlerta('La información esta incompleta', `agrega la información faltante para continuar`, 'info', 'warning')
       // this.isLoad = false;
       return;
     }
 
-    // this.data = this.formUpdateProveedores.value;
-    const formUpdateValues = this.formUpdateProveedores.value;
     let id = this.proveedor.id;
 
-    if (formUpdateValues.condiciones != "Credito") {
-      formUpdateValues.dias_credito = 0;
-    }
+    const data = this.valoresFormatedos();
 
-    for (let key in formUpdateValues) {
-      if (
-        formUpdateValues.hasOwnProperty(key) &&
-        formUpdateValues[key] !== null
-      ) {
-        this.formData.append(key, formUpdateValues[key]);
-      }
-    }
-
-    this.formData.append("_method", "PUT"); // Ajusto el método de la solicitud para trabajar con form data
-
-    this.proveedoresService.edit(id, this.formData).subscribe(
+    
+    this.proveedoresService.edit(id, data).subscribe(
       (response) => {
         if (response.status === "success") {
           this.event.emit(true);
-          Swal.fire({
-            title: "Guardado",
-            text: response.message,
-            buttonsStyling: false,
-            icon: "success",
-            customClass: {
-              confirmButton: "btn btn-success px-4",
-              cancelButton: "btn btn- ms-2 px-4",
-            },
-          });
+          this.alertas.mostrarAlerta('Guardado', response.message, 'success', 'success');
           //  this.isLoad = false;
+          this.cerrarModal();
+          this.submitted = false;
         } else {
-          Swal.fire({
-            title: "Ocurrio un error",
-            text: response.message,
-            buttonsStyling: false,
-            icon: "error",
-            customClass: {
-              confirmButton: "btn btn-danger px-4",
-            },
-          });
+          this.alertas.mostrarAlerta('Ocurrio un error', response.message, 'error', 'danger');
         }
       },
       (error) => {
-        Swal.fire({
-          title: "Error fetching data:",
-          text: error,
-          buttonsStyling: false,
-          icon: "error",
-          customClass: {
-            confirmButton: "btn btn-danger px-4",
-          },
-        });
+        this.alertas.mostrarAlerta('Error fetching data:', error, 'error', 'danger');
       }
     );
-    this.cerrarModal();
-    this.submitted = false;
-    this.formUpdateProveedores.reset();
+    
+    // this.formUpdateProveedores.reset();
 
-    this.formData = new FormData();
+    // this.formData = new FormData();
   }
 
   public cerrarModal(): void {
@@ -201,4 +87,42 @@ export class ModalUpdtProveedorComponent implements OnInit {
     setTimeout(() => {this.modalCerrado.emit();}, 150)
 
   }
+
+valoresFormatedos(): FormData {
+  const formData = new FormData();
+
+  const proveedor = this.formDatosProveedor.getFormValues();
+  const contactos = this.formProveedorContactos.guardar();
+  const expediente = this.formExpedienteProveedor.getFormValues(); // objeto con archivos
+  const cambio = this.formProveedorContactos.hasContactosChanged(this.proveedor.contactos, contactos.contactos);
+  const cambioProductos = this.formDatosProveedor.productosHasChangue();
+
+  if(contactos.contactos.length == 0){
+    this.alertas.mostrarAlerta('Faltan los contactos', `Agrega por lo menos un contacto en el apartado de contactos`, 'info', 'warning')
+    return;
+  }
+
+  formData.append('proveedor', JSON.stringify(proveedor));
+  if(cambio){
+      formData.append("change_contactos", '1');
+      formData.append('contactos', JSON.stringify(contactos));
+  }
+
+  if(cambioProductos){
+    formData.append("change_productos", '1');
+  }
+
+  // formData.append('contactos', JSON.stringify(contactos));
+
+  Object.keys(expediente).forEach((key) => {
+        const file = expediente[key];
+        if (file instanceof File) {
+          formData.append(key, file, file.name);
+        }
+  });
+
+ formData.append("_method", "PUT");
+ 
+ return formData;
+}
 }

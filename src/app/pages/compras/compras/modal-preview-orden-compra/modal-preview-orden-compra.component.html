@@ -1,0 +1,24 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">
+    Orden de Compra con folio: {{ solicitudCompra.folio_oc }}
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="cerrarModal()"></button>
+</div>
+<div class="modal-body">
+    <div class="d-flex justify-content-center" *ngIf="!pdfUrl">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <app-pdf-preview 
+    *ngIf="pdfUrl"
+    [pdfUrl]="pdfUrl"
+    ></app-pdf-preview>
+</div>
+<div class="modal-footer">
+  <button
+    type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="cerrarModal()"
+  >
+    Cerrar
+  </button>
+</div>

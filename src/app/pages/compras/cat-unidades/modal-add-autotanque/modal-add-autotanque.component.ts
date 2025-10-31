@@ -38,9 +38,11 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
     public deshabilitado: boolean = false;
 
     public event: EventEmitter<any> = new EventEmitter();
+    public modalCerrado: EventEmitter<any> = new EventEmitter();
 
     public cerrarModal(): void {
     this.bsModalRef.hide();
+    setTimeout(() => { this.modalCerrado.emit() }, 150);
     }
 
   setTitle(){

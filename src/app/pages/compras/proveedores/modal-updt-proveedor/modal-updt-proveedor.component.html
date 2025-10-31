@@ -12,7 +12,26 @@
       ></button>
     </div>
     <div class="modal-body">
-      <form
+
+      <app-form-datos-proveedor
+      #formDatosProveedor
+      [estados] = "estados"
+      [datos] = "proveedor"
+      ></app-form-datos-proveedor>
+
+      <app-form-proveedor-contactos
+        #formProveedorContactos
+        [datos] = "proveedor.contactos"
+      ></app-form-proveedor-contactos>
+
+      <app-form-expediente-proveedor
+        #formExpedienteProveedor
+        
+        [tipo] = "tipo"
+        [datos] = "proveedor.expediente"
+        ></app-form-expediente-proveedor>
+
+      <!-- <form
         class="row g-2"
         [formGroup]="formUpdateProveedores"
         enctype="multipart/form-data"
@@ -369,7 +388,7 @@
             />
           </div>
         </div>
-      </form>
+      </form> -->
     </div>
     <div class="modal-footer">
       <button

@@ -18,6 +18,7 @@ export class ModalCostosUnidadComponent implements OnInit{
   public showTable:boolean =  false;
 
    public event: EventEmitter<any> = new EventEmitter();
+   public modalCerrado: EventEmitter<any> = new EventEmitter();
 
   constructor(
     public bsModalRef: BsModalRef,
@@ -34,6 +35,7 @@ export class ModalCostosUnidadComponent implements OnInit{
 
   public cerrarModal(): void {
     this.bsModalRef.hide();
+    setTimeout(() => { this.modalCerrado.emit() }, 150);
     
     }
 

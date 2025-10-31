@@ -1,7 +1,7 @@
 <div class="card">
-  <div class="card-header bg-warning-subtle text-center">
-    Marca la casilla de la fila con el proveedor seleccionado para generar la
-    orden de compra
+  <div class="card-header bg-primary text-center text-white">
+   <strong>  Marca la casilla de la fila con el proveedor seleccionado para generar la
+    orden de compra </strong> 
   </div>
   <div class="card-body">
     <div *ngIf ="cotProv?.length > 0" class="row">
@@ -163,7 +163,7 @@
       class="btn btn-sm btn-success"
       (click)="guardarPrecios()"
     >
-      Guardar Cotización
+     <i class="fas fa-file-upload "></i> Guardar Cotización
     </button>
   </div>
 </div>

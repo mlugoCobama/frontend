@@ -1,83 +1,124 @@
 <div class="card border">
-  <div class="card-header bg-primary-subtle text-center">
-    Seleccione los proveedores con los que se realizara la cotización.
-  </div>
+  <div class="card-header bg-primary d-flex justify-content-between">
+    <strong class="text text-white">Seleccione los proveedores con los que se realizará la cotización.</strong>
 
-  <div class="card-body"> 
+                <button 
+                  type="button" 
+                  class="btn btn-sm btn-light text-primary"
+                  (click)="agregarProveedor()"
+                  [disabled]="isDisabled">
+                  <i class="fas fa-plus"></i> Agregar Proveedor
+                </button>
+  </div>
+  <div class="card-body">
     <form class="row g-2" [formGroup]="formProveedoresCotizacion">
-    <div class="col-md-4">
-      <label for="proveedor1" class="form-label form-label-sm">Proveedor 1: *</label>
-      <select
-        class="form-select form-select-sm" formControlName="proveedor1" id="proveedor1" aria-label="Default select example">
-        <option value="" selected disabled> Selecciona una opción</option>
-        <option *ngFor="let item of proveedores" [value]="item?.id">
-          {{ item?.nombre }}
-        </option>
-      </select>
-      <div *ngIf="solicitudCotizacionFormControl.proveedor1.touched || submitted">
-        <div
-          class="text-danger form-text" *ngIf="solicitudCotizacionFormControl.proveedor1.errors?.['required']">
-          Selecciona un proveedor
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <label for="proveedor2" class="form-label form-label-sm"> Proveedor 2: *</label>
-      <select class="form-select form-select-sm" formControlName="proveedor2" id="proveedor2" aria-label="Default select example">
-        <option value="" selected disabled> Selecciona una opción</option>
-        <option *ngFor="let item of proveedores" [value]="item?.id">
-          {{ item?.nombre }}
-        </option>
-      </select>
-      <div *ngIf="solicitudCotizacionFormControl.proveedor2.touched || submitted">
-        <div class="text-danger form-text" *ngIf="solicitudCotizacionFormControl.proveedor2.errors?.['required']">
-          Selecciona un proveedor
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <label for="proveedor3" class="form-label form-label-sm">Proveedor 3: *</label>
-      <select class="form-select form-select-sm" formControlName="proveedor3" id="proveedor3" aria-label="Default select example">
-        <option value="" selected disabled> Selecciona una opción</option>
-        <option *ngFor="let item of proveedores" [value]="item?.id">
-          {{ item?.nombre }}
-        </option>
-      </select>
-      <div *ngIf="solicitudCotizacionFormControl.proveedor3.touched || submitted">
-        <div class="text-danger form-text" *ngIf="solicitudCotizacionFormControl.proveedor3.errors?.['required']">
-          Selecciona un proveedor
-        </div>
-      </div>
-    </div>
+      
+      <!-- FormArray de Proveedores -->
+      <div class="col-12">
+        <label class="form-label form-label-sm mb-2">
+          <strong>Proveedores: *</strong>
+        </label>
+        
+        <div class="row g-2" formArrayName="proveedores">
+          <div 
+            *ngFor="let proveedor of proveedoresArray.controls; let i = index" 
+            class="col-md-4">
+            
+            <div class="card border-secondary h-100">
+              <div class="card-body p-2">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <small class="text-muted fw-bold">Proveedor {{ i + 1 }}</small>
+                  <button 
+                    type="button" 
+                    class="btn btn-sm btn-outline-danger"
+                    (click)="eliminarProveedor(i)"
+                    [disabled]="proveedoresArray.length === 1 || isDisabled"
+                    title="Eliminar proveedor">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+                
+                <select 
+                  class="form-select form-select-sm" 
+                  [formControlName]="i"
+                  [id]="'proveedor' + i"
+                  aria-label="Seleccionar proveedor">
+                  <option value="" disabled>Selecciona una opción</option>
+                  <option *ngFor="let item of proveedores" [value]="item?.id">
+                    {{ item?.nombre }} - {{ item?.servicios }}
+                  </option>
+                </select>
+                
+                <div *ngIf="proveedoresArray.at(i).touched || submitted">
+                  <div 
+                    class="text-danger form-text small" 
+                    *ngIf="proveedoresArray.at(i).errors?.['required']">
+                    Requerido
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-    <div class="col-md-12">
-      <label for="consideraciones" class="form-label">Consideraciones: </label>
-      <textarea 
-       class="form-control" formControlName="consideraciones"
-        id="consideraciones" rows="3"></textarea>
-      <!-- <p [class]="caracteresRestantes === 0 ? 'text-danger form-text' : 'form-text'">
-        {{ longitudMaxima }}/{{ caracteresRestantes }}
-      </p> -->
-      <div *ngIf="solicitudCotizacionFormControl.consideraciones.touched || submitted">
-        <div class="text-danger form-text" *ngIf="solicitudCotizacionFormControl.consideraciones.errors?.['required']">
-          Consideraciones es requerido.
+          <!-- Botón para agregar proveedor (dentro del mismo row) -->
+          <!-- <div class="col-md-4">
+            <div class="card border-success h-100 bg-light">
+              <div class="card-body p-2 d-flex align-items-center justify-content-center">
+                <button 
+                  type="button" 
+                  class="btn btn-sm btn-primary"
+                  (click)="agregarProveedor()"
+                  [disabled]="isDisabled">
+                  <i class="fas fa-plus"></i> Agregar Proveedor
+                </button>
+              </div>
+            </div>
+          </div> -->
         </div>
       </div>
-    </div>
-    <div class="col-sm-2">
-      <button
-        class="btn btn-sm btn-primary" type="button" (click)="enviarSolicitudCotizacion()" [disabled]="isDisabled" >
-        <span>
-          {{ isDisabled ? 'Trabajando' : 'Solicitar Cotización' }}
-        </span>
-        <span *ngIf="isDisabled" class="spinner-grow spinner-grow-sm ms-2" role="status" aria-hidden="true"></span>
-        <span class="visually-hidden" *ngIf="isDisabled">
-          Cargando…
-        </span>
-      </button>
-    </div>
-  </form>
+
+      <!-- Campo de Consideraciones -->
+      <div class="col-md-12 mt-3">
+        <label for="consideraciones" class="form-label">Consideraciones:</label>
+        <textarea 
+          class="form-control" 
+          formControlName="consideraciones" 
+          id="consideraciones" 
+          rows="3">
+        </textarea>
+        
+        <div *ngIf="solicitudCotizacionFormControl.consideraciones.touched || submitted">
+          <div 
+            class="text-danger form-text" 
+            *ngIf="solicitudCotizacionFormControl.consideraciones.errors?.['required']">
+            Consideraciones es requerido.
+          </div>
+        </div>
+      </div>
+
+      <!-- Botón de envío -->
+      <div class="col-sm-12 d-flex justify-content-end mt-3">
+        <button 
+          class="btn btn-sm btn-primary" 
+          type="button" 
+          (click)="enviarSolicitudCotizacion()" 
+          [disabled]="isDisabled">
+          <span>
+           <i class="fas fa-paper-plane"></i> {{ isDisabled ? 'Trabajando' : 'Solicitar Cotización' }} 
+          </span>
+          <span 
+            *ngIf="isDisabled" 
+            class="spinner-grow spinner-grow-sm ms-2" 
+            role="status" 
+            aria-hidden="true">
+          </span>
+          <span class="visually-hidden" *ngIf="isDisabled">
+            Cargando…
+          </span>
+        </button>
+      </div>
+    </form>
   </div>
-
 </div>
 
+<!-- </div> -->

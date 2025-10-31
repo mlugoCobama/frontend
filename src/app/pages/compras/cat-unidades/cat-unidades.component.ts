@@ -36,6 +36,21 @@ export class CatUnidadesComponent implements OnInit{
     // this.getUsuarioActivo();
   }
 
+ public  estatusColores = [
+  { color: '#28a745', dsc: 'Activa' },
+  { color: '#df2727ff', dsc: 'Fuera de circulación' },
+  { color: '#ffc107', dsc: 'En taller' },
+  { color: '#17a2b8', dsc: 'Vendida' },
+  { color: '#343a40', dsc: 'No identificada' },
+  { color: '#e83e8c', dsc: 'Descompuesta' },
+  { color: '#007bff', dsc: 'En Fiscalía' },
+  { color: '#6610f2', dsc: 'En Depósito vehicular' },
+  { color: '#495057', dsc: 'Chatarra' },
+  { color: '#fd7e14', dsc: 'Vendida como chatarra' },
+  { color: '#dc3545', dsc: 'Baja' },
+  { color: '#adb5bd', dsc: 'Desconocido' }
+];
+
   public usuarioSolicita: any = {
       id: null,
       firstname: "",
@@ -65,6 +80,9 @@ export class CatUnidadesComponent implements OnInit{
   public modalRef?: BsModalRef;
 
   public intercompania:any = null;
+
+  public totalDatos:any;
+  public totalDatosFiltrados:any;
 
   ordenarPor(columna: keyof any){
     this.datosFiltrados = this.ordenador.ordenar(columna);
@@ -107,6 +125,9 @@ export class CatUnidadesComponent implements OnInit{
   
           this.getCatVehiculos(this.intercompania);
         });
+        this.modalRef.content.modalCerrado.subscribe(() => {
+          this.modalAbierto = false;
+        });
   }
 
   public openModalInfo() {
@@ -126,6 +147,9 @@ export class CatUnidadesComponent implements OnInit{
           this.isLoad = true;
   
           this.getCatVehiculos(this.intercompania);
+        });
+        this.modalRef.content.modalCerrado.subscribe(() => {
+          this.modalAbierto = false;
         });
   }
 
@@ -147,6 +171,9 @@ export class CatUnidadesComponent implements OnInit{
   
           this.getCatVehiculos(this.intercompania);
         });
+        this.modalRef.content.modalCerrado.subscribe(() => {
+          this.modalAbierto = false;
+        });
   }
 
   public openModalHistorialPolizas() {
@@ -166,6 +193,9 @@ export class CatUnidadesComponent implements OnInit{
           this.isLoad = true;
   
           this.getCatVehiculos(this.intercompania);
+        });
+        this.modalRef.content.modalCerrado.subscribe(() => {
+          this.modalAbierto = false;
         });
   }
 
@@ -189,10 +219,12 @@ export class CatUnidadesComponent implements OnInit{
           this.isLoad = true;
           this.getCatVehiculos(this.intercompania);
         });
+        this.modalRef.content.modalCerrado.subscribe(() => {
+          this.modalAbierto = false;
+        });
   }
 
-  public totalDatos:any;
-  public totalDatosFiltrados:any;
+
   contarDatos(){
 
     this.totalDatosFiltrados = this.datosFiltrados.length
@@ -333,7 +365,7 @@ export class CatUnidadesComponent implements OnInit{
     }
 
 
-      public openAutorizar() {
+    public openAutorizar() {
         Swal.fire({
           title: "¿Deseas autorizar esta unidad?",
           text: "Ingresa tus comentarios u observaciones acerca de esta unidad",
@@ -387,7 +419,7 @@ export class CatUnidadesComponent implements OnInit{
               );
           }
         });
-      }
+    }
 
     tienePermiso(permiso: string = null): boolean {
     if (!permiso) return true;

@@ -102,7 +102,7 @@ export class ProveedoresComponent implements OnInit {
       initialState: {
         proveedor: this.proveedor,
       },
-      class: "modal-lg",
+      class: "modal-md",
     };
     this.modalRef = this.modalService.show(
       ModalShowProveedorComponent,
@@ -159,6 +159,7 @@ export class ProveedoresComponent implements OnInit {
       "telefono",
       "localidad",
       "condiciones",
+      "rfc"
     ]);
   }
 

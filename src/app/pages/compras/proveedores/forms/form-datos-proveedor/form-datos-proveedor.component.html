@@ -1,0 +1,172 @@
+<div class="card border">
+    <div class="card-header">
+        <strong class="text-center"> Datos del Proveedor </strong>
+    </div>
+    <div class="card-body">
+        <form [formGroup]="formProveedores">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="nombre" class="form-label">Razón social: *</label>
+                    <input placeholder="Razón social" type="text" class="form-control form-control-sm"
+                        formControlName="nombre" id="nombre" name="nombre" aria-label="Nombre" />
+                    <div *ngIf="proveedoresFormControl.nombre.touched || submitted">
+                        <div class="text-danger form-text" *ngIf="proveedoresFormControl.nombre.errors?.['required']">
+                            Nombre es requerido.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="rfc" class="form-label">RFC: *</label>
+                    <input placeholder="RFC" type="text" class="form-control form-control-sm" formControlName="rfc"
+                        id="rfc" name="rfc" aria-label="rfc" />
+                    <div *ngIf="proveedoresFormControl.rfc.touched || submitted">
+                        <div class="text-danger form-text" *ngIf="proveedoresFormControl.rfc.errors?.['required']">
+                            RFC es requerido.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="contacto" class="form-label form-label-sm">Contacto: *</label>
+                    <input placeholder="Contacto principal" type="text" class="form-control form-control-sm"
+                        formControlName="contacto" id="contacto" name="contacto" aria-label="Contacto" />
+                    <div *ngIf="proveedoresFormControl.contacto.touched || submitted">
+                        <div class="text-danger form-text" *ngIf="proveedoresFormControl.contacto.errors?.['required']">
+                            Contacto es requerido.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="telefono" class="form-label">Teléfono: *</label>
+                    <input placeholder="Teléfono" type="text" class="form-control form-control-sm"
+                        formControlName="telefono" (input)="validateNumberInput($event)" id="telefono" name="telefono"
+                        aria-label="Teléfono" />
+                    <div *ngIf="
+                                proveedoresFormControl.telefono.touched ||
+                                proveedoresFormControl.telefono.dirty ||
+                                submitted
+                                ">
+                        <div class="text-danger form-text" *ngIf="proveedoresFormControl.telefono.errors?.['required']">
+                            Teléfono es requerido.
+                        </div>
+                        <div class="text-danger form-text" *ngIf="proveedoresFormControl.telefono.errors?.['pattern']">
+                              El teléfono solo puede contener números, espacios, paréntesis, +, -, o "ext".
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="correo" class="form-label">Correo de contacto: *</label>
+                    <input placeholder="Correo de contacto principal" type="email" class="form-control form-control-sm"
+                        formControlName="correo" id="correo" name="correo" aria-label="Teléfono" />
+                    <div *ngIf="proveedoresFormControl.correo.touched || submitted">
+                        <div class="text-danger form-text" *ngIf="proveedoresFormControl.correo?.errors?.['required']">
+                            Correo es requerido.
+                        </div>
+                        <div class="text-danger form-text" *ngIf="formProveedores.get('correo')?.hasError('invalidEmails')">
+                            Los siguientes correos no son válidos: {{ formProveedores.get('correo')?.getError('invalidEmails') }}
+                        </div>
+                        <!-- <div class="text-danger form-text" *ngIf="proveedoresFormControl.correo.errors?.['email']">
+                            Introduce un correo valido.
+                        </div> -->
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="localidad" class="form-label">Localidad: *</label>
+                    <select class="form-select form-select-sm" type="text" formControlName="localidad" id="localidad"
+                        name="localidad" aria-label="localidad">
+                        <option value="Selecciona uno" selected disabled>Selecciona una localidad</option>
+                        <option *ngFor="let item of estados" value="{{ item.clave }}">
+                            {{ item.nombre }}
+                        </option>
+                    </select>
+                    <div *ngIf="proveedoresFormControl.localidad.touched || submitted">
+                        <div class="text-danger form-text"
+                            *ngIf="proveedoresFormControl.localidad.errors?.['required']">
+                            Localidad es requerido.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="condiciones" class="form-label form-label-sm">Condiciones: *</label>
+                    <select class="form-select form-select-sm" formControlName="condiciones" id="condiciones"
+                        name="condiciones" aria-label="condiciones" #selectElement (change)="onChange(selectElement)">
+                        <option value="Selecciona uno" selected disabled>Selecciona uno</option>
+                        <option value="Contado">Contado</option>
+                        <option value="Credito">Credito</option>
+                    </select>
+                    <div *ngIf="
+                                proveedoresFormControl.condiciones.touched ||
+                                submitted ||
+                                proveedoresFormControl.condiciones.value === 'Selecciona uno'
+                                ">
+                        <div class="text-danger form-text"
+                            *ngIf="proveedoresFormControl.condiciones.errors?.['required']">
+                            Condiciones es requerido.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6" *ngIf="isCredit">
+                    <label for="dias_credito" class="form-label">Dias de crédito: *</label>
+                    <input type="number" value="0" min="1" class="form-control form-control-sm"
+                        formControlName="dias_credito" id="dias_credito" name="dias_credito"
+                        aria-label="dias_credito" />
+                    <div *ngIf="
+                                proveedoresFormControl.dias_credito.touched ||
+                                submitted ||
+                                proveedoresFormControl.dias_credito.dirty
+                                ">
+                        <div class="text-danger form-text"
+                            *ngIf="proveedoresFormControl.dias_credito.errors?.['pattern']">
+                            El campo solo acepta números.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="horario_atencion" class="form-label">Horario de Atención: *</label>
+                    <input placeholder="Horario de Atención" type="text" class="form-control form-control-sm"
+                        formControlName="horario_atencion" id="horario_atencion" name="horario_atencion"
+                        aria-label="horario_atencion" />
+                    <div *ngIf="proveedoresFormControl.horario_atencion.touched || submitted">
+                        <div class="text-danger form-text"
+                            *ngIf="proveedoresFormControl.horario_atencion.errors?.['required']">
+                            Horario de atención es requerido.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="tiempo_entrega" class="form-label">Tiempo de entrega: *</label>
+                    <input placeholder="Tiempo de entrega" type="text" class="form-control form-control-sm"
+                        formControlName="tiempo_entrega" id="tiempo_entrega" name="tiempo_entrega"
+                        aria-label="tiempo_entrega" />
+                    <div *ngIf="proveedoresFormControl.tiempo_entrega.touched || submitted">
+                        <div class="text-danger form-text"
+                            *ngIf="proveedoresFormControl.tiempo_entrega.errors?.['required']">
+                            Tiempo de entrega es requerido.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="servicios" class="form-label">Servicios: *</label>
+                    <input placeholder="Servicios" type="text" class="form-control form-control-sm"
+                        formControlName="servicios" id="servicios" name="servicios" aria-label="Servicios" />
+                    <div *ngIf="proveedoresFormControl.servicios.touched || submitted">
+                        <div class="text-danger form-text"
+                            *ngIf="proveedoresFormControl.servicios.errors?.['required']">
+                            Servicios es requerido.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="productos" class="form-label">Productos: *</label>
+                    <input placeholder="Productos separados por comas (Ej.: produto1, producto2...)"  type="text" class="form-control form-control-sm"
+                        formControlName="productos" id="productos" name="productos" aria-label="productos" />
+                    <div *ngIf="proveedoresFormControl.productos.touched || submitted">
+                        <div class="text-danger form-text"
+                            *ngIf="proveedoresFormControl.productos.errors?.['required']">
+                            Productos es requerido.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -98,7 +98,7 @@
             </div>
           </div>
           
-          <div *ngIf = "!isLoad && showTable">
+          <div *ngIf = "!isLoad && showTable && !isLoad && datosFiltrados.length > 0 ; else elseBlock">
             <div class="tab-page-content mt-3 table-responsive" style="overflow-y: scroll; height: 20rem;">
               <table  class="table table-hover table-sm table-bordered">
                 <thead class="table-light" [ngClass] = "modalAbierto === false ? 'sticky-top' : '' ">
@@ -155,7 +155,18 @@
             </div>
           </div>
           <p *ngIf = "!isLoad && showTable" class="text-muted pt-3"> Se muestran {{ totalDatosFiltrados }} de {{ totalDatos }} </p>
+        <div *ngIf = "!isLoad && showTable" class="d-flex justify-content-between  gap-3 mt-4">
+          <div class="d-flex align-items-center" *ngFor="let estado of estatusColores">
+            <span class="rounded-circle d-inline-block me-1"
+                  [style.background-color]="estado.color"
+                  style="width: 10px; height: 10px;"></span>
+            <span><small>{{ estado.dsc }}</small></span>
+          </div>
         </div>
+        </div>
+        
+
+
         <!--div.card-body-->
       </div>
     </div>
@@ -166,4 +177,10 @@
   <p>
     <strong>{{ usuarioSolicita.empresa }} </strong>
   </p>
+</ng-template>
+
+<ng-template #elseBlock>
+  <div *ngIf = "!isLoad && showTable" class="text-center text-muted p-3">
+    <Strong>Aun no hay vehículos que mostrar...</Strong>
+  </div>
 </ng-template>

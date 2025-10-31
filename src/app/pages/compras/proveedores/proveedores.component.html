@@ -58,19 +58,32 @@
               <thead  class="table-light" [ngClass] = "modalAbierto === false ? 'sticky-top' : '' ">
                 <tr>
                   <th (click)="ordenarPor('nombre')" style="cursor: pointer;" >Nombre <i [ngClass]="getIconoOrden('nombre')"></i></th>
+                  <th (click)="ordenarPor('rfc')" style="cursor: pointer;" >RFC <i [ngClass]="getIconoOrden('rfc')"></i></th>
                   <th (click)="ordenarPor('contacto')" style="cursor: pointer;" >Contacto <i [ngClass]="getIconoOrden('contacto')"></i></th>
                   <th (click)="ordenarPor('telefono')" style="cursor: pointer;" >Telefono <i [ngClass]="getIconoOrden('telefono')"></i></th>
                   <th (click)="ordenarPor('localidad')" style="cursor: pointer;" >Localidad <i [ngClass]="getIconoOrden('localidad')"></i></th>
                   <th (click)="ordenarPor('condiciones')" style="cursor: pointer;" >Condiciones <i [ngClass]="getIconoOrden('condiciones')"></i></th>
+                  <th class="text-center">Expediente</th>
                 </tr>
               </thead>
                 <tbody >
                     <tr *ngFor="let item of datosFiltrados" (click)="seleccionar(item, $event)">
                       <td >{{ item.nombre }} </td>
+                      <td >{{ item.rfc }} <i *ngIf="!item.expActualizado"class= "text-danger fas fa-info-circle " title="Es posible que la CSF este desactualizada" > </i> </td>
                       <td>{{ item.contacto }}</td>
                       <td>{{ item.telefono }}</td>
                       <td>{{ item.localidad }}</td>
                       <td>{{ item.condiciones }} {{ item.dias_credito }} Dias</td>
+                      <td class="text-center">
+                        <p class="m-0" [title]="item.documentos_faltantes_texto">
+                          <strong [ngClass]="item.estatus == 'Completo' ? 'text-success' : 'text-danger'"> {{ item.estatus }} </strong>
+                          <span *ngIf="+item.faltantes > 0" class="badge bg-danger text-ligth">
+                            <strong> {{ item.faltantes }} </strong>
+                          </span>
+                        </p>
+                      </td>
+
+
                     </tr>
                 </tbody>
             </table>
