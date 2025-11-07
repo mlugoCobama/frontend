@@ -115,6 +115,11 @@ class="row g-2"
   </div>
 </div>
 
+<app-btn-finalizar-compra
+*ngIf="solicitudCompra.estatus > enEsts.EnSurtido && ordenCompra && solicitudCompra.estatus > enEsts.Finalizada "
+[ordenCompra]="ordenCompra" 
+></app-btn-finalizar-compra>
+
 
 
 

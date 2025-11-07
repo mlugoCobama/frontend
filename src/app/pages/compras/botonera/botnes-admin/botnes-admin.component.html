@@ -20,5 +20,15 @@
         <i class="fas fa-ban"></i>
         Cancelar Solicitud
     </a>
+
+    <a
+    *ngIf="!solicitudSelecionada && tienePermiso('view btn descargar solicitudes')"
+    href="javascript:void(0);"
+    class="btn btn-outline-success btn-sm"
+    (click)="onDownload()"
+    >
+        <i class="fas fa-file-excel"></i>
+        Descargar Solicitudes
+    </a>
 </div>
   

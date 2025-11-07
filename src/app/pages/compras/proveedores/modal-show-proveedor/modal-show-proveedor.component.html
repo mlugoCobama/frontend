@@ -96,22 +96,22 @@
         </tr>
         <tr>
           <td>Opinion de cumplimiento</td>
-          <td *ngIf="archivos?.poder_notarial; else noArchivo">
+          <td *ngIf="archivos?.opinion_cumplimiento; else noArchivo">
             <a
               class="btn btn-sm btn-info"
               href="javascript:void(0)"
-              (click)="openFile(archivos?.poder_notarial)"
+              (click)="openFile(archivos?.opinion_cumplimiento)"
               >Abrir</a
             >
           </td>
         </tr>
         <tr>
           <td>Contrato</td>
-          <td *ngIf="archivos?.poder_notarial; else noArchivo">
+          <td *ngIf="archivos?.contrato; else noArchivo">
             <a
               class="btn btn-sm btn-info"
               href="javascript:void(0)"
-              (click)="openFile(archivos?.poder_notarial)"
+              (click)="openFile(archivos?.contrato)"
               >Abrir</a
             >
           </td>

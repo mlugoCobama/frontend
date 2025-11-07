@@ -174,10 +174,14 @@ export class OrdenesCompraService {
     );
   }
 
-    downloadXML(file:string) {
+  downloadXML(file:string) {
     return this.http.get(
       environment.apiUrl + `compras/download-xml/${file}`, {
       responseType: 'blob'
     });
+  }
+
+  public finalizarCompra(id: any){
+    return this.http.get(environment.apiUrl + `compras/marcar-como-finalizada/${id}`, {headers} );
   }
 }

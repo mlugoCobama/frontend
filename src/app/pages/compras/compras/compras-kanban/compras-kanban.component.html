@@ -24,11 +24,8 @@
 
       <!-- Contenedor Drag & Drop -->
       <div
-        cdkDropList
-        [cdkDropListData]="datosAgrupados[estado.nombre]"
         class="p-2"
         style="max-height: 58vh; overflow-y: auto;"
-        (cdkDropListDropped)="drop($event, estado)"
       >
         <div
           *ngIf="datosAgrupados[estado.nombre]?.length === 0"
@@ -62,7 +59,7 @@
             </p>
             <p class="text-muted mb-1 small text-truncate">
               <strong>Destino:</strong>
-              {{ item.c_c > 0 ? item.centro_costo : item.usuario_destino.substring(0, 42)+"..." }}
+              {{ item.c_c > 0 ? item.centro_costo : item.usuario_destino.substring(0, 42) }} {{ item.usuario_destino.length > 42 ? '...' : '' }}
             </p>
             <p class="mb-1 small">
               <strong> {{ item.fecha }} </strong>

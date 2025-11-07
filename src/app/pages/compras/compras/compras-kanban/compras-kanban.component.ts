@@ -55,14 +55,10 @@ export class ComprasKanbanComponent implements OnInit, OnChanges {
 
 
   constructor(
-    // private http: HttpClient
   ) {}
 
   ngOnInit(): void {
-    console.log(this.datos)
-    // this.cargarSolicitudes();
     this.agruparPorEstado();
-    
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -70,17 +66,6 @@ export class ComprasKanbanComponent implements OnInit, OnChanges {
       this.agruparPorEstado();
     }
   }
-
-  // cargarSolicitudes() {
-  //   this.http.get<any>('TU_API_AQUI').subscribe({
-  //     next: (res) => {
-  //       this.datos = res.data;
-  //       this.agruparPorEstado();
-  //       this.isLoad = false;
-  //     },
-  //     error: () => (this.isLoad = false)
-  //   });
-  // }
 
   agruparPorEstado() {
     this.datosAgrupados = {};
@@ -92,7 +77,6 @@ export class ComprasKanbanComponent implements OnInit, OnChanges {
     this.isLoad = false;
   }
 
-  // Tus funciones existentes
   openModalSeguimiento(item: any) {
     this.btnModalSeguimiento.emit(item);
   }

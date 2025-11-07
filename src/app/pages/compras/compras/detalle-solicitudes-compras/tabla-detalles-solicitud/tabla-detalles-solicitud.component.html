@@ -8,7 +8,7 @@
     <span class="visually-hidden">Loading...</span>
   </div>
 </div>
-<div class="pb-2" *ngIf="!isLoad">
+<div class="pb-2" *ngIf="!isLoad && formulario">
   <form [formGroup]="formulario">
     <div class="d-flex justify-content-end pb-2 gap-2">
       <button

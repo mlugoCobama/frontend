@@ -27,6 +27,7 @@ import { LocalStorageServiceService } from "src/app/core/services/local-storage-
 
 export class ComprasComponent implements OnInit {
   vistaKanban: boolean = false;
+  public tipoCompras = 1;
 
   public dtOptions: Config = {};
 

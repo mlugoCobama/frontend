@@ -62,6 +62,7 @@ import { ModalPreviewOrdenCompraComponent } from './compras/modal-preview-orden-
 import { PdfPreviewComponent } from './compras/modal-preview-orden-compra/pdf-preview/pdf-preview.component';
 import { TableDetallesSolicitudSegComponent } from './compras/modal-seguimiento/table-detalles-solicitud-seg/table-detalles-solicitud-seg.component';
 import { ComprasKanbanComponent } from './compras/compras-kanban/compras-kanban.component';
+import { BtnFinalizarCompraComponent } from './compras/detalle-solicitudes-compras/btn-finalizar-compra/btn-finalizar-compra.component';
 
 @NgModule({
   declarations: [
@@ -118,6 +119,7 @@ import { ComprasKanbanComponent } from './compras/compras-kanban/compras-kanban.
     PdfPreviewComponent,
     TableDetallesSolicitudSegComponent,
     ComprasKanbanComponent,
+    BtnFinalizarCompraComponent,
   ],
   imports: [
     CommonModule,

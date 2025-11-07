@@ -318,7 +318,6 @@ export class FormFilesFacturasComponent implements OnInit {
   checkMetodoPago() {
 
     this.metodoPago = this.factura.metodoPago?.metodoPago;
-    console.log('METODO PAGO:', this.metodoPago);
     // console.log(this.metodoPago)
     if (this.metodoPago === "PPD" || this.metodoPago === '' || this.metodoPago === undefined || this.metodoPago === null) {
       this.habilitado = true;

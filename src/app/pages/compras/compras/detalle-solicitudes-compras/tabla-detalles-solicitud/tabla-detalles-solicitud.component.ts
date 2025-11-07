@@ -58,13 +58,13 @@ export class TablaDetallesSolicitudComponent implements OnInit {
    */
   public getDetalles() {
     this.isLoad = true;
-    this.compras.getOne(this.solicitudCompra.id).subscribe(
+    this.compras.getOne(this.solicitudCompra?.id).subscribe(
       (response) => {
         if (response) {
           this.datos = response.data;
           this.cargarDatos();
           this.toggleModoLectura();
-          this.getProveedoresCotizacion()
+          this.getProveedoresCotizacion();
           this.isLoad = false;
         } else {
           this.alertasService.mostrarAlerta("Error!",response.message, "error", "danger" );
@@ -104,6 +104,7 @@ export class TablaDetallesSolicitudComponent implements OnInit {
       detalles: this.formBuilder.array([])
     });
   }
+  
   /** Atajo para acceder al FormArray */
   get detalles(): FormArray {
     return this.formulario.get('detalles') as FormArray;
@@ -251,7 +252,7 @@ toggleModoLectura() {
    * Recupera proveedores-cotizacion
    */
   public getProveedoresCotizacion() {
-    this.cotizacionesService.getOne(this.solicitudCompra.id).subscribe(
+    this.cotizacionesService.getOne(this.solicitudCompra?.id).subscribe(
       (response) => {
         if (response) {
           this.cotProv = response.data;

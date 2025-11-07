@@ -71,7 +71,7 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
               (response) => {
                 if (response.status === "success") {
                   
-                  this.alertasService.mostrarAlerta("Guardado", "Unidad registrada correctamente", "success", "success");
+                  this.alertasService.mostrarAlerta("Guardado", "Unidad registrada correctamente, en cuanto auditoria revise y autorice la unidad la veras reflejada en tu parque vehicular", "success", "success");
                   this.event.emit(true);
                   this.cerrarModal();
                   this.formDatosTanque.resetearFormulario();

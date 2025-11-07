@@ -29,7 +29,6 @@ export class PanelEntregasComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.ordenCompra)
     this.buildForm();
     this.cargarAcuses();
   }

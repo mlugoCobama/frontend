@@ -19,8 +19,9 @@ import Swal from "sweetalert2";
   styleUrl: './compras-macro.component.css'
 })
 export class ComprasMacroComponent implements OnInit{
-  vistaKanban: boolean = false;
-  private readonly STORAGE_KEY_VISTA = 'vistaComprasKanban';
+    public tipoCompras = 2;
+    vistaKanban: boolean = false;
+    private readonly STORAGE_KEY_VISTA = 'vistaComprasKanban';
     public modalRef?: BsModalRef;
 
     public isLoad: boolean = true;
@@ -234,10 +235,11 @@ export class ComprasMacroComponent implements OnInit{
                 this.regresar();
                 this.alertasService.mostrarAlerta("Cancelada!", "La solicitud ha sido cancelada.", "success","success");
               } else {
-                this.alertasService.mostrarAlerta("Error!", "Ocurrió un error inesperado", "error","error");
+                this.alertasService.mostrarAlerta("Error!", "Ocurrió un error inesperado", "error","danger");
               }
             },
             (error) => {
+              this.alertasService.mostrarAlerta("Error!", `Error fetching data:  ${error} `, "error","danger");
               console.error("Error fetching data:", error);
             }
           );
