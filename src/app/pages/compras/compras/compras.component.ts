@@ -347,34 +347,26 @@ export class ComprasComponent implements OnInit {
   }
 
   //Botón que descarga la orden de compra
-  btnDescargarOC() {
-    this.ordenesComprasService
-      .pdfOrdenCompra(this.solicitudCompra.id)
-      .subscribe(
-        (response) => {
-          if (response) {
-            const blob = new Blob([response], { type: "application/pdf" });
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = "orden_compra.pdf";
-            link.click();
-            window.URL.revokeObjectURL(url);
-            // this.alertasService.mostrarAlerta("Descargando", "Revisa el apartado de descargas en tu explorar de archivos", "success","success");
-          } else {
-            this.alertasService.mostrarAlerta(
-              "Error!",
-              "La orden de compra no existe",
-              "error",
-              "danger"
-            );
-          }
-        },
-        (error) => {
-          this.alertasService.mostrarAlerta("Error!", error, "error", "danger");
-        }
-      );
-  }
+ btnDescargarOC() {
+  this.ordenesComprasService.pdfOrdenCompra(this.solicitudCompra.id).subscribe(
+    (response) => {
+      const blob = new Blob([response.body!], { type: "application/pdf" });
+      const fileName = response.headers.get('X-Filename') || 'orden_compra.pdf';
+
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName;
+      link.click();
+      window.URL.revokeObjectURL(url);
+    },
+    (error) => {
+      this.alertasService.mostrarAlerta("Error!", error, "error", "danger");
+    }
+  );
+}
+
+
 
   updateStatus(status: any) {
     this.status = status;

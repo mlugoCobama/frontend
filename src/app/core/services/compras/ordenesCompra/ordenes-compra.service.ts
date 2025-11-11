@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 
@@ -94,14 +94,14 @@ export class OrdenesCompraService {
    * @param id solicitud_compra_id
    * @returns pdf en binario
    */
-  public pdfOrdenCompra(id: number): Observable<Blob> {
-    return this.http.get(
-      environment.apiUrl + `compras/consulta-datos-pdf/${id}`,
-      { 
-        responseType: "blob",
-       }
-    );
-  }
+  pdfOrdenCompra(id: number): Observable<HttpResponse<Blob>> {
+  return this.http.get(environment.apiUrl + `compras/consulta-datos-pdf/${id}`, {
+    responseType: "blob",
+    observe: "response" 
+  });
+}
+
+
 
    /**
    * Obtiene la URL para previsualizar el PDF en un iframe.
@@ -111,6 +111,7 @@ export class OrdenesCompraService {
       environment.apiUrl + `compras/preview-orden-compra-pdf/${ordenId}`,
       { 
         responseType: "blob",
+        observe: "response" 
        }
     );
   }

@@ -51,6 +51,19 @@ export class CatUnidadesComponent implements OnInit{
   { color: '#adb5bd', dsc: 'Desconocido' }
 ];
 
+categorias = [
+    {"id": 1, "descripcion":"Propia" , "abreviatura": "PPA" },
+    {"id": 2, "descripcion":"Propia prestada a comisionista", "abreviatura": "PPC" },
+    {"id": 3, "descripcion":"Comisionista", "abreviatura": "CTA" },
+    {"id": 4, "descripcion":"No especificado", "abreviatura": "NES" },
+  ];
+
+  categoriasGPS = [
+    {"id": 1, "descripcion": "SI, REPORTANDO" , "estilo": "fas fa-satellite-dish text-success" },
+    {"id": 2, "descripcion": "SI, NO REPORTA", "estilo": "fas fa-exclamation-triangle text-warning" },
+    {"id": 3,  "descripcion": "NO TIENE", "estilo": "fas fa-ban text-danger" },
+  ];
+
   public usuarioSolicita: any = {
       id: null,
       firstname: "",

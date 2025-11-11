@@ -101,21 +101,23 @@
           <div *ngIf = "!isLoad && showTable && !isLoad && datosFiltrados.length > 0 ; else elseBlock">
             <div class="tab-page-content mt-3 table-responsive" style="overflow-y: scroll; height: 20rem;">
               <table  class="table table-hover table-sm table-bordered">
-                <thead class="table-light" [ngClass] = "modalAbierto === false ? 'sticky-top' : '' ">
+                <thead class="table-light border" [ngClass] = "modalAbierto === false ? 'sticky-top' : '' ">
                   <tr class="text-center">
-                    <th (click)="ordenarPor('entidad')">Empresa<i [ngClass]="getIconoOrden('entidad')"></i></th>
-                    <th (click)="ordenarPor('eco')">Nro. Eco.<i [ngClass]="getIconoOrden('eco')"></i></th>
-                    <th (click)="ordenarPor('marca_vehiculo')">Marca Vehiculo<i [ngClass]="getIconoOrden('marca_vehiculo')"></i></th>
-                    <th (click)="ordenarPor('submarca')">Sub Marca <i [ngClass]="getIconoOrden('submarca')"></i></th>
-                    <th (click)="ordenarPor('modelo')">Modelo <i [ngClass]="getIconoOrden('modelo')"></i></th>
-                    <th (click)="ordenarPor('no_serie')">No. Serie <i [ngClass]="getIconoOrden('no_serie')"></i></th>
-                    <th (click)="ordenarPor('placas')">Placas <i [ngClass]="getIconoOrden('placas')"></i></th>
-                    <th (click)="ordenarPor('marca_tanque')">Marca Tanque <i [ngClass]="getIconoOrden('marca_tanque')"></i></th>
-                    <th (click)="ordenarPor('anio_fabricacion')">Fabricación <i [ngClass]="getIconoOrden('anio_fabricacion')"></i></th>
-                    <th (click)="ordenarPor('capacidad')">Capacidad <i [ngClass]="getIconoOrden('capacidad')"></i></th>
-                    <th (click)="ordenarPor('tipo_medidor')">Serie <i [ngClass]="getIconoOrden('tipo_medidor')"></i></th>
-                    <th (click)="ordenarPor('serie')">Tipo Medidor <i [ngClass]="getIconoOrden('serie')"></i></th>
-                    <th (click)="ordenarPor('estatus')">Estatus <i [ngClass]="getIconoOrden('estatus')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('entidad')">Empresa<i [ngClass]="getIconoOrden('entidad')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('eco')">Nro. Eco.<i [ngClass]="getIconoOrden('eco')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('marca_vehiculo')">Marca Vehiculo<i [ngClass]="getIconoOrden('marca_vehiculo')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('submarca')">Sub Marca <i [ngClass]="getIconoOrden('submarca')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('modelo')">Modelo <i [ngClass]="getIconoOrden('modelo')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('no_serie')">No. Serie <i [ngClass]="getIconoOrden('no_serie')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('placas')">Placas <i [ngClass]="getIconoOrden('placas')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('marca_tanque')">Marca Tanque <i [ngClass]="getIconoOrden('marca_tanque')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('anio_fabricacion')">Fabricación <i [ngClass]="getIconoOrden('anio_fabricacion')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('capacidad')">Capacidad <i [ngClass]="getIconoOrden('capacidad')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('tipo_medidor')">Serie <i [ngClass]="getIconoOrden('tipo_medidor')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('serie')">Tipo Medidor <i [ngClass]="getIconoOrden('serie')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('categoria')" class="text-center">Cat.<i [ngClass]="getIconoOrden('categoria')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('gps')" class="text-center">GPS.<i [ngClass]="getIconoOrden('gps')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('estatus')">Estatus <i [ngClass]="getIconoOrden('estatus')"></i></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -135,6 +137,15 @@
                     <td>{{item.capacidad ?? '0'}} L</td>
                     <td>{{item.serie ?? 'No aplica'}}</td>
                     <td>{{item.tipo_medidor ?? 'No aplica'}}</td>
+                    
+                    <td class="text-center" [ngStyle]="{'color': (+item.categoria === 1 || +item.categoria === 2) ? '#012e46' : 'inherit'}" >
+                      <strong [title]="categorias[+(item?.categoria ?? '4') - 1].descripcion">
+                        {{ categorias[+(item?.categoria ?? '4') - 1].abreviatura }}
+                      </strong>
+                    </td>
+                    <td class="text-center">
+                      <i [title]="categoriasGPS[+(item?.gps ?? 3) - 1].descripcion" [ngClass]="categoriasGPS[+(item?.gps ?? 3) - 1].estilo"></i>
+                    </td>
                     <td class="text-center">
                       <span
                           [ngStyle]="{
@@ -147,8 +158,6 @@
                         [title]="item.status_dsc"
                         ></span>
                     </td>
-
-
                   </tr>
                 </tbody>
               </table> 

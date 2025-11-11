@@ -27,6 +27,14 @@
           
         <th *ngFor="let prov of cotProv" class="text-center">
           <strong> {{ prov.proveedores_id[0].nombre }} </strong>
+          <button
+              class="btn btn-warnign btn-sm"
+              title="Editar precios"
+              (click)="habilitarEdicionProveedor(prov.proveedores_id[0].id)"
+              *ngIf= "solicitudCompra.estatus === enEsts.EnCotizacion && tienePermiso('view btn save precios') && !mostrarObs"
+            >
+              <i class="fas fa-edit"></i>
+            </button>
         </th>
       </tr>
     </thead>

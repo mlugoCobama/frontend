@@ -137,6 +137,34 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-6">
+            <label for="categoria" class="form-label">Categoría: *</label>
+            <select class="form-select form-select-sm" formControlName="categoria" id="categoria" name="categoria"
+                aria-label="categoria">
+                <option value="">Selecciona uno</option>
+                <option *ngFor=" let item of categorias" [value]="item.id">{{item.abreviatura}} - {{item.descripcion}}</option>
+            </select>
+            <div *ngIf="datosVehiculoFormControl.categoria.touched || submitted">
+                <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.categoria.errors?.['required']">
+                    Debes de seleccionar una categoria
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <label for="gps" class="form-label">GPS: *</label>
+            <select class="form-select form-select-sm" formControlName="gps" id="gps" name="gps"
+                aria-label="gps">
+                <option value="">Selecciona uno</option>
+                <option *ngFor=" let item of categoriasGPS" [value]="item.id">{{item.descripcion}}</option>
+            </select>
+            <div *ngIf="datosVehiculoFormControl.gps.touched || submitted">
+                <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.gps.errors?.['required']">
+                    Debes de seleccionar un estado de GPS
+                </div>
+            </div>
+        </div>
+
         <div class="col-md-12">
             <label for="observacion" class="form-label">Agregar observaciones: </label>
             <textarea class="form-control" 

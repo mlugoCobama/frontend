@@ -29,7 +29,20 @@ export class FormDatosVehiculoComponent implements OnInit{
     {"numero": 8, "descripcion": "Chatarra"},
     {"numero": 9, "descripcion": "Vendida como chatarra"},
     {"numero": 10, "descripcion": "Baja"},
-  ]
+  ];
+
+  categorias = [
+    {"id": 1 , "descripcion": "Propia" , "abreviatura": "PPA" },
+    {"id": 2 , "descripcion": "Propia prestada a comisionista", "abreviatura": "PPC" },
+    {"id": 3, "descripcion": "Comisionista", "abreviatura": "CTA" },
+    {"id": 4, "descripcion": "No especificado", "abreviatura": "NES" },
+  ];
+
+  categoriasGPS = [
+    {"id": 1, "descripcion": "SI, REPORTANDO" , "class": "fa-solid fa-satellite-dish text-success" },
+    {"id": 2, "descripcion": "SI, NO REPORTA", "class": "fa-solid fa-triangle-exclamation text-warning" },
+    {"id": 3,  "descripcion": "NO TIENE", "class": "fa-solid fa-ban text-danger" },
+  ];
 
   @Input() datos: any = [];
   public formDatosVehiculo: FormGroup;
@@ -66,6 +79,8 @@ export class FormDatosVehiculoComponent implements OnInit{
         tipo_vehiculo: new FormControl("", [Validators.required]),
         tipo_combustible: new FormControl("", [Validators.required]),
         estatus: new FormControl("", [Validators.required]),
+        categoria: new FormControl("", [Validators.required]),
+        gps: new FormControl("", [Validators.required]),
       });
 
     this.valorOriginalEstatus = this.formDatosVehiculo.get('estatus')?.value || '' || this.datos?.estatus;
@@ -105,6 +120,8 @@ export class FormDatosVehiculoComponent implements OnInit{
       tipo_vehiculo: this.datos?.tipo_vehiculo,
       tipo_combustible: this.datos?.tipo_combustible,
       estatus: this.datos?.estatus,
+      categoria: this.datos?.categoria,
+      gps: this.datos?.gps,
     });
   }
 

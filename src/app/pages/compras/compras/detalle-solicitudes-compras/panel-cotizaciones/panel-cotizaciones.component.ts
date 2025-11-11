@@ -130,8 +130,6 @@ export class PanelCotizacionesComponent implements OnInit {
         consideraciones: this.formProveedoresCotizacion.value.consideraciones,
         solicitudes_compra_id: idSolicitud,
       };
-
-      console.log(data);
       
       this.comprasService.sendMail(data).subscribe(
         (response) => {

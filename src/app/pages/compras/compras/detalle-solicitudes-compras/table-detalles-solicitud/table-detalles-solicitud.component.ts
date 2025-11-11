@@ -535,5 +535,19 @@ cambioCheck(item, event) {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
   }
+
+  public habilitarEdicionProveedor(proveedorId: number) {
+  this.detalles.forEach(detalle => {
+    detalle["disabled_" + proveedorId] = false;
+  });
+
+  this.alertasService.mostrarAlerta(
+    "Modo edición activado",
+    "Ya puedes modificar los precios guardados",
+    "info",
+    "info"
+  );
+}
+
 }
 
