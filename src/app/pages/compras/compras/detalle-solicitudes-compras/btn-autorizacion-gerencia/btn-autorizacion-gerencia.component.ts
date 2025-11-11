@@ -293,4 +293,32 @@ export class BtnAutorizacionGerenciaComponent {
       }
     });
   }
+
+  validarEmpresaUsuario() {
+    const tipoUsuarioStr = localStorage.getItem("currentUser");
+    if (!tipoUsuarioStr) return false;
+
+    const tipoUsuario = JSON.parse(tipoUsuarioStr);
+    const empresasUsuario = tipoUsuario.usuarioActivo[0]?.empresas || [];
+    const intercompaniaUsuario = tipoUsuario.usuarioActivo[0]?.intercompania;
+    const idUsuario = tipoUsuario.usuarioActivo[0]?.id;
+
+    const intercompaniaCompra = Number(this.solicitudCompra.intercompania);
+    const estaDentro = empresasUsuario.includes(intercompaniaCompra);
+    
+    if (empresasUsuario.length > 0 && estaDentro) { 
+      return true;
+    }
+
+    if (empresasUsuario.length === 0 && intercompaniaUsuario == intercompaniaCompra ) {
+      return true;
+    }
+
+    if (empresasUsuario.length === 0 && intercompaniaUsuario === 333 && idUsuario === 2395 ) {
+      return true;
+    }
+
+    return false;
+  }
+
 }
