@@ -1,10 +1,10 @@
 <div class="card border">
   <div class=" card-header bg-primary text-white text-center">
-    <p *ngIf = "mostrarBtnSolicitud()" class="m-0"> <strong>  Da click en el siguiente botón si deseas solicitar el surtido de tu orden de compra  </strong> </p>
+    <p *ngIf = "mostrarBtnSolicitud() && tienePermiso('view btn save precios')" class="m-0"> <strong>  Da click en el siguiente botón si deseas solicitar el surtido de tu orden de compra  </strong> </p>
     <p *ngIf = "!mostrarBtnSolicitud()" class="m-0"> <strong> Carga en el siguiente formulario tus acuses o comprobantes cuando el proveedor te entregue lo solicitado </strong></p>
   </div>
   <div class="card-body">
-  <div *ngIf="mostrarBtnSolicitud()" class="d-flex justify-content-evenly gap-2 col-9 mx-auto">
+  <div *ngIf="mostrarBtnSolicitud() && tienePermiso('view btn save precios')"class="d-flex justify-content-evenly gap-2 col-9 mx-auto">
     <button (click)="solicitarSurtido()" class="btn btn-info col-md-4" type="button">
       <strong> Solicitar al proveedor que surta la orden de compra</strong>
     </button>

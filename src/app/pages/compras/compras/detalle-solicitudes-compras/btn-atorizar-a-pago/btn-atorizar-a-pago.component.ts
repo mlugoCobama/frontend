@@ -2,6 +2,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import Swal from 'sweetalert2';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import { OrdenesCompraService } from 'src/app/core/services/compras/ordenesCompra/ordenes-compra.service';
+import { PermisosService } from "src/app/core/services/permisos.service";
+
 @Component({
   selector: 'app-btn-atorizar-a-pago',
   templateUrl: './btn-atorizar-a-pago.component.html',
@@ -14,7 +16,8 @@ export class BtnAtorizarAPagoComponent {
 
   constructor(
     private alertasService: SwalComprsServiceService,
-    private ordenesComprasService : OrdenesCompraService
+    private ordenesComprasService : OrdenesCompraService,
+    private permisosService : PermisosService
   ){}
 
     public solicitarPago() {
@@ -91,4 +94,9 @@ export class BtnAtorizarAPagoComponent {
         }
       });
     }
+    
+    tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
+  }
 }

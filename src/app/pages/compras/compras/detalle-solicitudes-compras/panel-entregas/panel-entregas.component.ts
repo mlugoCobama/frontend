@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ProveedoresService } from 'src/app/core/services/compras/proveedores/proveedores.service';
-
+import { PermisosService } from "src/app/core/services/permisos.service";
 
 import { AcuseRecibidoService } from 'src/app/core/services/compras/acuse-recibido.service';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
@@ -25,7 +25,8 @@ export class PanelEntregasComponent implements OnInit {
     private fb: FormBuilder,
     private acuseRecibido: AcuseRecibidoService,
     private alertasService: SwalComprsServiceService,
-    private proveedoresService: ProveedoresService
+    private proveedoresService: ProveedoresService,
+    private permisosService : PermisosService
   ) {}
 
   ngOnInit(): void {
@@ -177,5 +178,10 @@ export class PanelEntregasComponent implements OnInit {
    */
   verArchivos(prov: any) {
     this.proveedoresService.abrirArchivo(prov);
+  }
+
+  tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
   }
 }

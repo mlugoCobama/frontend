@@ -1,5 +1,5 @@
 <!-- botones aceptar o rechazar orden -->
- <div class="card border">
+ <div class="card border" *ngIf = "isLoad && tienePermiso('view panel auto orden compra') ">
     <div class="card-header bg-primary text-white text-center">
       <strong> Da click en el botón "Aceptar" para marcar la solicitud como aprobada o "Rechazada" para marcarla como rechazada. </strong>
     </div>
