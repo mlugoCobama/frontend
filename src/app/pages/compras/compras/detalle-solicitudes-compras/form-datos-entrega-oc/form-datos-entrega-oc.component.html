@@ -1,0 +1,62 @@
+<div class="row g-2" *ngIf="mostrarObs">
+    <form [formGroup]="formOrdenCompra" *ngIf ="empresas.length > 0">
+        <div class="row">
+            <div class="col-md-6">
+            <label for="entrega" class="form-label">Se entrega en: *</label>
+            <select class="form-select form-select-sm" aria-label="Default select example"
+                formControlName="entrega">
+                <option selected disabled value="">Selecciona uno</option>
+                <option *ngIf="isLoading" value="" [disabled]="isLoading">
+                    Cargando opciones espera...
+                </option>
+                <option *ngFor="let item of empresas" [value]="item?.intercompania">
+                    {{ item?.name }}
+                </option>
+            </select>
+            <div *ngIf="
+              ordenCompraFormControl?.entrega?.touched ||
+              submitted ||
+              ordenCompraFormControl?.entrega?.value === 'Selecciona uno'
+            ">
+                <div class="text-danger form-text" *ngIf="ordenCompraFormControl?.entrega?.errors?.['required']">
+                    Debes de seleccionar una empresa.
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label for="modoPago" class="form-label">Modo de pago: *</label>
+            <select class="form-select form-select-sm" aria-label="Default select example" formControlName="modoPago">
+                <option selected disabled value="">Selecciona uno</option>
+                <option *ngIf="isLoading" value="" [disabled]="isLoading">
+                    Cargando opciones espera...
+                </option>
+                <option *ngFor="let item of modosPago" [value]="item?.id">
+                    {{ item?.descripcion }}
+                </option>
+            </select>
+            <div *ngIf="
+              ordenCompraFormControl?.modoPago?.touched ||
+              submitted ||
+              ordenCompraFormControl?.modoPago?.value === 'Selecciona uno'
+            ">
+                <div class="text-danger form-text" *ngIf="ordenCompraFormControl?.modoPago?.errors?.['required']">
+                    Debes de seleccionar un modo de pago.
+                </div>
+            </div>
+
+        </div>
+        </div>
+        <div class="col-md-12">
+            <label for="observaciones" class="form-label">Observaciones: </label>
+            <textarea class="form-control" formControlName="observaciones" id="observaciones" rows="3"></textarea>
+
+            <div *ngIf="ordenCompraFormControl.observaciones.touched || submitted">
+                <div class="text-danger form-text" *ngIf="ordenCompraFormControl?.observaciones?.errors?.['required']">
+                    Observaciones es requerido.
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+

@@ -18,7 +18,7 @@
     <!--Tabla documentos cotizaciones-->
     <table
       *ngIf="isLoad"
-      class="table  table-hover table-sm table-bordered table-responsive"
+      class="table  table-hover table-sm table-bordered table-responsive m-0"
     >
       <thead class="table-light" >
         <tr class="text-center">
@@ -37,7 +37,7 @@
                 *ngIf="prov?.ruta"
                 (change)="manejoCheck(prov)"
                 name="radioProveedor"
-                class="form-check-input form-radio-success "
+                class="form-check-input border border-dark"
                 type="radio"
               />
             </div>
@@ -82,63 +82,14 @@
       </tbody>
     </table>
     <!-- form Observaciones -->
-    <form class="row g-2" [formGroup]="formOrdenCompra">
-      <div class="col-12" *ngIf="mostrarObs">
-        <div class="col-md-12">
-          <label for="entrega" class="form-label">Se entrega en: *</label>
-          <select
-            (change)="setValuesForm()"
-            class="form-select form-select-sm"
-            aria-label="Default select example"
-            formControlName="entrega"
-          >
-            <option selected disabled value="">Selecciona uno</option>
-            <option *ngIf="isLoading" value="" [disabled]="isLoading">
-              Cargando opciones espera...
-            </option>
-            <option *ngFor="let item of empresas" [value]="item?.intercompania">
-              {{ item?.name }}
-            </option>
-          </select>
-          <div
-            *ngIf="
-              ordenCompraFormControl.entrega.touched ||
-              submitted ||
-              ordenCompraFormControl.entrega.value === 'Selecciona uno'
-            "
-          >
-            <div
-              class="text-danger form-text"
-              *ngIf="ordenCompraFormControl.entrega.errors?.['required']"
-            >
-              Debes de seleccionar una empresa.
-            </div>
-          </div>
-
-          <label for="observaciones" class="form-label">Observaciones: </label>
-          <textarea
-            
-            class="form-control"
-            formControlName="observaciones"
-            id="observaciones"
-            rows="3"
-          ></textarea>
-          
-          <div
-            *ngIf="ordenCompraFormControl.observaciones.touched || submitted"
-          >
-            <div
-              class="text-danger form-text"
-              *ngIf="ordenCompraFormControl.observaciones.errors?.['required']"
-            >
-              Observaciones es requerido.
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
+    <app-form-datos-entrega-oc
+    #formDatosOC
+    [solicitudCompra] = "solicitudCompra"
+    [mostrarObs] = "mostrarObs"
+    [tipo] = "tipo"
+    ></app-form-datos-entrega-oc>
     <!-- form observaciones orden de compra -->
-    <div *ngIf="solicitudCompra?.estatus >= enEsts.OrdenCompra" class="row">
+    <div *ngIf="solicitudCompra?.estatus >= enEsts.OrdenCompra" class="row pt-2">
       <div *ngIf="ordenCompra" class="alert alert-primary text-center" role="alert">
           ORDEN DE COMPRA:
           <strong>{{ ordenCompra?.folio_oc }}</strong>
@@ -156,7 +107,7 @@
     </div>
   </div>
 
-  <div class="col-2 d-flex align-items-start">
+  <div class="col-2 d-flex align-items-end justify-content-center">
     <button
       *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && !mostrarObs && tienePermiso('view btn save precios')"
       type="submit"
@@ -164,6 +115,15 @@
       (click)="guardarPrecios()"
     >
      <i class="fas fa-file-upload "></i> Guardar Cotización
+    </button>
+
+    <button 
+      *ngIf = "!ordenCompra && proveedorSeleccionado && tienePermiso('view btn generar orden')"
+      type="submit"
+      class="btn btn-sm btn-primary"
+      (click)="generarOrden()"
+    >
+     <i class="fas fa-file-import"></i> Generar orden de compra
     </button>
   </div>
 </div>

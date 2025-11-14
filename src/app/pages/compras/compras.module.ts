@@ -63,6 +63,11 @@ import { PdfPreviewComponent } from './compras/modal-preview-orden-compra/pdf-pr
 import { TableDetallesSolicitudSegComponent } from './compras/modal-seguimiento/table-detalles-solicitud-seg/table-detalles-solicitud-seg.component';
 import { ComprasKanbanComponent } from './compras/compras-kanban/compras-kanban.component';
 import { BtnFinalizarCompraComponent } from './compras/detalle-solicitudes-compras/btn-finalizar-compra/btn-finalizar-compra.component';
+import { FormDatosEntregaOcComponent } from './compras/detalle-solicitudes-compras/form-datos-entrega-oc/form-datos-entrega-oc.component';
+import { ReportesComprasComponent } from './reportes-compras/reportes-compras.component';
+import { ReporteGastoMensualComponent } from './reportes-compras/reporte-gasto-mensual/reporte-gasto-mensual.component';
+import { FormFiltroMensualComponent } from './reportes-compras/widgets/form-filtro-mensual/form-filtro-mensual.component';
+import { TableTotalConcentradoMensualComponent } from './reportes-compras/widgets/table-total-concentrado-mensual/table-total-concentrado-mensual.component';
 
 @NgModule({
   declarations: [
@@ -120,6 +125,11 @@ import { BtnFinalizarCompraComponent } from './compras/detalle-solicitudes-compr
     TableDetallesSolicitudSegComponent,
     ComprasKanbanComponent,
     BtnFinalizarCompraComponent,
+    FormDatosEntregaOcComponent,
+    ReportesComprasComponent,
+    ReporteGastoMensualComponent,
+    FormFiltroMensualComponent,
+    TableTotalConcentradoMensualComponent,
   ],
   imports: [
     CommonModule,

@@ -1,4 +1,6 @@
 import { Component, Input, Output, OnInit, EventEmitter, OnDestroy } from "@angular/core";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Subscription } from "rxjs";
 
 import { ComprasService } from "src/app/core/services/compras/compras.service";
 import { CotizacionesService } from "src/app/core/services/compras/cotizaciones/cotizaciones.service";
@@ -8,12 +10,6 @@ import { DetallesSolicitudService } from "src/app/core/services/compras/detalles
 import { EstadoSolicitud } from "../../estado-solicitud.enum";
 import { CatUnidadesMedidasService } from "src/app/core/services/compras/unidadesMedidas/cat-unidades-medidas.service";
 import { PermisosService } from "src/app/core/services/permisos.service";
-import Swal from 'sweetalert2';
-
-import { Subscription } from "rxjs";
-// import {FormGroup} from "@angular/forms";
-
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 @Component({
   selector: "app-table-detalles-solicitud",
@@ -21,6 +17,9 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
   styleUrl: "./table-detalles-solicitud.component.css",
 })
 export class TableDetallesSolicitudComponent implements OnInit {
+
+  public enEsts = EstadoSolicitud;
+
   @Input() mostrarTotal: boolean = false;
   @Input() solicitudCompra: any;
   @Input() ordenCompra: any;
@@ -34,26 +33,21 @@ export class TableDetallesSolicitudComponent implements OnInit {
   @Output() setDataCotizacion = new EventEmitter<any>();
 
   public formOrdenCompra: FormGroup;
-
-  public formDetallesSolicitud: FormGroup;
+  // public formDetallesSolicitud: FormGroup;
 
   public isLoad: boolean = true;
+  public mostrarObs: boolean = false;
+  
   public unidades:any  = [];
-
   public cotProv: any[] = [];
   public totals: any = {};
   public detalles: any;
 
   public cotizacion: any;
-
   public totalMasBajo: number | null = null;
-
   public proveedorSelec: any;
-  public mostrarObs: boolean = false;
-
+  
   private generarOrdenSubscripcion: Subscription;
-
-  public enEsts = EstadoSolicitud;
 
   constructor(
     public compras: ComprasService,
@@ -65,34 +59,14 @@ export class TableDetallesSolicitudComponent implements OnInit {
     public catUnidadesMedidasService: CatUnidadesMedidasService, 
     public permisosService: PermisosService
   ) {
-    this.formDetallesSolicitud = this.formBuilder.group({});
+    // this.formDetallesSolicitud = this.formBuilder.group({});
   }
 
   ngOnInit(): void {
-    this.getUnidades();
     this.getDetalles();
-    this.generarOrdenSubscripcion = this.compras.generateOrder$.subscribe(
-      () => {
-        this.generarOrden();
-      }
-    );
-  }
-
-  private modelInputs = {
-    id: "",
-    cantidad:  "",
-    descripcion: "",
-    observaciones: "", 
-    unidadMedida: "",
-    img_referencia: "",
-    confirmado: ""
   }
 
   ngOnDestroy(): void {
-    if (this.generarOrdenSubscripcion) {
-      //Elimino la subscripcion para evitar que se genere mas de una orden de compra la hacer click
-      this.generarOrdenSubscripcion.unsubscribe();
-    }
   }
 
   verReferencia(image: string) {
@@ -189,14 +163,14 @@ export class TableDetallesSolicitudComponent implements OnInit {
    * Valida que se ingresen unicamente números al campo
    * @param event caracteres tecleados
    */
-  validateNumberInput(event: any) {
-    const inputValue = event.target.value;
-    const validNumber = /^[0-9]*\.?[0-9]{0,2}$/.test(inputValue);
+  // validateNumberInput(event: any) {
+  //   const inputValue = event.target.value;
+  //   const validNumber = /^[0-9]*\.?[0-9]{0,2}$/.test(inputValue);
 
-    if (!validNumber) {
-      event.target.value = inputValue.slice(0, -1);
-    }
-  }
+  //   if (!validNumber) {
+  //     event.target.value = inputValue.slice(0, -1);
+  //   }
+  // }
 
   /**
    * Actualiza los valores de totales
@@ -266,14 +240,6 @@ export class TableDetallesSolicitudComponent implements OnInit {
       }
     });
     
-    // if (!datosIngresados || !archivosIngresados) {
-    // if (!datosIngresados) {
-    //    const mensaje =
-    //      "Recuerda que ademas de los precios también debes de adjuntar el archivo de la cotización ";
-    //    this.alertasService.mostrarAlerta("Error", mensaje, "warning", "warning");
-    //    return;
-    //  }
-
     this.cotizacionesService.save(formData).subscribe(
       (response) => {
         if (response.status === "success") {
@@ -296,235 +262,9 @@ export class TableDetallesSolicitudComponent implements OnInit {
     );
   }
 
-  /**
-   *Recupera los valores del check
-   */
-  public manejoCheck(prov: any): void {
-  const total = this.totalCotizacion(prov);
-  const noAutorizado = prov.autorizado === 0;
-
-  if (total > 50000 && noAutorizado) {
-    this.solicitarAutorizacion();
-    return;
-  }
-
-  if (total === 0 && noAutorizado) {
-    this.compras.setMostrarBoton(false);
-    this.mostrarObs = false;
-    this.alertasService.mostrarAlerta(
-      "El total de la cotización debe ser mayor a 0",
-      "Carga los precios y da click en el botón de guardar precios",
-      "info",
-      "info"
-    );
-    return;
-  }
-
-  this.proveedorSelec = prov;
-  this.compras.setMostrarBoton(true);
-  this.mostrarObs = true;
-}
-
-  totalCotizacion(prov){
-      const detalles = prov.detalles
-      let totalCotizacion = 0;
-      detalles.forEach(detalle => {
-        const total = Number(detalle.importe_unitario) * Number(detalle.detalle_solicitud.cantidad)
-        totalCotizacion = totalCotizacion + total
-      });
-      return (totalCotizacion);
-  }
-
-  /**
-   * Genera la orden de compra
-   */
-  public generarOrden() {
-    this.formOrdenCompra = this.cotizacionesService.getForm();
-    this.compras.setMostrarBoton(false);
-    let observaciones: any;
-    let entrega: any;
-
-    if (this.formOrdenCompra === undefined || !this.formOrdenCompra.valid) {
-      this.alertasService.mostrarAlerta(
-        "Error",
-        "Debes de seleccionar un lugar de entrega",
-        "warning",
-        "warning"
-      );
-      this.compras.setMostrarBoton(true);
-      return;
-    }
-
-    if (this.formOrdenCompra != undefined && this.formOrdenCompra.valid) {
-      observaciones = this.formOrdenCompra.value.observaciones;
-      entrega = this.formOrdenCompra.value.entrega;
-    }
-    const cotizaciones_id = this.proveedorSelec?.cotizaciones_id;
-    const cotizacionProveedor = this.proveedorSelec?.id;
-
-    const solicitudCompra = this.solicitudCompra.id;
-
-    const datos = {
-      entrega: entrega || null,
-      observaciones: observaciones || null,
-      cotizaciones_id: cotizaciones_id,
-      id_cotizacion_prov: cotizacionProveedor,
-      id_solicitud_compra: solicitudCompra,
-    };
-
-    this.ordenesComprasService.save(datos).subscribe(
-      (response) => {
-        if (response.status === "success") {
-          this.alertasService.mostrarAlerta(
-            "Guardado",
-            "Se generó correctamente la orden de compra",
-            "success",
-            "success"
-          );
-
-          this.getDetalles();
-          this.actualizarStatus.emit();
-
-          this.mostrarObs = false;
-        } else {
-          this.alertasService.mostrarAlerta(
-            "Error",
-            response.message,
-            "warning",
-            "warning"
-          );
-          // console.log(response.message);
-        }
-      },
-      (error) => {
-        this.alertasService.mostrarAlerta("Error guardando los datos:", error, "error", "danger");
-        // console.error("Error enviando datos:", error);
-      }
-    );
-
-    // this.submitted = false;
-  }
-
-  public modificarDetalles() {
-    if (this.validarTamaño()) {
-      Swal.fire({
-        title: "¿Estas seguro?",
-        text: "Los detalles se actualizaran",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Si",
-        cancelButtonText: "No",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.detallesService
-            .edit(this.solicitudCompra.id, this.detalles)
-            .subscribe(
-              (response) => {
-                if (response.status === "success") {
-                  this.alertasService.mostrarAlerta(
-                    "Actualizado",
-                    "Se han actualizado los detalles de la solicitud",
-                    "success",
-                    "success"
-                  );
-                  this.getDetalles();
-                } else {
-                  this.alertasService.mostrarAlerta(
-                    "Error",
-                    response.message,
-                    "warning",
-                    "warning"
-                  );
-                }
-              },
-              (error) => {
-                console.error("Error enviando datos:", error);
-              }
-            );
-        } else {
-          this.getDetalles();
-        }
-      });
-    } else {
-      this.alertasService.mostrarAlerta(
-        "Error",
-        "Ningun elemento esta autorizado",
-        "error",
-        "danger"
-      );
-      this.getDetalles();
-    }
-  }
-
-  validarTamaño() {
-  const contador = this.detalles.reduce((acc, detalle) => acc + detalle.confirmado, 0);
-  return contador !== 0;
-}
-
-cambioCheck(item, event) {
-  item.confirmado = event.target.checked ? 1 : 0;
-}
-
-  private getUnidades() {
-    this.catUnidadesMedidasService.getAll().subscribe(
-      (response) => {
-        if (response) {
-          this.unidades = response.data;
-        } else {
-          this.alertasService.mostrarAlerta("Error guardando los datos:", response.message, "error", "danger");
-        }
-      },
-      (error) => {
-        this.alertasService.mostrarAlerta("Error guardando los datos:", error, "error", "danger");
-      }
-    );
-  }
-
-  private solicitarAutorizacion(){
-    Swal.fire({
-        title: "La cotización supera el limite establecido",
-        text: "Es necesario que la planta autorice esto \n ¿Deseas solicitar autorizacion ahora?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Si",
-        cancelButtonText: "No, intentar con otra cotización",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.enviarSolAutorizacion();
-        }
-      });
-  }
-
-  private enviarSolAutorizacion(){
-    this.cotizacionesService.solicitarAutorizacion(this.solicitudCompra.id).subscribe(
-     (response) => {
-        if (response.status === "success") {
-          this.alertasService.mostrarAlerta(
-            "Enviado",
-            "Se ha solicitado la autorización por parte de la planta",
-            "success",
-            "success"
-          );
-          this.actualizarStatus.emit();
-        } else {
-          this.alertasService.mostrarAlerta("Error guardando los datos:", response.message, "error", "danger");
-        }
-      },
-      (error) => {
-        this.alertasService.mostrarAlerta("Error guardando los datos:", error, "error", "danger");
-        // console.error("Error guardando los datos:", error);
-      }
-    );
-  }
-
   copiarTexto(texto: string): void {
     navigator.clipboard.writeText(texto)
       .then(() => {
-        // console.log(`Texto copiado: ${texto}`);
       })
       .catch(err => {
         console.error('Error al copiar al portapapeles', err);
@@ -537,16 +277,11 @@ cambioCheck(item, event) {
   }
 
   public habilitarEdicionProveedor(proveedorId: number) {
-  this.detalles.forEach(detalle => {
-    detalle["disabled_" + proveedorId] = false;
-  });
+    this.detalles.forEach(detalle => {
+      detalle["disabled_" + proveedorId] = false;
+    });
 
-  this.alertasService.mostrarAlerta(
-    "Modo edición activado",
-    "Ya puedes modificar los precios guardados",
-    "info",
-    "info"
-  );
+    this.alertasService.mostrarAlerta("Modo edición activado", "Ya puedes modificar los precios guardados", "info", "info");
 }
 
 }

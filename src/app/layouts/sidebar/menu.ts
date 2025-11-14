@@ -67,6 +67,20 @@ export const MENU: MenuItem[] = [
         permission: "view compras macro taller",
       },
       {
+        id: 11,
+        label: "Reportes de compras",
+        parentId: 7,
+        permission: "desarrollo",
+        subItems: [
+          {
+            id: 111,
+            label: "Gasto Mensual",
+            link: "/compras/reporte-gasto-mensual",
+            parentId: 11,
+          }
+        ],
+      },
+      {
         id: 9,
         label: "Proveedores",
         link: "/compras/proveedores",

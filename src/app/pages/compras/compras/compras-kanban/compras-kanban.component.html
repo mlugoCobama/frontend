@@ -45,12 +45,19 @@
           <div class="card-body p-2">
             <div class="d-flex justify-content-between align-items-start mb-1">
               <h6 class="mb-0"> <strong> {{ item.folio }} </strong></h6>
-              <i
-                style="font-size: 1rem;"
-                class="fas fa-info-circle text-primary"
-                (click)="openModalSeguimiento(item)"
-                title="Ver seguimiento"
-              ></i>
+              <div>
+                <i 
+                  title="Requiere autorización" 
+                  class="fas fa-signature px-2 text-danger" 
+                  *ngIf="validarAutorizaciones(item)"
+                ></i>
+                <i
+                  style="font-size: 1rem;"
+                  class="fas fa-info-circle text-primary"
+                  (click)="openModalSeguimiento(item)"
+                  title="Ver seguimiento"
+                ></i>
+              </div>
             </div>
 
             <p class="mb-1"><strong> {{ item.empresa || 'No disponible' }} </strong></p>

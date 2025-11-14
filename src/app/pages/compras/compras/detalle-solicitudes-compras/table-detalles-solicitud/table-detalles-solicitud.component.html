@@ -147,5 +147,7 @@
     [cotProv]="cotProv"
     [mostrarObs]="mostrarObs"    
     (savePrices)="guardarPrecios()"
+    (actualizarDetalles)="getDetalles()"
+    (actualizarStatus)="actualizarStatus.emit()"
     (selectCotizacion)="manejoCheck($event)"
   ></app-table-files-cotizaciones>

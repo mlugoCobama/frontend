@@ -4,19 +4,27 @@
       <strong> Da click en el botón "Aceptar" para marcar la solicitud como aprobada o "Rechazada" para marcarla como rechazada. </strong>
     </div>
     <div class="card-body ">
-      <div *ngIf = "isLoad && tienePermiso('view panel auto orden compra') " class="row justify-content-around">
-    <button
-      class="btn btn-danger col-md-5"
-      (click)="cancelarOrden()"
-    >
-      Orden de compra <strong> Rechazada </strong>
-    </button>
-    <button
-      class="btn btn-success col-md-5"
-      (click)="autorizarOrden()"
-    >
-      Orden de compra <strong>  Autorizada </strong>
-    </button>
-</div>
+        <div *ngIf = "isLoad && tienePermiso('view panel auto orden compra') " class="d-flex flex-column flex-md-row justify-content-around align-items-center gap-2">
+            <button
+              class="btn btn-danger px-5"
+              (click)="cancelarOrden()"
+            >
+              Orden de compra <strong> Rechazada </strong>
+            </button>
+
+            <!-- <button
+              class="btn btn-warning px-5"
+              (click)="autorizarOrden()"
+            >
+              <strong> Cambiar de proveedor </strong>
+            </button> -->
+
+            <button
+              class="btn btn-success px-5"
+              (click)="autorizarOrden()"
+            >
+              Orden de compra <strong>  Autorizada </strong>
+            </button>
+        </div>
     </div>
- </div>
+  </div>

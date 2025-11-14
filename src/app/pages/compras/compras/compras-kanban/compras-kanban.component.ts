@@ -86,4 +86,18 @@ export class ComprasKanbanComponent implements OnInit, OnChanges {
   openDetallesSolicitud(item: any, e: any) {
     this.btnOpenDetalleSolicitud.emit(item);
   }
+
+  validarAutorizaciones(item){
+    let resultado = false;
+
+    if(item.tipo === 1 || item.tipo === 3) {
+      resultado = (item.auto_admin == 0 || item.auto_gg == 0) ? true : false ;
+    }
+
+    if(item.tipo === 2){
+      resultado = (item.auto_admin == 0 || item.auto_gg == 0 || item.auto_macro == 0 ) ? true : false ;
+    }
+
+    return resultado;
+  }
 }

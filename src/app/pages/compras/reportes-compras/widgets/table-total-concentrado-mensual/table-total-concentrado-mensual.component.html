@@ -1,0 +1,37 @@
+<div class="card border mt-3">
+  <div class="card-header bg-info text-center text-white">
+    <strong>Gasto mensual concentrado</strong>
+  </div>
+
+  <div class="card-body p-2">
+    <div class="table-responsive" style="max-height: 300px; overflow: auto; ">
+      <table class="table table-sm table-bordered table-striped align-middle p-2">
+        <thead class="table-light sticky-top">
+          <tr>
+            <th>Empresa</th>
+            <th># Solicitudes</th>
+            <th>Total</th>
+            
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of datos">
+            <td>{{ item.empresa | titlecase }}</td>
+            <td>{{ item.solicitudes }}</td>
+            <td class="text-end"> <strong> {{ item.total | currency }} </strong></td>
+            
+          </tr>
+        </tbody>
+         <tfoot class="table-light sticky-bottom">
+          <tr>
+            <th>Total General</th>
+            <th>{{ totalSolicitudes }}</th>
+            <th class="text-end">{{ totalGeneral  | currency }}</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+
