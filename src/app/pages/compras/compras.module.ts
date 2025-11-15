@@ -68,6 +68,9 @@ import { ReportesComprasComponent } from './reportes-compras/reportes-compras.co
 import { ReporteGastoMensualComponent } from './reportes-compras/reporte-gasto-mensual/reporte-gasto-mensual.component';
 import { FormFiltroMensualComponent } from './reportes-compras/widgets/form-filtro-mensual/form-filtro-mensual.component';
 import { TableTotalConcentradoMensualComponent } from './reportes-compras/widgets/table-total-concentrado-mensual/table-total-concentrado-mensual.component';
+import { TableTotalDetalleComponent } from './reportes-compras/widgets/table-total-detalle/table-total-detalle.component';
+import { ModalDetalleComponent } from './reportes-compras/widgets/modal-detalle/modal-detalle.component';
+import { CardSpinerComponent } from './reportes-compras/widgets/card-spiner/card-spiner.component';
 
 @NgModule({
   declarations: [
@@ -130,6 +133,9 @@ import { TableTotalConcentradoMensualComponent } from './reportes-compras/widget
     ReporteGastoMensualComponent,
     FormFiltroMensualComponent,
     TableTotalConcentradoMensualComponent,
+    TableTotalDetalleComponent,
+    ModalDetalleComponent,
+    CardSpinerComponent,
   ],
   imports: [
     CommonModule,

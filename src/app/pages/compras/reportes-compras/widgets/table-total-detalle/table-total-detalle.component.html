@@ -1,0 +1,56 @@
+<div class="card border mt-3">
+  <div class="card-header border-info text-center d-flex justify-content-between align-items-center">
+    <p class="pt-1">
+        Detalle de solicitudes de <strong> {{nameEmpresa}} </strong>  del periodo: {{ params.fechaInicial | date:'dd/MM/yyyy' }} - {{ params.fechaFinal | date:'dd/MM/yyyy' }}
+      de {{ tiposCompras[+params.tipo - 1] }}
+    </p>
+    <button (click)="btnDescargarDetalle()" [disabled]="isDownloadingDetalle" class="btn btn-success btn-sm">
+        <i class="fas fa-file-excel" *ngIf="!isDownloadingDetalle"></i>
+            <span *ngIf="isDownloadingDetalle" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+        {{ isDownloadingDetalle ? 'Descargando...' : 'Descargar Detalle' }}
+    </button>
+
+  </div>
+
+  <div class="card-body p-2">
+    <div class="table-responsive" style="max-height: 300px; overflow: auto;">
+      <table class="table table-sm table-bordered align-middle p-2">
+        <thead class="table-light" [ngClass]="modalAbierto === false ? 'sticky-top' : '' ">
+          <tr>
+            <th (click)="ordenarPor('folio_solicitud')">Folio Solicitud <i [ngClass]="getIconoOrden('folio_solicitud')"></i> </th>
+            <th (click)="ordenarPor('folio_orden_compra')"> Folio OC <i [ngClass]="getIconoOrden('folio_orden_compra')"></i></th>
+            <th (click)="ordenarPor('fecha')">Fecha <i [ngClass]="getIconoOrden('fecha')"></i></th>
+            <th (click)="ordenarPor('proveedor')">Proveedor <i [ngClass]="getIconoOrden('proveedor')"></i></th>
+            <th  *ngIf="params.tipo === '2'">AT </th>
+            <th (click)="ordenarPor('servicios')">Servicio <i [ngClass]="getIconoOrden('servicios')"></i></th>
+            <th (click)="ordenarPor('total_por_folio')"  class="text-end">Total <i [ngClass]="getIconoOrden('total_por_folio')"></i></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr
+            (dblclick)="seleccionar(item, $event)"
+            *ngFor="let item of datosFiltrados"
+            [class.table-primary]="item === selectedItem"
+          >
+            <td>{{ item.folio_solicitud }}</td>
+            <td>{{ item.folio_orden_compra }}</td>
+            <td>{{ item.fecha | date:'dd/MM/yyyy' }}</td>
+            <td>{{ item.proveedor }}</td>
+            <td *ngIf="params.tipo === '2'" >{{ item.at }}</td>
+            <td>{{ item.servicios }}</td>
+            <td  class="text-end">
+              <strong>{{ item.total_por_folio | currency }}</strong>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot class="table-light" [ngClass]="modalAbierto === false ? 'sticky-bottom' : '' ">
+          <tr>
+            <th class="text-end" [attr.colspan] = "params.tipo === '2' ?  6 : 5" >Total General</th>
+            <th class="text-end">{{ total  | currency }}</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</div>

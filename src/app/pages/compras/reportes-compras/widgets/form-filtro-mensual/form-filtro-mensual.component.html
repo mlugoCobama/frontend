@@ -1,41 +1,70 @@
 <div class="card border">
-  <div class="card-header card-header bg-info text-center text-white">
+  <div class="card-header card-header">
     <strong>Filtro para consultar datos</strong>
   </div>
 
   <div class="card-body">
-    <form [formGroup]="miFormulario " (ngSubmit)="guardar()">
-      <div class="row g-3">
+    <form [formGroup]="miFormulario" (ngSubmit)="consultar()">
+      <div class="row g-3 align-items-end">
         <!-- Campo Tipo -->
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label class="form-label">Tipo</label>
-          <select class="form-select form-select-sm" formControlName="tipo">
+          <select
+            class="form-select form-select-sm"
+            formControlName="tipo"
+            [ngClass]="{ 'is-invalid': f.tipo.invalid && f.tipo.touched }"
+          >
             <option value="">Seleccione</option>
-            <option value="opcion1">Compras Generales</option>
-            <option value="opcion2">Compras Macro Taller</option>
-            <option value="opcion3">Compras Recursos Tecnológicos</option>
+            <option value="1">Compras Generales</option>
+            <option value="2">Compras Macro Taller</option>
+            <option value="3">Compras Recursos Tecnológicos</option>
           </select>
+          <div *ngIf="f.tipo.invalid && f.tipo.touched" class="invalid-feedback">
+            El campo Tipo es obligatorio.
+          </div>
         </div>
 
         <!-- Fecha Inicial -->
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label class="form-label">Fecha Inicial</label>
-          <input type="date" class="form-control form-control-sm" formControlName="fechaInicial">
+          <input
+            type="date"
+            class="form-control form-control-sm"
+            formControlName="fechaInicial"
+            [ngClass]="{ 'is-invalid': f.fechaInicial.invalid && f.fechaInicial.touched }"
+          />
+          <div *ngIf="f.fechaInicial.invalid && f.fechaInicial.touched" class="invalid-feedback">
+            La fecha inicial es obligatoria.
+          </div>
         </div>
 
         <!-- Fecha Final -->
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label class="form-label">Fecha Final</label>
-          <input type="date" class="form-control form-control-sm" formControlName="fechaFinal">
+          <input
+            type="date"
+            class="form-control form-control-sm"
+            formControlName="fechaFinal"
+            [ngClass]="{ 'is-invalid': f.fechaFinal.invalid && f.fechaFinal.touched }"
+          />
+          <div *ngIf="f.fechaFinal.invalid && f.fechaFinal.touched" class="invalid-feedback">
+            La fecha final es obligatoria.
+          </div>
+        </div>
+        <!-- Botón Consultar -->
+        <div class="col-md-3">
+
+            <button (click)="consultar()" [disabled]="isFetchingConcentrado " class="btn btn-primary btn-sm">
+            <ng-container *ngIf="!isFetchingConcentrado ; else loadingConcentrado">
+                <i class="fas fa-search-dollar"></i> &nbsp;Consultar
+            </ng-container>
+            <ng-template #loadingConcentrado>
+                <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                Buscando informacion...
+            </ng-template>
+            </button>
         </div>
       </div>
-
-      <div class="mt-3 d-flex justify-content-end align-items-center">
-        <button type="submit" class="btn btn-primary btn-sm">Consultar</button>
-      </div>
-
-      
     </form>
   </div>
 </div>
-

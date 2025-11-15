@@ -1,29 +1,40 @@
 <div class="card border mt-3">
-  <div class="card-header bg-info text-center text-white">
-    <strong>Gasto mensual concentrado</strong>
-  </div>
+  <div class="card-header  border-info text-center d-flex justify-content-between align-items-center">
+    <strong>Gasto mensual concentrado del periodo: {{params.fechaInicial | date:'dd/MM/yyyy' }} - {{params.fechaFinal | date:'dd/MM/yyyy'}} de {{ tiposCompras[+params.tipo - 1]}} </strong>
+    <button (click)="btnDescargarConcentrado()" [disabled]="isDownloadingConcentrado" class="btn btn-success btn-sm">
+    <ng-container *ngIf="!isDownloadingConcentrado; else loadingConcentrado">
+        <i class="fas fa-file-excel"></i> Descargar Concentrado
+    </ng-container>
+    <ng-template #loadingConcentrado>
+        <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+        Descargando...
+    </ng-template>
+    </button>
+
+</div>
 
   <div class="card-body p-2">
     <div class="table-responsive" style="max-height: 300px; overflow: auto; ">
-      <table class="table table-sm table-bordered table-striped align-middle p-2">
-        <thead class="table-light sticky-top">
+      <table class="table table-sm table-bordered align-middle p-2">
+        <thead class="table-light" [ngClass]="modalAbierto === false ? 'sticky-top' : '' ">
           <tr>
-            <th>Empresa</th>
-            <th># Solicitudes</th>
-            <th>Total</th>
-            
+            <th (click)="ordenarPor('empresa')">Empresa <i [ngClass]="getIconoOrden('empresa')"></i></th>
+            <th (click)="ordenarPor('solicitudes')"># Solicitudes <i [ngClass]="getIconoOrden('solicitudes')"></i></th>
+            <th (click)="ordenarPor('total_por_empresa')" class="text-end">Total <i [ngClass]="getIconoOrden('total_por_empresa')"></i></th>
           </tr>
         </thead>
 
         <tbody>
-          <tr *ngFor="let item of datos">
+          <tr (dblclick)="seleccionar(item, $event)"
+                *ngFor="let item of datosFiltrados"
+                [class.table-primary]="item === selectedItem"
+                >
             <td>{{ item.empresa | titlecase }}</td>
             <td>{{ item.solicitudes }}</td>
-            <td class="text-end"> <strong> {{ item.total | currency }} </strong></td>
-            
+            <td class="text-end"> <strong> {{ item.total_por_empresa | currency }} </strong></td>
           </tr>
         </tbody>
-         <tfoot class="table-light sticky-bottom">
+         <tfoot class="table-light" [ngClass]="modalAbierto === false ? 'sticky-bottom' : '' ">
           <tr>
             <th>Total General</th>
             <th>{{ totalSolicitudes }}</th>

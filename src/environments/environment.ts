@@ -23,7 +23,7 @@ export const environment = {
     scrollCollapse: true,
     scrollY: '200px'
   },
-  // apiUrl: 'http://192.168.22.226:8080/api/',
+  // apiUrl: 'http://192.168.22.226:8081/api/',
   apiUrl: 'http://localhost:8000/api/',
   urlApiCodigoPostal: 'https://apicodigospostales.com/v1/'
 };

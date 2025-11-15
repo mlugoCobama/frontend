@@ -51,4 +51,26 @@ export class ReportesComprasService {
     a.remove();
   }
 
+  getComprasConcentrado(fechaInicial, fechaFinal, tipo){
+    return this.http.get<any>( `${environment.apiUrl}compras/ReportesCompras/GatoMensualConcentrado/${fechaInicial}/${fechaFinal}/${tipo}`);
+  }
+
+  getComprasDetalle(intercompania ,fechaInicial, fechaFinal, tipo){
+    return this.http.get<any>( `${environment.apiUrl}compras/ReportesCompras/GatoMensualDetalle/${intercompania}/${fechaInicial}/${fechaFinal}/${tipo}`);
+  }
+
+  descargarConcentrado(fechaInicial: string, fechaFinal: string, tipo: number) {
+    return this.http.get(`${environment.apiUrl}compras/reportes/gastos/concentrado`, {
+      params: { fechaInicial, fechaFinal, tipo },
+      responseType: 'blob' 
+    });
+  }
+
+  descargarDetalleEmpresa(intercompania: string, fechaInicial: string, fechaFinal: string, tipo: number) {
+    return this.http.get(`${environment.apiUrl}compras/reportes/gastos/detalle/${intercompania}`, {
+      params: { fechaInicial, fechaFinal, tipo },
+      responseType: 'blob'
+    });
+  }
+
 }

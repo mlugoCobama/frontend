@@ -1,5 +1,22 @@
+<div class="card">
+    <div class="card-body bg-info text-white py-3">
+        <h5 class="m-0">Reporte de gastos - Compras</h5>
+    </div>
+</div>
 
-    <app-form-filtro-mensual></app-form-filtro-mensual>
-    <app-table-total-concentrado-mensual>
+<app-form-filtro-mensual (ejecutarConsulta)="recibirDatos($event)"
+    [isFetchingConcentrado]="isFetchingConcentrado"></app-form-filtro-mensual>
 
-    </app-table-total-concentrado-mensual>
+<app-card-spiner *ngIf="!isLoad && showContent"></app-card-spiner>
+
+<app-table-total-concentrado-mensual *ngIf="isLoad" [datos]="data" [params]="params" [modalAbierto]="modalAbierto"
+    (descargarConcentrado)="descargarConcentrado()" (ejecutarConsultaDetalle)="getDetalleIntercompania($event)"
+    [isDownloadingConcentrado]="isDownloadingConcentrado">
+</app-table-total-concentrado-mensual>
+
+<app-card-spiner *ngIf="!isLoadDeatil && showContentDetail"></app-card-spiner>
+
+<app-table-total-detalle *ngIf="showContentDetail && isLoadDeatil && dataDetalle.length > 0" [datos]="dataDetalle"
+    [params]="params" (isOpenModal)="isOpenModal($event)" [nameEmpresa]="nameEmpresa" [intercompania]="intercompania"
+    (descargarDetalle)="descargarDetalle($event)"
+    [isDownloadingDetalle]="isDownloadingDetalle"></app-table-total-detalle>
