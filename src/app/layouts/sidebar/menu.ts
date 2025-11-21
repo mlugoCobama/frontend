@@ -70,7 +70,7 @@ export const MENU: MenuItem[] = [
         id: 11,
         label: "Reportes de compras",
         parentId: 7,
-        // permission: "desarrollo",
+        permission: "view reportes compras",
         subItems: [
           {
             id: 111,
