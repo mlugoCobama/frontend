@@ -103,13 +103,6 @@ export const MENU: MenuItem[] = [
     permission: "view modulo macro taller",
     subItems: [
       {
-        id: 11,
-        label: "Parque Vehicular",
-        link: "/compras/cat-unidades",
-        parentId: 7,
-        permission: "view parque vehicular",
-      },
-      {
         id: 8,
         label: "Técnicos",
         link: "/macro/tecnicos",
@@ -122,6 +115,21 @@ export const MENU: MenuItem[] = [
         link: "/macro/almacen",
         parentId: 7,
         permission: "view macro almacen",
+      },
+    ],
+  },
+  {
+     id: 7,
+    label: "Parque Vehicular",
+    icon: "bx bxs-truck",
+    permission: "view parque vehicular",
+    subItems: [
+      {
+        id: 11,
+        label: "Parque Vehicular",
+        link: "/compras/cat-unidades",
+        parentId: 7,
+        permission: "view parque vehicular",
       },
     ],
   },

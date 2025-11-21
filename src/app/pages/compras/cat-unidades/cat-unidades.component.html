@@ -38,21 +38,21 @@
               >
               <a
                 [disabled] = "true"
-                *ngIf = "mostrar"
+                *ngIf = "mostrar  && tienePermiso('view btn eliminar vehiculo')"
                 href="javascript:void(0);"
                 class="btn btn-danger btn-sm"
                 (click)="destroy()"
                 ><i class="fas fa-trash"></i> Eliminar</a
               >
               <a
-                *ngIf = "mostrar"
+                *ngIf = "mostrar && tienePermiso('view btn actualizacion vehiculo')"
                 href="javascript:void(0);"
                 class="btn btn-warning btn-sm"
                 (click)="openModalUpdate()"
                 ><i class="fas fa-edit"></i> Actualizar</a
               >
               <a
-                *ngIf = "!mostrar && intercompania != undefined"
+                *ngIf = "!mostrar && intercompania != undefined && tienePermiso('view btn alta vehiculo')"
                 href="javascript:void(0);"
                 class="btn btn-primary btn-sm"
                 (click) = "openModalNuevo()"

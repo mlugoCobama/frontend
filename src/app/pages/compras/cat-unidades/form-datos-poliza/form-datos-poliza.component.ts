@@ -104,6 +104,7 @@ export class FormDatosPolizaComponent implements OnInit{
    * @returns boolean:  true ->valido, false ->no valido
    */
   esValido() {
+    this.formDatosPoliza.markAllAsTouched();
     return this.formDatosPoliza.valid;
   }
 

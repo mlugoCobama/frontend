@@ -15,7 +15,7 @@ import { UnidadesService } from 'src/app/core/services/compras/unidades.service'
 export class ModalAddAutotanqueComponent implements AfterViewInit{
 
   public openFormTanque: boolean = false;
-  public mostrarFormulario: boolean = false;
+  public mostrarFormulario: boolean = true;
 
 
   constructor(

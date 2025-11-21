@@ -141,6 +141,7 @@ export class FormDatosVehiculoComponent implements OnInit{
    * @returns boolean:  true ->valido, false ->no valido
    */
   esValido() {
+    this.formDatosVehiculo.markAllAsTouched();
     this.mostrarErroresFormulario();
     return this.formDatosVehiculo.valid;
   }

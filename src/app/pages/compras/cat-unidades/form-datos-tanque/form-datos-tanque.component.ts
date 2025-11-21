@@ -98,6 +98,7 @@ export class FormDatosTanqueComponent implements OnInit {
    * @returns boolean:  true ->valido, false ->no valido
    */
   esValido() {
+    this.formDatosTanques.markAllAsTouched();
     return this.formDatosTanques.valid;
   }
 
