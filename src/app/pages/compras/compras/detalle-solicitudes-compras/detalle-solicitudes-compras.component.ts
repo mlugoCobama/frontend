@@ -1,8 +1,9 @@
-import { Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, ViewChild} from '@angular/core';
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { ComprasService } from 'src/app/core/services/compras/compras.service';
 import { EstadoSolicitud } from '../estado-solicitud.enum';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
+import { TableDetallesSolicitudComponent } from './table-detalles-solicitud/table-detalles-solicitud.component';
 
 @Component({
   selector: 'app-detalle-solicitudes-compras',
@@ -10,7 +11,8 @@ import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-com
   styleUrl: './detalle-solicitudes-compras.component.css'
 })
 export class DetalleSolicitudesComprasComponent implements OnInit{
-
+@ViewChild("tableDetalles", { static: false })
+  tableDetalles!: TableDetallesSolicitudComponent;
  @Input() solicitudCompra:any;
  @Input() status:any;
  @Input() modifica:any;
@@ -60,6 +62,7 @@ public setDataCotizacion(data:any) {
  */ 
 public setDataOrdenCompra(data:any) {
   this.ordenCompra = data;
+  this.tableDetalles.getProveedoresCotizacion();
 }
 /**
  * Asigna un valor a MostrarTotal

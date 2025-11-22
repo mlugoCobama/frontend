@@ -108,14 +108,25 @@
   </div>
 
   <div class="col-2 d-flex align-items-end justify-content-center">
+    <div class="d-flex flex-column bd-highlight gap-2">
     <button
       *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && !mostrarObs && tienePermiso('view btn save precios')"
-      type="submit"
-      class="btn btn-sm btn-success"
-      (click)="guardarPrecios()"
+      class="btn btn-sm btn-primary"
+      (click)="showPanelCotizaciones = !showPanelCotizaciones"
     >
-     <i class="fas fa-file-upload "></i> Guardar Cotización
+      <i class="fas fa-file-upload"></i>
+      {{ showPanelCotizaciones ? 'Ocultar proveedor' : 'Agregar proveedor a cotización' }}
     </button>
+      <button
+        *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && !mostrarObs && tienePermiso('view btn save precios')"
+        type="submit"
+        class="btn btn-sm btn-success"
+        (click)="guardarPrecios()"
+      >
+      <i class="fas fa-file-upload "></i> Guardar Cotización
+      </button>
+    </div>
+    
 
     <button 
       *ngIf = "!ordenCompra && proveedorSeleccionado && tienePermiso('view btn generar orden')"
@@ -130,4 +141,9 @@
   </div>
 </div>
 
+<app-panel-cotizaciones
+  *ngIf="showPanelCotizaciones"
+  [solicitudCompra]="solicitudCompra"
+  (actualizarStatus)="actDetalle()"
+></app-panel-cotizaciones>
 <hr />

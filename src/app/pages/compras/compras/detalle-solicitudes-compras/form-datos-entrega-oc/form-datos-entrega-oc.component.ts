@@ -33,6 +33,7 @@ export class FormDatosEntregaOcComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.getEmpresas();
     this.buildForm();
+    console.log(this.solicitudCompra)
   }
 
   constructor(
@@ -83,7 +84,7 @@ export class FormDatosEntregaOcComponent implements AfterViewInit {
   }
 
   public getEmpresas() {
-    if (this.solicitudCompra.estatus === this.enEsts.EnCotizacion) {
+    if (this.solicitudCompra.estatus <= this.enEsts.Autorizado && this.solicitudCompra.estatus != this.enEsts.Cancelado) {
       this.usuariosService.getEmpresas().subscribe(
         (response) => {
           if (response) {

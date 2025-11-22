@@ -10,8 +10,8 @@ export class ReportesComprasService {
 
   constructor(private http: HttpClient) {}
 
-  getReportFile(tipo, status ){
-    const url = `${environment.apiUrl}compras/download/SolicutdesCompras/${tipo}/${status}`;
+  getReportFile(tipo, status, fechaInicial, fechaFinal ){
+    const url = `${environment.apiUrl}compras/download/SolicutdesCompras/${tipo}/${status}/${fechaInicial}/${fechaFinal}`;
     return this.http.get(url, {
       observe: 'response',
       responseType: 'blob'

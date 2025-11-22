@@ -25,10 +25,26 @@
     *ngIf="!solicitudSelecionada && tienePermiso('view btn descargar solicitudes')"
     href="javascript:void(0);"
     class="btn btn-outline-success btn-sm"
+    [disabled]="downloading"
     (click)="onDownload()"
     >
-        <i class="fas fa-file-excel"></i>
-        Descargar Solicitudes
+    <ng-container *ngIf="!downloading; else loadingConcentrado">
+        <i class="fas fa-file-excel"></i> Descargar Solicitudes
+    </ng-container>
+    <ng-template #loadingConcentrado>
+        <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+        Descargando...
+    </ng-template>
     </a>
+
+    <!-- <button (click)="btnDescargarConcentrado()" [disabled]="isDownloadingConcentrado" class="btn btn-success btn-sm">
+    <ng-container *ngIf="!isDownloadingConcentrado; else loadingConcentrado">
+        <i class="fas fa-file-excel"></i> Descargar Concentrado
+    </ng-container>
+    <ng-template #loadingConcentrado>
+        <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+        Descargando...
+    </ng-template>
+    </button> -->
 </div>
   

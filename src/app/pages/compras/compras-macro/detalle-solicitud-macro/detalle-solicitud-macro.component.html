@@ -12,6 +12,7 @@
       ></app-select-sistema-mantenimiento>
 
       <app-table-detalles-solicitud
+      #tableDetallesMacro
       *ngIf ="solicitudCompra.estatus > enEsts.Solicitado && solicitudCompra.estado != 'ESP. AUT. MACRO'"
       [solicitudCompra]="solicitudCompra"
       [ordenCompra]="ordenCompra"

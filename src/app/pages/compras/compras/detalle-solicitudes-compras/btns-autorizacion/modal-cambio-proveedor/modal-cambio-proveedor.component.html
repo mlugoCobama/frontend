@@ -1,0 +1,47 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">
+    Cambio de proveedor seleccionado.
+  </h5>
+  <button type="button" (click)="cerrarModal()" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+</div>
+<div class="modal-body">
+    <form [formGroup]="formSelctProv" >
+        <div class="pb-2" *ngIf="cotProv.length > 0">
+        <p class= "p-1">Para modificar el proveedor seleccionado es necesario especificar los siguientes datos</p>
+        <label for="entrega" class="form-label">Proveedor seleccionado *</label>
+        <select formControlName="proveedorSeleccionado" class="form-select form-select-sm" aria-label=".form-select-sm example">
+            <option value="" disabled>Selecciona un proveedor</option>
+            <option  *ngFor="let item of cotProv" [disabled] = "item?.ruta == null ? true : false" [value]="item?.id">{{ item?.proveedores_id[0]?.nombre }}</option>
+        </select>
+        <div
+        *ngIf="selctProvFormControl.proveedorSeleccionado.invalid && (selctProvFormControl.proveedorSeleccionado?.touched)"
+        class="text-danger mt-1"
+        >
+        <small lass="text-danger text-sm form-text" *ngIf="selctProvFormControl.proveedorSeleccionado?.errors?.['required']">
+            Debes seleccionar un proveedor.
+        </small>
+        </div>
+    </div>
+
+    </form>
+    
+    <app-form-datos-entrega-oc
+        #formDatosEntregaOc
+        [mostrarObs] = "mostrarObs"
+        [solicitudCompra] = "solicitudCompra"
+    ></app-form-datos-entrega-oc>
+</div>
+<div class="modal-footer">
+  <button
+  [disabled] = "deshabilitado"
+    type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="cerrarModal()"
+  >
+    Cerrar
+  </button>
+  <button 
+  [disabled] = "deshabilitado"
+  (click)="saveChanges()"
+  type="button" class="btn btn-primary btn-sm">
+    Guardar
+  </button>
+</div>

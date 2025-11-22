@@ -1,7 +1,8 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { OrdenesCompraService } from 'src/app/core/services/compras/ordenesCompra/ordenes-compra.service';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
-
+import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
+import { ModalCambioProveedorComponent } from './modal-cambio-proveedor/modal-cambio-proveedor.component';
 import Swal from 'sweetalert2';
 import { PermisosService } from 'src/app/core/services/permisos.service';
 
@@ -19,8 +20,10 @@ export class BtnsAutorizacionComponent implements OnInit {
 
   public ordenCompra: any;
   public isLoad: boolean = false;
+  public modalRef?: BsModalRef;
 
   constructor(
+    private modalService: BsModalService,
     public ordenesComprasService: OrdenesCompraService,
     private alertasService:SwalComprsServiceService,
     private permisosService: PermisosService,
@@ -219,4 +222,28 @@ export class BtnsAutorizacionComponent implements OnInit {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
   }
+
+  /**
+     * Manejo de componentes
+     */
+    public openModalNuevo() {
+      // this.modalAbierto = true;
+      const initialState: ModalOptions = {
+        initialState: {
+          solicitudCompra : this.solicitudCompra
+          //Datos que envió al componente
+        },
+        class: "modal-lg",
+      };
+      this.modalRef = this.modalService.show(ModalCambioProveedorComponent, initialState);
+      this.modalRef.content.closeBtnName = "Close";
+      this.modalRef.content.event.subscribe(() => {
+        //  this.isLoad = true;
+        this.actualizarStatus.emit();
+        this.getOrdenCompra();
+      });
+      this.modalRef.content.modalCerrado.subscribe(() => {
+      //   // this.modalAbierto = false;
+      });
+    }
 }

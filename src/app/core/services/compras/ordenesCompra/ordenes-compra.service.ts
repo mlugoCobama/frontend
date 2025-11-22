@@ -185,4 +185,11 @@ export class OrdenesCompraService {
   public finalizarCompra(id: any){
     return this.http.get(environment.apiUrl + `compras/marcar-como-finalizada/${id}`, {headers} );
   }
+
+  public cambiarProveedorSeleccionado(data: any): Observable<any> {
+    return this.http.post(
+      environment.apiUrl + "compras/cambiar-proveedor-seleccionado",
+      data , {headers} 
+    );
+  }
 }

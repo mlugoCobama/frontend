@@ -1,4 +1,4 @@
-<div class="card border">
+<div class="card border" *ngIf="solicitudCompra.auto_gg === 0 || solicitudCompra.auto_admin === 0 || (solicitudCompra.auto_macro === 0 && solicitudCompra.tipo == 2)">
   <div class="card-header text-center bg-primary text-white">
     <strong> Da click en tu botón para autorizar la solicitud y continuar con el proceso </strong>
   </div>

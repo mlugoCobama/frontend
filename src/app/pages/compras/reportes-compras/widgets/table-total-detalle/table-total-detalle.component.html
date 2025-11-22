@@ -37,7 +37,7 @@
             <td>{{ item.folio_orden_compra }}</td>
             <td>{{ item.fecha | date:'dd/MM/yyyy' }}</td>
             <td>{{ item.proveedor }}</td>
-            <td *ngIf="params.tipo === '2'" >{{ item.at }}</td>
+            <td *ngIf="params.tipo === '2'" >{{ item.nro_economico }}</td>
             <td>{{ item.servicios }}</td>
             <td  class="text-end">
               <strong>{{ item.total_por_folio | currency }}</strong>

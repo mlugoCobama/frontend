@@ -75,6 +75,7 @@ export const MENU: MenuItem[] = [
           {
             id: 111,
             label: "Gasto Mensual",
+            permission: "view reportes gasto mensual",
             link: "/compras/reporte-gasto-mensual",
             parentId: 11,
           }

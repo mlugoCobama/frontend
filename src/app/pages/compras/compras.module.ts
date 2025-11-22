@@ -71,6 +71,7 @@ import { TableTotalConcentradoMensualComponent } from './reportes-compras/widget
 import { TableTotalDetalleComponent } from './reportes-compras/widgets/table-total-detalle/table-total-detalle.component';
 import { ModalDetalleComponent } from './reportes-compras/widgets/modal-detalle/modal-detalle.component';
 import { CardSpinerComponent } from './reportes-compras/widgets/card-spiner/card-spiner.component';
+import { ModalCambioProveedorComponent } from './compras/detalle-solicitudes-compras/btns-autorizacion/modal-cambio-proveedor/modal-cambio-proveedor.component';
 
 @NgModule({
   declarations: [
@@ -136,6 +137,7 @@ import { CardSpinerComponent } from './reportes-compras/widgets/card-spiner/card
     TableTotalDetalleComponent,
     ModalDetalleComponent,
     CardSpinerComponent,
+    ModalCambioProveedorComponent,
   ],
   imports: [
     CommonModule,

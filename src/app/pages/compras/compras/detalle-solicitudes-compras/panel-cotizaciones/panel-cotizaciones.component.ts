@@ -149,8 +149,8 @@ export class PanelCotizacionesComponent implements OnInit {
             this.isDisabled = false;
           } else {
             this.alertasService.mostrarAlerta(
-              response.message,
-              "Revisa que el proveedor tenga un correo asignado",
+              'Error',
+             response.message,
               "error",
               "danger"
             );

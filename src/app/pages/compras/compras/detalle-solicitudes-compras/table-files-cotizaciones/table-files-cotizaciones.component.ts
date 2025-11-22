@@ -44,6 +44,7 @@ public proveedorSelec: any;
 public empresas: any = [];
 public isLoading: boolean = true;
 public isLoad: boolean = true;
+public showPanelCotizaciones: boolean = false;
 public enEsts = EstadoSolicitud;
 
 public proveedorSeleccionado: any;
@@ -257,4 +258,7 @@ public proveedorSeleccionado: any;
       );
     }
 
+    public actDetalle(){
+      this.actualizarDetalles.emit();
+    }
 }
