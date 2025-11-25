@@ -201,7 +201,7 @@ public proveedorSeleccionado: any;
       return;
     }
 
-    if (total === 0 && noAutorizado) {
+    if (total === 0) {
       // this.compras.setMostrarBoton(false);
       this.mostrarObs = false;
       this.alertasService.mostrarAlerta("El total de la cotización debe ser mayor a 0",

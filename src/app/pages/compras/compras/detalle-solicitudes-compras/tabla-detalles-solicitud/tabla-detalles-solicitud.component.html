@@ -55,6 +55,7 @@
           <th>Observaciones</th>
           <th class="text-center" *ngIf= "solicitudCompra?.multiUnidad">AT</th>
           <th>Ref. fotográfica</th>
+          <th>Rec</th>
           <th *ngIf = "modifica">Autorizado</th>
           <th *ngIf="mostrarTotal">Quitar</th>
         </tr>
@@ -189,6 +190,9 @@
             >
               <i class="fas fa-eye"></i
             ></a>
+          </td>
+          <td style="width: 3rem" class="text-center">
+            <span title="El costo de este insumo sera recuperado por el cliente"><i  *ngIf="detalle.get('recuperable')?.value == 1" class="fas fa-info-circle text-success"></i></span>
           </td>
           <td *ngIf="modifica" style="width: 6rem" class="text-center">
             <input

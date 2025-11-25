@@ -124,7 +124,8 @@ export class TablaDetallesSolicitudComponent implements OnInit {
       solicitudes_compra_id: [dato?.solicitudes_compra_id ?? null],
       autotanque: [dato?.DetalleAutotanque?.DatosVehiculo?.eco ?? null],
       no_serie: [dato?.DetalleAutotanque?.DatosVehiculo?.no_serie ?? null],
-      confirmado: [dato?.confirmado ?? 0]
+      confirmado: [dato?.confirmado ?? 0],
+      recuperable: [dato?.recuperable ?? 0]
     });
   }
 

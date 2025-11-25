@@ -56,7 +56,10 @@ export class ModalUpdtAutotanqueComponent implements AfterViewInit {
     if( !this.formDatosVehiculo.esValido()
       || (this.openFormTanque  &&  !this.formDatosTanque.esValido())
       || (this.mostrarFormulario &&  !this.formDatosPoliza.esValido())){
-      this.alertasService.mostrarAlerta("Llena le formualrio correctamente", `Falta información importante, ingresala para continuar: ${this.formDatosVehiculo.mostrarErroresFormulario() || 'Campos marcados en rojo'}`, "warning", "warning");
+      this.alertasService.mostrarAlerta("Llena le formualrio correctamente", `Falta información importante, ingresala para continuar: ${this.formDatosVehiculo.mostrarErroresFormulario() 
+        || this.formDatosTanque.mostrarErroresFormulario() 
+        || this.formDatosPoliza.mostrarErroresFormulario() 
+        || 'Campos marcados en rojo'}`, "warning", "warning");
       // this.event.emit(false);
       this.deshabilitado = false;
       return

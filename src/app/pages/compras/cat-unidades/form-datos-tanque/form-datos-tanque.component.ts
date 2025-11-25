@@ -5,6 +5,7 @@ import {
   FormGroup,
   Validators,
 } from "@angular/forms";
+import { obtenerErroresFormulario } from 'src/app/core/helpers/errores-forrmulario';
 
 @Component({
   selector: 'app-form-datos-tanque',
@@ -111,4 +112,11 @@ export class FormDatosTanqueComponent implements OnInit {
     this.formDatosTanques.reset();
   }
 
+  mostrarErroresFormulario() {
+    const errores = obtenerErroresFormulario(this.formDatosTanques);
+  
+    if (errores.length > 0) {
+      return errores[0]; // o mostrar todos
+    }
+  }
 }

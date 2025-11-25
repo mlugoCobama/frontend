@@ -4,7 +4,7 @@ import {  FormBuilder, FormControl, FormGroup,  Validators  } from "@angular/for
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
 import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 import { ComprasMacroService } from 'src/app/core/services/compras/compras-macro.service';
-
+import { obtenerErroresFormulario } from 'src/app/core/helpers/errores-forrmulario';
 
 @Component({
   selector: 'app-form-solicitud-macro',
@@ -75,6 +75,7 @@ export class FormSolicitudMacroComponent implements OnInit{
         folio_requisicion: new FormControl(null, Validators.required),
         formato_orden_trabajo: new FormControl(null, Validators.required),
         cotizacion: new FormControl(null),
+        requiere_anticipo: new FormControl(null, Validators.required)
       });
       resolve(true);
     });
@@ -248,6 +249,14 @@ public autotanquesFormatted(datos) {
     value: item.id,
     label: `ECO: ${item.id} ${item.marca_vehiculo} ${item.submarca}(${item.modelo}) PLACAS: ${item.placas}`
   }));
+}
+
+mostrarErroresFormulario() {
+  const errores = obtenerErroresFormulario(this.formSolicitudCompra);
+
+  if (errores.length > 0) {
+    return errores[0]; // o mostrar todos
+  }
 }
 
 }

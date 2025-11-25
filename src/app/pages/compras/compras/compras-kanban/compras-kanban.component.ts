@@ -40,7 +40,6 @@ export class ComprasKanbanComponent implements OnInit, OnChanges {
   { id: 1, nombre: 'En espera de autorización', color: 'bg-info' },
   { id: 2, nombre: 'Solicitado', color: 'bg-info' },
   { id: 3, nombre: 'En cotización', color: 'bg-warning' },
-  { id: 4, nombre: 'Cancelado', color: 'bg-danger' },
   { id: 5, nombre: 'Orden de compra', color: 'bg-warning' },
   { id: 6, nombre: 'Autorizado', color: 'bg-success' },
   { id: 7, nombre: 'Autorizado a pago', color: 'bg-primary' },
@@ -50,7 +49,8 @@ export class ComprasKanbanComponent implements OnInit, OnChanges {
   { id: 11, nombre: 'Solicitado pago', color: 'bg-warning' },
   { id: 12, nombre: 'Pagada', color: 'bg-success' },
   { id: 13, nombre: 'Cargar complemento', color: 'bg-secondary' },
-  { id: 14, nombre: 'Finalizada', color: 'bg-dark' }
+  { id: 14, nombre: 'Finalizada', color: 'bg-dark' },
+  { id: 4, nombre: 'Cancelado', color: 'bg-danger' },
 ];
 
 

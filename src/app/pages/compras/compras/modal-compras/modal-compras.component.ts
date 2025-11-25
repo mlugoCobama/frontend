@@ -63,7 +63,7 @@ export class ModalComprasComponent implements AfterViewInit
 
       this.alertasService.mostrarAlerta(
         "Alerta",
-        "Debes llenar correctamente todos los campos",
+        `Debes llenar correctamente todos los campos: ${this.formSolicitudCompra.mostrarErroresFormulario()}` ,
         "warning",
         "warning"
       );
@@ -133,7 +133,7 @@ export class ModalComprasComponent implements AfterViewInit
           this.cerrarModal();
         } else {
           this.alertasService.mostrarAlerta("Error", response.message, "warning", "warning");
-
+          this.sending = false;
           return;
         }
       },

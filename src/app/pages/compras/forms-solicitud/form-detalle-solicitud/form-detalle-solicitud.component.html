@@ -32,6 +32,7 @@
       </div>
       <div class="col-sm-4 my-1">
         <input type="text" formControlName="descripcion" id="descripcion" name="descripcion" aria-label="descripcion" 
+        title="Ingresa la descripción de lo que solicitas"
         class="form-control form-control-sm" placeholder="Descripción *"/>
         <div
           *ngIf="detalleSolicitudFormControl.descripcion.touched || submittedDetail">
@@ -45,7 +46,7 @@
         </div>
       </div>
       <div class="col-sm-4 my-1">
-        <input type="text" formControlName="observaciones" id="observaciones" name="observaciones" aria-label="observaciones" 
+        <input title="Ingresa observaciones como notas técnicas o condiciones especiales" type="text" formControlName="observaciones" id="observaciones" name="observaciones" aria-label="observaciones" 
         class="form-control form-control-sm"  placeholder="Observaciones"/>
         <div
           *ngIf="detalleSolicitudFormControl.observaciones.touched || submittedDetail">
@@ -64,7 +65,9 @@
 
       <div class="col-sm my-1">
         <label for="img_referencia" class="form-label">Referencia fotografica: </label>
-        <input type="file" accept=".jpg, .png" id="img_referencia" name="img_referencia" aria-label="img_referencia" class="form-control form-control-sm" 
+        <input
+        title="Imagen de referencia para identificar el producto (no cotizaciones)."
+         type="file" accept=".jpg, .png" id="img_referencia" name="img_referencia" aria-label="img_referencia" class="form-control form-control-sm" 
         (change)="onFileChange($event, 'img_referencia')" formControlName="img_referencia"/>
         <div
           *ngIf=" detalleSolicitudFormControl.img_referencia.touched || submittedDetail">
@@ -73,6 +76,28 @@
           </div>
         </div>
       </div>
+      <div class="col-sm-2 my-1">
+      <label for="recuperar_costo" class="form-label">Recupera costo</label>
+      <select 
+      title="¿El costo del insumo sera recuperado por el cliente?"
+        class="form-select form-select-sm" 
+        id="recuperar_costo" 
+        name="recuperar_costo" 
+        aria-label="recuperar_costo"
+        formControlName="recuperar_costo">
+        <option value="" selected disabled>Selecciona</option>
+        <option value="1">Sí</option>
+        <option value="0">No</option>
+      </select>
+      <div
+          *ngIf=" detalleSolicitudFormControl.recuperar_costo.touched || submittedDetail">
+          <div class="text-danger form-text" *ngIf="detalleSolicitudFormControl.recuperar_costo.errors?.['required']">
+            Especifica si el costo sera recuperado.
+          </div>
+        </div>
+    </div>
+
+
       <div *ngIf = "+destino === 602" class="col-sm my-1">
         <label for="vehiculo" class="form-label"> Autotanque *: </label>
         <select class="form-select form-select-sm" aria-label="Default select example" formControlName="vehiculo" id="vehiculo" 
@@ -84,11 +109,20 @@
         </option>
       </select>
       <div *ngIf="detalleSolicitudFormControl.vehiculo.touched || submittedDetail">
+        <div class="text-danger form-text" *ngIf="detalleSolicitudFormControl.vehiculo.errors?.['required']">
+          Autotanque es requerido.
+        </div>
+      </div>
+
+
+
+
+      <!-- <div *ngIf="detalleSolicitudFormControl.vehiculo.touched || submittedDetail">
         <div
           class="text-danger form-text">
           Autotanques es requerido.
         </div>
-      </div>
+      </div> -->
       </div>
 
       <!-- <div *ngIf="isAgencia" class="col-sm-3 my-1">
@@ -139,7 +173,9 @@
         <td *ngIf = "+destino === 602"> ECO: {{ row.label }}</td>
         <td class="text-center"><img *ngIf="row.img_referencia1;else elseBlock" src="{{ row.img_referencia1 }}" alt="Sin imagen de referencia" width="100"/></td>
         <!-- <td *ngIf="isAgencia">{{row.cat_areas}}</td> -->
-        <td  class="text-center"> <input type="checkbox" title="¿El costo del insumo sera recuperado por el cliente?" class="form-check-input" id="exampleCheck1"> </td> 
+        <td class="text-center">
+          <strong> {{ row.recuperar_costo == 1 ? 'Sí' : 'No' }} </strong>
+        </td>
         <td class="text-center">
           <button type="button" class="btn btn-danger btn-sm" (click)="removeDetalle(i)">
             <i class="fas fa-minus-circle"></i>

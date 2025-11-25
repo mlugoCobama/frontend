@@ -61,7 +61,7 @@ export class ModalComprasMacroComponent implements AfterViewInit {
       this.isLoad = false;
       this.alertasService.mostrarAlerta(
         "Alerta",
-        "Debes llenar correctamente todos los campos marcados en rojo",
+        "Debes llenar correctamente el formulario " + this.formSolicitudCompra.mostrarErroresFormulario(),
         "warning",
         "warning"
       );
@@ -159,5 +159,7 @@ export class ModalComprasMacroComponent implements AfterViewInit {
 
   getDato(dato:any) {
     this.destino = dato;
+    this.tableData.limpiarArray();
+    this.tableData.setVehiculoValidator(dato);
   }
 }

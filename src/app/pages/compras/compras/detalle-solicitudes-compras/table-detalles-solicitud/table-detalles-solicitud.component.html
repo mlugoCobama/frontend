@@ -24,7 +24,7 @@
         <th *ngIf = "solicitudCompra.multiUnidad" >AT</th>
         <th>Ref. fotográfica</th>
         <th>Autorizado</th>
-          
+        <th title="El costo del insumo sera pagado por el cliente">Rec</th>
         <th *ngFor="let prov of cotProv" class="text-center">
           <strong> {{ prov.proveedores_id[0].nombre }} </strong>
           <button
@@ -74,6 +74,9 @@
             [checked]="row.confirmado === 1 ? true : false" [disabled] = "solicitudCompra.estatus < enEsts.Solicitado ? false : true">
           </div>
         </td>
+        <td class="text-center">
+          <span title="El costo de este insumo sera recuperado por el cliente"><i  *ngIf="row.recuperable == 1" class="fas fa-info-circle text-success"></i></span>
+        </td>
         <td *ngFor="let prov of cotProv; let i = index">
           <!-- <td *ngFor="let prov of row.detalles"> -->
           <div *ngIf = "row.confirmado === 1" class="input-group input-group-sm col-sm">
@@ -94,7 +97,7 @@
     </tbody>
     <tfoot *ngIf="mostrarTotal">
       <tr >
-        <td [attr.colspan]="solicitudCompra.multiUnidad ? 7 : 6" class="text-end">
+        <td [attr.colspan]="solicitudCompra.multiUnidad ? 8 : 7" class="text-end">
           <Strong> SUB-TOTAL (sin iva) </Strong>
         </td>
         <td
@@ -108,7 +111,7 @@
         </td>
       </tr>
       <tr >
-        <td [attr.colspan]="solicitudCompra.multiUnidad ? 7 : 6" class="text-end">
+        <td [attr.colspan]="solicitudCompra.multiUnidad ? 8 : 7" class="text-end">
           <Strong>TOTAL</Strong>
         </td>
         <td

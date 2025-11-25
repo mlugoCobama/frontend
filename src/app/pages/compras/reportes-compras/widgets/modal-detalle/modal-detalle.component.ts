@@ -26,7 +26,8 @@ export class ModalDetalleComponent implements OnInit {
         proveedor: this.data.proveedor,
         at: this.data.at,
         servicio: this.data.servicio,
-        total_at: this.data.total_at
+        total_at: this.data.total_at,
+        multiunidad: this.data.multiunidad,
       };
     }
   }

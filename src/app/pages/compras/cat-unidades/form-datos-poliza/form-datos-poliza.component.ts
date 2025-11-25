@@ -5,7 +5,7 @@ import {
   FormGroup,
   Validators,
 } from "@angular/forms";
-
+import { obtenerErroresFormulario } from 'src/app/core/helpers/errores-forrmulario';
 @Component({
   selector: 'app-form-datos-poliza',
   templateUrl: './form-datos-poliza.component.html',
@@ -116,6 +116,13 @@ export class FormDatosPolizaComponent implements OnInit{
     this.submitted = false;
     this.formDatosPoliza.reset();
   }
+
+  mostrarErroresFormulario() {
+      const errores = obtenerErroresFormulario(this.formDatosPoliza);
+      if (errores.length > 0) {
+        return errores[0]; // o mostrar todos
+      }
+    }
 
 
 

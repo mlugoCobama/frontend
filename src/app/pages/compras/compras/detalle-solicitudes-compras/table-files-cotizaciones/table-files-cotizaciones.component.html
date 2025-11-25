@@ -107,7 +107,7 @@
     </div>
   </div>
 
-  <div class="col-2 d-flex align-items-end justify-content-center">
+  <div class="col-2 d-flex align-items-end justify-content-center" *ngIf="!sending">
     <div class="d-flex flex-column bd-highlight gap-2">
     <button
       *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && !mostrarObs && tienePermiso('view btn save precios')"
@@ -126,8 +126,6 @@
       <i class="fas fa-file-upload "></i> Guardar Cotización
       </button>
     </div>
-    
-
     <button 
       *ngIf = "!ordenCompra && proveedorSeleccionado && tienePermiso('view btn generar orden')"
       type="submit"

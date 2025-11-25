@@ -7,6 +7,7 @@ import { LocalStorageServiceService } from "src/app/core/services/local-storage-
 import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 
 import catCentrosCostos from "src/environments/cat_centros_costos.json";
+import { obtenerErroresFormulario } from 'src/app/core/helpers/errores-forrmulario';
 
 @Component({
   selector: 'app-form-solicitud',
@@ -74,6 +75,7 @@ export class FormSolicitudComponent implements OnInit{
         usuario_destino: new FormControl(""),
         c_c: new FormControl(0),
         motivo: new FormControl(null, Validators.required),
+        requiere_anticipo: new FormControl(null, Validators.required)
       });
       resolve(true);
     });
@@ -255,4 +257,14 @@ export class FormSolicitudComponent implements OnInit{
   getIsAgencia(){
     return this.isAgencia;
   }
+
+  mostrarErroresFormulario() {
+  const errores = obtenerErroresFormulario(this.formSolicitudCompra);
+
+  if (errores.length > 0) {
+    return errores[0]; // o mostrar todos
+  }
+}
+
+
 }

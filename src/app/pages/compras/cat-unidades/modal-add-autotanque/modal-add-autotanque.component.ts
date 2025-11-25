@@ -58,7 +58,9 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
       || (this.mostrarFormulario &&  !this.formDatosPoliza.esValido())
     ){
       this.alertasService.mostrarAlerta("Llena le formualrio correctamente",
-                                         `Falta información importante, ingresala para continuar: ${this.formDatosVehiculo.mostrarErroresFormulario() || 'Campos marcados en rojo'}`,
+                                         `Falta información importante, ingresala para continuar: ${this.formDatosVehiculo.mostrarErroresFormulario() 
+                                          || this.formDatosTanque.mostrarErroresFormulario() 
+                                          || this.formDatosPoliza.mostrarErroresFormulario() || 'Campos en rojo'}`,
                                         "warning", 
                                         "warning");
       // this.event.emit(false);
