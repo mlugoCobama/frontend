@@ -95,7 +95,7 @@
         <button type="button" class="btn header-item d-flex align-items-center" dropdownToggle id="page-header-user-dropdown">
           <!-- <img class="rounded-circle header-profile-user" src="assets/images/users/user-dummy-img.jpg" alt="Header Avatar"> -->
           <div class="avatar-xs align-self-center">
-            <span class="avatar-title rounded-circle bg-primary-subtle text-primary font-size-16 
+            <span [ngClass]="getColorClass()" class="avatar-title rounded-circle font-size-16 
             header-profile-user d-flex align-items-center justify-content-center" > {{ inciales }} </span>
           </div>
           &nbsp;{{this.userName.role.name}}

@@ -24,8 +24,9 @@
         <tr class="text-center">
           <th *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && tienePermiso('view btn save precios')">#</th>
           <th>Nombre proveedor</th>
-          <th>Archivo cotización</th>
-          <th *ngIf="solicitudCompra?.estatus <= 3 ">Autorizado</th>
+          <th>Archivo de cotización</th>
+          <th style="width: 6rem;" *ngIf="solicitudCompra?.estatus <= 3 "><small>Reenviar correo</small></th>
+          <th style="width: 3rem;" *ngIf="solicitudCompra?.estatus <= 3 ">Autorizado</th>
         </tr>
       </thead>
       <tbody>
@@ -73,6 +74,23 @@
               </a>
             </div>
           </td>
+          <td *ngIf="solicitudCompra?.estatus <= 3 && tienePermiso('view btn save precios')"> 
+            <button 
+              (click)="reenviarSC(prov)" 
+              [disabled]="prov?.loading"
+              class="btn btn-sm btn-primary"
+              title="Reenviar correo de solicitud de cotización al proveedor">
+
+              <ng-container *ngIf="!prov?.loading; else loadingIcon">
+                <i class="fas fa-paper-plane"></i>
+              </ng-container>
+              <ng-template #loadingIcon>
+                <span class="spinner-border spinner-border-sm"></span>
+              </ng-template>
+            </button>
+
+
+          </td>
           <td *ngIf="solicitudCompra?.estatus <= 3 && prov?.autorizado != 0;">
               <div class="text-success">
                 <i class="fas fa-check"></i>
@@ -117,13 +135,20 @@
       <i class="fas fa-file-upload"></i>
       {{ showPanelCotizaciones ? 'Ocultar proveedor' : 'Agregar proveedor a cotización' }}
     </button>
+
       <button
         *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && !mostrarObs && tienePermiso('view btn save precios')"
         type="submit"
         class="btn btn-sm btn-success"
         (click)="guardarPrecios()"
       >
-      <i class="fas fa-file-upload "></i> Guardar Cotización
+      <ng-container *ngIf="!saving; else loadingGuardando">
+        <i class="fas fa-file-upload "></i> Guardar Cotización
+      </ng-container>
+      <ng-template #loadingGuardando>
+          <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+          Guardando...
+      </ng-template>
       </button>
     </div>
     <button 

@@ -46,6 +46,14 @@ export class TopbarComponent implements OnInit {
   userName:any;
   inciales: any;
 
+  colores: string[] = [
+    'bg-success-subtle text-success',
+    'bg-danger-subtle text-danger',
+    'bg-primary-subtle text-primary',
+    'bg-warning-subtle text-warning',
+    'bg-info-subtle text-info',
+  ];
+
   constructor(@Inject(DOCUMENT) private document: any, private router: Router, private authService: AuthenticationService,
     private authFackservice: AuthfakeauthenticationService,
     public languageService: LanguageService,
@@ -77,7 +85,7 @@ export class TopbarComponent implements OnInit {
     })
     this.openMobileMenu = false;
     this.element = document.documentElement;
-    
+
     this.userName = this.localStorage.getItem('currentUser');
     //Genera las iniciales para mostrar el perfil del usuario
     this.inciales =  this.userName.role.name.split(" ").slice(0,2).reduce((acumulador, palabra) => acumulador + palabra.charAt(0), '').toUpperCase();
@@ -93,6 +101,14 @@ export class TopbarComponent implements OnInit {
     } else {
       this.flagvalue = val.map(element => element.flag);
     }
+  }
+
+  getColorClass(): string {
+    if (!this.inciales) return 'bg-primary-subtle text-primary';
+    const letra = this.inciales.charAt(0).toUpperCase();
+    const codigo = letra.charCodeAt(0);
+    const index = codigo % this.colores.length;
+    return this.colores[index];
   }
 
   setLanguage(text: string, lang: string, flag: string) {

@@ -45,6 +45,10 @@ export class CotizacionesService {
     return this.http.post(environment.apiUrl + "compras/Cotizaciones", data, {headers});
   }
 
+  public reenviarCorreo(data:any): Observable<any> {
+    return this.http.post(environment.apiUrl + "compras/reenviar-solicitud-cotizacion", data, {headers});
+  }
+
   /**
    * Recupera los archivos de cotizaciones en el servidor
    * @param rutaArchivo Archivo en le servidor

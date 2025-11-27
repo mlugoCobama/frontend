@@ -37,6 +37,7 @@ export class TableDetallesSolicitudComponent implements OnInit {
 
   public isLoad: boolean = true;
   public mostrarObs: boolean = false;
+  public saving: boolean = false;
   
   public unidades:any  = [];
   public cotProv: any[] = [];
@@ -214,6 +215,7 @@ export class TableDetallesSolicitudComponent implements OnInit {
    * Guarda los precios capturados dentro de la tabla
    */
   public guardarPrecios() {
+    this.saving = true;
     const formData = new FormData();
     let allFilesUploaded = true;
     let datosIngresados = false;
@@ -252,12 +254,15 @@ export class TableDetallesSolicitudComponent implements OnInit {
           this.getDetalles();
           this.cotizacionesService.clearFiles();
           this.isLoad = false;
+          this.saving = false;
         } else {
           this.alertasService.mostrarAlerta("Error guardando los datos:", response.message, "error", "danger");
+          this.saving = false;
         }
       },
       (error) => {
         this.alertasService.mostrarAlerta("Error guardando los datos:", error, "error", "danger");
+        this.saving = false;
       }
     );
   }

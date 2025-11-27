@@ -22,9 +22,9 @@
         <th>Descripción</th>
         <th>Observaciones</th>
         <th *ngIf = "solicitudCompra.multiUnidad" >AT</th>
-        <th>Ref. fotográfica</th>
-        <th>Autorizado</th>
-        <th title="El costo del insumo sera pagado por el cliente">Rec</th>
+        <th style="width: 3rem;">R. fot.</th>
+        <th style="width: 3rem;" class="text-center">Autorizado</th>
+        <th style="width: 3rem;" class="text-center" title="El costo del insumo sera pagado por el cliente">Rec</th>
         <th *ngFor="let prov of cotProv" class="text-center">
           <strong> {{ prov.proveedores_id[0].nombre }} </strong>
           <button
@@ -131,7 +131,14 @@
       ACTUALIZAR DETALLES
     </button> -->
     <button *ngIf= "solicitudCompra.estatus === enEsts.EnCotizacion && !isLoad" class="btn btn-sm btn-primary" (click)="guardarPrecios()">
-      <i class="fas fa-money-check-alt"></i> Guardar Precios
+      <!-- <i class="fas fa-money-check-alt"></i> Guardar Precios -->
+       <ng-container *ngIf="!saving; else loadingGuardando">
+        <i class="fas fa-money-check-alt"></i> Guardar Precios
+      </ng-container>
+      <ng-template #loadingGuardando>
+          <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+          Guardando...
+      </ng-template>
     </button>
     </div>
   </div>
@@ -148,6 +155,7 @@
     [ordenCompra]="ordenCompra"
     [solicitudCompra]="solicitudCompra"
     [cotProv]="cotProv"
+    [saving]="saving"
     [mostrarObs]="mostrarObs"    
     (savePrices)="guardarPrecios()"
     (actualizarDetalles)="getDetalles()"
