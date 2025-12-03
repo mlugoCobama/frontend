@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-xl-12">
-      <div class="card">
+      <div class="card shadow-lg rounded">
         <div class="card-body border-bottom">
           <div class="d-flex align-items-center">
             <h5 class="mb-0 card-title flex-grow-1">
@@ -30,9 +30,11 @@
               >
             </div>
           </div>
-        </div>
-
-        <div class="card-body border-bottom">
+        </div>    
+        <!--div.card-body-->
+      </div>
+      <div class="card shadow-lg rounded">
+          <div class="card-body border-bottom">
           <div class="d-flex justify-content-center" *ngIf="isLoad">
             <div class="spinner-border" role="status">
               <span class="visually-hidden">Loading...</span>
@@ -63,8 +65,7 @@
             </div>
           </div>
         </div>
-        <!--div.card-body-->
-      </div>
+        </div>
     </div>
   </div>
 </div>

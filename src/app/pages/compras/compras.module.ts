@@ -72,6 +72,8 @@ import { TableTotalDetalleComponent } from './reportes-compras/widgets/table-tot
 import { ModalDetalleComponent } from './reportes-compras/widgets/modal-detalle/modal-detalle.component';
 import { CardSpinerComponent } from './reportes-compras/widgets/card-spiner/card-spiner.component';
 import { ModalCambioProveedorComponent } from './compras/detalle-solicitudes-compras/btns-autorizacion/modal-cambio-proveedor/modal-cambio-proveedor.component';
+import { TableFormExistenciasComponent } from './compras/detalle-solicitudes-compras/panel-entregas/table-form-existencias/table-form-existencias.component';
+import { TableCardexMovimientosComponent } from './compras/detalle-solicitudes-compras/panel-entregas/table-cardex-movimientos/table-cardex-movimientos.component';
 
 @NgModule({
   declarations: [
@@ -138,6 +140,9 @@ import { ModalCambioProveedorComponent } from './compras/detalle-solicitudes-com
     ModalDetalleComponent,
     CardSpinerComponent,
     ModalCambioProveedorComponent,
+    TableFormExistenciasComponent,
+    TableCardexMovimientosComponent,
+    
   ],
   imports: [
     CommonModule,

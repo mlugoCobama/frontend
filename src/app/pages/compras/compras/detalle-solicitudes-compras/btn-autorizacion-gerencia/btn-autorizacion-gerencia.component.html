@@ -1,26 +1,39 @@
-<div class="card border" *ngIf="solicitudCompra.auto_gg === 0 || solicitudCompra.auto_admin === 0 || (solicitudCompra.auto_macro === 0 && solicitudCompra.tipo == 2)">
+<div class="card border rounded shadow-lg" *ngIf="solicitudCompra.auto_gg === 0 || solicitudCompra.auto_admin === 0 || (solicitudCompra.auto_macro === 0 && solicitudCompra.tipo == 2)">
   <div class="card-header text-center bg-primary text-white">
     <strong> Da click en tu botón para autorizar la solicitud y continuar con el proceso </strong>
   </div>
   <div class="card-body">
     <div class="row">
       <div class="d-flex justify-content-evenly gap-2 col-9 mx-auto">
-        <button *ngIf="solicitudCompra.auto_gg === 0 && tienePermiso('view btn autorizacion gg') && validarEmpresaUsuario()"
+        <button [disabled] = "working" *ngIf="solicitudCompra.auto_gg === 0 && tienePermiso('view btn autorizacion gg') && validarEmpresaUsuario()"
           class="btn btn-primary col-md-4" type="button" (click)="autorizar('auto_gg')">
-          <strong> Autoriza: Gerencia general </strong>
+          <ng-container *ngIf="!working; else spinner">
+            <strong> Autoriza: Gerencia general </strong>
+          </ng-container>
         </button>
-        <button *ngIf="solicitudCompra.auto_admin === 0 && tienePermiso('view btn autorizacion ga') && validarEmpresaUsuario()"
+        <button [disabled] = "working" *ngIf="solicitudCompra.auto_admin === 0 && tienePermiso('view btn autorizacion ga') && validarEmpresaUsuario()"
           class="btn btn-info col-md-4" type="button" (click)="autorizar('auto_admin')">
-          <strong> Autoriza: Gerencia administrativa </strong>
+          <ng-container *ngIf="!working; else spinner">
+            <strong> Autoriza: Gerencia administrativa </strong>
+          </ng-container>
         </button>
         <button
+        [disabled] = "working"
           *ngIf="solicitudCompra.auto_macro === 0  && solicitudCompra.auto_gg === 1 && solicitudCompra.auto_admin === 1 && tienePermiso('view btn autorizacion macro') && solicitudCompra.tipo === 2"
           class="btn btn-warning col-md-4" type="button" (click)="guardar('auto_macro')">
-          <strong> Autoriza: Macro taller </strong>
+          <ng-container *ngIf="!working; else spinner">
+            <strong> Autoriza: Macro taller </strong>
+          </ng-container>
         </button>
       </div>
     </div>
   </div>
 </div>
+<ng-template #spinner>
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    <strong> Trabajando... </strong>
+</ng-template>
+
+
 
 

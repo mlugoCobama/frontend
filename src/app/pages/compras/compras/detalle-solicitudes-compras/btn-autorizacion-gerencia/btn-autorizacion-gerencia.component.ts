@@ -23,6 +23,7 @@ export class BtnAutorizacionGerenciaComponent {
   @Input() tipoAutorizacion: any;
   @Input() solicitudCompra: any;
   @Output() actualizarStatus = new EventEmitter<void>();
+  public working: boolean = false;
 
   constructor(
     public comprasService: ComprasService,
@@ -64,6 +65,7 @@ export class BtnAutorizacionGerenciaComponent {
   }
 
   public autorizarSolicitud(gerencia) {
+    this.working = true;
     const data = { campo: gerencia, value: 1 };
     this.comprasService.edit(this.solicitudCompra.id, data).subscribe(
       (response) => {
@@ -74,8 +76,10 @@ export class BtnAutorizacionGerenciaComponent {
             "success",
             "success"
           );
+          this.working = false;
           this.actualizarStatus.emit();
         } else {
+          this.working = false;
           this.alertasService.mostrarAlerta(
             "Error!",
             "Hubo un error",
@@ -85,6 +89,7 @@ export class BtnAutorizacionGerenciaComponent {
         }
       },
       (error) => {
+        this.working = false;
         this.alertasService.mostrarAlerta(
           "Error!",
           `Error fetching data: ${error}`,
@@ -96,6 +101,7 @@ export class BtnAutorizacionGerenciaComponent {
   }
 
   public autorizarCotizacion(gerencia) {
+    this.working = true;
     const data = { campo: gerencia, value: 1 };
     this.comprasService.edit(this.solicitudCompra.id, data).subscribe(
       (response) => {
@@ -106,9 +112,11 @@ export class BtnAutorizacionGerenciaComponent {
             "success",
             "success"
           );
+          this.working = false;
           this.enviarSolicitud();
           this.actualizarStatus.emit();
         } else {
+          this.working = false;
           this.alertasService.mostrarAlerta(
             "Error!",
             "Hubo un error",
@@ -118,6 +126,7 @@ export class BtnAutorizacionGerenciaComponent {
         }
       },
       (error) => {
+        this.working = false;
         this.alertasService.mostrarAlerta(
           "Error!",
           `Error fetching data: ${error}`,
@@ -269,6 +278,7 @@ export class BtnAutorizacionGerenciaComponent {
           ...datos,
           observacion: result.value,
         };
+        this.working = true;
         this.comprasMacro.edit(id, payload).subscribe(
           (response) => {
             if ((response.status = "success")) {
@@ -279,6 +289,7 @@ export class BtnAutorizacionGerenciaComponent {
                 "success",
                 "success"
               );
+              this.working = false;
             }
           },
           (error) => {
@@ -288,6 +299,7 @@ export class BtnAutorizacionGerenciaComponent {
               "success",
               "success"
             );
+            this.working = false;
           }
         );
       }

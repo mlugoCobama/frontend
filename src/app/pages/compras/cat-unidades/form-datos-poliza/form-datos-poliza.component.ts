@@ -17,7 +17,31 @@ export class FormDatosPolizaComponent implements OnInit{
   @Input() datos: any = [];
   public formDatosPoliza: FormGroup;
   public submitted:boolean =  false;
+  public fechaActual: any;
+  public fechaFormateada: any;
+
   @Input() mostrarFormulario: any;
+
+  public subramos =[
+    { codigo: "9101", Nombre: "Automóviles", Descripcion: "Vehículos particulares y flotillas." },
+    { codigo: "9102", Nombre: "Motocicletas", Descripcion: "Vehículos particulares y flotillas." },
+    { codigo: "9103", Nombre: "Vehículos de carga", Descripcion: "Camiones, tractocamiones y transporte de mercancías (Auto tanques). " },
+  ];
+
+  public ramos =[
+    { codigo: "0090", Nombre: "Vehículos", Descripcion: "Vehículos terrestres" },
+  ];
+
+  public periodicidadesPago = [
+    { codigo: "3", Nombre: "Trimestral"},
+    { codigo: "6", Nombre: "Semestral"},
+    { codigo: "12", Nombre: "Anual"},
+  ];
+
+  public tiposMovimiento = [
+    { codigo: "1", Nombre: "Individual"},
+    { codigo: "2", Nombre: "Flotilla"},
+  ];
 
   constructor(
       public formBuilder: FormBuilder,
@@ -27,32 +51,36 @@ export class FormDatosPolizaComponent implements OnInit{
       this.buildForm();
     }
 
-
-
   private buildForm() {
 
-    const fechaActual = new Date();
-    const fechaFormateada = fechaActual.toISOString().split('T')[0];
+    this.fechaActual = new Date();
+    this.fechaFormateada = this.fechaActual.toISOString().split('T')[0];
 
     return new Promise((resolve, reject) => {
       this.formDatosPoliza = this.formBuilder.group({
         idSeguro: new FormControl( null),
         id_vehiculo_seguro: new FormControl(null),
-        inciso_vehiculo: new FormControl(null, Validators.required),
         aseguradora: new FormControl(null, Validators.required),
+        ramo: new FormControl("", Validators.required),
+        subramo: new FormControl("", Validators.required),
+        periodicidad_pago: new FormControl("", Validators.required),
+        tipo_movimiento: new FormControl("", Validators.required),
+        prima_total: new FormControl(null, Validators.required),
         cobertura: new FormControl(null, Validators.required),
         inicio_vigencia: new FormControl(null, Validators.required),
         fin_vigencia: new FormControl(null, Validators.required),
-        flotilla: new FormControl(null, Validators.required),
-        inciso_foltilla: new FormControl(null, Validators.required),
-        fecha_renovacion: new FormControl( fechaFormateada , Validators.required),
+        numero_poliza: new FormControl(null, Validators.required),
+        inciso: new FormControl(null, Validators.required),
+        fecha_emision: new FormControl( this.fechaFormateada , Validators.required),
       });
       resolve(true);
     });
   }
 
   public actualizarValidadoresPoliza(): void {
-  const campos = ['inciso_vehiculo', 'aseguradora', 'cobertura', 'inicio_vigencia', 'fin_vigencia', 'flotilla', 'inciso_foltilla', 'fecha_renovacion'];
+  const campos = ['ramo', 'subramo', 'aseguradora', 'cobertura', 'inicio_vigencia',
+     'fin_vigencia', 'numero_poliza', 'inciso', 'fecha_emision', 'prima_total',
+    'periodicidad_pago', 'tipo_movimiento'];
 
   campos.forEach(campo => {
     const control = this.formDatosPoliza.get(campo);
@@ -76,15 +104,19 @@ export class FormDatosPolizaComponent implements OnInit{
     this.formDatosPoliza.patchValue({
       idSeguro: this.datos?.idSeguro,
       id_vehiculo_seguro: this.datos?.id_com_datos_vehiculo,
-      inciso_vehiculo: this.datos?.inciso_vehiculo,
+      ramo: this.datos?.ramo,
+      subramo: this.datos?.sub_ramo,
       aseguradora: this.datos?.aseguradora,
       cobertura: this.datos?.cobertura,
       inicio_vigencia: this.datos?.inicio_vigencia,
       fin_vigencia: this.datos?.fin_vigencia,
-      tipo_vehiculo: this.datos?.tipo_vehiculo,
-      flotilla: this.datos?.flotilla,
-      inciso_foltilla: this.datos?.inciso_foltilla,
-      fecha_renovacion: this.datos?.fecha_renovacion
+      // tipo_vehiculo: this.datos?.tipo_vehiculo,
+      numero_poliza: this.datos?.numero_poliza,
+      inciso: this.datos?.inciso,
+      fecha_emision: this.datos?.fecha_emision,
+      prima_total: this.datos?.prima_total,
+      periodicidad_pago: this.datos?.periodicidad_pago,
+      tipo_movimiento: this.datos?.tipo_movimiento,
     });
   }
 

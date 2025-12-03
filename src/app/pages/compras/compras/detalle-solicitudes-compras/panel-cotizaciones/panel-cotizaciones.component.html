@@ -1,4 +1,4 @@
-<div class="card border">
+<div class="card border rounded shadow-lg">
   <div class="card-header bg-primary d-flex justify-content-between">
     <strong class="text text-white">Seleccione los proveedores con los que se realizará la cotización.</strong>
 
@@ -24,7 +24,7 @@
             *ngFor="let proveedor of proveedoresArray.controls; let i = index" 
             class="col-md-4">
             
-            <div class="card border-secondary h-100">
+            <div class="card border shadow-sm h-100">
               <div class="card-body p-2">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                   <small class="text-muted fw-bold">Proveedor {{ i + 1 }}</small>
@@ -104,17 +104,17 @@
           (click)="enviarSolicitudCotizacion()" 
           [disabled]="isDisabled">
           <span>
-           <i class="fas fa-paper-plane"></i> {{ isDisabled ? 'Trabajando' : 'Solicitar Cotización' }} 
+           <i class="bx bxs-paper-plane " [ngClass] = "{ 'bx-fade-up' : isDisabled }" ></i> {{ isDisabled ? 'Enviando' : 'Solicitar Cotización' }} 
           </span>
-          <span 
+          <!-- <span 
             *ngIf="isDisabled" 
             class="spinner-grow spinner-grow-sm ms-2" 
             role="status" 
             aria-hidden="true">
-          </span>
-          <span class="visually-hidden" *ngIf="isDisabled">
+          </span> -->
+          <!-- <span class="visually-hidden" *ngIf="isDisabled">
             Cargando…
-          </span>
+          </span> -->
         </button>
       </div>
     </form>

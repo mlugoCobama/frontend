@@ -34,10 +34,12 @@
             <strong> <small>Agregado el: {{ item.fecha }}</small> </strong>
         </div> -->
         <p class="mb-1"> <strong>Aseguradora: </strong> {{ item.aseguradora }}</p>
-        <p class="mb-1"> <strong>Cobertura: </strong> {{ item.cobertura }} <strong>&nbsp;Inciso: </strong> {{ item.inciso_vehiculo }}</p>
-        <p class="mb-1"> <strong>Flotilla: </strong> {{ item.flotilla }} <strong>&nbsp; Inciso: </strong> {{ item.inciso_foltilla }}</p>
+        <p class="mb-1"> <strong>No. de Póliza: </strong> {{ item.flotilla }} <strong>&nbsp; Inciso: </strong> {{ item.inciso_foltilla }}</p>
+        <p class="mb-1"> <strong>Ramo:</strong> {{ item.ramo }} <strong>Subramo:</strong>  {{ item.sub_ramo }} </p>
+        <p class="mb-1"> <strong>Cobertura: </strong> {{ item.cobertura }} <strong>&nbsp;Prima Total: </strong> {{ (+item.prima_total || 0) | currency }}</p>
+        
         <p class="mb-1"> <strong>Vigencia: </strong> {{ item.inicio_vigencia }} <strong>&nbsp; - &nbsp; </strong>  {{ item.fin_vigencia }}  </p>
-        <p><strong>Fecha de renovación: {{ item.fecha_renovacion || '-' }} </strong></p>
+        <p><strong>Fecha de emisión: {{ item.fecha_renovacion || '-' }} </strong></p>
     </a>
 
     <p *ngIf="comentarios.length == 0" class="text-muted text-center"><strong>Aun no hay pólizas asignadas...</strong></p>

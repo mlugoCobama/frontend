@@ -1,4 +1,4 @@
-<div class="card border">
+<div class="card border rounded shadow-lg">
   <div class=" card-header bg-primary text-white text-center">
     <p *ngIf = "mostrarBtnSolicitud() && tienePermiso('view btn save precios')" class="m-0"> <strong>  Da click en el siguiente botón si deseas solicitar el surtido de tu orden de compra  </strong> </p>
     <p *ngIf = "!mostrarBtnSolicitud()" class="m-0"> <strong> Carga en el siguiente formulario tus acuses o comprobantes de ENTREGA cuando el proveedor te entregue lo solicitado </strong></p>
@@ -9,11 +9,27 @@
       <strong> Solicitar al proveedor que surta la orden de compra</strong>
     </button>
   </div>
+
+
+
   <div *ngIf="!mostrarBtnSolicitud()">
-  <!-- <div class="alert alert-dark" role="alert">
-  Carga en el siguiente formulario tu acuse o comprobante de entrega
-  </div> -->
-  <form [formGroup]="acuseForm"  enctype="multipart/form-data">
+  <div *ngIf="this.detalles.length === 0" class="card-body border-bottom">
+      <div class="d-flex justify-content-center" >
+            <div class="spinner-border  text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+      </div>
+    </div>
+    <app-table-form-existencias
+    #formTableEntradas
+    [hidden]="this.detalles.length === 0"
+    [isLoad] = "isLoad"
+    [detalles]="detalles"
+    [entregaCompleta] = "entregaCompleta"
+    [submittDetail]="submittDetail"
+  ></app-table-form-existencias>
+
+  <form  *ngIf= "!entregaCompleta && this.detalles.length > 0" [formGroup]="acuseForm"  enctype="multipart/form-data">
     <div class="row align-items-end g-2">
       <div class="col-sm-4">
         <label for="archivo" class="form-label">Archivo de acuse</label>
@@ -26,46 +42,31 @@
       </div>
 
       <div class="col-sm-2 d-grid">
-        <button (click)="guardar()"  class="btn btn-primary btn-sm">Guardar</button>
+        <button (click)="guardar()" [disabled] = "submitted"  *ngIf="tienePermiso('view btn entrada almacen')" class="btn btn-primary btn-sm">{{ submitted ? 'Guardando...' :  'Guardar' }}</button>
       </div>
     </div>
   </form>
-  <hr />
-  <table *ngIf="ordenCompra?.acuses_entrega?.length > 0"  class="table table-bordered table-sm mt-2 text-center">
+
+  <table *ngIf="ordenCompra?.acuses_entrega?.length > 0"  class="table table-bordered table-sm mt-1 text-center">
     <thead class="table-light ">
       <tr>
         <th>#</th>
-        <th>Archivo</th>
         <th>Fecha</th>
         <th>Observaciones</th>
+        <th>Acuse</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let acuse of acusesGuardados; let i = index">
-        <td>{{ i + 1}}</td>
+        <td> <strong class="text-muted">{{ i + 1}}</strong></td>
+        <td> Entregado: <strong> {{ acuse.fecha | date: 'dd/MM/yyyy' }} </strong></td>
+        <td>{{ acuse.comentario }}</td>
         <td>
         <a (click) ="verArchivos(acuse.ruta)"  class="btn btn-sm btn-danger">
           <i class="fas fa-file-pdf"></i> Ver Acuse
-            </a>
+        </a>
         </td>
-        <td> Entregado: {{ acuse.fecha | date: 'dd/MM/yyyy' }}</td>
-        <td>{{ acuse.comentario }}</td>
       </tr>
     </tbody>
   </table>
-</div>
-
-  </div>
-
-</div>
-<!-- <div class="container p-1">
-  <div class="alert alert-dark" role="alert">
-  Da click en el siguiente botón si deseas solicitar el surtido de tu orden de compra
-  </div>
-  <div *ngIf="mostrarBtnSolicitud()" class="d-flex justify-content-evenly gap-2 col-9 mx-auto">
-    <button (click)="solicitarSurtido()" class="btn btn-info col-md-4" type="button">
-      <strong> Solicitar al proveedor que surta la orden de compra</strong>
-    </button>
-  </div>
-</div> -->
 

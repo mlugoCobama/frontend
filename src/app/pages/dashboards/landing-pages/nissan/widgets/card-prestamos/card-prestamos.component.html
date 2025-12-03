@@ -7,22 +7,22 @@
     <div class="row text-center">
       <div class="col-6">
         <p class="text-muted mb-2">Este Mes:</p>
-        <h3 class="mb-0">$ {{totalMes| number}}</h3>
+        <h3 class="mb-0">$ {{totalMes || 0 | number}}</h3>
         <p>Total</p>
         <p class="text-muted mb-2">Intereses</p>
         <h5 class="mb-0">
           <span class="font-size-14 text-muted"></span>
-          $ {{interesMes | number}}
+          $ {{interesMes || 0 | number}}
         </h5>
       </div>
-      <div class="col-6">
+      <div class="col-6 border-left">
         <p class="text-muted mb-2">El mes pasado:</p>
-        <h3 class="mb-0">$ {{totalMesAnt | number}}</h3>
+        <h3 class="mb-0">$ {{totalMesAnt || 0 | number}}</h3>
         <p>Total</p>
         <p class="text-muted mb-2">Intereses</p>
         <h5 class="mb-0">
           <span class="font-size-14 text-muted"></span>
-          $ {{interesMesAnt | number}}
+          $ {{interesMesAnt || 0 | number}}
         </h5>
       </div>
     </div>
@@ -33,7 +33,7 @@
         <span class="badge badge-soft-success me-1"><i
             class="bx bx-trending-up align-bottom me-1"
           ></i>
-          + {{difTotal | number}}</span
+          + {{difTotal || 0 | number}}</span
         >
         En comparación con el mes anterior
       </p>
@@ -43,7 +43,7 @@
       <span class="badge badge-soft-danger me-1"><i
           class="bx bx-trending-down align-bottom me-1"
         ></i>
-        {{difTotal | number}}</span
+        {{difTotal || 0 | number}}</span
       >
       En comparación con el mes anterior
     </p>

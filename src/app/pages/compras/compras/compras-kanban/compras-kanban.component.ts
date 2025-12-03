@@ -1,6 +1,5 @@
 
 import { Component, OnInit, Input, OnChanges, SimpleChanges, EventEmitter, Output } from '@angular/core';
-import { event } from 'jquery';
 
 interface SolicitudCompra {
   id: number;
@@ -100,4 +99,5 @@ export class ComprasKanbanComponent implements OnInit, OnChanges {
 
     return resultado;
   }
+
 }

@@ -10,21 +10,21 @@
           <div class="mb-4">
             <p>Este mes</p>
             <ng-container *ngIf="totalMes > 0; else elseTemplate1">
-              <h4>{{money}} {{ totalMes | number }}</h4>
+              <h4>{{money}} {{ totalMes || 0 | number }}</h4>
             </ng-container>
             <ng-template #elseTemplate1>
-              <h4 class="text-danger">{{money}} {{ totalMes | number }}</h4>
+              <h4 class="text-danger">{{money}} {{ totalMes || 0 | number }}</h4>
             </ng-template>
 
             <div>
               <ng-container *ngIf="diferencia > 0; else elseTemplate">
                 <span class="badge badge-soft-success font-size-12 me-1">
-                  + {{ diferencia | number }}</span
+                  + {{ diferencia || 0 | number }}</span
                 >
               </ng-container>
               <ng-template #elseTemplate>
                 <span class="badge badge-soft-danger font-size-12 me-1">
-                  {{money}} {{ diferencia | number }}</span
+                  {{money}} {{ diferencia || 0 | number }}</span
                 >
               </ng-template>
             </div>
@@ -36,7 +36,7 @@
 
           <div class="mt-4">
             <p class="mb-2">El mes pasado:</p>
-            <h5>{{money}} {{ totalMesAnt | number }}</h5>
+            <h5>{{money}} {{ totalMesAnt || 0 | number }}</h5>
           </div>
         </div>
       </div>

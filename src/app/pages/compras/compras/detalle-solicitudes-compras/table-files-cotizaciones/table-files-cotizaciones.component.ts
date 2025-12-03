@@ -327,7 +327,7 @@ export class TableFilesCotizacionesComponent implements AfterViewInit {
         if (response.status === "success") {
           this.alertasService.mostrarAlerta(
             "Guardado",
-            "Se generó correctamente la orden de compra",
+            "Se reenvió correctamente el correo de solicitud de cotización",
             "success",
             "success"
           );

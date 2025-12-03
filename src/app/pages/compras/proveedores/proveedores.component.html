@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-xl-12">
-      <div class="card">
+      <div class="card rounded shadow-lg">
         <div class="card-body border-bottom">
           <div class="d-flex align-items-center">
             <h5 class="mb-0 card-title flex-grow-1">Proveedores</h5>
@@ -37,8 +37,9 @@
             </div>
           </div>
         </div>
-
-        <div class="card-body border-bottom">
+      </div>  
+        <div class="card rounded shadow-lg">
+          <div class="card-body border-bottom">
           <div class="d-flex justify-content-center" *ngIf="isLoad">
             <div class="spinner-border" role="status">
               <span class="visually-hidden">Loading...</span>
@@ -68,9 +69,9 @@
               </thead>
                 <tbody >
                     <tr *ngFor="let item of datosFiltrados" (click)="seleccionar(item, $event)">
-                      <td >{{ item.nombre }} </td>
+                      <td >{{ item.nombre}} </td>
                       <td >{{ item.rfc }} <i *ngIf="!item.expActualizado"class= "text-danger fas fa-info-circle " title="Es posible que la CSF este desactualizada" > </i> </td>
-                      <td>{{ item.contacto }}</td>
+                      <td>{{ item.contacto  | titlecase}}</td>
                       <td>{{ item.telefono }}</td>
                       <td>{{ item.localidad }}</td>
                       <td>{{ item.condiciones }} {{ item.dias_credito }} Dias</td>
@@ -90,8 +91,9 @@
             </div>
           </div>
         </div>
+        </div>
         <!--div.card-body-->
-      </div>
+      
     </div>
   </div>
 </div>

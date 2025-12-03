@@ -34,7 +34,8 @@
   <button 
   [disabled]="sending"
   type="button" class="btn btn-primary btn-sm" (click)="save()">
-    Guardar
+  <i class="bx bxs-send " [ngClass]="{ 'bx-fade-right': sending }" ></i>
+    {{ sending ? 'Guardando' :'Guardar'}}
   </button>
 </div>
 

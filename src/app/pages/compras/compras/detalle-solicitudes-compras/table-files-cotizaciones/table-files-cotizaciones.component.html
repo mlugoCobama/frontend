@@ -1,8 +1,13 @@
-<div class="card">
+<div class="card rounded shadow-lg">
   <div class="card-header bg-primary text-center text-white">
    <strong>  Marca la casilla de la fila con el proveedor seleccionado para generar la
     orden de compra </strong> 
   </div>
+  <div class="d-flex justify-content-center pt-3" *ngIf="cotProv?.length === 0">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
   <div class="card-body">
     <div *ngIf ="cotProv?.length > 0" class="row">
   <!-- <div class="alert alert-warning text-center" role="alert">
@@ -25,7 +30,7 @@
           <th *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && tienePermiso('view btn save precios')">#</th>
           <th>Nombre proveedor</th>
           <th>Archivo de cotización</th>
-          <th style="width: 6rem;" *ngIf="solicitudCompra?.estatus <= 3 "><small>Reenviar correo</small></th>
+          <th style="width: 6rem;" *ngIf="solicitudCompra?.estatus <= 3 && tienePermiso('view btn save precios')"><small>Reenviar correo</small></th>
           <th style="width: 3rem;" *ngIf="solicitudCompra?.estatus <= 3 ">Autorizado</th>
         </tr>
       </thead>
@@ -45,13 +50,10 @@
           </td>
           <td>
             {{ prov?.proveedores_id[0].nombre }}
-            <i
-              *ngIf="prov?.seleccionado === 1"
-              class="fas fa-check-circle"
-              style="color: green"
-            >
-              (Seleccionado)
-            </i>
+            <span *ngIf="prov?.seleccionado === 1"  class="text-success" >
+              <i class="bx bx-check-circle bx-burst"></i>
+              <strong> (SELECCIONADO) </strong>
+            </span>
           </td>
           <td>
             <div>
@@ -169,4 +171,3 @@
   [solicitudCompra]="solicitudCompra"
   (actualizarStatus)="actDetalle()"
 ></app-panel-cotizaciones>
-<hr />

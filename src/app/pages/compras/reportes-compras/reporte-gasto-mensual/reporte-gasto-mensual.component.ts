@@ -41,14 +41,17 @@ export class ReporteGastoMensualComponent {
             this.data = response.data;
             this.isLoad = this.data.length > 0;
             this.isFetchingConcentrado = false;
+            this.showContent = false;
           } else {
             this.isLoad = true
-            console.log(response.message);
+            this.isFetchingConcentrado = false;
+            this.showContent = false;
           }
         },
         (error) => {
           this.isLoad = true
           this.isFetchingConcentrado = false;
+          this.showContent = false;
           Swal.fire({
             icon: 'error',
             title: 'Error al obtener datos',
@@ -63,7 +66,6 @@ export class ReporteGastoMensualComponent {
   public getDetalleIntercompania(data){
     this.nameEmpresa = data.empresa;
     this.intercompania = data.intercompania
-    console.log(this.intercompania)
     this.getDetalle(data.intercompania, this.params.fechaInicial, this.params.fechaFinal, this.params.tipo )
     
   }

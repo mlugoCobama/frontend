@@ -195,16 +195,45 @@ export class AnualComponent implements OnInit, OnDestroy{
    * @param datos Data anual del año a recuperar
    * @returns array [[datetime, dato]...] o array [ ] 
    */
-  private generarSerie(datos: any[], nombreVariable: string) {
-  let data: number[] = [];
+//   private generarSerie(datos: any[], nombreVariable: string) {
+//   let data: number[] = [];
+
+//   if (datos.length > 0) {
+//     for (let i = 0; i < datos.length; i++) {
+//         const element = Number(
+//           datos[i][this.concepto]
+//         );
+//         data.push(element);
+//       }
+//     return {
+//       name: String(new Date(datos[0]["fecha"]).getFullYear()),
+//       data: data,
+//       type: "line",
+//     };
+//   } else {
+//     return {
+//       name: "sin datos",
+//       data: data,
+//       type: "line",
+//     };
+//   }
+// }
+
+private generarSerie(datos: any[], nombreVariable: string) {
+  // Inicializamos un arreglo de 12 posiciones (enero a diciembre) con null
+  let data: (number | null)[] = Array(12).fill(null);
 
   if (datos.length > 0) {
+    // Recorremos los datos que sí existen
     for (let i = 0; i < datos.length; i++) {
-        const element = Number(
-          datos[i][this.concepto]
-        );
-        data.push(element);
-      }
+      const fecha = new Date(datos[i]["fecha"]);
+      const mes = fecha.getMonth(); // 0 = enero, 11 = diciembre
+      const valor = Number(datos[i][this.concepto]);
+
+      // Colocamos el valor en la posición correspondiente al mes
+      data[mes] = isNaN(valor) ? null : valor;
+    }
+
     return {
       name: String(new Date(datos[0]["fecha"]).getFullYear()),
       data: data,
@@ -218,7 +247,6 @@ export class AnualComponent implements OnInit, OnDestroy{
     };
   }
 }
-
 
  /**
    * Genera la serie a partir de año actual o mas reciente,

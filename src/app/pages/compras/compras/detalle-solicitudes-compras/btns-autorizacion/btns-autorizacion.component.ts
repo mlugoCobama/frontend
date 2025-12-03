@@ -21,6 +21,7 @@ export class BtnsAutorizacionComponent implements OnInit {
   public ordenCompra: any;
   public isLoad: boolean = false;
   public modalRef?: BsModalRef;
+  public working: boolean = false;
 
   constructor(
     private modalService: BsModalService,
@@ -105,7 +106,7 @@ export class BtnsAutorizacionComponent implements OnInit {
           id: this.solicitudCompra.id,
           razonCancelacion: result.value
         };
-  
+        this.working = true;
         this.ordenesComprasService.destroy(payload).subscribe(
           (response) => {
             this.isLoad = false;
@@ -118,7 +119,9 @@ export class BtnsAutorizacionComponent implements OnInit {
                 'success',
                 'success'
               );
+               this.working = false;
             } else {
+               this.working = false;
               this.alertasService.mostrarAlerta(
                 'Error!',
                 'Ocurrió un error inesperado',
@@ -128,6 +131,7 @@ export class BtnsAutorizacionComponent implements OnInit {
             }
           },
           (error) => {
+             this.working = false;
             this.isLoad = false;
             this.alertasService.mostrarAlerta(
               'Error!',
@@ -165,32 +169,40 @@ export class BtnsAutorizacionComponent implements OnInit {
       buttonsStyling: false,
     }).then((result) => {
       if (result.isConfirmed) {
+        this.working = true;
         this.ordenesComprasService.enviarSolicitudSurtido(data).subscribe(
           (response) => {
             if (response.status === "success") {
+              this.working = false;
               this.alertasService.mostrarAlerta("Enviada!!", "La orden de compra ha sido autorizada y enviada al proveedor.","success","success");
               this.actualizarStatus.emit();
               this.getOrdenCompra();
             } else {
+              this.working = false;
               this.alertasService.mostrarAlerta("Error!", response.message,"error","danger");
             }
           },
           (error) => {
+            this.working = false;
             this.alertasService.mostrarAlerta("Error!",`Error fetching data: ${error}`, "error", "danger");
           }
         );
       } else if (result.isDenied) {
+        this.working = true;
         this.ordenesComprasService.autorizarOrdenCompra(data).subscribe(
           (response) => {
             if (response.status === "success") {
               this.alertasService.mostrarAlerta("Orden autorizada", "La orden sera marcada como autorizada","success","success");
               this.actualizarStatus.emit();
               this.getOrdenCompra();
+              this.working = false;
             } else {
+              this.working = false;
               this.alertasService.mostrarAlerta("Error!", response.message,"error","danger");
             }
           },
           (error) => {
+            this.working = false;
             this.alertasService.mostrarAlerta("Error!",`Error fetching data: ${error}`, "error", "danger");
           }
         );
