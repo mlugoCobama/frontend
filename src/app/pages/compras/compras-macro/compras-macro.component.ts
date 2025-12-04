@@ -357,8 +357,19 @@ export class ComprasMacroComponent implements OnInit{
   filtrarTabla(){
     this.busqueda2 = "";
     this.datosFiltrados = this.ordenador.filtrar(this.busqueda, [
-      'folio', 'usuario_destino', 'motivo',
-      'fecha', 'usuario_solicita', 'empresa', 'estado'
+      "folio",
+      "usuario_destino",
+      // "motivo",
+      "fecha",
+      "usuario_solicita",
+      "empresa",
+      "estado",
+      "centro_costo",
+      "proveedor",
+      "total_orden",
+      "folio_oc",
+      "modo_pago",
+      "pagado"
     ]);
   }  
 
@@ -367,12 +378,17 @@ export class ComprasMacroComponent implements OnInit{
     this.datosFiltrados = this.ordenador.filtrar(this.busqueda2, [
       "folio",
       "usuario_destino",
-      "motivo",
+      // "motivo",
       "fecha",
       "usuario_solicita",
       "empresa",
       "estado",
       "centro_costo",
+      "proveedor",
+      "total_orden",
+      "folio_oc",
+      "modo_pago",
+      "pagado"
     ]);
   }
 

@@ -394,7 +394,9 @@ export class ComprasComponent implements OnInit {
       "centro_costo",
       "proveedor",
       "total_orden",
-      "folio_oc"
+      "folio_oc",
+      "modo_pago",
+      "pagado"
     ]);
   }
 
@@ -411,7 +413,9 @@ export class ComprasComponent implements OnInit {
       "centro_costo",
       "proveedor",
       "total_orden",
-      "folio_oc"
+      "folio_oc",
+      "modo_pago",
+      "pagado"
     ]);
   }
 

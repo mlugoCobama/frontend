@@ -75,7 +75,18 @@
               <strong>Proveedor:</strong> {{ item.proveedor }}
             </p>
 
-            <div class="d-flex justify-content-between align-items-center mt-2">
+             <div class="d-flex justify-content-between align-items-center">
+              <p *ngIf ="item.modo_pago != null" class="mb-1 small text-truncate">
+                <strong>Modo de Pago: {{ item.modo_pago }}</strong>
+              </p>
+
+              <p *ngIf="item.pagado != null " class="mb-1 small text-truncate">
+                <strong  [ngClass]="{ 'text-success': item.pagado === 'PAGADO', 'text-danger': item.pagado !== 'PAGADO' }" > {{ item.pagado }}</strong>
+              </p>
+             </div>
+            
+
+            <div class="d-flex justify-content-between align-items-center mt-1">
               <span
                 class="badge rounded-pill font-size-11"
                 [ngClass]="item.claseEstado"
