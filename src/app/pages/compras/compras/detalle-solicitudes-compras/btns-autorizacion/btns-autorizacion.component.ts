@@ -157,37 +157,18 @@ export class BtnsAutorizacionComponent implements OnInit {
     };
     Swal.fire({
       title: "Ya casi!!",
-      text: "Deseas enviar la solicitud de surtido al proveedor?",
+      text: "Deseas autorizar la solicitud?",
       icon: "info",
       showDenyButton: true,
-      confirmButtonText: " SI, Enviar... ",
-      denyButtonText: `NO, Solo autorizar`,
+      confirmButtonText: " SI",
+      denyButtonText: `NO`,
       customClass: {
         confirmButton: "btn btn-success px-4",
-        denyButton: "btn btn-info ms-2 px-4",
+        denyButton: "btn btn-danger ms-2 px-4",
       },
       buttonsStyling: false,
     }).then((result) => {
       if (result.isConfirmed) {
-        this.working = true;
-        this.ordenesComprasService.enviarSolicitudSurtido(data).subscribe(
-          (response) => {
-            if (response.status === "success") {
-              this.working = false;
-              this.alertasService.mostrarAlerta("Enviada!!", "La orden de compra ha sido autorizada y enviada al proveedor.","success","success");
-              this.actualizarStatus.emit();
-              this.getOrdenCompra();
-            } else {
-              this.working = false;
-              this.alertasService.mostrarAlerta("Error!", response.message,"error","danger");
-            }
-          },
-          (error) => {
-            this.working = false;
-            this.alertasService.mostrarAlerta("Error!",`Error fetching data: ${error}`, "error", "danger");
-          }
-        );
-      } else if (result.isDenied) {
         this.working = true;
         this.ordenesComprasService.autorizarOrdenCompra(data).subscribe(
           (response) => {

@@ -1,4 +1,4 @@
-
+import { PermisosService } from 'src/app/core/services/permisos.service';
 import { Component, OnInit, Input, OnChanges, SimpleChanges, EventEmitter, Output } from '@angular/core';
 
 interface SolicitudCompra {
@@ -36,24 +36,25 @@ export class ComprasKanbanComponent implements OnInit, OnChanges {
   datosAgrupados: { [key: string]: SolicitudCompra[] } = {};
 
   estados = [
-  { id: 1, nombre: 'En espera de autorización', color: 'bg-info' },
-  { id: 2, nombre: 'Solicitado', color: 'bg-info' },
-  { id: 3, nombre: 'En cotización', color: 'bg-warning' },
-  { id: 5, nombre: 'Orden de compra', color: 'bg-warning' },
-  { id: 6, nombre: 'Autorizado', color: 'bg-success' },
-  { id: 7, nombre: 'Autorizado a pago', color: 'bg-primary' },
-  { id: 8, nombre: 'En surtido', color: 'bg-primary' },
-  { id: 9, nombre: 'Entregada', color: 'bg-dark' },
-  { id: 10, nombre: 'Facturado', color: 'bg-primary' },
-  { id: 11, nombre: 'Solicitado pago', color: 'bg-warning' },
-  { id: 12, nombre: 'Pagada', color: 'bg-success' },
-  { id: 13, nombre: 'Cargar complemento', color: 'bg-secondary' },
-  { id: 14, nombre: 'Finalizada', color: 'bg-dark' },
-  { id: 4, nombre: 'Cancelado', color: 'bg-danger' },
+  { id: 1, nombre: 'En espera de autorización', color: 'bg-info', permiso: 'view column esp auto'},
+  { id: 2, nombre: 'Solicitado', color: 'bg-info', permiso: 'view column solicitado'},
+  { id: 3, nombre: 'En cotización', color: 'bg-warning', permiso: 'view column en cotizacion'},
+  { id: 5, nombre: 'Orden de compra', color: 'bg-warning', permiso: 'view column orden compra'},
+  { id: 6, nombre: 'Autorizado', color: 'bg-success', permiso: 'view column autorizado'},
+  { id: 7, nombre: 'Autorizado a pago', color: 'bg-primary', permiso: 'view column autorizado a pago'},
+  { id: 8, nombre: 'En surtido', color: 'bg-primary', permiso: 'view column en surtido'},
+  { id: 9, nombre: 'Entregada', color: 'bg-dark', permiso: 'view column entregado'},
+  { id: 10, nombre: 'Facturado', color: 'bg-primary', permiso: 'view column facturado'},
+  { id: 11, nombre: 'Solicitado pago', color: 'bg-warning', permiso: 'view column solicitado a pago'},
+  { id: 12, nombre: 'Pagada', color: 'bg-success', permiso: 'view column pagada'},
+  { id: 13, nombre: 'Cargar complemento', color: 'bg-secondary', permiso: 'view column cargar complemento'},
+  { id: 14, nombre: 'Finalizada', color: 'bg-dark', permiso: 'view column finalizada'},
+  { id: 4, nombre: 'Cancelado', color: 'bg-danger', permiso: 'view column cancelado'},
 ];
 
 
   constructor(
+    private permisosService: PermisosService
   ) {}
 
   ngOnInit(): void {
@@ -99,5 +100,11 @@ export class ComprasKanbanComponent implements OnInit, OnChanges {
 
     return resultado;
   }
+
+  tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
+  }
+
 
 }

@@ -8,6 +8,7 @@
     <!-- Columnas -->
     <div
       *ngFor="let estado of estados"
+      [hidden]=" !tienePermiso(estado.permiso)"
       class="me-3 bg-light border rounded shadow-lg flex-shrink-0"
       style="min-width: 320px;"
     >

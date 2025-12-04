@@ -29,7 +29,8 @@
           <strong>MET. PAGO: </strong> {{ factura.metodoPago?.metodoPagoDesc }} ({{ factura.metodoPago?.metodoPago || 'Esperando Factura'}})
         </p>
       </div>
-      <table
+      <div class="table-responsive">
+        <table
         class="text-center table table-sm table-borderless table-responsive"
       >
         <thead class="table-light">
@@ -122,6 +123,7 @@
           </td>
         </tfoot>
       </table>
+      </div>
       <br />
       <hr />
     </div>
