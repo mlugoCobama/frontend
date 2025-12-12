@@ -461,4 +461,17 @@ export class ComprasComponent implements OnInit {
       JSON.stringify(this.vistaKanban)
     );
   }
+
+  public tienePermiso(permiso: string): boolean {
+  const permisosRaw = localStorage.getItem('permisos');
+  if (!permisosRaw) return false;
+  
+  try {
+    const permisos = JSON.parse(permisosRaw);
+    const lista = permisos.map((p: any) => p.name);
+    return lista.includes(permiso);
+  } catch {
+    return false;
+  }
+}
 }

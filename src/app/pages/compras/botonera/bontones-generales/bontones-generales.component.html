@@ -10,7 +10,7 @@
   </a>
 
   <a
-    *ngIf="status >= enEsts.OrdenCompra || status === enEsts.Cancelado"
+    *ngIf="(status >= enEsts.OrdenCompra || status === enEsts.Cancelado) && tienePermiso('view btn descargar orden')"
     href="javascript:void(0);"
     class="btn btn-sm btn-primary"
     (click)="clickDescargar()"

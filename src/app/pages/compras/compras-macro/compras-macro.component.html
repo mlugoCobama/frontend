@@ -114,7 +114,7 @@
                     <tbody>
                       <tr *ngFor ="let item of datosFiltrados" (dblclick)="openDetallesSolicitud(item, $event)">
                         <td class="d-flex justify-content-between">{{ item.folio }} <i class="fas fa-info-circle" [title]="'Vista rápida solicitud'" style="cursor: pointer" (click) = "openModalSeguimiento(item)"></i> </td>
-                        <td> <strong style="cursor: pointer" [title]="'Vista previa de la orden de compra'" (click)="openModalOC(item)"> {{ item.folio_oc}} </strong></td>
+                        <td> <strong style="cursor: pointer" [title]="'Vista previa de la orden de compra'" (click)="openModalOC(item)" *ngIf="tienePermiso('view btn descargar orden')"> {{ item.folio_oc}} </strong></td>
                         <td class="text-center"><span
                             >
                             {{ item.empresa }}

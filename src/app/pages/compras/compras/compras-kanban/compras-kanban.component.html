@@ -97,8 +97,9 @@
               <span> <strong> {{ item.total_orden | currency }} </strong></span>
             </div>
 
-            <div *ngIf="item.folio_oc" class="mt-1 small">
+            <div *ngIf="item.folio_oc && tienePermiso('view btn descargar orden')" class="mt-1 small">
               <a
+              
                 [title]="'Vista previa de la orden de compra'"
                 class="btn btn-sm btn-info"
                 style="cursor: pointer"
