@@ -4,10 +4,22 @@ import { ComprasService } from 'src/app/core/services/compras/compras.service';
 import { EstadoSolicitud } from '../../compras/estado-solicitud.enum';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import { TableDetallesSolicitudComponent } from '../../compras/detalle-solicitudes-compras/table-detalles-solicitud/table-detalles-solicitud.component';
+import { trigger, transition, style, animate } from '@angular/animations';
 @Component({
   selector: 'app-detalle-solicitud-macro',
   templateUrl: './detalle-solicitud-macro.component.html',
-  styleUrl: './detalle-solicitud-macro.component.css'
+  styleUrl: './detalle-solicitud-macro.component.css',
+    animations: [
+      trigger('fadeInOut', [
+        transition(':enter', [ // cuando aparece
+          style({ opacity: 0, transform: 'translateY(20px)' }),
+          animate('680ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+        ]),
+        transition(':leave', [ // cuando desaparece
+          animate('680ms ease-in', style({ opacity: 0, transform: 'translateY(20px)' }))
+        ])
+      ])
+    ]
 })
 export class DetalleSolicitudMacroComponent {
 

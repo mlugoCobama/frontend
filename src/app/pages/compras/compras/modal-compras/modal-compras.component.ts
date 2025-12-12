@@ -62,11 +62,8 @@ export class ModalComprasComponent implements AfterViewInit
       this.isLoad = false;
 
       this.alertasService.mostrarAlerta(
-        "Alerta",
-        `Debes llenar correctamente todos los campos: ${this.formSolicitudCompra.mostrarErroresFormulario()}` ,
-        "warning",
-        "warning"
-      );
+        "Alerta", `Debes llenar correctamente todos los campos: ${this.formSolicitudCompra.mostrarErroresFormulario()}` ,
+        "warning", "warning");
       this.sending = false;
       return;
     }
@@ -78,10 +75,8 @@ export class ModalComprasComponent implements AfterViewInit
       this.isLoad = false;
 
       this.alertasService.mostrarAlerta(
-        "Alerta",
-        "Agrega por lo menos un elemento a la solicitud",
-        "warning",
-        "warning"
+        "Alerta", "Agrega por lo menos un elemento a la solicitud",
+        "warning", "warning"
       );
       this.sending = false;
       return;
@@ -120,12 +115,7 @@ export class ModalComprasComponent implements AfterViewInit
           this.event.emit(true);
           // this.showTable = true;
 
-          this.alertasService.mostrarAlerta(
-            "Guardado",
-            "Solicitud registrada correctamente",
-            "success",
-            "success"
-          );
+          this.alertasService.mostrarAlerta("Guardado", "Solicitud registrada correctamente","success","success");
           this.tableData.limpiarArray();
           this.submitted = false;
           this.sending = false;

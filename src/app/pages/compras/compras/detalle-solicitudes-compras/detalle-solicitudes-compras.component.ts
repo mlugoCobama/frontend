@@ -4,11 +4,24 @@ import { ComprasService } from 'src/app/core/services/compras/compras.service';
 import { EstadoSolicitud } from '../estado-solicitud.enum';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import { TableDetallesSolicitudComponent } from './table-detalles-solicitud/table-detalles-solicitud.component';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-detalle-solicitudes-compras',
   templateUrl: './detalle-solicitudes-compras.component.html',
-  styleUrl: './detalle-solicitudes-compras.component.css'
+  styleUrl: './detalle-solicitudes-compras.component.css',
+  animations: [
+    trigger('fadeInOut', [
+      transition(':enter', [ // cuando aparece
+        style({ opacity: 0, transform: 'translateY(20px)' }),
+        animate('680ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ]),
+      transition(':leave', [ // cuando desaparece
+        animate('680ms ease-in', style({ opacity: 0, transform: 'translateY(20px)' }))
+      ])
+    ])
+  ]
+
 })
 export class DetalleSolicitudesComprasComponent implements OnInit{
 @ViewChild("tableDetalles", { static: false })

@@ -188,13 +188,6 @@ export class ComprasComponent implements OnInit {
   // Funcion para llenar la vista con el detalle component
   public openDetallesSolicitud(dato: any, evento: any =  null)  {
     this.solicitudSelecionada = true;
-    // if (evento.currentTarget.classList.contains("table-primary")) {
-    //   evento.currentTarget.classList.remove("table-primary");
-    //   this.solicitudSelecionada = false;
-    // } else {
-    //   const filas = document.querySelectorAll("tbody tr");
-    //   filas.forEach((fila) => fila.classList.remove("table-primary"));
-    //   evento.currentTarget.classList.add("table-primary");
       this.solicitudSelecionada = true;
       this.solicitudCompra = dato; // Objeto que se envía al detalleSolicitudCompra
       this.status = this.solicitudCompra.estatus;

@@ -1,17 +1,20 @@
 <div>
   <!-- Inicia vista final  -->
       <app-info-solicitud
+      @fadeInOut
       [solicitudCompra]="solicitudCompra"
       [mostrarTotal]="mostrarTotal"  
       [cotizacion]="cotizacion"     
       ></app-info-solicitud>
   
       <app-select-sistema-mantenimiento
+      @fadeInOut
       [solicitudCompra]="solicitudCompra"
       *ngIf ="solicitudCompra.tipo === 2 && solicitudCompra.auto_gg === 1 && solicitudCompra.auto_admin === 1"
       ></app-select-sistema-mantenimiento>
 
       <app-table-detalles-solicitud
+      @fadeInOut
       #tableDetallesMacro
       *ngIf ="solicitudCompra.estatus > enEsts.Solicitado && solicitudCompra.estado != 'ESP. AUT. MACRO'"
       [solicitudCompra]="solicitudCompra"
@@ -24,6 +27,7 @@
       ></app-table-detalles-solicitud>
 
       <app-tabla-detalles-solicitud
+      @fadeInOut
       *ngIf="solicitudCompra.estatus <= enEsts.Solicitado  || solicitudCompra.estado === 'ESP. AUT. MACRO'"
       [modifica] = "modifica"
       [solicitudCompra]="solicitudCompra"
@@ -32,6 +36,7 @@
 
        <!-- Se muestra si el estatus es orden de compra o posterior-->
       <app-form-files-facturas
+      @fadeInOut
       *ngIf = "solicitudCompra.estatus >= enEsts.OrdenCompra"
       [solicitudCompra]="solicitudCompra"
       (setDataOrdenCompra)="setDataOrdenCompra($event)"
@@ -42,6 +47,7 @@
   
   <!-- Inicia paneles temporales -->
       <app-panel-cotizaciones
+      @fadeInOut
       *ngIf="mostrarCotizacionFlag && solicitudCompra.estatus === enEsts.Solicitado"
       [solicitudCompra]="solicitudCompra"
       (actualizarStatus)="updateStatus()"
@@ -49,6 +55,7 @@
       ></app-panel-cotizaciones>
   
       <app-btns-autorizacion
+      @fadeInOut
       *ngIf= "solicitudCompra.estatus === enEsts.OrdenCompra "
       [solicitudCompra]="solicitudCompra" 
       (setDataOrdenCompra)="setDataOrdenCompra($event)"
@@ -56,18 +63,21 @@
       ></app-btns-autorizacion>
   
       <app-btn-autorizacion-gerencia
+      @fadeInOut
       *ngIf="solicitudCompra.estatus === enEsts.EspAutPlanta"
       (actualizarStatus)="updateStatus()"
       [solicitudCompra]="solicitudCompra" 
       ></app-btn-autorizacion-gerencia>
       
       <app-btn-autorizacion-gerencia
+      @fadeInOut
       *ngIf="solicitudCompra.estatus === enEsts.EnCotizacion"
       (actualizarStatus)="updateStatus()"
       [solicitudCompra]="solicitudCompra" 
       ></app-btn-autorizacion-gerencia>
   <!-- Inicia paneles temporales -->
     <app-timeline-solicitud
+    @fadeInOut
     [solicitudCompra]="solicitudCompra" 
     ></app-timeline-solicitud>
   </div>

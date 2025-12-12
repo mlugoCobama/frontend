@@ -1,0 +1,568 @@
+<div class="container mt-4 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-10 col-xl-8">
+      
+      <!-- Header -->
+      <div class="card shadow-lg mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center" style="background-color: #c3002f;">
+          <strong><h2 class="m-0 fw-bold text-white">Tarjeta de Cliente</h2></strong>
+          <img class="img-fluid" src="../../../../assets/images/cobama-s-nombre.png" alt="Descripción de la imagen" style="max-height: 100%; height: auto; max-width: 2.5rem;" />
+        </div>
+        <div class="card-body">
+          <!-- Progress Bar -->
+          <div class="progress mb-3" style="height: 8px;">
+            <div class="progress-bar"
+                 style="background-color: #c3002F;" 
+                 role="progressbar" 
+                 [style.width.%]="getProgressPercentage()"
+                 [attr.aria-valuenow]="currentStep"
+                 aria-valuemin="0" 
+                 [attr.aria-valuemax]="totalSteps">
+            </div>
+          </div>
+
+          <!-- Step Indicators -->
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div *ngFor="let step of [1,2,3,4,5,6,7]" 
+                 class="flex-fill text-center step-indicator"
+                 [class.active]="currentStep === step"
+                 [class.completed]="currentStep > step"
+                 (click)="goToStep(step)">
+              <div class="step-circle mx-auto mb-2"
+                   [class.active]="currentStep === step"
+                   [class.completed]="currentStep > step">
+                <span *ngIf="currentStep > step">✓</span>
+                <span *ngIf="currentStep <= step">{{step}}</span>
+              </div>
+              <small class="d-none d-md-block step-label">
+                <span *ngIf="step === 1">Identificacion de agencia</span>
+                <span *ngIf="step === 2">Datos personales del cliente</span>
+                <span *ngIf="step === 3">Datos de contacto del cliente</span>
+                <span *ngIf="step === 4">Tipo de cliente</span>
+                <span *ngIf="step === 5">Atencion al cliente</span>
+                <span *ngIf="step === 6">El cliente quiere</span>
+                <span *ngIf="step === 7">El cliente tiene</span>
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Content -->
+      <div class="card shadow-lg">
+        <div class="card-body p-4">
+          
+          <!-- Step 1: Identificacion de agencias-->
+          <div *ngIf="currentStep === 1" class="step-content">
+            <h4 class="mb-4">Agencia en donde se atiende al cliente</h4>
+            <form [formGroup]="agenciaForm">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Agencia*</label>
+                  <select 
+                        formControlName="agencia"
+                          [class.is-invalid]="agenciaForm.get('agencia')?.invalid && agenciaForm.get('agencia')?.touched" 
+                          class="form-select">
+                    <option value="" selected disabled>Selecciona una opción</option>
+                    <option *ngFor="let agencia of agenciasNissan" [value]="agencia.intercompania">{{agencia.nombre}}</option>
+                  </select>
+                  <div class="invalid-feedback">Este campo es requerido</div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Asesor de ventas*</label>
+                  <input type="text" 
+                         class="form-control" 
+                         formControlName="asesor_ventas"
+                         [class.is-invalid]="agenciaForm.get('asesor_ventas')?.invalid && agenciaForm.get('asesor_ventas')?.touched">
+                  <div class="invalid-feedback">Este campo es requerido</div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">No. de SICOP*</label>
+                <input type="text" 
+                       class="form-control" 
+                       formControlName="no_sicop"
+                       [class.is-invalid]="agenciaForm.get('no_sicop')?.invalid && agenciaForm.get('no_sicop')?.touched">
+                <div class="invalid-feedback">Este campo es requerido</div>
+              </div>
+            </form>
+          </div>
+          
+          <!-- Step 2: Información Personal -->
+          <div *ngIf="currentStep === 2" class="step-content">
+            <h4 class="mb-4">Información Personal del Cliente</h4>
+            <form [formGroup]="personalForm">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Nombre del Cliente *</label>
+                  <input type="text" 
+                         placeholder="El nombre completo del cliente"
+                         class="form-control" 
+                         formControlName="nombre_cliente"
+                         [class.is-invalid]="personalForm.get('nombre_cliente')?.invalid && personalForm.get('nombre_cliente')?.touched">
+                  <div class="invalid-feedback">Este campo es requerido</div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Direccion *</label>
+                  <input type="text" 
+                         placeholder="Calle, número ext., número int., colonia, C.P."
+                         class="form-control" 
+                         formControlName="direccion"
+                         [class.is-invalid]="personalForm.get('direccion')?.invalid && personalForm.get('direccion')?.touched">
+                  <div class="invalid-feedback">Este campo es requerido</div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                <label class="form-label">Estado *</label>
+                <select
+                        formControlName="estado"
+                         [class.is-invalid]="personalForm.get('estado')?.invalid && personalForm.get('estado')?.touched"
+                        class="form-select">
+                  <option value="" selected disabled>Selecciona una opción</option>
+                  <option *ngFor="let estado of estados" [value]="estado.clave">{{estado.nombre}}</option>
+                </select>
+                <div class="invalid-feedback">Este campo es requerido</div>
+              </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">Ciudad *</label>
+                  <input type="text" 
+                         placeholder="Ciudad"
+                         class="form-control" 
+                         formControlName="ciudad"
+                         [class.is-invalid]="personalForm.get('ciudad')?.invalid && personalForm.get('ciudad')?.touched">
+                  <div class="invalid-feedback">Este campo es requerido</div>
+                </div>
+                <!-- <div class="col-md-6 mb-3">
+                  <label class="form-label">Estado *</label>
+                  <input type="text" 
+                         placeholder="Estado" 
+                         class="form-control" 
+                         formControlName="estado"
+                         [class.is-invalid]="personalForm.get('estado')?.invalid && personalForm.get('estado')?.touched">
+                  <div class="invalid-feedback">Este campo es requerido</div>
+                </div> -->
+              </div>
+            </form>
+          </div>
+
+          <!-- Step 3: Información de Contacto -->
+          <div *ngIf="currentStep === 3" class="step-content">
+            <h4 class="mb-4">Información de Contacto</h4>
+            <form [formGroup]="contactForm">
+              <div class="mb-3">
+                <label class="form-label">Email personal *</label>
+                <input type="email" 
+                       class="form-control" 
+                       formControlName="email_personal"
+                       placeholder="ejemplo@correo.com"
+                       [class.is-invalid]="contactForm.get('email_personal')?.invalid && contactForm.get('email_personal')?.touched">
+                <div class="invalid-feedback">Ingrese un email válido</div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Email de trabajo</label>
+                <input type="email" 
+                       class="form-control" 
+                       formControlName="email_trabajo"
+                       placeholder="ejemplo@correo.com"
+                       [class.is-invalid]="contactForm.get('email_trabajo')?.invalid && contactForm.get('email_trabajo')?.touched">
+                <div class="invalid-feedback">Ingrese un email válido</div>
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">Teléfono principal*</label>
+                <input type="tel" 
+                       mask="000-000-0000||0000-000-0000"
+                       class="form-control" 
+                       formControlName="telefono_principal"
+                       placeholder="55 1234 5678"
+                       [class.is-invalid]="contactForm.get('telefono_principal')?.invalid && contactForm.get('telefono_principal')?.touched">
+                <div class="text-form text-muted">Mejor teléfono</div>
+                <div class="invalid-feedback">Este campo es requerido</div>
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">Teléfono secundario</label>
+                <input type="tel" 
+                        mask="000-000-0000||0000-000-0000"       
+                        class="form-control" 
+                       formControlName="telefono_secundario"
+                       placeholder="55 1234 5678">
+                <div class="text-form text-muted">Segundo mejor teléfono</div>
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">Teléfono adicional</label>
+                <input type="tel" 
+                       mask="000-000-0000||0000-000-0000"
+                       class="form-control" 
+                       formControlName="telefono_adicional"
+                       placeholder="55 1234 5678">
+              </div>
+            </form>
+          </div>
+
+          <!-- Step 4: Tipo de cliente -->
+          <div *ngIf="currentStep === 4" class="step-content">
+            <h4 class="mb-4">Tipo de cliente</h4>
+            <form [formGroup]="tipoClienteForm">
+              <div class="mb-3">
+                <label class="form-label">¿Tiene cita? *</label>
+                <select (change)="selectChange($event)" 
+                        formControlName="tiene_cita"
+                        [class.is-invalid]="tipoClienteForm.get('tiene_cita')?.invalid && tipoClienteForm.get('tiene_cita')?.touched" 
+                        class="form-select">
+                  <option value="" selected disabled>Selecciona una opción</option>
+                  <option value="1">Si</option>
+                  <option value="2">No</option>
+                </select>
+                <div class="invalid-feedback">Este campo es requerido</div>
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">Tipo de contacto*</label>
+                <select formControlName="tipo_contacto"
+                        [class.is-invalid]="tipoClienteForm.get('tipo_contacto')?.invalid && tipoClienteForm.get('tipo_contacto')?.touched" 
+                        class="form-select">
+                  <option value="" selected disabled>Selecciona una opción</option>
+                  <option *ngFor="let item of opcionesSelectCita" [value]="item.clave">{{item.descripcion}}</option>
+                </select>
+                <div class="invalid-feedback">Este campo es requerido</div>
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">Cual publicidad</label>
+                <input type="text" 
+                       placeholder="Indica por cual publicidad llega el cliente"
+                       class="form-control" 
+                       formControlName="cual_publicidad">
+              </div>
+            </form>
+          </div>
+
+          <!-- Step 5: Atención al cliente -->
+          <div *ngIf="currentStep === 5" class="step-content">
+            <h4 class="mb-4">Atención al cliente</h4>
+            <form [formGroup]="atencionForm">
+              <div class="mb-3">
+                <label class="form-label">Servicio *</label>
+                <select formControlName="servicio"
+                        [class.is-invalid]="atencionForm.get('servicio')?.invalid && atencionForm.get('servicio')?.touched" 
+                        class="form-select">
+                  <option value="" selected disabled>Selecciona una opción</option>
+                  <option *ngFor="let item of servicios" [value]="item.clave">{{item.descripcion}}</option>
+                </select>
+                <div class="invalid-feedback">Este campo es requerido</div>
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">Notas de APV*</label>
+                <textarea formControlName="notas_apv"
+                          [class.is-invalid]="atencionForm.get('notas_apv')?.invalid && atencionForm.get('notas_apv')?.touched"
+                          class="form-control" 
+                          rows="3"></textarea>
+                <div class="invalid-feedback">Este campo es requerido</div>
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">Notas de GV*</label>
+                <textarea formControlName="notas_gv"
+                          [class.is-invalid]="atencionForm.get('notas_gv')?.invalid && atencionForm.get('notas_gv')?.touched"
+                          class="form-control" 
+                          rows="3"></textarea>
+                <div class="invalid-feedback">Este campo es requerido</div>
+              </div>
+            </form>
+          </div>
+
+          <!-- Step 6: Intención de compra -->
+          <div *ngIf="currentStep === 6" class="step-content">
+            <h4 class="mb-4">Intención de compra</h4>
+            <form [formGroup]="intencionCompraForm">
+              <div class="row">
+                <div class="mb-3 col-md-3">
+                  <label class="form-label">El cliente quiere: *</label>
+                  <select formControlName="cliente_quiere"
+                          [class.is-invalid]="intencionCompraForm.get('cliente_quiere')?.invalid && intencionCompraForm.get('cliente_quiere')?.touched" 
+                          class="form-select">
+                    <option value="">Selecciona una opción</option>
+                    <option value="1">Nuevo</option>
+                    <option value="2">Semi Nuevo</option>
+                  </select>
+                  <div class="invalid-feedback">Este campo es requerido</div>
+                </div>
+                
+                <div class="mb-3 col-md-3">
+                  <label class="form-label">Año</label>
+                  <input type="text" 
+                         mask="9999"
+                         placeholder="Año del vehículo"
+                         class="form-control" 
+                         formControlName="anio">
+                </div>
+                
+                <div class="mb-3 col-md-6">
+                  <label class="form-label">Modelo</label>
+                  <input type="text" 
+                         placeholder="Modelo del vehículo"
+                         class="form-control" 
+                         formControlName="modelo">
+                </div>
+                
+                <div class="mb-3">
+                  <label class="form-label">Estilo</label>
+                  <input type="text" 
+                         placeholder="Estilo del vehículo"
+                         class="form-control" 
+                         formControlName="estilo">
+                </div>
+                
+                <div class="mb-3">
+                  <label class="form-label">Color</label>
+                  <input type="text" 
+                         placeholder="Color del vehículo"
+                         class="form-control" 
+                         formControlName="color">
+                </div>
+                
+                <div class="mb-3">
+                  <label class="form-label">Stock # ó VIN #</label>
+                  <input type="text" 
+                         placeholder="Stock o VIN"
+                         class="form-control" 
+                         formControlName="stock_vin">
+                </div>
+                
+                <div class="mb-3">
+                  <label class="form-label">Equipo particular</label>
+                  <input type="text" 
+                         placeholder="Equipo particular"
+                         class="form-control" 
+                         formControlName="equipo_particular">
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- Step 7: Vehículo del cliente -->
+          <div *ngIf="currentStep === 7" class="step-content">
+            <h4 class="mb-4">Vehículo con el que cuenta el cliente</h4>
+            <form [formGroup]="vehiculoClienteForm">
+              <div class="row">
+                <div class="mb-3 col-md-6">
+                  <label class="form-label">Año</label>
+                  <input type="text" 
+                        mask="9999"
+                         placeholder="Año del vehículo"
+                         class="form-control" 
+                         formControlName="anio_vehiculo">
+                </div>
+                
+                <div class="mb-3 col-md-6">
+                  <label class="form-label">Modelo</label>
+                  <input type="text" 
+                         placeholder="Modelo del vehículo"
+                         class="form-control" 
+                         formControlName="modelo_vehiculo">
+                </div>
+                
+                <div class="mb-3">
+                  <label class="form-label">Estilo</label>
+                  <input type="text" 
+                         placeholder="Estilo del vehículo"
+                         class="form-control" 
+                         formControlName="estilo_vehiculo">
+                </div>
+                
+                <div class="mb-3">
+                  <label class="form-label">Color</label>
+                  <input type="text" 
+                         placeholder="Color del vehículo"
+                         class="form-control" 
+                         formControlName="color_vehiculo">
+                </div>
+              </div>
+
+              <!-- Checkboxes de equipamiento -->
+              <h5 class="mb-3">Equipamiento</h5>
+              <div class="row">
+                <div class="mb-3 col-2">
+                  <div class="form-check">
+                    <input class="form-check-input" 
+                           type="checkbox" 
+                           formControlName="ac"
+                           id="ac">
+                    <label class="form-check-label" for="ac">AC</label>
+                  </div>
+                </div>
+                
+                <div class="mb-3 col-2">
+                  <div class="form-check">
+                    <input class="form-check-input" 
+                           type="checkbox" 
+                           formControlName="pw"
+                           id="pw">
+                    <label class="form-check-label" for="pw">PW</label>
+                  </div>
+                </div>
+                
+                <div class="mb-3 col-2">
+                  <div class="form-check">
+                    <input class="form-check-input" 
+                           type="checkbox" 
+                           formControlName="pl"
+                           id="pl">
+                    <label class="form-check-label" for="pl">PL</label>
+                  </div>
+                </div>
+                
+                <div class="mb-3 col-2">
+                  <div class="form-check">
+                    <input class="form-check-input" 
+                           type="checkbox" 
+                           formControlName="cruise"
+                           id="cruise">
+                    <label class="form-check-label" for="cruise">Cruise</label>
+                  </div>
+                </div>
+                
+                <div class="mb-3 col-2">
+                  <div class="form-check">
+                    <input class="form-check-input" 
+                           type="checkbox" 
+                           formControlName="tilt"
+                           id="tilt">
+                    <label class="form-check-label" for="tilt">Tilt</label>
+                  </div>
+                </div>
+                
+                <div class="mb-3 col-2">
+                  <div class="form-check">
+                    <input class="form-check-input" 
+                           type="checkbox" 
+                           formControlName="auto"
+                           id="auto">
+                    <label class="form-check-label" for="auto">Auto</label>
+                  </div>
+                </div>
+                
+                <div class="mb-3 col-2">
+                  <div class="form-check">
+                    <input class="form-check-input" 
+                           type="checkbox" 
+                           formControlName="x4x4"
+                           id="x4x4">
+                    <label class="form-check-label" for="x4x4">4X4</label>
+                  </div>
+                </div>
+                
+                <div class="mb-3 col-2">
+                  <div class="form-check">
+                    <input class="form-check-input" 
+                           type="checkbox" 
+                           formControlName="cd"
+                           id="cd">
+                    <label class="form-check-label" for="cd">CD</label>
+                  </div>
+                </div>
+                
+                <div class="mb-3 col-2">
+                  <div class="form-check">
+                    <input class="form-check-input" 
+                           type="checkbox" 
+                           formControlName="sat"
+                           id="sat">
+                    <label class="form-check-label" for="sat">Sat</label>
+                  </div>
+                </div>
+                
+                <div class="mb-3 col-2">
+                  <div class="form-check">
+                    <input class="form-check-input" 
+                           type="checkbox" 
+                           formControlName="navi"
+                           id="navi">
+                    <label class="form-check-label" for="navi">Navi</label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Campos adicionales -->
+              <div class="row mt-3">
+                <div class="mb-3 col-md-6">
+                  <label class="form-label">Kilometraje</label>
+                  <input type="text" 
+                        mask="separator.0" 
+                          thousandSeparator="," 
+                          suffix=" km"
+                         placeholder="Kilometraje"
+                         class="form-control" 
+                         formControlName="kilometraje">
+                </div>
+                
+                <div class="mb-3 col-md-6">
+                  <label class="form-label">VIN #</label>
+                  <input type="text" 
+                         placeholder="VIN"
+                         class="form-control" 
+                         formControlName="vin">
+                </div>
+                
+                <div class="mb-3 col-md-6">
+                  <label class="form-label">Costo para pagar</label>
+                  <input type="text" 
+                        mask="separator.2" thousandSeparator="," decimalMarker="."  prefix="$ "
+                         placeholder="Costo"
+                         class="form-control" 
+                         formControlName="costo_pagar">
+                </div>
+                
+                <div class="mb-3 col-md-6">
+                  <label class="form-label">ACV</label>
+                  <input type="text" 
+                         placeholder="ACV"
+                         class="form-control" 
+                         formControlName="acv">
+                </div>
+                
+                <div class="mb-3">
+                  <label class="form-label">Teléfono del banco</label>
+                  <input type="text" 
+                        mask="000-000-0000||0000-000-0000"
+                         placeholder="Teléfono"
+                         class="form-control" 
+                         formControlName="telefono_banco">
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- Navigation Buttons -->
+          <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+            <button class="btn border border-dark text-dark" 
+                    style="background-color: #F4F5F7;"
+                    (click)="prevStep()" 
+                    [disabled]="currentStep === 1">
+              <i class="bi bi-arrow-left"></i> Anterior
+            </button>
+            
+            <button *ngIf="currentStep < totalSteps" 
+                    class="btn text-white" 
+                    style="background-color: #283C50;"
+                    (click)="nextStep()">
+              Siguiente <i class="bi bi-arrow-right"></i>
+            </button>
+            
+            <button *ngIf="currentStep === totalSteps" 
+                    class="btn text-white" 
+                    style="background-color: #508f40;"
+                    (click)="submitForm()"
+                    [disabled]="!isCurrentStepValid()">
+              <i class="bi bi-check-circle"></i> Enviar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
