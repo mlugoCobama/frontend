@@ -31,7 +31,7 @@ export class FormTecnicoComponent implements OnInit {
     this.buildForm();
     if (this.tipo == "actualizar"){
       this.llenarForm();
-      console.log(this.datos)
+      // console.log(this.datos)
     }
   }
 

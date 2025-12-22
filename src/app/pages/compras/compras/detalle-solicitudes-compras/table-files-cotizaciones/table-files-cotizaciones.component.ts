@@ -166,7 +166,7 @@ export class TableFilesCotizacionesComponent implements AfterViewInit {
     if (!this.formDatosOC.isValid()) {
       this.alertasService.mostrarAlerta(
         "Error",
-        "Entrega y forma de pago son obligatorios",
+        "Entrega, forma de pago y fecha de entrega son obligatorios",
         "warning",
         "warning"
       );

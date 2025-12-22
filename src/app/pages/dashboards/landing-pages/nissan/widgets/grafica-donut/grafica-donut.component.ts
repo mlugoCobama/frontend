@@ -37,6 +37,16 @@ export class GraficaDonutComponent implements AfterViewInit {
     chart: {
       type: "donut",
     },
+    // colors: [
+    //   "#feb019", // Amarillo brillante (categoría destacada)
+    //   "#ff4560", // Rojo intenso
+    //   "#008ffb", // Azul claro vibrante
+    //   "#049764ff", // Verde fuerte
+    //   "#035686ff",  // Azul casi negro (último, menos dominante)
+    //   "#6a37e2ff", // Gris neutro
+    //   "#1c3db3ff", // Azul oscuro
+    // ],
+
     plotOptions: {
       pie: {
         donut: {

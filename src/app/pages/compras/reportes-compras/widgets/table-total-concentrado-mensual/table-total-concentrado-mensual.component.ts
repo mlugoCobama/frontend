@@ -53,7 +53,7 @@ export class TableTotalConcentradoMensualComponent implements OnInit{
   public seleccionar1(dato, evento: any) {
       // this.mostrar = true;
       this.ejecutarConsultaDetalle.emit(dato.num_intercompania);
-      console.log(dato)
+      // console.log(dato)
       if (evento.currentTarget.classList.contains("table-primary")) {
         evento.currentTarget.classList.remove("table-primary");
         // this.mostrar = false;

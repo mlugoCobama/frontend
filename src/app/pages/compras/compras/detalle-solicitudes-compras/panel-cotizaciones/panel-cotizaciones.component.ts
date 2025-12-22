@@ -154,7 +154,7 @@ export class PanelCotizacionesComponent implements OnInit {
               "error",
               "danger"
             );
-            console.log(response.errors);
+            // console.log(response.errors);
             this.isDisabled = false;
           }
         },

@@ -90,7 +90,7 @@ export class ModalAddProveedorComponent implements AfterViewInit {
 
     const data = this.valoresFormatedos();
 
-    console.log(data);
+    // console.log(data);
     
     this.proveedoresService.save(data).subscribe(
       (response) => {
@@ -129,7 +129,7 @@ export class ModalAddProveedorComponent implements AfterViewInit {
     } else {
       this.isCredit = false;
     }
-    console.log(this.isCredit);
+    // console.log(this.isCredit);
   }
 
   validateNumberInput(event: any) {

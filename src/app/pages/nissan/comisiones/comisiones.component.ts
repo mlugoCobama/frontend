@@ -95,7 +95,7 @@ export class ComisionesComponent implements OnInit {
             "success",
             "success"
           );
-          console.log(response);
+          // console.log(response);
           this.getAll();
           this.patchValues(item.faau_nofactura, response.data);
         } else {
@@ -122,7 +122,7 @@ export class ComisionesComponent implements OnInit {
 
   public patchValues(nofactura: string, data) {
     data = this.data.find((element) => element.faau_nofactura === nofactura);
-    console.log(data);
+    // console.log(data);
     Object.keys(this.modelInputs).forEach((field) => {
       let controlName = `${field}_${nofactura}`;
 

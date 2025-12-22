@@ -42,10 +42,10 @@ public tienePermiso(permiso: string): boolean {
   try {
     const permisos = JSON.parse(permisosRaw);
     const lista = permisos.map((p: any) => p.name);
-    console.log(lista.includes(permiso))
+    // console.log(lista.includes(permiso))
     return lista.includes(permiso);
   } catch {
-    console.log(false);
+    // console.log(false);
     return false;
   }
 }

@@ -124,6 +124,10 @@
       <div *ngIf="ordenCompra?.tipo_pago">
         <p> <strong>Tipo de pago: </strong>  {{ ordenCompra?.tipo_pago | uppercase }} </p>
       </div>
+
+      <div *ngIf="ordenCompra?.fecha_entrega">
+        <p> <strong>Fecha de entrega: {{ ordenCompra?.fecha_entrega | date:'d / M / y' }} </strong>   </p>
+      </div>
     </div>
   </div>
 

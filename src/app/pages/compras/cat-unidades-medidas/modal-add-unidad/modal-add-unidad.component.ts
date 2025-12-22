@@ -80,7 +80,7 @@ export class ModalAddUnidadComponent implements OnInit {
             if (response.status === "success") {
               this.event.emit(true);
               this.modalCerrado.emit();
-              console.log(response.message);
+              // console.log(response.message);
               Swal.fire({
                 title: "Guardado",
                 text: "Unidad registrada correctamente",

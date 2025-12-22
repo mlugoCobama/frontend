@@ -79,7 +79,7 @@ export class ReporteGastoMensualComponent {
         (response: any) => {
           if (response) {
             this.dataDetalle = response.data;
-            console.log(this.dataDetalle)
+            // console.log(this.dataDetalle)
             this.isLoadDeatil = this.dataDetalle.length > 0 ? true : false;
           } else { 
             this.isLoadDeatil = false

@@ -187,7 +187,7 @@ export class FormFilesFacturasComponent implements OnInit {
 
       const idOrdenCompra = this.ordenCompra.id;
 
-      console.log(this.ordenCompra?.documentos[0]?.id)
+      // console.log(this.ordenCompra?.documentos[0]?.id)
       const idDocOC = this.ordenCompra?.documentos[0]?.id === undefined ? null : this.ordenCompra?.documentos[0]?.id;
 
       if(idDocOC){

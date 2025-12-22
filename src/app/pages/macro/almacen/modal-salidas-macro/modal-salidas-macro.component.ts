@@ -83,7 +83,7 @@ export class ModalSalidasMacroComponent {
 
     const datos = this.datos();
 
-    console.log(datos)
+    // console.log(datos)
 
     this.almacen.saveSalida(datos).subscribe(
       (response) => {

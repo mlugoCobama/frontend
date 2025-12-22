@@ -117,7 +117,7 @@ export class ModalInventarioComponent implements OnInit {
       cat_hardware_id: this.formModalInventario.controls['cat_hardware_id'].value,
     };
 
-    console.log(datos);
+    // console.log(datos);
     
 
     this.inventarioService.save(datos).subscribe((resp) => {

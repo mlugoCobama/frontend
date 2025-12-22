@@ -106,5 +106,39 @@ export class ComprasKanbanComponent implements OnInit, OnChanges {
     return this.permisosService.tienePermiso(permiso);
   }
 
+  
+//  diferenciaEnDias(fechaStr: string): number {
+//   // fechaStr espera formato "dd/mm/aaaa"
+//   const partes = fechaStr.split("/"); // ["dd", "mm", "aaaa"]
+
+//   // Parsear a números
+//   const dia = parseInt(partes[0], 10);
+//   const mes = parseInt(partes[1], 10) - 1; // los meses en JS van 0–11
+//   const anio = parseInt(partes[2], 10);
+
+//   const fechaEspecifica = new Date(anio, mes, dia);
+//   const hoy = new Date();
+
+//   const unDiaEnMs = 1000 * 60 * 60 * 24;
+
+//   const diferenciaMs = hoy.getTime() - fechaEspecifica.getTime();
+
+//   return Math.round(diferenciaMs / unDiaEnMs);
+// }
+
+// getColorPorDias(fechaStr: string): string {
+//   const dias = this.diferenciaEnDias(fechaStr);
+
+//   if (dias <= 2) {
+//     return '';
+//   } else if (dias >= 3 && dias <= 6) {
+//     return "bg-warning";
+//   } else if (dias >= 7) {
+//     return "bg-danger";
+//   } else {
+//     return "bg-dark"; // sin clase
+//   }
+// }
+
 
 }

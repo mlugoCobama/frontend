@@ -25,6 +25,9 @@ export class FormDatosEntregaOcComponent implements AfterViewInit {
   @Input() tipo: any = null;
   @Input() datos: any = [];
 
+  public fechaActual : any;
+  public fechaFormateada: any;
+
   public modosPago = [
     { id: 1, descripcion: "Contado" },
     { id: 2, descripcion: "Credito" },
@@ -33,7 +36,7 @@ export class FormDatosEntregaOcComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     this.getEmpresas();
     this.buildForm();
-    console.log(this.solicitudCompra)
+    // console.log(this.solicitudCompra)
   }
 
   constructor(
@@ -46,11 +49,15 @@ export class FormDatosEntregaOcComponent implements AfterViewInit {
    * construye el formulario
    */
   private buildForm() {
+    this.fechaActual = new Date();
+    this.fechaFormateada = this.fechaActual.toISOString().split('T')[0];
+
     return new Promise((resolve, reject) => {
       this.formOrdenCompra = this.formBuilder.group({
         id: new FormControl(null),
         entrega: new FormControl("", Validators.required),
         modoPago: new FormControl("", Validators.required),
+        fechaEntrega : new FormControl (null, Validators.required),
         observaciones: new FormControl(null),
       });
       resolve(true);
@@ -63,7 +70,8 @@ export class FormDatosEntregaOcComponent implements AfterViewInit {
 
   public getFormValues(){
     if(!this.isValid()){
-      this.alertasService.mostrarAlerta("Error", "Entrega y modo de pago son obligatorios", "error", "danger");
+      this.alertasService.mostrarAlerta("Error", "Entrega, modo de pago y fecha de entrega son obligatorios",
+         "error", "danger");
       return;
     }
     return this.formOrdenCompra.value;

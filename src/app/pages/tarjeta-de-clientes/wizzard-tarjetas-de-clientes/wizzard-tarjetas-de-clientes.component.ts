@@ -171,7 +171,7 @@ export class WizzardTarjetasDeClientesComponent implements OnInit {
   }
 
   isCurrentStepValid(): boolean {
-    console.log(this.getCurrentForm().errors)
+    // console.log(this.getCurrentForm().errors)
     return this.getCurrentForm().valid;
   }
 
@@ -251,7 +251,7 @@ export class WizzardTarjetasDeClientesComponent implements OnInit {
         vehiculoCliente: this.vehiculoClienteForm.value
       };
 
-      console.log(formData)
+      // console.log(formData)
       this.tarjetaClientes.saveTarjetaCliente(formData)
       .subscribe({
         next: (resp) => 

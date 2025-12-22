@@ -48,7 +48,7 @@ export class ModalUcoipComponent implements OnInit  {
     this.getPermisos();
     this.buildFormModal();
 
-    console.log(this.dataPermisos);
+    // console.log(this.dataPermisos);
     
   }
 

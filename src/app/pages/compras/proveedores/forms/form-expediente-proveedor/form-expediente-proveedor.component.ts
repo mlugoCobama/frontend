@@ -71,7 +71,7 @@ export class FormExpedienteProveedorComponent implements OnInit {
 
   guardar() {
     if (this.expedienteForm.valid) {
-      console.log(this.expedienteForm.value);
+      // console.log(this.expedienteForm.value);
     } else {
       alert("Completa todos los campos requeridos.");
     }

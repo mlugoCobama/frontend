@@ -75,9 +75,9 @@
           </div>
         </td>
         <td class="text-center">
-          <span [title]="row.recuperable == 1 ? 'El costo de este insumo sera recuperado por el cliente' : '' "><i [ngClass]="{
-          'fas fa-info-circle text-success': row.recuperable == 1,
-          'fas fa-building text-primary': row.recuperable == 0}"></i>
+          <span [title]="row.recuperable == 1 ? 'El costo de este insumo sera recuperado por el cliente' : '' "><i class="fas" [ngClass]="{
+          'fa-info-circle text-success': row.recuperable == 1,
+          'fa-building text-primary': row.recuperable == 0}"></i>
           </span>
         </td>
         <td *ngFor="let prov of cotProv; let i = index">

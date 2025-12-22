@@ -62,7 +62,7 @@ export class PermisosComponent implements OnInit {
   
       this.modalRef.content.closeBtnName = 'Close';
       this.modalRef.content.event.subscribe((res) => {
-        console.log(res);
+        // console.log(res);
         
         this.isLoad = true;
         this.dataPermisos = [];

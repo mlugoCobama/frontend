@@ -56,7 +56,7 @@ export class ModalPreviewOrdenCompraComponent implements AfterViewInit, OnDestro
   this.ordenesCompra.pdfOrdenCompra(this.solicitudCompra.id).subscribe(
     (response) => {
       const blob = new Blob([response.body!], { type: "application/pdf" });
-       console.log(response.headers)
+      //  console.log(response.headers)
       const fileName = response.headers.get('X-Filename') || 'orden_compra.pdf';
 
       const url = window.URL.createObjectURL(blob);

@@ -59,7 +59,7 @@ export class BtnAtorizarAPagoComponent {
             modo_pago : result.value
           };
      
-          console.log(payload);
+          // console.log(payload);
           this.ordenesComprasService.autorizarPagoOrdenCompra(payload).subscribe(
             (response) => {
               // this.isLoad = false;

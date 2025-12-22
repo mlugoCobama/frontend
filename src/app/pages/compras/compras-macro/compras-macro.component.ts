@@ -325,7 +325,7 @@ export class ComprasMacroComponent implements OnInit{
   this.ordenesComprasService.pdfOrdenCompra(this.solicitudCompra.id).subscribe(
     (response) => {
       const blob = new Blob([response.body!], { type: "application/pdf" });
-      console.log(response.headers.get('X-Filename') )
+      // console.log(response.headers.get('X-Filename') )
       const fileName = response.headers.get('X-Filename') || 'orden_compra.pdf';
 
       const url = window.URL.createObjectURL(blob);
