@@ -1,9 +1,15 @@
 <div class="card">
-  <div class="card-body">
-    <form [formGroup]="formSistemaMantenimiento" class="pb-2">
+  
+  <div  class="card-body">
+    <div class="d-flex justify-content-center" *ngIf="isLoad">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+  </div>
+    <form [hidden]="isLoad" [formGroup]="formSistemaMantenimiento" class="pb-2">
   <div class="row g-2">
     <div class="col">
-      <label for="sistema" class="form-label">Sistema del vehículo:</label>
+      <label for="sistema" class="form-label"> {{ tipo == 2 ? 'Sistema del vehículo:' : 'Area de Infraestructuras / Soporte / TI:'}}  </label>
       <select
         (change)="selectChange()"
         class="form-select form-select-sm"

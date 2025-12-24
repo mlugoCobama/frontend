@@ -10,6 +10,7 @@
       <app-select-sistema-mantenimiento
       @fadeInOut
       [solicitudCompra]="solicitudCompra"
+      [tipo]= 2
       *ngIf ="solicitudCompra.tipo === 2 && solicitudCompra.auto_gg === 1 && solicitudCompra.auto_admin === 1"
       ></app-select-sistema-mantenimiento>
 

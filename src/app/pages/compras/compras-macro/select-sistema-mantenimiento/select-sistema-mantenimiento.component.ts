@@ -20,6 +20,7 @@ import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-com
 export class SelectSistemaMantenimientoComponent implements OnInit{
 
   @Input() solicitudCompra:  any;
+  @Input() tipo:  number ;
 
   public isLoad: boolean = false;
   public submitted: boolean = false;
@@ -40,12 +41,13 @@ export class SelectSistemaMantenimientoComponent implements OnInit{
   ngOnInit(): void {
     this.buildForm();
     this.getAll();
-    this.getTiposMantenimiento();
+    // this.getTiposMantenimiento();
     this.selectChange();
   }
 
 
   public buildForm() {
+    console.log(this.solicitudCompra)
   return new Promise((resolve, reject) => {
     const disabled = this.solicitudCompra?.auto_macro === 1 ? true: false;
     const sistemaValue = this.solicitudCompra?.sistema ?? '';
@@ -67,10 +69,11 @@ export class SelectSistemaMantenimientoComponent implements OnInit{
   // Recupera todos los regsitros de la bse de datos 
   private getAll() {
     this.isLoad = true;
-    this.CatSistemasAuto.getAll().subscribe(
+    this.CatSistemasAuto.getAll(this.tipo).subscribe(
       (response) => {
         if (response) {
           this.sistemas = response.data;
+          this.tiposMantenimiento = response.data2;
           this.isLoad = false;
         } else {
           console.log(response.message);
@@ -86,7 +89,7 @@ export class SelectSistemaMantenimientoComponent implements OnInit{
 
   private getTiposMantenimiento() {
     this.isLoad = true;
-    this.CatSistemasAuto.getTiposMantenimiento().subscribe(
+    this.CatSistemasAuto.getTiposMantenimiento(this.tipo).subscribe(
       (response) => {
         if (response) {
           this.tiposMantenimiento = response.data;

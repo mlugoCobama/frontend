@@ -4,18 +4,25 @@
   </h5>
   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="cerrarModal()"></button>
 </div>
+
 <div class="modal-body">
-  <app-form-solicitud
-  #formSolicitud
-  [submitted]="submitted"
-  (closeModal)="cerrarModal()"
+  <app-form-solicitud 
+    #formSolicitud 
+    [submitted]="submitted" 
+    (closeModal)="cerrarModal()"
   ></app-form-solicitud>
 
-  <app-form-detalle-solicitud
-  #formDetalleSolicitud
+  <app-select-sistema-mantenimiento 
+  *ngIf = "tienePermiso('view form tipo mantenimiento')"
+    #formSelectsSistemaManteniemiento
+    [tipo]=3
+  ></app-select-sistema-mantenimiento>
+
+  <app-form-detalle-solicitud 
+    #formDetalleSolicitud
   ></app-form-detalle-solicitud>
-  
 </div>
+
 <div class="modal-footer">
   <button
    [disabled]="sending"

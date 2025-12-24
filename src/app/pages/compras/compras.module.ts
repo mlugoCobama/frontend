@@ -74,7 +74,6 @@ import { CardSpinerComponent } from './reportes-compras/widgets/card-spiner/card
 import { ModalCambioProveedorComponent } from './compras/detalle-solicitudes-compras/btns-autorizacion/modal-cambio-proveedor/modal-cambio-proveedor.component';
 import { TableFormExistenciasComponent } from './compras/detalle-solicitudes-compras/panel-entregas/table-form-existencias/table-form-existencias.component';
 import { TableCardexMovimientosComponent } from './compras/detalle-solicitudes-compras/panel-entregas/table-cardex-movimientos/table-cardex-movimientos.component';
-
 @NgModule({
   declarations: [
     ComprasComponent,

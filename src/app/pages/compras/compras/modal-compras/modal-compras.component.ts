@@ -7,6 +7,11 @@ import { SwalComprsServiceService } from "src/app/core/services/compras/swal-com
 
 import { FormDetalleSolicitudComponent } from "../../forms-solicitud/form-detalle-solicitud/form-detalle-solicitud.component";
 import { FormSolicitudComponent } from "../../forms-solicitud/form-solicitud/form-solicitud.component";
+import { SelectSistemaMantenimientoComponent } from "../../compras-macro/select-sistema-mantenimiento/select-sistema-mantenimiento.component";
+
+import { PermisosService } from 'src/app/core/services/permisos.service';
+
+
 
 import catCentrosCostos from "src/environments/cat_centros_costos.json";
 @Component({
@@ -29,6 +34,7 @@ export class ModalComprasComponent implements AfterViewInit
 
   @ViewChild('formSolicitud', { static: false }) formSolicitudCompra!:  FormSolicitudComponent;
   @ViewChild('formDetalleSolicitud', { static: false }) tableData!:  FormDetalleSolicitudComponent;
+  @ViewChild('formSelectsSistemaManteniemiento ', { static: false }) formSelectsSistemaManteniemiento!: SelectSistemaMantenimientoComponent;
 
   public modalCerrado: EventEmitter<any> = new EventEmitter();
   public event: EventEmitter<any> = new EventEmitter();
@@ -39,6 +45,7 @@ export class ModalComprasComponent implements AfterViewInit
   constructor(
     private alertasService: SwalComprsServiceService,
     private comprasService: ComprasService,
+    private permisosService: PermisosService,
     public modalRef: BsModalRef
   ) {}
 
@@ -68,6 +75,14 @@ export class ModalComprasComponent implements AfterViewInit
       return;
     }
 
+    if(this.tienePermiso('view form tipo mantenimiento') && !this.formSelectsSistemaManteniemiento.esValido()){
+      this.alertasService.mostrarAlerta(
+        "Alerta", `Debes llenar correctamente los campos de tipo de mantenimiento y sistema` ,
+        "warning", "warning");
+      this.sending = false;
+      return;
+    }
+
     /**
      * Valido que el usuario ingrese por lo menos un detalle
      */
@@ -84,6 +99,7 @@ export class ModalComprasComponent implements AfterViewInit
 
     const data = {
       ...this.formSolicitudCompra.obtenerValores(),
+      ...this.formSelectsSistemaManteniemiento.obtenerValores(),
       usuario_solicita: this.formSolicitudCompra.obtenerUsuarios(),
       detalles: this.tableData.getDetalles(),
     };
@@ -143,5 +159,10 @@ export class ModalComprasComponent implements AfterViewInit
   public cerrarModal(): void {
     this.modalRef.hide();
     setTimeout(() => { this.modalCerrado.emit() }, 150);
+  }
+
+  tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
   }
 }
