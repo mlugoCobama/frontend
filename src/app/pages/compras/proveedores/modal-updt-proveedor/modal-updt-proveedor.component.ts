@@ -59,7 +59,10 @@ export class ModalUpdtProveedorComponent implements AfterViewInit {
 
     const data = this.valoresFormatedos();
 
-    
+    if(!data){
+      return;
+    }
+
     this.proveedoresService.edit(id, data).subscribe(
       (response) => {
         if (response.status === "success") {
@@ -95,17 +98,19 @@ valoresFormatedos(): FormData {
   const contactos = this.formProveedorContactos.guardar();
   const expediente = this.formExpedienteProveedor.getFormValues(); // objeto con archivos
   const cambio = this.formProveedorContactos.hasContactosChanged(this.proveedor.contactos, contactos.contactos);
-  const cambioProductos = this.formDatosProveedor.productosHasChangue();
+  const cambioProductos = this.formDatosProveedor.productosHasChange();
 
-  if(contactos.contactos.length == 0){
-    this.alertas.mostrarAlerta('Faltan los contactos', `Agrega por lo menos un contacto en el apartado de contactos`, 'info', 'warning')
-    return;
-  }
+  // if(contactos.contactos.length == 0){
+  //   this.alertas.mostrarAlerta('Faltan los contactos', `Agrega por lo menos un contacto en el apartado de contactos`, 'info', 'warning')
+  //   return;
+  // }
 
   formData.append('proveedor', JSON.stringify(proveedor));
   if(cambio){
+    if(contactos.contactos.length > 0){
       formData.append("change_contactos", '1');
       formData.append('contactos', JSON.stringify(contactos));
+    }
   }
 
   if(cambioProductos){
@@ -121,8 +126,7 @@ valoresFormatedos(): FormData {
         }
   });
 
- formData.append("_method", "PUT");
- 
+//  formData.append("_method", "PUT");
  return formData;
 }
 }

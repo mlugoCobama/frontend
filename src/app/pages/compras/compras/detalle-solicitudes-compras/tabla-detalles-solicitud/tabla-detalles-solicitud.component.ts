@@ -257,6 +257,7 @@ toggleModoLectura() {
       (response) => {
         if (response) {
           this.cotProv = response.data;
+          console.log(this.cotProv)
           this.cotizacion = response.dataCotizacion;
           this.isLoad = false;
         } else {
@@ -278,6 +279,14 @@ toggleModoLectura() {
         console.error('Error al copiar al portapapeles', err);
       });
   }
+
+  sumarDetalle(dataSource) {
+  return dataSource.reduce((acumulador, objeto) => {
+    return acumulador + (((objeto['importe_unitario'] ?? 0) * (objeto['detalle_solicitud']['cantidad'] ?? 0)) || 0);
+    }, 0);
+  }
+
+
 
 
 

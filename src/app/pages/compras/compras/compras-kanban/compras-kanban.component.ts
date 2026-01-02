@@ -52,13 +52,31 @@ export class ComprasKanbanComponent implements OnInit, OnChanges {
   { id: 4, nombre: 'Cancelado', color: 'bg-danger', permiso: 'view column cancelado'},
 ];
 
+agrupaciones = {
+  'En espera de autorización': ['ESP. AUT. PLANTA', 'ESP. AUT. MACRO'],
+  'Solicitado': ['SOLICITADO'],
+  'En cotización': ['EN COTIZACIÓN'],
+  'Orden de compra': ['ORDEN DE COMPRA'],
+  'Autorizado' : ['AUTORIZADA'],
+  'Autorizado a pago' : ['AUTO. A PAGO'],
+  'En surtido': ['EN SURTIDO'],
+  'Entregada': ['ENTREGADO'],
+  'Facturado': ['FACTURADO'],
+  'Solicitado pago': ['PAGO SOLICITADO'],
+  'Pagada': ['PAGADO'],
+  'Cargar complemento': ['CARGA COMPLEMENTO'],
+  'Finalizada': ['FINALIZADO'],
+  'Cancelado': ['CANCELADA']
+};
+
 
   constructor(
     private permisosService: PermisosService
   ) {}
 
   ngOnInit(): void {
-    this.agruparPorEstado();
+    // this.agruparPorEstado();
+    this.agruparPorEstadoTexto();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -76,6 +94,20 @@ export class ComprasKanbanComponent implements OnInit, OnChanges {
     });
     this.isLoad = false;
   }
+
+  agruparPorEstadoTexto() {
+  this.datosAgrupados = {};
+
+  Object.keys(this.agrupaciones).forEach((grupo) => {
+    const nombres = this.agrupaciones[grupo];
+
+    this.datosAgrupados[grupo] = this.datos.filter((d) =>
+      nombres.includes(d.estado)
+    );
+  });
+
+  this.isLoad = false;
+}
 
   openModalSeguimiento(item: any) {
     this.btnModalSeguimiento.emit(item);

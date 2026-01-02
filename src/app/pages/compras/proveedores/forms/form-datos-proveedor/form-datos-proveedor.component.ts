@@ -147,7 +147,7 @@ export class FormDatosProveedorComponent implements OnInit {
     }
   }
 
-  productosHasChangue() {
+  productosHasChange() {
     const productos = this.formProveedores.get("productos").value;
     return productos != this.datos?.productos ? true : false;
   }

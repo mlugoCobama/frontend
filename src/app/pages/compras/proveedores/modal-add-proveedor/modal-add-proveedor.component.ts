@@ -90,6 +90,10 @@ export class ModalAddProveedorComponent implements AfterViewInit {
 
     const data = this.valoresFormatedos();
 
+    if(!data){
+      return;
+    }
+
     // console.log(data);
     
     this.proveedoresService.save(data).subscribe(
@@ -155,6 +159,11 @@ export class ModalAddProveedorComponent implements AfterViewInit {
     const contactos = this.formProveedorContactos.guardar();
     const expediente = this.formExpedienteProveedor.getFormValues(); // objeto con archivos
 
+    if(contactos.contactos.length == 0){
+       this.alertas.mostrarAlerta('Faltan los contactos', `Agrega por lo menos un contacto en el apartado de contactos`, 'info', 'warning')
+       return;
+   }
+   
     formData.append("proveedor", JSON.stringify(proveedor));
     formData.append("contactos", JSON.stringify(contactos));
 

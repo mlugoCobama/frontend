@@ -47,7 +47,6 @@ export class SelectSistemaMantenimientoComponent implements OnInit{
 
 
   public buildForm() {
-    console.log(this.solicitudCompra)
   return new Promise((resolve, reject) => {
     const disabled = this.solicitudCompra?.auto_macro === 1 ? true: false;
     const sistemaValue = this.solicitudCompra?.sistema ?? '';

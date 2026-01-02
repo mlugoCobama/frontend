@@ -14,7 +14,6 @@ export class FormActualizarDetalleComponent {
   constructor(
     private detallesService: DetallesSolicitudService,
     private alertasService: SwalComprsServiceService
-
   ){}
 
   @Input() detalles:any;
