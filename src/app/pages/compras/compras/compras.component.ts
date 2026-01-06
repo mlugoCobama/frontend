@@ -95,7 +95,10 @@ export class ComprasComponent implements OnInit {
       (response) => {
         if (response) {
           this.rawEmpresas = response.data;
-          this.getUsuarioActivo();
+          if(this.rawEmpresas){
+            this.getUsuarioActivo();
+          }
+          
           // this.isLoading = false;
         } else {
           this.alertasService.mostrarAlerta(

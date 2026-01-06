@@ -97,12 +97,22 @@ export class ModalComprasComponent implements AfterViewInit
       return;
     }
 
-    const data = {
-      ...this.formSolicitudCompra.obtenerValores(),
-      ...this.formSelectsSistemaManteniemiento.obtenerValores(),
-      usuario_solicita: this.formSolicitudCompra.obtenerUsuarios(),
-      detalles: this.tableData.getDetalles(),
-    };
+    let data;
+    if(this.tienePermiso('view form tipo mantenimiento')){
+      data = {
+        ...this.formSolicitudCompra.obtenerValores(),
+        ...this.formSelectsSistemaManteniemiento.obtenerValores(),
+        usuario_solicita: this.formSolicitudCompra.obtenerUsuarios(),
+        detalles: this.tableData.getDetalles(),
+      };
+    }else{
+      data = {
+        ...this.formSolicitudCompra.obtenerValores(),
+        usuario_solicita: this.formSolicitudCompra.obtenerUsuarios(),
+        detalles: this.tableData.getDetalles(),
+      };
+    }
+    
 
     if(!this.formSolicitudCompra.getIsAgencia()){
       data.c_c = 0;
