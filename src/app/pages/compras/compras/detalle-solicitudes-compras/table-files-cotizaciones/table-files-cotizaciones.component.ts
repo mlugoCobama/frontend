@@ -51,6 +51,7 @@ export class TableFilesCotizacionesComponent implements AfterViewInit {
   // public sending: boolean = false;
 
   public proveedorSeleccionado: any;
+  public datosPago:any;
 
   constructor(
     private proveedoresService: ProveedoresService,
@@ -352,5 +353,13 @@ export class TableFilesCotizacionesComponent implements AfterViewInit {
         item.loading = false;
       }
     );
+  }
+
+  getProveedorSeleccionado(){
+    const proveedorSeleccionado = this.cotProv.find(u => u.seleccionado == 1);
+    
+    // console.log(proveedorSeleccionado?.proveedores_id[0]?.datos_pago[0]);
+    return proveedorSeleccionado?.proveedores_id[0]?.datos_pago[0];
+    
   }
 }

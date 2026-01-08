@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 import { FormDatosProveedorComponent } from "../forms/form-datos-proveedor/form-datos-proveedor.component";
 import { FormExpedienteProveedorComponent } from "../forms/form-expediente-proveedor/form-expediente-proveedor.component";
 import { FormProveedorContactosComponent } from "../forms/form-proveedor-contactos/form-proveedor-contactos.component";
-
+import { FormDatosPagoComponent } from "../forms/form-datos-pago/form-datos-pago.component";
 import {
   FormBuilder,
   FormControl,
@@ -38,6 +38,7 @@ export class ModalAddProveedorComponent implements AfterViewInit {
   @ViewChild("formDatosProveedor", { static: false }) formDatosProveedor!: FormDatosProveedorComponent;
   @ViewChild("formExpedienteProveedor", { static: false }) formExpedienteProveedor!: FormExpedienteProveedorComponent;
   @ViewChild("formProveedorContactos", { static: false }) formProveedorContactos!: FormProveedorContactosComponent;
+  @ViewChild("formDatosPago", { static: false }) formDatosPago!: FormDatosPagoComponent;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -158,13 +159,21 @@ export class ModalAddProveedorComponent implements AfterViewInit {
     const proveedor = this.formDatosProveedor.getFormValues();
     const contactos = this.formProveedorContactos.guardar();
     const expediente = this.formExpedienteProveedor.getFormValues(); // objeto con archivos
+    const datosPago = this.formDatosPago.guardar();
 
     if(contactos.contactos.length == 0){
        this.alertas.mostrarAlerta('Faltan los contactos', `Agrega por lo menos un contacto en el apartado de contactos`, 'info', 'warning')
        return;
    }
+
+   if(datosPago.datosPago.length > 0){
+      formData.append("datosPago", JSON.stringify(datosPago));
+      //  this.alertas.mostrarAlerta('Faltan los datos de pago', `Agrega por lo menos datos de pagos`, 'info', 'warning')
+      //  return;
+   }
    
     formData.append("proveedor", JSON.stringify(proveedor));
+    // formData.append("datosPago", JSON.stringify(datosPago));
     formData.append("contactos", JSON.stringify(contactos));
 
     // Agregar archivos del expediente solo si existen

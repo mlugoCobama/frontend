@@ -216,7 +216,7 @@ export class PanelEntregasComponent implements OnInit, AfterViewInit {
       if(response.status){
         this.detalles = response.data;
         this.entregaCompleta = response.todasEnCero;
-        if(this.detalles.length > 0){
+        if(this.detalles.length > 0 && this.ordenCompra.surtido_solicitado == 1){
           // this.formTableEntradas.createFormArray(this.detalles);
           // setTimeout(()=>{
           //   if (this.formTableEntradas && typeof this.formTableEntradas.createFormArray === 'function') {

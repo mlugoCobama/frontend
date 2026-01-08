@@ -1,0 +1,82 @@
+<div class="card border m-2">
+    <div class="card-header">
+        <div class="d-flex  justify-content-between">
+            <strong class="text-center"> Datos de pago del proveedor</strong>
+
+            <div class="mb-0">
+                <button type="button" class="btn btn-sm btn-primary" (click)="agregarDatoPago()">
+                <i class="fas fa-plus"></i> Agregar datos de pago
+                </button>
+            </div>
+        </div>
+
+        
+    </div>
+    <div class="card-body m-0">
+        <form [formGroup]="proveedorForm" *ngIf="datosPago.controls.length > 0; else elseBlock" (ngSubmit)="guardar()">
+        <div formArrayName="datosPago">
+            <table class="table table-striped table-sm m-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Banco</th>
+                    <th>No. Cuenta</th>
+                    <th>Clave Interbancaria</th>
+                    <th>Beneficiario</th>
+                    <th class="text-center">-</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let dato of datosPago.controls; let i = index" [formGroupName]="i">
+                <td>
+                    <input formControlName="banco" type="text" class="form-control form-control-sm" placeholder="Banco">
+                    <div *ngIf="dato.get('banco')?.touched && dato.get('banco')?.errors"
+                                class="text-danger text-sm">
+                                <small *ngIf="dato.get('banco')?.errors['required']">El banco es
+                                    obligatorio.</small>
+                            </div>
+                </td>
+                <td>
+                    <input formControlName="no_cuenta" type="text"  maxlength="20" class="form-control form-control-sm" placeholder="Cuenta">
+                    <div *ngIf="dato.get('no_cuenta')?.touched && dato.get('no_cuenta')?.errors"
+                                class="text-danger text-sm">
+                                <small *ngIf="dato.get('no_cuenta')?.errors['required']">El numero de cuenta es
+                                    obligatorio.</small>
+                            </div>
+                </td>
+                <td>
+                    <input formControlName="clave_interbancaria" maxlength="21" mask="000 000 00000000000 0" type="text" class="form-control form-control-sm" placeholder="CLABE">
+                    <div *ngIf="dato.get('clave_interbancaria')?.touched && dato.get('clave_interbancaria')?.errors"
+                                class="text-danger text-sm">
+                                <small *ngIf="dato.get('clave_interbancaria')?.errors['required']"> La CLABE es obligatoria</small>
+                            </div>
+                </td>
+                <td>
+                    <input formControlName="beneficiario" type="text" class="form-control form-control-sm" placeholder="Beneficiario">
+                    <div *ngIf="dato.get('beneficiario')?.touched && dato.get('beneficiario')?.errors"
+                                class="text-danger text-sm">
+                                <small *ngIf="dato.get('beneficiario')?.errors['required']">El beneficiario es
+                                    obligatorio.</small>
+                            </div>
+                </td>
+                <td class="text-center">
+                    <button type="button" class="btn btn-sm btn-danger" (click)="eliminarDatoPago(i)">
+                    <i class="fas fa-trash-alt"></i>
+                    </button>
+                </td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+
+        
+
+        <!-- <button type="submit" class="btn btn-sm btn-success">
+            <i class="bi bi-save"></i> Guardar
+        </button> -->
+        </form>
+    </div>
+    <ng-template #elseBlock>
+                <p class="text-center text-muted"><strong>Aún no hay datos de pago guardados para este proveedor.</strong>
+                </p>
+            </ng-template>
+</div>

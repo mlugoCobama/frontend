@@ -1,4 +1,4 @@
-<div class="card border">
+<div class="card border m-2">
     <div class="card-header">
         <div class="d-flex  justify-content-between">
             <strong>Contactos del proveedor</strong>
@@ -12,7 +12,7 @@
     <div class="card card-body m-0">
         <form [formGroup]="proveedorForm">
             <table *ngIf="contactos.controls.length > 0; else elseBlock"
-                class="table table-bordered table-striped table-sm m-0">
+                class="table table-striped table-sm m-0">
                 <thead class="table-light">
                     <tr>
                         <th>Nombre</th>

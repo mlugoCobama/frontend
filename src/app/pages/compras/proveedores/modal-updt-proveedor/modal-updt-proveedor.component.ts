@@ -10,6 +10,7 @@ import { FormProveedorContactosComponent } from "../forms/form-proveedor-contact
 import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 
 import { FormBuilder, FormControl, FormGroup, Validators,} from "@angular/forms";
+import { FormDatosPagoComponent } from "../forms/form-datos-pago/form-datos-pago.component";
 
 @Component({
   selector: "app-modal-updt-proveedor",
@@ -37,13 +38,14 @@ export class ModalUpdtProveedorComponent implements AfterViewInit {
     public bsModalRef: BsModalRef
   ) { }
 
-
   ngAfterViewInit(): void {
+    console.log(this.proveedor)
   }
 
   @ViewChild('formDatosProveedor', { static: false }) formDatosProveedor!:  FormDatosProveedorComponent;
   @ViewChild('formExpedienteProveedor', { static: false }) formExpedienteProveedor!:  FormExpedienteProveedorComponent;
   @ViewChild('formProveedorContactos', { static: false }) formProveedorContactos!:  FormProveedorContactosComponent;
+  @ViewChild("formDatosPago", { static: false }) formDatosPago!: FormDatosPagoComponent;
 
   public edit() {
     //Actualiza los valores del registro
@@ -96,14 +98,17 @@ valoresFormatedos(): FormData {
 
   const proveedor = this.formDatosProveedor.getFormValues();
   const contactos = this.formProveedorContactos.guardar();
+  const datosPago =  this.formDatosPago.guardar();
   const expediente = this.formExpedienteProveedor.getFormValues(); // objeto con archivos
   const cambio = this.formProveedorContactos.hasContactosChanged(this.proveedor.contactos, contactos.contactos);
   const cambioProductos = this.formDatosProveedor.productosHasChange();
 
-  // if(contactos.contactos.length == 0){
-  //   this.alertas.mostrarAlerta('Faltan los contactos', `Agrega por lo menos un contacto en el apartado de contactos`, 'info', 'warning')
-  //   return;
-  // }
+  const datosCambiaron =  this.formDatosPago.hasDatosChanged(this.proveedor.datosPago, datosPago.datosPago )
+
+  if(contactos.contactos.length == 0){
+     this.alertas.mostrarAlerta('Faltan los contactos', `Agrega por lo menos un contacto en el apartado de contactos`, 'info', 'warning')
+     return;
+   }
 
   formData.append('proveedor', JSON.stringify(proveedor));
   if(cambio){
@@ -112,6 +117,18 @@ valoresFormatedos(): FormData {
       formData.append('contactos', JSON.stringify(contactos));
     }
   }
+
+  if(datosPago.datosPago.length == 0){
+     this.alertas.mostrarAlerta('Faltan lo datos de pago', `Agrega por lo menos un dato de pago`, 'info', 'warning')
+     return;
+   }
+
+  if(datosCambiaron && datosPago.datosPago.length > 0){
+    formData.append("change_datosPago", '1');
+      formData.append('datosPago', JSON.stringify(datosPago));
+  }
+
+
 
   if(cambioProductos){
     formData.append("change_productos", '1');
