@@ -11,6 +11,7 @@
     >
       <thead class="table-light sticky-top">
         <tr>
+          <th></th>
           <th>Fecha</th>
           <th>Factura</th>
           <th>Razón Social</th>
@@ -46,6 +47,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of data; let i; index">
+          <td> <input type="checkbox" class="form-check-input" id="exampleCheck1"> </td>
           <td class="text-nowrap">{{ item.fecha_factura }}</td>
           <td>{{ item.faau_nofactura }}</td>
           <td class="text-nowrap">{{ item.faau_razonfactura }}</td>
@@ -94,8 +96,9 @@
               mask="separator"
               thousandSeparator=","
               type="text"
-              [formControlName]="'previa_' + item.faau_nofactura"
               placeholder="Previa"
+              [formControlName]="'previa_' + item.faau_nofactura"
+              
             />
           </td>
           <td>

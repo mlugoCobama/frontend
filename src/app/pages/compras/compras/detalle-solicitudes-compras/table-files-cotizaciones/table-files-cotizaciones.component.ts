@@ -317,7 +317,7 @@ export class TableFilesCotizacionesComponent implements AfterViewInit {
   public reenviarSC(item) {
     item.loading = true;
     const data = {
-      proveedores: [item?.proveedores_id[0]?.id],
+      proveedores: [item?.proveedores_id?.id],
       consideraciones: "",
       solicitudes_compra_id: this.solicitudCompra?.id,
       // loading : item.loading
@@ -358,8 +358,8 @@ export class TableFilesCotizacionesComponent implements AfterViewInit {
   getProveedorSeleccionado(){
     const proveedorSeleccionado = this.cotProv.find(u => u.seleccionado == 1);
     
-    // console.log(proveedorSeleccionado?.proveedores_id[0]?.datos_pago[0]);
-    return proveedorSeleccionado?.proveedores_id[0]?.datos_pago[0];
+    // console.log(proveedorSeleccionado?.proveedores_id?.datos_pago[0]);
+    return proveedorSeleccionado?.proveedores_id?.datos_pago[0];
     
   }
 }

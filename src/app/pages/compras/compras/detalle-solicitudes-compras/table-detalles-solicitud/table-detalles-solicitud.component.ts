@@ -143,7 +143,7 @@ export class TableDetallesSolicitudComponent implements OnInit {
    */
   private addProveedorColumns() {
     this.cotProv.forEach((cotizacion) => {
-      const proveedorId = cotizacion.proveedores_id[0].id;
+      const proveedorId = cotizacion.proveedores_id.id;
 
       this.detalles.forEach((detalle) => {
         const detalleCotizacion = cotizacion.detalles.find(
@@ -180,7 +180,7 @@ export class TableDetallesSolicitudComponent implements OnInit {
     this.totals = {};
     this.cotProv.forEach((cotizacion) => {
       let total = 0;
-      const proveedorId = cotizacion.proveedores_id[0].id;
+      const proveedorId = cotizacion.proveedores_id.id;
       this.detalles.forEach((detalle) => {
         // const precio = Number(detalle["precio_" + proveedorId]);
         const precio = parseFloat(detalle["precio_" + proveedorId]);
@@ -201,7 +201,7 @@ export class TableDetallesSolicitudComponent implements OnInit {
   getTotalMasBajo(): number {
     let tmasBajo = Number.MAX_VALUE;
     for (let prov of this.cotProv) {
-      let total = this.totals["precio_" + prov.proveedores_id[0].id];
+      let total = this.totals["precio_" + prov.proveedores_id.id];
       if (total < tmasBajo) {
         tmasBajo = total;
       }
@@ -224,7 +224,7 @@ export class TableDetallesSolicitudComponent implements OnInit {
 
     this.cotProv.forEach((proveedor) => {
       this.detalles.forEach((detalle) => {
-        const proveedorId = proveedor.proveedores_id[0].id;
+        const proveedorId = proveedor.proveedores_id.id;
         const precio = detalle["precio_" + proveedorId];
 
         if (!detalle["disabled_" + proveedorId] && precio) {

@@ -19,6 +19,31 @@ export class ComisionesService {
     public getAll(fecha_inicio:any, fecha_fin:any): Observable<ResponseComision> {
       return this.http.get<ResponseComision>(environment.apiUrl + `nissan/comisiones/${fecha_inicio}/${fecha_fin}`);
     }
+    
+    public getLibroVentas(estado:any ,agencia: any, tipoVenta: any, fecha_inicio:any, fecha_fin:any, vendedor:any): Observable<ResponseComision> {
+      return this.http.get<ResponseComision>(environment.apiUrl + `autos/libro-ventas/${estado}/${agencia}/${tipoVenta}/${fecha_inicio}/${fecha_fin}/${vendedor}`);
+    }
+
+    public guardarEntregados(data:any): Observable<any> {
+      return this.http.post(environment.apiUrl + "nissan/datos-venta", data);
+    }
+
+    public guardarValidados(data:any): Observable<any> {
+      return this.http.post(environment.apiUrl + "nissan/datos-venta/validados", data);
+    }
+
+    public guardarPagado(id:any): Observable<any> {
+      return this.http.get(environment.apiUrl + `nissan/datos-venta/pagado/${id}`);
+    }
+
+    public getVendedoresAgencia(id:any): Observable<any> {
+      return this.http.get(environment.apiUrl + `nissan/vendedor/${id}`);
+    }
+    
+    public devolverPartida(id ,data:any): Observable<any> {
+      return this.http.put(environment.apiUrl + `nissan/datos-venta/${id}`, data);
+    }
+
     /**
      * Recupera los porcentajes de los punto de ventas
      * @returns datos 

@@ -25,7 +25,7 @@
         <th *ngIf = "solicitudCompra.multiUnidad" >AT</th>
         <!-- <th>-</th> -->
         <th *ngFor="let prov of cotProv" class="text-center" > 
-          <strong> {{ prov.proveedores_id[0].nombre }} </strong> <i [ngClass]="{'bg-success text-white': totals['precio_' + prov.proveedores_id[0].id] === totalMasBajo}"></i>
+          <strong> {{ prov.proveedores_id.nombre }} </strong> <i [ngClass]="{'bg-success text-white': totals['precio_' + prov.proveedores_id.id] === totalMasBajo}"></i>
         </th>
       </tr>
     </thead>
@@ -72,11 +72,11 @@
         </td>
         <td
           *ngFor="let prov of cotProv"
-          [ngClass]="{'bg-success text-white': totals['precio_' + prov.proveedores_id[0].id] === totalMasBajo}"
+          [ngClass]="{'bg-success text-white': totals['precio_' + prov.proveedores_id.id] === totalMasBajo}"
           class="text-end"
         >
           <strong>
-            {{ totals["precio_" + prov.proveedores_id[0].id] | currency }}
+            {{ totals["precio_" + prov.proveedores_id.id] | currency }}
           </strong>
         </td>
       </tr>
@@ -86,11 +86,11 @@
         </td>
         <td
           *ngFor="let prov of cotProv"
-          [ngClass]="{'bg-primary text-white': totals['precio_' + prov.proveedores_id[0].id] === totalMasBajo}"
+          [ngClass]="{'bg-primary text-white': totals['precio_' + prov.proveedores_id.id] === totalMasBajo}"
           class="text-end"
         >
           <strong>
-            {{ totals["precio_" + prov.proveedores_id[0].id] * 1.16 | currency }}
+            {{ totals["precio_" + prov.proveedores_id.id] * 1.16 | currency }}
           </strong>
         </td>
       </tr>

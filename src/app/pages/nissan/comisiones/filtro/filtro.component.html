@@ -1,0 +1,94 @@
+<div class="card">
+    <div class="card-body p-3">
+      <form [formGroup]="formulario"> 
+        <div class="row g-2 mb-1">
+          
+            <div class="col-auto">
+              <label>Agencias</label>
+              <select class="form-select form-select-sm " aria-label=".form-select-sm example" formControlName="agencia">
+                <option value=""selected>Selecciona uno</option>
+                <option value="todos">Todas</option>
+                <option value="710">Nissan Universidad</option>
+                <option value="0">Nissan Insurgentes</option>
+                <option value="730">Nissan Azcapotzalco</option>
+                <option value="714">Nissan Campestre</option>
+                <option value="740">Renault Azcapotzalco</option>
+                <option value="746">Renault Ecatepec</option>
+                <option value="743">Renault Vallejo</option>
+                <option value="760">Renault Pachuca</option>
+              </select>
+              <div *ngIf="form.agencia.invalid && form.agencia.touched" class="error">
+                <small> Selecciona una agencia </small>
+              </div>
+            </div>
+            <div class="col-auto">
+              <label>Tipo de venta</label>
+              <select class="form-select form-select-sm " aria-label=".form-select-sm example" formControlName="tipoVenta">
+                <option value=""selected>Selecciona uno</option>
+                <option value="todos">Todos</option>
+                <option value="NU">Nuevos</option>
+                <option value="SEMI">Seminuevos</option>
+                <!-- <option value="3">Flotillas</option>
+                <option value="4">Accesorios</option>
+                <option value="5">Refacciones</option> -->
+              </select>
+              <div *ngIf="form.tipoVenta.invalid && form.tipoVenta.touched" class="error">
+                <small> Selecciona un Tipo de venta </small>
+              </div>
+            </div>
+            <div class="col-auto">
+              <label >Fecha inicial</label>
+              <input type="date" [max]="hoy" class="form-control form-control-sm" formControlName="fechaInicial">
+              <div *ngIf="form.fechaInicial.invalid && form.fechaInicial.touched" class="error">
+                <small> Selecciona una Fecha Inicial </small>
+              </div>
+              <div *ngIf="formulario.errors?.['fechaInvalida']" class="error">
+                <small> La fecha inicial no puede ser mayor que la fecha final </small>
+              </div>
+            </div>
+            <div class="col-auto">
+              <label>Fecha Final</label>
+              <input  type="date" [max]="hoy" class="form-control form-control-sm" formControlName="fechaFinal">
+              <div *ngIf="form.fechaFinal.invalid && form.fechaFinal.touched" class="error">
+                <small> Selecciona una Fecha Final </small>
+              </div>
+            </div>
+            <div class="col-auto">
+              <label >Vendedor</label>
+              <select class="form-select form-select-sm " aria-label=".form-select-sm example" formControlName="vendedor">
+                <option value="" selected>Selecciona uno</option>
+                <option *ngFor="let v of vendedores" [value]="v.value">{{ v.label }}</option>
+              </select>
+              <div *ngIf="form.vendedor.invalid && form.vendedor.touched" class="error">
+                <small> Selecciona un vendedor </small> 
+              </div>
+
+
+            </div>
+           <div class="col-auto">
+            <button type="submit"  class="btn btn-sm btn-info mt-4"  [disabled]="finding" (click)="buscarDatos()">
+              <ng-container *ngIf="!finding; else loading">
+                <i class="fas fa-search"></i> Buscar
+              </ng-container>
+              <ng-template #loading>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Buscando...
+              </ng-template>
+            </button>
+          </div>
+
+            </div>
+          </form>
+            <!-- <div class="col-auto">
+               <label>Marca</label>
+              <select class="form-select form-select-sm " aria-label=".form-select-sm example">
+                <option value="0"selected>Selecciona uno</option>
+                <option value="todos">Todas</option>
+                <option value="1">Nissan</option>
+                <option value="2">Renault</option>
+              </select>
+            </div> -->
+            
+            
+    </div>
+</div>

@@ -26,11 +26,11 @@
         <th style="width: 3rem;" class="text-center">Autorizado</th>
         <th style="width: 3rem;" class="text-center" title="El costo del insumo sera pagado por el cliente">Rec</th>
         <th *ngFor="let prov of cotProv" class="text-center">
-          <strong> {{ prov.proveedores_id[0].nombre }} </strong>
+          <strong> {{ prov.proveedores_id.nombre }} </strong>
           <button
               class="btn btn-warnign btn-sm"
               title="Editar precios"
-              (click)="habilitarEdicionProveedor(prov.proveedores_id[0].id)"
+              (click)="habilitarEdicionProveedor(prov.proveedores_id.id)"
               *ngIf= "solicitudCompra.estatus === enEsts.EnCotizacion && tienePermiso('view btn save precios') && !mostrarObs"
             >
               <i class="fas fa-edit"></i>
@@ -86,12 +86,12 @@
             <span class="input-group-text">$</span>
             <input
               type="text"
-              [(ngModel)]="row['precio_' + prov.proveedores_id[0].id]"   
+              [(ngModel)]="row['precio_' + prov.proveedores_id.id]"   
               placeholder="Precio"
               mask="separator"
               thousandSeparator=","
               class="form-control form-control-sm"
-              [disabled]="row['disabled_' + +prov.proveedores_id[0].id]"
+              [disabled]="row['disabled_' + +prov.proveedores_id.id]"
               (input)="updateTotals()"
             />
           </div>
@@ -105,11 +105,11 @@
         </td>
         <td
           *ngFor="let prov of cotProv"
-          [ngClass]="{'bg-success text-white': totals['precio_' + prov.proveedores_id[0].id] === totalMasBajo}"
+          [ngClass]="{'bg-success text-white': totals['precio_' + prov.proveedores_id.id] === totalMasBajo}"
           class="text-center"
         >
           <strong>
-            {{ totals["precio_" + prov.proveedores_id[0].id] | currency }}
+            {{ totals["precio_" + prov.proveedores_id.id] | currency }}
           </strong>
         </td>
       </tr>
@@ -119,11 +119,11 @@
         </td>
         <td
           *ngFor="let prov of cotProv"
-          [ngClass]="{'bg-primary text-white': totals['precio_' + prov.proveedores_id[0].id] === totalMasBajo}"
+          [ngClass]="{'bg-primary text-white': totals['precio_' + prov.proveedores_id.id] === totalMasBajo}"
           class="text-center"
         >
           <strong>
-            {{ totals["precio_" + prov.proveedores_id[0].id] * 1.16 | currency }}
+            {{ totals["precio_" + prov.proveedores_id.id] * 1.16 | currency }}
           </strong>
         </td>
       </tr>

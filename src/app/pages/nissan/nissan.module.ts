@@ -15,6 +15,11 @@ import { ComprasSeminuevosComponent } from './compras-seminuevos/compras-seminue
 import { ComisionesComponent } from './comisiones/comisiones.component';
 import { TablaCapturaComponent } from './comisiones/tabla-captura/tabla-captura.component';
 import { TablaPagadasComponent } from './comisiones/tabla-pagadas/tabla-pagadas.component';
+import { VendedoresComponent } from './comisiones/vendedores/vendedores.component';
+import { TabuladorComponent } from './comisiones/tabulador/tabulador.component';
+import { FiltroComponent } from './comisiones/filtro/filtro.component';
+import { BotoneraComponent } from './comisiones/botonera/botonera.component';
+import { SpinerComponent } from './comisiones/spiner/spiner.component';
 
 
 @NgModule({
@@ -23,7 +28,12 @@ import { TablaPagadasComponent } from './comisiones/tabla-pagadas/tabla-pagadas.
     ComprasSeminuevosComponent,
     ComisionesComponent,
     TablaCapturaComponent,
-    TablaPagadasComponent
+    TablaPagadasComponent,
+    VendedoresComponent,
+    TabuladorComponent,
+    FiltroComponent,
+    BotoneraComponent,
+    SpinerComponent
   ],
   imports: [
     CommonModule,

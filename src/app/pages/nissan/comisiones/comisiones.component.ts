@@ -1,23 +1,32 @@
-import { Component, OnInit } from "@angular/core";
+import { AfterViewInit, Component, OnInit, signal, ViewChild, WritableSignal } from "@angular/core";
 import { Comision } from "src/app/core/models/nissan/comisiones";
 import { ComisionesService } from "src/app/core/services/nissan/comisiones.service";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 import Swal from "sweetalert2";
+import { PermisosService } from 'src/app/core/services/permisos.service';
+import { FiltroComponent } from "./filtro/filtro.component";
+import { firstValueFrom } from 'rxjs';
+
 
 @Component({
   selector: "app-comisiones",
   templateUrl: "./comisiones.component.html",
   styleUrl: "./comisiones.component.css",
 })
-export class ComisionesComponent implements OnInit {
+export class ComisionesComponent implements AfterViewInit {
+  finding: boolean = false;
+  public datos: any = [];
+
   public data: Comision[];
   public vendedores: any;
 
   public isDisabled = true;
 
   public ready: boolean = false;
-  public isLoadig: boolean = true;
+  public isLoadig: boolean = false;
+  public estado: any = 0;
+
   public showTable: boolean = false;
 
   public hoy = new Date().toISOString().split("T")[0];
@@ -30,328 +39,470 @@ export class ComisionesComponent implements OnInit {
   public porcentajes: any;
   public porcentajesBDC: any;
 
-  private modelInputs = {
-    otros: "",
-    gasolina: "",
-    previa: "",
-    descuentos: "",
-    traslados: "",
-    descuento_impulso: "",
-    total_subsidios: "",
-    descuento_gastos: "",
-    cortesia: "",
-    accesorios: "",
-    placas: "",
-  };
+  pagando: boolean[] = [];
+  devolviendo: boolean[] = [];
+
+  guardandoG: boolean = false;
+  guardandoV: boolean = false;
+  guardandoE: boolean = false;
+  
+  @ViewChild('formFiltro', { static: false }) formFiltro!:  FiltroComponent;
 
   constructor(
     private comisionesService: ComisionesService,
     private swal: SwalComprsServiceService,
-    public formBuilder: FormBuilder
-  ) {
-    this.formDatosGastos = this.formBuilder.group({});
-  }
+    public fb: FormBuilder,
+    private permisosService: PermisosService
+  ) {}
 
-  public ngOnInit(): void {
-    this.getPorcentaje();
-    // this.getAll();
-  }
-
-  private getPorcentaje() {
-    this.comisionesService.getPorentajes().subscribe(
-      (response) => {
-        if (response.status) {
-          this.porcentajes = response.data;
-        } else {
-           this.swal.mostrarAlerta("Error", `Error fetching data: ${response.message}`, "error" , "danger" );
-        }
-      },
-      (error) => {
-        this.swal.mostrarAlerta("Error", `Error fetching data: ${error}`, "error" , "danger" );
-      }
-    );
-  }
-
-  public guardarDatos(item) {
-    Swal.fire({
-      title: "Seguro que quieres guardar estos datos",
-      showDenyButton: true,
-      showCancelButton: false,
-      confirmButtonText: "Guardar",
-      denyButtonText: `Cancelar`
-    }).then((result) => {
-      if (result.isConfirmed) {
-        if (this.isRowValid(item.faau_nofactura)) {
-      const data = {
-        folio_factura: item.faau_nofactura,
-        isNew: item.isNew,
-        ...this.recuperarValoresFactura(item.faau_nofactura),
-      };
-      this.comisionesService.save(data).subscribe((response) => {
-        if (response.status === "success") {
-          this.swal.mostrarAlerta(
-            "Listo",
-            response.message,
-            "success",
-            "success"
-          );
-          // console.log(response);
-          this.getAll();
-          this.patchValues(item.faau_nofactura, response.data);
-        } else {
-          this.swal.mostrarAlerta("Error", response.message, "error", "danger");
-          this.getAll();
-        }
-      });
-    } else {
-      this.swal.mostrarAlerta(
-        "Faltan datos",
-        "Debes llenar todos los campos",
-        "warning",
-        "warning"
-      );
-      // console.log(this.getRowErrors(item.faau_nofactura));
-      return;
-    }
-      } else if (result.isDenied) {
-        Swal.fire("Los datos no serán guardados", "", "info");
-      }
-    });
+  ngAfterViewInit(): void {
     
   }
 
-  public patchValues(nofactura: string, data) {
-    data = this.data.find((element) => element.faau_nofactura === nofactura);
-    // console.log(data);
-    Object.keys(this.modelInputs).forEach((field) => {
-      let controlName = `${field}_${nofactura}`;
 
-      this.formDatosGastos.patchValue({
-        [controlName]: data[field],
-      });
-    });
-  }
-
-  /**
-   * r
-   * @param nofactura 
-   * @returns 
-   */
-public recuperarValoresFactura(nofactura: string): any {
-  const values = {};
-  Object.keys(this.modelInputs).forEach((field) => {
-    const controlName = `${field}_${nofactura}`;
-    const control = this.formDatosGastos.get(controlName);
-    values[field] = control?.value || "";
+  form = this.fb.group({
+    ventas: this.fb.array([])
   });
-  return values;
-}
 
-/**
- * Recupera todos los registros de un periodo en especifico
- */
-  private getAll() {
-    this.showTable = true;
-    this.isLoadig = true;
-    this.comisionesService.getAll(this.fecha_inicio, this.fecha_fin).subscribe(
-      (response) => {
-        // console.log(response);
-        if (response.status) {
-          this.data = response.data;
-          // Filtra los datos para solo mostrar ventas que aun no tiene una comisión calculada
-          // this.data = response.data.filter((data) => data.isNew === true);
-          // Mapea los vendedores para colocarlos dentro del filtro
-          this.vendedores = [
-            ...new Set(this.data.map((dato) => dato.faau_vend_clave)),
-          ];
-          this.buildFormGastos();
-          // this.comisionesService.emitirEvento();
-          // console.log(this.data.length)
-          this.isLoadig = false;
-        } else {
-          this.swal.mostrarAlerta("Error", `${response.message}`, "error" , "danger" );
-        }
-      },
-      (error) => {
-        this.swal.mostrarAlerta("Error", `Error fetching data: ${error}`, "error" , "danger" );
-      }
-    );
+  get ventas(): FormArray {
+    return this.form.get('ventas') as FormArray;
   }
 
-  /**
-   * Construye el formulario
-   */
-  private buildFormGastos() {
-    const fields = {};
-    this.formDatosGastos = this.formBuilder.group({});
-    Object.entries(this.data).forEach((data) => {
-      for (const field of Object.keys(this.modelInputs)) {
-        // console.log(field)
-        const controlName = `${field}_${data[1].faau_nofactura}`;
-        this.formDatosGastos.addControl(
-          controlName,
-          this.formBuilder.control(data[1][field], Validators.required)
-        );
-      }
-    });
+
+  tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
   }
 
-  /**
-   * Busca el porcentaje para cada tipo de venta
-   * @param tipoVenta tipo de venta del registro
-   * @returns porcentaje del tipo
-   */
-  public findPorcentaje(tipoVenta: string): number {
-    const porcentajes = this.porcentajes.reduce((obj, item) => {
-      obj[item.tipo_venta] = parseFloat(item.porcentaje_apv);
-      return obj;
-    }, {});
-    return porcentajes[tipoVenta as keyof typeof porcentajes] || porcentajes["EXTERNO" as keyof typeof porcentajes];
-  }
-  
-
-  /**
-   * Busca el porcentaje para cada tipo de venta
-   * @param tipoVenta tipo de venta del registro
-   * @returns porcentaje del tipo
-   */
-  public findPorcentajeBDC(tipoVenta: string): number {
-    const porcentajes = this.porcentajes.reduce((obj, item) => {
-      obj[item.tipo_venta] = parseFloat(item.porcentaje_bdc);
-      return obj;
-    }, {});
-    return porcentajes[tipoVenta as keyof typeof porcentajes] || porcentajes["EXTERNO" as keyof typeof porcentajes];
+  bindingSpiner(value) {
+    this.isLoadig = value;
   }
 
-  /**
-   * Suma los datos del form basado en un form control ('campo_noFactura')
-   * @param nofactura numero de factura
-   * @returns suma de los gatos
-   */
-  public calcularTotalGastosFila(nofactura: string): number {
-    let total = 0;
-
-    Object.keys(this.modelInputs).forEach((field) => {
-      const controlName = `${field}_${nofactura}`;
-      const value = this.formDatosGastos.get(controlName)?.value;
-      if (value && !isNaN(parseFloat(value))) {
-        total += parseFloat(value.toString().replace(/,/g, ""));
-      }
-    });
-
-    return total;
+  bindingEstado(value) {
+    this.estado = value;
   }
 
-  /**
-   * Calcula la utilidad final
-   * @param item datos de la fila
-   * @returns utilidad final despues de gastos
-   */
-  public calcularUtilidadFinal(item: Comision): number {
-    const utilidad = +item.Utilidad;
-    const totalGastos = this.calcularTotalGastosFila(item.faau_nofactura);
-
-    return utilidad - totalGastos;
-  }
-
-  /**
-   * Calcula la comision de los apv
-   * @param item datos de la fila
-   * @returns comision para el apv
-   */
-  public calcularComisionApv(item: Comision): number {
-    const utilidadFinal = this.calcularUtilidadFinal(item);
-    // const utilidadDespuesDescuento = utilidad - (utilidad * 0.225);
-    const porcentaje = this.findPorcentaje(item.faau_form_TipoVenta);
-    const porcentajeBDC = this.findPorcentajeBDC(item.faau_form_TipoVenta);
-
-    // console.log("calculo", utilidadFinal, porcentaje, porcentajeBDC);
-
-    return utilidadFinal * (porcentaje - porcentajeBDC);
-  }
-
-  public idAgencia: any;
-  onSelectedAgencia(value) {
-    this.idAgencia = value;
-    this.validateFilter();
-  }
-
-  onSelectVendedor(value) {
-    this.idAgencia = value;
-    this.validateFilter();
-  }
-
-  onSelectInicio(value) {
-    this.fecha_inicio = value.length > 0 ? value : null;
-    this.validateFilter();
-  }
-
-  onSelectFin(value) {
-    this.fecha_fin = value.length > 0 ? value : null;
-    this.validateFilter();
-  }
-
-  /**
-   * Valida si el filtro es correcto para mostrar el botón
-   * @returns 
-   */
-  validateFilter() {
-    if (
-      this.idAgencia > 0 &&
-      this.fecha_inicio != null &&
-      this.fecha_fin != null
-    ) {
-      const fecha1 = new Date(this.fecha_inicio);
-      const fecha2 = new Date(this.fecha_fin);
-
-      if (fecha1.getTime() > fecha2.getTime()) {
-        this.swal.mostrarAlerta(
-          "Error",
-          "La fecha de incio debe ser anterior a la fecha final",
-          "warning",
-          "warning"
-        );
-        this.ready = false;
-        return;
-      }
-      this.ready = true;
-    } else {
-      this.ready = false;
+  bindingData(value) {
+    this.datos = value;
+    if (this.datos.length > 0) {
+      this.cargarVentas();
     }
   }
 
-  /**
-   * Verifica si la fila es valida
-   * @param nofactura 
-   * @returns 
-   */
-  public isRowValid(nofactura: string): boolean {
-    let isValid = true;
-    Object.keys(this.modelInputs).forEach((field) => {
-      const controlName = `${field}_${nofactura}`;
-      const control = this.formDatosGastos.get(controlName);
-      if (control && control.invalid) {
-        isValid = false;
-      }
+  crearVenta(row: any): FormGroup {
+    const fg = this.fb.group({
+      id_venta: [row.id ?? false],
+      entregado: [row.entregado ?? false],
+      estatus: [{ value: row.estatus, disabled: true }],
+      fecha_factura: [{ value: row.fecha_factura, disabled: true }],
+      no_factura: [{ value: row.no_factura, disabled: true }],
+      razon_social: [{ value: row.razon_social, disabled: true }],
+      clave_producto: [{ value: row.clave_producto, disabled: true }],
+      clave_inventario: [{ value: row.clave_inventario, disabled: true }],
+      clave_vendedor: [{ value: row.clave_vendedor, disabled: true }],
+      descripcion: [{ value: row.descripcion, disabled: true }],
+      serie: [{ value: row.serie, disabled: true }],
+      total_venta: [{ value: row.total_venta, disabled: true }],
+      costos: [{ value: row.costos, disabled: true }],
+      bonificaciones: [{ value: row.bonificaciones, disabled: true }],
+      utilidad_inicial: [{ value: row.utilidad_inicial, disabled: true }],
+      tipo_venta: [{ value: row.tipo_venta, disabled: true }],
+      tipo_venta_porcentaje: [{ value: row.tipo_venta_porcentaje, disabled: true }],
+      validado: [row.validado ?? false],
+      pagado: [row.pagado ?? 0],
+      // Gastos editables
+      id_gastos : [0],
+      otros: [0],
+      gasolina: [0],
+      previa: [0],
+      descuentos: [0],
+      descuento_impulso: [0],
+      traslados: [0],
+      subsidios: [0],
+      descuento_da: [0],
+      cortesia: [0],
+      accesorios: [0],
+      placas: [0],
+
+      // Calculados
+      total_gastos: [{ value: 0, disabled: true }],
+      utilidad_final: [{ value: 0, disabled: true }],
+      comision_apv: [{ value: 0, disabled: true }]
     });
-    return isValid;
+
+    this.calcularResultados(fg);
+    this.inicializarReglasTipoVenta(fg);
+
+    if (row.gastos) {
+      this.patchGastosBackend(fg, row.gastos);
+    }
+
+    if (row.entregado) {
+      fg.get('entregado')?.disable({ emitEvent: false });
+    }
+
+    if (row.validado) {
+      fg.get('validado')?.disable({ emitEvent: false });
+    }
+
+    return fg;
   }
 
-  /**
-   * Recupera erroes de validacion de la fila 
-   * @param nofactura 
-   * @returns 
-   */
-  public getRowErrors(nofactura: string): string[] {
-    const errors: string[] = [];
-    Object.keys(this.modelInputs).forEach((field) => {
-      const controlName = `${field}_${nofactura}`;
-      const control = this.formDatosGastos.get(controlName);
-      if (control && control.invalid && control.touched) {
-        errors.push(`${field} tiene errores`);
+   inicializarReglasTipoVenta(fg: FormGroup) {
+    this.aplicarReglasTipoVenta(fg);
+  }
+
+  aplicarReglasTipoVenta(fg: FormGroup) {
+    const tipo = fg.get('clave_producto')?.value;
+    const estatus = fg.get('estatus')?.value;
+
+    const reglas: Record<string, string[]> = {
+      NU: ['otros','gasolina','previa','descuentos','descuento_impulso',
+      'traslados','subsidios','cortesia' ],
+      SEMI: ['otros','gasolina','previa','descuentos','descuento_impulso',
+      'traslados','subsidios','descuento_da','accesorios','placas'],
+    };
+
+    const campos = [
+      'otros','gasolina','previa','descuentos','descuento_impulso',
+      'traslados','subsidios','descuento_da','cortesia','accesorios','placas'
+    ];
+    
+    if (Number(estatus) > 2) {
+      campos.forEach(c => {
+        fg.get(c)?.disable({ emitEvent: false });
+        fg.get(c)?.setValue(0, { emitEvent: false });
+      });
+      return; // no aplicar reglas de tipo
+    }
+
+
+
+    campos.forEach(c => {
+      fg.get(c)?.disable({ emitEvent: false });
+      fg.get(c)?.setValue(0, { emitEvent: false });
+    });
+
+    reglas[tipo]?.forEach(c => {
+      fg.get(c)?.enable({ emitEvent: false });
+    });
+  }
+
+  // ===============================
+  // Cálculos
+  // ===============================
+  calcularResultados(fg: FormGroup) {
+  const camposGastos = [
+    'otros',
+    'gasolina',
+    'previa',
+    'descuentos',
+    'descuento_impulso',
+    'traslados',
+    'subsidios',
+    'descuento_da',
+    'cortesia',
+    'accesorios',
+    'placas'
+  ];
+
+  fg.valueChanges.subscribe(() => {
+
+    const totalGastos = camposGastos.reduce((total, campo) => {
+      const valor = fg.get(campo)?.value;
+      const numero = Number(valor);
+      return total + (isNaN(numero) ? 0 : numero);
+    }, 0);
+
+    const comisionGuardada = Number(fg.get('comision_apv')?.value)
+    const utilidadInicial = Number(fg.get('utilidad_inicial')?.value) || 0;
+    const porcentaje = Number(fg.get('tipo_venta_porcentaje')?.value) || 0;
+
+    const utilidadAC = utilidadInicial - totalGastos;
+    const comision = utilidadAC * porcentaje;
+    const utilidadFinal = utilidadAC - comision
+
+    fg.patchValue({
+      total_gastos: totalGastos,
+      utilidad_final: utilidadFinal,
+      comision_apv: comision
+    }, { emitEvent: false });
+  });
+}
+
+
+  // ===============================
+  // Patch desde backend
+  // ===============================
+  patchGastosBackend(fg: FormGroup, g: any) {
+    fg.patchValue({
+      id_gastos: g.id ?? null,
+      otros: g.otros ?? 0,
+      gasolina: g.gasolina ?? 0,
+      previa: g.previa ?? 0,
+      descuentos: g.descuentos ?? 0,
+      descuento_impulso: g.descuento_impulso ?? 0,
+      traslados: g.traslados ?? 0,
+      subsidios: g.subsidios ?? 0,
+      descuento_da: g.descuento_da ?? 0,
+      cortesia: g.cortesia ?? 0,
+      accesorios: g.accesorios ?? 0,
+      placas: g.placas ?? 0
+    }, { emitEvent: true });
+  }
+
+  // ===============================
+  // Cargar ventas
+  // ===============================
+  cargarVentas() {
+    this.ventas.clear();
+        this.datos.forEach(row => {
+          this.ventas.push(this.crearVenta(row));
+          this.pagando.push(false);
+          this.devolviendo.push(false);
+        });
+  }
+
+  // ===============================
+  // Guardar gastos
+  // ===============================
+  guardarGastos() {
+    this.guardandoG = true;
+    const payload = this.ventas.getRawValue()
+      .filter(v => v.total_gastos > 0)
+      .map(v => ({
+        id_venta: v.id_venta,
+        total_gastos: v.total_gastos,
+        utilidad_final: v.utilidad_final,
+        comision_apv: v.comision_apv,
+        id_gastos: v.id_gastos,
+        otros: v.otros,
+        gasolina: v.gasolina,
+        previa: v.previa,
+        descuentos: v.descuentos,
+        descuento_impulso: v.descuento_impulso,
+        traslados: v.traslados,
+        subsidios: v.subsidios,
+        descuento_da: v.descuento_da,
+        cortesia: v.cortesia,
+        accesorios: v.accesorios,
+        placas: v.placas
+      }));
+      
+      this.comisionesService.save(payload).subscribe((response) => {
+        if (response.status === "success") {
+            this.swal.mostrarAlerta(
+              "Listo", response.message,
+              "success", "success"
+              );
+              this.resetFormArray();
+              this.guardandoG = false;
+        } else {
+            this.swal.mostrarAlerta(
+              "Error", response.message,
+              "error", "danger"
+              );
+              this.guardandoG = false;
+              return;
+        }
+      },(error) => {
+            this.swal.mostrarAlerta("Error", `Error fetching data: ${error}`, "error" , "danger" );
+            this.guardandoG = false;
+            return;
+        });
+  }
+
+  // Marcar entregados
+  marcarEntregados() {
+    const payload = this.ventas.getRawValue()
+      .filter(v => v.entregado)
+      .map(v => ({
+        id : v.id_venta,
+        entregado: true
+      }));
+    return payload;
+  }
+
+
+  guardarEntregados(){
+    this.guardandoE = true;
+    const seleccionados = this.marcarEntregados();
+    this.comisionesService.guardarEntregados(seleccionados).subscribe((response) => {
+      if (response.status === "success") {
+          this.swal.mostrarAlerta(
+            "Listo", response.message,
+            "success", "success"
+            );
+            this.guardandoE = false;
+            this.resetFormArray();
+      } else {
+          this.swal.mostrarAlerta(
+            "Error", response.message,
+            "error", "danger"
+            );
+            this.guardandoE = false;
+            return;
+      }
+    },(error) => {
+          this.swal.mostrarAlerta("Error", `Error fetching data: ${error}`, "error" , "danger" );
+          this.guardandoE = false;
+          return;
+      });
+  }
+
+  resetFormArray() {
+    this.ventas.clear();
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
+    this.formFiltro.buscarDatos();
+  }
+
+  devolver(idVenta:any, indexform:any) {
+  Swal.fire({
+    title: 'Va devolver esta partida al estado anterior',
+    text: 'Agrega la razón del porque esta regresando',
+    input: 'textarea',
+    inputPlaceholder: 'Escribe la razón aquí...',
+    inputAttributes: {
+      'aria-label': 'Razón de devolución'
+    },
+    showCancelButton: true,
+    confirmButtonText: 'Enviar',
+    cancelButtonText: 'Cancelar',
+    reverseButtons: true,
+    customClass: {
+      confirmButton: 'btn btn-primary m-1',
+      cancelButton: 'btn btn-secondary m-1'
+    },
+    buttonsStyling: false,
+    showLoaderOnConfirm: true,
+    preConfirm: async (razon) => {
+      if (!razon) {
+        Swal.showValidationMessage('El campo es obligatorio');
+        return false;
+      }
+      try {
+        this.devolviendo[indexform] = true;
+        Swal.showLoading();
+        const payload = { observacion: razon}
+        const response: any = await firstValueFrom(
+          this.comisionesService.devolverPartida(idVenta, payload )
+        );
+        if (response.status === 'success') {
+          this.swal.mostrarAlerta('Listo', response.message, 'success', 'success');
+          this.devolviendo[indexform] = false;
+          this.removerFila(indexform);
+        } else {
+          this.swal.mostrarAlerta('Error', response.message, 'error', 'danger');
+          this.devolviendo[indexform] = false;
+          throw new Error(response.message);
+        }
+      } catch (error: any) {
+        Swal.showValidationMessage(`Solicitud fallida: ${error.message}`);
+        this.devolviendo[indexform] = false;
+        throw error;
+      }
+    },
+    allowOutsideClick: () => !Swal.isLoading()
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire('¡Enviado!', 'La partida fue devuelta correctamente.', 'success');
+    }
+  });
+}
+
+
+
+  removerFila(index: number) {
+    this.ventas.removeAt(index);
+  }
+
+
+    // Marcar entregados
+  marcarValidados() {
+    const payload = this.ventas.getRawValue()
+      .filter(v => v.validado)
+      .map(v => ({
+        id : v.id_venta,
+        validado: true
+      }));
+    return payload;
+  }
+
+
+  guardarValidados(){
+    this.guardandoV = true;
+    const seleccionados = this.marcarValidados();
+    this.comisionesService.guardarValidados(seleccionados).subscribe((response) => {
+      if (response.status === "success") {
+          this.swal.mostrarAlerta(
+            "Listo", response.message,
+            "success", "success"
+            );
+            this.resetFormArray();
+            this.guardandoV = false;
+      } else {
+          this.swal.mostrarAlerta(
+            "Error", response.message,
+            "error", "danger"
+            );
+            this.guardandoV = false;
+            return;
+      }
+    },(error) => {
+          this.swal.mostrarAlerta("Error", `Error fetching data: ${error}`, "error" , "danger" );
+          this.guardandoV = false;
+          return;
+      });
+  }
+  
+
+  guardarPagado(idVenta:any, indice:any ){
+     Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'La partida sera marcada para dispersion a pago de comision',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'OK',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true,
+      customClass: {
+        confirmButton: 'btn btn-primary m-1',
+        cancelButton: 'btn btn-secondary m-1'
+      },
+      buttonsStyling: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+      this.pagando[indice] = true;
+      this.comisionesService.guardarPagado(idVenta).subscribe((response) => {
+            if (response.status === "success") {
+                this.swal.mostrarAlerta(
+                  "Listo", response.message,
+                  "success", "success"
+                  );
+                  this.pagando[indice] = false;
+                  this.removerFila(indice);
+            } else {
+                this.swal.mostrarAlerta(
+                  "Error", response.message,
+                  "error", "danger"
+                  );
+                  this.pagando[indice] = false;
+                  return;
+            }
+          },(error) => {
+                this.swal.mostrarAlerta("Error", `Error fetching data: ${error}`, "error" , "danger" );
+                this.pagando[indice] = false;
+                return;
+            });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        this.pagando[indice] = false;
       }
     });
-    return errors;
   }
+
+
+
+
 
 }

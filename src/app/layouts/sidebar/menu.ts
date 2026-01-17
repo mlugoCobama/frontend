@@ -157,9 +157,31 @@ export const MENU: MenuItem[] = [
       {
         id: 32,
         label: "Comisiones",
-        link: "/nissan/comisiones",
+        permission: "view modulo nissan",
         parentId: 30,
-        permission: "view comisiones",
+        subItems: [
+          {
+            id: 8,
+            label: "Comisiones",
+            link: "/nissan/comisiones",
+            parentId: 32,
+            permission: "view submodulo comisiones",
+          },
+          {
+            id: 9,
+            label: "Tabulador",
+            link: "/nissan/tabulador",
+            parentId: 32,
+            permission: "view submoduloe tabuladores",
+          },
+          {
+            id: 10,
+            label: "Vendedores",
+            link: "/nissan/vendedores",
+            parentId: 32,
+            permission: "view submodulo vendedores",
+          },
+        ]
       },
     ],
   },

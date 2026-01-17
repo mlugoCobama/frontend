@@ -79,7 +79,7 @@ calcularTotales(): void {
     this.totals = {};
 
     this.cotProv.forEach(prov => {
-      const proveedorId = prov.proveedores_id[0].id;
+      const proveedorId = prov.proveedores_id.id;
       let total = 0;
 
       prov.detalles.forEach(det => {
