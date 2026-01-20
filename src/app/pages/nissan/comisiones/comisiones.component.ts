@@ -18,26 +18,17 @@ export class ComisionesComponent implements AfterViewInit {
   finding: boolean = false;
   public datos: any = [];
 
-  public data: Comision[];
   public vendedores: any;
-
-  public isDisabled = true;
 
   public ready: boolean = false;
   public isLoadig: boolean = false;
   public estado: any = 0;
 
-  public showTable: boolean = false;
+  public modelCamposGastos = ['otros','gasolina','previa','descuentos','descuento_impulso',
+                              'traslados','subsidios','descuento_da','cortesia','accesorios','placas'
+                            ];
 
   public hoy = new Date().toISOString().split("T")[0];
-
-  private fecha_inicio: Date = null;
-  private fecha_fin: Date = null;
-
-  public formDatosGastos: FormGroup;
-
-  public porcentajes: any;
-  public porcentajesBDC: any;
 
   pagando: boolean[] = [];
   devolviendo: boolean[] = [];
@@ -55,11 +46,9 @@ export class ComisionesComponent implements AfterViewInit {
     private permisosService: PermisosService
   ) {}
 
-  ngAfterViewInit(): void {
-    
-  }
+  ngAfterViewInit(): void {}
 
-
+  /** Form array */
   form = this.fb.group({
     ventas: this.fb.array([])
   });
@@ -68,20 +57,23 @@ export class ComisionesComponent implements AfterViewInit {
     return this.form.get('ventas') as FormArray;
   }
 
-
+  /** Validador de permisos */
   tienePermiso(permiso: string = null): boolean {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
   }
 
+  /**Puente para manejar el spinner */
   bindingSpiner(value) {
     this.isLoadig = value;
   }
 
+  /**Puente para manejar el estado */
   bindingEstado(value) {
     this.estado = value;
   }
 
+  /**Puente para manejar la carga de datos nuevos */
   bindingData(value) {
     this.datos = value;
     if (this.datos.length > 0) {
@@ -89,6 +81,11 @@ export class ComisionesComponent implements AfterViewInit {
     }
   }
 
+ /**
+  * Genera una fila (formulario) dentro del form array
+  * @param row registro de venta
+  * @returns 
+  */
   crearVenta(row: any): FormGroup {
     const fg = this.fb.group({
       id_venta: [row.id ?? false],
@@ -110,6 +107,7 @@ export class ComisionesComponent implements AfterViewInit {
       tipo_venta_porcentaje: [{ value: row.tipo_venta_porcentaje, disabled: true }],
       validado: [row.validado ?? false],
       pagado: [row.pagado ?? 0],
+      observacion: [row.observacion ?? null],
       // Gastos editables
       id_gastos : [0],
       otros: [0],
@@ -148,10 +146,16 @@ export class ComisionesComponent implements AfterViewInit {
     return fg;
   }
 
-   inicializarReglasTipoVenta(fg: FormGroup) {
+  /** Inicializa las reglas de tipo de venta (deshabilitado de campos) */
+  inicializarReglasTipoVenta(fg: FormGroup) {
     this.aplicarReglasTipoVenta(fg);
   }
 
+  /**
+   * Reglas por tipo de venta y por estado (deshabilitado de campos)
+   * @param fg fila-formulario
+   * @returns 
+   */
   aplicarReglasTipoVenta(fg: FormGroup) {
     const tipo = fg.get('clave_producto')?.value;
     const estatus = fg.get('estatus')?.value;
@@ -163,20 +167,15 @@ export class ComisionesComponent implements AfterViewInit {
       'traslados','subsidios','descuento_da','accesorios','placas'],
     };
 
-    const campos = [
-      'otros','gasolina','previa','descuentos','descuento_impulso',
-      'traslados','subsidios','descuento_da','cortesia','accesorios','placas'
-    ];
+    const campos = this.modelCamposGastos;
     
     if (Number(estatus) > 2) {
       campos.forEach(c => {
         fg.get(c)?.disable({ emitEvent: false });
         fg.get(c)?.setValue(0, { emitEvent: false });
       });
-      return; // no aplicar reglas de tipo
+      return;
     }
-
-
 
     campos.forEach(c => {
       fg.get(c)?.disable({ emitEvent: false });
@@ -188,23 +187,12 @@ export class ComisionesComponent implements AfterViewInit {
     });
   }
 
-  // ===============================
-  // Cálculos
-  // ===============================
+  /**
+   * Calculo de comisión, gastos, utilidad final
+   * @param fg fila formulario
+   */
   calcularResultados(fg: FormGroup) {
-  const camposGastos = [
-    'otros',
-    'gasolina',
-    'previa',
-    'descuentos',
-    'descuento_impulso',
-    'traslados',
-    'subsidios',
-    'descuento_da',
-    'cortesia',
-    'accesorios',
-    'placas'
-  ];
+  const camposGastos = this.modelCamposGastos;
 
   fg.valueChanges.subscribe(() => {
 
@@ -231,9 +219,11 @@ export class ComisionesComponent implements AfterViewInit {
 }
 
 
-  // ===============================
-  // Patch desde backend
-  // ===============================
+  /**
+   * Set de valores de gastos en los inputs
+   * @param fg fila.formulario
+   * @param g gastos fila-formulario si existen
+   */
   patchGastosBackend(fg: FormGroup, g: any) {
     fg.patchValue({
       id_gastos: g.id ?? null,
@@ -251,9 +241,9 @@ export class ComisionesComponent implements AfterViewInit {
     }, { emitEvent: true });
   }
 
-  // ===============================
-  // Cargar ventas
-  // ===============================
+  /**
+   * Genera el formulario a partir de datos cargados
+   */
   cargarVentas() {
     this.ventas.clear();
         this.datos.forEach(row => {
@@ -263,9 +253,9 @@ export class ComisionesComponent implements AfterViewInit {
         });
   }
 
-  // ===============================
-  // Guardar gastos
-  // ===============================
+  /**
+   * Guarda los datos de los gastos (solo los que tienen gastos > 0)
+   */
   guardarGastos() {
     this.guardandoG = true;
     const payload = this.ventas.getRawValue()
@@ -312,7 +302,7 @@ export class ComisionesComponent implements AfterViewInit {
         });
   }
 
-  // Marcar entregados
+  /** Recupera los datos que fueron marcados como entregados */
   marcarEntregados() {
     const payload = this.ventas.getRawValue()
       .filter(v => v.entregado)
@@ -323,7 +313,7 @@ export class ComisionesComponent implements AfterViewInit {
     return payload;
   }
 
-
+  /** Guarda los datos marcados como entregados */
   guardarEntregados(){
     this.guardandoE = true;
     const seleccionados = this.marcarEntregados();
@@ -350,6 +340,7 @@ export class ComisionesComponent implements AfterViewInit {
       });
   }
 
+  /** Limpia el form array */
   resetFormArray() {
     this.ventas.clear();
     this.form.markAsPristine();
@@ -357,8 +348,9 @@ export class ComisionesComponent implements AfterViewInit {
     this.formFiltro.buscarDatos();
   }
 
+  /** Devuelve al estado anterior el registro seleccionado */
   devolver(idVenta:any, indexform:any) {
-  Swal.fire({
+    Swal.fire({
     title: 'Va devolver esta partida al estado anterior',
     text: 'Agrega la razón del porque esta regresando',
     input: 'textarea',
@@ -410,15 +402,13 @@ export class ComisionesComponent implements AfterViewInit {
     }
   });
 }
-
-
-
+  /** Remueve la fila de tabla y del from array */
   removerFila(index: number) {
     this.ventas.removeAt(index);
   }
 
 
-    // Marcar entregados
+  /** Recupera los datos que fueron marcados como validados */
   marcarValidados() {
     const payload = this.ventas.getRawValue()
       .filter(v => v.validado)
@@ -429,7 +419,7 @@ export class ComisionesComponent implements AfterViewInit {
     return payload;
   }
 
-
+  /** Guarda los datos marcados como validados */
   guardarValidados(){
     this.guardandoV = true;
     const seleccionados = this.marcarValidados();
@@ -456,7 +446,7 @@ export class ComisionesComponent implements AfterViewInit {
       });
   }
   
-
+  /** Guarda la partida que se desea pagar */
   guardarPagado(idVenta:any, indice:any ){
      Swal.fire({
       title: '¿Estás seguro?',

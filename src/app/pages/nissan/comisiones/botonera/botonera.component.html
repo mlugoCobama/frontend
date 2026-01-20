@@ -1,9 +1,52 @@
-<div class="card">
+  <div class="card shadow-sm" *ngIf="estado > 0">
     <div class="card-body">
         <div class="d-flex justify-content-end align-items-end gap-2">
-              <button class="btn btn-sm btn-primary">Guardar entregados</button>
-              <button class="btn btn-sm btn-info">Guardar Gastos</button>
-              <button class="btn btn-sm btn-success">Guardar</button>
+              <button
+                *ngIf="estado == 1 || estado == 12345"
+                class="btn btn-sm btn-primary"
+                [disabled]="guardandoE"
+                (click)="guardarEntregados()"
+              >
+                <span *ngIf="!guardandoE">Guardar entregados</span>
+
+                <span
+                  *ngIf="guardandoE"
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                >Trabajando...</span>
+              </button>
+              <button
+                *ngIf="estado == 2 || estado == 12345"
+                class="btn btn-sm btn-info"
+                [disabled]="guardandoG"
+                (click)="guardarGastos()"
+              >
+                <span *ngIf="!guardandoG">Guardar Gastos</span>
+
+                <span
+                  *ngIf="guardandoG"
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                >Trabajando...</span>
+              </button>
+              <button
+                *ngIf="estado == 3 || estado == 12345"
+                class="btn btn-sm btn-success"
+                [disabled]="guardandoV"
+                (click)="guardarValidados()"
+              >
+                <span *ngIf="!guardandoV">Guardar Validados</span>
+
+                <span
+                  *ngIf="guardandoV"
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                >Trabajando...</span>
+              </button>
+              <!-- <button *ngIf="estado == 4 || estado == 12345 " (click)="guardarEntregados()" class="btn btn-sm btn-success">Guardar Pagados</button> -->
         </div> 
     </div>
 </div>

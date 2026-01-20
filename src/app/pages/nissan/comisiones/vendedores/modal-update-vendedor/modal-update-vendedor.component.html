@@ -1,0 +1,35 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Actualizar Vendedor</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      [disabled] = "sending"
+      (click)="cerrarModal()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <app-form-vendedores
+    [datos]="datos"
+    #formVendedores
+    ></app-form-vendedores>
+
+  </div>
+  <div class="modal-footer">
+    <button
+      [disabled] = "sending"
+      type="button"
+      class="btn btn-secondary btn-sm"
+      data-bs-dismiss="modal"
+      (click)="cerrarModal()"
+    >
+      Cerrar
+    </button>
+    <button  [disabled] = "sending" (click)="save()" type="button" class="btn btn-primary btn-sm">
+        <span *ngIf="sending" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Guardar
+    </button>
+  </div>
+

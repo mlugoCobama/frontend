@@ -1,10 +1,169 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { TabuladorService } from 'src/app/core/services/nissan/tabulador.service';
+import { FuncionesTablas } from 'src/app/core/helpers/funciones-tablas';
+import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
+import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
+import Swal from 'sweetalert2';
+
+import { ModalAddTabuladorComponent } from './modal-add-tabulador/modal-add-tabulador.component';
+import { ModalUpdateTabuladorComponent } from './modal-update-tabulador/modal-update-tabulador.component';
 
 @Component({
-  selector: 'app-tabulador',
-  templateUrl: './tabulador.component.html',
-  styleUrl: './tabulador.component.css'
+  selector: "app-tabulador",
+  templateUrl: "./tabulador.component.html",
+  styleUrl: "./tabulador.component.css",
 })
 export class TabuladorComponent {
+  public data: any;
+  public datosFiltrados: any;
+  public ordenador: any;
+  public busqueda = "";
+  public isLoad: boolean = true;
 
+  public itemSeleccionado = false;
+
+  public modalRef?: BsModalRef;
+
+  public tabulador: any;
+
+  constructor(
+    private tabuladorService: TabuladorService,
+    private modalService: BsModalService,
+    private alertas: SwalComprsServiceService,
+  ) {}
+
+  ngOnInit(): void {
+    this.getAll();
+  }
+
+  /** recupera todos los registros de los tabuladores */
+  private getAll() {
+    this.isLoad = true;
+    this.tabuladorService.getAll().subscribe(
+      (response: any) => {
+        if (response) {
+          this.data = response.data;
+          this.ordenador = new FuncionesTablas(this.data);
+          this.datosFiltrados = [...this.data];
+          this.isLoad = false;
+        } else {
+          console.log(response.message);
+          this.isLoad = false;
+        }
+      },
+      (error) => {
+        console.error("Error fetching data:", error);
+        this.isLoad = false;
+      },
+    );
+  }
+
+  /** Manejo del elemento seleccionado */
+  public seleccionar(dato: any, evento: any) {
+    this.itemSeleccionado = true;
+    this.tabulador = dato;
+
+    if (evento.currentTarget.classList.contains("table-primary")) {
+      evento.currentTarget.classList.remove("table-primary");
+      this.itemSeleccionado = false;
+    } else {
+      const filas = document.querySelectorAll("tbody tr");
+      filas.forEach((fila) => fila.classList.remove("table-primary"));
+      evento.currentTarget.classList.add("table-primary");
+    }
+  }
+
+  ordenarPor(columna: keyof any) {
+    this.datosFiltrados = this.ordenador.ordenar(columna);
+  }
+
+  getIconoOrden(columna: keyof any): string {
+    return this.ordenador.getIcono(columna);
+  }
+
+  filtrarTabla() {
+    this.datosFiltrados = this.ordenador.filtrar(this.busqueda, [
+      "nombre",
+      "porcentaje",
+    ]);
+  }
+
+  /** Despliega la ventana modal para un nuevo registro  */
+  public openModalNuevo() {
+    const initialState: ModalOptions = {
+      initialState: {},
+      class: "modal-lg",
+    };
+    this.modalRef = this.modalService.show(
+      ModalAddTabuladorComponent,
+      initialState,
+    );
+    this.modalRef.content.closeBtnName = "Close";
+    this.modalRef.content.event.subscribe(() => {
+      this.isLoad = true;
+      this.getAll();
+    });
+  }
+
+  /** Despliega la ventana modal para actualizar un registro  */
+  public openModalEditar() {
+    const initialState: ModalOptions = {
+      initialState: {
+        datos: this.tabulador,
+      },
+      class: "modal-lg",
+    };
+    this.modalRef = this.modalService.show(
+      ModalUpdateTabuladorComponent,
+      initialState,
+    );
+    this.modalRef.content.closeBtnName = "Close";
+    this.modalRef.content.event.subscribe(() => {
+      this.isLoad = true;
+      // this.mostrar = false;
+      this.getAll();
+    });
+  }
+
+  /**  Despliega alerta de confirmación de eliminado de registro */
+  confirmarDelete() {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Este registro será eliminado",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí",
+      cancelButtonText: "No",
+      reverseButtons: true,
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      showLoaderOnConfirm: true,
+      preConfirm: () => {
+        return this.tabuladorService
+          .delete(this.tabulador.id)
+          .toPromise()
+          .then((response: any) => {
+            if (response.status === "success") {
+              this.alertas.mostrarAlerta(
+                "Listo!",
+                response.message,
+                "success",
+                "success",
+              );
+              this.getAll();
+            } else {
+              Swal.showValidationMessage(`Error: ${response.message}`);
+            }
+          })
+          .catch((error) => {
+            console.error("Error eliminando:", error);
+            Swal.showValidationMessage(`Error: ${error}`);
+          });
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log("Eliminación confirmada");
+      }
+    });
+  }
 }

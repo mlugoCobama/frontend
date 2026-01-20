@@ -5,17 +5,9 @@
     <div class="col-xl-12">
 
       
-      <div class="card">
-
-        <div class="card-body border-bottom p-2">
-          <div class="d-flex align-items-center">
-            <h5 class="mb-0 card-title flex-grow-1">Comisiones</h5>
-            <div class="flex-shrink-0 d-flex gap-1">
-              <!--a href="javascript:void(0);" class="btn btn-primary btn-sm" >Nuevo</a-->
-            </div>
-          </div>
-        </div>
-      </div>
+      <app-card-top
+      [title] = "'Comisiones'"
+      ></app-card-top>
       
       <app-filtro
         #formFiltro
@@ -81,7 +73,9 @@
                     </span>
                 </td>
                 <td>{{v.get('fecha_factura')?.value}}</td>
-                <td>{{v.get('no_factura')?.value}}</td>
+                <td class="text-nowrap">{{v.get('no_factura')?.value}} 
+                  <span class="text-danger" *ngIf="v.get('observacion')?.value" [title]="v.get('observacion')?.value"> <i class="bx bx-info-circle bx-flashing "></i></span>
+                </td>
                 <td class="text-nowrap">{{v.get('razon_social')?.value}}</td>
                 <td>{{v.get('clave_inventario')?.value}}</td>
                 <td>{{v.get('clave_vendedor')?.value }}</td>
@@ -142,58 +136,17 @@
         </div>
     </div>
 
-  <div class="card" *ngIf="estado > 0">
-    <div class="card-body">
-        <div class="d-flex justify-content-end align-items-end gap-2">
-              <button
-                *ngIf="estado == 1 || estado == 12345"
-                class="btn btn-sm btn-primary"
-                [disabled]="guardandoE"
-                (click)="guardarEntregados()"
-              >
-                <span *ngIf="!guardandoE">Guardar entregados</span>
+    <app-botonera
+     *ngIf="estado > 0"
+      [estado] = "estado"
+      [guardandoE] = "guardandoE"
+      [guardandoV] = "guardandoV"
+      [guardandoG] = "guardandoG"
 
-                <span
-                  *ngIf="guardandoE"
-                  class="spinner-border spinner-border-sm"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-              </button>
-              <button
-                *ngIf="estado == 2 || estado == 12345"
-                class="btn btn-sm btn-info"
-                [disabled]="guardandoG"
-                (click)="guardarGastos()"
-              >
-                <span *ngIf="!guardandoG">Guardar Gastos</span>
-
-                <span
-                  *ngIf="guardandoG"
-                  class="spinner-border spinner-border-sm"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-              </button>
-              <button
-                *ngIf="estado == 3 || estado == 12345"
-                class="btn btn-sm btn-success"
-                [disabled]="guardandoV"
-                (click)="guardarValidados()"
-              >
-                <span *ngIf="!guardandoV">Guardar Validados</span>
-
-                <span
-                  *ngIf="guardandoV"
-                  class="spinner-border spinner-border-sm"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-              </button>
-              <!-- <button *ngIf="estado == 4 || estado == 12345 " (click)="guardarEntregados()" class="btn btn-sm btn-success">Guardar Pagados</button> -->
-        </div> 
-    </div>
-</div>
+      (saveEntregados)="guardarEntregados()"
+      (saveValidados)="guardarValidados()"
+      (saveGastos)="guardarGastos()"
+    ></app-botonera>
 
     </div>
   </div>

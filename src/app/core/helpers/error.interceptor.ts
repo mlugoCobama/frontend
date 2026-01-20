@@ -29,10 +29,6 @@ export class ErrorInterceptor implements HttpInterceptor {
                 }else{
                     this.authFackservice.logout();
                 }
-                setTimeout(() => {
-                    location.reload();
-                }, 4000)
-                
             }
 
             if (err.status === 404) {

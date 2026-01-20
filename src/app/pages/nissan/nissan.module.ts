@@ -20,6 +20,13 @@ import { TabuladorComponent } from './comisiones/tabulador/tabulador.component';
 import { FiltroComponent } from './comisiones/filtro/filtro.component';
 import { BotoneraComponent } from './comisiones/botonera/botonera.component';
 import { SpinerComponent } from './comisiones/spiner/spiner.component';
+import { CardTopComponent } from './comisiones/card-top/card-top.component';
+import { ModalAddVendedorComponent } from './comisiones/vendedores/modal-add-vendedor/modal-add-vendedor.component';
+import { FormVendedoresComponent } from './comisiones/vendedores/form-vendedores/form-vendedores.component';
+import { ModalUpdateVendedorComponent } from './comisiones/vendedores/modal-update-vendedor/modal-update-vendedor.component';
+import { FormTabuladorComponent } from './comisiones/tabulador/form-tabulador/form-tabulador.component';
+import { ModalAddTabuladorComponent } from './comisiones/tabulador/modal-add-tabulador/modal-add-tabulador.component';
+import { ModalUpdateTabuladorComponent } from './comisiones/tabulador/modal-update-tabulador/modal-update-tabulador.component';
 
 
 @NgModule({
@@ -33,7 +40,14 @@ import { SpinerComponent } from './comisiones/spiner/spiner.component';
     TabuladorComponent,
     FiltroComponent,
     BotoneraComponent,
-    SpinerComponent
+    SpinerComponent,
+    CardTopComponent,
+    ModalAddVendedorComponent,
+    FormVendedoresComponent,
+    ModalUpdateVendedorComponent,
+    FormTabuladorComponent,
+    ModalAddTabuladorComponent,
+    ModalUpdateTabuladorComponent
   ],
   imports: [
     CommonModule,

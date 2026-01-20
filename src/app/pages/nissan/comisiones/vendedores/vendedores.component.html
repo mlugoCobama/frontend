@@ -1,1 +1,60 @@
-<p>vendedores works!</p>
+<app-card-top
+    [title] = "'Vendedores'"
+    [hasButtons] = "true"
+    [showBtnNuevo] = "!itemSeleccionado"
+    [showBtnEditar] = "itemSeleccionado"
+    [showBtnEliminar] = "itemSeleccionado"
+    (nuevo) = "openModalNuevo()"
+    (actualizar) = "openModalEditar()"
+    (eliminar) = "confirmarDelete()"
+></app-card-top>
+
+
+
+<div  class="card shadow-sm">
+    <div class="card-body">
+
+    <app-spiner *ngIf="isLoad"></app-spiner>
+    <div *ngIf="!isLoad" class="row justify-content-end mb-2">
+        <div class="col-3">
+          <input type="text" class="form-control form-control-sm" placeholder="Buscar..." [(ngModel)]="busqueda"  (input)="filtrarTabla()"/>
+        </div>
+    </div>
+
+    <div *ngIf="!isLoad" class="table-responsive" style="max-height:28rem; overflow-y:auto;">
+      <table class="table table-sm ">
+        <thead class="table-light thead-sticky">
+          <tr>
+            <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'nombre', etiqueta:'Nombre'}"></ng-container>
+            <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'clave', etiqueta:'Clave'}"></ng-container>
+            <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'nro_vendedor_as', etiqueta:'# Auto System'}"></ng-container>
+            <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'tipo_texto', etiqueta:'T. Vendedor'}"></ng-container>
+            <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'agencia_nombre', etiqueta:'Agencia'}"></ng-container>
+             <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'procentaje_apv', etiqueta:'%'}"></ng-container>
+          </tr>
+        </thead>
+        <tbody class="table-bordered">
+          <tr (click) ="seleccionar(item, $event)" *ngFor = "let item of datosFiltrados">
+            <td>{{item.nombre}}</td>
+            <td>{{item.clave}}</td>
+            <td>{{item.nro_vendedor_as}}</td>
+            <td>{{item.tipo_texto}}</td>
+            <td>{{item.agencia_nombre}}</td>
+            <td>{{item.procentaje_apv | percent}}</td>
+          </tr>
+        </tbody>
+        
+      </table>
+      
+    </div>
+        <caption *ngIf="!isLoad" class="text-nowrap">Mostrando {{datosFiltrados.length}} de {{data.length}}</caption>
+    </div>
+</div>
+
+<ng-template #thOrdenable let-campo="campo" let-etiqueta="etiqueta">
+  <th (click)="ordenarPor(campo)">
+    <span>{{ etiqueta }}</span>
+    <i [ngClass]="getIconoOrden(campo)"></i>
+  </th>
+</ng-template>
+
