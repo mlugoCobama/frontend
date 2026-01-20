@@ -41,7 +41,8 @@ export class PanelCotizacionesComponent implements OnInit {
 
   private buildForm() {
     this.formProveedoresCotizacion = this.formBuilder.group({
-      proveedores: this.formBuilder.array([this.crearProveedorControl()]),
+      // proveedores: this.formBuilder.array([this.crearProveedorControl()]),
+      proveedores: this.formBuilder.array([this.crearProveedorGroup()]),
       consideraciones: new FormControl(null),
     });
   }
@@ -49,6 +50,13 @@ export class PanelCotizacionesComponent implements OnInit {
   // Crea un nuevo FormControl para un proveedor
   private crearProveedorControl(): FormControl {
     return new FormControl("", Validators.required);
+  }
+
+  private crearProveedorGroup(): FormGroup {
+    return this.formBuilder.group({
+      proveedor_id: ['', Validators.required],
+      contacto_id: ['']
+    });
   }
 
   // Getter para acceder al FormArray
@@ -63,7 +71,7 @@ export class PanelCotizacionesComponent implements OnInit {
   // Agregar un nuevo proveedor al FormArray
   agregarProveedor() {
     if (this.proveedoresArray.length < 3) { // Límite opcional
-      this.proveedoresArray.push(this.crearProveedorControl());
+      this.proveedoresArray.push(this.crearProveedorGroup());
     } else {
       this.alertasService.mostrarAlerta(
         "Límite alcanzado",
@@ -213,4 +221,33 @@ export class PanelCotizacionesComponent implements OnInit {
 
     return true;
   }
+
+onProveedorChange(index: number) {
+  const proveedorCtrl = this.proveedoresArray.at(index) as FormGroup;
+  const contactoCtrl = proveedorCtrl.get('contacto_id');
+  if(contactoCtrl){
+    console.log(this.tieneContactos(index));
+    if (this.tieneContactos(index)) {
+    contactoCtrl?.setValidators([Validators.required]);
+  } else {
+    contactoCtrl?.clearValidators();
+    contactoCtrl?.setValue(null);
+  }
+
+  contactoCtrl?.updateValueAndValidity();
+  }
+  
+}
+
+
+getContactos(index: number): any[] {
+  const proveedorId = this.proveedoresArray.at(index).get('proveedor_id')?.value;
+  const proveedor = this.proveedores.find((p: any) => p.id === +proveedorId);
+  return proveedor?.contactos || [];
+}
+
+tieneContactos(index: number): boolean {
+  return this.getContactos(index).length > 0;
+}
+
 }

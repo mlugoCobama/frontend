@@ -315,8 +315,12 @@ export class TableFilesCotizacionesComponent implements AfterViewInit {
   }
 
   public reenviarSC(item) {
+
+    console.log(item)
+    
     item.loading = true;
     const data = {
+      id: item?.id,
       proveedores: [item?.proveedores_id?.id],
       consideraciones: "",
       solicitudes_compra_id: this.solicitudCompra?.id,

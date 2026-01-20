@@ -20,8 +20,8 @@
         </label>
         
         <div class="row g-2" formArrayName="proveedores">
-          <div 
-            *ngFor="let proveedor of proveedoresArray.controls; let i = index" 
+          <div  *ngFor="let proveedor of proveedoresArray.controls; let i = index" 
+          [formGroupName]="i"
             class="col-md-4">
             
             <div class="card border shadow-sm h-100">
@@ -38,24 +38,61 @@
                   </button>
                 </div>
                 
-                <select 
+                <!-- <select 
                   class="form-select form-select-sm" 
                   [formControlName]="i"
                   [id]="'proveedor' + i"
-                  aria-label="Seleccionar proveedor">
+                  aria-label="Seleccionar proveedor"
+                  
+                  >
                   <option value="" disabled>Selecciona una opción</option>
                   <option *ngFor="let item of proveedores" [value]="item?.id">
                     {{ item?.nombre }} - {{ item?.servicios }}
                   </option>
-                </select>
-                
-                <div *ngIf="proveedoresArray.at(i).touched || submitted">
+                </select> -->
+                    <select
+                      class="form-select form-select-sm"
+                      formControlName="proveedor_id"
+                      (change)="onProveedorChange(i)"
+                    >
+                      <option value="">Selecciona proveedor</option>
+                      <option
+                        *ngFor="let p of proveedores"
+                        [value]="p.id"
+                      >
+                        {{ p.nombre }} - {{p?.servicios}}
+                      </option>
+                    </select>
+
+                <div *ngIf="proveedoresArray.at(i).get('proveedor_id').touched || submitted">
                   <div 
                     class="text-danger form-text small" 
-                    *ngIf="proveedoresArray.at(i).errors?.['required']">
-                    Requerido
+                    *ngIf="proveedoresArray.at(i).get('proveedor_id').errors?.['required']">
+                    Selecciona un proveedor
                   </div>
                 </div>
+
+                    <ng-container
+                        *ngIf="tieneContactos(i)">
+                        <select
+                          class="form-select form-select-sm mt-2"
+                          formControlName="contacto_id"
+                        >
+                          <option value="">Selecciona contacto</option>
+                          <option
+                            *ngFor="let c of getContactos(i)" [value]="c.id">
+                            {{ c.nombre }}
+                          </option>
+                        </select>
+                        <div *ngIf="proveedoresArray.at(i).get('contacto_id').touched || submitted">
+                      <div 
+                        class="text-danger form-text small" 
+                        *ngIf="proveedoresArray.at(i).get('contacto_id').errors?.['required']">
+                        Selecciona un contacto del proveedor
+                      </div>
+                    </div>
+                      </ng-container>
+
               </div>
             </div>
           </div>
