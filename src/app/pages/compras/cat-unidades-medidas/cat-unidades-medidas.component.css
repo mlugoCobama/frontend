@@ -4,3 +4,8 @@
   /* border-width: 5; */
 }
 
+.thead-sticky th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}

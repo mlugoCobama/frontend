@@ -103,7 +103,7 @@
           <div *ngIf = "!isLoad && showTable && !isLoad && datosFiltrados.length > 0 ; else elseBlock">
             <div class="tab-page-content mt-3 table-responsive" style="overflow-y: scroll; height: 20rem;">
               <table  class="table table-hover table-sm table-bordered">
-                <thead class="table-light border" [ngClass] = "modalAbierto === false ? 'sticky-top' : '' ">
+                <thead class="table-light border thead-sticky">
                   <tr class="text-center">
                     <th style="cursor: pointer" (click)="ordenarPor('entidad')">Empresa<i [ngClass]="getIconoOrden('entidad')"></i></th>
                     <th style="cursor: pointer" (click)="ordenarPor('eco')">Nro. Eco.<i [ngClass]="getIconoOrden('eco')"></i></th>

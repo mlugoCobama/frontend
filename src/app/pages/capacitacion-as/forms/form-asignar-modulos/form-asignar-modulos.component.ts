@@ -51,7 +51,7 @@ export class FormAsignarModulosComponent implements OnInit {
 
   ngOnInit(): void {
     this.buildForm();
-    console.log(this.nombrePuesto)
+    // console.log(this.nombrePuesto)
   }
 
   private buildForm() {
@@ -105,10 +105,10 @@ export class FormAsignarModulosComponent implements OnInit {
 
       const submodulosArray = moduloGroup.get("submodulos") as FormArray;
         submodulosArray.controls.forEach((submoduloGroup) => {
-          submoduloGroup.get("activo")?.setValue(isActive, { emitEvent: false });
+          submoduloGroup.get("activo")?.setValue( isActive == true ? !isActive : isActive , { emitEvent: false });
           const funcionesArray = submoduloGroup.get("funciones") as FormArray;
           funcionesArray.controls.forEach((funcionGroup) => {
-            funcionGroup.get("activo")?.setValue(isActive, { emitEvent: false });
+            funcionGroup.get("activo")?.setValue(isActive == true ? !isActive : isActive, { emitEvent: false });
           });
         });
 
@@ -143,7 +143,7 @@ export class FormAsignarModulosComponent implements OnInit {
     submoduloGroup.get("activo")?.valueChanges.subscribe((isActive: boolean) => {
       const funcionesArray = submoduloGroup.get("funciones") as FormArray;
       funcionesArray.controls.forEach((funcionGroup) => {
-        funcionGroup.get("activo")?.setValue(isActive, { emitEvent: false });
+        funcionGroup.get("activo")?.setValue(isActive == true ? !isActive : isActive, { emitEvent: false });
       });
     });
 

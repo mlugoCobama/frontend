@@ -49,7 +49,7 @@
           <div >
             <div class="tab-page-content mt-3 table-responsive" style="overflow-y: scroll; height: 20rem;">
               <table *ngIf="!isLoad" class="table table-hover table-sm table-bordered">
-                <thead class="table-light" [ngClass] = "modalAbierto === false ? 'sticky-top' : '' " >
+                <thead class="table-light thead-sticky">
                   <tr>
                     <th (click)="ordenarPor('nombre')">Unidad de Medida <i [ngClass]="getIconoOrden('nombre')"></i></th>
                     <th (click)="ordenarPor('abreviatura')">Abreviatura <i [ngClass]="getIconoOrden('abreviatura')"></i></th>

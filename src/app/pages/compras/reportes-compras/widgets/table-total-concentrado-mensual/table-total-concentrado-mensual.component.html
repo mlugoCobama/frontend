@@ -16,7 +16,7 @@
   <div class="card-body p-2">
     <div class="table-responsive" style="max-height: 300px; overflow: auto; ">
       <table class="table table-sm table-bordered align-middle p-2">
-        <thead class="table-light" [ngClass]="modalAbierto === false ? 'sticky-top' : '' ">
+        <thead class="table-light thead-sticky">
           <tr>
             <th (click)="ordenarPor('empresa')">Empresa <i [ngClass]="getIconoOrden('empresa')"></i></th>
             <th (click)="ordenarPor('solicitudes')"># Solicitudes <i [ngClass]="getIconoOrden('solicitudes')"></i></th>
@@ -34,7 +34,7 @@
             <td class="text-end"> <strong> {{ item.total_por_empresa | currency }} </strong></td>
           </tr>
         </tbody>
-         <tfoot class="table-light" [ngClass]="modalAbierto === false ? 'sticky-bottom' : '' ">
+         <tfoot class="table-light tfoot-sticky">
           <tr>
             <th>Total General</th>
             <th>{{ totalSolicitudes }}</th>

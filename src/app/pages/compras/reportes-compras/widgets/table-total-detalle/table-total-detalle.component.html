@@ -15,7 +15,7 @@
   <div class="card-body p-2">
     <div class="table-responsive" style="max-height: 300px; overflow: auto;">
       <table class="table table-sm table-bordered align-middle p-2">
-        <thead class="table-light" [ngClass]="modalAbierto === false ? 'sticky-top' : '' ">
+        <thead class="table-light thead-sticky">
           <tr>
             <th (click)="ordenarPor('folio_solicitud')">Folio Solicitud <i [ngClass]="getIconoOrden('folio_solicitud')"></i> </th>
             <th (click)="ordenarPor('folio_orden_compra')"> Folio OC <i [ngClass]="getIconoOrden('folio_orden_compra')"></i></th>
@@ -44,7 +44,7 @@
             </td>
           </tr>
         </tbody>
-        <tfoot class="table-light" [ngClass]="modalAbierto === false ? 'sticky-bottom' : '' ">
+        <tfoot class="table-light tfoot-sticky">
           <tr>
             <th class="text-end" [attr.colspan] = "params.tipo === '2' ?  6 : 5" >Total General</th>
             <th class="text-end">{{ total  | currency }}</th>

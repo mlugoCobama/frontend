@@ -97,7 +97,7 @@
                   <table *ngIf="!isLoad && datosFiltrados.length > 0; else elseBlock"
                     class="table table-striped table-hover table-sm table-bordered"
                   >
-                    <thead class="table-light" [ngClass] = "modalAbierto === false ? 'sticky-top' : '' ">
+                    <thead class="table-light thead-sticky">
                       <tr>
                         <th style="cursor: pointer" (click)="ordenarPor('folio')">Folio <i [ngClass]="getIconoOrden('folio')"></i></th>
                         <th style="cursor: pointer" (click)="ordenarPor('folio_oc')">Folio OC<i [ngClass]="getIconoOrden('folio_oc')"></i></th>

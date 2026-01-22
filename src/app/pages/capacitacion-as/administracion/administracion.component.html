@@ -48,7 +48,7 @@
           <div *ngIf="!isLoad">
             <div class="tab-page-content mt-3 table-responsive" style="overflow-y: scroll; height: 20rem;">
               <table class="table table-hover table-sm table-bordered text-center">
-                <thead class="table-light">
+                <thead class="table-light thead-stick">
                   <tr >
                     <th (click)="ordenarPor('puesto')">Puesto <i [ngClass]="getIconoOrden('puesto')"></i></th>
                     <th (click)="ordenarPor('empresa')">Empresa <i [ngClass]="getIconoOrden('empresa')"></i></th>
