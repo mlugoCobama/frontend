@@ -226,7 +226,7 @@ export class TableFilesCotizacionesComponent implements AfterViewInit {
     const total = this.totalCotizacion(prov);
     const noAutorizado = prov.autorizado === 0;
 
-    if (total > 50000 && noAutorizado) {
+    if (total > 50000 && noAutorizado && this.solicitudCompra.tipo != 3) {
       this.solicitarAutorizacion();
       return;
     }
