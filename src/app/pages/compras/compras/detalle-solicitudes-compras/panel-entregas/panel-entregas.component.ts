@@ -49,7 +49,9 @@ export class PanelEntregasComponent implements OnInit, AfterViewInit {
     
   }
 
-
+  /**
+   * Construccion del form
+   */
   private buildForm() {
     this.acuseForm = this.fb.group({
       archivo: [null, Validators.required],
@@ -62,6 +64,11 @@ export class PanelEntregasComponent implements OnInit, AfterViewInit {
     this.acuseForm.patchValue({ archivo: file });
   }
 
+  /**
+   * Guarda los datos de entrega
+   * cantidad de entradas y acuse de entrega
+   * @returns 
+   */
   guardar(): void {
     this.submitted = true;
 
@@ -136,6 +143,9 @@ export class PanelEntregasComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Despliega la alerta pra solicitar el surtido
+   */
   solicitarSurtido(): void {
     Swal.fire({
       title: "¿Deseas solicitar el surtido de la orden de compra?",
@@ -209,6 +219,11 @@ export class PanelEntregasComponent implements OnInit, AfterViewInit {
   public isLoad: boolean = false;
   public submittDetail:boolean = false;
 
+
+  /**
+   * Busca los detalles de uns solicitud de compra 
+   * @param idSolicitud 
+   */
   public buscarDetalles(idSolicitud){
     this.detalles = [];
     this.isLoad = true;
@@ -217,12 +232,9 @@ export class PanelEntregasComponent implements OnInit, AfterViewInit {
         this.detalles = response.data;
         this.entregaCompleta = response.todasEnCero;
         if(this.detalles.length > 0 && this.ordenCompra.surtido_solicitado == 1){
-          // this.formTableEntradas.createFormArray(this.detalles);
-          // setTimeout(()=>{
-          //   if (this.formTableEntradas && typeof this.formTableEntradas.createFormArray === 'function') {
+
               this.formTableEntradas.createFormArray(this.detalles);
-          // }
-          // },1000)
+
         }
         this.isLoad = false;
         // this.enviarDatos.emit(response.data);

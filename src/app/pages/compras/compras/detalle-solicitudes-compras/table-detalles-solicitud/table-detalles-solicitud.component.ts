@@ -281,6 +281,10 @@ export class TableDetallesSolicitudComponent implements OnInit {
     return this.permisosService.tienePermiso(permiso);
   }
 
+  /**
+   * Habilita los inputs de una columna para editar el proveedor
+   * @param proveedorId id del proveedor
+   */
   public habilitarEdicionProveedor(proveedorId: number) {
     this.detalles.forEach(detalle => {
       detalle["disabled_" + proveedorId] = false;

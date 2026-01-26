@@ -51,7 +51,7 @@ export class PanelCotizacionesComponent implements OnInit {
   private crearProveedorControl(): FormControl {
     return new FormControl("", Validators.required);
   }
-
+ // Crea un nuevo FormGroup para un proveedor
   private crearProveedorGroup(): FormGroup {
     return this.formBuilder.group({
       proveedor_id: ['', Validators.required],
@@ -191,6 +191,10 @@ export class PanelCotizacionesComponent implements OnInit {
     this.actualizarStatus.emit();
   }
 
+  /**
+   * Validación de proveedores mínimo uno y ninguno repetido
+   * @returns true or false
+   */
   validarProveedores(): boolean {
     const proveedoresSeleccionados = this.proveedoresArray.value.filter(
       (p: string) => p !== ""
@@ -222,6 +226,12 @@ export class PanelCotizacionesComponent implements OnInit {
     return true;
   }
 
+
+/**
+ * Maneja el cambio en el dorm group cuando existen o no 
+ * muestra u oculta un campo
+ * @param index index del formArray para todo el formulario
+ */  
 onProveedorChange(index: number) {
   const proveedorCtrl = this.proveedoresArray.at(index) as FormGroup;
   const contactoCtrl = proveedorCtrl.get('contacto_id');
@@ -239,13 +249,22 @@ onProveedorChange(index: number) {
   
 }
 
-
+/**
+ * Recupera los contactos del proveedor
+ * @param index index del formArray para todo el formulario
+ * @returns contactos-proveedor
+ */
 getContactos(index: number): any[] {
   const proveedorId = this.proveedoresArray.at(index).get('proveedor_id')?.value;
   const proveedor = this.proveedores.find((p: any) => p.id === +proveedorId);
   return proveedor?.contactos || [];
 }
 
+/**
+ * Valida que existan contactos
+ * @param index index del formArray para todo el formulario
+ * @returns true or false
+ */
 tieneContactos(index: number): boolean {
   return this.getContactos(index).length > 0;
 }

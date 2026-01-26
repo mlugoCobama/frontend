@@ -257,7 +257,6 @@ toggleModoLectura() {
       (response) => {
         if (response) {
           this.cotProv = response.data;
-          console.log(this.cotProv)
           this.cotizacion = response.dataCotizacion;
           this.isLoad = false;
         } else {

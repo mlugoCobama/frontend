@@ -11,27 +11,28 @@
                 href="javascript:void(0);"
                 class="btn btn-success btn-sm"
                 (click)="openModalExpedientes()"
-                *ngIf="mostrar"
+                *ngIf="mostrar && tienePermiso('view btn expediente proveedor')"
                 ><i class="fas fa-folder-open"></i> Expediente</a
               >
               <a
                 href="javascript:void(0);"
                 class="btn btn-danger btn-sm"
                 (click)="destroy()"
-                *ngIf="mostrar"
+                *ngIf="mostrar  && tienePermiso('view btn delete proveedor')"
                 ><i class="fas fa-trash"></i> Eliminar</a
               >
               <a
                 href="javascript:void(0);"
                 class="btn btn-warning btn-sm"
                 (click)="openModalActualizar()"
-                *ngIf="mostrar"
+                *ngIf="mostrar  && tienePermiso('view btn update proveedor')"
                 ><i class="fas fa-edit"></i> Actualizar</a
               >
               <a
                 href="javascript:void(0);"
                 class="btn btn-primary btn-sm"
                 (click)="openModalNuevo()"
+                *ngIf= "tienePermiso('view btn add proveedor')"              
                 ><i class="fas fa-plus"></i> Nuevo</a
               >
             </div>

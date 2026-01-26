@@ -11,6 +11,8 @@ import { FuncionesTablas } from "../compras/funciones-tablas";
 import { ModalAddProveedorComponent } from "./modal-add-proveedor/modal-add-proveedor.component";
 import { ModalUpdtProveedorComponent } from "./modal-updt-proveedor/modal-updt-proveedor.component";
 import { ModalShowProveedorComponent } from "./modal-show-proveedor/modal-show-proveedor.component";
+import { PermisosService } from 'src/app/core/services/permisos.service';
+
 @Component({
   selector: "app-proveedores",
   templateUrl: "./proveedores.component.html",
@@ -43,7 +45,8 @@ export class ProveedoresComponent implements OnInit {
   constructor(
     private proveedoresService: ProveedoresService,
     private catEstadosService: CatEstadosService,
-    private modalService: BsModalService
+    private modalService: BsModalService,
+    private permisosService: PermisosService
   ) {}
 
   public ngOnInit(): void {
@@ -231,5 +234,11 @@ export class ProveedoresComponent implements OnInit {
       filas.forEach((fila) => fila.classList.remove("table-primary"));
       evento.currentTarget.classList.add("table-primary");
     }
+  }
+
+
+    tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
   }
 }

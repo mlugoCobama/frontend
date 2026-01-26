@@ -162,6 +162,10 @@ export class TableFilesCotizacionesComponent implements AfterViewInit {
     return this.permisosService.tienePermiso(permiso);
   }
 
+  /**
+   * Metodo para generar la orden de compra
+   * @returns
+   */
   public generarOrden() {
     this.sending = true;
     if (!this.formDatosOC.isValid()) {
@@ -212,6 +216,9 @@ export class TableFilesCotizacionesComponent implements AfterViewInit {
     );
   }
 
+  /**
+   * formateo de datos para generar la orden de compra
+   */
   public formatData() {
     const datos = {
       ...this.formDatosOC.getFormValues(),
@@ -248,6 +255,11 @@ export class TableFilesCotizacionesComponent implements AfterViewInit {
     this.mostrarObs = true;
   }
 
+  /**
+   * Calculo de la cotizacion seleccionada
+   * @param prov cotizacionProveeedor
+   * @returns total de la cotizacion con impuestos
+   */
   totalCotizacion(prov) {
     const detalles = prov.detalles;
     let totalCotizacion = 0;
@@ -260,6 +272,9 @@ export class TableFilesCotizacionesComponent implements AfterViewInit {
     return totalCotizacion * 1.16;
   }
 
+  /**
+   * Alerta para oicitud e autorizacion cuando se supera el limite de 50000
+   */
   private solicitarAutorizacion() {
     Swal.fire({
       title: "La cotización supera el limite establecido",
@@ -277,6 +292,10 @@ export class TableFilesCotizacionesComponent implements AfterViewInit {
     });
   }
 
+
+  /**
+   * Metodo para invocar el servicio de solicitud de autorización
+   */
   private enviarSolAutorizacion() {
     this.cotizacionesService
       .solicitarAutorizacion(this.solicitudCompra.id)
@@ -310,14 +329,18 @@ export class TableFilesCotizacionesComponent implements AfterViewInit {
       );
   }
 
+  /**
+   * Evento para actualizar el detalle
+   */
   public actDetalle() {
     this.actualizarDetalles.emit();
   }
 
-  public reenviarSC(item) {
-
-    console.log(item)
-    
+  /**
+   * Metodo para renviar correo 
+   * @param item fila del cotProv
+   */
+  public reenviarSC(item) {    
     item.loading = true;
     const data = {
       id: item?.id,
