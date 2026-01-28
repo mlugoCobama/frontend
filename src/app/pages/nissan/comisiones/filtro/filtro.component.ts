@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators }
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import { ComisionesService } from 'src/app/core/services/nissan/comisiones.service';
 import { PermisosService } from 'src/app/core/services/permisos.service';
+import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
 
 @Component({
   selector: 'app-filtro',
@@ -23,7 +24,19 @@ export class FiltroComponent implements OnInit{
 
   vendedores: { value: string, label: string }[] = [{ value: 'todos', label: 'Todos' }];
 
-
+  rawAgencias = [
+    { value:"todos", name:"Todas"},
+    { value:"710", name:"Nissan Universidad"},
+    { value:"0", name:"Nissan Insurgentes"},
+    { value:"730", name:"Nissan Azcapotzalco"},
+    { value:"714", name:"Nissan Campestre"},
+    { value:"740", name:"Renault Azcapotzalco"},
+    { value:"746", name:"Renault Ecatepec"},
+    { value:"743", name:"Renault Vallejo"},
+    { value:"760", name:"Renault Pachuca"},
+  ];
+  
+  agencias = []
 
    @Output() bindingSpiner = new EventEmitter<boolean>();
    @Output() bindingData = new EventEmitter<any>();
@@ -34,12 +47,15 @@ export class FiltroComponent implements OnInit{
     private alertas: SwalComprsServiceService,
     private comisiones:  ComisionesService,
     private permisosService:PermisosService,
+    private localStorage: LocalStorageServiceService
   ) {}
 
   ngOnInit(): void {
     this.buildForm();
-    this.estado = this.asignarEstado()
+    this.estado = this.asignarEstado();
+    this.agencias = this.filtrarAgencias(this.getEmpresaActiva());
   }
+
 
   buildForm(){
     const fecha = new Date();
@@ -158,5 +174,24 @@ tienePermiso(permiso: string = null): boolean {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
   }
+
+  filtrarAgencias(cadena) {
+  const filtro = cadena.toLowerCase();
+    if (filtro === "nissan") {
+      return this.rawAgencias.filter(a => a.name.toLowerCase().includes("nissan"));
+    } else if (filtro === "lille" ||  filtro === "renault") {
+      return this.rawAgencias.filter(a => a.name.toLowerCase().includes("renault"));
+    } else {
+      return this.rawAgencias; 
+    }
+}
+
+getEmpresaActiva(){
+  const usuarioActual = this.localStorage.getItem('currentUser');
+  const empresaActual = usuarioActual['usuarioActivo'][0].empresa.split(" ")[0];
+  return empresaActual;
+}
+
+
 
 }
