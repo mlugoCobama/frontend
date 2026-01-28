@@ -55,9 +55,12 @@
                   <th *ngIf="estado > 1">Cortesía</th>
                   <th *ngIf="estado > 1">Accesorios</th>
                   <th *ngIf="estado > 1">Placas</th>
+                  <th *ngIf="estado > 1" class="text-nowrap">% BDC</th>
                   <!--  Resultados calculados -->
                   <th *ngIf="estado > 1 "class="text-nowrap">Total Gastos</th> 
+                  <th *ngIf="estado > 1 "class="text-nowrap">Uti.D.Gastos</th> 
                   <th *ngIf="estado > 1"class="text-nowrap">Comision APV</th>
+                  <th *ngIf="estado > 1"class="text-nowrap">Comision BDC</th>
                   <th *ngIf="estado > 1"class="text-nowrap">Utilidad final</th>
                   <th *ngIf="estado > 2"lass="text-nowrap">Valido</th>
                   <th *ngIf="estado > 1"class="text-nowrap text-center">Acciones</th>
@@ -100,10 +103,13 @@
                 <td *ngIf="estado > 1"><input class="form-control form-control-sm" mask="separator" thousandSeparator=","  type="text" placeholder="Cortesia" formControlName="cortesia"></td><!-- Input Editable -->
                 <td *ngIf="estado > 1"><input class="form-control form-control-sm" mask="separator" thousandSeparator=","  type="text" placeholder="Accesorios" formControlName="accesorios"></td><!-- Input Editable -->
                 <td *ngIf="estado > 1"><input class="form-control form-control-sm" mask="separator" thousandSeparator=","  type="text" placeholder="Placas" formControlName="placas"></td><!-- Input Editable -->
-                  <!--  Resultados calculados -->
-                <td *ngIf="estado > 1" class="text-nowrap fw-bold text-end">{{ v.get('total_gastos')?.value | currency }}</td> 
+                <td *ngIf="estado > 1"><input class="form-control form-control-sm" mask="separator" thousandSeparator=","  type="text" placeholder="% BDC" formControlName="porcentaje_bdc" suffix="%"></td><!-- Input Editable -->
+                <!--  Resultados calculados -->
+                <td *ngIf="estado > 1" class="text-nowrap fw-bold text-end">{{ v.get('total_gastos')?.value | currency }}</td>
+                <td *ngIf="estado > 1" class="text-nowrap fw-bold text-end text-muted">{{ v.get('utlidad_gastos')?.value | currency }}</td>  
                 <td *ngIf="estado > 1" class="text-nowrap fw-bold text-end text-primary">{{ v.get('comision_apv')?.value | currency }}</td>
-                <td *ngIf="estado > 1" class="text-nowrap fw-bold text-end">{{ v.get('utilidad_final')?.value | currency }}</td>
+                <td *ngIf="estado > 1" class="text-nowrap fw-bold text-end text-muted">{{ v.get('comision_bdc')?.value | currency }}</td>
+                <td *ngIf="estado > 1" class="text-nowrap fw-bold text-end text-muted">{{ v.get('utilidad_final')?.value | currency }}</td>
                 <td *ngIf="estado > 2"> 
                     <span class="d-flex align-items-center justify-content-center">
                        <input formControlName="validado"  type="checkbox" class="form-check-input" id="exampleCheck1">

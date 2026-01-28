@@ -121,11 +121,13 @@ export class ComisionesComponent implements AfterViewInit {
       cortesia: [0],
       accesorios: [0],
       placas: [0],
-
+      porcentaje_bdc: [0],
       // Calculados
       total_gastos: [{ value: 0, disabled: true }],
+      utlidad_gastos: [{ value: 0, disabled: true }],
       utilidad_final: [{ value: 0, disabled: true }],
-      comision_apv: [{ value: 0, disabled: true }]
+      comision_apv: [{ value: 0, disabled: true }],
+      comision_bdc: [{ value: 0, disabled: true }],
     });
 
     this.calcularResultados(fg);
@@ -202,18 +204,23 @@ export class ComisionesComponent implements AfterViewInit {
       return total + (isNaN(numero) ? 0 : numero);
     }, 0);
 
+    const porcentajeBdc = (Number(fg.get('porcentaje_bdc')?.value) / 100) || 0;
     const comisionGuardada = Number(fg.get('comision_apv')?.value)
     const utilidadInicial = Number(fg.get('utilidad_inicial')?.value) || 0;
-    const porcentaje = Number(fg.get('tipo_venta_porcentaje')?.value) || 0;
+    const porcentaje = (Number(fg.get('tipo_venta_porcentaje')?.value) - porcentajeBdc)  || 0;
 
     const utilidadAC = utilidadInicial - totalGastos;
     const comision = utilidadAC * porcentaje;
-    const utilidadFinal = utilidadAC - comision
+    const comisionBDC = utilidadAC * porcentajeBdc; 
+    const utilidadFinal = utilidadAC - comision - comisionBDC;
+  
 
     fg.patchValue({
+      utlidad_gastos: utilidadAC,
       total_gastos: totalGastos,
       utilidad_final: utilidadFinal,
-      comision_apv: comision
+      comision_apv: comision,
+      comision_bdc: comisionBDC
     }, { emitEvent: false });
   });
 }
