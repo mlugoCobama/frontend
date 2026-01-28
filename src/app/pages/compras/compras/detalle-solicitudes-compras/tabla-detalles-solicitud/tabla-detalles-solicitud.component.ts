@@ -9,6 +9,7 @@ import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-com
 import { CatUnidadesMedidasService } from 'src/app/core/services/compras/unidadesMedidas/cat-unidades-medidas.service';
 import { CotizacionesService } from 'src/app/core/services/compras/cotizaciones/cotizaciones.service';
 import Swal from 'sweetalert2';
+import { PermisosService } from 'src/app/core/services/permisos.service';
 
 @Component({
   selector: 'app-tabla-detalles-solicitud',
@@ -43,7 +44,8 @@ export class TablaDetallesSolicitudComponent implements OnInit {
     private detallesService: DetallesSolicitudService,
     private alertasService: SwalComprsServiceService,
     private catUnidadesMedidasService: CatUnidadesMedidasService,
-    private cotizacionesService: CotizacionesService
+    private cotizacionesService: CotizacionesService,
+    public permisosService: PermisosService
 
   ) {}
 
@@ -286,7 +288,10 @@ toggleModoLectura() {
   }
 
 
-
+  tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
+  }
 
 
 }
