@@ -6,6 +6,8 @@ import { ModalAddVendedorComponent } from './modal-add-vendedor/modal-add-vended
 import { ModalUpdateVendedorComponent } from './modal-update-vendedor/modal-update-vendedor.component';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import Swal from 'sweetalert2';
+import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
+import { PermisosService } from 'src/app/core/services/permisos.service';
 
 @Component({
   selector: "app-vendedores",
@@ -17,10 +19,13 @@ export class VendedoresComponent implements OnInit {
     private vendedoresService: VendedoresService,
     private modalService: BsModalService,
     private alertas: SwalComprsServiceService,
+    private permisosService:PermisosService,
+    private localStorage: LocalStorageServiceService
   ) {}
 
   ngOnInit(): void {
-    this.getAll();
+    this.getAll(this.getEmpresaActiva().intercompania);
+    this.agencias = this.filtrarAgencias(this.getEmpresaActiva().empresa)
   }
 
   public data: any;
@@ -36,9 +41,9 @@ export class VendedoresComponent implements OnInit {
   public vendedor: any;
 
   /** recupera todos los registros de los vendedores */
-  private getAll() {
+  private getAll(intercompania) {
     this.isLoad = true;
-    this.vendedoresService.getAll().subscribe(
+    this.vendedoresService.getOne(intercompania).subscribe(
       (response: any) => {
         if (response) {
           this.data = response.data;
@@ -106,7 +111,7 @@ export class VendedoresComponent implements OnInit {
     this.modalRef.content.event.subscribe(() => {
       this.isLoad = true;
       // this.mostrar = false;
-      this.getAll();
+      this.getAll(this.getEmpresaActiva().intercompania);
     });
   }
 
@@ -127,7 +132,7 @@ export class VendedoresComponent implements OnInit {
     this.modalRef.content.event.subscribe(() => {
       this.isLoad = true;
       // this.mostrar = false;
-      this.getAll();
+      this.getAll(this.getEmpresaActiva().intercompania);
     });
   }
 
@@ -156,7 +161,7 @@ export class VendedoresComponent implements OnInit {
                 "success",
                 "success",
               );
-              this.getAll();
+              this.getAll(this.getEmpresaActiva().intercompania);
             } else {
               Swal.showValidationMessage(`Error: ${response.message}`);
             }
@@ -171,5 +176,43 @@ export class VendedoresComponent implements OnInit {
         console.log("Eliminación confirmada");
       }
     });
+  }
+
+
+   rawAgencias = [
+    { value:"todos", name:"Todas", permiso: "view select agencias all" },
+    { value:"710", name:"Nissan Universidad", permiso: "view select agencias nu"},
+    { value:"0", name:"Nissan Insurgentes", permiso: "view select agencias ni"},
+    { value:"730", name:"Nissan Azcapotzalco", permiso: "view select agencias na"},
+    { value:"714", name:"Nissan Campestre", permiso: "view select agencias nc"},
+    { value:"740", name:"Renault Azcapotzalco", permiso: "view select agencias ra"},
+    { value:"746", name:"Renault Ecatepec", permiso: "view select agencias re"},
+    { value:"743", name:"Renault Vallejo", permiso: "view select agencias rv"},
+    { value:"760", name:"Renault Pachuca", permiso: "view select agencias rp"},
+  ];
+
+  agencias = []
+
+  tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
+  }
+
+  filtrarAgencias(cadena) {
+    const filtro = cadena.toLowerCase();
+      if (filtro === "nissan") {
+        return this.rawAgencias.filter(a => a.name.toLowerCase().includes("nissan"));
+      } else if (filtro === "lille" ||  filtro === "renault") {
+        return this.rawAgencias.filter(a => a.name.toLowerCase().includes("renault"));
+      } else {
+        return this.rawAgencias; 
+      }
+  }
+
+  getEmpresaActiva(){
+    const usuarioActual = this.localStorage.getItem('currentUser');
+    const empresaActual = usuarioActual['usuarioActivo'][0].empresa.split(" ")[0];
+    const intercompaniaActual = usuarioActual['usuarioActivo'][0].intercompania;
+    return {empresa : empresaActual, intercompania : intercompaniaActual};
   }
 }

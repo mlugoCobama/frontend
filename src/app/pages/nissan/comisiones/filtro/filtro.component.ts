@@ -25,15 +25,15 @@ export class FiltroComponent implements OnInit{
   vendedores: { value: string, label: string }[] = [{ value: 'todos', label: 'Todos' }];
 
   rawAgencias = [
-    { value:"todos", name:"Todas"},
-    { value:"710", name:"Nissan Universidad"},
-    { value:"0", name:"Nissan Insurgentes"},
-    { value:"730", name:"Nissan Azcapotzalco"},
-    { value:"714", name:"Nissan Campestre"},
-    { value:"740", name:"Renault Azcapotzalco"},
-    { value:"746", name:"Renault Ecatepec"},
-    { value:"743", name:"Renault Vallejo"},
-    { value:"760", name:"Renault Pachuca"},
+    { value:"todos", name:"Todas", permiso: "view select agencias all" },
+    { value:"710", name:"Nissan Universidad", permiso: "view select agencias nu"},
+    { value:"0", name:"Nissan Insurgentes", permiso: "view select agencias ni"},
+    { value:"730", name:"Nissan Azcapotzalco", permiso: "view select agencias na"},
+    { value:"714", name:"Nissan Campestre", permiso: "view select agencias nc"},
+    { value:"740", name:"Renault Azcapotzalco", permiso: "view select agencias ra"},
+    { value:"746", name:"Renault Ecatepec", permiso: "view select agencias re"},
+    { value:"743", name:"Renault Vallejo", permiso: "view select agencias rv"},
+    { value:"760", name:"Renault Pachuca", permiso: "view select agencias rp"},
   ];
   
   agencias = []
@@ -114,10 +114,6 @@ asignarEstado() {
   return encontrado?.value ?? 0;
 }
 
-
-
-
-  
   // Getter para acceder a los controles
   get form() {
     return this.formulario.controls;
