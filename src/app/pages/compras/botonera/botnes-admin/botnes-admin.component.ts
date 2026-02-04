@@ -19,6 +19,8 @@ export class BotnesAdminComponent implements OnInit{
   @Input() solicitudSelecionada :  any;
 
   @Input() tipoCompras: any;
+  @Input() tiposPermitidos: any = [];
+  
 
   public downloading:boolean = false
 
@@ -72,11 +74,48 @@ export class BotnesAdminComponent implements OnInit{
 async onDownload(): Promise<void> {
   const hoy = new Date();
 
-  const primerDiaMesActual = new Date(hoy.getFullYear(), hoy.getMonth(), 1)
-    .toISOString().slice(0, 10);
+  const primerDiaMesActual = hoy.toISOString().slice(0, 10);
 
   const primerDiaMesAnterior = new Date(hoy.getFullYear(), hoy.getMonth() - 1, 1)
     .toISOString().slice(0, 10);
+
+  const tiposPermitidos = this.tiposPermitidos;
+
+  const opcionesTipo: { value: string; label: string }[] = [
+    { value: "1", label: "Compras Generales" },
+    { value: "2", label: "Compras Macro Taller" },
+    { value: "3", label: "Compras Recursos Tecnológicos" },
+  ];
+
+  const opcionesStatus: { value: string; label: string }[] = [
+    { value: "1", label: "En espera de autorización" },
+    { value: "2", label: "Solicitado" },
+    { value: "3", label: "En cotización" },
+    { value: "4", label: "Cancelados" },
+    { value: "5", label: "Orden de compra" },
+    // { value: "6", label: "Autorizado" },
+    // { value: "7", label: "Autorizado a pago" },
+    { value: "8", label: "En surtido" },
+    { value: "9", label: "Entregado" },
+    { value: "10", label: "Facturado" },
+    { value: "11", label: "Solicitado a pago" },
+    { value: "12", label: "Pagado" },
+    { value: "13", label: "Cargar complemento" },
+    { value: "14", label: "Finalizada" },
+  ];
+
+  const opcionesFiltradas = opcionesTipo
+    .filter(op => tiposPermitidos.includes(op.value))
+    .map(op => {
+      const selected = tiposPermitidos.length === 1 ? "selected" : "";
+      return `<option value="${op.value}" ${selected}>${op.label}</option>`;
+    }).join("");
+
+  const hidden = tiposPermitidos.length === 1 ? "hidden" : "";
+
+  const status = opcionesStatus
+    .map(op => {  return `<option value="${op.value}">${op.label}</option>`; })
+    .join("");
 
   const { value: formValues } = await Swal.fire({
     title: 'Filtros del reporte',
@@ -87,20 +126,7 @@ async onDownload(): Promise<void> {
             <label class="form-label">Estatus</label>
             <select id="estatus" class="form-select form-select-sm">
               <option value="">Seleccione...</option>
-              <option value="1">En espera de autorización</option>
-              <option value="2">Solicitado</option>
-              <option value="3">En cotización</option>
-              <option value="4">Cancelado</option>
-              <option value="5">Orden de compra</option>
-              <option value="6">Autorizado</option>
-              <option value="7">Autorizado a pago</option>
-              <option value="8">En surtido</option>
-              <option value="9">Entregado</option>
-              <option value="10">Facturado</option>
-              <option value="11">Solicitado a pago</option>
-              <option value="12">Pagado</option>
-              <option value="13">Cargar complemento</option>
-              <option value="14">Finalizada</option>
+              ${status}
             </select>
           </div>
         </div>
@@ -116,14 +142,12 @@ async onDownload(): Promise<void> {
           </div>
         </div>
 
-        <div class="row mb-2">
+        <div class="row mb-2" ${hidden}>
           <div class="col-12">
             <label class="form-label">Tipo</label>
             <select id="tipo" class="form-select form-select-sm">
               <option value="">Seleccione...</option>
-              <option value="1">Compras Generales</option>
-              <option value="2">Compras Macro Taller</option>
-              <option value="3">Compras Recursos Tecnológicos</option>
+              ${opcionesFiltradas}
             </select>
           </div>
         </div>
@@ -136,8 +160,8 @@ async onDownload(): Promise<void> {
     },
     focusConfirm: false,
     reverseButtons: true,
-    confirmButtonText: 'Descargar',
-    cancelButtonText: 'Cancelar',
+    confirmButtonText: '<i class="fa fa-download"></i> Descargar',
+    cancelButtonText: '<i class="fa fa-times"></i> Cancelar',
     showCancelButton: true,
     preConfirm: () => {
       return {
@@ -154,12 +178,7 @@ async onDownload(): Promise<void> {
   this.downloading = true;
 
   this.reportesComprasService
-    .getReportFile(
-      formValues.tipo,
-      formValues.estatus,
-      formValues.fechaInicial,
-      formValues.fechaFinal
-    )
+    .getReportFile(formValues.tipo, formValues.estatus, formValues.fechaInicial,  formValues.fechaFinal)
     .subscribe(
       (response) => {
         this.reportesComprasService.downloadBlob(
