@@ -1,6 +1,10 @@
 <div class="card mb-3 rounded shadow-lg">
-  <div class="card-header bg-primary text-center text-white">
+  <div class="card-header bg-primary text-white" [ngClass]="solicitudCompra?.motivo_revision
+    ? 'd-flex align-items-center justify-content-between' 
+    : 'text-center'"
+    (click)="clickEditarSolicitud()">
    <strong>Información general de la solicitud de compra. </strong> 
+   <button *ngIf="solicitudCompra?.motivo_revision" class="btn btn-sm btn-outline-light"> <i class="fas fa-edit"></i> Modificar Solicitud</button>
   </div>
   <div class="card-body">
     <div class="row"> <!--Inicia div datos solicitud -->
@@ -16,7 +20,7 @@
         &nbsp; 
         <span *ngIf="solicitudCompra.formato_orden" (click)= "verArchivos(solicitudCompra.formato_orden)" class="btn btn-sm btn-info"><i class="bx bx-info-circle"></i> Ver  </span>   
       </p>
-      
+      <p *ngIf="solicitudCompra.motivo_revision"><strong class="text-danger"> Correcciones sugeridas: </strong>{{solicitudCompra.motivo_revision}} </p>
     </div>
 
 

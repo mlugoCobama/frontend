@@ -5,6 +5,7 @@ import { EstadoSolicitud } from '../../compras/estado-solicitud.enum';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import { TableDetallesSolicitudComponent } from '../../compras/detalle-solicitudes-compras/table-detalles-solicitud/table-detalles-solicitud.component';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { ModalActualizarSolicitudMacroComponent } from '../modal-actualizar-solicitud-macro/modal-actualizar-solicitud-macro.component';
 @Component({
   selector: 'app-detalle-solicitud-macro',
   templateUrl: './detalle-solicitud-macro.component.html',
@@ -103,4 +104,20 @@ public updateStatus() {
     }
   )
 }  
+
+openModalUpdateSolicitud(){
+  const initialState: ModalOptions = {
+      initialState: {
+        solicitudCompra: this.solicitudCompra
+      },
+      class: "modal-lg",
+    };
+    this.modalRef = this.modalService.show(ModalActualizarSolicitudMacroComponent, initialState);
+    this.modalRef.content.closeBtnName = "Close";
+    this.modalRef.content.event.subscribe(() => {
+      // this.isLoad = true;
+      // this.getAll(this.usuarioSolicita.intercompania);
+    });
+
+}
 }

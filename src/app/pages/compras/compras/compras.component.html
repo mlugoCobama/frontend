@@ -7,7 +7,7 @@
             <h5 class="mb-0 card-title flex-grow-1">Solicitudes de Compra</h5>
             <div class="flex-shrink-0 d-flex gap-1 mt-2 mt-lg-0">
 
-              <button *ngIf="!solicitudSelecionada" class="btn btn-outline-primary btn-sm" type="button"
+              <button *ngIf="!solicitudSelecionada" class="btn btn-sm btn-outline-primary" type="button"
                 (click)="alternarVista()">
                 <i class="fas" [ngClass]="vistaKanban ? 'fa-table' : 'fa-th-large'"></i>
                 {{ vistaKanban ? 'Ver como tabla' : 'Ver como kanban' }}
@@ -15,6 +15,7 @@
 
               <app-botnes-admin [status]="status" [mostrarBoton]="mostrarBoton"
                 [solicitudSelecionada]="solicitudSelecionada" [tipoCompras]="tipoCompras"
+                (devolverRevision)="enviarRevisionSolicitud()"
                 (btnGenerarOC)="btnGenerarOC()" (mostrarCotizacion)="mostrarCotizacion()"
                 (cancelarSolicitud)="cancelarSolicitud()"></app-botnes-admin>
 

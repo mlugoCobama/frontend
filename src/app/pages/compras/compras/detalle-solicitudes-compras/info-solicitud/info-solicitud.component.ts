@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, EventEmitter, OnInit, Output } from '@angular/core';
 import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 import { ProveedoresService } from 'src/app/core/services/compras/proveedores/proveedores.service';
 import { ComprasService } from 'src/app/core/services/compras/compras.service';
@@ -13,7 +13,8 @@ export class InfoSolicitudComponent implements OnInit{
   @Input() solicitudCompra:any;//Datos de 
   @Input() mostrarTotal:any;
   @Input() cotizacion:any;
-
+  @Input() tienePermiso:any;
+  @Output() openEdicionSolicitud = new EventEmitter<void>();
  public centrosCostos:any = catCentrosCostos;
 
   constructor(
@@ -24,6 +25,10 @@ export class InfoSolicitudComponent implements OnInit{
 
   ngOnInit(): void {
     this.comprasService.actualizarEstatus$.subscribe(valor => { this.solicitudCompra.estatus =  valor } );
+  }
+
+  clickEditarSolicitud() {
+      this.openEdicionSolicitud.emit();
   }
 
       /**

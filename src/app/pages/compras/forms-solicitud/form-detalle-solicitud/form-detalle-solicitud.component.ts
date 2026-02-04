@@ -142,6 +142,7 @@ export class FormDetalleSolicitudComponent implements OnInit{
 
     this.tableData.push(newDetalle);
 
+    console.log(this.tableData)
     // this.formDetalleSolicitud.reset();
     this.resetFormDetalle();
 
@@ -227,6 +228,30 @@ export class FormDetalleSolicitudComponent implements OnInit{
      text: primerError,
     });
   }
+}
+
+public loadDetallesFromDB(detalles: any[]) {
+  this.tableData = detalles.map(detalle => {
+    let dato = null;
+
+    if (+this.destino === 602) {
+      dato = this.autotanques.find(objeto => +objeto.id === +detalle.vehiculo);
+    }
+
+    return {
+      ...detalle,
+      cat_unidades_medida_id: detalle?.unidadMedida.id,
+      cat_unidades_medida_id1: `${detalle?.unidadMedida.nombre} (${ detalle?.unidadMedida?.abreviatura})`,
+      img_referencia1: 
+      // detalle.img_referencia ? URL.createObjectURL(detalle.img_referencia) : 
+      null,
+      label: detalle?.DetalleAutotanque?.DatosVehiculo.eco ?? null,
+      vehiculo: detalle?.DetalleAutotanque?.com_datos_vehiculo_id ?? null,
+      confirmado: 1
+    };
+  });
+  console.log(this.tableData);
+  console.log(this.destino)
 }
 
 

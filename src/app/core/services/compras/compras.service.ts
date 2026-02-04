@@ -67,6 +67,9 @@ export class ComprasService {
     return this.http.post(environment.apiUrl + "compras/SolicitudesCompras", data , {headers});
   }
   
+  public updateSolicitud(data: any): Observable<any> {
+    return this.http.post(environment.apiUrl + "compras/SolicitudesCompras/actualiza-solicitud", data , {headers});
+  }
 
   public edit(id: number, data: any): Observable<any> {
     return this.http.put(environment.apiUrl + `compras/SolicitudesCompras/${id}`, data, {headers}) ;
@@ -80,6 +83,10 @@ export class ComprasService {
   public destroy(data: any): Observable<any> {
     // return this.http.delete(environment.apiUrl + `compras/SolicitudesCompras/${id}`, {headers});
     return this.http.post(environment.apiUrl + `compras/cancelar-solicitud`, data ,{headers});
+  }
+
+  public devolverSolictud(data: any): Observable<any> {
+    return this.http.post(environment.apiUrl + `compras/devolver-solicitud-revision`, data ,{headers});
   }
 
   /**

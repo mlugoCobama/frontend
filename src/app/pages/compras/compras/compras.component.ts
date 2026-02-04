@@ -377,42 +377,18 @@ export class ComprasComponent implements OnInit {
     return this.ordenador.getIcono(columna);
   }
 
+  public modelBusqueda = [  "folio", "usuario_destino",  "fecha",
+                            "usuario_solicita", "empresa", "estado",
+                          "centro_costo", "proveedor",  "total_orden",
+                          "folio_oc", "modo_pago",  "pagado"];
   filtrarTabla() {
     this.busqueda2 = "";
-    this.datosFiltrados = this.ordenador.filtrar(this.busqueda, [
-      "folio",
-      "usuario_destino",
-      // "motivo",
-      "fecha",
-      "usuario_solicita",
-      "empresa",
-      "estado",
-      "centro_costo",
-      "proveedor",
-      "total_orden",
-      "folio_oc",
-      "modo_pago",
-      "pagado"
-    ]);
+    this.datosFiltrados = this.ordenador.filtrar(this.busqueda, this.modelBusqueda);
   }
 
   filtrarTabla2() {
     this.busqueda = "";
-    this.datosFiltrados = this.ordenador.filtrar(this.busqueda2, [
-      "folio",
-      "usuario_destino",
-      // "motivo",
-      "fecha",
-      "usuario_solicita",
-      "empresa",
-      "estado",
-      "centro_costo",
-      "proveedor",
-      "total_orden",
-      "folio_oc",
-      "modo_pago",
-      "pagado"
-    ]);
+    this.datosFiltrados = this.ordenador.filtrar(this.busqueda2, this.modelBusqueda);
   }
 
   openModalSeguimiento(item){
@@ -477,4 +453,73 @@ export class ComprasComponent implements OnInit {
     return false;
   }
 }
+
+enviarRevisionSolicitud() {
+    Swal.fire({
+      title: 'Aviso',
+      text: 'Esta solicitud volverá al estado anterior, ingresa tus observaciones para volverla correcta',
+      input: 'textarea',
+      inputPlaceholder: 'Escribe tus observaciones aquí...',
+      inputAttributes: {
+        'aria-label': 'Escribe tus observaciones aquí'
+      },
+      reverseButtons: true,
+      showCancelButton: true,
+      confirmButtonText: 'Enviar',
+      cancelButtonText: 'Cancelar',
+      allowOutsideClick: false, 
+      buttonsStyling: false,
+      customClass: {
+        confirmButton: 'btn btn-sm btn-primary m-1',
+        cancelButton: 'btn btn-sm btn-secondary m-1'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const payload = {
+          id: this.solicitudCompra.id,
+          motivo: result.value
+        };
+
+        Swal.fire({
+          title: 'Enviando...',
+          text: 'Por favor espera',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+
+        this.comprasService.devolverSolictud(payload).subscribe(
+        (response) => {
+          this.isLoad = false;
+          if (response.status === 'success') {
+            this.regresar();
+            this.alertasService.mostrarAlerta(
+              'Listo!',
+              'La solicitud ha sido devuelta para su revision.',
+              'success',
+              'success'
+            );
+          } else {
+            this.alertasService.mostrarAlerta(
+              'Error!',
+              `Ocurrió un error inesperado :${response.message || ''}` ,
+              'error',
+              'danger'
+            );
+          }
+        },
+        (error) => {
+          this.isLoad = false;
+          this.alertasService.mostrarAlerta(
+            'Error!',
+            error,
+            'error',
+            'danger'
+          );
+        }
+      );
+      }
+    });
+  }
 }

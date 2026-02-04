@@ -25,6 +25,7 @@ export class BotnesAdminComponent implements OnInit{
   @Output() btnGenerarOC = new EventEmitter<void>();
   @Output() mostrarCotizacion = new EventEmitter<void>();
   @Output() cancelarSolicitud = new EventEmitter<void>();
+  @Output() devolverRevision = new EventEmitter<void>();
 
   constructor(
     public comprasService: ComprasService,
@@ -46,6 +47,10 @@ export class BotnesAdminComponent implements OnInit{
 
   clickCancelar() {
       this.cancelarSolicitud.emit();
+  }
+
+  clickDevolverRevision() {
+      this.devolverRevision.emit();
   }
 
   tienePermiso(permiso: string = null): boolean {
@@ -72,9 +77,9 @@ export class BotnesAdminComponent implements OnInit{
 async onDownload(): Promise<void> {
   const hoy = new Date();
 
-  const primerDiaMesActual = new Date(hoy.getFullYear(), hoy.getMonth(), 1)
-    .toISOString().slice(0, 10);
-
+  // const primerDiaMesActual = new Date(hoy.getFullYear(), hoy.getMonth(), 1)
+  //   .toISOString().slice(0, 10);
+  const primerDiaMesActual = hoy.toISOString().slice(0, 10);
   const primerDiaMesAnterior = new Date(hoy.getFullYear(), hoy.getMonth() - 1, 1)
     .toISOString().slice(0, 10);
 
@@ -90,7 +95,6 @@ async onDownload(): Promise<void> {
               <option value="1">En espera de autorización</option>
               <option value="2">Solicitado</option>
               <option value="3">En cotización</option>
-              <option value="4">Cancelado</option>
               <option value="5">Orden de compra</option>
               <option value="6">Autorizado</option>
               <option value="7">Autorizado a pago</option>
@@ -101,6 +105,7 @@ async onDownload(): Promise<void> {
               <option value="12">Pagado</option>
               <option value="13">Cargar complemento</option>
               <option value="14">Finalizada</option>
+              <option value="4">Cancelado</option>
             </select>
           </div>
         </div>
@@ -176,7 +181,4 @@ async onDownload(): Promise<void> {
       }
     );
 }
-
-
-
 }

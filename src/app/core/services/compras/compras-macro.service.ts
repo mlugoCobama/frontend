@@ -46,6 +46,10 @@ export class ComprasMacroService {
     return this.http.put(environment.apiUrl + `compras/SolicitudesMacro/${id}`, data, {headers});
   }
 
+  public updateSolicitud(data: any): Observable<any> {
+    return this.http.post(environment.apiUrl + "compras/SolicitudesCompras/Macro/actualiza-solicitud", data , {headers});
+  }
+
   private formDataSubject = new BehaviorSubject<any>(null);
   formData$ = this.formDataSubject.asObservable();
 
