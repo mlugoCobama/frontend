@@ -74,6 +74,9 @@ export class SelectSistemaMantenimientoComponent implements OnInit{
           this.sistemas = response.data;
           this.tiposMantenimiento = response.data2;
           this.isLoad = false;
+          if(this.tipo == 1){
+            this.formSistemaMantenimiento.patchValue({ tipoMantenimiento: '7'});
+          }
         } else {
           console.log(response.message);
           this.isLoad = false;
@@ -131,4 +134,15 @@ export class SelectSistemaMantenimientoComponent implements OnInit{
     }
   }
 
+  public setTextosDescriptivos(){
+    const datos = [
+      { tipo : 2, texto: 'Sistema del vehículo: ', complemeto: ' un sistema', keyword:'Sistema', mantenimiento:'Tipo de mantenimiento', visible: true},
+      { tipo : 3, texto: 'Area de Infraestructuras / Soporte / TI: ', complemeto: ' un area', keyword:'Area', mantenimiento:'Tipo de mantenimiento', visible: true},
+      { tipo : 1, texto: 'Categorias:', complemeto: ' una categoria', keyword:'categoria', mantenimiento:'Compra', visible: false },
+    ];
+
+    const resultado = datos.find(d => d.tipo === this.tipo);
+    return resultado;
+
+  }
 }

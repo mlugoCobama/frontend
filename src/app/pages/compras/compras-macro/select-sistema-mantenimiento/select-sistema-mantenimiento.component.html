@@ -9,7 +9,7 @@
     <form [hidden]="isLoad" [formGroup]="formSistemaMantenimiento" class="pb-2">
   <div class="row g-2">
     <div class="col">
-      <label for="sistema" class="form-label"> {{ tipo == 2 ? 'Sistema del vehículo:' : 'Area de Infraestructuras / Soporte / TI:'}}  </label>
+      <label for="sistema" class="form-label"> {{ setTextosDescriptivos().texto }}  </label>
       <select
         (change)="selectChange()"
         class="form-select form-select-sm"
@@ -17,7 +17,7 @@
         name="sistema"
         id="sistema"
       >
-        <option value="" selected>Seleccione un sistema</option>
+        <option value="" selected>Seleccione {{ setTextosDescriptivos().complemeto }}</option>
         <option *ngFor="let sistema of sistemas" [value]="sistema.id">
           {{ sistema.sistema }}
         </option>
@@ -27,13 +27,13 @@
           class="text-danger form-text"
           *ngIf="sisteMantenimientoFormControl.sistema.errors?.['required']"
         >
-          Sistema es requerido.
+          {{ setTextosDescriptivos().keyword }} es requerido.
         </div>
       </div>
     </div>
 
-    <div class="col">
-      <label for="tipoMantenimiento" class="form-label">Tipo de mantenimiento:</label>
+    <div class="col" [hidden]= !setTextosDescriptivos().visible >
+      <label for="tipoMantenimiento" class="form-label">{{setTextosDescriptivos().mantenimiento}}</label>
       <select
       (change)="selectChange()"
         class="form-select form-select-sm"
@@ -51,7 +51,7 @@
           class="text-danger form-text"
           *ngIf="sisteMantenimientoFormControl.tipoMantenimiento.errors?.['required']"
         >
-          Tipo de mantenimiento es requerido.
+          {{ setTextosDescriptivos().mantenimiento }} es requerido.
         </div>
       </div>
     </div>
