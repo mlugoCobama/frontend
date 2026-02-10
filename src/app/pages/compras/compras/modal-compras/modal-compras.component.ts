@@ -104,12 +104,14 @@ export class ModalComprasComponent implements AfterViewInit
         ...this.formSelectsSistemaManteniemiento.obtenerValores(),
         usuario_solicita: this.formSolicitudCompra.obtenerUsuarios(),
         detalles: this.tableData.getDetalles(),
+        isAgencia: this.formSolicitudCompra.getIsAgencia(),
       };
     }else{
       data = {
         ...this.formSolicitudCompra.obtenerValores(),
         usuario_solicita: this.formSolicitudCompra.obtenerUsuarios(),
         detalles: this.tableData.getDetalles(),
+        isAgencia: this.formSolicitudCompra.getIsAgencia(),
       };
     }
     

@@ -15,6 +15,10 @@ export class FormFilesFacturasComponent implements OnInit {
   
   @Output() actualizarStatus = new EventEmitter<void>();
   @Output() setDataOrdenCompra = new EventEmitter<void>();
+  loadingArchivos = false;
+  loadingComPago = false;
+  loadingDescargas = false;
+
 
   public ordenCompra: any;
   public formDocsOrdenCompra: FormGroup;
@@ -144,9 +148,12 @@ export class FormFilesFacturasComponent implements OnInit {
   public guardarArchivos() {
     this.submitted = true;
     this.isLoad = true;
+    this.loadingArchivos = true;
+
     if (this.formDocsOrdenCompra.invalid) {
       this.alertasService.mostrarAlerta("Alerta", "Debes adjuntar la factura en ambos formatos", "warning", "warning");
       this.isLoad = false;
+      this.loadingArchivos = false;
       return;
     }
 
@@ -165,13 +172,15 @@ export class FormFilesFacturasComponent implements OnInit {
           this.formData = new FormData();
           this.submitted = false;
           this.formDocsOrdenCompra.reset();
-
+          this.loadingArchivos = false;
         } else {
           this.alertasService.mostrarAlerta('error', response.message, 'error', 'danger');
+          this.loadingArchivos = false;
         }
       },
       (error) => {
         this.alertasService.mostrarAlerta('error',` "Error:" ${error}`, 'error', 'danger');
+        this.loadingArchivos = false;
         
       }
     );
@@ -183,6 +192,7 @@ export class FormFilesFacturasComponent implements OnInit {
    * @returns 
    */
   public guardarComPago() {
+    this.loadingComPago = true;
     if (this.formData.has("comprobante_pago")) {
 
       const idOrdenCompra = this.ordenCompra.id;
@@ -206,12 +216,15 @@ export class FormFilesFacturasComponent implements OnInit {
               this.isLoad = false;
               this.formData = new FormData();
               this.formDocsOrdenCompra.reset();
+              this.loadingComPago = false
             } else {
               this.alertasService.mostrarAlerta('error', response.message, 'error', 'danger');
+              this.loadingComPago = false
             }
           },
           (error) => {
             this.alertasService.mostrarAlerta('error',` "Error:" ${error}`, 'error', 'danger');
+            this.loadingComPago = false
 
           }
         );
@@ -230,14 +243,15 @@ export class FormFilesFacturasComponent implements OnInit {
           this.formData = new FormData();
           this.submitted = false;
           this.formDocsOrdenCompra.reset();
-
+          this.loadingComPago = false
         } else {
           this.alertasService.mostrarAlerta('error', response.message, 'error', 'danger');
+          this.loadingComPago = false
         }
       },
       (error) => {
         this.alertasService.mostrarAlerta('error',` "Error:" ${error}`, 'error', 'danger');
-        
+        this.loadingComPago = false
       }
     );
 
@@ -247,6 +261,7 @@ export class FormFilesFacturasComponent implements OnInit {
     } else {
       this.alertasService.mostrarAlerta("Alerta", "Debes adjuntar el comprobante pago", "warning", "warning");
       this.isLoad = false;
+      this.loadingComPago = false
       return;
     }
   }
@@ -332,6 +347,8 @@ export class FormFilesFacturasComponent implements OnInit {
    * Descarga  todas las facturas de la orden de compra en formato zip
    */
   public descargarFacturas() {
+    this.loadingDescargas = true;
+
     this.ordenesComprasService.descargarFacturas(this.ordenCompra.id).subscribe((response) => {
 
         const blob = new Blob([response], { type: "application/zip" });
@@ -342,9 +359,11 @@ export class FormFilesFacturasComponent implements OnInit {
         link.download = `Facturas_${this.ordenCompra.folio_oc}.zip`;
         link.click();
         window.URL.revokeObjectURL(url);
+        this.loadingDescargas = false;
       },
       (error) => {
           this.alertasService.mostrarAlerta('error',` "Error:" ${error}`, 'error', 'danger');
+          this.loadingDescargas = false;
       });
   }
 

@@ -20,6 +20,7 @@
                 (cancelarSolicitud)="cancelarSolicitud()"></app-botnes-admin>
 
               <app-bontones-generales [status]="status" [mostrarBoton]="mostrarBoton"
+                [showBtnAdd] = "tienePermiso('show btn compras generales')"
                 [solicitudSelecionada]="solicitudSelecionada" (btnDescargarOC)="btnDescargarOC()"
                 (regresar)="regresar()" (openModalNuevo)="openModalNuevo()"></app-bontones-generales>
             </div>

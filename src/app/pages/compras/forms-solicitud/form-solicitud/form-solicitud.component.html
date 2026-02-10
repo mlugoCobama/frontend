@@ -85,6 +85,23 @@
         </small>
       </div>
     </div>
+    <!-- <div class="col-md">
+      <label for="empresa" class="form-label form-label-sm">Tipo de compra: *</label>
+      
+      <select
+        class="form-select form-select-sm" aria-label="Default select example" formControlName="tipo" id="tipo"
+        name="tipo" aria-label="tipo">
+        <option value="" selected disabled>Selecciona uno</option>
+        <option  *ngFor="let item of tiposCompras" [value]="item.claveNum">
+          {{ item.tipoCompra }}
+        </option>
+      </select>
+      <div *ngIf="solicitudCompraFormControl.tipo.touched || submitted || solicitudCompraFormControl.tipo.value === 'Selecciona uno'">
+        <div class="text-danger form-text" *ngIf="solicitudCompraFormControl.tipo.errors?.['required']">
+          Debes de seleccionar un tipo.
+        </div>
+      </div>
+    </div> -->
     <!-- fin primer from -->
   </form>
   <ng-template #nombreEmpresa>

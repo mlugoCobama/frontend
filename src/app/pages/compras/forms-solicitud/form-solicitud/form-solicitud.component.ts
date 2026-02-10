@@ -46,6 +46,12 @@ export class FormSolicitudComponent implements OnInit{
     7102, 7075, 7074, 7072, 7071, 7064, 7063, 7062, 7061, 7051, 712, 710, 706,
   ];
 
+  public tiposCompras = [
+    {tipoCompra: 'Compras Generales Gaseras', claveNum : 1 },
+    {tipoCompra: 'Compras Infraestructura / Soporte / TI ', claveNum : 3},
+    {tipoCompra: 'Compras Generales Autos', claveNum : 4},
+  ];
+
   @Input() datos: any;
   @Input() submitted: boolean = false;
   @Output() closeModal = new EventEmitter<void>();
@@ -75,7 +81,8 @@ export class FormSolicitudComponent implements OnInit{
         usuario_destino: new FormControl(""),
         c_c: new FormControl(0),
         motivo: new FormControl(null, Validators.required),
-        requiere_anticipo: new FormControl(null, Validators.required)
+        requiere_anticipo: new FormControl(null, Validators.required),
+        // tipo: new FormControl(""),
       });
       resolve(true);
     });
@@ -280,6 +287,9 @@ public setValues() {
   };
 
   this.formSolicitudCompra.patchValue(valores);
+
+  this.formSolicitudCompra.get('usuario_destino')?.disable();
+  this.formSolicitudCompra.get('empresa')?.disable();
 }
 
 

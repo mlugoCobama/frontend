@@ -101,7 +101,12 @@ export class FormSolicitudMacroComponent implements OnInit{
     requiere_anticipo: this.datos?.requiere_anticipo == 1 ? "true" : "false"
   };
   this.formSolicitudCompra.patchValue(valores);
-  this.setDato(this.datos?.usuario_destino_id)
+  
+  this.setDato(this.datos?.usuario_destino_id);
+  this.formSolicitudCompra.get('usuario_destino')?.disable();
+  this.formSolicitudCompra.get('empresa')?.disable();
+  this.formSolicitudCompra.get('formato_orden_trabajo')?.disable();
+  this.formSolicitudCompra.get('cotizacion')?.disable();
 }
 
   public get solicitudCompraFormControl() {
