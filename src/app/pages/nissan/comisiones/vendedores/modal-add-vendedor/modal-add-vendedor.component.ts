@@ -20,6 +20,7 @@ export class ModalAddVendedorComponent implements AfterViewInit {
   ngAfterViewInit(): void {}
   /** bandera para el manejo de botones durante la petición */
   public sending : boolean = false;
+  public agencias : any = [];
 
   public event: EventEmitter<any> = new EventEmitter();
 

@@ -7,15 +7,7 @@
               <label>Agencias</label>
               <select class="form-select form-select-sm " aria-label=".form-select-sm example" formControlName="agencia">
                 <option value=""selected>Selecciona uno</option>
-                <option value="todos">Todas</option>
-                <option value="710">Nissan Universidad</option>
-                <option value="0">Nissan Insurgentes</option>
-                <option value="730">Nissan Azcapotzalco</option>
-                <option value="714">Nissan Campestre</option>
-                <option value="740">Renault Azcapotzalco</option>
-                <option value="746">Renault Ecatepec</option>
-                <option value="743">Renault Vallejo</option>
-                <option value="760">Renault Pachuca</option>
+                <option *ngFor = "let agencia of agencias" [hidden]="!tienePermiso(agencia.permiso)" [value]="agencia.value">{{agencia.name}}</option>
               </select>
               <div *ngIf="form.agencia.invalid && form.agencia.touched" class="error">
                 <small> Selecciona una agencia </small>

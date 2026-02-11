@@ -235,6 +235,35 @@ export const MENU: MenuItem[] = [
         permission: "view sabana control",
         parentId: 30,
       },
+      {
+        id: 32,
+        label: "Comisiones",
+        permission: "view modulo renault",
+        parentId: 30,
+        subItems: [
+          {
+            id: 8,
+            label: "Comisiones",
+            link: "/renault/comisiones",
+            parentId: 32,
+            permission: "view submodulo comisiones renault",
+          },
+          {
+            id: 9,
+            label: "Tabulador",
+            link: "/renault/tabulador",
+            parentId: 32,
+            permission: "view submoduloe tabuladores renault",
+          },
+          {
+            id: 10,
+            label: "Vendedores",
+            link: "/renault/vendedores",
+            parentId: 32,
+            permission: "view submodulo vendedores renault",
+          },
+        ]
+      },
     ],
   },
   {

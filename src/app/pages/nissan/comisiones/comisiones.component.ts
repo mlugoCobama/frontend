@@ -25,7 +25,7 @@ export class ComisionesComponent implements AfterViewInit {
   public estado: any = 0;
 
   public modelCamposGastos = ['otros','gasolina','previa','descuentos','descuento_impulso',
-                              'traslados','subsidios','descuento_da','cortesia','accesorios','placas'
+                              'traslados','subsidios','descuento_da','cortesia','accesorios','placas', 'porcentaje_bdc'
                             ];
 
   public hoy = new Date().toISOString().split("T")[0];
@@ -121,11 +121,13 @@ export class ComisionesComponent implements AfterViewInit {
       cortesia: [0],
       accesorios: [0],
       placas: [0],
-
+      porcentaje_bdc: [0],
       // Calculados
       total_gastos: [{ value: 0, disabled: true }],
+      utlidad_gastos: [{ value: 0, disabled: true }],
       utilidad_final: [{ value: 0, disabled: true }],
-      comision_apv: [{ value: 0, disabled: true }]
+      comision_apv: [{ value: 0, disabled: true }],
+      comision_bdc: [{ value: 0, disabled: true }],
     });
 
     this.calcularResultados(fg);
@@ -202,18 +204,23 @@ export class ComisionesComponent implements AfterViewInit {
       return total + (isNaN(numero) ? 0 : numero);
     }, 0);
 
+    const porcentajeBdc = (Number(fg.get('porcentaje_bdc')?.value) / 100) || 0;
     const comisionGuardada = Number(fg.get('comision_apv')?.value)
     const utilidadInicial = Number(fg.get('utilidad_inicial')?.value) || 0;
-    const porcentaje = Number(fg.get('tipo_venta_porcentaje')?.value) || 0;
+    const porcentaje = (Number(fg.get('tipo_venta_porcentaje')?.value) - porcentajeBdc)  || 0;
 
     const utilidadAC = utilidadInicial - totalGastos;
-    const comision = utilidadAC * porcentaje;
-    const utilidadFinal = utilidadAC - comision
+    const comision = utilidadAC > 0 ?  utilidadAC * porcentaje : 0;
+    const comisionBDC = utilidadAC > 0 ? utilidadAC * porcentajeBdc : 0; 
+    const utilidadFinal = utilidadAC - comision - comisionBDC;
+  
 
     fg.patchValue({
+      utlidad_gastos: utilidadAC,
       total_gastos: totalGastos,
       utilidad_final: utilidadFinal,
-      comision_apv: comision
+      comision_apv: comision,
+      comision_bdc: comisionBDC
     }, { emitEvent: false });
   });
 }
@@ -237,7 +244,8 @@ export class ComisionesComponent implements AfterViewInit {
       descuento_da: g.descuento_da ?? 0,
       cortesia: g.cortesia ?? 0,
       accesorios: g.accesorios ?? 0,
-      placas: g.placas ?? 0
+      placas: g.placas ?? 0,
+      porcentaje_bdc: g.porcentaje_bdc ?? 0
     }, { emitEvent: true });
   }
 
@@ -265,6 +273,8 @@ export class ComisionesComponent implements AfterViewInit {
         total_gastos: v.total_gastos,
         utilidad_final: v.utilidad_final,
         comision_apv: v.comision_apv,
+        porcentaje_bdc: v.porcentaje_bdc,
+        comision_bdc: v.comision_bdc,
         id_gastos: v.id_gastos,
         otros: v.otros,
         gasolina: v.gasolina,

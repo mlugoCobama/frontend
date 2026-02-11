@@ -10,15 +10,15 @@ export class FormVendedoresComponent implements OnInit {
   formulario!: FormGroup;
 
   /** Data estática de agencias */
-  agencias: object[] = [
-    {value : 710 , dsc:'Nissan Universidad'},
-    {value : 0 , dsc:'Nissan Insurgentes'},
-    {value : 730 , dsc:'Nissan Azcapotzalco'},
-    {value : 714 , dsc:'Nissan Campestre'},
-    {value : 740 , dsc:'Renault Azcapotzalco'},
-    {value : 746 , dsc:'Renault Ecatepec'},
-    {value : 743 , dsc:'Renault Vallejo'},
-    {value : 760 , dsc:'Renault Pachuca'},
+  @Input() agencias : object[] = [
+    {value : 710 , name:'Nissan Universidad'},
+    {value : 0 , name:'Nissan Insurgentes'},
+    {value : 730 , name:'Nissan Azcapotzalco'},
+    {value : 714 , name:'Nissan Campestre'},
+    {value : 1 , name:'Renault Azcapotzalco'},
+    {value : 2 , name:'Renault Ecatepec'},
+    {value : 3 , name:'Renault Vallejo'},
+    {value : 4 , name:'Renault Pachuca'},
   ];
 
   /** Data estática de tipos de vendedor */

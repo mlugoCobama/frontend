@@ -3,6 +3,9 @@ import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators }
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import { ComisionesService } from 'src/app/core/services/nissan/comisiones.service';
 import { PermisosService } from 'src/app/core/services/permisos.service';
+import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-filtro',
@@ -23,7 +26,19 @@ export class FiltroComponent implements OnInit{
 
   vendedores: { value: string, label: string }[] = [{ value: 'todos', label: 'Todos' }];
 
-
+  rawAgencias = [
+    { value:"todos", name:"Todas", permiso: "view select agencias all" },
+    { value:"710", name:"Nissan Universidad", permiso: "view select agencias nu"},
+    // { value:"0", name:"Nissan Insurgentes", permiso: "view select agencias ni"},
+    { value:"730", name:"Nissan Azcapotzalco", permiso: "view select agencias na"},
+    { value:"714", name:"Nissan Campestre", permiso: "view select agencias nc"},
+    { value:"1", name:"Renault Azcapotzalco", permiso: "view select agencias ra"},
+    { value:"2", name:"Renault Ecatepec", permiso: "view select agencias re"},
+    { value:"3", name:"Renault Vallejo", permiso: "view select agencias rv"},
+    { value:"4", name:"Renault Pachuca", permiso: "view select agencias rp"},
+  ];
+  
+  agencias = []
 
    @Output() bindingSpiner = new EventEmitter<boolean>();
    @Output() bindingData = new EventEmitter<any>();
@@ -34,12 +49,17 @@ export class FiltroComponent implements OnInit{
     private alertas: SwalComprsServiceService,
     private comisiones:  ComisionesService,
     private permisosService:PermisosService,
+    private localStorage: LocalStorageServiceService,
+    private route: ActivatedRoute
+
   ) {}
 
   ngOnInit(): void {
     this.buildForm();
-    this.estado = this.asignarEstado()
+    this.estado = this.asignarEstado();
+    this.agencias = this.filtrarAgencias(this.getEmpresaActiva());
   }
+
 
   buildForm(){
     const fecha = new Date();
@@ -72,7 +92,7 @@ export class FiltroComponent implements OnInit{
           { value: 'todos', label: 'Todos' },
           ...data.data.map((v: any) => ({ value: v.id, label: `${v.nombre}-${v.clave}` }))
         ];
-        console.log(this.vendedores)
+        // console.log(this.vendedores)
       },
       error: () => {
         this.vendedores = [{ value: '', label: 'Error al cargar vendedores' }];
@@ -98,10 +118,6 @@ asignarEstado() {
   return encontrado?.value ?? 0;
 }
 
-
-
-
-  
   // Getter para acceder a los controles
   get form() {
     return this.formulario.controls;
@@ -158,5 +174,25 @@ tienePermiso(permiso: string = null): boolean {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
   }
+
+  filtrarAgencias(cadena) {
+  const filtro = cadena.toLowerCase();
+    if (filtro === "nissan") {
+      return this.rawAgencias.filter(a => a.name.toLowerCase().includes("nissan"));
+    } else if (filtro === "lille" ||  filtro === "renault") {
+      return this.rawAgencias.filter(a => a.name.toLowerCase().includes("renault"));
+    } else {
+      return this.rawAgencias; 
+    }
+}
+
+getEmpresaActiva(){
+  // const usuarioActual = this.localStorage.getItem('currentUser');
+  // const empresaActual = usuarioActual['usuarioActivo'][0].empresa.split(" ")[0];
+  const segmento = this.route.parent?.snapshot.url[0].path || '';
+  return segmento;
+}
+
+
 
 }
