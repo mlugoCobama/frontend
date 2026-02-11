@@ -8,6 +8,7 @@ import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-com
 import Swal from 'sweetalert2';
 import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
 import { PermisosService } from 'src/app/core/services/permisos.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: "app-vendedores",
@@ -20,7 +21,8 @@ export class VendedoresComponent implements OnInit {
     private modalService: BsModalService,
     private alertas: SwalComprsServiceService,
     private permisosService:PermisosService,
-    private localStorage: LocalStorageServiceService
+    private localStorage: LocalStorageServiceService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -100,7 +102,9 @@ export class VendedoresComponent implements OnInit {
   public openModalNuevo() {
     // this.modalAbierto =  true;
     const initialState: ModalOptions = {
-      initialState: {},
+      initialState: {
+        agencias :  this.agencias
+      },
       class: "modal-lg",
     };
     this.modalRef = this.modalService.show(
@@ -121,6 +125,7 @@ export class VendedoresComponent implements OnInit {
     const initialState: ModalOptions = {
       initialState: {
         datos: this.vendedor,
+        agencias :  this.agencias
       },
       class: "modal-lg",
     };
@@ -185,10 +190,10 @@ export class VendedoresComponent implements OnInit {
     { value:"0", name:"Nissan Insurgentes", permiso: "view select agencias ni"},
     { value:"730", name:"Nissan Azcapotzalco", permiso: "view select agencias na"},
     { value:"714", name:"Nissan Campestre", permiso: "view select agencias nc"},
-    { value:"740", name:"Renault Azcapotzalco", permiso: "view select agencias ra"},
-    { value:"746", name:"Renault Ecatepec", permiso: "view select agencias re"},
-    { value:"743", name:"Renault Vallejo", permiso: "view select agencias rv"},
-    { value:"760", name:"Renault Pachuca", permiso: "view select agencias rp"},
+    { value:"1", name:"Renault Azcapotzalco", permiso: "view select agencias ra"},
+    { value:"2", name:"Renault Ecatepec", permiso: "view select agencias re"},
+    { value:"3", name:"Renault Vallejo", permiso: "view select agencias rv"},
+    { value:"4", name:"Renault Pachuca", permiso: "view select agencias rp"},
   ];
 
   agencias = []
@@ -211,7 +216,8 @@ export class VendedoresComponent implements OnInit {
 
   getEmpresaActiva(){
     const usuarioActual = this.localStorage.getItem('currentUser');
-    const empresaActual = usuarioActual['usuarioActivo'][0].empresa.split(" ")[0];
+    // const empresaActual = usuarioActual['usuarioActivo'][0].empresa.split(" ")[0];
+    const empresaActual = this.route.parent?.snapshot.url[0].path || '';
     const intercompaniaActual = usuarioActual['usuarioActivo'][0].intercompania;
     return {empresa : empresaActual, intercompania : intercompaniaActual};
   }
