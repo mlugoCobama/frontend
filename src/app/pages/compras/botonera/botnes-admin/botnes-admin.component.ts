@@ -27,6 +27,7 @@ export class BotnesAdminComponent implements OnInit{
   @Output() btnGenerarOC = new EventEmitter<void>();
   @Output() mostrarCotizacion = new EventEmitter<void>();
   @Output() cancelarSolicitud = new EventEmitter<void>();
+  @Output() devolverRevision = new EventEmitter<void>();
 
   constructor(
     public comprasService: ComprasService,
@@ -48,6 +49,10 @@ export class BotnesAdminComponent implements OnInit{
 
   clickCancelar() {
       this.cancelarSolicitud.emit();
+  }
+
+  clickDevolverRevision() {
+      this.devolverRevision.emit();
   }
 
   tienePermiso(permiso: string = null): boolean {
@@ -74,8 +79,9 @@ export class BotnesAdminComponent implements OnInit{
 async onDownload(): Promise<void> {
   const hoy = new Date();
 
+  // const primerDiaMesActual = new Date(hoy.getFullYear(), hoy.getMonth(), 1)
+  //   .toISOString().slice(0, 10);
   const primerDiaMesActual = hoy.toISOString().slice(0, 10);
-
   const primerDiaMesAnterior = new Date(hoy.getFullYear(), hoy.getMonth() - 1, 1)
     .toISOString().slice(0, 10);
 
@@ -195,7 +201,4 @@ async onDownload(): Promise<void> {
       }
     );
 }
-
-
-
 }

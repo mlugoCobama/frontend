@@ -12,7 +12,7 @@
   <form [formGroup]="formulario">
     <div class="d-flex justify-content-end pb-2 gap-2">
       <button
-        *ngIf = "modifica && tienePermiso('view btn edit detalles')"
+        *ngIf = "(modifica && tienePermiso('view btn edit detalles')) || !solicitudCompra.motivo_revision "
         class="btn btn-secondary btn-sm"
         type="button"
         (click)="toggleModoLectura()"

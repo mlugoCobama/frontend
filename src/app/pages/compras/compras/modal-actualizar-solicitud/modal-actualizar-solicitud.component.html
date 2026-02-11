@@ -1,0 +1,57 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">
+    Modificar solicitud de compra
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="cerrarModal()"></button>
+</div>
+
+<div class="modal-body">
+  <div class="d-flex justify-content-center" *ngIf="isLoad">
+        <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <div [hidden]="isLoad">
+        <app-form-solicitud 
+          #formSolicitud 
+          [datos] = "solicitudCompra"
+          [submitted]="submitted" 
+          (closeModal)="cerrarModal()"
+        ></app-form-solicitud>
+
+        <app-select-sistema-mantenimiento 
+        *ngIf = "tienePermiso('view form tipo mantenimiento') && solicitudCompra.tipo == 3"
+          [solicitudCompra] = "solicitudCompra"
+          #formSelectsSistemaManteniemiento
+          [tipo]=3
+        ></app-select-sistema-mantenimiento>
+
+        <app-form-detalle-solicitud 
+          #formDetalleSolicitud
+        ></app-form-detalle-solicitud>
+
+    </div>
+
+</div>
+
+<div class="modal-footer">
+  <button
+   [disabled]="sending"
+    type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="cerrarModal()"
+  >
+    Cerrar
+  </button>
+  <button 
+  [disabled]="sending"
+  type="button" class="btn btn-primary btn-sm" (click)="save()">
+  <i class="bx bxs-send " [ngClass]="{ 'bx-fade-right': sending }" ></i>
+    {{ sending ? 'Guardando' :'Guardar'}}
+  </button>
+</div>
+
+<ng-template #elseBlock ><i class="fas far fa-eye-slash"></i> Sin imagen</ng-template>
+
+<ng-template #nombreEmpresa>
+  <p> <strong>{{ usuarioSolicita.empresa }} </strong> </p>
+</ng-template>

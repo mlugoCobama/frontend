@@ -78,27 +78,39 @@ class="row g-2"
   </table>
   <div class="col-2"></div>
   <div class="row">
-    <div class="col-12 d-flex justify-content-end gap-2">
-      <button
-        *ngIf="habilitado && hasComprobantePago && solicitudCompra.estatus < enEsts.Finalizada"
-        type="submit" (click)="guardarArchivos()" class="btn btn-success btn-sm">
-        <i class="fas fa-file-upload"></i>
-        Guardar Archivos
-      </button>
-      <button *ngIf="!hasComprobantePago" type="submit" (click)="guardarComPago()" class="btn btn-warning btn-sm">
-        <i class="fas fa-file-upload"></i>
-        Guardar Archivos
-      </button>
-      <!-- <button *ngIf="hasComprobantePago && ordenCompra.documentos.length > 0 && solicitudCompra.estatus < enEsts.Finalizada"
-        type="submit" (click)="marcarComoPagada()" class="btn btn-primary btn-sm">
-        <i class="fas fa-check"></i>
-        Marcar como pagada
-      </button> -->
-      <a *ngIf="hasFiles" class="btn btn-sm btn-info" (click)="descargarFacturas()">
-        <i class="fas fa-cloud-download-alt"></i>
-        Descargar Archivos
-      </a>
-    </div>
+<div class="col-12 d-flex justify-content-end gap-2">
+  <button
+    *ngIf="habilitado && hasComprobantePago && solicitudCompra.estatus < enEsts.Finalizada"
+    type="submit"
+    (click)="guardarArchivos()"
+    class="btn btn-success btn-sm"
+    [disabled]="loadingArchivos">
+    <i *ngIf="!loadingArchivos" class="fas fa-file-upload"></i>
+    <span *ngIf="loadingArchivos" class="spinner-border spinner-border-sm"></span>
+    Guardar Archivos
+  </button>
+
+  <button
+    *ngIf="!hasComprobantePago"
+    type="submit"
+    (click)="guardarComPago()"
+    class="btn btn-warning btn-sm"
+    [disabled]="loadingComPago">
+    <i *ngIf="!loadingComPago" class="fas fa-file-upload"></i>
+    <span *ngIf="loadingComPago" class="spinner-border spinner-border-sm"></span>
+    Guardar Archivos
+  </button>
+
+  <a
+    *ngIf="hasFiles"
+    class="btn btn-sm btn-info"
+    (click)="descargarFacturas()"
+    [class.disabled]="loadingDescargas">
+    <i *ngIf="!loadingDescargas" class="fas fa-cloud-download-alt"></i>
+    <span *ngIf="loadingDescargas" class="spinner-border spinner-border-sm"></span>
+    Descargar Archivos
+  </a>
+</div>
   </div>
 
   <hr />

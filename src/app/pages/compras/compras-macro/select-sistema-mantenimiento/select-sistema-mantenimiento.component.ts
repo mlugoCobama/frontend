@@ -145,4 +145,9 @@ export class SelectSistemaMantenimientoComponent implements OnInit{
     return resultado;
 
   }
+  public habilitarCampos() {
+    this.formSistemaMantenimiento.get('sistema')?.enable();
+    this.formSistemaMantenimiento.get('tipoMantenimiento')?.enable();
+  }
+
 }

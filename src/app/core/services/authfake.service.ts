@@ -50,6 +50,6 @@ export class AuthfakeauthenticationService {
         setTimeout(() => {
             window.location.reload();
             // location.reload();
-        }, 4000);
+        }, 1000);
     }
 }

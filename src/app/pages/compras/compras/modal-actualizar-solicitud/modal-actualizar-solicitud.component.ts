@@ -1,27 +1,22 @@
-import { Component, Input, OnInit, EventEmitter, ViewChild, AfterViewInit } from "@angular/core";
-import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
-
-//services
-import { ComprasService } from "src/app/core/services/compras/compras.service";
-import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
-
-import { FormDetalleSolicitudComponent } from "../../forms-solicitud/form-detalle-solicitud/form-detalle-solicitud.component";
-import { FormSolicitudComponent } from "../../forms-solicitud/form-solicitud/form-solicitud.component";
-import { SelectSistemaMantenimientoComponent } from "../../compras-macro/select-sistema-mantenimiento/select-sistema-mantenimiento.component";
-
-import { PermisosService } from 'src/app/core/services/permisos.service';
-
-
-
+import { Component, ViewChild, EventEmitter } from '@angular/core';
+import { FormSolicitudComponent } from '../../forms-solicitud/form-solicitud/form-solicitud.component';
+import { FormDetalleSolicitudComponent } from '../../forms-solicitud/form-detalle-solicitud/form-detalle-solicitud.component';
+import { SelectSistemaMantenimientoComponent } from '../../compras-macro/select-sistema-mantenimiento/select-sistema-mantenimiento.component';
 import catCentrosCostos from "src/environments/cat_centros_costos.json";
+import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
+import { ComprasService } from 'src/app/core/services/compras/compras.service';
+import { PermisosService } from 'src/app/core/services/permisos.service';
+import { BsModalRef } from 'ngx-bootstrap/modal';
+
+
 @Component({
-  selector: "app-modal-compras",
-  templateUrl: "./modal-compras.component.html",
-  styleUrls: ["./modal-compras.component.css"],
+  selector: 'app-modal-actualizar-solicitud',
+  templateUrl: './modal-actualizar-solicitud.component.html',
+  styleUrl: './modal-actualizar-solicitud.component.css'
 })
-export class ModalComprasComponent implements AfterViewInit
- {
-  
+
+
+export class ModalActualizarSolicitudComponent {
   public isLoading: boolean = true;
   public submittedDetail: boolean = false;
   public isLoad: boolean = false;
@@ -32,34 +27,41 @@ export class ModalComprasComponent implements AfterViewInit
 
   public centrosCostos = catCentrosCostos;
 
+  public solicitudCompra;
+  public detalles;
+
   @ViewChild('formSolicitud', { static: false }) formSolicitudCompra!:  FormSolicitudComponent;
   @ViewChild('formDetalleSolicitud', { static: false }) tableData!:  FormDetalleSolicitudComponent;
   @ViewChild('formSelectsSistemaManteniemiento ', { static: false }) formSelectsSistemaManteniemiento!: SelectSistemaMantenimientoComponent;
-
-  public modalCerrado: EventEmitter<any> = new EventEmitter();
   public event: EventEmitter<any> = new EventEmitter();
-
-  /**
-   * variable para regresar el evento
-   */
   constructor(
-    private alertasService: SwalComprsServiceService,
-    private comprasService: ComprasService,
-    private permisosService: PermisosService,
-    public modalRef: BsModalRef
-  ) {}
+      private alertasService: SwalComprsServiceService,
+      private comprasService: ComprasService,
+      private permisosService: PermisosService,
+      public modalRef: BsModalRef
+    ) {}
+  
+    // public ngOnInit(): void {
+  
+    // }
+     public ngAfterViewInit(): void {
+      this.getDetalles();
+      
+     }
 
-  // public ngOnInit(): void {
-
-  // }
-   public ngAfterViewInit(): void {
-    
-   }
-
-  /**
-   * Guarda el contenido del la solicitud y detalles
-   * @returns
+    /**
+   * cierra la ventana modal
    */
+  public cerrarModal(): void {
+    this.modalRef.hide();
+    // setTimeout(() => { this.modalCerrado.emit() }, 150);
+  }
+
+  tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
+  }
+  
   public save() {
     this.submitted = true;
     this.isLoad = true;
@@ -100,18 +102,18 @@ export class ModalComprasComponent implements AfterViewInit
     let data;
     if(this.tienePermiso('view form tipo mantenimiento')){
       data = {
+        idSolicitud : this.solicitudCompra.id,
         ...this.formSolicitudCompra.obtenerValores(),
         ...this.formSelectsSistemaManteniemiento.obtenerValores(),
-        usuario_solicita: this.formSolicitudCompra.obtenerUsuarios(),
+        usuario_solicita: this.solicitudCompra.usuario_solicita_id,
         detalles: this.tableData.getDetalles(),
-        isAgencia: this.formSolicitudCompra.getIsAgencia(),
       };
     }else{
       data = {
         ...this.formSolicitudCompra.obtenerValores(),
-        usuario_solicita: this.formSolicitudCompra.obtenerUsuarios(),
+        usuario_solicita: this.solicitudCompra.usuario_solicita_id,
         detalles: this.tableData.getDetalles(),
-        isAgencia: this.formSolicitudCompra.getIsAgencia(),
+        idSolicitud : this.solicitudCompra.id,
       };
     }
     
@@ -136,8 +138,7 @@ export class ModalComprasComponent implements AfterViewInit
         );
       }
     });
-
-    this.comprasService.save(formDataToSend).subscribe(
+    this.comprasService.updateSolicitud(formDataToSend).subscribe(
       (response) => {
         if (response.status === "success") {
           this.event.emit(true);
@@ -165,16 +166,32 @@ export class ModalComprasComponent implements AfterViewInit
     
   }
 
-  /**
-   * cierra la ventana modal
-   */
-  public cerrarModal(): void {
-    this.modalRef.hide();
-    setTimeout(() => { this.modalCerrado.emit() }, 150);
+    public getDetalles() {
+    this.isLoad = true;
+    this.comprasService.getOne(this.solicitudCompra?.id).subscribe(
+      (response) => {
+        if (response) {
+          this.detalles = response.data
+            if(this.detalles){
+              // console.log(this.detalles)
+              this.formSolicitudCompra.setValues();
+              this.tableData.loadDetallesFromDB(this.detalles);
+              if(this.tienePermiso('view form tipo mantenimiento') && this.solicitudCompra.tipo == 3){
+                this.formSelectsSistemaManteniemiento.habilitarCampos();
+              }
+            }
+
+          this.isLoad = false;
+        } else {
+          this.alertasService.mostrarAlerta("Error!",response.message, "error", "danger" );
+          this.isLoad = false;
+        }
+      },
+      (error) => {
+        this.alertasService.mostrarAlerta("Error!",`Error fetching data: ${error}`, "error", "danger" );
+        this.isLoad = false;
+      }
+    );
   }
 
-  tienePermiso(permiso: string = null): boolean {
-    if (!permiso) return true;
-    return this.permisosService.tienePermiso(permiso);
-  }
 }

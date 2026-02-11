@@ -75,6 +75,8 @@ import { ModalCambioProveedorComponent } from './compras/detalle-solicitudes-com
 import { TableFormExistenciasComponent } from './compras/detalle-solicitudes-compras/panel-entregas/table-form-existencias/table-form-existencias.component';
 import { TableCardexMovimientosComponent } from './compras/detalle-solicitudes-compras/panel-entregas/table-cardex-movimientos/table-cardex-movimientos.component';
 import { FormDatosPagoComponent } from './proveedores/forms/form-datos-pago/form-datos-pago.component';
+import { ModalActualizarSolicitudComponent } from './compras/modal-actualizar-solicitud/modal-actualizar-solicitud.component';
+import { ModalActualizarSolicitudMacroComponent } from './compras-macro/modal-actualizar-solicitud-macro/modal-actualizar-solicitud-macro.component';
 @NgModule({
   declarations: [
     ComprasComponent,
@@ -143,6 +145,8 @@ import { FormDatosPagoComponent } from './proveedores/forms/form-datos-pago/form
     TableFormExistenciasComponent,
     TableCardexMovimientosComponent,
     FormDatosPagoComponent,
+    ModalActualizarSolicitudComponent,
+    ModalActualizarSolicitudMacroComponent,
     
   ],
   imports: [

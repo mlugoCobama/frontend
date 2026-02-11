@@ -30,6 +30,7 @@ export class FormSolicitudMacroComponent implements OnInit{
     idVehiculo: null,
     };
 
+  @Input() datos: any;
   @Input() submitted: boolean = false;
   @Output() closeModal = new EventEmitter<void>();
   @Output() setData = new EventEmitter<any>();
@@ -80,6 +81,33 @@ export class FormSolicitudMacroComponent implements OnInit{
       resolve(true);
     });
   }
+
+  public setValues() {
+    this.formSolicitudCompra.get('formato_orden_trabajo')?.clearValidators();
+    this.formSolicitudCompra.get('formato_orden_trabajo')?.updateValueAndValidity();
+
+
+  if(this.usuarioSolicita.intercompania != this.datos?.intercompania){
+    this.getAutotanques(this.datos?.intercompania);
+  }
+  const valores = {
+    empresa: this.datos?.intercompania,
+    usuario_destino: this.datos?.usuario_destino_id,
+    c_c: this.datos?.c_c,
+    motivo: this.datos?.motivo,
+    orden_trabajo: this.datos?.orden_trabajo,
+    folio_requisicion: this.datos?.folio_requisicion,
+    formato_orden_trabajo: this.datos?.formato_orden_trabajo,
+    requiere_anticipo: this.datos?.requiere_anticipo == 1 ? "true" : "false"
+  };
+  this.formSolicitudCompra.patchValue(valores);
+  
+  this.setDato(this.datos?.usuario_destino_id);
+  this.formSolicitudCompra.get('usuario_destino')?.disable();
+  this.formSolicitudCompra.get('empresa')?.disable();
+  this.formSolicitudCompra.get('formato_orden_trabajo')?.disable();
+  this.formSolicitudCompra.get('cotizacion')?.disable();
+}
 
   public get solicitudCompraFormControl() {
     return this.formSolicitudCompra.controls;

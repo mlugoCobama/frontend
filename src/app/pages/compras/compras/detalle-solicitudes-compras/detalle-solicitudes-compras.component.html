@@ -2,6 +2,7 @@
   <!-- Inicia vista final  -->
       <app-info-solicitud
       @fadeInOut
+      (openEdicionSolicitud) = "openModalUpdateSolicitud()"
       [solicitudCompra]="solicitudCompra"
       [mostrarTotal]="mostrarTotal"  
       [cotizacion]="cotizacion"     

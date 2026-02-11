@@ -21,6 +21,14 @@
         Cancelar Solicitud
     </a>
 
+    <a 
+    (click) = "clickDevolverRevision()"
+    *ngIf="solicitudSelecionada && status <= enEsts.Solicitado && tienePermiso('view btn cotizar')"
+    href="javascript:void(0);" class="btn btn-outline-danger btn-sm">
+        <i class="fas fa-reply"></i>
+         Devolver para revisión
+    </a>
+
     <a
     *ngIf="!solicitudSelecionada && tienePermiso('view btn descargar solicitudes')"
     href="javascript:void(0);"

@@ -14,6 +14,7 @@ export class BontonesGeneralesComponent {
   @Input() status:any;
   @Input() mostrarBoton:any;
   @Input() solicitudSelecionada:any = null;
+  @Input() showBtnAdd:any;
 
   @Output() btnDescargarOC = new EventEmitter<void>();
   @Output() regresar = new EventEmitter<void>();

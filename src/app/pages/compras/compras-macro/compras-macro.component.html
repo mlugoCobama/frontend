@@ -29,6 +29,7 @@
               (cancelarSolicitud)="cancelarSolicitud()"
               [tipoCompras] = "tipoCompras"
               [tiposPermitidos]="['2']"
+              (devolverRevision)="enviarRevisionSolicitud()"
               ></app-botnes-admin>
 
               <app-bontones-generales
@@ -38,6 +39,7 @@
               (btnDescargarOC)="btnDescargarOC()"
               (regresar)="regresar()"
               (openModalNuevo)="openModalNuevo()"
+              [showBtnAdd] = "tienePermiso('show btn compras macro')"
               ></app-bontones-generales>
 
             </div>
