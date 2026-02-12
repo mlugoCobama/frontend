@@ -25,8 +25,9 @@ export class FormComplementoComponent implements OnInit {
   public formData = new FormData();
 
   tiposDocumentos = [
-    {id: "comprobante_pago",  tipo_documento:"Comprobante de pago"},
-    {id: "complemento_pago",  tipo_documento:"Complemento de pago"},
+    {id: "complemento_pago",  tipo_documento:"COMPLEMENTO DE PAGO"},
+    {id: "comprobante_pago",  tipo_documento:"COMPROBANTE DE PAGO"},
+    
     // {id: "factura_adjunta",   tipo_documento:"Factura x concepto extra"},
     // {id: "nota_crédito",   tipo_documento:"Nota de crédito"},
   ];

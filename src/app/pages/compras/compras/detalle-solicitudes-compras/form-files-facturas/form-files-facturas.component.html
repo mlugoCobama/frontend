@@ -1,137 +1,146 @@
 <div *ngIf="(ordenCompra?.estatus === 2 && !ordenCompra?.tipo_pago) || solicitudCompra.estatus == enEsts.Autorizado">
-        <app-btn-atorizar-a-pago
-        [ordenCompra] = "ordenCompra" 
-        (actualizarStatus1)="actualizadorEstatus()" >       
-        </app-btn-atorizar-a-pago>
+  <app-btn-atorizar-a-pago [ordenCompra]="ordenCompra" (actualizarStatus1)="actualizadorEstatus()">
+  </app-btn-atorizar-a-pago>
 </div>
 
-<app-panel-entregas
-*ngIf="ordenCompra && ordenCompra?.estatus > 2"
-  [solicitudCompra] = "solicitudCompra"
-  [ordenCompra] = "ordenCompra"
-  (actualizarStatus1)="actualizadorEstatus()" 
-></app-panel-entregas>
+<app-panel-entregas *ngIf="ordenCompra && ordenCompra?.estatus > 2" [solicitudCompra]="solicitudCompra"
+  [ordenCompra]="ordenCompra" (actualizarStatus1)="actualizadorEstatus()"></app-panel-entregas>
 
 <div class="card border rounded shadow-lg">
-  <div class="card-header bg-primary text-center text-white" *ngIf="solicitudCompra.estatus >= enEsts.Autorizado && ordenCompra?.tipo_pago">
-    <p *ngIf = "solicitudCompra.estatus != enEsts.Finalizada" class="m-0">
-    <strong> Adjunta los siguientes archivos para la orden de compra: </strong>
-    <strong>{{ ordenCompra?.folio_oc }}</strong>
-  </p>
+  <div class="card-header bg-primary text-center text-white"
+    *ngIf="solicitudCompra.estatus >= enEsts.Autorizado && ordenCompra?.tipo_pago">
+    <p *ngIf="solicitudCompra.estatus != enEsts.Finalizada" class="m-0">
+      <strong> Adjunta los siguientes archivos para la orden de compra: </strong>
+      <strong>{{ ordenCompra?.folio_oc }}</strong>
+    </p>
   </div>
   <div class="card-body">
-    <form
-class="row g-2"
-[formGroup]="formDocsOrdenCompra"
-*ngIf="solicitudCompra.estatus >= enEsts.Autorizado && ordenCompra?.tipo_pago"
->
-<div class="col-md-1"></div>
-<div class="col-md-10" *ngIf="ordenCompra">
-  
-  <table *ngIf = "solicitudCompra.estatus != enEsts.Finalizada" class="table table-sm table-borderless table-responsive">
-    <thead class="table-light">
-      <tr class="text-center">
-        <th>Documento</th>
-        <th >Subir archivo</th>
-      </tr>
-    </thead>
-
-    <tbody class="text-center">
-      <tr>
-        <td>Factura <strong>.XML</strong> *</td>
-        <td >
-          <input
-          *ngIf="hasComprobantePago && habilitado" class="form-control form-control-sm" id="factura_xml"
-            type="file" (change)="onFileChange1($event, 'factura_xml')" formControlName="factura_xml" accept="text/xml"
-          />
-          <div *ngIf="ordenDocsCompraFormControl.factura_xml.touched || submitted">
-            <div class="text-danger form-text" *ngIf="ordenDocsCompraFormControl.factura_xml.errors?.['required']">
-            Ingresa la factura XML.
+      <div class="d-flex aling-items-center justify-content-center">
+        <div class="col-md-11" *ngIf="ordenCompra">
+        <div class="row" *ngIf="ordenCompra && solicitudCompra.estatus < enEsts.Finalizada ">
+          <!-- Inicia zona de tabs -->
+          <div class="card border">
+            <div class="card-body">
+              <ul class="nav nav-pills justify-content-center">
+                <li *ngFor="let tab of modelTabs" class="nav-item">
+                  <a class="nav-link" [hidden]="tab.hidden" [class.disabled]="validarDocumento(tab.tipoDocumento)"
+                    [class.active]="selectedTab === tab.tabName"
+                    (click)="!validarDocumento(tab.tipoDocumento) && selectedTab = tab.tabName">{{ tab.tabLabel }}</a>
+                </li>
+              </ul>
             </div>
           </div>
-        </td>
-      </tr>
-      <tr>
-        <td>Factura <strong>.PDF</strong> *</td>
-        <td>
-          <input *ngIf="hasComprobantePago && habilitado " class="form-control form-control-sm" id="factura_pdf"
-            type="file" accept="application/pdf" (change)="onFileChange1($event, 'factura_pdf')" formControlName="factura_pdf"/>
-          <div *ngIf="ordenDocsCompraFormControl.factura_pdf.touched || submitted">
-            <div
-              class="text-danger form-text" *ngIf="ordenDocsCompraFormControl.factura_pdf.errors?.['required']">
-            Ingresa la factura PDF.
+
+          <div class="card border">
+            <div class="card-body">
+              <div class="tab-content mt-3">
+                <!-- Tab subir Facturas -->
+                <div *ngIf="selectedTab === 'upFactura'" [hidden]="validarDocumento('INGRESO')">
+                  <form [formGroup]="formDocsOrdenCompra" class="g-2">
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <label for="factura_xml" class="col-form-label">  Factura <strong>.XML</strong> *</label>
+                      </div>
+                      <div class="col">
+                        <input class="form-control form-control-sm" id="factura_xml" type="file" accept="text/xml"  (change)="onFileChange1($event, 'factura_xml')" formControlName="factura_xml" />
+                        <div *ngIf="ordenDocsCompraFormControl.factura_xml.touched || submitted">
+                          <div class="text-danger form-text" *ngIf="ordenDocsCompraFormControl.factura_xml.errors?.['required']">
+                            Ingresa la factura XML.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <label for="factura_pdf" class="col-form-label">  Factura <strong>.PDF</strong> *</label>
+                      </div>
+                      <div class="col">
+                        <input class="form-control form-control-sm" id="factura_pdf" type="file"  accept="application/pdf" (change)="onFileChange1($event, 'factura_pdf')" formControlName="factura_pdf"/>
+                        <div *ngIf="ordenDocsCompraFormControl.factura_pdf.touched || submitted">
+                          <div class="text-danger form-text" *ngIf="ordenDocsCompraFormControl.factura_pdf.errors?.['required']">
+                            Ingresa la factura PDF.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                  <div class="d-flex aling-items-center justify-content-end">
+                    <button *ngIf="!validarDocumento('INGRESO') && solicitudCompra.estatus < enEsts.Finalizada" type="submit" (click)="guardarArchivos()" class="btn btn-primary btn-sm" [disabled]="loadingArchivos">
+                      <i *ngIf="!loadingArchivos" class="fas fa-file-upload"></i>
+                        <span *ngIf="loadingArchivos" class="spinner-border spinner-border-sm"></span>
+                      Guardar Factura
+                    </button>
+                  </div>
+
+                </div>
+                <!-- Tab subir Pago -->
+                <div *ngIf="selectedTab === 'upPago'" [hidden]="validarDocumento('COMPROBANTE PAGO')">
+                  <form enctype="multipart/form-data" class="row g-2 align-items-center">
+                    <div class="col-auto">
+                      <label for="comprobante_pago" class="col-form-label"><strong>Comprobante de pago *</strong></label>
+                    </div>
+                    <div class="col">
+                      <input class="form-control form-control-sm" id="comprobante_pago" type="file" 
+                      accept="application/pdf,image/jpeg,image/png" (change)="onFileChange1($event, 'comprobante_pago')" />
+                    </div>
+                  </form>
+                  <div class="d-flex aling-items-center justify-content-end">
+                    <button *ngIf="!validarDocumento('COMPROBANTE PAGO') && solicitudCompra.estatus < enEsts.Finalizada"
+                      type="submit" (click)="guardarComPago()" class="btn btn-success btn-sm"
+                      [disabled]="loadingComPago">
+                      <i *ngIf="!loadingComPago" class="fas fa-file-upload"></i>
+                      <span *ngIf="loadingComPago" class="spinner-border spinner-border-sm"></span>
+                      Guardar Archivo
+                    </button>
+                  </div>
+
+                </div>
+                <!-- Tab subir complemento -->
+                <div *ngIf="selectedTab === 'upComplemento'" [hidden]="!validarDocumento('INGRESO')">
+                  <app-form-complemento #formComplemento></app-form-complemento>
+                  <div class="d-flex aling-items-center justify-content-end">
+                    <button
+                      *ngIf="validarDocumento('COMPROBANTE PAGO') && validarDocumento('INGRESO') && solicitudCompra.estatus < enEsts.Finalizada"
+                      type="submit" (click)="save()" class="btn btn-secondary btn-sm" [disabled]="loadingComplementos">
+                      <i *ngIf="!loadingComplementos" class="fas fa-file-upload"></i>
+                      <span *ngIf="loadingComplementos" class="spinner-border spinner-border-sm"></span>
+                      Guardar Archivos
+                    </button>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <strong> Comprobante de pago * </strong>
-        </td>
-        <td >
-          <input *ngIf="!hasComprobantePago" class="form-control form-control-sm" id="comprobante_pago" 
-          type="file" accept="application/pdf,image/jpeg,image/png"
-          (change)="onFileChange1($event, 'comprobante_pago')" formControlName="comprobante_pago"/>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <div class="col-2"></div>
-  <div class="row">
-<div class="col-12 d-flex justify-content-end gap-2">
-  <button
-    *ngIf="habilitado && hasComprobantePago && solicitudCompra.estatus < enEsts.Finalizada"
-    type="submit"
-    (click)="guardarArchivos()"
-    class="btn btn-success btn-sm"
-    [disabled]="loadingArchivos">
-    <i *ngIf="!loadingArchivos" class="fas fa-file-upload"></i>
-    <span *ngIf="loadingArchivos" class="spinner-border spinner-border-sm"></span>
-    Guardar Archivos
-  </button>
-
-  <button
-    *ngIf="!hasComprobantePago"
-    type="submit"
-    (click)="guardarComPago()"
-    class="btn btn-warning btn-sm"
-    [disabled]="loadingComPago">
-    <i *ngIf="!loadingComPago" class="fas fa-file-upload"></i>
-    <span *ngIf="loadingComPago" class="spinner-border spinner-border-sm"></span>
-    Guardar Archivos
-  </button>
-
-  <a
-    *ngIf="hasFiles"
-    class="btn btn-sm btn-info"
-    (click)="descargarFacturas()"
-    [class.disabled]="loadingDescargas">
-    <i *ngIf="!loadingDescargas" class="fas fa-cloud-download-alt"></i>
-    <span *ngIf="loadingDescargas" class="spinner-border spinner-border-sm"></span>
-    Descargar Archivos
-  </a>
-</div>
-  </div>
-
-  <hr />
-
-  <!-- Visualizado de facturas XML -->
-  <app-datos-facturas
-  [mostrarDtsFac]="mostrarDtsFac"
-  [ordenCompra]="ordenCompra"
-  [factura]="factura"
-  [metodoPago] = "metodoPago"
-  (getOrdenCompra) = "getOrdenCompra()"
-  ></app-datos-facturas>
-</div>
-</form>
+          <div *ngIf="hasFiles" class="card border">
+            <div class="card-body">
+              <div class="col-12 d-flex justify-content-end gap-2">
+                <a *ngIf="hasFiles" class="btn btn-sm btn-info" (click)="descargarFacturas()"
+                  [class.disabled]="loadingDescargas">
+                  <i *ngIf="!loadingDescargas" class="fas fa-cloud-download-alt"></i>
+                  <span *ngIf="loadingDescargas" class="spinner-border spinner-border-sm"></span>
+                  Descargar Archivos
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- Termina zona de tabs -->
+        </div>
+        <!-- <hr /> -->
+        <!-- Visualizado de facturas XML -->
+        <app-datos-facturas [mostrarDtsFac]="mostrarDtsFac" [ordenCompra]="ordenCompra" [factura]="factura"
+          [metodoPago]="metodoPago" (getOrdenCompra)="getOrdenCompra()"></app-datos-facturas>
+      </div>
+      </div>
+      
   </div>
 </div>
 
 <app-btn-finalizar-compra
-*ngIf="solicitudCompra.estatus > enEsts.EnSurtido && ordenCompra && solicitudCompra.estatus < enEsts.Finalizada "
-[ordenCompra]="ordenCompra" 
-></app-btn-finalizar-compra>
+  *ngIf="solicitudCompra.estatus > enEsts.EnSurtido && ordenCompra && solicitudCompra.estatus < enEsts.Finalizada "
+  [ordenCompra]="ordenCompra"
+  (actualizarStatus1)="actualizadorEstatus()"
+  ></app-btn-finalizar-compra>
 
 
 

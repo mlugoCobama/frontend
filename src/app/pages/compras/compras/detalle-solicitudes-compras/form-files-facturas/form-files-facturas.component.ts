@@ -4,19 +4,25 @@ import { OrdenesCompraService } from "src/app/core/services/compras/ordenesCompr
 import { EstadoSolicitud } from "../../estado-solicitud.enum";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { PanelEntregasComponent } from "../panel-entregas/panel-entregas.component";
-
+import { FormComplementoComponent } from "../datos-facturas/form-complemento/form-complemento.component";
 @Component({
   selector: "app-form-files-facturas",
   templateUrl: "./form-files-facturas.component.html",
   styleUrl: "./form-files-facturas.component.css",
 })
 export class FormFilesFacturasComponent implements OnInit {
+  selectedTab: string = '';
+  public modelTabs = [];
+
+  @ViewChild('formComplemento') formComplemento!:  FormComplementoComponent;
+
   @Input() solicitudCompra: any;
-  
   @Output() actualizarStatus = new EventEmitter<void>();
   @Output() setDataOrdenCompra = new EventEmitter<void>();
+  
   loadingArchivos = false;
   loadingComPago = false;
+  loadingComplementos = false;
   loadingDescargas = false;
 
 
@@ -56,7 +62,59 @@ export class FormFilesFacturasComponent implements OnInit {
   ngOnInit(): void {
     this.buildForm();
     this.getOrdenCompra();
+    
   }
+
+  inicializarTabs() {
+  const isCredito = this.ordenCompra?.modo_pago == 2;
+  const pasoFactura = isCredito ? 1 : 2;
+  const pasoPago = isCredito ? 2 : 1;
+  const pasoComplemento = isCredito ? 3 : null;
+
+  this.modelTabs = [
+    { tabName: 'upFactura', tabLabel: 'Subir Factura', hidden: false, orden: pasoFactura, tipoDocumento: 'INGRESO' },
+    { tabName: 'upPago', tabLabel: 'Subir Comprobante de Pago', hidden: false, orden: pasoPago, tipoDocumento: 'COMPROBANTE PAGO' },
+    { tabName: 'upComplemento', tabLabel: 'Subir Complemento de Pago', hidden: !isCredito, orden: pasoComplemento, tipoDocumento: 'PAGO' },
+  ];
+
+  this.modelTabs = this.modelTabs
+    .filter(tab => tab.orden !== null)
+    .sort((a, b) => a.orden - b.orden)
+    .map(tab => ({ ...tab, paso: tab.orden }));
+
+    this.setFirstTab();
+}
+
+/**
+ * Fija el tab seleccionado en el ultimo tab valido o el primero
+ */
+setFirstTab(){
+  const firstEnabledTab = this.modelTabs.find(tab => !this.validarDocumento(tab.tipoDocumento));
+  this.selectedTab = firstEnabledTab ? firstEnabledTab.tabName : this.modelTabs[0].tabName;
+}
+
+/**
+ * Valida que exista el tipo de comprobante dentro del array
+ * @param tipoDocumento tipo de comprobante: (INGRESO, COMPROBANTE PAGO, PAGO)
+ * @returns boolean true o false
+ */
+validarDocumento(tipoDocumento: string){
+  let hasDocumento = false;
+  if(tipoDocumento != 'PAGO'){ 
+    hasDocumento = this.factura.comprobantes?.some(c => c.tComprobanteDesc === tipoDocumento);
+  }
+  return hasDocumento;  
+}
+
+/**
+ * Recupera la primera factura de tipo ingreso como referencia para el complemento de pago
+ * @returns objeto {UUID,fecha,folioforma,Pago,idRuta,moneda,representacion_impresa,
+ *  serie, subTotal, tComprobante, total, xml}
+ */
+getFacturaReferencia(){
+  const facturaReferencia = this.factura.comprobantes?.find(c => c.tComprobanteDesc == 'INGRESO');
+  return facturaReferencia;
+}
 
   /**
    * Emite la orden de compra al componente padre 
@@ -91,8 +149,6 @@ export class FormFilesFacturasComponent implements OnInit {
           
           this.isLoad = false;
 
-          
-
           if (this.ordenCompra.documentos.length > 0) {
             this.hasFiles = true;
             // console.log(this.ordenCompra.documentos);
@@ -119,8 +175,6 @@ export class FormFilesFacturasComponent implements OnInit {
             }
           }
 
-          
-
           if (this.ordenCompra.documentos.length === 0) {
             this.habilitado = true;
             this.hasFacturas = false;
@@ -131,6 +185,7 @@ export class FormFilesFacturasComponent implements OnInit {
               this.hasComprobantePago = false;
           }
 
+          this.inicializarTabs();
         } else {
           this.alertasService.mostrarAlerta('error', response.message, 'error', 'danger');
         }
@@ -158,7 +213,6 @@ export class FormFilesFacturasComponent implements OnInit {
     }
 
     const idOrdenCompra = this.ordenCompra.id;
-
     this.formData.append("orden_compra_id", idOrdenCompra);
 
     this.ordenesComprasService.saveDocs(this.formData).subscribe(
@@ -196,8 +250,6 @@ export class FormFilesFacturasComponent implements OnInit {
     if (this.formData.has("comprobante_pago")) {
 
       const idOrdenCompra = this.ordenCompra.id;
-
-      // console.log(this.ordenCompra?.documentos[0]?.id)
       const idDocOC = this.ordenCompra?.documentos[0]?.id === undefined ? null : this.ordenCompra?.documentos[0]?.id;
 
       if(idDocOC){
@@ -209,10 +261,8 @@ export class FormFilesFacturasComponent implements OnInit {
       this.ordenesComprasService.saveFacturaDocs(this.formData).subscribe(
         (response) => {
           if (response) {
-
               this.getOrdenCompra();
               this.alertasService.mostrarAlerta("Guardado", "Documentos guardados correctamente", "success", "success");
-
               this.isLoad = false;
               this.formData = new FormData();
               this.formDocsOrdenCompra.reset();
@@ -257,35 +307,12 @@ export class FormFilesFacturasComponent implements OnInit {
 
       }
 
-      
     } else {
       this.alertasService.mostrarAlerta("Alerta", "Debes adjuntar el comprobante pago", "warning", "warning");
       this.isLoad = false;
       this.loadingComPago = false
       return;
     }
-  }
-
-  /**
-   * Actualiza el estatus de la compra a pagado
-   */
-  public marcarComoPagada() {
-    this.ordenesComprasService
-      .edit(this.ordenCompra.id, this.solicitudCompra.id)
-      .subscribe(
-        (response) => {
-          if (response.status === "success") {
-            this.alertasService.mostrarAlerta("Listo", "Se ha marcado como pagada", "success", "success");
-            this.isLoad = false;
-            this.actualizarStatus.emit();
-          } else {
-            this.alertasService.mostrarAlerta('error', response.message, 'error', 'danger');
-          }
-        },
-        (error) => {
-          this.alertasService.mostrarAlerta('error',` "Error:" ${error}`, 'error', 'danger');
-        }
-      );
   }
 
   /**
@@ -311,8 +338,8 @@ export class FormFilesFacturasComponent implements OnInit {
              this.hasComprobantePago = false;
            }
           }
-
-          this.checkMetodoPago();
+          // this.checkMetodoPago();
+          this.setFirstTab();
         }
     },(error) => {
           this.alertasService.mostrarAlerta('error',` "Error:" ${error}`, 'error', 'danger');
@@ -333,8 +360,12 @@ export class FormFilesFacturasComponent implements OnInit {
   checkMetodoPago() {
 
     this.metodoPago = this.factura.metodoPago?.metodoPago;
+    const existeIngreso = this.factura.comprobantes?.some(c => c.tComprobante === "I");
     // console.log(this.metodoPago)
     if (this.metodoPago === "PPD" || this.metodoPago === '' || this.metodoPago === undefined || this.metodoPago === null) {
+      if(!existeIngreso){
+        this.habilitado = true;
+      }
       this.habilitado = true;
     } else {
       this.habilitado = false;
@@ -348,13 +379,10 @@ export class FormFilesFacturasComponent implements OnInit {
    */
   public descargarFacturas() {
     this.loadingDescargas = true;
-
     this.ordenesComprasService.descargarFacturas(this.ordenCompra.id).subscribe((response) => {
-
         const blob = new Blob([response], { type: "application/zip" });
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
-
         link.href = url;
         link.download = `Facturas_${this.ordenCompra.folio_oc}.zip`;
         link.click();
@@ -389,7 +417,7 @@ export class FormFilesFacturasComponent implements OnInit {
    *  Valida que el archivo que se suba sea un cfdi
    * y recupera el tipo de comprobante
   */ 
-  validarXML(file: File) {
+validarXML(file: File) {
   const reader = new FileReader();
 
   reader.onload = (e) => {
@@ -412,11 +440,54 @@ export class FormFilesFacturasComponent implements OnInit {
   reader.readAsText(file);
 }
 
-public actualizadorEstatus(){
-  
+public actualizadorEstatus(){ 
   this.actualizarStatus.emit();
   this.ordenCompra = [];
   this.getOrdenCompra();
 }
+
+public save(){
+    this.loadingComplementos = true;
+
+    if(!this.formComplemento.esValido()){
+      this.alertasService.mostrarAlerta('error', 'Llena correctamente los archivos', 'error', 'danger');
+      this.loadingComplementos = false;
+      return
+    }
+    const data = this.getData();
+    this.ordenesComprasService.saveFacturaDocs(data).subscribe(
+      (response) => {
+        if (response) {
+          this.alertasService.mostrarAlerta("Guardado", "Documentos guardados correctamente", "success", "success");
+
+          this.formComplemento.resetearFormulario();
+          this.getOrdenCompra();
+          this.loadingComplementos = false;
+        } else {
+          this.loadingComplementos = false;
+          this.alertasService.mostrarAlerta('error', response.message, 'error', 'danger');
+        }
+      },
+      (error) => {
+        this.loadingComplementos = false;
+        this.alertasService.mostrarAlerta('error',` "Error:" ${error}`, 'error', 'danger');
+      }
+    );
+  }
+
+  private getData(){
+    const formData = new FormData;
+    const files = this.formComplemento.obtenerValores();
+    const tipo_documento =  this.formComplemento.obtenerSelect();
+    formData.append('idFactura', this.getFacturaReferencia().idRuta);
+    formData.append('tipo_documento', tipo_documento);
+    if(tipo_documento != 'comprobante_pago'){
+      formData.append('archivo_xml', files.get('archivo_xml'));
+    }
+    formData.append('archivo', files.get('archivo'));
+    // formData.append("_method", "PUT");
+    formData.append("orden_compra_id", this.ordenCompra.id);
+    return formData;
+  } 
 
 }

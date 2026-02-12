@@ -41,7 +41,7 @@ export class ModalAddComplementoComponent {
     }
     
     const data = this.getData();
-    // console.log(data);
+    console.log(data);
     this.ordenesComprasService.saveFacturaDocs(data).subscribe(
       (response) => {
         if (response) {

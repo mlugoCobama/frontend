@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { OrdenesCompraService } from 'src/app/core/services/compras/ordenesCompra/ordenes-compra.service';
 import Swal from 'sweetalert2';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
@@ -12,6 +12,7 @@ import { PermisosService } from 'src/app/core/services/permisos.service';
 export class BtnFinalizarCompraComponent implements OnInit{
 
   @Input() ordenCompra:any;
+  @Output() actualizarStatus1 = new EventEmitter<void>();
 
   constructor(
     private ordenesCompra: OrdenesCompraService,
@@ -44,7 +45,7 @@ export class BtnFinalizarCompraComponent implements OnInit{
           this.ordenesCompra.finalizarCompra(this.ordenCompra?.id).subscribe(
             (response) => {
               if (response) {
-                // this.actualizarStatus.emit();
+                this.actualizarStatus1.emit();
       
                 this.alertasService.mostrarAlerta(
                   'Finalizada!',
