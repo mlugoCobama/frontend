@@ -6,7 +6,7 @@
 <app-panel-entregas *ngIf="ordenCompra && ordenCompra?.estatus > 2" [solicitudCompra]="solicitudCompra"
   [ordenCompra]="ordenCompra" (actualizarStatus1)="actualizadorEstatus()"></app-panel-entregas>
 
-<div class="card border rounded shadow-lg">
+<div class="card border rounded shadow-lg" *ngIf="solicitudCompra.estatus >= enEsts.Autorizado && ordenCompra?.tipo_pago">
   <div class="card-header bg-primary text-center text-white"
     *ngIf="solicitudCompra.estatus >= enEsts.Autorizado && ordenCompra?.tipo_pago">
     <p *ngIf="solicitudCompra.estatus != enEsts.Finalizada" class="m-0">
@@ -14,7 +14,7 @@
       <strong>{{ ordenCompra?.folio_oc }}</strong>
     </p>
   </div>
-  <div class="card-body">
+  <div class="card-body" *ngIf="solicitudCompra.estatus >= enEsts.Autorizado && ordenCompra?.tipo_pago">
       <div class="d-flex aling-items-center justify-content-center">
         <div class="col-md-11" *ngIf="ordenCompra">
         <div class="row" *ngIf="ordenCompra && solicitudCompra.estatus < enEsts.Finalizada ">
