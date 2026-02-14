@@ -8,6 +8,7 @@ import {
 import { UsuariosService } from "src/app/core/services/compras/usuarios.service";
 import { EstadoSolicitud } from "../../estado-solicitud.enum";
 import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
+import { CatSistemasAutoService } from "src/app/core/services/macrotaller/cat-sistemas-auto.service";
 
 @Component({
   selector: "app-form-datos-entrega-oc",
@@ -35,6 +36,7 @@ export class FormDatosEntregaOcComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.getEmpresas();
+    this.getCategorias();
     this.buildForm();
     // console.log(this.solicitudCompra)
   }
@@ -42,7 +44,8 @@ export class FormDatosEntregaOcComponent implements AfterViewInit {
   constructor(
     public formBuilder: FormBuilder,
     private usuariosService: UsuariosService,
-    private alertasService: SwalComprsServiceService
+    private alertasService: SwalComprsServiceService,
+    private CatSistemasAuto: CatSistemasAutoService
   ) {}
 
   /**
@@ -59,7 +62,16 @@ export class FormDatosEntregaOcComponent implements AfterViewInit {
         modoPago: new FormControl("", Validators.required),
         fechaEntrega : new FormControl (null, Validators.required),
         observaciones: new FormControl(null),
+        categoria: new FormControl(""),
       });
+
+      if (this.solicitudCompra?.tipo === 1 || this.solicitudCompra?.tipo === 4) {
+        this.formOrdenCompra.get('categoria')?.setValidators([Validators.required]);
+      } else {
+        this.formOrdenCompra.get('categoria')?.clearValidators();
+      }
+      this.formOrdenCompra.get('categoria')?.updateValueAndValidity();
+
       resolve(true);
     });
   }
@@ -88,6 +100,7 @@ export class FormDatosEntregaOcComponent implements AfterViewInit {
       entrega: this.datos?.entrega,
       modoPago: this.datos?.modoPago,
       observaciones: this.datos?.observaciones,
+      categoria: this.datos?.id_categoria,
     });
   }
 
@@ -116,5 +129,29 @@ export class FormDatosEntregaOcComponent implements AfterViewInit {
         }
       );
     }
+  }
+
+  public isLoad:boolean = true;
+  public sistemas: any = [];
+  // public tiposMantenimiento: any = [];
+  private getCategorias() {
+    this.isLoad = true;
+    this.CatSistemasAuto.getAll(this.solicitudCompra?.tipo).subscribe(
+      (response) => {
+        if (response) {
+          this.sistemas = response.data;
+          console.log(this.sistemas);
+          // this.tiposMantenimiento = response.data2;
+          this.isLoad = false;
+        } else {
+          console.log(response.message);
+          this.isLoad = false;
+        }
+      },
+      (error) => {
+        console.error("Error fetching data:", error);
+        this.isLoad = false;
+      }
+    );
   }
 }

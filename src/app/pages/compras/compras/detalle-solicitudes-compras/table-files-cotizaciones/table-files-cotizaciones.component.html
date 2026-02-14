@@ -129,6 +129,9 @@
               <div *ngIf="ordenCompra?.fecha_entrega">
                 <p> <strong>Fecha de entrega: {{ ordenCompra?.fecha_entrega | date:'d / M / y' }} </strong>   </p>
               </div>
+              <div *ngIf="ordenCompra?.categoria">
+                <p> <strong>Categoría: </strong>{{ ordenCompra?.categoria }} </p>
+              </div>
       </div>
       <div class="col-md-6" *ngIf="ordenCompra">
               <p><strong>DATOS DE PAGO</strong></p>

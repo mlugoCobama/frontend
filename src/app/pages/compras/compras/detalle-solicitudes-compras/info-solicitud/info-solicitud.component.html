@@ -14,12 +14,12 @@
       </p>
       <p><strong>Empresa: </strong>{{solicitudCompra.empresa}}</p>
       <p> <strong>Estatus: </strong>  <span [ngClass]="'badge rounded-pill font-size-11 ' + solicitudCompra.claseEstado "> {{solicitudCompra.estado}} </span>
-      <p *ngIf="solicitudCompra.razon_cancelacion"><strong> Razón de cancelación: </strong>{{solicitudCompra.razon_cancelacion}}</p>
+      <p *ngIf="solicitudCompra.razon_cancelacion" class="alert alert-danger p-1"><strong> Razón de cancelación: </strong>{{solicitudCompra.razon_cancelacion}}</p>
       <p *ngIf="solicitudCompra.tipo === 2"> <strong>Orden de trabajo: </strong> {{ solicitudCompra.orden_trabajo }} 
         &nbsp; 
         <span *ngIf="solicitudCompra.formato_orden" (click)= "verArchivos(solicitudCompra.formato_orden)" class="btn btn-sm btn-info"><i class="bx bx-info-circle"></i> Ver  </span>   
       </p>
-      <p *ngIf="solicitudCompra.motivo_revision"><strong class="text-danger"> Correcciones sugeridas: </strong>{{solicitudCompra.motivo_revision}} </p>
+      <p *ngIf="solicitudCompra.motivo_revision" class="alert alert-warningn p-1"><strong class="text-danger"> Correcciones sugeridas: </strong>{{solicitudCompra.motivo_revision}} </p>
     </div>
 
 
@@ -38,7 +38,7 @@
           <strong>Consideraciones: </strong> {{ cotizacion.consideraciones }}
         </p>
       </div>
-      <p *ngIf="solicitudCompra.observaciones"> <strong>Observaciones: </strong> {{solicitudCompra.observaciones}}</p>
+      <p *ngIf="solicitudCompra.observaciones" class="alert alert-info p-1"> <strong>Observaciones: </strong> {{solicitudCompra.observaciones}}</p>
     </div>
   </div> <!--Fin div datos solicitud -->
   </div>
