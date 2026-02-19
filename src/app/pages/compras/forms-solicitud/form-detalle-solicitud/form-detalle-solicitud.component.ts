@@ -142,7 +142,7 @@ export class FormDetalleSolicitudComponent implements OnInit{
 
     this.tableData.push(newDetalle);
 
-    console.log(this.tableData)
+    // console.log(this.tableData)
     // this.formDetalleSolicitud.reset();
     this.resetFormDetalle();
 

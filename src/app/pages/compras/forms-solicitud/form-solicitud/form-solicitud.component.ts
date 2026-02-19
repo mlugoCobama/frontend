@@ -8,6 +8,7 @@ import { SwalComprsServiceService } from "src/app/core/services/compras/swal-com
 
 import catCentrosCostos from "src/environments/cat_centros_costos.json";
 import { obtenerErroresFormulario } from 'src/app/core/helpers/errores-forrmulario';
+import { PermisosService } from 'src/app/core/services/permisos.service';
 
 @Component({
   selector: 'app-form-solicitud',
@@ -61,6 +62,7 @@ export class FormSolicitudComponent implements OnInit{
     private localStorage: LocalStorageServiceService,
     private usuariosService: UsuariosService,
     private alertasService: SwalComprsServiceService,
+    private permisosService: PermisosService,
 
   ){}
 
@@ -161,7 +163,7 @@ export class FormSolicitudComponent implements OnInit{
     this.isLoad = false;
     this.disabled = false;
     this.isAgencia = this.interAgencias.some((num) => num === Number(intercompania));
-    if (intercompania != "" && this.isAgencia === false) {
+    if (intercompania != "" && (this.isAgencia === false || this.tienePermiso('view form tipo mantenimiento')) ) {
       this.usuariosService.getUsuariosEmpresas(intercompania).subscribe(
         (response) => {
           if (response) {
@@ -292,6 +294,9 @@ public setValues() {
   this.formSolicitudCompra.get('empresa')?.disable();
 }
 
-
+tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
+  }
 
 }

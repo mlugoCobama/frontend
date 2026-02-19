@@ -123,7 +123,7 @@ export class TableDetallesSolicitudComponent implements OnInit {
         if (response) {
           this.cotProv = response.data;
           this.cotizacion = response.dataCotizacion;
-          // console.log(this.cotizacion);
+          // console.log(this.cotProv);
           this.setCotizacion(this.cotizacion);
 
           this.addProveedorColumns();

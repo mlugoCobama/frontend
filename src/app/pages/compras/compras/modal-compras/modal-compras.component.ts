@@ -120,12 +120,14 @@ export class ModalComprasComponent implements AfterViewInit
       data.c_c = 0;
     }
     
-    if (this.formSolicitudCompra.getIsAgencia()) {
+    if (this.formSolicitudCompra.getIsAgencia() && !this.tienePermiso('view form tipo mantenimiento')) {
       data.usuario_destino = this.formSolicitudCompra.obtenerUsuarios();
     }
 
+  
     const formDataToSend = new FormData();
     formDataToSend.append("data", JSON.stringify(data));
+
 
     //agrega los detalles al form data para enviarlos
     this.tableData.getDetalles().forEach((detalle, index) => {

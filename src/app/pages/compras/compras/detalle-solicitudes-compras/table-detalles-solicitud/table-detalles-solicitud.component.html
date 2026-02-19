@@ -27,6 +27,7 @@
         <th style="width: 3rem;" class="text-center" title="El costo del insumo sera pagado por el cliente">Rec</th>
         <th *ngFor="let prov of cotProv" class="text-center">
           <strong> {{ prov.proveedores_id.nombre }} </strong>
+          <i title="Proveedor seleccionado" *ngIf="prov.seleccionado == 1" class=" text-success bx bx-check-circle bx-burst"></i>
           <button
               class="btn btn-warnign btn-sm"
               title="Editar precios"

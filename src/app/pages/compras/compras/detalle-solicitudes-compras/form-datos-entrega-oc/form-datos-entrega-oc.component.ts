@@ -140,7 +140,7 @@ export class FormDatosEntregaOcComponent implements AfterViewInit {
       (response) => {
         if (response) {
           this.sistemas = response.data;
-          console.log(this.sistemas);
+          // console.log(this.sistemas);
           // this.tiposMantenimiento = response.data2;
           this.isLoad = false;
         } else {

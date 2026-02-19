@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <div class="col-md" *ngIf ="!isAgencia">
+    <div class="col-md" *ngIf ="!isAgencia || tienePermiso('view form tipo mantenimiento')">
       <label for="usuario_destino" class="form-label">Usuarios: *</label>
       <select class="form-select form-select-sm" aria-label="Default select example" formControlName="usuario_destino" id="usuario_destino" 
       name="usuario_destino" aria-label="usuario_destino">
@@ -37,7 +37,7 @@
       </div>
     </div>
 
-    <div *ngIf="isAgencia" class="col-md">
+    <div *ngIf="isAgencia && !tienePermiso('view form tipo mantenimiento')" class="col-md">
       <label  class="form-label">Centro de costos *: </label>
       <select class="form-select form-select-sm" type="text" formControlName="c_c"  
        id="c_c" name="c_c" aria-label="c_c">
