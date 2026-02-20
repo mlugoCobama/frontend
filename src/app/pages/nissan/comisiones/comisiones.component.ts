@@ -78,6 +78,10 @@ export class ComisionesComponent implements AfterViewInit {
     this.datos = value;
     if (this.datos.length > 0) {
       this.cargarVentas();
+    }else{
+      this.ventas.clear();
+      this.form.markAsPristine();
+      this.form.markAsUntouched();
     }
   }
 

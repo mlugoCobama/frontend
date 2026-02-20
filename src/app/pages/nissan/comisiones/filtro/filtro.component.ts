@@ -192,7 +192,28 @@ getEmpresaActiva(){
   const segmento = this.route.parent?.snapshot.url[0].path || '';
   return segmento;
 }
+  public downloading:boolean = false;
 
-
+  descargarConcentrado() {
+  this.downloading = true;
+  const param = this.formulario.value;
+  this.comisiones.descargarLibroVentas(this.estado,param.agencia, param.tipoVenta,param.fechaInicial,param.fechaFinal,param.vendedor).
+  subscribe(res => {
+    const blob = res.body as Blob;
+    let filename = `Libro_Ventas_${this.estado}_${param.agencia}_${param.tipoVenta}_
+                    ${param.fechaInicial}_${param.fechaFinal}_${param.vendedor}.xlsx`;
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    window.URL.revokeObjectURL(url);
+    this.downloading = false;
+  },(error) => {
+          this.alertas.mostrarAlerta("Error", `Error fetching data: ${error}`, "error" , "danger" );
+          this.downloading = false;
+          return;
+  });
+}
 
 }

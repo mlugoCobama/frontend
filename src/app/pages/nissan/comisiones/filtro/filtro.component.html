@@ -69,6 +69,25 @@
             </button>
           </div>
 
+          <div class="col-auto ms-auto">
+              <a
+                *ngIf="data.length > 0"
+                href="javascript:void(0);"
+                class="btn btn-outline-success btn-sm mt-4"
+                [disabled]="downloading"
+                (click)="descargarConcentrado()"
+                >
+                <ng-container *ngIf="!downloading; else loadingConcentrado">
+                    <i class="fas fa-file-excel"></i> Descargar
+                </ng-container>
+                <ng-template #loadingConcentrado>
+                    <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                    Descargando...
+                </ng-template>
+              </a>
+          </div>
+          
+
             </div>
           </form>
             <!-- <div class="col-auto">

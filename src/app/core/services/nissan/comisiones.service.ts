@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -85,5 +85,12 @@ export class ComisionesService {
     emitirEvento() {
         this.$emitter.emit();
     }   
+
+    descargarLibroVentas(estado:any ,agencia: any, tipoVenta: any, fecha_inicio:any, fecha_fin:any, vendedor:any) : Observable<HttpResponse<Blob>> {
+    return this.http.get(`${environment.apiUrl}autos/descarga-libro-ventas/${estado}/${agencia}/${tipoVenta}/${fecha_inicio}/${fecha_fin}/${vendedor}`, {
+      responseType: 'blob',
+      observe: 'response' 
+    });
+  }
 
 }
