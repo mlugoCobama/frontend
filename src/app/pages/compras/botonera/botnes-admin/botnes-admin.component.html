@@ -22,6 +22,14 @@
     </a>
 
     <a 
+    (click) = "clickCancelar()"
+    *ngIf="status == enEsts.EspAutPlanta && tienePermiso('view btn cancelar admins')"
+    href="javascript:void(0);" class="btn btn-danger btn-sm">
+        <i class="fas fa-ban"></i>
+        Cancelar Solicitud
+    </a>
+
+    <a 
     (click) = "clickDevolverRevision()"
     *ngIf="solicitudSelecionada && status <= enEsts.Solicitado && tienePermiso('view btn cotizar')"
     href="javascript:void(0);" class="btn btn-outline-danger btn-sm">
