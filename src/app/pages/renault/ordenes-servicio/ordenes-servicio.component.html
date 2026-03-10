@@ -1,0 +1,106 @@
+<ng-container *ngIf="!activeCita">
+<div class="card  shadow-lg">
+    <div class="card-body">
+        <h5 class="m-0">Ordenes de Servicio - Renault</h5>
+    </div>
+</div>
+
+<!-- <div class="card shadow-lg">
+    <div class="card-body">
+        <div class="d-flex justify-content-around aling-items-center gap-2">
+            <ng-container *ngFor="let indicador of indicadores">
+                <ng-container 
+                    *ngTemplateOutlet="alertTemplate; context: indicador">
+                </ng-container>
+            </ng-container>
+        </div>
+    </div>
+</div> -->
+<app-filtro-ordenes-servicio
+*ngIf="tienePermiso('view filtro ordenes servicio')"
+[loading]="!isLoad"
+(executeFilter) = "getFilter($event)"
+></app-filtro-ordenes-servicio>
+
+<div class="card shadow-lg">
+    <div class="card-body ">
+        <div class="container-fluid rounded pt-1">
+
+      <div *ngIf="!isLoad" class="text-center">
+        <div class="spinner-border text-warning" role="status"></div>
+      </div>
+
+  <div *ngIf="isLoad" class="d-flex flex-row overflow-auto pb-3">
+    <!-- Columnas -->
+    <div
+      *ngFor="let estado of indicadores"
+      class="me-3 rounded flex-shrink-0"
+      style="min-width: 18rem; max-width: 20rem;"
+    >
+      <!-- Encabezados-->
+      <div
+        class="p-2 mx-1 mb-3 text-white rounded text-center fw-semibold d-flex justify-content-between align-items-center"
+        [ngClass]="'bg-'+estado.color"
+      >
+        <span class="text-start flex-grow-1">{{ estado.nombre }}</span>
+        <span class="badge bg-light text-dark ms-2">
+          <strong> {{ datosAgrupados[estado.nombre]?.length || 0 }} </strong>
+        </span>
+      </div>
+
+      <!-- Contenedor Drag & Drop -->
+      <div
+        class="p-1"
+        style="max-height: 58vh; overflow-y: auto;"
+      >
+        <div
+          *ngIf="datosAgrupados[estado.nombre]?.length === 0"
+          class="text-muted small text-center py-3"
+        >
+          <em>Aun no hay elementos</em>
+        </div>
+
+        <!--Card-->
+        <div
+          *ngFor="let item of datosAgrupados[estado.nombre]"
+          class="card mb-2 border rounded"
+          [ngClass]="'border-'+estado.color+' shadow-hover-'+estado.color"
+          role="button"
+          (click) ="setCitaSeleccionada(item)"
+
+          cdkDrag
+        >
+        <!-- <span *ngIf="item.estatus != '4' && item.estatus != '14'" title="Dias desde el ultimo cambio" class="position-absolute top-0 start-10 translate-middle badge rounded-pill" [ngClass]="getColorPorDias(item.fecha)" >{{ diferenciaEnDias(item.fecha) }}<span class="visually-hidden"></span></span> -->
+          <div class="card-body  p-2">
+            <div class="d-flex justify-content-between align-items-start mb-1">
+              <h6 class="mb-0"><strong>Folio de cita: {{ item.folio }} </strong></h6>
+              <p class="m-0"> <Strong> {{ item.estatus }} </Strong></p>
+            </div>
+            <p class="m-0"><strong>Vehículo: </strong>{{ item.modelo }} {{ item.anio }} {{ item.color }}</p>
+             <p class="m-0"> <strong>Placas: </strong> {{ item.placas }} </p> 
+            <p class="m-0"><strong>Observaciones: </strong> {{ item.observaciones }} </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+    </div>
+</div>
+</ng-container>
+
+
+<app-detalle-orden
+  *ngIf = "activeCita"
+  [cita] = "citaSeleccionada"
+  (setActiveCita)="setActiveCita($event)"
+  (reload)="getAll(333)"
+>
+</app-detalle-orden>
+
+<ng-template #alertTemplate let-label="label" let-number="number" let-className="className">
+  <div class="{{ className }}" role="alert">
+    <strong>{{ label }} :</strong> {{ number }}
+  </div>
+</ng-template>

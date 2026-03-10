@@ -11,13 +11,19 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { NgStepperModule } from 'angular-ng-stepper';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
+import { OrdenesServicioComponent } from './ordenes-servicio/ordenes-servicio.component';
+import { DetalleOrdenComponent } from './ordenes-servicio/detalle-orden/detalle-orden.component';
+import { FiltroOrdenesServicioComponent } from './ordenes-servicio/filtro-ordenes-servicio/filtro-ordenes-servicio.component';
 
 
 @NgModule({
   declarations: [
     SabanaControlComponent,
     VisorCitasComponent,
-    ModalSabanaControlComponent
+    ModalSabanaControlComponent,
+    OrdenesServicioComponent,
+    DetalleOrdenComponent,
+    FiltroOrdenesServicioComponent
   ],
   imports: [
     CommonModule,

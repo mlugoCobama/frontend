@@ -247,7 +247,7 @@ export class TableDetallesSolicitudComponent implements OnInit {
         if (response.status === "success") {
           this.alertasService.mostrarAlerta(
             "Enviado",
-            "Tu cotización se ha guardado correctamente",
+            response.message,
             "success",
             "success"
           );

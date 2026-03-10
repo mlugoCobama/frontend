@@ -1,0 +1,111 @@
+<div class="card shadow-lg border-0">
+  <div class="card-body">
+
+    <form [formGroup]="filtroForm" (ngSubmit)="buscar()">
+
+      <div class="row g-3 align-items-end">
+
+        <!-- Agencia -->
+        <div class="col-lg-2 col-md-3">
+          <label class="form-label fw-semibold">Agencia</label>
+          <select
+            class="form-select form-select-sm"
+            formControlName="agencia"
+            (change)="cargarAps()">
+
+            <option selected disabled value="">Selecciona uno</option>
+
+            <option
+              *ngFor="let agencia of agencias"
+              [hidden]="!tienePermiso(agencia.permiso)"
+              [value]="agencia.intercompania">
+
+              {{ agencia.nombre }}
+
+            </option>
+          </select>
+        </div>
+
+        <!-- APS -->
+        <div class="col-lg-2 col-md-3">
+          <label class="form-label fw-semibold">APS</label>
+
+          <select
+            class="form-select form-select-sm"
+            formControlName="aps"
+            [disabled]="!filtroForm.value.agencia">
+
+            <option selected disabled value="">Selecciona uno</option>
+             <option value="todos">Todos</option>
+            <option
+              *ngFor="let aps of apsList"
+              [value]="aps.id">
+
+              {{ aps.firstname }}
+
+            </option>
+
+          </select>
+        </div>
+
+        <!-- Fecha Inicio -->
+        <div class="col-lg-2 col-md-3">
+          <label class="form-label fw-semibold">Fecha Inicio</label>
+
+          <input
+            [max]="hoy"
+            type="date"
+            class="form-control form-control-sm"
+            formControlName="fechaInicio">
+        </div>
+
+        <!-- Fecha Fin -->
+        <div class="col-lg-2 col-md-3">
+          <label class="form-label fw-semibold">Fecha Fin</label>
+
+          <input
+            type="date"
+            [max]="hoy"
+            class="form-control form-control-sm"
+            formControlName="fechaFin"
+            [min]="filtroForm.value.fechaInicio">
+        </div>
+
+        <!-- Botones -->
+        <div class="col-lg-4">
+
+          <div class="d-flex gap-2">
+
+            <button
+              type="submit"
+              class="btn btn-sm btn-warning fw-bold text-dark px-4"
+              [disabled]="loading">
+
+              <span
+                *ngIf="loading"
+                class="spinner-border spinner-border-sm me-2">
+              </span>
+              <i class="fas fa-search"></i>
+              Buscar
+
+            </button>
+
+            <!-- <button
+              type="button"
+              class="btn btn-sm btn-outline-secondary"
+              (click)="limpiar()">
+
+              Limpiar
+
+            </button> -->
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </form>
+
+  </div>
+</div>

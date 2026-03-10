@@ -1,0 +1,273 @@
+<div class="card  shadow-lg">
+    <div class="card-body  bg-warning text-dark">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="m-0"><strong>Detalle de Orden de Servicio - {{cita?.folio}}</strong></h5>
+            <div class="d-flex gap-2">
+                <button *ngIf="dataEntrada?.num_entrada" class="btn btn-secondary btn-sm" [disabled]="isLoading" (click)="descargarPdf(cita.id)">
+                <ng-container *ngIf="!isLoading; else loading">
+                    <i class="fas fa-file-pdf"></i> Descargar Orden de Reparación
+                </ng-container>
+                <ng-template #loading>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Descargando...
+                </ng-template>
+                </button>
+
+                <button class="btn btn-dark btn-sm text-warning" (click)="goBack()"><i class="fas fa-arrow-left"> </i> Regresar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="!isLoad" class="card shadow-lg">
+    <div class="card-body">
+        <div  class="text-center">
+        <div class="spinner-border text-warning" role="status"></div>
+</div>
+    </div>
+</div>
+
+
+<ngContainer *ngIf="isLoad">
+    <div class="row">
+    <div class="col-lg-6">
+        <div class="card shadow-lg">
+        <div class="card-header bg-warning text-dark">
+            <strong>Datos del cliente</strong>
+        </div>
+        <div class="card-body">
+            <p><strong>Nombre: </strong> {{cita?.nombre}} {{cita?.apellido_paterno}} {{cita?.apellido_materno}}</p>
+            <p><strong>Domicilio: </strong> {{cita?.domicilio || 'No Especificado'}}</p>
+            <p><strong>Telefono: </strong> {{cita?.telefono || 'No Especificado' }}</p>
+            <p><strong>RFC: </strong> {{cita?.rfc || 'No Especificado' }}</p>
+            <p><strong>E-mail:</strong> {{cita?.email || 'No Especificado' }} </p>
+        </div>
+
+    </div>
+    <div class="border rounded bg-warning p-2 shadow-lg">
+        <h5 class="m-0"><strong>Estatus: </strong>{{cita?.estatus}}</h5>    
+    </div>        
+    </div>
+    <div class="col-lg-6">
+        <div class="card shadow-lg">
+        <div class="card-header bg-warning text-dark">
+            <strong>Datos del Vehiculo</strong>
+        </div>
+        <div class="card-body">
+            <p><strong>Entrada No.: </strong> {{dataEntrada?.num_entrada || 'No Especificado' }}</p>
+            <p><strong>VIN: </strong> {{cita?.vin || 'No Especificado' }}</p>
+            <p><strong>Modelo: </strong> {{cita?.modelo || 'No Especificado' }}</p>
+            <p><strong>PLacas: </strong> {{cita?.placas || 'No Especificado' }}</p>
+            <p><strong>Tipo: </strong>{{cita?.tipo || 'No Especificado' }}</p>
+            <p><strong>Color: </strong>{{cita?.color || 'No Especificado' }}</p>
+            <p><strong>Año: </strong>{{cita?.anio || 'No Especificado' }}</p>
+        </div>
+    </div>
+    </div> 
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card shadow-lg">
+        <div class="card-header bg-warning text-dark">
+            <strong>Inventario</strong>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-4">
+                        <ng-container  *ngTemplateOutlet="checkboxTemplate; 
+                            context: { label: 'Antena: ', id: 'activo', dato: dataEntrada?.antena ?? 0}">
+                        </ng-container>
+                        <ng-container *ngTemplateOutlet="checkboxTemplate; 
+                            context: { label: 'Espejo: ', id: 'admin', dato: dataEntrada?.espejo ?? 0}">
+                        </ng-container>
+                        <ng-container *ngTemplateOutlet="checkboxTemplate; 
+                            context: { label: 'Tapones: ', id: 'admin', dato: dataEntrada?.tapones ?? 0}">
+                        </ng-container>
+                        <ng-container *ngTemplateOutlet="checkboxTemplate; 
+                            context: { label: 'Rines: ', id: 'admin', dato: dataEntrada?.rines ?? 0}">
+                        </ng-container>
+                        <ng-container *ngTemplateOutlet="checkboxTemplate; 
+                            context: { label: 'Tapón de Gasolina: ', id: 'admin', dato: dataEntrada?.tapon_gasolina ?? 0}">
+                        </ng-container>
+                        <ng-container *ngTemplateOutlet="checkboxTemplate; 
+                            context: { label: 'Radio: ', id: 'admin', dato: dataEntrada?.radio ?? 0}">
+                        </ng-container>
+                </div>
+                <div class="col-lg-4">
+                        <ng-container *ngTemplateOutlet="checkboxTemplate; 
+                            context: { label: 'Encendedor: ', id: 'admin', dato: dataEntrada?.encendedor ?? 0}">
+                        </ng-container>
+                        <ng-container *ngTemplateOutlet="checkboxTemplate; 
+                            context: { label: 'Tapetes: ', id: 'admin', dato: dataEntrada?.tapetes ?? 0}">
+                        </ng-container>
+                        <ng-container *ngTemplateOutlet="checkboxTemplate; 
+                            context: { label: 'Llanta de refacción: ', id: 'admin', dato: dataEntrada?.llanta_refaccion ?? 0}">
+                        </ng-container>
+                        <ng-container *ngTemplateOutlet="checkboxTemplate; 
+                            context: { label: 'Herramientas: ', id: 'admin', dato: dataEntrada?.herraminetas ?? 0}">
+                        </ng-container>
+                        <ng-container *ngTemplateOutlet="checkboxTemplate; 
+                            context: { label: 'Reflejantes: ', id: 'admin', dato: dataEntrada?.reflejantes ?? 0}">
+                        </ng-container>
+                        <ng-container *ngTemplateOutlet="checkboxTemplate; 
+                            context: { label: 'Extinguidor: ', id: 'admin', dato: dataEntrada?.extinguidor ?? 0}">
+                        </ng-container>
+                </div>
+                <div class="col-lg-4">
+                        <ng-container *ngTemplateOutlet="checkboxTemplate; 
+                            context: { label: 'Cables de corriente: ', id: 'admin', dato: dataEntrada?.cables_corriente ?? 0}">
+                        </ng-container>
+                        <ng-container *ngTemplateOutlet="checkboxTemplate; 
+                            context: { label: 'Gato: ', id: 'admin', dato: dataEntrada?.gato ?? 0}">
+                        </ng-container>
+                        <ng-container *ngTemplateOutlet="checkboxTemplate; 
+                            context: { label: 'Objetos de valor: ', id: 'admin', dato: dataEntrada?.objetos_valor ?? 0}">
+                        </ng-container>
+                        <div class="border border-warning p-2 m-1">
+                            <p class="m-0"><strong>Otros: </strong>{{ dataEntrada?.otros ?? 'No especifica' }}</p>
+                        </div>
+                        <div class="border border-warning p-2 m-1">
+                            <p class="m-0"><strong>Vestiduras: </strong> {{ dataEntrada?.vestiduras ?? 'No especifica' }}</p>
+                        </div>
+                        <div class="border border-warning p-2 m-1">
+                            <p class="m-0"><strong>Cristales: </strong> {{ dataEntrada?.cristales ?? 'No especifica' }} </p>
+                        </div>
+                </div>
+            </div>
+            <div class="row border border-warning p-2 m-1">
+                <div class="col-lg-1 p-0"><strong>Nivel de gasolina: </strong>{{ dataEntrada?.nivel_gasolina ?? 0 }}</div>
+                <div class="col-lg-11 p-0">
+                    <div class="progress" style="height: 20px;">
+                     <div class="progress-bar progress-bar-animated progress-bar-striped bg-warning text-dark" 
+                    role="progressbar" 
+                    [style.width.%]="dataEntrada?.nivel_gasolina ?? 0"
+                        
+                    aria-valuemin="0" 
+                    aria-valuemax="100">
+                    {{ dataEntrada?.nivel_gasolina ?? 0 }}%
+                </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card shadow-lg">
+        <div class="card-header bg-warning text-dark">
+            <strong>Detalle de Trabajos Solicitados</strong>
+            <small>Operaciones a Efectuar</small>
+        </div>
+        <div class="card-body">
+            <table class="table table-sm">
+  <!-- <caption>Operaciones a Efectuar</caption> -->
+  <thead>
+    <tr>
+      <th scope="col">Descripción</th>
+      <th scope="col">Partes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor=" let trabajo of dataEntrada.trabajos">
+      <!-- <th scope="row">1</th> -->
+      <td>{{trabajo.descripcion}}</td>
+      <td>{{trabajo.partes}}</td>
+    </tr>  
+  </tbody>
+</table>
+        </div>
+    </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card shadow-lg">
+        <div class="card-header bg-warning text-dark">
+            <strong>Garantias</strong>
+            <small>Operaciones a Efectuar</small>
+        </div>
+        <div class="card-body">
+            <table class="table table-sm">
+  <!-- <caption>Operaciones a Efectuar</caption> -->
+  <thead >
+    <tr>
+      <th scope="col">Descripción</th>
+      <th scope="col">Tiempo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor=" let garantia of dataEntrada.garantias">
+      <!-- <th scope="row">1</th> -->
+      <td>{{garantia.descripcion}}</td>
+      <td>{{garantia.tiempo}}</td>
+    </tr>  
+  </tbody>
+</table>
+        </div>
+    </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card shadow-lg">
+        <div class="card-header bg-warning text-dark">
+            <strong>Estado del vehículo</strong>
+        </div>
+        <div class="card-body">
+            <ngContariner *ngIf="dataEntrada?.testigos_fotograficos?.length > 0; else noData" >
+                <div class="row">
+                    <div *ngFor="let item of dataEntrada.testigos_fotograficos" class="col-lg-4 mb-3">
+                        <img [src]="item.imagen" alt="Imagen del testigo" class="img-fluid">
+                    </div>
+                </div>
+
+            </ngContariner>
+        </div>
+    </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="card border-warning mb-3">
+  <div class="card-header bg-warning">
+        <strong> Proceso del Servicio </strong> 
+  </div>
+  <div class="card-body">
+    <!-- Línea de progreso -->
+    <div class="progress" style="height: 4px; position: relative;">
+      <div class="progress-bar bg-warning" style="width: 25%;"></div>
+    </div>
+
+    <!-- Pasos distribuidos horizontalmente -->
+    <div class="d-flex justify-content-between mt-3 text-center">
+      <div *ngFor="let evento of eventos">
+        <button class="btn btn-sm" [ngClass]="evento.completado ? 'btn-warning' : 'btn-secondary'">{{evento.estatus}}</button>
+        <p class="mb-0"><small>{{evento.fecha}}</small></p>
+        <p class="mb-0"><small>Por: {{evento.usuario}}</small></p>
+      </div>
+    </div>
+  </div>
+</div>
+        
+    </div>
+</div>
+</ngContainer>
+
+
+<ng-template #checkboxTemplate let-label="label" let-id="id" let-dato="dato">
+    <div>
+        <div class="form-check d-flex align-items-center justify-content-between border border-warning p-2 m-1">
+            <label  class="form-check-label order-1 fw-bold"  [for]="id"> {{ label }}</label>
+            <input  class="form-check-input  order-2 p-2" type="checkbox" [id]="id"
+                    [name]="id" disabled [checked]="dato == 1 ? true : false ">
+        </div>
+    </div>
+</ng-template>
+<ng-template #noData>
+    <div class="text-center text-muted">
+        <strong> No hay elementos disponibles </strong>
+    </div>
+</ng-template>

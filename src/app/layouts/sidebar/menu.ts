@@ -264,6 +264,13 @@ export const MENU: MenuItem[] = [
           },
         ]
       },
+      {
+        id: 32,
+        label: "Ordenes de Servicio",
+        link: "/renault/ordenes-servicio",
+        permission: "view submodulo ordenes de servicio",
+        parentId: 30,
+      },
     ],
   },
   {

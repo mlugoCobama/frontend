@@ -5,6 +5,8 @@ import { VisorCitasComponent } from './visor-citas/visor-citas.component';
 import { ComisionesComponent } from '../nissan/comisiones/comisiones.component';
 import { VendedoresComponent } from '../nissan/comisiones/vendedores/vendedores.component';
 import { TabuladorComponent } from '../nissan/comisiones/tabulador/tabulador.component';
+import { OrdenesServicioComponent } from './ordenes-servicio/ordenes-servicio.component';
+import { DetalleOrdenComponent } from './ordenes-servicio/detalle-orden/detalle-orden.component';
 
 
 
@@ -14,6 +16,8 @@ const routes: Routes = [
   { path: 'comisiones', component:  ComisionesComponent},
   { path: 'vendedores', component:  VendedoresComponent},
   { path: 'tabulador', component:  TabuladorComponent},
+  { path: 'ordenes-servicio', component:  OrdenesServicioComponent},
+  { path: 'orden-servicio/:folio/:id', component: DetalleOrdenComponent },
 ];
 
 @NgModule({
