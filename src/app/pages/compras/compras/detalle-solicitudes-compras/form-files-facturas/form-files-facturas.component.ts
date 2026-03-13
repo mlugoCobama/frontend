@@ -5,6 +5,8 @@ import { EstadoSolicitud } from "../../estado-solicitud.enum";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { PanelEntregasComponent } from "../panel-entregas/panel-entregas.component";
 import { FormComplementoComponent } from "../datos-facturas/form-complemento/form-complemento.component";
+import { ValidadorCFDI } from "src/app/core/helpers/cfdi-validador";
+
 @Component({
   selector: "app-form-files-facturas",
   templateUrl: "./form-files-facturas.component.html",
@@ -89,6 +91,7 @@ export class FormFilesFacturasComponent implements OnInit {
  * Fija el tab seleccionado en el ultimo tab valido o el primero
  */
 setFirstTab(){
+  
   const firstEnabledTab = this.modelTabs.find(tab => !this.validarDocumento(tab.tipoDocumento));
   this.selectedTab = firstEnabledTab ? firstEnabledTab.tabName : this.modelTabs[0].tabName;
 }
@@ -100,9 +103,12 @@ setFirstTab(){
  */
 validarDocumento(tipoDocumento: string){
   let hasDocumento = false;
-  if(tipoDocumento != 'PAGO'){ 
+  let entregaParcial =  this.validarTotales( this.factura.sumaTotal, this.solicitudCompra.total_orden );
+  if(tipoDocumento != 'PAGO' && !entregaParcial){ 
     hasDocumento = this.factura.comprobantes?.some(c => c.tComprobanteDesc === tipoDocumento);
   }
+  // console.log('entregaParcial',entregaParcial);
+  // console.log('Has Documento',hasDocumento);
   return hasDocumento;  
 }
 
@@ -214,6 +220,9 @@ getFacturaReferencia(){
 
     const idOrdenCompra = this.ordenCompra.id;
     this.formData.append("orden_compra_id", idOrdenCompra);
+
+    this.formData.append("total_compra", this.solicitudCompra.total_orden);
+    this.formData.append("suma_facturas", this.factura.sumaTotal);
 
     this.ordenesComprasService.saveDocs(this.formData).subscribe(
       (response) => {
@@ -338,7 +347,6 @@ getFacturaReferencia(){
              this.hasComprobantePago = false;
            }
           }
-          // this.checkMetodoPago();
           this.setFirstTab();
         }
     },(error) => {
@@ -408,37 +416,27 @@ getFacturaReferencia(){
       if(fieldName === 'factura_xml'){
         this.validarXML(file);
       }
-      
     }
-    
   }
 
   /**
    *  Valida que el archivo que se suba sea un cfdi
    * y recupera el tipo de comprobante
   */ 
-validarXML(file: File) {
-  const reader = new FileReader();
-
-  reader.onload = (e) => {
-    const xmlContent = e.target?.result as string;
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlContent, "application/xml");
-
-    const comprobante = xmlDoc.getElementsByTagName("cfdi:Comprobante")[0];
-    if (comprobante) {
-      const tipo = comprobante.getAttribute("TipoDeComprobante");
-      // console.log("Tipo de comprobante:", tipo);
-    } else {
-      this.alertasService.mostrarAlerta('No valido', 'El archivo que intentas subir no es un CFDI'+
-        "\n No se encontró el nodo 'cfdi:Comprobante'.",'error', 'danger');
-      this.formDocsOrdenCompra.reset();
-      console.warn("No se encontró el nodo 'cfdi:Comprobante'.");
-    }
-  };
-
-  reader.readAsText(file);
-}
+  validarXML(file: File) {
+    if (file) {
+        ValidadorCFDI.esCFDI(file).then((esValido) => {
+          if (!esValido) {
+            this.alertasService.mostrarAlerta('No valido', 'El archivo que intentas subir no es un CFDI'+
+            "\n No se encontró el nodo 'cfdi:Comprobante'.",'error', 'danger');
+            this.formDocsOrdenCompra.reset();
+            this.formData = new FormData();
+          } else {
+            console.info('CFDI VALIDO');
+          }
+        });
+      }
+  }
 
 public actualizadorEstatus(){ 
   this.actualizarStatus.emit();
@@ -489,5 +487,20 @@ public save(){
     formData.append("orden_compra_id", this.ordenCompra.id);
     return formData;
   } 
+
+  validarTotales(impTotalXML, impTotalOC) {
+  // Redondear a un decimal
+  const xml = Number(Math.ceil(impTotalXML));
+  const oc  = Number(Math.ceil(impTotalOC));
+
+    console.log('total xml', xml, 'total', oc);
+
+    if (xml === 0) return true;            // No pagado
+    if (xml < oc) return true;             // Pagado parcialmente
+    if (xml === oc) return false;          // Pagado completamente
+    return false;                          // Revisar discrepancias
+  }
+
+
 
 }

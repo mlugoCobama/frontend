@@ -96,7 +96,7 @@
 
                 </div>
                 <!-- Tab subir complemento -->
-                <div *ngIf="selectedTab === 'upComplemento'" [hidden]="!validarDocumento('INGRESO')">
+                <div *ngIf="selectedTab === 'upComplemento'" [hidden]="ordenCompra?.tipo_pago == 1">
                   <app-form-complemento #formComplemento></app-form-complemento>
                   <div class="d-flex aling-items-center justify-content-end">
                     <button

@@ -14,7 +14,7 @@
     >
       <!-- Encabezados-->
       <div
-        class="p-2 mx-1 mt-1 mb-3 text-white rounded text-center fw-bold d-flex justify-content-between align-items-center"
+        class="p-2 mx-2 mt-1 mb-3 text-white rounded text-center fw-bold d-flex justify-content-between align-items-center"
         [ngClass]="estado.color"
       >
         <span class="text-start flex-grow-1">{{ estado.nombre }}</span>
@@ -98,16 +98,18 @@
               <span *ngIf="item.folio_oc && tienePermiso('view total orden')"> <strong> {{ item.total_orden | currency }} </strong></span>
             </div>
 
-            <div *ngIf="item.folio_oc && tienePermiso('view btn descargar orden')" class="mt-1 small">
+            <div  class="d-flex justify-content-between aling-items-center mt-1 small">
               <a
-              
+                *ngIf="item.folio_oc && tienePermiso('view btn descargar orden')"
                 [title]="'Vista previa de la orden de compra'"
-                class="btn btn-sm btn-info"
+                class="btn btn-sm btn-info p-1"
                 style="cursor: pointer"
                 (click)="openModalOC(item)"
               >
                 <strong> {{ item.folio_oc }} </strong>
               </a>
+              <p  *ngIf="item.modo_pago == 'CREDITO' && item.pagado !== 'PAGADO'" class="m-0"><strong>Pago parcial (factura)</strong></p>
+              <p *ngIf="item.modo_pago == 'CONTADO' && item.pagado !== 'PAGADO'" class="m-0"><strong>Pagar total orden</strong></p>
             </div>
           </div>
         </div>
