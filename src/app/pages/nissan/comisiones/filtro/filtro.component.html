@@ -3,7 +3,7 @@
       <form [formGroup]="formulario"> 
         <div class="row g-2 mb-1">
           
-            <div class="col-auto">
+            <div class="col-auto" *ngIf="tienePermiso('view multiselect comisiones agencias'); else nombreEmpresa">
               <label>Agencias</label>
               <select class="form-select form-select-sm " aria-label=".form-select-sm example" formControlName="agencia">
                 <option value=""selected>Selecciona uno</option>
@@ -13,6 +13,7 @@
                 <small> Selecciona una agencia </small>
               </div>
             </div>
+
             <div class="col-auto">
               <label>Tipo de venta</label>
               <select class="form-select form-select-sm " aria-label=".form-select-sm example" formControlName="tipoVenta">
@@ -103,3 +104,11 @@
             
     </div>
 </div>
+<ng-template #nombreEmpresa>
+  <div class="col-auto">
+    <label>Empresa: </label>
+    <p class="border rounded py-1 px-2"> <strong>{{getEmpresaUsuario().nombreEmpresa}} </strong></p>
+  </div>
+  
+</ng-template>
+

@@ -58,6 +58,8 @@ export class FiltroComponent implements OnInit{
     this.buildForm();
     this.estado = this.asignarEstado();
     this.agencias = this.filtrarAgencias(this.getEmpresaActiva());
+    this.formulario.patchValue({agencia: this.getEmpresaUsuario().intercompania});
+
   }
 
 
@@ -214,6 +216,13 @@ getEmpresaActiva(){
           this.downloading = false;
           return;
   });
+}
+
+getEmpresaUsuario(){
+  const usuarioActual = this.localStorage.getItem('currentUser');
+  const intercompania = usuarioActual['usuarioActivo'][0].intercompania;
+  const nombreEmpresa = usuarioActual['usuarioActivo'][0].empresa ?? 'No especificada';
+  return { intercompania: intercompania, nombreEmpresa:nombreEmpresa };
 }
 
 }
