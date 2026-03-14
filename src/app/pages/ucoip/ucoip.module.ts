@@ -10,12 +10,14 @@ import { InventarioComponent } from './inventario/inventario.component';
 import { ModalInventarioComponent } from './inventario/modal-inventario/modal-inventario.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PermisosComponent } from './permisos/permisos.component';
 
 @NgModule({
   declarations: [
     UcoipComponent,
     InventarioComponent,
     ModalInventarioComponent,
+    PermisosComponent,
     
   ],
   imports: [
