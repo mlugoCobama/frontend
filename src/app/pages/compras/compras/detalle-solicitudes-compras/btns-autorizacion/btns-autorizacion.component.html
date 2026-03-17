@@ -6,6 +6,7 @@
     <div class="card-body ">
         <div *ngIf = "isLoad && tienePermiso('view panel auto orden compra') " class="d-flex flex-column flex-md-row justify-content-around align-items-center gap-2">
             <button
+            *ngIf = "tienePermiso('view btn cancelar orden compra')"
             [disabled] = "working"
               class="btn btn-danger px-5"
               (click)="cancelarOrden()"
@@ -20,6 +21,7 @@
             [disabled] = "working"
               class="btn btn-warning px-5"
               (click)="openModalNuevo()"
+              *ngIf = "tienePermiso('view btn cambiar porveedor orden compra')"
             >
             <ng-container *ngIf="!working; else spinner">
               <strong> Cambiar de proveedor </strong>
@@ -31,6 +33,7 @@
             [disabled] = "working"
               class="btn btn-success px-5"
               (click)="autorizarOrden()"
+              *ngIf = "tienePermiso('view btn autorizar orden compra')"
             >
             <ng-container *ngIf="!working; else spinner">
                 Orden de compra <strong>  Autorizada </strong>

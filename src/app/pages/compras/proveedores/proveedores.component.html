@@ -54,10 +54,10 @@
           <div >
             <div class="tab-page-content mt-3 table-responsive" style="overflow-y: scroll; height: 20rem;">
               <table
-              class="table table-hover table-sm table-bordered table-responsive"
+              class="table table-hover table-sm table-responsive  border"
               *ngIf="!isLoad"
             >
-              <thead  class="table-light thead-sticky">
+              <thead  class="table-dark thead-sticky">
                 <tr>
                   <th (click)="ordenarPor('nombre')" style="cursor: pointer;" >Nombre <i [ngClass]="getIconoOrden('nombre')"></i></th>
                   <th (click)="ordenarPor('rfc')" style="cursor: pointer;" >RFC <i [ngClass]="getIconoOrden('rfc')"></i></th>
@@ -89,12 +89,13 @@
                     </tr>
                 </tbody>
             </table>
+            
             </div>
           </div>
+          <p class="mt-2 text-muted">Se muestran {{ datosFiltrados?.length ?? 0 }} de {{ data?.length ?? 0 }}</p>
         </div>
         </div>
         <!--div.card-body-->
-      
     </div>
   </div>
 </div>

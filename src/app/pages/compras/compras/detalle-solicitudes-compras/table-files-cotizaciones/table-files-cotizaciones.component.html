@@ -23,21 +23,21 @@
     <!--Tabla documentos cotizaciones-->
     <table
       *ngIf="isLoad"
-      class="table  table-hover table-sm table-bordered table-responsive m-0"
+      class="table table-sm table-hover rounded border"
     >
       <thead class="table-light" >
         <tr class="text-center">
-          <th *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && tienePermiso('view btn save precios')">#</th>
-          <th>Nombre proveedor</th>
+          <th *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && tienePermiso('view chks seleccionar cotizacion')">#</th>
+          <th>Nombre del proveedor</th>
           <th>Archivo de cotización</th>
-          <th style="width: 6rem;" *ngIf="solicitudCompra?.estatus <= 3 && tienePermiso('view btn save precios')"><small>Reenviar correo</small></th>
+          <th style="width: 6rem;" *ngIf="solicitudCompra?.estatus <= 3 && tienePermiso('view btn reenviar correo')"><small>Reenviar correo</small></th>
           <th style="width: 3rem;" *ngIf="solicitudCompra?.estatus <= 3 ">Autorizado</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let prov of cotProv; let i = index" class="text-center">
           <td [ngClass] = "prov?.ruta ? 'bg-secondary-subtle bg-opacity-75' : '' "
-          *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && tienePermiso('view btn save precios')">
+          *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && tienePermiso('view chks seleccionar cotizacion')">
             <div class="col align-self-center">
               <input
                 *ngIf="prov?.ruta"
@@ -72,11 +72,11 @@
                 (click)="verArchivos(prov?.ruta)"
               >
                 <i class="fas fa-file-pdf"></i>
-
+                  Ver Cotización
               </a>
             </div>
           </td>
-          <td *ngIf="solicitudCompra?.estatus <= 3 && tienePermiso('view btn save precios')"> 
+          <td *ngIf="solicitudCompra?.estatus <= 3 && tienePermiso('view btn reenviar correo')"> 
             <button 
               (click)="reenviarSC(prov)" 
               [disabled]="prov?.loading"
@@ -147,11 +147,11 @@
   <div class="col-2 d-flex align-items-end justify-content-center" *ngIf="!sending">
     <div class="d-flex flex-column bd-highlight gap-2">
     <button
-      *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && !mostrarObs && tienePermiso('view btn save precios')"
+      *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && !mostrarObs && tienePermiso('view btn add proveedor cotizacion')"
       class="btn btn-sm btn-primary"
       (click)="showPanelCotizaciones = !showPanelCotizaciones"
     >
-      <i class="fas fa-file-upload"></i>
+      <i class="fas fa-user-plus "></i>
       {{ showPanelCotizaciones ? 'Ocultar proveedor' : 'Agregar proveedor a cotización' }}
     </button>
 

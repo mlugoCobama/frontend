@@ -80,30 +80,24 @@ export class FiltroComponent implements OnInit{
 
     this.formulario.get('agencia')?.valueChanges.subscribe(value => {
     if (value === 'todos' || !value) {
-      // Si selecciona "todos" o vacío, solo deja esa opción
       this.vendedores = [{ value: 'todos', label: 'Todos' }];
       return;
     }
 
     // Mostrar opción de "cargando"
     this.vendedores = [{ value: '', label: 'Cargando vendedores...' }];
-
     this.comisiones.getVendedoresAgencia(value).subscribe({
       next: (data) => {
         this.vendedores = [
           { value: 'todos', label: 'Todos' },
           ...data.data.map((v: any) => ({ value: v.id, label: `${v.nombre}-${v.clave}` }))
         ];
-        // console.log(this.vendedores)
       },
       error: () => {
         this.vendedores = [{ value: '', label: 'Error al cargar vendedores' }];
       }
     });
   });
-
-
-
   }
 
 asignarEstado() {
@@ -189,8 +183,6 @@ tienePermiso(permiso: string = null): boolean {
 }
 
 getEmpresaActiva(){
-  // const usuarioActual = this.localStorage.getItem('currentUser');
-  // const empresaActual = usuarioActual['usuarioActivo'][0].empresa.split(" ")[0];
   const segmento = this.route.parent?.snapshot.url[0].path || '';
   return segmento;
 }

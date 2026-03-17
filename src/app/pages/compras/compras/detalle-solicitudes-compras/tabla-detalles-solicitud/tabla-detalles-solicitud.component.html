@@ -80,15 +80,8 @@
               class="form-control form-control-sm"
             />
             <!-- VALIDACIÓN -->
-            <div
-              *ngIf="
-                getDetalleControl(i, 'cantidad').touched || submittedDetail
-              "
-            >
-              <div
-                class="text-danger form-text"
-                *ngIf="getDetalleControl(i, 'cantidad').errors?.['required']"
-              >
+            <div *ngIf="getDetalleControl(i, 'cantidad').touched || submittedDetail">
+              <div class="text-danger form-text" *ngIf="getDetalleControl(i, 'cantidad').errors?.['required']">
                 Cantidad es requerido.
               </div>
             </div>

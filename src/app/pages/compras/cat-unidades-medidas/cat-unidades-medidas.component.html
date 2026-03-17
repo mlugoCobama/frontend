@@ -48,8 +48,8 @@
           </div>
           <div >
             <div class="tab-page-content mt-3 table-responsive" style="overflow-y: scroll; height: 20rem;">
-              <table *ngIf="!isLoad" class="table table-hover table-sm table-bordered">
-                <thead class="table-light thead-sticky">
+              <table *ngIf="!isLoad" class="table table-hover table-sm border">
+                <thead class="table-dark thead-sticky">
                   <tr>
                     <th (click)="ordenarPor('nombre')">Unidad de Medida <i [ngClass]="getIconoOrden('nombre')"></i></th>
                     <th (click)="ordenarPor('abreviatura')">Abreviatura <i [ngClass]="getIconoOrden('abreviatura')"></i></th>
@@ -63,6 +63,7 @@
                 </tbody>
               </table>
             </div>
+            <p class="mt-2 text-muted">Se muestran {{ datosFiltrados?.length ?? 0 }} de {{ data?.length ?? 0 }}</p>
           </div>
         </div>
         </div>

@@ -11,7 +11,7 @@
   <!-- Inicia tabla detalle solicitud + precios cotizaciones -->
   <div class="table-responsive">
     <table
-    class="table table-striped table-hover table-sm table-bordered table-responsive"
+    class="table table-sm table-hover rounded border"
     id="tableCompraInsumos"
     *ngIf="!isLoad"
   > 
@@ -23,19 +23,25 @@
         <th>Observaciones</th>
         <th *ngIf = "solicitudCompra.multiUnidad" >AT</th>
         <th style="width: 3rem;">R. fot.</th>
-        <th style="width: 3rem;" class="text-center">Autorizado</th>
+        <th style="width: 3rem;" class="text-center"> <small>Autorizado</small> </th>
         <th style="width: 3rem;" class="text-center" title="El costo del insumo sera pagado por el cliente">Rec</th>
         <th *ngFor="let prov of cotProv" class="text-center">
-          <strong> {{ prov.proveedores_id.nombre }} </strong>
-          <i title="Proveedor seleccionado" *ngIf="prov.seleccionado == 1" class=" text-success bx bx-check-circle bx-burst"></i>
-          <button
-              class="btn btn-warnign btn-sm"
-              title="Editar precios"
-              (click)="habilitarEdicionProveedor(prov.proveedores_id.id)"
-              *ngIf= "solicitudCompra.estatus === enEsts.EnCotizacion && tienePermiso('view btn save precios') && !mostrarObs"
-            >
-              <i class="fas fa-edit"></i>
-            </button>
+          <div class="d-flex justify-content-between align-items-center">
+    <strong>{{ prov.proveedores_id.nombre }}</strong>
+    <div>
+      <i title="Proveedor seleccionado" *ngIf="prov.seleccionado == 1" class="text-success bx bx-check-circle bx-burst"></i>
+      <button
+        class="btn btn-outline-dark btn-sm ms-2"
+        title="Editar precios"
+        (click)="habilitarEdicionProveedor(prov.proveedores_id.id)"
+        *ngIf="solicitudCompra.estatus === enEsts.EnCotizacion && tienePermiso('view btn editar precios') && !mostrarObs"
+      >
+        <i class="fas fa-edit"></i>
+      </button>
+    </div>
+  </div>
+
+
         </th>
       </tr>
     </thead>
@@ -68,7 +74,7 @@
             <i class="fas fa-eye"></i
           ></a>
         </td>
-        <td class="text-center d-flex justify-content-center">
+        <td class="text-center">
           <div>
             <input class="form-check-input" type="checkbox" value="" id="flexCheckCheckedDisabled" 
             (change) ="cambioCheck(row, $event)"
@@ -83,17 +89,18 @@
         </td>
         <td *ngFor="let prov of cotProv; let i = index">
           <!-- <td *ngFor="let prov of row.detalles"> -->
-          <div *ngIf = "row.confirmado === 1" class="input-group input-group-sm col-sm">
+          <div *ngIf = "row.confirmado === 1" class="input-group input-group-sm">
             <span class="input-group-text">$</span>
             <input
               type="text"
               [(ngModel)]="row['precio_' + prov.proveedores_id.id]"   
-              placeholder="Precio"
+              placeholder="Precio unitario"
               mask="separator"
               thousandSeparator=","
-              class="form-control form-control-sm"
+              class="form-control form-control-sm text-end"
               [disabled]="row['disabled_' + +prov.proveedores_id.id]"
               (input)="updateTotals()"
+              title="Precio unitario"
             />
           </div>
         </td>
@@ -102,12 +109,12 @@
     <tfoot *ngIf="mostrarTotal">
       <tr >
         <td [attr.colspan]="solicitudCompra.multiUnidad ? 8 : 7" class="text-end">
-          <Strong> SUB-TOTAL (sin iva) </Strong>
+          <Strong> SUB-TOTAL<small>(Sin IVA)</small></Strong>
         </td>
         <td
           *ngFor="let prov of cotProv"
           [ngClass]="{'bg-success text-white': totals['precio_' + prov.proveedores_id.id] === totalMasBajo}"
-          class="text-center"
+          class="text-end"
         >
           <strong>
             {{ totals["precio_" + prov.proveedores_id.id] | currency }}
@@ -121,9 +128,9 @@
         <td
           *ngFor="let prov of cotProv"
           [ngClass]="{'bg-primary text-white': totals['precio_' + prov.proveedores_id.id] === totalMasBajo}"
-          class="text-center"
+          class="text-end"
         >
-          <strong>
+          <strong [title]="totals['precio_' + prov.proveedores_id.id] === totalMasBajo ? 'Este es el precio mas bajo' : ''">
             {{ totals["precio_" + prov.proveedores_id.id] * 1.16 | currency }}
           </strong>
         </td>
@@ -131,11 +138,7 @@
     </tfoot>
   </table>
   <div class="p-2 d-flex justify-content-end" *ngIf="tienePermiso('view btn save precios') && !mostrarObs">
-      <!-- <button *ngIf = "solicitudCompra.estatus < 3" class="btn btn-sm btn-warning" (click)="modificarDetalles()">
-      ACTUALIZAR DETALLES
-    </button> -->
     <button *ngIf= "solicitudCompra.estatus === enEsts.EnCotizacion && !isLoad" class="btn btn-sm btn-primary" (click)="guardarPrecios()">
-      <!-- <i class="fas fa-money-check-alt"></i> Guardar Precios -->
        <ng-container *ngIf="!saving; else loadingGuardando">
         <i class="fas fa-money-check-alt"></i> Guardar Precios
       </ng-container>
