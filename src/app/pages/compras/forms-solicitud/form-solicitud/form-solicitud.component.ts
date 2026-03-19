@@ -208,6 +208,7 @@ export class FormSolicitudComponent implements OnInit{
         if (response) {
           
           this.empresas = response.data;
+          console.log(this.empresas)
           this.getUsuarioActivo();
           this.isLoading = false;
         } else {

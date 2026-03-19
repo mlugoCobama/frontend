@@ -8,7 +8,7 @@
         name="empresa" aria-label="empresa" (change)="getUsuarios($event.target.value)">
         <option value="" selected disabled>Selecciona uno</option>
         <option *ngIf = "isLoading" value="" [disabled] = "isLoading"> Cargando opciones espera...</option>
-        <option  *ngFor="let item of empresas" [value]="item.intercompania">
+        <option  *ngFor="let item of empresas" [value]="item.intercompania" [hidden]="!tienePermiso(item.permiso)" >
           {{ item.name.toUpperCase() }}
         </option>
       </select>
