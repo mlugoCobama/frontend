@@ -236,7 +236,7 @@ onProveedorChange(index: number) {
   const proveedorCtrl = this.proveedoresArray.at(index) as FormGroup;
   const contactoCtrl = proveedorCtrl.get('contacto_id');
   if(contactoCtrl){
-    console.log(this.tieneContactos(index));
+    // console.log(this.tieneContactos(index));
     if (this.tieneContactos(index)) {
     contactoCtrl?.setValidators([Validators.required]);
   } else {

@@ -51,7 +51,7 @@ ngOnInit() {
 
 
   ngOnDestroy() {
-    console.log('DetalleComponent destruido');
+    // console.log('DetalleComponent destruido');
     // aquí puedes limpiar subscripciones o recursos
   }
 
@@ -61,7 +61,7 @@ ngOnInit() {
     this.ordenesServicio.getOne(id).subscribe(data => {
       if (data.status == 'success') {
         this.dataEntrada = data.data;
-        console.log(this.dataEntrada);
+        // console.log(this.dataEntrada);
         // this.setValues();
         if(this.dataEntrada.num_entrada){
           // this.showBtnSave = false;

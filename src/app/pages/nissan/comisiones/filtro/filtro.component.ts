@@ -179,13 +179,18 @@ tienePermiso(permiso: string = null): boolean {
 
   filtrarAgencias(cadena) {
   const filtro = cadena.toLowerCase();
-    if (filtro === "nissan") {
-      return this.rawAgencias.filter(a => a.name.toLowerCase().includes("nissan"));
-    } else if (filtro === "lille" ||  filtro === "renault") {
-      return this.rawAgencias.filter(a => a.name.toLowerCase().includes("renault"));
-    } else {
-      return this.rawAgencias; 
-    }
+  let resultado = [];
+
+  if (filtro === "nissan") {
+    resultado = this.rawAgencias.filter(a => a.name.toLowerCase().includes("nissan"));
+  } else if (filtro === "lille" || filtro === "renault") {
+    resultado = this.rawAgencias.filter(a => a.name.toLowerCase().includes("renault"));
+  } else {
+    resultado = this.rawAgencias;
+  }
+  
+  const todas = this.rawAgencias.find(a => a.value === "todos");
+  return [todas, ...resultado.filter(a => a.value !== "todos")];
 }
 
 getEmpresaActiva(){

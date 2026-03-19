@@ -250,8 +250,8 @@ public loadDetallesFromDB(detalles: any[]) {
       confirmado: 1
     };
   });
-  console.log(this.tableData);
-  console.log(this.destino)
+  // console.log(this.tableData);
+  // console.log(this.destino)
 }
 
 
