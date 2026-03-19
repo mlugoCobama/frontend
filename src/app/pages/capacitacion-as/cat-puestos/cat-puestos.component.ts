@@ -112,7 +112,7 @@ export class CatPuestosComponent implements OnInit{
         (response) => {
           if (response) {
             this.modulos = response.data;
-            console.log(this.modulos)
+            // console.log(this.modulos)
             this.ready = true;
           } else {
             this.ready = false;
@@ -166,7 +166,7 @@ export class CatPuestosComponent implements OnInit{
              this.puestos.destroy(this.dato.id).subscribe(
                (response) => {
                  if (response.status === "success") {
-                   console.log(response.message);
+                  //  console.log(response.message);
                    this.getAll();
                    Swal.fire({
                      title: "Borrado!",

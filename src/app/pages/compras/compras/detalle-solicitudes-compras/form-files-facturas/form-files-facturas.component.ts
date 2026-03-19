@@ -493,7 +493,7 @@ public save(){
   const xml = Number(Math.ceil(impTotalXML));
   const oc  = Number(Math.ceil(impTotalOC));
 
-    console.log('total xml', xml, 'total', oc);
+    // console.log('total xml', xml, 'total', oc);
 
     if (xml === 0) return true;            // No pagado
     if (xml < oc) return true;             // Pagado parcialmente

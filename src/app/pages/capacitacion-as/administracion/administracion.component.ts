@@ -140,7 +140,7 @@ export class AdministracionComponent implements OnInit {
     this.administracion.getEmpresas().subscribe(
       (response) => {
         if (response) {
-          console.log(response.data)
+          // console.log(response.data)
           this.empresas = this.filtrarEmpresas(response.data);
           this.haveEmpresas = true;
         } else {
@@ -197,7 +197,7 @@ export class AdministracionComponent implements OnInit {
             this.administracion.destroy(this.dato.id).subscribe(
               (response) => {
                 if (response.status === "success") {
-                  console.log(response.message);
+                  // console.log(response.message);
                   this.getData();
                   Swal.fire({
                     title: "Borrado!",

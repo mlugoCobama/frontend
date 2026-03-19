@@ -76,10 +76,8 @@ export class FormDatosPagoComponent implements OnInit{
     if (this.proveedorForm.invalid) {
       this.alertas.mostrarAlerta("error", "Falta datos de pago", 'error', 'danger')
       this.datosPago.controls.forEach(group => group.markAllAsTouched());
-      console.log(this.proveedorForm);
       return;
     }
-    console.log(this.proveedorForm)
     return this.proveedorForm.value
 
 
