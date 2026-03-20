@@ -8,7 +8,7 @@ const routes: Routes = [
   { path: '', component: UcoipComponent },
   { path: 'ucoip', loadChildren: () => import('./configuracion/configuracion.module').then(m => m.ConfiguracionModule) },
   { path: 'inventario', component: InventarioComponent },
-  { path: 'permisos', component: PermisosComponent},
+  { path: 'testing/provisional/permisos', component: PermisosComponent},
 ];
 
 @NgModule({

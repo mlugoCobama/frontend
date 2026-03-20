@@ -5,6 +5,7 @@ import { LocalStorageServiceService } from "src/app/core/services/local-storage-
 import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 import { ComprasMacroService } from 'src/app/core/services/compras/compras-macro.service';
 import { obtenerErroresFormulario } from 'src/app/core/helpers/errores-forrmulario';
+import { PermisosService } from 'src/app/core/services/permisos.service';
 
 @Component({
   selector: 'app-form-solicitud-macro',
@@ -57,6 +58,7 @@ export class FormSolicitudMacroComponent implements OnInit{
     private usuariosService: UsuariosService,
     private alertasService: SwalComprsServiceService,
     private comprasMacro: ComprasMacroService,
+    private permisosService: PermisosService,
    ){};
 
    ngOnInit(): void {
@@ -286,5 +288,11 @@ mostrarErroresFormulario() {
     return errores[0]; // o mostrar todos
   }
 }
+
+tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
+  }
+
 
 }

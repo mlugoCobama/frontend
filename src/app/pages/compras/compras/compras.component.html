@@ -39,28 +39,28 @@
             <div *ngIf="!isLoad" class="row" [ngClass]="'justify-content-between'">
 
               <div class="col-3">
-                <label *ngIf="usuarioSolicita?.multiselect === true" for="empresa"
+                <label *ngIf="tienePermiso('view select emp users compras')" for="empresa"
                   class="form-label form-label-sm">Empresa: *</label>
-                <select *ngIf="usuarioSolicita?.multiselect === true && !modifica" class="form-select form-select-sm"
+                <select *ngIf="tienePermiso('view select emp simple compras')" class="form-select form-select-sm"
                   aria-label="Default select example" id="empresa" name="empresa" aria-label="empresa"
                   (change)="getAll($event.target.value)">
                   <option value="" selected disabled>Selecciona uno</option>
                   <option *ngIf="isLoading" value="" [disabled]="isLoading">
                     Cargando opciones espera...
                   </option>
-                  <option *ngFor="let item of empresas" [value]="item.intercompania">
+                  <option *ngFor="let item of rawEmpresas" [value]="item.intercompania" [hidden]="!tienePermiso(item.permiso)">
                     {{ item.name.toUpperCase() }}
                   </option>
                 </select>
 
-                <select *ngIf="usuarioSolicita?.multiselect === true && modifica" class="form-select form-select-sm"
+                <select *ngIf="tienePermiso('view select emp quick compras')" class="form-select form-select-sm"
                   aria-label="Default select example" id="empresa" name="empresa" aria-label="empresa"
                   [(ngModel)]="busqueda2" (change)="filtrarTabla2()">
                   <option value="" selected>Todas</option>
                   <option *ngIf="isLoading" value="" [disabled]="isLoading">
                     Cargando opciones espera...
                   </option>
-                  <option *ngFor="let item of rawEmpresas" [value]="item.name">
+                  <option *ngFor="let item of rawEmpresas" [value]="item.name" [hidden]="!tienePermiso(item.permiso)">
                     {{ item.name.toUpperCase() }}
                   </option>
                 </select>

@@ -98,7 +98,6 @@ export class ComprasComponent implements OnInit {
           if(this.rawEmpresas){
             this.getUsuarioActivo();
           }
-          
           // this.isLoading = false;
         } else {
           this.alertasService.mostrarAlerta(
@@ -162,9 +161,10 @@ export class ComprasComponent implements OnInit {
   }
 
   filtrarEmpresas(data, empRel) {
-    this.empresas = data.filter((empresa) =>
-      empRel.includes(empresa.intercompania)
-    );
+    this.empresas = data
+    // data.filter((empresa) =>
+    //   empRel.includes(empresa.intercompania)
+    // );
   }
 
   /**

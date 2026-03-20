@@ -78,9 +78,9 @@ export class ComprasMacroComponent implements OnInit{
       (response) => {
         if (response.status === "success") {
           this.usuarioSolicita = response.data[0];
-          if(this.usuarioSolicita.empresas !=  null){
-            this.filtrarEmpresas( this.empresas ,this.usuarioSolicita.empresas);
-          }
+          // if(this.usuarioSolicita.empresas !=  null){
+          //   this.filtrarEmpresas( this.empresas ,this.usuarioSolicita.empresas);
+          // }
           this.getAll(this.usuarioSolicita?.intercompania);
           // this.formSolicitudCompra.patchValue({empresa :  this.usuarioSolicita.intercompania});
           // console.log(this.usuarioSolicita);

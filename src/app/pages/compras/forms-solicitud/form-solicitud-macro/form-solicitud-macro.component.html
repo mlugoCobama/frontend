@@ -3,7 +3,7 @@
     <label for="empresa" class="form-label form-label-sm">Empresa: *</label>
 
     <select
-      *ngIf="usuarioSolicita?.multiselect === true; else nombreEmpresa"
+      *ngIf="tienePermiso('view select emp users compras') === true; else nombreEmpresa"
       class="form-select form-select-sm"
       aria-label="Default select example"
       formControlName="empresa"
@@ -17,7 +17,7 @@
         Cargando opciones espera...
       </option>
       
-      <option *ngFor="let item of empresas" [value]="item.intercompania">
+      <option *ngFor="let item of empresas" [value]="item.intercompania" [hidden]="!tienePermiso(item.permiso)">
         {{ item.name.toUpperCase() }}
       </option>
     </select>
