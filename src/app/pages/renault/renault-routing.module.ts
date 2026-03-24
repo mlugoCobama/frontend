@@ -13,7 +13,9 @@ import { DetalleOrdenComponent } from './ordenes-servicio/detalle-orden/detalle-
 const routes: Routes = [
   { path: 'sabana-control', component: SabanaControlComponent },
   { path: 'visor-citas/:id', component: VisorCitasComponent },
-  { path: 'comisiones', component:  ComisionesComponent},
+  { path: 'comisiones/concentrado', component:  ComisionesComponent},
+  { path: 'comisiones/nuevos', component:  ComisionesComponent},
+  { path: 'comisiones/seminuevos', component:  ComisionesComponent},
   { path: 'vendedores', component:  VendedoresComponent},
   { path: 'tabulador', component:  TabuladorComponent},
   { path: 'ordenes-servicio', component:  OrdenesServicioComponent},

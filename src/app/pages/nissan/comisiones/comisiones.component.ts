@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import { PermisosService } from 'src/app/core/services/permisos.service';
 import { FiltroComponent } from "./filtro/filtro.component";
 import { firstValueFrom } from 'rxjs';
+import { ActivatedRoute } from "@angular/router";
 
 
 @Component({
@@ -25,7 +26,7 @@ export class ComisionesComponent implements AfterViewInit {
   public estado: any = 0;
 
   public modelCamposGastos = ['otros','gasolina','previa','descuentos','descuento_impulso',
-                              'traslados','subsidios','descuento_da','cortesia','accesorios','placas', 'porcentaje_bdc'
+                              'traslados','subsidios','descuento_da','cortesia','accesorios','placas', 'porcentaje_bdc', 'comision_garantizada'
                             ];
 
   public hoy = new Date().toISOString().split("T")[0];
@@ -43,7 +44,8 @@ export class ComisionesComponent implements AfterViewInit {
     private comisionesService: ComisionesService,
     private swal: SwalComprsServiceService,
     public fb: FormBuilder,
-    private permisosService: PermisosService
+    private permisosService: PermisosService,
+    private route: ActivatedRoute
   ) {}
 
   ngAfterViewInit(): void {}
@@ -126,6 +128,7 @@ export class ComisionesComponent implements AfterViewInit {
       accesorios: [0],
       placas: [0],
       porcentaje_bdc: [0],
+      comision_garantizada: [0],
       // Calculados
       total_gastos: [{ value: 0, disabled: true }],
       utlidad_gastos: [{ value: 0, disabled: true }],
@@ -168,9 +171,9 @@ export class ComisionesComponent implements AfterViewInit {
 
     const reglas: Record<string, string[]> = {
       NU: ['otros','gasolina','previa','descuentos','descuento_impulso',
-      'traslados','subsidios','cortesia' ],
+      'traslados','subsidios','cortesia', 'porcentaje_bdc', 'comision_garantizada' ],
       SEMI: ['otros','gasolina','previa','descuentos','descuento_impulso',
-      'traslados','subsidios','descuento_da','accesorios','placas'],
+      'traslados','subsidios','descuento_da','accesorios','placas', 'porcentaje_bdc', 'comision_garantizada'],
     };
 
     const campos = this.modelCamposGastos;
@@ -212,9 +215,9 @@ export class ComisionesComponent implements AfterViewInit {
     const comisionGuardada = Number(fg.get('comision_apv')?.value)
     const utilidadInicial = Number(fg.get('utilidad_inicial')?.value) || 0;
     const porcentaje = (Number(fg.get('tipo_venta_porcentaje')?.value) - porcentajeBdc)  || 0;
-
+    const comGarantizada =  Number(fg.get('comision_garantizada')?.value)
     const utilidadAC = utilidadInicial - totalGastos;
-    const comision = utilidadAC > 0 ?  utilidadAC * porcentaje : 0;
+    const comision =  comGarantizada > 0 ? comGarantizada : (utilidadAC > 0 ?  utilidadAC * porcentaje : 0);
     const comisionBDC = utilidadAC > 0 ? utilidadAC * porcentajeBdc : 0; 
     const utilidadFinal = utilidadAC - comision - comisionBDC;
   
@@ -249,7 +252,8 @@ export class ComisionesComponent implements AfterViewInit {
       cortesia: g.cortesia ?? 0,
       accesorios: g.accesorios ?? 0,
       placas: g.placas ?? 0,
-      porcentaje_bdc: g.porcentaje_bdc ?? 0
+      porcentaje_bdc: g.porcentaje_bdc ?? 0,
+      comision_garantizada: g.comision_garantizada ?? 0
     }, { emitEvent: true });
   }
 
@@ -290,7 +294,8 @@ export class ComisionesComponent implements AfterViewInit {
         descuento_da: v.descuento_da,
         cortesia: v.cortesia,
         accesorios: v.accesorios,
-        placas: v.placas
+        placas: v.placas,
+        comision_garantizada: v.comision_garantizada
       }));
       
       this.comisionesService.save(payload).subscribe((response) => {
@@ -505,7 +510,11 @@ export class ComisionesComponent implements AfterViewInit {
     });
   }
 
-
+getVentaAuto() {
+  const segments = this.route.snapshot.url;
+  const ventaAuto = segments.length > 0 ? segments[segments.length - 1].path : '';
+  return ventaAuto ?? null;
+}
 
 
 
