@@ -73,7 +73,7 @@
             <p class="mb-1 small">
               <strong> {{ item.fecha }} </strong>
             </p>
-            <p class="text-muted mb-1 small text-truncate">
+            <p *ngIf="item.proveedor != '-' " class="text-muted mb-1 small text-truncate">
               <strong>Proveedor:</strong> {{ item.proveedor.substring(0, 42) }} {{ item.proveedor.length > 42 ? '...' : '' }}
             </p>
 
@@ -82,7 +82,7 @@
                 <strong>Modo de Pago: {{ item.modo_pago }}</strong>
               </p>
 
-              <p *ngIf="item.pagado != null " class="mb-1 small text-truncate">
+              <p *ngIf="item.pagado != null &&  item.estatus > 5" class="mb-1 small text-truncate">
                 <strong [ngClass]="{ 'text-success': item.pagado === 'PAGADO', 'text-danger': item.pagado !== 'PAGADO' }" > {{ item.pagado }}</strong>
               </p>
              </div>
@@ -95,12 +95,12 @@
               >
                 {{ item.estado }}
               </span>
-              <span *ngIf="item.folio_oc && tienePermiso('view total orden')"> <strong> {{ item.total_orden | currency }} </strong></span>
+              <span *ngIf="item.folio_oc && tienePermiso('view total orden') && +item.total_orden > 0"> <strong> {{ item.total_orden | currency }} </strong></span>
             </div>
 
             <div  class="d-flex justify-content-between aling-items-center mt-1 small">
               <a
-                *ngIf="item.folio_oc && tienePermiso('view btn descargar orden')"
+                *ngIf="item.folio_oc && tienePermiso('view btn descargar orden') && item.folio_oc != '-'"
                 [title]="'Vista previa de la orden de compra'"
                 class="btn btn-sm btn-info p-1"
                 style="cursor: pointer"
@@ -108,8 +108,8 @@
               >
                 <strong> {{ item.folio_oc }} </strong>
               </a>
-              <p  *ngIf="item.modo_pago == 'CREDITO' && item.pagado !== 'PAGADO'" class="m-0"><strong>Pago parcial (factura)</strong></p>
-              <p *ngIf="item.modo_pago == 'CONTADO' && item.pagado !== 'PAGADO'" class="m-0"><strong>Pagar total orden</strong></p>
+              <p  *ngIf="item.modo_pago == 'CREDITO' && item.pagado !== 'PAGADO' && item.estatus > 5" class="m-0"><strong>Pago parcial (factura)</strong></p>
+              <!-- <p *ngIf="item.modo_pago == 'CONTADO' && item.pagado !== 'PAGADO'" class="m-0"><strong>Pagar total orden</strong></p> -->
             </div>
           </div>
         </div>
@@ -117,5 +117,4 @@
     </div>
   </div>
 </div>
-
 
