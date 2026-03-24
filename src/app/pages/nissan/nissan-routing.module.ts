@@ -10,7 +10,9 @@ import { TabuladorComponent } from './comisiones/tabulador/tabulador.component';
 const routes: Routes = [
   { path: 'pedido-unidades', component: PedidosUnidadesComponent },
   { path: 'compra-seminuevos', component: ComprasSeminuevosComponent },
-  { path: 'comisiones', component:  ComisionesComponent},
+  { path: 'comisiones/concentrado', component:  ComisionesComponent},
+  { path: 'comisiones/nuevos', component:  ComisionesComponent},
+  { path: 'comisiones/seminuevos', component:  ComisionesComponent},
   { path: 'vendedores', component:  VendedoresComponent},
   { path: 'tabulador', component:  TabuladorComponent},
 ];
