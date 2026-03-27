@@ -20,7 +20,7 @@ import { TabuladorComponent } from './comisiones/tabulador/tabulador.component';
 import { FiltroComponent } from './comisiones/filtro/filtro.component';
 import { BotoneraComponent } from './comisiones/botonera/botonera.component';
 import { SpinerComponent } from './comisiones/spiner/spiner.component';
-import { CardTopComponent } from './comisiones/card-top/card-top.component';
+// import { CardTopComponent } from './comisiones/card-top/card-top.component';
 import { ModalAddVendedorComponent } from './comisiones/vendedores/modal-add-vendedor/modal-add-vendedor.component';
 import { FormVendedoresComponent } from './comisiones/vendedores/form-vendedores/form-vendedores.component';
 import { ModalUpdateVendedorComponent } from './comisiones/vendedores/modal-update-vendedor/modal-update-vendedor.component';
@@ -41,7 +41,7 @@ import { ModalUpdateTabuladorComponent } from './comisiones/tabulador/modal-upda
     FiltroComponent,
     BotoneraComponent,
     SpinerComponent,
-    CardTopComponent,
+    // CardTopComponent,
     ModalAddVendedorComponent,
     FormVendedoresComponent,
     ModalUpdateVendedorComponent,

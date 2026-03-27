@@ -1,0 +1,166 @@
+<div class="card shadow-sm">
+  <div class="card-body">
+
+    <!-- Buscador -->
+   <div class="row justify-content-between align-items-center mb-2">
+
+  <!-- SELECT (izquierda) -->
+  <div class="col-auto" *ngIf="mostrarSelect">
+    <select
+      class="form-select form-select-sm"
+      [(ngModel)]="valorSelect"
+      (change)="onSelectChange()"
+    >
+      <option value="">{{ placeholderSelect }}</option>
+      <option *ngFor="let op of opcionesSelect" [value]="op.valor">
+        {{ op.etiqueta }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Espaciador cuando no hay select -->
+  <div class="col-auto" *ngIf="!mostrarSelect"></div>
+
+  <!-- BUSCADOR (derecha) -->
+  <div class="col-3">
+    <input
+      type="text"
+      class="form-control form-control-sm"
+      placeholder="Buscar..."
+      [(ngModel)]="busqueda"
+      (input)="filtrarTabla()"
+    />
+  </div>
+
+</div>
+
+<div *ngIf="mostrarCheck && seleccionados.size > 0"
+         class="mb-2 d-flex align-items-center gap-2">
+      <span class="badge bg-primary">
+        {{ seleccionados.size }} seleccionado(s)
+      </span>
+      <button class="btn btn-sm btn-outline-secondary"
+              (click)="limpiarSeleccion()">
+        <i class="fas fa-times"></i> Limpiar selección
+      </button>
+    </div>
+
+    <!-- Tabla -->
+    <div
+      *ngIf="!isLoad"
+      class="table-responsive border"
+      [style.max-height]="maxHeight"
+      style="overflow-y: auto;"
+    >
+      <table
+        *ngIf="datosFiltrados.length > 0; else noDataMensaje"
+        class="table table-sm"
+      >
+        <thead class="table-dark thead-sticky">
+          <tr>
+            <th *ngIf="mostrarCheck" style="width:40px;" class="text-center">
+              <input type="checkbox"
+                     class="form-check-input"
+                     [checked]="todosMarcados"
+                     (change)="toggleTodos($any($event.target).checked)"/>
+            </th>
+            <ng-container *ngFor="let col of columnas">
+              <th (click)="ordenarPor(col.campo)" style="cursor:pointer; white-space:nowrap; " [ngClass]="{
+                                                            'text-start': !col.align || col.align === 'left',
+                                                            'text-center': col.align === 'center',
+                                                            'text-end': col.align === 'right',
+                                                            }">
+                <span>{{ col.etiqueta }}</span>
+                <i [ngClass]="getIconoOrden(col.campo)"></i>
+              </th>
+            </ng-container>
+            <th *ngIf="tieneAcciones"
+                class="text-center"
+                style="white-space:nowrap;">
+              Acciones
+            </th>
+          </tr>
+        </thead>
+
+        <tbody class="table-bordered">
+          <tr
+            *ngFor="let item of datosFiltrados; let iFila = index"
+            (click)="seleccionar(item, $event)"
+            style="cursor:pointer;"
+          >
+            <td *ngIf="mostrarCheck" (click)="$event.stopPropagation()" class="text-center">
+              <input type="checkbox"
+                     class="form-check-input border"
+                     [checked]="estaSeleccionado(item)"
+                     (change)="toggleCheck(item, $any($event.target).checked)"/>
+            </td>
+            <td  *ngFor="let col of columnas" [ngClass]="{
+                                                            'text-start': !col.align || col.align === 'left',
+                                                            'text-center': col.align === 'center',
+                                                            'text-end': col.align === 'right',
+                                                            'text-success': col.textColor === 'success',
+                                                            'text-primary': col.textColor === 'primary',
+                                                            'text-danger': col.textColor === 'danger',
+                                                            'text-warning': col.textColor === 'warning',
+                                                            'fw-bold': col.bold ===true,
+                                                            }">
+              <ng-container [ngSwitch]="col.pipe">
+                <span *ngSwitchCase="'percent'">
+                  {{ item[col.campo] | percent }}
+                </span>
+                <span *ngSwitchCase="'currency'">
+                  {{ item[col.campo] | currency: (col.pipeArgs || '') }}
+                </span>
+                <span *ngSwitchCase="'date'">
+                  {{ item[col.campo] | date: (col.pipeArgs || 'dd/MM/yyyy') }}
+                </span>
+                <span *ngSwitchDefault>
+                  {{ item[col.campo] }}
+                </span>
+              </ng-container>
+            </td>
+            <td *ngIf="tieneAcciones"
+                class="text-center"
+                (click)="$event.stopPropagation()">
+              <div class="d-flex justify-content-center gap-1">
+                <ng-container *ngFor="let accion of acciones; let iAccion = index">
+                  <button 
+                        *ngIf="esVisible(accion, item) && tienePermiso(accion.permiso)"
+                        class="btn btn-sm {{ accion.clase }}"
+                        [title]="accion.tooltip || ''"
+                        (click)="ejecutarAccion(accion, item, iFila, iAccion, $event)">
+                   <span *ngIf="estaEnLoading(iFila, iAccion)"
+                      class="spinner-border spinner-border-sm">
+                    </span>
+                    <i *ngIf="!estaEnLoading(iFila, iAccion)"
+                      [ngClass]="accion.icono">
+                    </i>
+                </button>
+                </ng-container>
+                
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Spinner de carga -->
+    <div *ngIf="isLoad" class="text-center py-3">
+      <div class="spinner-border  text-secondary" role="status"></div>
+    </div>
+
+    <!-- Contador -->
+    <caption *ngIf="!isLoad" class="text-nowrap d-block mt-1">
+      Mostrando {{ datosFiltrados.length }} de {{ data.length }}
+    </caption>
+
+  </div>
+</div>
+
+<!-- Templates -->
+<ng-template #noDataMensaje>
+  <div class="text-center text-muted py-3">
+    <strong>No se encontraron registros para mostrar...</strong>
+  </div>
+</ng-template>

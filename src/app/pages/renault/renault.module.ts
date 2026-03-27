@@ -14,7 +14,9 @@ import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { OrdenesServicioComponent } from './ordenes-servicio/ordenes-servicio.component';
 import { DetalleOrdenComponent } from './ordenes-servicio/detalle-orden/detalle-orden.component';
 import { FiltroOrdenesServicioComponent } from './ordenes-servicio/filtro-ordenes-servicio/filtro-ordenes-servicio.component';
-
+import { ComisionesFinanciamientoComponent } from './comisiones-financiamiento/comisiones-financiamiento.component';
+import { FinanciamientoFormComponent } from './comisiones-financiamiento/forms/financiamiento-form/financiamiento-form.component';
+import { FinanciamientoModalComponent } from './comisiones-financiamiento/financiamiento-modal/financiamiento-modal.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,10 @@ import { FiltroOrdenesServicioComponent } from './ordenes-servicio/filtro-ordene
     ModalSabanaControlComponent,
     OrdenesServicioComponent,
     DetalleOrdenComponent,
-    FiltroOrdenesServicioComponent
+    FiltroOrdenesServicioComponent,
+    ComisionesFinanciamientoComponent,
+    FinanciamientoFormComponent,
+    FinanciamientoModalComponent,
   ],
   imports: [
     CommonModule,

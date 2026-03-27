@@ -1,0 +1,134 @@
+<div class="card shadow-sm">
+  <div class="card-body p-3">
+    <form [formGroup]="formulario">
+      <div class="row g-2 mb-1 align-items-end">
+
+        <!-- AGENCIA -->
+        <ng-container *ngIf="config.showAgencia">
+          <ng-container *ngIf="tienePermiso('view multiselect comisiones agencias'); else nombreEmpresa">
+            <div class="col-auto">
+              <label>Agencias</label>
+              <select class="form-select form-select-sm" formControlName="agencia">
+                <option value="" selected>Selecciona uno</option>
+                <option *ngFor="let agencia of agencias"
+                        [hidden]="!tienePermiso(agencia.permiso)"
+                        [value]="agencia.value">{{ agencia.name }}</option>
+              </select>
+              <div *ngIf="form['agencia'].invalid && form['agencia'].touched" class="error">
+                <small>Selecciona una agencia</small>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+
+        <!-- TIPO DE VENTA -->
+        <div class="col-auto" *ngIf="config.showTipoVenta">
+          <label>Tipo de venta</label>
+          <select class="form-select form-select-sm" formControlName="tipoVenta">
+            <option value="" selected>Selecciona uno</option>
+            <option value="todos">Todos</option>
+            <option value="NU">Nuevos</option>
+            <option value="SEMI">Seminuevos</option>
+          </select>
+          <div *ngIf="form['tipoVenta'].invalid && form['tipoVenta'].touched" class="error">
+            <small>Selecciona un tipo de venta</small>
+          </div>
+        </div>
+
+        <!-- FECHAS -->
+        <ng-container *ngIf="config.showFechas">
+          <div class="col-auto">
+            <label>Fecha inicial</label>
+            <input type="date" [max]="hoy" class="form-control form-control-sm" formControlName="fechaInicial">
+            <div *ngIf="form['fechaInicial'].invalid && form['fechaInicial'].touched" class="error">
+              <small>Selecciona una fecha inicial</small>
+            </div>
+            <div *ngIf="formulario.errors?.['fechaInvalida']" class="error">
+              <small>La fecha inicial no puede ser mayor que la fecha final</small>
+            </div>
+          </div>
+          <div class="col-auto">
+            <label>Fecha final</label>
+            <input type="date" [max]="hoy" class="form-control form-control-sm" formControlName="fechaFinal">
+            <div *ngIf="form['fechaFinal'].invalid && form['fechaFinal'].touched" class="error">
+              <small>Selecciona una fecha final</small>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- VENDEDOR -->
+        <div class="col-auto" *ngIf="config.showVendedor">
+          <label>Vendedor</label>
+          <select class="form-select form-select-sm" formControlName="vendedor">
+            <option value="" selected>Selecciona uno</option>
+            <option *ngFor="let v of vendedores" [value]="v.value">{{ v.label }}</option>
+          </select>
+          <div *ngIf="form['vendedor'].invalid && form['vendedor'].touched" class="error">
+            <small>Selecciona un vendedor</small>
+          </div>
+        </div>
+
+        <!-- ESTADO -->
+        <div class="col-auto" *ngIf="config.showEstado">
+          <label>Estado</label>
+          <select class="form-select form-select-sm" formControlName="estado">
+            <option value="" selected>Selecciona uno</option>
+            <option *ngFor="let op of estadoOpciones" [value]="op.value">{{ op.label }}</option>
+          </select>
+          <div *ngIf="form['estado'].invalid && form['estado'].touched" class="error">
+            <small>Selecciona un estado</small>
+          </div>
+        </div>
+
+        <!-- BUSCAR -->
+        <div class="col-auto">
+          <button type="button" class="btn btn-sm btn-info"
+                  [disabled]="searching"
+                  (click)="buscarDatos()">
+            <ng-container *ngIf="!searching; else loadingBuscar">
+              <i class="fas fa-search"></i> Buscar
+            </ng-container>
+            <ng-template #loadingBuscar>
+              <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+              Buscando...
+            </ng-template>
+          </button>
+        </div>
+        <!-- LIMPIAR -->
+        <div class="col-auto">
+          <button type="button" class="btn btn-sm btn-secondary"
+                  (click)="resetForm()">
+            <i class="fas fa-times"></i> Limpiar
+          </button>
+        </div>
+
+        <!-- DESCARGAR -->
+        <div class="col-auto ms-auto" *ngIf="hasData">
+          <a href="javascript:void(0);"
+             class="btn btn-outline-success btn-sm"
+             [class.disabled]="downloading"
+             (click)="descargarConcentrado()">
+            <ng-container *ngIf="!downloading; else loadingDescarga">
+              <i class="fas fa-file-excel"></i> Descargar
+            </ng-container>
+            <ng-template #loadingDescarga>
+              <span class="spinner-border spinner-border-sm me-1" role="status"></span>
+              Descargando...
+            </ng-template>
+          </a>
+        </div>
+
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Fallback cuando no tiene permiso de ver el select de agencias -->
+<ng-template #nombreEmpresa>
+  <div class="col-auto">
+    <label>Empresa</label>
+    <p class="border rounded py-1 px-2 mb-0">
+      <strong>{{ getEmpresaUsuario().nombreEmpresa }}</strong>
+    </p>
+  </div>
+</ng-template>

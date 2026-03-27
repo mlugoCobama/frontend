@@ -7,6 +7,7 @@ import { VendedoresComponent } from '../nissan/comisiones/vendedores/vendedores.
 import { TabuladorComponent } from '../nissan/comisiones/tabulador/tabulador.component';
 import { OrdenesServicioComponent } from './ordenes-servicio/ordenes-servicio.component';
 import { DetalleOrdenComponent } from './ordenes-servicio/detalle-orden/detalle-orden.component';
+import { ComisionesFinanciamientoComponent } from './comisiones-financiamiento/comisiones-financiamiento.component';
 
 
 
@@ -14,6 +15,8 @@ const routes: Routes = [
   { path: 'sabana-control', component: SabanaControlComponent },
   { path: 'visor-citas/:id', component: VisorCitasComponent },
   { path: 'comisiones', component:  ComisionesComponent},
+  { path: 'comisiones/nrfinance', component:  ComisionesFinanciamientoComponent},
+
   { path: 'vendedores', component:  VendedoresComponent},
   { path: 'tabulador', component:  TabuladorComponent},
   { path: 'ordenes-servicio', component:  OrdenesServicioComponent},

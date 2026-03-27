@@ -262,6 +262,13 @@ export const MENU: MenuItem[] = [
             parentId: 32,
             permission: "view submodulo vendedores renault",
           },
+          {
+            id: 13,
+            label: "NR Finance",
+            link: "/renault/comisiones/nrfinance",
+            parentId: 32,
+            // permission: "view submodulo comisiones nrf renault",
+          },
         ]
       },
       {
