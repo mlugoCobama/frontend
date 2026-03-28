@@ -1,10 +1,12 @@
 <app-card-top 
 [title] = "'Comsiones por Toma de Unidades'"
 [hasButtons] = "true"
-[showBtnNuevo] = "true"
-[showBtnEditar] = "false"
-[showBtnEliminar] = "false"
+[showBtnNuevo] = "!filaSeleccionada"
+[showBtnEditar] = "filaSeleccionada"
+[showBtnEliminar] = "filaSeleccionada"
 (nuevo) = "openModalNuevo()"
+(actualizar) = "openModalActualizar()"
+(eliminar) = "confirmarDelete()"
 
 ></app-card-top>
 

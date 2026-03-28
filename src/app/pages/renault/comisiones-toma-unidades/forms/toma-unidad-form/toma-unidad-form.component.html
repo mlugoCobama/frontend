@@ -18,26 +18,38 @@
       </div>
     </div>
 
-    <!-- No Inventario -->
-    <div class="mb-2 col-lg-6">
-      <label class="form-label">No. Inventario</label>
-      <input type="text" class="form-control form-control-sm"
-             placeholder="No. Inventario"
-             formControlName="no_inventario">
-      <div class="text-danger small"
-           *ngIf="form.get('no_inventario')?.touched && form.get('no_inventario')?.invalid">
-        Campo requerido
-      </div>
-    </div>
-
     <!-- Clave Producto -->
-    <div class="mb-2 col-lg-6">
+    <div class="mb-2 col-lg-4">
       <label class="form-label">Clave Producto</label>
       <input type="text" class="form-control form-control-sm"
              placeholder="Clave Producto"
              formControlName="clave_producto">
       <div class="text-danger small"
            *ngIf="form.get('clave_producto')?.touched && form.get('clave_producto')?.invalid">
+        Campo requerido
+      </div>
+    </div>
+    
+    <!-- Anio -->
+    <div class="mb-2 col-lg-4">
+      <label class="form-label">Año</label>
+      <input type="text" class="form-control form-control-sm"
+             placeholder="Año"
+             formControlName="anio">
+      <div class="text-danger small"
+           *ngIf="form.get('anio')?.touched && form.get('anio')?.invalid">
+        Campo requerido
+      </div>
+    </div>
+
+    <!-- No Inventario -->
+    <div class="mb-2 col-lg-4">
+      <label class="form-label">No. Inventario</label>
+      <input type="text" class="form-control form-control-sm"
+             placeholder="No. Inventario"
+             formControlName="no_inventario">
+      <div class="text-danger small"
+           *ngIf="form.get('no_inventario')?.touched && form.get('no_inventario')?.invalid">
         Campo requerido
       </div>
     </div>
