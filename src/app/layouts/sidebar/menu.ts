@@ -269,6 +269,13 @@ export const MENU: MenuItem[] = [
             parentId: 32,
             // permission: "view submodulo comisiones nrf renault",
           },
+          {
+            id: 15,
+            label: "Toma de Unidad",
+            link: "/renault/comisiones/toma-unidades",
+            parentId: 32,
+            // permission: "view submodulo comisiones toma unidad renault",
+          },
         ]
       },
       {

@@ -1,0 +1,82 @@
+<!-- toma-unidad-form.component.html -->
+<form [formGroup]="form">
+  <div class="row">
+
+    <!-- Vendedor -->
+    <div class="mb-2 col-lg-12">
+      <label class="form-label">Vendedor</label>
+      <select class="form-select form-select-sm"
+              formControlName="com_vendedores_id">
+        <option selected disabled value="">Seleccione...</option>
+        <option *ngFor="let v of vendedores" [value]="v.id">
+          {{v.nro_vendedor_as}}-{{v.clave}}-{{ v.nombre }}
+        </option>
+      </select>
+      <div class="text-danger small"
+           *ngIf="form.get('com_vendedores_id')?.touched && form.get('com_vendedores_id')?.invalid">
+        Campo requerido
+      </div>
+    </div>
+
+    <!-- No Inventario -->
+    <div class="mb-2 col-lg-6">
+      <label class="form-label">No. Inventario</label>
+      <input type="text" class="form-control form-control-sm"
+             placeholder="No. Inventario"
+             formControlName="no_inventario">
+      <div class="text-danger small"
+           *ngIf="form.get('no_inventario')?.touched && form.get('no_inventario')?.invalid">
+        Campo requerido
+      </div>
+    </div>
+
+    <!-- Clave Producto -->
+    <div class="mb-2 col-lg-6">
+      <label class="form-label">Clave Producto</label>
+      <input type="text" class="form-control form-control-sm"
+             placeholder="Clave Producto"
+             formControlName="clave_producto">
+      <div class="text-danger small"
+           *ngIf="form.get('clave_producto')?.touched && form.get('clave_producto')?.invalid">
+        Campo requerido
+      </div>
+    </div>
+
+    <!-- Comisión APV en Pesos -->
+    <div class="mb-2 col-lg-6">
+      <label class="form-label">Importe Comisión APV</label>
+      <input mask="separator" thousandSeparator="," type="text"
+             placeholder="Comisión APV"
+             prefix="$ " class="form-control form-control-sm"
+             formControlName="comision_apv_pesos">
+      <div class="text-danger small"
+           *ngIf="form.get('comision_apv_pesos')?.touched && form.get('comision_apv_pesos')?.invalid">
+        Campo requerido
+      </div>
+    </div>
+
+    <!-- Fecha Toma -->
+    <div class="mb-2 col-lg-6">
+      <label class="form-label">Fecha Toma</label>
+      <input type="date" class="form-control form-control-sm"
+             formControlName="fecha_toma">
+      <div class="text-danger small"
+           *ngIf="form.get('fecha_toma')?.touched && form.get('fecha_toma')?.invalid">
+        Campo requerido
+      </div>
+    </div>
+
+    <!-- Observaciones -->
+    <div class="mb-2">
+      <label class="form-label">Observaciones</label>
+      <textarea formControlName="observaciones" class="form-control" rows="3"></textarea>
+      <div class="text-danger small"
+           *ngIf="form.get('observaciones')?.touched && form.get('observaciones')?.invalid">
+        Campo requerido
+      </div>
+    </div>
+
+  </div>
+</form>
+
+
