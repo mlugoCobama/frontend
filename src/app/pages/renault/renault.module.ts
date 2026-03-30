@@ -17,6 +17,7 @@ import { FiltroOrdenesServicioComponent } from './ordenes-servicio/filtro-ordene
 import { ComisionesFinanciamientoComponent } from './comisiones-financiamiento/comisiones-financiamiento.component';
 import { FinanciamientoFormComponent } from './comisiones-financiamiento/forms/financiamiento-form/financiamiento-form.component';
 import { FinanciamientoModalComponent } from './comisiones-financiamiento/financiamiento-modal/financiamiento-modal.component';
+import { ComisionesConcentradoComponent } from './comisiones-concentrado/comisiones-concentrado.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { FinanciamientoModalComponent } from './comisiones-financiamiento/financ
     ComisionesFinanciamientoComponent,
     FinanciamientoFormComponent,
     FinanciamientoModalComponent,
+    ComisionesConcentradoComponent,
   ],
   imports: [
     CommonModule,

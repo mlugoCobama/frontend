@@ -8,6 +8,7 @@ import { TabuladorComponent } from '../nissan/comisiones/tabulador/tabulador.com
 import { OrdenesServicioComponent } from './ordenes-servicio/ordenes-servicio.component';
 import { DetalleOrdenComponent } from './ordenes-servicio/detalle-orden/detalle-orden.component';
 import { ComisionesFinanciamientoComponent } from './comisiones-financiamiento/comisiones-financiamiento.component';
+import { ComisionesConcentradoComponent } from './comisiones-concentrado/comisiones-concentrado.component';
 
 
 
@@ -16,7 +17,7 @@ const routes: Routes = [
   { path: 'visor-citas/:id', component: VisorCitasComponent },
   { path: 'comisiones', component:  ComisionesComponent},
   { path: 'comisiones/nrfinance', component:  ComisionesFinanciamientoComponent},
-
+  { path: 'comisiones/concentrado', component:  ComisionesConcentradoComponent},
   { path: 'vendedores', component:  VendedoresComponent},
   { path: 'tabulador', component:  TabuladorComponent},
   { path: 'ordenes-servicio', component:  OrdenesServicioComponent},

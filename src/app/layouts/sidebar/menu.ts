@@ -241,6 +241,13 @@ export const MENU: MenuItem[] = [
         permission: "view modulo renault",
         parentId: 30,
         subItems: [
+           {
+            id: 7,
+            label: "Concentrado",
+            link: "/renault/comisiones/concentrado",
+            parentId: 32,
+            // permission: "view submodulo comisiones concentrado renault",
+          },
           {
             id: 8,
             label: "Comisiones",

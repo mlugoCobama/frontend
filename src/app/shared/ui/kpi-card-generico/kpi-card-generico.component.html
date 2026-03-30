@@ -1,0 +1,12 @@
+<div class="card shadow-sm">
+  <div class="card-body text-center">
+    <!-- Título del KPI -->
+    <h5 class="card-title">{{ title }}</h5>
+
+    <!-- Número KPI con clase dinámica -->
+    <h4 [ngClass]="colorClass"> <strong>{{ kpi| currency }}</strong> </h4>
+
+    <!-- Descripción opcional -->
+    <p *ngIf="description" class="card-text text-muted">{{ description }}</p>
+  </div>
+</div>
