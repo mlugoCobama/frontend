@@ -21,6 +21,9 @@ import { ComisionesConcentradoComponent } from './comisiones-concentrado/comisio
 import { ComisionesTomaUnidadesComponent } from './comisiones-toma-unidades/comisiones-toma-unidades.component';
 import { TomaUnidadesModalComponent } from './comisiones-toma-unidades/toma-unidades-modal/toma-unidades-modal.component';
 import { TomaUnidadFormComponent } from './comisiones-toma-unidades/forms/toma-unidad-form/toma-unidad-form.component';
+import { ComsionesSeguroComponent } from './comsiones-seguro/comsiones-seguro.component';
+import { SeguroModalComponent } from './comsiones-seguro/seguro-modal/seguro-modal.component';
+import { SeguroFormComponent } from './comsiones-seguro/forms/seguro-form/seguro-form.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +40,9 @@ import { TomaUnidadFormComponent } from './comisiones-toma-unidades/forms/toma-u
     ComisionesTomaUnidadesComponent,
     TomaUnidadesModalComponent,
     TomaUnidadFormComponent,
+    ComsionesSeguroComponent,
+    SeguroModalComponent,
+    SeguroFormComponent,
   ],
   imports: [
     CommonModule,
