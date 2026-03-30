@@ -269,6 +269,15 @@ export const MENU: MenuItem[] = [
             parentId: 32,
             // permission: "view submodulo comisiones nrf renault",
           },
+
+           {
+            id: 14,
+            label: "Seguros",
+            link: "/renault/comisiones/seguros",
+            parentId: 32,
+            // permission: "view submodulo comisiones seguro renault",
+          },
+
         ]
       },
       {

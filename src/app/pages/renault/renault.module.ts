@@ -17,6 +17,9 @@ import { FiltroOrdenesServicioComponent } from './ordenes-servicio/filtro-ordene
 import { ComisionesFinanciamientoComponent } from './comisiones-financiamiento/comisiones-financiamiento.component';
 import { FinanciamientoFormComponent } from './comisiones-financiamiento/forms/financiamiento-form/financiamiento-form.component';
 import { FinanciamientoModalComponent } from './comisiones-financiamiento/financiamiento-modal/financiamiento-modal.component';
+import { ComsionesSeguroComponent } from './comsiones-seguro/comsiones-seguro.component';
+import { SeguroModalComponent } from './comsiones-seguro/seguro-modal/seguro-modal.component';
+import { SeguroFormComponent } from './comsiones-seguro/forms/seguro-form/seguro-form.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +32,9 @@ import { FinanciamientoModalComponent } from './comisiones-financiamiento/financ
     ComisionesFinanciamientoComponent,
     FinanciamientoFormComponent,
     FinanciamientoModalComponent,
+    ComsionesSeguroComponent,
+    SeguroModalComponent,
+    SeguroFormComponent,
   ],
   imports: [
     CommonModule,
