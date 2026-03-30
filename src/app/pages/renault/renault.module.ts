@@ -18,6 +18,9 @@ import { ComisionesFinanciamientoComponent } from './comisiones-financiamiento/c
 import { FinanciamientoFormComponent } from './comisiones-financiamiento/forms/financiamiento-form/financiamiento-form.component';
 import { FinanciamientoModalComponent } from './comisiones-financiamiento/financiamiento-modal/financiamiento-modal.component';
 import { ComisionesConcentradoComponent } from './comisiones-concentrado/comisiones-concentrado.component';
+import { ComisionesTomaUnidadesComponent } from './comisiones-toma-unidades/comisiones-toma-unidades.component';
+import { TomaUnidadesModalComponent } from './comisiones-toma-unidades/toma-unidades-modal/toma-unidades-modal.component';
+import { TomaUnidadFormComponent } from './comisiones-toma-unidades/forms/toma-unidad-form/toma-unidad-form.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +34,9 @@ import { ComisionesConcentradoComponent } from './comisiones-concentrado/comisio
     FinanciamientoFormComponent,
     FinanciamientoModalComponent,
     ComisionesConcentradoComponent,
+    ComisionesTomaUnidadesComponent,
+    TomaUnidadesModalComponent,
+    TomaUnidadFormComponent,
   ],
   imports: [
     CommonModule,

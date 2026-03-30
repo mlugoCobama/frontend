@@ -9,6 +9,7 @@ import { OrdenesServicioComponent } from './ordenes-servicio/ordenes-servicio.co
 import { DetalleOrdenComponent } from './ordenes-servicio/detalle-orden/detalle-orden.component';
 import { ComisionesFinanciamientoComponent } from './comisiones-financiamiento/comisiones-financiamiento.component';
 import { ComisionesConcentradoComponent } from './comisiones-concentrado/comisiones-concentrado.component';
+import { ComisionesTomaUnidadesComponent } from './comisiones-toma-unidades/comisiones-toma-unidades.component';
 
 
 
@@ -21,6 +22,9 @@ const routes: Routes = [
   { path: 'comisiones/concentrado', component:  ComisionesComponent},
   { path: 'comisiones/nuevos', component:  ComisionesComponent},
   { path: 'comisiones/seminuevos', component:  ComisionesComponent},
+  { path: 'comisiones/toma-unidades', component:  ComisionesTomaUnidadesComponent},
+  
+
   { path: 'vendedores', component:  VendedoresComponent},
   { path: 'tabulador', component:  TabuladorComponent},
   { path: 'ordenes-servicio', component:  OrdenesServicioComponent},
