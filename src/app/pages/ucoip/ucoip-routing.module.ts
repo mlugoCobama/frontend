@@ -7,6 +7,7 @@ import { PermisosComponent } from './permisos/permisos.component';
 const routes: Routes = [
   { path: '', component: UcoipComponent },
   { path: 'ucoip', loadChildren: () => import('./configuracion/configuracion.module').then(m => m.ConfiguracionModule) },
+  { path: 'servicios', loadChildren: () => import('./gestion-servicios/gestion-servicios.module').then(m => m.GestionServiciosModule) },
   { path: 'inventario', component: InventarioComponent },
   { path: 'testing/provisional/permisos', component: PermisosComponent},
 ];

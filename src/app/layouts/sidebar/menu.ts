@@ -1,6 +1,7 @@
 import { MenuItem } from './menu.model';
 
 export const MENU: MenuItem[] = [
+  // UCOIP
   {
     id: 1,
     label: "UCoIP",
@@ -46,6 +47,7 @@ export const MENU: MenuItem[] = [
       },
     ],
   },
+  //COMRPAS
   {
     id: 7,
     label: "Compras",
@@ -97,6 +99,7 @@ export const MENU: MenuItem[] = [
       },
     ],
   },
+  // MACRO TALLER
   {
     id: 7,
     label: "Macro Taller",
@@ -119,6 +122,7 @@ export const MENU: MenuItem[] = [
       },
     ],
   },
+  // PARQUE VEHICULAR
   {
      id: 7,
     label: "Parque Vehicular",
@@ -134,6 +138,7 @@ export const MENU: MenuItem[] = [
       },
     ],
   },
+  // NISSAN
   {
     id: 30,
     label: "Nissan",
@@ -163,28 +168,44 @@ export const MENU: MenuItem[] = [
           {
             id: 8,
             label: "Comisiones",
-            link: "/nissan/comisiones",
+            link: "/nissan/comisiones/concentrado",
             parentId: 32,
-            permission: "view submodulo comisiones",
+            permission: "view submodulo comisiones concentrado",
+          },
+
+           {
+            id: 11,
+            label: "Nuevos",
+            link: "/nissan/comisiones/nuevos",
+            parentId: 30,
+            permission: "view submodulo comisiones nuevos nissan",
+          },
+          {
+            id: 12,
+            label: "Seminuevos",
+            link: "/nissan/comisiones/seminuevos",
+            parentId: 30,
+            permission: "view submodulo comisiones seminuevos nissan",
           },
           {
             id: 9,
             label: "Tabulador",
             link: "/nissan/tabulador",
-            parentId: 32,
+            parentId: 30,
             permission: "view submoduloe tabuladores",
           },
           {
             id: 10,
             label: "Vendedores",
             link: "/nissan/vendedores",
-            parentId: 32,
+            parentId: 30,
             permission: "view submodulo vendedores",
           },
         ]
       },
     ],
   },
+  // RENAULT
   {
     id: 30,
     label: "Renault",
@@ -250,10 +271,10 @@ export const MENU: MenuItem[] = [
           },
           {
             id: 8,
-            label: "Comisiones",
-            link: "/renault/comisiones",
+            label: "Concentrado",
+            link: "/renault/comisiones/concentrado",
             parentId: 32,
-            permission: "view submodulo comisiones renault",
+            permission: "view submodulo comisiones concentrado renault",
           },
           {
             id: 9,

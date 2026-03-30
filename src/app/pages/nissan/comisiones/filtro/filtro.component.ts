@@ -60,6 +60,8 @@ export class FiltroComponent implements OnInit{
     this.agencias = this.filtrarAgencias(this.getEmpresaActiva());
     this.formulario.patchValue({agencia: this.getEmpresaUsuario().intercompania});
 
+    console.log(this.getVentaAuto())
+
   }
 
 
@@ -191,6 +193,14 @@ getEmpresaActiva(){
   const segmento = this.route.parent?.snapshot.url[0].path || '';
   return segmento;
 }
+
+getVentaAuto() {
+  const segments = this.route.snapshot.url;
+  const ventaAuto = segments.length > 0 ? segments[segments.length - 1].path : '';
+  return ventaAuto ?? null;
+}
+
+
   public downloading:boolean = false;
 
   descargarConcentrado() {
@@ -220,6 +230,23 @@ getEmpresaUsuario(){
   const intercompania = usuarioActual['usuarioActivo'][0].intercompania;
   const nombreEmpresa = usuarioActual['usuarioActivo'][0].empresa ?? 'No especificada';
   return { intercompania: intercompania, nombreEmpresa:nombreEmpresa };
+}
+
+showSelectTipoVenta(){
+  const tipoVentaAuto = this.getVentaAuto();
+  if( tipoVentaAuto == 'nuevos'){
+    this.formulario.patchValue({ tipoVenta: 'nu'})
+    return false;
+  }
+
+  if( tipoVentaAuto == 'seminuevos'){
+    this.formulario.patchValue({ tipoVenta: 'semi'})
+    return false;
+  }
+
+  return true
+
+
 }
 
 }

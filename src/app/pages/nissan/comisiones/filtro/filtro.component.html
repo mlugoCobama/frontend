@@ -14,7 +14,7 @@
               </div>
             </div>
 
-            <div class="col-auto">
+            <div *ngIf ="showSelectTipoVenta()"class="col-auto">
               <label>Tipo de venta</label>
               <select class="form-select form-select-sm " aria-label=".form-select-sm example" formControlName="tipoVenta">
                 <option value=""selected>Selecciona uno</option>

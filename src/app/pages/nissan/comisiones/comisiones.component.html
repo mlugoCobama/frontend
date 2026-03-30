@@ -6,7 +6,7 @@
 
       
       <app-card-top
-      [title] = "'Comisiones'"
+      [title] = "getVentaAuto() | titlecase"
       ></app-card-top>
       
       <app-filtro
@@ -55,6 +55,7 @@
                   <th *ngIf="estado > 1">Cortesía</th>
                   <th *ngIf="estado > 1">Accesorios</th>
                   <th *ngIf="estado > 1">Placas</th>
+                  <th *ngIf="estado > 1" class="text-nowrap">Comi. Garantizada</th>
                   <th *ngIf="estado > 1" class="text-nowrap">% BDC</th>
                   <!--  Resultados calculados -->
                   <th *ngIf="estado > 1 "class="text-nowrap">Total Gastos</th> 
@@ -90,7 +91,7 @@
                 <td>{{v.get('utilidad_inicial')?.value | currency}}</td>
 
                 <th class="text-nowrap">{{v.get('tipo_venta')?.value}}</th> <!-- Este valor ya existe solo  es de referencia -->
-                <th class="text-nowrap">{{v.get('tipo_venta_porcentaje')?.value | percent}}</th> <!-- Este valor ya existe solo es de referencia -->
+                <th class="text-nowrap">{{(v.get('comision_garantizada').value > 0 ? 0 : v.get('tipo_venta_porcentaje')?.value ) | percent}}</th> <!-- Este valor ya existe solo es de referencia -->
 
                 <td *ngIf="estado > 1"><input class="form-control form-control-sm" mask="separator" thousandSeparator=","  type="text" placeholder="Otros" formControlName="otros"></td><!-- Input Editable -->
                 <td *ngIf="estado > 1"><input class="form-control form-control-sm" mask="separator" thousandSeparator=","  type="text" placeholder="Gasolina" formControlName="gasolina"></td><!-- Input Editable -->
@@ -103,6 +104,7 @@
                 <td *ngIf="estado > 1"><input class="form-control form-control-sm" mask="separator" thousandSeparator=","  type="text" placeholder="Cortesia" formControlName="cortesia"></td><!-- Input Editable -->
                 <td *ngIf="estado > 1"><input class="form-control form-control-sm" mask="separator" thousandSeparator=","  type="text" placeholder="Accesorios" formControlName="accesorios"></td><!-- Input Editable -->
                 <td *ngIf="estado > 1"><input class="form-control form-control-sm" mask="separator" thousandSeparator=","  type="text" placeholder="Placas" formControlName="placas"></td><!-- Input Editable -->
+                <td *ngIf="estado > 1"><input class="form-control form-control-sm" mask="separator" thousandSeparator=","  type="text" placeholder="ComI. Garantizada" formControlName="comision_garantizada"></td><!-- Input Editable -->
                 <td *ngIf="estado > 1"><input class="form-control form-control-sm" mask="separator" thousandSeparator=","  type="text" placeholder="% BDC" formControlName="porcentaje_bdc" suffix="%"></td><!-- Input Editable -->
                 <!--  Resultados calculados -->
                 <td *ngIf="estado > 1" class="text-nowrap fw-bold text-end">{{ v.get('total_gastos')?.value | currency }}</td>
