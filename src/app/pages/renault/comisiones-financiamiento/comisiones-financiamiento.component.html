@@ -2,9 +2,9 @@
 <app-card-top 
 [title] = "'Comsiones de NR Finance'"
 [hasButtons] = "true"
-[showBtnNuevo] = "!filaSeleccionada"
-[showBtnEditar] = "filaSeleccionada"
-[showBtnEliminar] = "filaSeleccionada"
+[showBtnNuevo] = "!filaSeleccionada && tienePermiso('view btn add comision financiamiento')"
+[showBtnEditar] = "filaSeleccionada && filaSeleccionada.estatus == 1"
+[showBtnEliminar] = "filaSeleccionada && filaSeleccionada.estatus == 1"
 (nuevo) = "openModalNuevo()"
 (actualizar) = "openModalActualizar()"
 (eliminar) = "confirmarDelete()"
@@ -12,6 +12,7 @@
 
 <!-- padre.component.html -->
 <app-filtro-comsiones-generico
+  *ngIf = "showFiltro"
   [config]="configFiltro"
   [estadoOpciones]="misEstados"
   [hasData]="hayDatos"
@@ -20,7 +21,9 @@
   (buscar)="buscarDatos($event)"
   (descargar)="onDescargar($event)"
   (formValidChange)="formularioValido = $event"
-  (resetted)="onReset()">
+  (resetted)="onReset()"
+  [defaultEstado] = "estadoDefault"
+  >
 </app-filtro-comsiones-generico>
 
 <!-- componente.html -->
@@ -33,7 +36,6 @@
   (itemSeleccionado)="onItemSeleccionado($event)"
   [mostrarCheck]="false"
   [acciones]="accionesTabla"
-  (itemSeleccionado)="onItemSeleccionado($event)"
   (itemsSeleccionados)="onItemsSeleccionados($event)"
 />
 

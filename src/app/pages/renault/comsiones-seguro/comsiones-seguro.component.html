@@ -1,15 +1,16 @@
 <app-card-top 
 [title] = "'Comsiones de Seguros'"
 [hasButtons] = "true"
-[showBtnNuevo] = "!filaSeleccionada"
-[showBtnEditar] = "filaSeleccionada"
-[showBtnEliminar] = "filaSeleccionada"
+[showBtnNuevo] = "!filaSeleccionada && tienePermiso('view btn add comision seguro')"
+[showBtnEditar] = "filaSeleccionada && filaSeleccionada.estatus == 1"
+[showBtnEliminar] = "filaSeleccionada && filaSeleccionada.estatus == 1"
 (nuevo) = "openModalNuevo()"
 (actualizar) = "openModalActualizar()"
 (eliminar) = "confirmarDelete()"
 ></app-card-top>
 
 <app-filtro-comsiones-generico
+  *ngIf = "showFiltro"
   [config]="configFiltro"
   [estadoOpciones]="misEstados"
   [hasData]="hayDatos"
@@ -18,7 +19,9 @@
   (buscar)="buscarDatos($event)"
   (descargar)="onDescargar($event)"
   (formValidChange)="formularioValido = $event"
-  (resetted)="onReset()">
+  (resetted)="onReset()"
+  [defaultEstado] = "estadoDefault"
+  >
 </app-filtro-comsiones-generico>
 
 <app-tabla-generica

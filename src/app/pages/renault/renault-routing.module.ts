@@ -20,12 +20,9 @@ const routes: Routes = [
   { path: 'comisiones', component:  ComisionesComponent},
   { path: 'comisiones/nrfinance', component:  ComisionesFinanciamientoComponent},
   { path: 'comisiones/concentrado', component:  ComisionesConcentradoComponent},
-  { path: 'comisiones/concentrado', component:  ComisionesComponent},
   { path: 'comisiones/nuevos', component:  ComisionesComponent},
   { path: 'comisiones/seminuevos', component:  ComisionesComponent},
   { path: 'comisiones/toma-unidades', component:  ComisionesTomaUnidadesComponent},
-  
-
   { path: 'comisiones/seguros', component:  ComsionesSeguroComponent},
   { path: 'vendedores', component:  VendedoresComponent},
   { path: 'tabulador', component:  TabuladorComponent},

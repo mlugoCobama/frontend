@@ -25,27 +25,26 @@ export const configEstadosFinanciamiento  = [
 
 export const configuracionesAceessLevel = [
     {
-        permiso : 'admnin',
+        permiso : 'view financiamientos like admin',
         configFiltro :{ showEstado: true, showVendedor: true, showTipoVenta: false},
-        estadoDefault : 'todos'
+        estadoDefault : '12345'
     },{
-        permiso : 'cxc',
-        configFiltro :{ showEstado: true, showVendedor: true, showTipoVenta: false},
+        permiso : 'view financiamientos like nivel 1',
+        configFiltro :{ showEstado: false, showVendedor: true, showTipoVenta: false},
         estadoDefault : '1'
     },{
-        permiso : 'gventas',
-        configFiltro :{ showEstado: true, showVendedor: true, showTipoVenta: false},
-         estadoDefault : '1'
+        permiso : 'view financiamientos like nivel 2',
+        configFiltro :{ showEstado: false, showVendedor: true, showTipoVenta: false},
+         estadoDefault : '2'
     },
     {
-        permiso : 'conta',
-        configFiltro :{ showEstado: true, showVendedor: true, showTipoVenta: false},
-        estadoDefault : '2'
-    },
-    {
-        permiso : 'rh',
-        configFiltro :{ showEstado: true, showVendedor: true, showTipoVenta: false},
+        permiso : 'view financiamientos like nivel 3',
+        configFiltro :{ showEstado: false, showVendedor: true, showTipoVenta: false},
         estadoDefault : '3'
     },
-
+    {
+        permiso : 'view financiamientos like nivel 4',
+        configFiltro :{ showEstado: false, showVendedor: true, showTipoVenta: false},
+        estadoDefault : '4'
+    },
 ]

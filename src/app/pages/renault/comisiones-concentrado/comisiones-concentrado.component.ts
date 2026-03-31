@@ -12,7 +12,8 @@ export class ComisionesConcentradoComponent implements OnInit{
   public columnasVendedor = configTablaConcentrado;
   public isLoad =  true;
   configFiltro = { showEstado: false, showVendedor: true, showTipoVenta: false}
-  hayDatos = true;
+  hayDatos = false;
+  public totales;
   
   constructor(private concentradoComisiones: ConcentradoComisionesService){
   }
@@ -28,9 +29,8 @@ export class ComisionesConcentradoComponent implements OnInit{
       (response: any) => {
         if (response) {
           this.data = response.data;
-          console.log(this.data)
-          // this.ordenador = new FuncionesTablas(this.data);
-          // this.datosFiltrados = [...this.data];
+          this.totales = this.obtenerTotales(response.data);
+          console.log(this.totales)
           this.isLoad = false;
         } else {
           console.log(response.message);
@@ -43,6 +43,14 @@ export class ComisionesConcentradoComponent implements OnInit{
       },
     );
   }
+
+ obtenerTotales(rows) {
+  // Buscamos la fila que tenga el texto "TOTAL GENERAL"
+  const totales = rows.find(r => r.vendedor === 'TOTAL GENERAL');
+  return totales || null;
+}
+
+
 
   buscarDatos(params){
     console.log(params);

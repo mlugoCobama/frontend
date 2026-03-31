@@ -267,55 +267,60 @@ export const MENU: MenuItem[] = [
             label: "Concentrado",
             link: "/renault/comisiones/concentrado",
             parentId: 32,
-            // permission: "view submodulo comisiones concentrado renault",
-          },
-          {
-            id: 8,
-            label: "Concentrado",
-            link: "/renault/comisiones/concentrado",
-            parentId: 32,
             permission: "view submodulo comisiones concentrado renault",
           },
           {
+            id: 8,
+            label: "Nuevos",
+            link: "/renault/comisiones/nuevos",
+            parentId: 32,
+            permission: "view submodulo comisiones nuevos renault",
+          },
+          {
             id: 9,
+            label: "Seminuevos",
+            link: "/renault/comisiones/seminuevos",
+            parentId: 32,
+            permission: "view submodulo comisiones seminuevos renault",
+          },
+          
+          {
+            id: 10,
+            label: "NR Finance",
+            link: "/renault/comisiones/nrfinance",
+            parentId: 32,
+            permission: "view submodulo comisiones nrf renault",
+          },
+          {
+            id: 11,
+            label: "Toma de Unidad",
+            link: "/renault/comisiones/toma-unidades",
+            parentId: 32,
+            permission: "view submodulo comisiones toma unidad renault",
+          },
+
+           {
+            id: 12,
+            label: "Seguros",
+            link: "/renault/comisiones/seguros",
+            parentId: 32,
+            permission: "view submodulo comisiones seguro renault",
+          },
+          {
+            id: 14,
             label: "Tabulador",
             link: "/renault/tabulador",
             parentId: 32,
             permission: "view submoduloe tabuladores renault",
           },
           {
-            id: 10,
+            id: 15,
             label: "Vendedores",
             link: "/renault/vendedores",
             parentId: 32,
             permission: "view submodulo vendedores renault",
           },
-          {
-            id: 13,
-            label: "NR Finance",
-            link: "/renault/comisiones/nrfinance",
-            parentId: 32,
-            // permission: "view submodulo comisiones nrf renault",
-          },
-<<<<<<< HEAD
-          {
-            id: 15,
-            label: "Toma de Unidad",
-            link: "/renault/comisiones/toma-unidades",
-            parentId: 32,
-            // permission: "view submodulo comisiones toma unidad renault",
-          },
-=======
 
-           {
-            id: 14,
-            label: "Seguros",
-            link: "/renault/comisiones/seguros",
-            parentId: 32,
-            // permission: "view submodulo comisiones seguro renault",
-          },
-
->>>>>>> CODE-58-Comisiones-Seguro
         ]
       },
       {

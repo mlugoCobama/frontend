@@ -14,12 +14,12 @@ export const configTablaConcentrado : ColumnaTabla[] = [
 
 /** configuracion de estados del filtro */
 export const configEstadosFinanciamiento  = [
+    { value: 12345, label: 'Todos' },
     { value: 1,     label: 'Por autorizar' },
     { value: 2,     label: 'Autorizada' },
     { value: 3,     label: 'Pagado' },
     { value: 4,     label: 'Rechazada' },
     // { value: 5,     label: 'Pagados' },
-    { value: 12345, label: 'Todos' },
 ];
 
 export const configuracionesAceessLevel = [

@@ -3,10 +3,11 @@ import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import { VendedoresService } from 'src/app/core/services/nissan/vendedores.service';
 import { SeguroModalComponent } from './seguro-modal/seguro-modal.component';
-import { configEstadosSeguro, configTablaSeguro } from './modelos-seguro';
+import { configEstadosSeguro, configTablaSeguro, configuracionesAceessLevel } from './modelos-seguro';
 import { SegurosService } from 'src/app/core/services/renault/seguros.service';
 import Swal from 'sweetalert2';
 import { firstValueFrom } from 'rxjs';
+import { PermisosService } from 'src/app/core/services/permisos.service';
 
 @Component({
   selector: 'app-comsiones-seguro',
@@ -31,42 +32,25 @@ export class ComsionesSeguroComponent {
     public seleccionados: any[] = [];
 
       public accionesTabla: any[] = [
-    {
-      icono:   'fas fa-backward',
-      clase:   'btn-warning',
-      tooltip: 'Devolver al estado anterior',
+    {  icono:   'fas fa-backward',  clase:   'btn-warning',  tooltip: 'Devolver al estado anterior',
       // Solo si NO está en el primer estado ni pagada
       visible: (item) => item.estatus > 1 && item.estatus !== 3,
       accion:  async (item) => await this.devolver(item),
     },
-    // {
-    //   icono:   'fas fa-window-close',
-    //   clase:   'btn-danger',
-    //   tooltip: 'Rechazar',
-    //   // Solo si está por autorizar o autorizada
-    //   visible: (item) => [1, 2].includes(item.estatus),
-    //   accion:  async (item) => await this.rechazar(item),
-    // },
     {
-      icono:   'fas fa-eye',
-      clase:   'btn-secondary',
-      tooltip: 'Ver documento de soporte',
+      icono:   'fas fa-eye',  clase:   'btn-secondary',  tooltip: 'Ver documento de soporte',
       // Solo si tiene archivo cargado
       visible: (item) => !!item.ruta_archivo,
       accion:  async (item) => await this.verDocumento(item),
     },
     {
-      icono:   'fas fa-exclamation-triangle',
-      clase:   'btn-info',
-      tooltip: 'Ver comentarios',
+      icono:   'fas fa-exclamation-triangle',  clase:   'btn-info',  tooltip: 'Ver comentarios',
       // Solo si tiene comentarios
       visible: (item) => !!item.comentario,
       accion:  (item) => this.mostrarObs(item),
     },
     {
-      icono:   'fas fa-check',
-      clase:   'btn-primary',
-      tooltip: 'Visto bueno',
+      icono:   'fas fa-check',  clase:   'btn-primary',  tooltip: 'Visto bueno',
       // Solo si está por autorizar o autorizada (no pagada ni rechazada)
       visible: (item) => [1, 2].includes(item.estatus),
       accion:  async (item) => await this.avanzarEstado(item),
@@ -78,12 +62,13 @@ export class ComsionesSeguroComponent {
       private modalService: BsModalService,
       private segurosService: SegurosService,
       private alertas: SwalComprsServiceService,
-      private vendedoresService:VendedoresService
+      private vendedoresService:VendedoresService,
+      private permisosService:PermisosService
     ) {}
 
   ngOnInit(): void {
     this.getVendedores(1);
-    this.getAll();
+    this.asignarEstado();
   }
 
    private getAll() {
@@ -348,5 +333,24 @@ async verDocumento(item: any): Promise<void> {
     }
   }
 
+  public showFiltro = true;
+  public estadoDefault;
   
+  asignarEstado() {
+    const permisos = configuracionesAceessLevel;
+    const encontrado = permisos.find(p => this.tienePermiso(p.permiso));
+
+    this.showFiltro = encontrado ? true : false;
+    if(this.showFiltro){
+       this.configFiltro = encontrado.configFiltro;
+        this.estadoDefault = encontrado.estadoDefault;
+    } 
+   
+    return encontrado?.estadoDefault ?? 0;
+    }
+  
+    tienePermiso(permiso: string = null): boolean {
+      if (!permiso) return true;
+      return this.permisosService.tienePermiso(permiso);
+    }
 }

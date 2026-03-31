@@ -6,43 +6,41 @@ export const configTablaTomaUnidades : ColumnaTabla[] = [
     { campo: "fecha_toma",            etiqueta: "Fecha Toma", pipe: "date" },
     { campo: "comision_apv_pesos",    etiqueta: "Importe", pipe: "currency",   align:'right', bold: true},
     { campo: "observaciones",         etiqueta: "Observaciones" },
-    // { campo: "porcentaje_asesor",     etiqueta: "%",                pipe: "percent",    align:'right' },
     { campo: "estatusTexto",          etiqueta: "Estatus",          textColor:'primary',align:'center', bold: true  },
   ];
 
 /** configuracion de estados del filtro */
 export const configEstadosTomaUnidades  = [
+    { value: 12345, label: 'Todos' },
     { value: 1,     label: 'Por autorizar' },
     { value: 2,     label: 'Autorizada' },
     { value: 3,     label: 'Pagado' },
     { value: 4,     label: 'Rechazada' },
     // { value: 5,     label: 'Pagados' },
-    { value: 12345, label: 'Todos' },
 ];
 
-export const configuracionesAceessLevelTU = [
+export const configuracionesAceessLevel = [
     {
-        permiso : 'admnin',
+        permiso : 'view toma unidad like admin',
         configFiltro :{ showEstado: true, showVendedor: true, showTipoVenta: false},
         estadoDefault : 'todos'
     },{
-        permiso : 'cxc',
-        configFiltro :{ showEstado: true, showVendedor: true, showTipoVenta: false},
+        permiso : 'view toma unidad like nivel 1',
+        configFiltro :{ showEstado: false, showVendedor: true, showTipoVenta: false},
         estadoDefault : '1'
     },{
-        permiso : 'gventas',
-        configFiltro :{ showEstado: true, showVendedor: true, showTipoVenta: false},
-         estadoDefault : '1'
+        permiso : 'view toma unidad like nivel 2',
+        configFiltro :{ showEstado: false, showVendedor: true, showTipoVenta: false},
+         estadoDefault : '2'
     },
     {
-        permiso : 'conta',
-        configFiltro :{ showEstado: true, showVendedor: true, showTipoVenta: false},
-        estadoDefault : '2'
-    },
-    {
-        permiso : 'rh',
-        configFiltro :{ showEstado: true, showVendedor: true, showTipoVenta: false},
+        permiso : 'view toma unidad like nivel 3',
+        configFiltro :{ showEstado: false, showVendedor: true, showTipoVenta: false},
         estadoDefault : '3'
     },
-
-]
+    {
+        permiso : 'view toma unidad like nivel 4',
+        configFiltro :{ showEstado: false, showVendedor: true, showTipoVenta: false},
+        estadoDefault : '4'
+    },
+];

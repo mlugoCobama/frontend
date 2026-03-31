@@ -114,7 +114,7 @@ export class FiltroComsionesGenericoComponent implements OnInit, OnChanges {
       this.mergeConfig();
       this.syncValidators();
     }
-    
+
     if (changes['defaultEstado'] && !this.formulario.get('estado')?.value) {
     this.formulario.patchValue({ estado: this.defaultEstado });
     }
@@ -196,7 +196,7 @@ export class FiltroComsionesGenericoComponent implements OnInit, OnChanges {
         ctrl?.setValidators(Validators.required);
       } else {
         ctrl?.clearValidators();
-        ctrl?.reset('');
+        // ctrl?.reset('');
       }
       ctrl?.updateValueAndValidity({ emitEvent: false });
     });
@@ -217,7 +217,7 @@ export class FiltroComsionesGenericoComponent implements OnInit, OnChanges {
         next: (data) => {
           this.vendedores = [
             { value: 'todos', label: 'Todos' },
-            ...data.data.map((v: any) => ({ value: v.id, label: `${v.nombre}-${v.clave}` }))
+            ...data.data.map((v: any) => ({ value: v.id, label: `${v.nro_vendedor_as}-${v.nombre}-${v.clave}` }))
           ];
         },
         error: () => {

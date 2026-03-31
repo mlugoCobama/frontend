@@ -11,7 +11,7 @@
     <div class="col">
         <app-kpi-card-generico
         title="Nuevos"
-        [kpi]="1500"
+        [kpi]="totales?.nuevos || 0"
         description="Pago de comisiones"
         colorClass="text-primary">
         </app-kpi-card-generico>
@@ -19,7 +19,7 @@
      <div class="col">
         <app-kpi-card-generico
         title="Seminuevos"
-        [kpi]="1500"
+        [kpi]="totales?.seminuevos || 0"
         description="Pago de comisiones"
         colorClass="text-primary">
         </app-kpi-card-generico>
@@ -27,7 +27,7 @@
      <div class="col">
         <app-kpi-card-generico
         title="Financiamientos"
-        [kpi]="1500"
+        [kpi]="totales?.financiamiento || 0"
         description="Pago de comisiones"
         colorClass="text-primary">
         </app-kpi-card-generico>
@@ -35,7 +35,7 @@
      <div class="col">
         <app-kpi-card-generico
         title="Seguros"
-        [kpi]="1500"
+        [kpi]="totales?.seguros || 0"
         description="Pago de comisiones"
         colorClass="text-primary">
         </app-kpi-card-generico>
@@ -43,7 +43,7 @@
     <div class="col">
         <app-kpi-card-generico
         title="Accesorios"
-        [kpi]="1500"
+        [kpi]="totales?.accesorios || 0"
         description="Pago de comisiones"
         colorClass="text-primary">
         </app-kpi-card-generico>
@@ -51,7 +51,7 @@
     <div class="col">
         <app-kpi-card-generico
         title="T. de unidades"
-        [kpi]="1500"
+        [kpi]="totales?.toma_unidades || 0"
         description="Pago de comisiones"
         colorClass="text-primary">
         </app-kpi-card-generico>
@@ -59,7 +59,7 @@
     <div class="col">
         <app-kpi-card-generico
         title="TOTAL"
-        [kpi]="1500"
+        [kpi]="totales?.total || 0"
         description="Pago de comisiones"
         colorClass="text-primary">
         </app-kpi-card-generico>

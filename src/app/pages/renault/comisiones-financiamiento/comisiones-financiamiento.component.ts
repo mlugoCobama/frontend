@@ -7,7 +7,8 @@ import { FinanciamientoService } from 'src/app/core/services/renault/financiamie
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import Swal from 'sweetalert2';
 import { firstValueFrom } from 'rxjs';
-import { configEstadosFinanciamiento, configTablaFinanciamiemto } from './modelos-comisiones';
+import { configEstadosFinanciamiento, configTablaFinanciamiemto, configuracionesAceessLevel } from './modelos-comisiones';
+import { PermisosService } from 'src/app/core/services/permisos.service';
 
 
 @Component({
@@ -23,6 +24,8 @@ export class ComisionesFinanciamientoComponent implements OnInit {
   public buscando = false;
   public columnasVendedor: any[] = configTablaFinanciamiemto;
   public misEstados= configEstadosFinanciamiento;
+  public showFiltro = true;
+  public estadoDefault:any;
 
   public configFiltro = { showEstado: true, showVendedor: true, showTipoVenta: false}
 
@@ -39,14 +42,6 @@ export class ComisionesFinanciamientoComponent implements OnInit {
       visible: (item) => item.estatus > 1 && item.estatus !== 3,
       accion:  async (item) => await this.devolver(item),
     },
-    // {
-    //   icono:   'fas fa-window-close',
-    //   clase:   'btn-danger',
-    //   tooltip: 'Rechazar',
-    //   // Solo si está por autorizar o autorizada
-    //   visible: (item) => [1, 2].includes(item.estatus),
-    //   accion:  async (item) => await this.rechazar(item),
-    // },
     {
       icono:   'fas fa-eye',
       clase:   'btn-secondary',
@@ -79,12 +74,14 @@ public seleccionados: any[] = [];
     private modalService: BsModalService,
     private financiamientoService: FinanciamientoService,
     private alertas: SwalComprsServiceService,
-    private vendedoresService:VendedoresService
+    private vendedoresService:VendedoresService, 
+    private permisosService: PermisosService
   ) {}
 
   ngOnInit(): void {
     this.getVendedores(1);
-    this.getAll();
+    this.asignarEstado();
+
   }
 
   public modalRef?: BsModalRef;
@@ -242,7 +239,7 @@ public seleccionados: any[] = [];
       this.isLoad = false;
       return;
     }
-
+    console.log(datos)
     const param = datos;
 
     this.financiamientoService.getLibroVentas(param.estado ,param.agencia, param.fechaInicial, param.fechaFinal, param.vendedor).subscribe(
@@ -299,35 +296,6 @@ public seleccionados: any[] = [];
       this.alertas.mostrarAlerta('Error', response.message, 'error', 'danger');
     }
   }
-  async rechazar(row: any): Promise<void> {
-    const { value: razon, isConfirmed } = await Swal.fire({
-      title:            '¿Está seguro que desea rechazar?',
-      text:             'Agrega la razón del rechazo',
-      input:            'textarea',
-      inputPlaceholder: 'Escribe la razón aquí...',
-      showCancelButton:  true,
-      confirmButtonText: 'Rechazar',
-      cancelButtonText:  'Cancelar',
-      reverseButtons:    true,
-      customClass: {
-        confirmButton: 'btn btn-danger m-1',
-        cancelButton:  'btn btn-secondary m-1'
-      },
-      buttonsStyling: false,
-      inputValidator: (value) => {
-        if (!value) return 'El campo es obligatorio';
-        return null;
-      }
-    });
-
-    if (!isConfirmed || !razon) return;
-
-    // Conecta tu servicio de rechazo aquí
-    // const response: any = await firstValueFrom(
-    //   this.financiamientoService.rechazar(row.id, { comentario: razon })
-    // );
-    console.log('Rechazar:', row.id, razon);
-  }
 
   async avanzarEstado(row: any): Promise<void> {
     const { isConfirmed } = await Swal.fire({
@@ -382,16 +350,16 @@ async verDocumento(item: any): Promise<void> {
   }
 
 asignarEstado() {
-  const permisos = [
-    { key: 'view comisiones cxc access', value: 1 },
-    { key: 'view comisiones gv access', value: 2 },
-    { key: 'view comisiones conta access', value: 3 },
-    { key: 'view comisiones rh access', value: 4 },
-    { key: 'view comisiones pagados access', value: 5 },
-    { key: 'view comisiones all access', value: 12345 }
-  ];
+  const permisos = configuracionesAceessLevel;
+  const encontrado = permisos.find(p => this.tienePermiso(p.permiso));
+  this.showFiltro = encontrado ? true : false;
+  this.configFiltro = encontrado.configFiltro;
+  this.estadoDefault = encontrado.estadoDefault;
+  return encontrado?.estadoDefault ?? 0;
+  }
 
-  // const encontrado = permisos.find(p => this.tienePermiso(p.key));
-  // return encontrado?.value ?? 0;
+  tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
   }
 }
