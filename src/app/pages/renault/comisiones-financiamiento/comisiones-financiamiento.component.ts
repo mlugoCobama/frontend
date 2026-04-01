@@ -134,7 +134,6 @@ public seleccionados: any[] = [];
       (response: any) => {
         if (response) {
           this.data = response.data;
-          console.log(this.data)
           // this.ordenador = new FuncionesTablas(this.data);
           // this.datosFiltrados = [...this.data];
           this.isLoad = false;

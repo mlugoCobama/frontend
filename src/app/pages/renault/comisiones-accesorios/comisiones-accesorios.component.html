@@ -1,0 +1,38 @@
+<app-card-top 
+[title] = "'Comsiones por Accesorios'"
+[hasButtons] = "true"
+[showBtnNuevo] = "!filaSeleccionada && tienePermiso('view btn add comision accesorios')"
+[showBtnEditar] = "filaSeleccionada && filaSeleccionada.estatus == 1"
+[showBtnEliminar] = "filaSeleccionada && filaSeleccionada.estatus == 1"
+(nuevo) = "openModalNuevo()"
+(actualizar) = "openModalActualizar()"
+(eliminar) = "confirmarDelete()"
+></app-card-top>
+
+
+<app-filtro-comsiones-generico
+  *ngIf = "showFiltro"
+  [config]="configFiltro"
+  [estadoOpciones]="misEstados"
+  [hasData]="hayDatos"
+  [downloading]="descargando"
+  [searching]="buscando"
+  (buscar)="buscarDatos($event)"
+  (descargar)="onDescargar($event)"
+  (formValidChange)="formularioValido = $event"
+  (resetted)="onReset()"
+  [defaultEstado] = "estadoDefault"
+  >
+</app-filtro-comsiones-generico>
+
+<app-tabla-generica
+  [data]="data"
+  [columnas]="columnasVendedor"
+  [isLoad]="isLoad"
+  [mostrarSelect]="false"
+  placeholderSelect="Seleccione una agencia"
+  [mostrarCheck]="false"
+  (itemSeleccionado)="onItemSeleccionado($event)"
+  [acciones]="accionesTabla"
+
+/>

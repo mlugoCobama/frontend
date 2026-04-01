@@ -1,0 +1,64 @@
+<form [formGroup]="form">
+  <div class="row">
+
+    <!-- Vendedor -->
+    <div class="mb-2 col-lg-6">
+      <label class="form-label">Vendedor</label>
+      <select class="form-select form-select-sm"
+              formControlName="com_vendedores_id">
+        <option selected disabled value="">Seleccione...</option>
+        <option *ngFor="let v of vendedores" [value]="v.id">
+          {{v.nro_vendedor_as}}-{{v.clave}}-{{ v.nombre }}
+        </option>
+      </select>
+      <div class="text-danger small"
+           *ngIf="form.get('com_vendedores_id')?.touched && form.get('com_vendedores_id')?.invalid">
+        Campo requerido
+      </div>
+    </div>
+
+    <div class="mb-2 col-lg-6">
+      <label class="form-label">No. Factura de Accesorios</label>
+      <input type="text" class="form-control form-control-sm"
+             formControlName="no_factura">
+    </div>
+
+    <!-- Subtotal Factura -->
+    <div class="mb-2 col-lg-4">
+      <label class="form-label">Subtotal Factura de Accesorios</label>
+      <input class="form-control form-control-sm"
+             mask="separator" thousandSeparator=","
+             prefix="$ "
+             placeholder="Subtotal"
+             formControlName="subtotal_factura">
+      <div class="text-danger small"
+           *ngIf="form.get('subtotal_factura')?.touched && form.get('subtotal_factura')?.invalid">
+        Campo requerido
+      </div>
+    </div>
+
+    <div class="mb-2 col-lg-4">
+      <label class="form-label">IVA</label>
+      <input type="text" class="form-control form-control-sm"
+             mask="separator" thousandSeparator=","
+             prefix="$ "
+             formControlName="iva_factura" readonly>
+    </div>
+
+    <!-- Comisión APV en Pesos -->
+    <div class="mb-2 col-lg-4">
+      <label class="form-label">Comisión APV</label>
+      <input type="text" class="form-control form-control-sm"
+             mask="separator" thousandSeparator=","
+             prefix="$ "
+             formControlName="comision_apv_pesos" readonly>
+    </div>
+
+    <!-- Observaciones -->
+    <div class="mb-2">
+      <label class="form-label">Observaciones</label>
+      <textarea formControlName="observaciones" class="form-control" rows="3"></textarea>
+    </div>
+
+  </div>
+</form>

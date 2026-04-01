@@ -307,6 +307,14 @@ export const MENU: MenuItem[] = [
             permission: "view submodulo comisiones seguro renault",
           },
           {
+            id: 12,
+            label: "Accesorios",
+            link: "/renault/comisiones/accesorios",
+            parentId: 32,
+            permission: "view submodulo comisiones accesorios renault",
+          },
+
+          {
             id: 14,
             label: "Tabulador",
             link: "/renault/tabulador",
