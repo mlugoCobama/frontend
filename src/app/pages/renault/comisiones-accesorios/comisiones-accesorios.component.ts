@@ -12,6 +12,7 @@ import { firstValueFrom } from 'rxjs';
 import { PermisosService } from 'src/app/core/services/permisos.service';
 import { configuracionesAceessLevel, configTablaFinanciamiemto,  configEstadosFinanciamiento} from './modelo-accesorios';
 import { AccesorioModalComponent } from './accesorio-modal/accesorio-modal.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-comisiones-accesorios',
@@ -72,6 +73,7 @@ export class ComisionesAccesoriosComponent implements OnInit {
     private accesoriosService: AccesoriosService,
     private alertas: SwalComprsServiceService,
     private permisosService: PermisosService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -85,6 +87,7 @@ export class ComisionesAccesoriosComponent implements OnInit {
     const initialState: ModalOptions = {
       initialState: {
         vendedores: this.vendedores,
+        empresaActiva : this.getEmpresaActiva()
       },
       class: "modal-lg",
     };
@@ -106,6 +109,7 @@ export class ComisionesAccesoriosComponent implements OnInit {
       initialState: {
         data: this.filaSeleccionada,
         vendedores: this.vendedores,
+        empresaActiva : this.getEmpresaActiva()
       },
       class: "modal-lg",
     };
@@ -388,5 +392,10 @@ export class ComisionesAccesoriosComponent implements OnInit {
   tienePermiso(permiso: string = null): boolean {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
+  }
+
+  
+  getEmpresaActiva(): string {
+    return this.route.parent?.snapshot.url[0]?.path || '';
   }
 }

@@ -1,0 +1,28 @@
+<div class="modal-header">
+  <h5 class="modal-title">
+    Comisiones de {{nroVendedor}} - {{nombreVendedor | titlecase}} por {{ rubro.replaceAll("_", " ") | titlecase }}
+
+  </h5>
+  <button type="button" class="btn-close" (click)="cerrarModal()"></button>
+</div>
+
+<div class="modal-body p-0 m-0">
+    <app-tabla-generica
+        [data]="data"
+        [columnas]="columnasVendedor"
+        [isLoad]="isLoad"
+        [mostrarSelect]="false"
+        [mostrarCheck]="false"
+        [acciones]="accionesTabla"
+    />
+</div>
+
+<div class="d-flex justify-content-end align-items-center gap-2 m-0 p-2">
+
+   <button class="btn btn-secondary btn-sm" (click)="cerrarModal()">
+    Cancelar
+  </button>
+  <!-- <button class="btn btn-primary btn-sm" (click)="recalcular()">
+    Recalcular
+  </button> -->
+</div>

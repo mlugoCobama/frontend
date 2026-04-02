@@ -24,7 +24,7 @@ export class TomaUnidadFormComponent {
 
     this.form = this.fb.group({
       id: [null],
-      com_vendedores_id: ["", Validators.required],
+      // com_vendedores_id: ["", Validators.required],
       no_inventario: ['', [Validators.maxLength(45), Validators.required]],
       anio: ['', [Validators.required]],
       clave_producto: ['', [Validators.maxLength(45), Validators.required]],
@@ -68,7 +68,7 @@ export class TomaUnidadFormComponent {
   setValores(data: any): void {
   this.form.patchValue({
     id: data.id ?? null,
-    com_vendedores_id: data.com_vendedores_id ?? null,
+    // com_vendedores_id: data.com_vendedores_id ?? null,
     no_inventario: data.no_inventario ?? '',
     anio: data.anio ?? '',
     clave_producto: data.clave_producto ?? '',

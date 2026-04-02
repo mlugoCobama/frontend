@@ -8,6 +8,7 @@ import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-com
 import Swal from 'sweetalert2';
 import { firstValueFrom } from 'rxjs';
 import { PermisosService } from 'src/app/core/services/permisos.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: "app-comisiones-toma-unidades",
@@ -68,6 +69,7 @@ export class ComisionesTomaUnidadesComponent implements OnInit {
     private tomaUnidadesService: TomaUnidadesService,
     private alertas: SwalComprsServiceService,
     private permisosService: PermisosService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -81,6 +83,7 @@ export class ComisionesTomaUnidadesComponent implements OnInit {
     const initialState: ModalOptions = {
       initialState: {
         vendedores: this.vendedores,
+        empresaActiva : this.getEmpresaActiva()
       },
       class: "modal-lg",
     };
@@ -102,6 +105,7 @@ export class ComisionesTomaUnidadesComponent implements OnInit {
       initialState: {
         data: this.filaSeleccionada,
         vendedores: this.vendedores,
+        empresaActiva : this.getEmpresaActiva()
       },
       class: "modal-lg",
     };
@@ -384,5 +388,9 @@ export class ComisionesTomaUnidadesComponent implements OnInit {
   tienePermiso(permiso: string = null): boolean {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
+  }
+  
+  getEmpresaActiva(): string {
+    return this.route.parent?.snapshot.url[0]?.path || '';
   }
 }

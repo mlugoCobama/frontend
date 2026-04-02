@@ -3,6 +3,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import { TomaUnidadFormComponent } from '../forms/toma-unidad-form/toma-unidad-form.component';
 import { TomaUnidadesService } from 'src/app/core/services/renault/toma-unidades.service';
+import { SelectAgenciaVendedorComponent } from 'src/app/shared/ui/select-agencia-vendedor/select-agencia-vendedor.component';
 
 @Component({
   selector: 'app-toma-unidades-modal',
@@ -13,10 +14,11 @@ export class TomaUnidadesModalComponent implements OnInit, AfterViewInit {
 
   @Input() data: any = null;
   @Input() vendedores: any = null;
+  @ViewChild('formSelectAgencia', { static: false }) formSelectAgencia!: SelectAgenciaVendedorComponent;
   @ViewChild('formFinancimiento', { static: false }) formFinanciamiento!: TomaUnidadFormComponent;
   public event: EventEmitter<any> = new EventEmitter();
   public loading = false;
-
+  public empresaActiva:any= '';
   constructor(
     public bsModalRef: BsModalRef,
     public alertas: SwalComprsServiceService,
@@ -40,7 +42,8 @@ export class TomaUnidadesModalComponent implements OnInit, AfterViewInit {
     }
 
     this.loading = true;
-    const valores = this.formFinanciamiento.getValores();
+    const valores = {...this.formFinanciamiento.getValores(), ...this.formSelectAgencia.getValues()};
+    console.log(valores);
     const payload = valores;
     const formData = new FormData();
     Object.keys(payload).forEach(key => {

@@ -309,6 +309,10 @@ export class FiltroComsionesGenericoComponent implements OnInit, OnChanges {
     return this.route.parent?.snapshot.url[0]?.path || '';
   }
 
+  getValues(){
+    return this.formulario.value;
+  }
+
   getEmpresaUsuario() {
     const usuarioActual = this.localStorage.getItem('currentUser');
     const intercompania = usuarioActual['usuarioActivo'][0].intercompania;

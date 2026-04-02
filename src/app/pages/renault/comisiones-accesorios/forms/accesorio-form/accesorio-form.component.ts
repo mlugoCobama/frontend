@@ -18,7 +18,7 @@ export class AccesorioFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      com_vendedores_id: ["", Validators.required],
+      // com_vendedores_id: ["", Validators.required],
       no_factura: [null, Validators.required],
       subtotal_factura: [null, Validators.required],
       iva_factura: [{ value: null, disabled: true }, Validators.required],

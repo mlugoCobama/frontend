@@ -3,6 +3,8 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import { FinanciamientoFormComponent } from '../forms/financiamiento-form/financiamiento-form.component';
 import { FinanciamientoService } from 'src/app/core/services/renault/financiamiento.service';
+import { ActivatedRoute } from '@angular/router';
+import { SelectAgenciaVendedorComponent } from 'src/app/shared/ui/select-agencia-vendedor/select-agencia-vendedor.component';
 
 @Component({
   selector: 'app-financiamiento-modal',
@@ -13,6 +15,8 @@ export class FinanciamientoModalComponent implements OnInit, AfterViewInit {
 
   @Input() data: any = null;
   @Input() vendedores: any = null;
+  public empresaActiva:any= '';
+  @ViewChild('formSelectAgencia', { static: false }) formSelectAgencia!: SelectAgenciaVendedorComponent;
   @ViewChild('formFinancimiento', { static: false }) formFinanciamiento!: FinanciamientoFormComponent;
   public event: EventEmitter<any> = new EventEmitter();
   public loading = false;
@@ -20,7 +24,8 @@ export class FinanciamientoModalComponent implements OnInit, AfterViewInit {
   constructor(
     public bsModalRef: BsModalRef,
     public alertas: SwalComprsServiceService,
-    private financiamientoService: FinanciamientoService
+    private financiamientoService: FinanciamientoService,
+
   ) {}
 
   ngOnInit(): void {}
@@ -40,7 +45,7 @@ export class FinanciamientoModalComponent implements OnInit, AfterViewInit {
     }
 
     this.loading = true;
-    const valores = this.formFinanciamiento.getValores();
+    const valores = {...this.formFinanciamiento.getValores(), ...this.formSelectAgencia.getValues()};
     const payload = valores;
     const formData = new FormData();
     Object.keys(payload).forEach(key => {

@@ -8,6 +8,7 @@ import { SegurosService } from 'src/app/core/services/renault/seguros.service';
 import Swal from 'sweetalert2';
 import { firstValueFrom } from 'rxjs';
 import { PermisosService } from 'src/app/core/services/permisos.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-comsiones-seguro',
@@ -63,7 +64,8 @@ export class ComsionesSeguroComponent {
       private segurosService: SegurosService,
       private alertas: SwalComprsServiceService,
       private vendedoresService:VendedoresService,
-      private permisosService:PermisosService
+      private permisosService:PermisosService,
+      private route: ActivatedRoute
     ) {}
 
   ngOnInit(): void {
@@ -134,7 +136,8 @@ export class ComsionesSeguroComponent {
   public openModalNuevo() {
     const initialState: ModalOptions = {
       initialState: {
-        vendedores :  this.vendedores
+        vendedores :  this.vendedores,
+        empresaActiva : this.getEmpresaActiva()
       },
       class: "modal-lg",
     };
@@ -155,7 +158,8 @@ export class ComsionesSeguroComponent {
       const initialState: ModalOptions = {
         initialState: {
           data :  this.filaSeleccionada,
-          vendedores :  this.vendedores
+          vendedores :  this.vendedores,
+          empresaActiva : this.getEmpresaActiva()
         },
         class: "modal-lg",
       };
@@ -353,4 +357,9 @@ async verDocumento(item: any): Promise<void> {
       if (!permiso) return true;
       return this.permisosService.tienePermiso(permiso);
     }
+
+    
+  getEmpresaActiva(): string {
+    return this.route.parent?.snapshot.url[0]?.path || '';
+  }
 }

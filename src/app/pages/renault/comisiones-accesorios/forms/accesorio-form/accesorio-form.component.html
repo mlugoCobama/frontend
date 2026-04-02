@@ -2,7 +2,7 @@
   <div class="row">
 
     <!-- Vendedor -->
-    <div class="mb-2 col-lg-6">
+    <!-- <div class="mb-2 col-lg-6">
       <label class="form-label">Vendedor</label>
       <select class="form-select form-select-sm"
               formControlName="com_vendedores_id">
@@ -15,7 +15,7 @@
            *ngIf="form.get('com_vendedores_id')?.touched && form.get('com_vendedores_id')?.invalid">
         Campo requerido
       </div>
-    </div>
+    </div> -->
 
     <div class="mb-2 col-lg-6">
       <label class="form-label">No. Factura de Accesorios</label>
@@ -24,7 +24,7 @@
     </div>
 
     <!-- Subtotal Factura -->
-    <div class="mb-2 col-lg-4">
+    <div class="mb-2 col-lg-6">
       <label class="form-label">Subtotal Factura de Accesorios</label>
       <input class="form-control form-control-sm"
              mask="separator" thousandSeparator=","
@@ -37,7 +37,7 @@
       </div>
     </div>
 
-    <div class="mb-2 col-lg-4">
+    <div class="mb-2 col-lg-6">
       <label class="form-label">IVA</label>
       <input type="text" class="form-control form-control-sm"
              mask="separator" thousandSeparator=","
@@ -46,7 +46,7 @@
     </div>
 
     <!-- Comisión APV en Pesos -->
-    <div class="mb-2 col-lg-4">
+    <div class="mb-2 col-lg-6">
       <label class="form-label">Comisión APV</label>
       <input type="text" class="form-control form-control-sm"
              mask="separator" thousandSeparator=","

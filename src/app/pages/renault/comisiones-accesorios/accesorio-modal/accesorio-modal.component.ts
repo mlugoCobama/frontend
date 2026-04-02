@@ -5,6 +5,7 @@ import { TomaUnidadesService } from 'src/app/core/services/renault/toma-unidades
 import { TomaUnidadFormComponent } from '../../comisiones-toma-unidades/forms/toma-unidad-form/toma-unidad-form.component';
 import { AccesoriosService } from 'src/app/core/services/renault/accesorios.service';
 import { DetalleAccesorioFormComponent } from '../forms/detalle-accesorio-form/detalle-accesorio-form.component';
+import { SelectAgenciaVendedorComponent } from 'src/app/shared/ui/select-agencia-vendedor/select-agencia-vendedor.component';
 @Component({
   selector: 'app-accesorio-modal',
   templateUrl: './accesorio-modal.component.html',
@@ -14,9 +15,10 @@ export class AccesorioModalComponent implements OnInit, AfterViewInit {
 
   @Input() data: any = null;
   @Input() vendedores: any = null;
+    @ViewChild('formSelectAgencia', { static: false }) formSelectAgencia!: SelectAgenciaVendedorComponent;
   @ViewChild('formFinancimiento', { static: false }) formFinanciamiento!: TomaUnidadFormComponent;
   @ViewChild('formDetalles', { static: false }) formDetalles!: DetalleAccesorioFormComponent;
-
+  public empresaActiva:any= '';
   public event: EventEmitter<any> = new EventEmitter();
   public loading = false;
 
@@ -45,7 +47,7 @@ guardar(): void {
   }
 
   this.loading = true;
-  const valores = this.formFinanciamiento.getValores();
+  const valores = {...this.formFinanciamiento.getValores(), ...this.formSelectAgencia.getValues()};
   const payload = valores;
   const formData = new FormData();
 
@@ -56,7 +58,7 @@ guardar(): void {
   });
 
   const detalles = this.formDetalles.getValores();
-  formData.append('detalles', JSON.stringify(detalles)); // <-- importante
+  formData.append('detalles', JSON.stringify(detalles)); 
 
   this.accesoriosService.create(formData).subscribe((response:any) => {
     if (response.status === 'success') { // <-- corregido

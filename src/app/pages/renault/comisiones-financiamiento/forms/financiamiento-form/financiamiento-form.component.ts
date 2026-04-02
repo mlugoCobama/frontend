@@ -31,7 +31,7 @@ export class FinanciamientoFormComponent implements OnInit {
       incentivo_dealer: [null,Validators.required],
       porcentaje_asesor: [null,Validators.required],
       comision_asesor_pesos: [{ value: null, disabled: true }],
-      com_vendedores_id: ["", Validators.required],
+      // com_vendedores_id: ["", Validators.required],
       tipo_financiamiento: [this.tipoFinanciamiento ?? ''],
       archivo: [null, Validators.required],
       observaciones: [null]

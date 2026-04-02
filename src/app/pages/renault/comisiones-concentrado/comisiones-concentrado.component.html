@@ -2,6 +2,7 @@
 [title] = "'Concentrado de comisiones'"
 ></app-card-top>
 <app-filtro-comsiones-generico
+  #formFiltro
   [config]="configFiltro"
   [hasData]="hayDatos"
   (buscar)="buscarDatos($event)">
@@ -66,11 +67,56 @@
     </div>
     
 </div>
-
-<app-tabla-generica
-  [data]="data"
-  [columnas]="columnasVendedor"
-  [isLoad]="isLoad"
-  [mostrarSelect]="false"
-
-/>
+<div class="card shadow">
+    <div class="card-body">
+        <table class="table table-sm table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Vendedor</th>
+                    <th>Nuevos</th>
+                    <th>Seminuevos</th>
+                    <th>Financiamiento</th>
+                    <th>Accesorios</th>
+                    <th>Seguros</th>
+                    <th>Toma de unidades</th>
+                    <th>Total comisiones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of data">
+                    <td> {{item.nro_vendedor_as}} {{item.vendedor}}</td>
+                    <td class="clickable text-end" (click)="abrirDetalle(item, 'nuevos')">
+                        {{item.nuevos | currency}}
+                    </td>
+                    <td  class="clickable text-end"(click)="abrirDetalle(item, 'seminuevos')">
+                        {{item.seminuevos | currency}}
+                    </td>
+                    <td  class="clickable text-end" (click)="abrirDetalle(item, 'financimaientos')">
+                        {{item.financiamiento | currency}}
+                    </td>
+                    <td class="clickable text-end" (click)="abrirDetalle(item, 'accesorios')">
+                        {{item.accesorios | currency}}
+                    </td>
+                    <td class="clickable text-end" (click)="abrirDetalle(item, 'seguros')">
+                        {{item.seguros | currency}}
+                    </td>
+                    <td class="clickable text-end" (click)="abrirDetalle(item, 'toma_de_unidades')">
+                        {{item.toma_unidades | currency}}
+                    </td>
+                    <td class="text-end">
+                        {{item.total | currency}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex justify-content-end align-items-center">
+            <button (click)="generarCorte()" class="btn btn-sm btn-primary">
+                Guardar Corte
+            </button>
+        </div>
+    </div>
+</div>

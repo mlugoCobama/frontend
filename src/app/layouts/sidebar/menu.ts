@@ -165,28 +165,58 @@ export const MENU: MenuItem[] = [
         permission: "view modulo nissan",
         parentId: 30,
         subItems: [
-          {
-            id: 8,
-            label: "Comisiones",
+         {
+            id: 7,
+            label: "Concentrado",
             link: "/nissan/comisiones/concentrado",
             parentId: 32,
-            permission: "view submodulo comisiones concentrado",
+            permission: "view submodulo comisiones concentrado renault",
+          },
+          {
+            id: 8,
+            label: "Nuevos",
+            link: "/nissan/comisiones/nuevos",
+            parentId: 32,
+            permission: "view submodulo comisiones nuevos renault",
+          },
+          {
+            id: 9,
+            label: "Seminuevos",
+            link: "/nissan/comisiones/seminuevos",
+            parentId: 32,
+            permission: "view submodulo comisiones seminuevos renault",
+          },
+          
+          {
+            id: 10,
+            label: "NR Finance",
+            link: "/nissan/comisiones/nrfinance",
+            parentId: 32,
+            permission: "view submodulo comisiones nrf renault",
+          },
+          {
+            id: 11,
+            label: "Toma de Unidad",
+            link: "/nissan/comisiones/toma-unidades",
+            parentId: 32,
+            permission: "view submodulo comisiones toma unidad renault",
           },
 
            {
-            id: 11,
-            label: "Nuevos",
-            link: "/nissan/comisiones/nuevos",
-            parentId: 30,
-            permission: "view submodulo comisiones nuevos nissan",
+            id: 12,
+            label: "Seguros",
+            link: "/nissan/comisiones/seguros",
+            parentId: 32,
+            permission: "view submodulo comisiones seguro renault",
           },
           {
             id: 12,
-            label: "Seminuevos",
-            link: "/nissan/comisiones/seminuevos",
-            parentId: 30,
-            permission: "view submodulo comisiones seminuevos nissan",
+            label: "Accesorios",
+            link: "/nissan/comisiones/accesorios",
+            parentId: 32,
+            permission: "view submodulo comisiones accesorios renault",
           },
+
           {
             id: 9,
             label: "Tabulador",

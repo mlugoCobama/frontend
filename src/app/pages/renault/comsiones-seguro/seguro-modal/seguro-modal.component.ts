@@ -3,6 +3,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import { FinanciamientoFormComponent } from '../../comisiones-financiamiento/forms/financiamiento-form/financiamiento-form.component';
 import { SegurosService } from 'src/app/core/services/renault/seguros.service';
+import { SelectAgenciaVendedorComponent } from 'src/app/shared/ui/select-agencia-vendedor/select-agencia-vendedor.component';
 
 @Component({
   selector: 'app-seguro-modal',
@@ -13,10 +14,11 @@ export class SeguroModalComponent implements OnInit, AfterViewInit {
 
   @Input() data: any = null;
   @Input() vendedores: any = null;
+  @ViewChild('formSelectAgencia', { static: false }) formSelectAgencia!: SelectAgenciaVendedorComponent;
   @ViewChild('formFinancimiento', { static: false }) formFinanciamiento!: FinanciamientoFormComponent;
   public event: EventEmitter<any> = new EventEmitter();
   public loading = false;
-
+  public empresaActiva:any= '';
   constructor(
     public bsModalRef: BsModalRef,
     public alertas: SwalComprsServiceService,
@@ -40,7 +42,7 @@ export class SeguroModalComponent implements OnInit, AfterViewInit {
     }
 
     this.loading = true;
-    const valores = this.formFinanciamiento.getValores();
+    const valores = {...this.formFinanciamiento.getValores(), ...this.formSelectAgencia.getValues()};
     const payload = valores;
     const formData = new FormData();
     Object.keys(payload).forEach(key => {

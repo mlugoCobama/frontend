@@ -13,9 +13,10 @@ import { TablaGenericaComponent } from './tabla-generica/tabla-generica.componen
 import { CardTopComponent } from './card-top/card-top.component';
 import { FiltroComsionesGenericoComponent } from './filtro-comsiones-generico/filtro-comsiones-generico.component';
 import { KpiCardGenericoComponent } from './kpi-card-generico/kpi-card-generico.component';
+import { SelectAgenciaVendedorComponent } from './select-agencia-vendedor/select-agencia-vendedor.component';
 
 @NgModule({
-  declarations: [PagetitleComponent,  LoaderComponent, TablaGenericaComponent, CardTopComponent, FiltroComsionesGenericoComponent, KpiCardGenericoComponent],
+  declarations: [PagetitleComponent,  LoaderComponent, TablaGenericaComponent, CardTopComponent, FiltroComsionesGenericoComponent, KpiCardGenericoComponent, SelectAgenciaVendedorComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -25,6 +26,6 @@ import { KpiCardGenericoComponent } from './kpi-card-generico/kpi-card-generico.
     BsDropdownModule.forRoot(),
     
   ],
-  exports: [PagetitleComponent, LoaderComponent, TablaGenericaComponent, CardTopComponent, FiltroComsionesGenericoComponent,  KpiCardGenericoComponent]
+  exports: [PagetitleComponent, LoaderComponent, TablaGenericaComponent, CardTopComponent, FiltroComsionesGenericoComponent,  KpiCardGenericoComponent, SelectAgenciaVendedorComponent]
 })
 export class UIModule { }

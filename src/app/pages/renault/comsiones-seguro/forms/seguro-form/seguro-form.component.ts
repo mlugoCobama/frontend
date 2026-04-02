@@ -23,7 +23,7 @@ export class SeguroFormComponent implements OnInit {
 
     this.form = this.fb.group({
       id: [null],
-      com_vendedores_id: ["", Validators.required],
+      // com_vendedores_id: ["", Validators.required],
       folio: ['', Validators.required],
       poliza: ['', Validators.required],
       fecha_emision: ['', Validators.required],
@@ -69,7 +69,7 @@ export class SeguroFormComponent implements OnInit {
   setValores(data: any): void {
   this.form.patchValue({
     id: data.id ?? null,
-    com_vendedores_id: data.com_vendedores_id ?? '',
+    // com_vendedores_id: data.com_vendedores_id ?? '',
     folio: data.folio ?? '',
     poliza: data.poliza ?? '',
     fecha_emision: this.formatDateForInputDate(data.fecha_emision) ?? '',

@@ -13,4 +13,16 @@ export class ConcentradoComisionesService {
   getAll() {
     return this.http.get(environment.apiUrl+'renault/concentrado-comisiones');
   }
+
+  getDetalleRubro(idVendedor: any, rubro: any) {
+    return this.http.get(`${environment.apiUrl}renault/concentrado-comisiones/detalle/${idVendedor}/${rubro}`);
+  }
+
+  public devolverPartida(id ,data:any): Observable<any> {
+      return this.http.put(environment.apiUrl + `renault/concentrado-comisiones/devolver/${id}`, data);
+  }
+
+  crearCorte(data) {
+      return this.http.post(environment.apiUrl+'renault/concentrado-comisiones', data);
+    }
 }
