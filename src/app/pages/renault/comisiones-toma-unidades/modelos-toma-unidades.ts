@@ -1,12 +1,16 @@
 import { ColumnaTabla } from 'src/app/shared/ui/tabla-generica/tabla-generica.component';
 /** Configuracion de columnas de la tabla generica */
 export const configTablaTomaUnidades : ColumnaTabla[] = [
-    { campo: "vendedor",              etiqueta: "Vendedor", bold: true},
-    { campo: "clave_inventario",         etiqueta: "Numero de inventario"},
-    { campo: "fecha_toma",            etiqueta: "Fecha Toma", pipe: "date" },
-    { campo: "comision_apv_pesos",    etiqueta: "Importe", pipe: "currency",   align:'right', bold: true},
-    { campo: "observaciones",         etiqueta: "Observaciones" },
-    { campo: "estatusTexto",          etiqueta: "Estatus",          textColor:'primary',align:'center', bold: true  },
+    { campo: "no_vendedor",                     etiqueta: "#",   bold: true, textNoWrap: true, sticky: true, width:41},
+    { campo: "vendedor",                etiqueta: "Vendedor",   bold: true, textNoWrap: true, sticky: true, width:240},
+    { campo: "por_inventario",          etiqueta: "Inventario"},
+    { campo: "fecha_toma",              etiqueta: "Fecha Toma", pipe: "date" },
+    { campo: "vehiculo",                etiqueta: "Vehiculo"},
+    { campo: "numero_serie",            etiqueta: "Numero de serie"},
+    { campo: "comision_apv_pesos",      etiqueta: "Importe",    pipe: "currency",   align:'right', bold: true},
+    { campo: "tipo_apv",                etiqueta: "Tipo APV", bold: true},
+    { campo: "observaciones",           etiqueta: "Observaciones" },
+    { campo: "estatusTexto",            etiqueta: "Estatus",    textColor:'primary',align:'center', bold: true  },
   ];
 
 /** configuracion de estados del filtro */
@@ -23,7 +27,7 @@ export const configuracionesAceessLevel = [
     {
         permiso : 'view toma unidad like admin',
         configFiltro :{ showEstado: true, showVendedor: true, showTipoVenta: false},
-        estadoDefault : 'todos'
+        estadoDefault : '12345'
     },{
         permiso : 'view toma unidad like nivel 1',
         configFiltro :{ showEstado: false, showVendedor: true, showTipoVenta: false},

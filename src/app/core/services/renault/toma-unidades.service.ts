@@ -14,8 +14,8 @@ export class TomaUnidadesService {
       return this.http.get(environment.apiUrl+'renault/toma-unidad');
     }
 
-    getDataVenta(factura:any) {
-      return this.http.get(environment.apiUrl+'renault/toma-unidad/datos-venta/'+factura);
+    getDataVenta(inventario:any) {
+      return this.http.get(environment.apiUrl+'renault/toma-unidad/datos-venta/'+inventario);
     }  
 
     public getLibroVentas(estado:any ,agencia: any, fecha_inicio:any, fecha_fin:any, vendedor:any): Observable<any> {

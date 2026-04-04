@@ -18,6 +18,12 @@ export interface ColumnaTabla {
   align?: string;
   textColor?: 'success' | 'primary' | 'danger' | 'warning' |null;
   bold?: boolean;
+  textNoWrap?: boolean;
+  borderEnd? : boolean;
+  borderStart? : boolean;
+  sticky?: boolean,
+  width?: any
+  left?: any
 }
 
 export interface OpcionSelect {
@@ -126,6 +132,7 @@ esVisible(accion: AccionTabla, item: any): boolean {
   ngOnInit(): void {
     this.ordenador = new FuncionesTablas(this.data);
     this.datosFiltrados = [...this.data];
+    this.calcularSticky();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -216,5 +223,15 @@ esVisible(accion: AccionTabla, item: any): boolean {
     return this.permisosService.tienePermiso(permiso);
   }
 
+  calcularSticky() {
+  let acumulado = 0;
+
+  this.columnas.forEach(col => {
+    if (col.sticky) {
+      col.left = acumulado;
+      acumulado += col.width || 150;
+    }
+  });
+}
   
 }

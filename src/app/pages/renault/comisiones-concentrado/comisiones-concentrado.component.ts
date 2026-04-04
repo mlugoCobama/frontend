@@ -30,29 +30,9 @@ export class ComisionesConcentradoComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.getAll();
   }
 
 
-  private getAll() {
-    this.isLoad = true;
-    this.concentradoComisiones.getAll().subscribe(
-      (response: any) => {
-        if (response) {
-          this.data = response.data;
-          this.totales = this.obtenerTotales(response.data);
-          this.isLoad = false;
-        } else {
-          console.log(response.message);
-          this.isLoad = false;
-        }
-      },
-      (error) => {
-        console.error("Error fetching data:", error);
-        this.isLoad = false;
-      },
-    );
-  }
 
  obtenerTotales(rows) {
   // Buscamos la fila que tenga el texto "TOTAL GENERAL"
@@ -79,14 +59,32 @@ abrirDetalle(item:any, rubro: string) {
       this.modalRef.content.event.subscribe(() => {
         // this.isLoad = true;
         // // this.mostrar = false;
-        this.getAll();
+         this.buscarDatos(this.agenciaActual);
       });
   }
   
 }
-
-  buscarDatos(params){
-    console.log(params);
+agenciaActual:any = '0';
+  buscarDatos(params:any){
+    this.isLoad = true;
+    this.agenciaActual = params.agencia;
+    this.data = [];
+    this.concentradoComisiones.getAll(params.agencia).subscribe(
+      (response: any) => {
+        if (response) {
+          this.data = response.data;
+          this.totales = this.obtenerTotales(response.data);
+          this.isLoad = false;
+        } else {
+          console.log(response.message);
+          this.isLoad = false;
+        }
+      },
+      (error) => {
+        console.error("Error fetching data:", error);
+        this.isLoad = false;
+      },
+    );
   }
 
 generarCorte(): void {

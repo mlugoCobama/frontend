@@ -22,34 +22,47 @@ export class SeguroFormComponent implements OnInit {
   ngOnInit(): void {
 
     this.form = this.fb.group({
-      id: [null],
-      // com_vendedores_id: ["", Validators.required],
-      folio: ['', Validators.required],
-      poliza: ['', Validators.required],
-      fecha_emision: ['', Validators.required],
-      prima_neta: [null, Validators.required],
-      comision_apv_pesos: [{ value: null, disabled: true }],
-      observaciones: [null]
+        id: [null],
+
+        // básicos
+        folio: ['', Validators.required],
+        poliza: ['', Validators.required],
+        aseguradora: ['', Validators.required],
+        nombre: ['', Validators.required],
+        unidad: ['', Validators.required],
+        serie: ['', Validators.required],
+
+        // fechas
+        fecha_emision: ['', Validators.required],
+
+        // info adicional
+        forma_pago: ['', Validators.required],
+
+        // montos
+        prima_neta: [null, Validators.required],
+        vs: [{ value: null, disabled: true }],
+        calcular_encargado_seg: [true],
+        com_encargado_seg: [{ value: null, disabled: true }],
+
+        // comisión
+        comision_apv_pesos: [{ value: null, disabled: true }],
+
+        // extras
+        observaciones: [null]
     });
 
     if (this.data) {
       this.setValores(this.data);
-
     }
 
-    this.form.valueChanges.subscribe(val => {
-      if (val.prima_neta) {
-
-        const prima = Number(val.prima_neta.toString().replace(/,/g, ''));
-
-        const comision = prima * 0.20 * 0.20; // o prima * 0.04
-
-        this.form.patchValue(
-          { comision_apv_pesos: comision },
-          { emitEvent: false }
-        );
-      }
+    this.form.get('prima_neta')?.valueChanges.subscribe(() => {
+      this.calcularValores();
     });
+
+    this.form.get('calcular_encargado_seg')?.valueChanges.subscribe(() => {
+      this.calcularValores();
+    });
+
 
     
 
@@ -69,16 +82,24 @@ export class SeguroFormComponent implements OnInit {
   setValores(data: any): void {
   this.form.patchValue({
     id: data.id ?? null,
-    // com_vendedores_id: data.com_vendedores_id ?? '',
     folio: data.folio ?? '',
     poliza: data.poliza ?? '',
     fecha_emision: this.formatDateForInputDate(data.fecha_emision) ?? '',
     prima_neta: data.prima_neta ?? null,
-    comision_apv_pesos: data.comision_apv_pesos ?? null,
-    observaciones: data.observaciones ?? ''
+    observaciones: data.observaciones ?? '',
+    aseguradora: data.aseguradora ?? '',
+    nombre: data.nombre ?? '',
+    unidad: data.unidad ?? '',
+    serie: data.serie ?? '',
+    forma_pago: data.forma_pago ?? '',
+    calcular_encargado_seg: (data.com_encargado_seg ?? 0) > 0 ? true : false,
   });
 }
 
+private limpiarNumero(valor: any): number {
+  if (!valor) return 0;
+  return Number(valor.toString().replace(/[^0-9.-]+/g, ''));
+}
 
   getValores(): any {
   return this.form.getRawValue();
@@ -139,6 +160,30 @@ private consultarFactura(noFactura: any) {
       console.error("Error fetching data:", error);
     },
   );
+}
+
+private calcularValores(): void {
+  const prima = this.limpiarNumero(this.form.get('prima_neta')?.value);
+  const calcularEnc = this.form.get('calcular_encargado_seg')?.value;
+
+  if (!prima || prima <= 0) {
+    this.form.patchValue({
+      comision_apv_pesos: null,
+      vs: null,
+      com_encargado_seg: null
+    }, { emitEvent: false });
+    return;
+  }
+
+  const comision = prima * 0.04;
+  const vs = prima * 0.20;
+  const encSeg = calcularEnc ? vs * 0.05 : 0;
+
+  this.form.patchValue({
+    comision_apv_pesos: comision.toFixed(2),
+    vs: vs.toFixed(2),
+    com_encargado_seg: encSeg.toFixed(2)
+  }, { emitEvent: false });
 }
 
 }

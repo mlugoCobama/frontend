@@ -65,11 +65,19 @@
                      (change)="toggleTodos($any($event.target).checked)"/>
             </th>
             <ng-container *ngFor="let col of columnas">
-              <th (click)="ordenarPor(col.campo)" style="cursor:pointer; white-space:nowrap; " [ngClass]="{
-                                                            'text-start': !col.align || col.align === 'left',
-                                                            'text-center': col.align === 'center',
-                                                            'text-end': col.align === 'right',
-                                                            }">
+              <th (click)="ordenarPor(col.campo)" style="cursor:pointer; white-space:nowrap; " 
+              [ngClass]="{
+                          'text-start': !col.align || col.align === 'left',
+                          'text-center': col.align === 'center',
+                          'text-end': col.align === 'right',
+                          }"
+              [ngStyle]="col.sticky ? {
+                        'position': 'sticky',
+                        'left.px': col.left || 0,
+                        'z-index': 3,
+                        'background': '#212529'
+                                        } : {}">
+              
                 <span>{{ col.etiqueta }}</span>
                 <i [ngClass]="getIconoOrden(col.campo)"></i>
               </th>
@@ -95,6 +103,9 @@
                      (change)="toggleCheck(item, $any($event.target).checked)"/>
             </td>
             <td  *ngFor="let col of columnas" [ngClass]="{
+                                                            'border-start' : col.borderStart,
+                                                            'border-end' : col.borderEnd,
+                                                            'text-nowrap' : col.textNoWrap,
                                                             'text-start': !col.align || col.align === 'left',
                                                             'text-center': col.align === 'center',
                                                             'text-end': col.align === 'right',
@@ -103,7 +114,13 @@
                                                             'text-danger': col.textColor === 'danger',
                                                             'text-warning': col.textColor === 'warning',
                                                             'fw-bold': col.bold ===true,
-                                                            }">
+                                                            }"
+                                              [ngStyle]="col.sticky ? {
+                                                        'position': 'sticky',
+                                                        'left.px': col.left || 0,
+                                                        'z-index': 2,
+                                                        'background': '#fff'
+                                                      } : {}">
               <ng-container [ngSwitch]="col.pipe">
                 <span *ngSwitchCase="'percent'">
                   {{ item[col.campo] | percent }}

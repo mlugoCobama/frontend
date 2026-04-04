@@ -1,21 +1,41 @@
 <form [formGroup]="formulario">
   <div class="row">
+
     <!-- Select Agencia -->
     <div class="col-sm-6 mb-3">
       <label for="agencia" class="form-label">Agencia</label>
-      <select id="agencia" class="form-select form-select-sm" formControlName="agencia">
+      <select id="agencia"
+              class="form-select form-select-sm"
+              formControlName="agencia">
         <option value="" selected disabled>Seleccione una agencia</option>
-        <option *ngFor="let ag of agencias" [value]="ag.value">{{ ag.name }}</option>
+        <option *ngFor="let ag of agencias" [value]="ag.value">
+          {{ ag.name }}
+        </option>
       </select>
+
+      <div class="text-danger small"
+           *ngIf="formulario.get('agencia')?.touched && formulario.get('agencia')?.invalid">
+        Debes seleccionar una agencia
+      </div>
     </div>
 
     <!-- Select Vendedor -->
     <div class="col-sm-6 mb-3">
       <label for="com_vendedores_id" class="form-label">Vendedor</label>
-      <select id="com_vendedores_id" class="form-select form-select-sm" formControlName="com_vendedores_id">
-        <option value="" selected disabled >Seleccione un vendedor</option>
-        <option *ngFor="let v of vendedores" [value]="v.value">{{ v.label }}</option>
+      <select id="com_vendedores_id"
+              class="form-select form-select-sm"
+              formControlName="com_vendedores_id">
+        <option value="" selected disabled>Seleccione un vendedor</option>
+        <option *ngFor="let v of vendedores" [value]="v.value">
+          {{ v.label }}
+        </option>
       </select>
+
+      <div class="text-danger small"
+           *ngIf="formulario.get('com_vendedores_id')?.touched && formulario.get('com_vendedores_id')?.invalid">
+        Debes seleccionar un vendedor
+      </div>
     </div>
+
   </div>
 </form>

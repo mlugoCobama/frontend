@@ -10,8 +10,8 @@ export class ConcentradoComisionesService {
 
    constructor(private http: HttpClient) {}
 
-  getAll() {
-    return this.http.get(environment.apiUrl+'renault/concentrado-comisiones');
+  getAll(agencia:any) {
+    return this.http.get(environment.apiUrl+'renault/concentrado-comisiones/'+agencia);
   }
 
   getDetalleRubro(idVendedor: any, rubro: any) {

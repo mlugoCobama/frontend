@@ -189,8 +189,8 @@ export const MENU: MenuItem[] = [
           
           {
             id: 10,
-            label: "NR Finance",
-            link: "/nissan/comisiones/nrfinance",
+            label: "Financiamiento",
+            link: "/nissan/comisiones/financiamiento",
             parentId: 32,
             permission: "view submodulo comisiones nrf renault",
           },
@@ -316,7 +316,7 @@ export const MENU: MenuItem[] = [
           
           {
             id: 10,
-            label: "NR Finance",
+            label: "Financiamiento",
             link: "/renault/comisiones/nrfinance",
             parentId: 32,
             permission: "view submodulo comisiones nrf renault",

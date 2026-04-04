@@ -34,6 +34,7 @@ export class AccesorioModalComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     if (this.data) {
       setTimeout(() => {
+        this.formSelectAgencia.setValores(this.data);
         this.formFinanciamiento.setValores(this.data);
         this.formDetalles.setValores(this.data.detalles);
       });

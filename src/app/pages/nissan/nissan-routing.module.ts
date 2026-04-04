@@ -16,7 +16,7 @@ const routes: Routes = [
   { path: 'pedido-unidades', component: PedidosUnidadesComponent },
   { path: 'compra-seminuevos', component: ComprasSeminuevosComponent },
   // { path: 'comisiones/concentrado', component:  ComisionesComponent},
-  { path: 'comisiones/nrfinance', component:  ComisionesFinanciamientoComponent},
+  { path: 'comisiones/financiamiento', component:  ComisionesFinanciamientoComponent},
   { path: 'comisiones/concentrado', component:  ComisionesConcentradoComponent},
   { path: 'comisiones/nuevos', component:  ComisionesComponent},
   { path: 'comisiones/seminuevos', component:  ComisionesComponent},

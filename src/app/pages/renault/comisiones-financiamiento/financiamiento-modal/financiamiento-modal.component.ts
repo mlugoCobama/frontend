@@ -34,6 +34,7 @@ export class FinanciamientoModalComponent implements OnInit, AfterViewInit {
     if (this.data) {
       setTimeout(() => {
         this.formFinanciamiento.setValores(this.data);
+        this.formSelectAgencia.setValores(this.data);
       });
     }
   }

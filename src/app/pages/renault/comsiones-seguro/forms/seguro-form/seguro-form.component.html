@@ -1,23 +1,6 @@
 <form [formGroup]="form">
   <div class="row">
-
-    <!-- Vendedor -->
-    <!-- <div class="mb-2 col-lg-12">
-      <label class="form-label">Vendedor</label>
-      <select class="form-select form-select-sm"
-              formControlName="com_vendedores_id">
-        <option selected disabled value="">Seleccione...</option>
-        <option *ngFor="let v of vendedores" [value]="v.id">
-          {{v.nro_vendedor_as}}-{{v.clave}}-{{ v.nombre }}
-        </option>
-      </select>
-
-      <div class="text-danger small"
-           *ngIf="form.get('com_vendedores_id')?.touched && form.get('com_vendedores_id')?.invalid">
-        Campo requerido
-      </div>
-    </div> -->
-
+    
     <!-- Folio -->
     <div class="mb-2 col-lg-4">
       <label class="form-label">Folio</label>
@@ -25,7 +8,7 @@
              formControlName="folio">
       <div class="text-danger small"
            *ngIf="form.get('folio')?.touched && form.get('folio')?.invalid">
-        Campo requerido
+        El folio es obligatorio
       </div>
     </div>
 
@@ -36,7 +19,51 @@
              formControlName="poliza">
       <div class="text-danger small"
            *ngIf="form.get('poliza')?.touched && form.get('poliza')?.invalid">
-        Campo requerido
+        La póliza es obligatoria
+      </div>
+    </div>
+
+    <!-- Aseguradora -->
+    <div class="mb-2 col-lg-4">
+      <label class="form-label">Aseguradora</label>
+      <input type="text" class="form-control form-control-sm"
+             formControlName="aseguradora">
+      <div class="text-danger small"
+           *ngIf="form.get('aseguradora')?.touched && form.get('aseguradora')?.invalid">
+        La aseguradora es obligatoria
+      </div>
+    </div>
+
+    <!-- Nombre -->
+    <div class="mb-2 col-lg-4">
+      <label class="form-label">Nombre</label>
+      <input type="text" class="form-control form-control-sm"
+             formControlName="nombre">
+      <div class="text-danger small"
+           *ngIf="form.get('nombre')?.touched && form.get('nombre')?.invalid">
+        El nombre es obligatorio
+      </div>
+    </div>
+
+    <!-- Unidad -->
+    <div class="mb-2 col-lg-4">
+      <label class="form-label">Unidad</label>
+      <input type="text" class="form-control form-control-sm"
+             formControlName="unidad">
+      <div class="text-danger small"
+           *ngIf="form.get('unidad')?.touched && form.get('unidad')?.invalid">
+        La unidad es obligatoria
+      </div>
+    </div>
+
+    <!-- Serie -->
+    <div class="mb-2 col-lg-4">
+      <label class="form-label">Serie</label>
+      <input type="text" class="form-control form-control-sm"
+             formControlName="serie">
+      <div class="text-danger small"
+           *ngIf="form.get('serie')?.touched && form.get('serie')?.invalid">
+        La serie es obligatoria
       </div>
     </div>
 
@@ -47,12 +74,23 @@
              formControlName="fecha_emision">
       <div class="text-danger small"
            *ngIf="form.get('fecha_emision')?.touched && form.get('fecha_emision')?.invalid">
-        Campo requerido
+        La fecha de emisión es obligatoria
+      </div>
+    </div>
+
+    <!-- Forma de pago -->
+    <div class="mb-2 col-lg-4">
+      <label class="form-label">Forma de pago</label>
+      <input type="text" class="form-control form-control-sm"
+             formControlName="forma_pago">
+      <div class="text-danger small"
+           *ngIf="form.get('forma_pago')?.touched && form.get('forma_pago')?.invalid">
+        La forma de pago es obligatoria
       </div>
     </div>
 
     <!-- Prima neta -->
-    <div class="mb-2 col-lg-6">
+    <div class="mb-2 col-lg-4">
       <label class="form-label">Prima Neta</label>
       <input mask="separator" thousandSeparator=","
              prefix="$ "
@@ -61,18 +99,47 @@
              formControlName="prima_neta">
       <div class="text-danger small"
            *ngIf="form.get('prima_neta')?.touched && form.get('prima_neta')?.invalid">
-        Campo requerido
+        La prima neta es obligatoria
+      </div>
+    </div>
+
+    <!-- VS -->
+    <div class="mb-2 col-lg-4">
+      <label class="form-label">VS</label>
+      <input mask="separator" thousandSeparator=","
+             prefix="$ "
+             type="text"
+             class="form-control form-control-sm"
+             formControlName="vs" readonly>
+      <div class="text-danger small"
+           *ngIf="form.get('vs')?.touched && form.get('vs')?.invalid">
+        El valor VS es obligatorio
       </div>
     </div>
 
     <!-- Comisión -->
-    <div class="mb-2 col-lg-6">
+    <div class="mb-2 col-lg-4">
       <label class="form-label">Comisión APV</label>
       <input mask="separator" thousandSeparator=","
              prefix="$ "
              type="text"
              class="form-control form-control-sm bg-light"
              formControlName="comision_apv_pesos"
+             readonly>
+    </div>
+
+    <!-- Comisión -->
+    <div class="mb-2 col-lg-4">
+    <input type="checkbox"
+         class="form-check-input me-2"
+         formControlName="calcular_encargado_seg"
+         id="chkEncargado">
+      <label class="form-label"> Calcular Comisión Enc. Seg</label>
+      <input mask="separator" thousandSeparator=","
+             prefix="$ "
+             type="text"
+             class="form-control form-control-sm bg-light"
+             formControlName="com_encargado_seg"
              readonly>
     </div>
 

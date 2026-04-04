@@ -3,7 +3,7 @@
 <form [formGroup]="form">
     <div class="row">
          <!-- No Contrato -->
-      <div class="mb-2 col-lg-4">
+      <div class="mb-2 col-lg-6">
         <label class="form-label">No. Contrato</label>
         <input type="text" class="form-control form-control-sm"
                placeholder="No. Contrato" formControlName="no_contrato">
@@ -14,18 +14,45 @@
       </div>
 
       <!-- Factura -->
-      <div class="mb-2 col-lg-4">
+      <div class="mb-2 col-lg-6">
         <label class="form-label">Número de Factura</label>
         <input type="text" class="form-control form-control-sm"
-               placeholder="Número de Factura"
+               placeholder="Ingresa la factura para ver los datos de venta"
                formControlName="numero_factura">
               <div class="text-danger small"
              *ngIf="form.get('numero_factura')?.touched && form.get('numero_factura')?.invalid">
           Campo requerido
         </div>
       </div>
+      <!-- datos venta -->
+      <div class=" mb-2 col-lg-4">
+      <label class="form-label">Cliente</label>
+      <input 
+        type="text" 
+        class="form-control form-control-sm bg-light" 
+        formControlName="razon_social"
+        readonly>
+    </div>
 
-      <!-- Fecha -->
+    <div class=" mb-2 col-lg-5">
+      <label class="form-label">Unidad</label>
+      <input 
+        type="text" 
+        class="form-control form-control-sm bg-light" 
+        formControlName="descripcion"
+        readonly>
+    </div>
+
+    <div class="mb-2 col-lg-3">
+      <label class="form-label">Serie</label>
+      <input 
+        type="text" 
+        class="form-control form-control-sm bg-light" 
+        formControlName="serie"
+        readonly>
+    </div>
+
+    <!-- Fecha -->
       <div class="mb-2 col-lg-4">
         <label class="form-label">Fecha Desembolso</label>
         <input type="date" class="form-control form-control-sm"
@@ -35,31 +62,7 @@
           Campo requerido
         </div>
       </div>
-
-      
-
-      <!-- datos venta -->
-      <div class="mb-2" *ngIf="dataVenta; else noData">
-        <div class="row">
-          <div class="col-lg-4">
-            <strong>Cliente: </strong>{{dataVenta.razon_social}}
-          </div>
-          <div class="col-lg-4">
-            <strong>Unidad: </strong>{{dataVenta.descripcion}}
-          </div>
-          <div class="col-lg-4">
-            <strong>Serie: </strong>{{dataVenta.serie}}
-          </div>
-        </div>
-      </div>
-
-      <!-- Template alternativo -->
-      <ng-template #noData>
-        <div class="text-center text-muted p-2">
-          Datos de venta no disponibles
-        </div>
-      </ng-template>
-       
+   
 
       <!-- Monto -->
       <div class="mb-2 col-lg-4">
@@ -72,8 +75,38 @@
         </div>               
       </div>
 
+            <div class="mb-2 col-lg-4">
+        <label class="form-label">Kit de Seguridad</label>
+        <input mask="separator" thousandSeparator="," type="text" prefix="$ " class="form-control form-control-sm"
+          formControlName="kit_seguridad">
+      </div>
+      
+      <div class="mb-2 col-lg-3">
+        <label class="form-label">Sat Finder</label>
+        <input mask="separator" thousandSeparator="," type="text" prefix="$ " class="form-control form-control-sm"
+          formControlName="sat_finder">
+      </div>
+      
+      <div class="mb-2 col-lg-3">
+        <label class="form-label">Garantía Exten.</label>
+        <input mask="separator" thousandSeparator="," type="text" prefix="$ " class="form-control form-control-sm"
+          formControlName="garantia_extendida">
+      </div>
+      
+      <div class="mb-2 col-lg-3">
+        <label class="form-label">Seguro VF3</label>
+        <input mask="separator" thousandSeparator="," type="text" prefix="$ " class="form-control form-control-sm"
+          formControlName="seguro_vf3">
+      </div>
+      
+      <div class="mb-2 col-lg-3">
+        <label class="form-label">Accesorios Adicionales</label>
+        <input mask="separator" thousandSeparator="," type="text" prefix="$ " class="form-control form-control-sm"
+          formControlName="accesorios_adicionales">
+      </div>
+
       <!-- Incentivo -->
-      <div class="mb-2 col-lg-4">
+      <div class="mb-2 col-lg-6">
         <label class="form-label">Incentivo Dealer</label>
         <input mask="separator" thousandSeparator=","  type="text" placeholder="Incentivo Dealer" prefix= "$ "  class="form-control form-control-sm"
                formControlName="incentivo_dealer">
@@ -84,7 +117,7 @@
       </div>
 
       <!-- % Asesor -->
-      <div class="mb-2 col-lg-4">
+      <div class="mb-2 col-lg-6">
         <label class="form-label">Porcentaje Asesor</label>
         <input type="number" mask="separator" thousandSeparator=","  type="text" placeholder="% Asesor" suffix="%" 
                class="form-control form-control-sm"
@@ -102,23 +135,39 @@
                formControlName="comision_asesor_pesos" readonly>
       </div>
 
-      <!-- Vendedor -->
-      <!-- <div class="mb-2">
-        <label class="form-label">Vendedor</label>
-        <select class="form-select form-select-sm"
-                formControlName="com_vendedores_id">
-          <option selected disabled value="">Seleccione...</option>
-          <option *ngFor="let v of vendedores" [value]="v.id">
-            {{v.nro_vendedor_as}}-{{v.clave}}-{{ v.nombre }}
-          </option>
-        </select>
 
-        <div class="text-danger small"
-             *ngIf="form.get('com_vendedores_id')?.touched && form.get('com_vendedores_id')?.invalid">
-          Campo requerido
-        </div>
-      </div> -->
-
+      
+      <!-- ====== COMISIONES ====== -->
+      
+      <div class="mb-2 col-lg-3">
+        <label class="form-label">Comisión Mantenimiento</label>
+        <input mask="separator" thousandSeparator="," type="text" prefix="$ " class="form-control form-control-sm"
+          formControlName="comision_mantenimiento">
+      </div>
+      
+      <div class="mb-2 col-lg-3">
+        <label class="form-label">Comisión Garantía Exten.</label>
+        <input mask="separator" thousandSeparator="," type="text" prefix="$ " class="form-control form-control-sm"
+          formControlName="comision_garantia_extendida">
+      </div>
+      
+      <div class="mb-2 col-lg-3">
+        <label class="form-label">Comisión UDI</label>
+        <input mask="separator" thousandSeparator="," type="text" prefix="$ " class="form-control form-control-sm"
+          formControlName="comision_udi">
+      </div>
+      
+      <div class="mb-2 col-lg-3">
+        <label class="form-label">Comisión VF3</label>
+        <input mask="separator" thousandSeparator="," type="text" prefix="$ " class="form-control form-control-sm"
+          formControlName="comision_vf3">
+      </div>
+      <div class="mb-2">
+        <label class="form-label">Total de subsidios x desembolso</label>
+        <input mask="separator" thousandSeparator="," type="text" prefix="$ " class="form-control form-control-sm"
+          formControlName="sub_x_des">
+      </div>
+      
       <div class="mb-2">
         <div class="mb-3">
           <label for="exampleFormControlTextarea1" class="form-label">Observaciones</label>
@@ -126,12 +175,7 @@
         </div>
       </div>
 
-      <!-- Tipo -->
-      <!-- <div class="mb-3">
-        <label class="form-label">Tipo de Financiamiento</label>
-        <input type="text" class="form-control form-control-sm"
-               formControlName="tipo_financiamiento">
-      </div> -->
+
 
       <!-- Archivo -->
       <div class="mb-3">

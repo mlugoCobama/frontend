@@ -1,43 +1,103 @@
 <form [formGroup]="form">
   <div class="row">
 
-    <!-- Vendedor -->
-    <!-- <div class="mb-2 col-lg-6">
-      <label class="form-label">Vendedor</label>
-      <select class="form-select form-select-sm"
-              formControlName="com_vendedores_id">
-        <option selected disabled value="">Seleccione...</option>
-        <option *ngFor="let v of vendedores" [value]="v.id">
-          {{v.nro_vendedor_as}}-{{v.clave}}-{{ v.nombre }}
-        </option>
-      </select>
-      <div class="text-danger small"
-           *ngIf="form.get('com_vendedores_id')?.touched && form.get('com_vendedores_id')?.invalid">
-        Campo requerido
-      </div>
-    </div> -->
-
-    <div class="mb-2 col-lg-6">
-      <label class="form-label">No. Factura de Accesorios</label>
+    <!-- Cliente -->
+    <div class="mb-2">
+      <label class="form-label">Cliente</label>
       <input type="text" class="form-control form-control-sm"
-             formControlName="no_factura">
+             formControlName="razon_social">
+
+      <div class="text-danger small"
+           *ngIf="form.get('razon_social')?.touched && form.get('razon_social')?.invalid">
+        
+        <span *ngIf="form.get('razon_social')?.errors?.['required']">
+          El cliente es obligatorio
+        </span>
+
+        <span *ngIf="form.get('razon_social')?.errors?.['minlength']">
+          Debe tener al menos 3 caracteres
+        </span>
+
+      </div>
     </div>
 
-    <!-- Subtotal Factura -->
-    <div class="mb-2 col-lg-6">
-      <label class="form-label">Subtotal Factura de Accesorios</label>
+    <!-- Factura -->
+    <div class="mb-2 col-lg-4">
+      <label class="form-label">Factura</label>
+      <input type="text" class="form-control form-control-sm"
+             formControlName="no_factura">
+
+      <div class="text-danger small"
+           *ngIf="form.get('no_factura')?.touched && form.get('no_factura')?.invalid">
+
+        <span *ngIf="form.get('no_factura')?.errors?.['required']">
+          El número de factura es obligatorio
+        </span>
+
+        <span *ngIf="form.get('no_factura')?.errors?.['pattern']">
+          Formato de factura inválido
+        </span>
+
+      </div>
+    </div>
+
+    <!-- Fecha -->
+    <div class="mb-2 col-lg-4">
+      <label class="form-label">Fecha</label>
+      <input type="date" class="form-control form-control-sm"
+             formControlName="fecha">
+
+      <div class="text-danger small"
+           *ngIf="form.get('fecha')?.touched && form.get('fecha')?.invalid">
+
+        <span *ngIf="form.get('fecha')?.errors?.['required']">
+          La fecha es obligatoria
+        </span>
+
+      </div>
+    </div>
+
+    <!-- No. Pedido -->
+    <div class="mb-2 col-lg-4">
+      <label class="form-label">No. Pedido</label>
+      <input type="text" class="form-control form-control-sm"
+             formControlName="no_pedido">
+
+      <div class="text-danger small"
+           *ngIf="form.get('no_pedido')?.touched && form.get('no_pedido')?.invalid">
+
+        <span *ngIf="form.get('no_pedido')?.errors?.['required']">
+          El número de pedido es obligatorio
+        </span>
+
+      </div>
+    </div>
+
+    <!-- Subtotal -->
+    <div class="mb-2 col-lg-3">
+      <label class="form-label">Subtotal</label>
       <input class="form-control form-control-sm"
              mask="separator" thousandSeparator=","
              prefix="$ "
              placeholder="Subtotal"
              formControlName="subtotal_factura">
+
       <div class="text-danger small"
            *ngIf="form.get('subtotal_factura')?.touched && form.get('subtotal_factura')?.invalid">
-        Campo requerido
+
+        <span *ngIf="form.get('subtotal_factura')?.errors?.['required']">
+          El subtotal es obligatorio
+        </span>
+
+        <span *ngIf="form.get('subtotal_factura')?.errors?.['min']">
+          El subtotal debe ser mayor a 0
+        </span>
+
       </div>
     </div>
 
-    <div class="mb-2 col-lg-6">
+    <!-- IVA -->
+    <div class="mb-2 col-lg-3">
       <label class="form-label">IVA</label>
       <input type="text" class="form-control form-control-sm"
              mask="separator" thousandSeparator=","
@@ -45,8 +105,17 @@
              formControlName="iva_factura" readonly>
     </div>
 
-    <!-- Comisión APV en Pesos -->
-    <div class="mb-2 col-lg-6">
+    <!-- Total -->
+    <div class="mb-2 col-lg-3">
+      <label class="form-label">Total</label>
+      <input type="text" class="form-control form-control-sm"
+             mask="separator" thousandSeparator=","
+             prefix="$ "
+             formControlName="total" readonly>
+    </div>
+
+    <!-- Comisión APV -->
+    <div class="mb-2 col-lg-3">
       <label class="form-label">Comisión APV</label>
       <input type="text" class="form-control form-control-sm"
              mask="separator" thousandSeparator=","
@@ -57,7 +126,9 @@
     <!-- Observaciones -->
     <div class="mb-2">
       <label class="form-label">Observaciones</label>
-      <textarea formControlName="observaciones" class="form-control" rows="3"></textarea>
+      <textarea formControlName="observaciones"
+                class="form-control"
+                rows="3"></textarea>
     </div>
 
   </div>

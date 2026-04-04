@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FinanciamientoService } from 'src/app/core/services/renault/financiamiento.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
-
+import { TomaUnidadesService } from 'src/app/core/services/renault/toma-unidades.service';
 @Component({
   selector: 'app-toma-unidad-form',
   templateUrl: './toma-unidad-form.component.html',
@@ -17,17 +17,18 @@ export class TomaUnidadFormComponent {
   @Input() data: any ;
   @Input() vendedores: any;
   @Input() tipoFinanciamiento: any;
+  @Input() agencia: any;
 
-  constructor(private fb: FormBuilder, private financiamientoService:FinanciamientoService ) {}
+  constructor(private fb: FormBuilder, private tomaUnidadesService: TomaUnidadesService) {}
 
   ngOnInit(): void {
 
     this.form = this.fb.group({
       id: [null],
-      // com_vendedores_id: ["", Validators.required],
-      no_inventario: ['', [Validators.maxLength(45), Validators.required]],
-      anio: ['', [Validators.required]],
-      clave_producto: ['', [Validators.maxLength(45), Validators.required]],
+      por_inventario: ['', [Validators.maxLength(45), Validators.required]],
+      vehiculo: ['', [Validators.required]],
+      numero_serie: ['', [Validators.required]],
+      tipo_apv: ['', [Validators.required]],
       comision_apv_pesos: [null, Validators.required],
       fecha_toma: ['', Validators.required],
       observaciones: [null]
@@ -52,30 +53,31 @@ export class TomaUnidadFormComponent {
 
     
 
-    this.form.get('numero_factura')?.valueChanges
-        .pipe(
-          debounceTime(500),          // espera 500ms después de que el usuario deja de escribir
-          distinctUntilChanged()      // solo emite si el valor cambió
-        )
-        .subscribe(value => {
-          if (value && value.trim() !== '') {
-              this.consultarFactura(value);
-            }
-        });
+    // this.form.get('por_inventario')?.valueChanges
+    //     .pipe(
+    //       debounceTime(500),          // espera 500ms después de que el usuario deja de escribir
+    //       distinctUntilChanged()      // solo emite si el valor cambió
+    //     )
+    //     .subscribe(value => {
+    //       if (value && value.trim() !== '') {
+    //           this.consultarFactura(value);
+    //         }
+    //     });
       }
 
 
   setValores(data: any): void {
-  this.form.patchValue({
-    id: data.id ?? null,
-    // com_vendedores_id: data.com_vendedores_id ?? null,
-    no_inventario: data.no_inventario ?? '',
-    anio: data.anio ?? '',
-    clave_producto: data.clave_producto ?? '',
-    comision_apv_pesos: data.comision_apv_pesos ?? null,
-    fecha_toma: this.formatDateForInputDate(data.fecha_toma) ?? '',
-    observaciones: data.observaciones ?? ''
-  });
+    this.form.patchValue({
+        id: data.id ?? null,
+        por_inventario: data.por_inventario ?? '',
+        vehiculo: data.vehiculo ?? '',
+        numero_serie: data.numero_serie ?? '',
+        tipo_apv: data.tipo_apv ?? '',
+        comision_apv_pesos: data.comision_apv_pesos ?? null,
+        fecha_toma: this.formatDateForInputDate(data.fecha_toma) ?? '',
+        observaciones: data.observaciones ?? ''
+      });
+
 }
 
 
@@ -113,29 +115,29 @@ export class TomaUnidadFormComponent {
     this.form.markAllAsTouched();
   }
 
-  formatDateForInputDate(isoString: string): string {
+  formatDateForInputDate(isoString:any) {
   const fecha = new Date(isoString);
-
-  const dia = String(fecha.getDate()).padStart(2, '0');
-  const mes = String(fecha.getMonth() + 1).padStart(2, '0'); // meses van de 0-11
-  const anio = fecha.getFullYear();
-
+  const dia = String(fecha.getUTCDate()).padStart(2, '0');
+  const mes = String(fecha.getUTCMonth() + 1).padStart(2, '0');
+  const anio = fecha.getUTCFullYear();
   return `${anio}-${mes}-${dia}`;
 }
 
+
+
 public dataVenta:any;
-private consultarFactura(noFactura: any) {
-  
-  this.financiamientoService.getDataVenta(noFactura).subscribe(
+private consultarFactura(noSerie: any) {
+
+  this.tomaUnidadesService.getDataVenta(`${noSerie}-`).subscribe(
     (response: any) => {
       if (response) {
         this.dataVenta = response.data;
-        // if ((!this.data || this.data === undefined) && this.dataVenta) {
-        //     this.form.patchValue({
-        //       com_vendedores_id: this.dataVenta.id_vendedor ?? '',
-        //       fecha_desembolso: this.formatDateForInputDate(this.dataVenta.fecha_factura) ?? null
-        //     });
-        //   }
+        if ((!this.data || this.data === undefined) && this.dataVenta) {
+            this.form.patchValue({
+              vehiculo: this.dataVenta.descripcion,
+              numero_serie: this.dataVenta.serie
+            });
+          }
 
 
       } else {

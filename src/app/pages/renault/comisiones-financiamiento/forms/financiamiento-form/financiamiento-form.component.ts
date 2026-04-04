@@ -31,10 +31,24 @@ export class FinanciamientoFormComponent implements OnInit {
       incentivo_dealer: [null,Validators.required],
       porcentaje_asesor: [null,Validators.required],
       comision_asesor_pesos: [{ value: null, disabled: true }],
-      // com_vendedores_id: ["", Validators.required],
+      razon_social: [''],
+      descripcion: [''],
+      serie: [''],
       tipo_financiamiento: [this.tipoFinanciamiento ?? ''],
       archivo: [null, Validators.required],
-      observaciones: [null]
+      observaciones: [null],
+
+      kit_seguridad: [0],
+      sat_finder: [0],
+      garantia_extendida: [0],
+      seguro_vf3: [0],
+      accesorios_adicionales: [0],
+
+      comision_mantenimiento: [0],
+      comision_garantia_extendida: [0],
+      comision_udi: [0],
+      comision_vf3: [0],
+      sub_x_des: [0]
     });
 
     if (this.data) {
@@ -46,7 +60,7 @@ export class FinanciamientoFormComponent implements OnInit {
       if (val.incentivo_dealer && val.porcentaje_asesor) {
         const comision = (val.incentivo_dealer * val.porcentaje_asesor) / 100;
         this.form.patchValue(
-          { comision_asesor_pesos: comision },
+          { comision_asesor_pesos: comision.toFixed(2) },
           { emitEvent: false }
         );
       }
@@ -62,6 +76,7 @@ export class FinanciamientoFormComponent implements OnInit {
         .subscribe(value => {
           if (value && value.trim() !== '') {
               this.consultarFactura(value);
+              
             }
         });
       }
@@ -80,6 +95,18 @@ export class FinanciamientoFormComponent implements OnInit {
       com_vendedores_id:     data.com_vendedores_id     ?? null,
       tipo_financiamiento:   data.tipo_financiamiento   ?? this.tipoFinanciamiento ?? '',
       observaciones:         data.observaciones   ??  '',
+
+      kit_seguridad: data.kit_seguridad   ??  0,
+      sat_finder: data.sat_finder   ??  0,
+      garantia_extendida: data.garantia_extendida   ??  0,
+      seguro_vf3: data.seguro_vf3   ??  0,
+      accesorios_adicionales: data.accesorios_adicionales   ??  0,
+
+      comision_mantenimiento: data.comision_mantenimiento   ??  0,
+      comision_garantia_extendida: data.comision_garantia_extendida   ??  0,
+      comision_udi: data.comision_udi   ??  0,
+      comision_vf3: data.comision_vf3   ??  0,
+      sub_x_des: data.sub_x_des   ??  0
     });
 
     this.form.get('archivo')?.setValidators(null);
@@ -133,18 +160,19 @@ export class FinanciamientoFormComponent implements OnInit {
 
 public dataVenta:any;
 private consultarFactura(noFactura: any) {
-  
+  this.dataVenta = [];
   this.financiamientoService.getDataVenta(noFactura).subscribe(
     (response: any) => {
       if (response) {
         this.dataVenta = response.data;
-        // if ((!this.data || this.data === undefined) && this.dataVenta) {
-        //     this.form.patchValue({
-        //       com_vendedores_id: this.dataVenta.id_vendedor ?? '',
-        //       fecha_desembolso: this.formatDateForInputDate(this.dataVenta.fecha_factura) ?? null
-        //     });
-        //   }
-
+        if(this.dataVenta){
+          this.form.patchValue({
+              razon_social: this.dataVenta.razon_social,
+              descripcion: `${this.dataVenta.descripcion} ${this.dataVenta.anio_vehiculo}`,
+              serie: this.dataVenta.serie
+            });
+        }
+        
 
       } else {
         console.log(response.message);
