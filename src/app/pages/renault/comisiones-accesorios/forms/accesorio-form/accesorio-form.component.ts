@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { debounceTime, distinctUntilChanged } from "rxjs";
+import { FinanciamientoService } from "src/app/core/services/renault/financiamiento.service";
 
 @Component({
   selector: "app-accesorio-form",
@@ -14,10 +15,11 @@ export class AccesorioFormComponent implements OnInit {
   loading = false;
   archivo: File | null = null;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private financiamientoService: FinanciamientoService) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
+      id : [null],
       // com_vendedores_id: ["", Validators.required],
       no_factura: [null, Validators.required],
       no_pedido: [null, Validators.required],
@@ -30,6 +32,9 @@ export class AccesorioFormComponent implements OnInit {
         { value: null, disabled: true },
         Validators.required,
       ],
+      factura_vehiculo: [null],
+      unidad: [null],
+      serie: [null],
       observaciones: [null],
     });
 
@@ -54,13 +59,29 @@ export class AccesorioFormComponent implements OnInit {
             { emitEvent: false },);
         }
       });
+
+
+
     if (this.data) {
       this.setValores(this.data);
     }
+
+    this.form.get('factura_vehiculo')?.valueChanges
+        .pipe(
+          debounceTime(500),          // espera 500ms después de que el usuario deja de escribir
+          distinctUntilChanged()      // solo emite si el valor cambió
+        )
+        .subscribe(value => {
+          if (value && value.trim() !== '') {
+              this.consultarFactura(value);
+              
+            }
+    });
   }
 
   setValores(data: any): void {
     this.form.patchValue({
+      id: data.id ?? null,
       com_vendedores_id: data.com_vendedores_id ?? null,
       razon_social: data.razon_social ?? "",
       fecha: this.formatDateForInputDate(data.fecha_factura) ?? null,
@@ -69,6 +90,7 @@ export class AccesorioFormComponent implements OnInit {
       subtotal_factura: data.sub_total_factura ?? null,
       comision_apv_pesos: data.comision_apv_pesos ?? null,
       observaciones: data.observaciones ?? "",
+      factura_vehiculo: data.factura_vehiculo ?? null,
     });
   }
 
@@ -109,4 +131,30 @@ export class AccesorioFormComponent implements OnInit {
     const anio = fecha.getUTCFullYear();
     return `${anio}-${mes}-${dia}`;
   }
+
+  
+  public dataVenta:any;
+private consultarFactura(noFactura: any) {
+  this.dataVenta = [];
+  this.financiamientoService.getDataVenta(noFactura).subscribe(
+    (response: any) => {
+      if (response) {
+        this.dataVenta = response.data;
+        if(this.dataVenta){
+          this.form.patchValue({
+              unidad: `${this.dataVenta.descripcion} ${this.dataVenta.anio_vehiculo}`,
+              serie: this.dataVenta.serie
+            });
+        }
+        
+
+      } else {
+        console.log(response.message);
+      }
+    },
+    (error) => {
+      console.error("Error fetching data:", error);
+    },
+  );
+}
 }

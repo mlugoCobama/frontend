@@ -37,6 +37,9 @@ export class ComisionesComponent implements AfterViewInit {
   guardandoG: boolean = false;
   guardandoV: boolean = false;
   guardandoE: boolean = false;
+
+  searchText: string = '';
+  filteredIndices: number[] = [];
   
   @ViewChild('formFiltro', { static: false }) formFiltro!:  FiltroComponent;
 
@@ -48,7 +51,10 @@ export class ComisionesComponent implements AfterViewInit {
     private route: ActivatedRoute
   ) {}
 
-  ngAfterViewInit(): void {}
+  ngAfterViewInit(): void {
+    this.filteredIndices = [];
+    this.resetFilter();
+  }
 
   /** Form array */
   form = this.fb.group({
@@ -84,6 +90,8 @@ export class ComisionesComponent implements AfterViewInit {
       this.ventas.clear();
       this.form.markAsPristine();
       this.form.markAsUntouched();
+      this.filteredIndices = [];
+      this.resetFilter();
     }
   }
 
@@ -267,6 +275,8 @@ export class ComisionesComponent implements AfterViewInit {
           this.pagando.push(false);
           this.devolviendo.push(false);
         });
+        this.filteredIndices = [];
+        this.resetFilter();
   }
 
   /**
@@ -424,6 +434,7 @@ export class ComisionesComponent implements AfterViewInit {
   /** Remueve la fila de tabla y del from array */
   removerFila(index: number) {
     this.ventas.removeAt(index);
+    this.resetFilter();
   }
 
 
@@ -515,6 +526,40 @@ getVentaAuto() {
   const ventaAuto = segments.length > 0 ? segments[segments.length - 1].path : '';
   return ventaAuto ?? null;
 }
+
+onSearch(text: string) {
+  this.searchText = text;
+  this.resetFilter();
+}
+
+resetFilter() {
+  const q = this.searchText.toLowerCase().trim();
+  this.filteredIndices = this.ventas.controls
+    .map((ctrl, i) => ({ ctrl, i }))
+    .filter(({ ctrl }) => {
+      if (!q) return true;
+      // Busca en los campos que necesites
+      const campos = [
+        ctrl.get('no_factura')?.value,
+        ctrl.get('razon_social')?.value,
+        ctrl.get('clave_vendedor')?.value,
+        ctrl.get('descripcion')?.value,
+        ctrl.get('serie')?.value,
+        ctrl.get('clave_inventario')?.value,
+      ];
+      return campos.some(v =>
+        v?.toString().toLowerCase().includes(q)
+      );
+    })
+    .map(({ i }) => i);
+}
+
+filaSeleccionada: number | null = null;
+
+  seleccionarFila(id: number): void {
+    this.filaSeleccionada = id;
+  }
+
 
 
 

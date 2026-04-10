@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { configEstadosTomaUnidades, configTablaTomaUnidades, configuracionesAceessLevel } from './modelos-toma-unidades';
 import { BsModalRef, ModalOptions, BsModalService } from 'ngx-bootstrap/modal';
 import { TomaUnidadesModalComponent,  } from './toma-unidades-modal/toma-unidades-modal.component';
@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { firstValueFrom } from 'rxjs';
 import { PermisosService } from 'src/app/core/services/permisos.service';
 import { ActivatedRoute } from '@angular/router';
+import { FiltroComsionesGenericoComponent } from 'src/app/shared/ui/filtro-comsiones-generico/filtro-comsiones-generico.component';
 
 @Component({
   selector: "app-comisiones-toma-unidades",
@@ -16,6 +17,8 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: "./comisiones-toma-unidades.component.css",
 })
 export class ComisionesTomaUnidadesComponent implements OnInit {
+
+  @ViewChild('formFiltro', { static: false }) formFiltro!: FiltroComsionesGenericoComponent;
   public data = [];
   public vendedores: any[] = [];
   public filaSeleccionada: any = null;
@@ -42,7 +45,7 @@ export class ComisionesTomaUnidadesComponent implements OnInit {
       clase: "btn-warning",
       tooltip: "Devolver al estado anterior",
       // Solo si NO está en el primer estado ni pagada
-      visible: (item) => item.estatus > 1 && item.estatus !== 3,
+      visible: (item) => item.estatus > 1 && item.estatus !== 4,
       accion: async (item) => await this.devolver(item),
     },
     {
@@ -73,7 +76,7 @@ export class ComisionesTomaUnidadesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getVendedores(1);
+    // this.getVendedores(1);
     this.asignarEstado();
   }
 
@@ -95,7 +98,7 @@ export class ComisionesTomaUnidadesComponent implements OnInit {
     this.modalRef.content.event.subscribe(() => {
       // this.isLoad = true;
       // // this.mostrar = false;
-      this.getAll();
+      this.buscarDatos(this.getFiltro());
     });
   }
 
@@ -117,49 +120,8 @@ export class ComisionesTomaUnidadesComponent implements OnInit {
     this.modalRef.content.event.subscribe(() => {
       // this.isLoad = true;
       // // this.mostrar = false;
-      this.getAll();
+      this.buscarDatos(this.getFiltro());
     });
-  }
-
-  private getVendedores(intercompania) {
-    this.isLoad = true;
-    this.vendedoresService.getOne(intercompania).subscribe(
-      (response: any) => {
-        if (response) {
-          this.vendedores = response.data;
-          this.isLoad = false;
-        } else {
-          console.log(response.message);
-          this.isLoad = false;
-        }
-      },
-      (error) => {
-        console.error("Error fetching data:", error);
-        this.isLoad = false;
-      },
-    );
-  }
-
-  private getAll() {
-    this.isLoad = true;
-    this.tomaUnidadesService.getAll().subscribe(
-      (response: any) => {
-        if (response) {
-          this.data = response.data;
-          console.log(this.data);
-          // this.ordenador = new FuncionesTablas(this.data);
-          // this.datosFiltrados = [...this.data];
-          this.isLoad = false;
-        } else {
-          console.log(response.message);
-          this.isLoad = false;
-        }
-      },
-      (error) => {
-        console.error("Error fetching data:", error);
-        this.isLoad = false;
-      },
-    );
   }
 
   onItemSeleccionado(item: any | null): void {
@@ -190,7 +152,7 @@ export class ComisionesTomaUnidadesComponent implements OnInit {
                 "success",
                 "success",
               );
-              this.getAll();
+              this.buscarDatos(this.getFiltro());
             } else {
               Swal.showValidationMessage(`Error: ${response.message}`);
             }
@@ -214,7 +176,7 @@ export class ComisionesTomaUnidadesComponent implements OnInit {
     this.data = [];
   }
 
-  buscarDatos(datos) {
+  buscarDatos(datos:any) {
     this.buscando = true;
     this.isLoad = true;
     if (!this.formularioValido) {
@@ -348,7 +310,7 @@ export class ComisionesTomaUnidadesComponent implements OnInit {
 
   /** Remueve la fila de tabla y del from array */
   removerFila(index: number) {
-    let indice = this.data.findIndex((p) => p.id === index);
+    let indice = this.data.findIndex((p:any) => p.id === index);
 
     if (indice !== -1) {
       this.data.splice(indice, 1);
@@ -356,7 +318,7 @@ export class ComisionesTomaUnidadesComponent implements OnInit {
     }
   }
 
-  mostrarObs(item) {
+  mostrarObs(item: any) {
     this.alertas.mostrarAlerta(
       "Comentario:",
       item.comentario ?? "No hay comentarios",
@@ -378,8 +340,8 @@ export class ComisionesTomaUnidadesComponent implements OnInit {
 
     this.showFiltro = encontrado ? true : false;
     if (this.showFiltro) {
-      this.configFiltro = encontrado.configFiltro;
-      this.estadoDefault = encontrado.estadoDefault;
+      this.configFiltro = encontrado!.configFiltro;
+      this.estadoDefault = encontrado!.estadoDefault;
     }
 
     return encontrado?.estadoDefault ?? 0;
@@ -392,5 +354,9 @@ export class ComisionesTomaUnidadesComponent implements OnInit {
   
   getEmpresaActiva(): string {
     return this.route.parent?.snapshot.url[0]?.path || '';
+  }
+
+    private getFiltro(){
+    return this.formFiltro.getValues();
   }
 }

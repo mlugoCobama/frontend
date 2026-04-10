@@ -90,3 +90,50 @@
 
   </div>
 </form>
+<!-- Botón para agregar al array -->
+<div class="d-flex justify-content-end mt-2 mb-4">
+  <button type="button" class="btn btn-primary btn-sm" (click)="agregarItem()">
+   <i class="fas fa-plus"></i>Agregar
+  </button>
+</div>
+
+<!-- Tabla de items agregados -->
+<div *ngIf="items.length > 0">
+  <h6 class="mb-2">
+    Toma de unidades agregadas
+    <span class="badge bg-primary ms-1">{{ items.length }}</span>
+  </h6>
+
+  <div class="table-responsive">
+    <table class="table table-sm table-bordered align-middle">
+      <thead class="table-light">
+        <tr>
+          <!-- <th>#</th> -->
+          <th>Inventario</th>
+          <th>Fecha Toma</th>
+          <th>Vehiculo</th>
+          <th>Número de Serie</th>
+          <th>Importe</th>
+          <th>Tipo APV</th>
+          <th>-</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items">
+          <!-- <td>{{ item.index }}</td> -->
+          <td>{{ item.formData?.por_inventario }}</td>
+          <td>{{ item.formData?.fecha_toma | date:'dd/MM/yyyy'}}</td>
+          <td>{{ item.formData?.vehiculo ?? 'No disponible'  }}</td>
+          <td>{{ item.formData?.numero_serie}}</td>
+          <td>{{ item.formData?.comision_apv_pesos ?? 0 | currency }}</td>
+          <td>{{ item.formData?.tipo_apv}}</td>
+          <td>
+            <button type="button" class="btn btn-outline-danger btn-sm"
+                    (click)="quitarItem(item.index)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

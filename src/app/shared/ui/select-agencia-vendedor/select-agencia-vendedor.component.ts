@@ -56,7 +56,7 @@ export class SelectAgenciaVendedorComponent implements OnInit, OnDestroy {
   }
 
   getValues() {
-    return this.formulario.value;
+    return this.formulario.getRawValue();
   }
 
   // LISTENER REACTIVO
@@ -103,7 +103,6 @@ export class SelectAgenciaVendedorComponent implements OnInit, OnDestroy {
   // SET VALORES EXTERNOS
   setValores(data: any): void {
     this.vendedorPendiente = data.com_vendedores_id ?? null;
-    console.log(this.vendedorPendiente)
     this.formulario.patchValue({
       agencia: data.agencia ?? ''
     });
@@ -147,5 +146,18 @@ export class SelectAgenciaVendedorComponent implements OnInit, OnDestroy {
   tienePermiso(permiso: string | null = null): boolean {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
+  }
+
+    esValido(): boolean {
+    return this.formulario.valid;
+  }
+
+  marcarTodo(): void {
+    this.formulario.markAllAsTouched();
+  }
+
+  deshabilitar(){
+    this.formulario.get('agencia')?.disable();
+    this.formulario.get('com_vendedores_id')?.disable();
   }
 }

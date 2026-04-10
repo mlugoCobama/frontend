@@ -39,42 +39,53 @@ export class FinanciamientoModalComponent implements OnInit, AfterViewInit {
     }
   }
 
-  guardar(): void {
-    if (!this.formFinanciamiento.esValido()) {
-      this.formFinanciamiento.marcarTodo();
-      return;
-    }
+guardar(): void {
+  if (!this.formSelectAgencia.esValido()) {
+    this.formSelectAgencia.marcarTodo();
+    return;
+  }
 
-    this.loading = true;
-    const valores = {...this.formFinanciamiento.getValores(), ...this.formSelectAgencia.getValues()};
-    const payload = valores;
-    const formData = new FormData();
+  const items = this.formFinanciamiento.getItems();
+
+  if (items.length === 0) {
+    this.alertas.mostrarAlerta('Aviso', 'Agrega al menos un financiamiento', 'warning', 'warning');
+    return;
+  }
+
+  this.loading = true;
+  const agenciaValues = this.formSelectAgencia.getValues();
+  const formData = new FormData();
+
+  items.forEach((item, i) => {
+    const payload = { ...item.formData, ...agenciaValues };
+
     Object.keys(payload).forEach(key => {
-      if (payload[key] !== null && payload[key] !== undefined && key !== 'archivo') {
-        formData.append(key, payload[key]);
-      }
+      // if (payload[key] !== null && payload[key] !== undefined) {
+        formData.append(`financiamientos[${i}][${key}]`, payload[key]);
+      // }
     });
-    if (valores.archivo) {
-      formData.append('archivo', valores.archivo);
-    }
 
-    // 5. Llamar servicio
-    this.financiamientoService.create(formData).subscribe((response:any)=>{
-      if(response.status = 'success'){
+    formData.append(`financiamientos[${i}][archivo]`, item.archivo, item.archivo.name);
+  });
+
+  this.financiamientoService.create(formData).subscribe({
+    next: (response: any) => {
+      if (response.status === 'success') {
         this.alertas.mostrarAlerta('Listo!', response.message, 'success', 'success');
-        this.loading = false;
         this.event.emit();
         this.cerrarModal();
-      }else{
+      } else {
         this.alertas.mostrarAlerta('Error!', response.message, 'error', 'danger');
-        this.loading = false;
       }
-    },(error) => {
-        console.error("Error fetching data:", error);
-        this.alertas.mostrarAlerta('Error!', error, 'error', 'danger');
-        this.loading = false;
-    });
-  }
+      this.loading = false;
+    },
+    error: (error) => {
+      console.error(error);
+      this.alertas.mostrarAlerta('Error!', error, 'error', 'danger');
+      this.loading = false;
+    }
+  });
+}
 
   cerrarModal(): void {
     this.bsModalRef.hide();

@@ -12,6 +12,7 @@
 
 <app-filtro-comsiones-generico
   *ngIf = "showFiltro"
+    #formFiltro
   [config]="configFiltro"
   [estadoOpciones]="misEstados"
   [hasData]="hayDatos"

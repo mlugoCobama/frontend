@@ -38,21 +38,30 @@ export class TomaUnidadesModalComponent implements OnInit, AfterViewInit {
   }
 
   guardar(): void {
-    if (!this.formFinanciamiento.esValido()) {
-      this.formFinanciamiento.marcarTodo();
+    if (!this.formSelectAgencia.esValido()) {
+      this.formSelectAgencia.marcarTodo();
       return;
     }
 
     this.loading = true;
-    const valores = {...this.formFinanciamiento.getValores(), ...this.formSelectAgencia.getValues()};
-    console.log(valores);
-    const payload = valores;
-    const formData = new FormData();
-    Object.keys(payload).forEach(key => {
-      if (payload[key] !== null && payload[key] !== undefined && key !== 'archivo') {
-        formData.append(key, payload[key]);
-      }
-    });
+    const valores = this.formFinanciamiento.getItems();
+    if (valores.length === 0) {
+      this.alertas.mostrarAlerta('Aviso', 'Agrega al menos una toma de unidad', 'warning', 'warning');
+    return;
+  }
+    const items = valores;
+      const agenciaValues = this.formSelectAgencia.getValues();
+      const formData = new FormData();
+
+      items.forEach((item, i) => {
+        const payload = { ...item.formData, ...agenciaValues };
+
+        Object.keys(payload).forEach(key => {
+          // if (payload[key] !== null && payload[key] !== undefined) {
+            formData.append(`toma_unidad[${i}][${key}]`, payload[key]);
+          // }
+        });
+      });
 
     this.tomaUnidadesService.create(formData).subscribe((response:any)=>{
       if(response.status = 'success'){

@@ -37,6 +37,7 @@ export class AccesorioModalComponent implements OnInit, AfterViewInit {
         this.formSelectAgencia.setValores(this.data);
         this.formFinanciamiento.setValores(this.data);
         this.formDetalles.setValores(this.data.detalles);
+        this.formSelectAgencia.deshabilitar();
       });
     }
   }

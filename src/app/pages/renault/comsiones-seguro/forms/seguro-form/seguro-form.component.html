@@ -34,6 +34,17 @@
       </div>
     </div>
 
+    <!-- Serie -->
+    <div class="mb-2 col-lg-4">
+      <label class="form-label">Serie</label>
+      <input type="text" class="form-control form-control-sm"
+             formControlName="serie">
+      <div class="text-danger small"
+           *ngIf="form.get('serie')?.touched && form.get('serie')?.invalid">
+        La serie es obligatoria
+      </div>
+    </div>
+
     <!-- Nombre -->
     <div class="mb-2 col-lg-4">
       <label class="form-label">Nombre</label>
@@ -56,16 +67,7 @@
       </div>
     </div>
 
-    <!-- Serie -->
-    <div class="mb-2 col-lg-4">
-      <label class="form-label">Serie</label>
-      <input type="text" class="form-control form-control-sm"
-             formControlName="serie">
-      <div class="text-danger small"
-           *ngIf="form.get('serie')?.touched && form.get('serie')?.invalid">
-        La serie es obligatoria
-      </div>
-    </div>
+    
 
     <!-- Fecha emisión -->
     <div class="mb-2 col-lg-4">
@@ -153,3 +155,52 @@
 
   </div>
 </form>
+<!-- Botón para agregar al array -->
+<div class="d-flex justify-content-end mt-2 mb-4">
+  <button type="button" class="btn btn-primary btn-sm" (click)="agregarItem()">
+   <i class="fas fa-plus"></i>Agregar
+  </button>
+</div>
+
+<!-- Tabla de items agregados -->
+<div *ngIf="items.length > 0">
+  <h6 class="mb-2">
+    Toma de unidades agregadas
+    <span class="badge bg-primary ms-1">{{ items.length }}</span>
+  </h6>
+
+  <div class="table-responsive">
+    <table class="table table-sm table-bordered align-middle">
+      <thead class="table-light">
+        <tr>
+          <!-- <th>#</th> -->
+          <th>Folio</th>
+          <th>Poliza</th>
+          <th>Nombre</th>
+          <th>Unidad</th>
+          <th>Serie</th>
+          <th>Prima Neta</th>
+          <th>Comision APV</th>
+          <th>-</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items">
+          <!-- <td>{{ item.index }}</td> -->
+          <td>{{ item.formData?.folio }}</td>
+          <td>{{ item.formData?.poliza}}</td>
+          <td>{{ item.formData?.nombre  }}</td>
+          <td>{{ item.formData?.unidad}}</td>
+          <td>{{ item.formData?.serie}}</td>
+          <td>{{ item.formData?.prima_neta ?? 0 | currency }}</td>
+          <td>{{ item.formData?.comision_apv_pesos ?? 0 | currency }}</td>
+          <td>
+            <button type="button" class="btn btn-outline-danger btn-sm"
+                    (click)="quitarItem(item.index)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

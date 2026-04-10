@@ -29,6 +29,8 @@ import { AccesorioFormComponent } from './comisiones-accesorios/forms/accesorio-
 import { DetalleAccesorioFormComponent } from './comisiones-accesorios/forms/detalle-accesorio-form/detalle-accesorio-form.component';
 import { AccesorioModalComponent } from './comisiones-accesorios/accesorio-modal/accesorio-modal.component';
 import { ModalDetalleRubroComponent } from './comisiones-concentrado/modal-detalle-rubro/modal-detalle-rubro.component';
+import { TablaConcentradoComisionesComponent } from './comisiones-concentrado/tabla-concentrado-comisiones/tabla-concentrado-comisiones.component';
+import { VisorCortesComponent } from './visor-cortes/visor-cortes.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +55,8 @@ import { ModalDetalleRubroComponent } from './comisiones-concentrado/modal-detal
     DetalleAccesorioFormComponent,
     AccesorioModalComponent,
     ModalDetalleRubroComponent,
+    TablaConcentradoComisionesComponent,
+    VisorCortesComponent,
   ],
   imports: [
     CommonModule,

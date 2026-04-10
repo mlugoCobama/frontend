@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import { VendedoresService } from 'src/app/core/services/nissan/vendedores.service';
@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { firstValueFrom } from 'rxjs';
 import { PermisosService } from 'src/app/core/services/permisos.service';
 import { ActivatedRoute } from '@angular/router';
+import { FiltroComsionesGenericoComponent } from 'src/app/shared/ui/filtro-comsiones-generico/filtro-comsiones-generico.component';
 
 @Component({
   selector: 'app-comsiones-seguro',
@@ -16,6 +17,9 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './comsiones-seguro.component.css'
 })
 export class ComsionesSeguroComponent {
+
+  @ViewChild('formFiltro', { static: false }) formFiltro!: FiltroComsionesGenericoComponent;
+
     public data = [];
     public vendedores: any[] = [];
     public filaSeleccionada: any = null;
@@ -35,7 +39,7 @@ export class ComsionesSeguroComponent {
       public accionesTabla: any[] = [
     {  icono:   'fas fa-backward',  clase:   'btn-warning',  tooltip: 'Devolver al estado anterior',
       // Solo si NO está en el primer estado ni pagada
-      visible: (item) => item.estatus > 1 && item.estatus !== 3,
+      visible: (item) => item.estatus > 1 && item.estatus !== 4,
       accion:  async (item) => await this.devolver(item),
     },
     {
@@ -69,30 +73,8 @@ export class ComsionesSeguroComponent {
     ) {}
 
   ngOnInit(): void {
-    this.getVendedores(1);
+    // this.getVendedores(1);
     this.asignarEstado();
-  }
-
-   private getAll() {
-    this.isLoad = true;
-    this.segurosService.getAll().subscribe(
-      (response: any) => {
-        if (response) {
-          this.data = response.data;
-          console.log(this.data)
-          // this.ordenador = new FuncionesTablas(this.data);
-          // this.datosFiltrados = [...this.data];
-          this.isLoad = false;
-        } else {
-          console.log(response.message);
-          this.isLoad = false;
-        }
-      },
-      (error) => {
-        console.error("Error fetching data:", error);
-        this.isLoad = false;
-      },
-    );
   }
 
     buscarDatos(datos){
@@ -149,7 +131,7 @@ export class ComsionesSeguroComponent {
     this.modalRef.content.event.subscribe(() => {
       // this.isLoad = true;
       // // this.mostrar = false;
-            // this.getAll();
+        this.buscarDatos(this.getFiltro());
     });
   }
 
@@ -171,7 +153,7 @@ export class ComsionesSeguroComponent {
       this.modalRef.content.event.subscribe(() => {
         // this.isLoad = true;
         // // this.mostrar = false;
-        this.getAll();
+        this.buscarDatos(this.getFiltro());
       });
     }
 
@@ -180,25 +162,6 @@ export class ComsionesSeguroComponent {
     this.data = [];
   }
 
-  /** recupera todos los registros de los vendedores */
-      private getVendedores(intercompania) {
-        this.isLoad = true;
-        this.vendedoresService.getOne(intercompania).subscribe(
-          (response: any) => {
-            if (response) {
-              this.vendedores = response.data;
-              this.isLoad = false;
-            } else {
-              console.log(response.message);
-              this.isLoad = false;
-            }
-          },
-          (error) => {
-            console.error("Error fetching data:", error);
-            this.isLoad = false;
-          },
-        );
-      }
     onItemsSeleccionados(items: any[]): void {
     this.seleccionados = items;
     console.log('Seleccionados:', items);
@@ -232,7 +195,7 @@ export class ComsionesSeguroComponent {
                     "success",
                     "success",
                   );
-                  this.getAll();
+                  this.buscarDatos(this.getFiltro());
                 } else {
                   Swal.showValidationMessage(`Error: ${response.message}`);
                 }
@@ -361,5 +324,9 @@ async verDocumento(item: any): Promise<void> {
     
   getEmpresaActiva(): string {
     return this.route.parent?.snapshot.url[0]?.path || '';
+  }
+
+  private getFiltro(){
+    return this.formFiltro.getValues();
   }
 }

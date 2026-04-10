@@ -66,16 +66,16 @@ export class SeguroFormComponent implements OnInit {
 
     
 
-    // this.form.get('numero_factura')?.valueChanges
-    //     .pipe(
-    //       debounceTime(500),          // espera 500ms después de que el usuario deja de escribir
-    //       distinctUntilChanged()      // solo emite si el valor cambió
-    //     )
-    //     .subscribe(value => {
-    //       if (value && value.trim() !== '') {
-    //           this.consultarFactura(value);
-    //         }
-    //     });
+  this.form.get('serie')?.valueChanges
+      .pipe(
+        debounceTime(500),          
+        distinctUntilChanged()      
+      )
+      .subscribe(value => {
+        if (value && value.trim() !== '') {
+            this.consultarFactura(value);
+          }
+      });
       }
 
 
@@ -137,31 +137,6 @@ private limpiarNumero(valor: any): number {
   return `${anio}-${mes}-${dia}`;
 }
 
-public dataVenta:any;
-private consultarFactura(noFactura: any) {
-  
-  this.financiamientoService.getDataVenta(noFactura).subscribe(
-    (response: any) => {
-      if (response) {
-        this.dataVenta = response.data;
-        // if ((!this.data || this.data === undefined) && this.dataVenta) {
-        //     this.form.patchValue({
-        //       com_vendedores_id: this.dataVenta.id_vendedor ?? '',
-        //       fecha_desembolso: this.formatDateForInputDate(this.dataVenta.fecha_factura) ?? null
-        //     });
-        //   }
-
-
-      } else {
-        console.log(response.message);
-      }
-    },
-    (error) => {
-      console.error("Error fetching data:", error);
-    },
-  );
-}
-
 private calcularValores(): void {
   const prima = this.limpiarNumero(this.form.get('prima_neta')?.value);
   const calcularEnc = this.form.get('calcular_encargado_seg')?.value;
@@ -185,5 +160,55 @@ private calcularValores(): void {
     com_encargado_seg: encSeg.toFixed(2)
   }, { emitEvent: false });
 }
+
+public dataVenta:any;
+private consultarFactura(noFactura: any) {
+  this.dataVenta = [];
+  this.financiamientoService.getDataVenta(noFactura).subscribe(
+    (response: any) => {
+      if (response) {
+        this.dataVenta = response.data;
+        if(this.dataVenta){
+          this.form.patchValue({
+              unidad: this.dataVenta.descripcion,
+              nombre: this.dataVenta.razon_social,
+            });
+        }
+        
+
+      } else {
+        console.log(response.message);
+      }
+    },
+    (error) => {
+      console.error("Error fetching data:", error);
+    },
+  );
+}
+
+items: { formData: any; index: number }[] = [];
+private itemCounter = 0;
+
+
+agregarItem(): void {
+  this.marcarTodo();
+  if (this.form.invalid) return;
+
+  this.items.push({
+    formData: this.form.getRawValue(),
+    index:    ++this.itemCounter,
+  });
+
+  this.limpiar();
+}
+
+  quitarItem(index: number): void {
+    this.items = this.items.filter(item => item.index !== index);
+  }
+
+  getItems(): { formData: any }[] {
+  return this.items;
+}
+
 
 }

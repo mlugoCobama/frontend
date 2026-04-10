@@ -24,6 +24,7 @@ export interface ColumnaTabla {
   sticky?: boolean,
   width?: any
   left?: any
+  fontHeaderSize?: 'small' | 'normal' | 'large' | null;
 }
 
 export interface OpcionSelect {

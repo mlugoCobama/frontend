@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { FinanciamientoModalComponent } from './financiamiento-modal/financiamiento-modal.component';
 
@@ -10,6 +10,7 @@ import { firstValueFrom } from 'rxjs';
 import { configEstadosFinanciamiento, configTablaFinanciamiemto, configuracionesAceessLevel } from './modelos-comisiones';
 import { PermisosService } from 'src/app/core/services/permisos.service';
 import { ActivatedRoute } from '@angular/router';
+import { FiltroComsionesGenericoComponent } from 'src/app/shared/ui/filtro-comsiones-generico/filtro-comsiones-generico.component';
 
 
 @Component({
@@ -28,7 +29,10 @@ export class ComisionesFinanciamientoComponent implements OnInit {
   public showFiltro = true;
   public estadoDefault:any;
 
+
+
   public configFiltro = { showEstado: true, showVendedor: true, showTipoVenta: false}
+  @ViewChild('formFiltro', { static: false }) formFiltro!: FiltroComsionesGenericoComponent;
 
   hayDatos = false;
   descargando = false;
@@ -81,7 +85,6 @@ public seleccionados: any[] = [];
   ) {}
 
   ngOnInit(): void {
-    this.getVendedores(1);
     this.asignarEstado();
   }
 
@@ -93,7 +96,7 @@ public seleccionados: any[] = [];
         vendedores :  this.vendedores,
         empresaActiva : this.getEmpresaActiva()
       },
-      class: "modal-lg",
+      class: "modal-xl",
     };
     this.modalRef = this.modalService.show(
       FinanciamientoModalComponent,
@@ -103,7 +106,7 @@ public seleccionados: any[] = [];
     this.modalRef.content.event.subscribe(() => {
       // this.isLoad = true;
       // // this.mostrar = false;
-            this.getAll();
+      this.buscarDatos(this.getFiltro());
     });
   }
 
@@ -115,7 +118,7 @@ public seleccionados: any[] = [];
         vendedores :  this.vendedores,
         empresaActiva : this.getEmpresaActiva()
       },
-      class: "modal-lg",
+      class: "modal-xl",
     };
     this.modalRef = this.modalService.show(
       FinanciamientoModalComponent,
@@ -125,31 +128,8 @@ public seleccionados: any[] = [];
     this.modalRef.content.event.subscribe(() => {
       // this.isLoad = true;
       // // this.mostrar = false;
-      this.getAll();
+      this.buscarDatos(this.getFiltro());
     });
-  }
-
-
-
-  private getAll() {
-    this.isLoad = true;
-    this.financiamientoService.getAll().subscribe(
-      (response: any) => {
-        if (response) {
-          this.data = response.data;
-          // this.ordenador = new FuncionesTablas(this.data);
-          // this.datosFiltrados = [...this.data];
-          this.isLoad = false;
-        } else {
-          console.log(response.message);
-          this.isLoad = false;
-        }
-      },
-      (error) => {
-        console.error("Error fetching data:", error);
-        this.isLoad = false;
-      },
-    );
   }
 
   onItemSeleccionado(item: any | null): void {
@@ -181,7 +161,7 @@ public seleccionados: any[] = [];
                   "success",
                   "success",
                 );
-                this.getAll();
+                this.buscarDatos(this.getFiltro());
               } else {
                 Swal.showValidationMessage(`Error: ${response.message}`);
               }
@@ -197,26 +177,6 @@ public seleccionados: any[] = [];
         }
       });
     }
-
-    /** recupera todos los registros de los vendedores */
-      private getVendedores(intercompania) {
-        this.isLoad = true;
-        this.vendedoresService.getOne(intercompania).subscribe(
-          (response: any) => {
-            if (response) {
-              this.vendedores = response.data;
-              this.isLoad = false;
-            } else {
-              console.log(response.message);
-              this.isLoad = false;
-            }
-          },
-          (error) => {
-            console.error("Error fetching data:", error);
-            this.isLoad = false;
-          },
-        );
-      }
 
   onDescargar(valores: any): void {
     
@@ -241,7 +201,7 @@ public seleccionados: any[] = [];
       this.isLoad = false;
       return;
     }
-    console.log(datos)
+
     const param = datos;
 
     this.financiamientoService.getLibroVentas(param.estado ,param.agencia, param.fechaInicial, param.fechaFinal, param.vendedor).subscribe(
@@ -367,5 +327,10 @@ asignarEstado() {
 
   getEmpresaActiva(): string {
     return this.route.parent?.snapshot.url[0]?.path || '';
+  }
+
+  
+  private getFiltro(){
+    return this.formFiltro.getValues();
   }
 }

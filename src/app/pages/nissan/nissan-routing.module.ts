@@ -10,6 +10,7 @@ import { ComisionesConcentradoComponent } from '../renault/comisiones-concentrad
 import { ComisionesTomaUnidadesComponent } from '../renault/comisiones-toma-unidades/comisiones-toma-unidades.component';
 import { ComsionesSeguroComponent } from '../renault/comsiones-seguro/comsiones-seguro.component';
 import { ComisionesAccesoriosComponent } from '../renault/comisiones-accesorios/comisiones-accesorios.component';
+import { VisorCortesComponent } from '../renault/visor-cortes/visor-cortes.component';
 
 
 const routes: Routes = [
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'comisiones/toma-unidades', component:  ComisionesTomaUnidadesComponent},
   { path: 'comisiones/seguros', component:  ComsionesSeguroComponent},
   { path: 'comisiones/accesorios', component:  ComisionesAccesoriosComponent},
+  { path: 'comisiones/cortes', component:  VisorCortesComponent},
   { path: 'vendedores', component:  VendedoresComponent},
   { path: 'tabulador', component:  TabuladorComponent},
 ];

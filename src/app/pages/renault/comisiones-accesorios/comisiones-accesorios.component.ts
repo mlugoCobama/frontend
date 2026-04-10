@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { BsModalRef, ModalOptions, BsModalService } from 'ngx-bootstrap/modal';
 import { TomaUnidadesModalComponent } from '../comisiones-toma-unidades/toma-unidades-modal/toma-unidades-modal.component';
 import { VendedoresService } from 'src/app/core/services/nissan/vendedores.service';
-
 import { AccesoriosService } from 'src/app/core/services/renault/accesorios.service';
 
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
@@ -13,6 +12,7 @@ import { PermisosService } from 'src/app/core/services/permisos.service';
 import { configuracionesAceessLevel, configTablaFinanciamiemto,  configEstadosFinanciamiento} from './modelo-accesorios';
 import { AccesorioModalComponent } from './accesorio-modal/accesorio-modal.component';
 import { ActivatedRoute } from '@angular/router';
+import { FiltroComsionesGenericoComponent } from 'src/app/shared/ui/filtro-comsiones-generico/filtro-comsiones-generico.component';
 
 @Component({
   selector: 'app-comisiones-accesorios',
@@ -20,6 +20,9 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './comisiones-accesorios.component.css'
 })
 export class ComisionesAccesoriosComponent implements OnInit {
+
+   @ViewChild('formFiltro', { static: false }) formFiltro!: FiltroComsionesGenericoComponent;
+
   public data = [];
   public vendedores: any[] = [];
   public filaSeleccionada: any = null;
@@ -73,11 +76,10 @@ export class ComisionesAccesoriosComponent implements OnInit {
     private accesoriosService: AccesoriosService,
     private alertas: SwalComprsServiceService,
     private permisosService: PermisosService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
-    this.getVendedores(1);
     this.asignarEstado();
   }
 
@@ -99,7 +101,7 @@ export class ComisionesAccesoriosComponent implements OnInit {
     this.modalRef.content.event.subscribe(() => {
       // this.isLoad = true;
       // // this.mostrar = false;
-      this.getAll();
+      this.buscarDatos(this.getFiltro());
     });
   }
 
@@ -119,51 +121,8 @@ export class ComisionesAccesoriosComponent implements OnInit {
     );
     this.modalRef.content.closeBtnName = "Close";
     this.modalRef.content.event.subscribe(() => {
-      // this.isLoad = true;
-      // // this.mostrar = false;
-      this.getAll();
+      this.buscarDatos(this.getFiltro());
     });
-  }
-
-  private getVendedores(intercompania) {
-    this.isLoad = true;
-    this.vendedoresService.getOne(intercompania).subscribe(
-      (response: any) => {
-        if (response) {
-          this.vendedores = response.data;
-          this.isLoad = false;
-        } else {
-          console.log(response.message);
-          this.isLoad = false;
-        }
-      },
-      (error) => {
-        console.error("Error fetching data:", error);
-        this.isLoad = false;
-      },
-    );
-  }
-
-  private getAll() {
-    this.isLoad = true;
-    this.accesoriosService.getAll().subscribe(
-      (response: any) => {
-        if (response) {
-          this.data = response.data;
-          console.log(this.data);
-          // this.ordenador = new FuncionesTablas(this.data);
-          // this.datosFiltrados = [...this.data];
-          this.isLoad = false;
-        } else {
-          console.log(response.message);
-          this.isLoad = false;
-        }
-      },
-      (error) => {
-        console.error("Error fetching data:", error);
-        this.isLoad = false;
-      },
-    );
   }
 
   onItemSeleccionado(item: any | null): void {
@@ -194,7 +153,7 @@ export class ComisionesAccesoriosComponent implements OnInit {
                 "success",
                 "success",
               );
-              this.getAll();
+              this.buscarDatos(this.getFiltro());
             } else {
               Swal.showValidationMessage(`Error: ${response.message}`);
             }
@@ -397,5 +356,9 @@ export class ComisionesAccesoriosComponent implements OnInit {
   
   getEmpresaActiva(): string {
     return this.route.parent?.snapshot.url[0]?.path || '';
+  }
+
+  getFiltro(){
+    return this.formFiltro.getValues()
   }
 }

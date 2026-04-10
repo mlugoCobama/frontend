@@ -6,7 +6,6 @@ import { PermisosService } from 'src/app/core/services/permisos.service';
 import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
 import { ActivatedRoute } from '@angular/router';
 
-
 @Component({
   selector: 'app-filtro',
   templateUrl: './filtro.component.html',
@@ -59,9 +58,6 @@ export class FiltroComponent implements OnInit{
     this.estado = this.asignarEstado();
     this.agencias = this.filtrarAgencias(this.getEmpresaActiva());
     this.formulario.patchValue({agencia: this.getEmpresaUsuario().intercompania});
-
-    console.log(this.getVentaAuto())
-
   }
 
 

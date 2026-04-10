@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { configTablaConcentrado } from './modelo-concentrado';
 import { ConcentradoComisionesService } from 'src/app/core/services/renault/concentrado-comisiones.service';
 import { ModalDetalleRubroComponent } from './modal-detalle-rubro/modal-detalle-rubro.component';
@@ -7,6 +7,7 @@ import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { firstValueFrom } from 'rxjs';
 import Swal from 'sweetalert2';
 import { FiltroComsionesGenericoComponent } from 'src/app/shared/ui/filtro-comsiones-generico/filtro-comsiones-generico.component';
+import { TablaConcentradoComisionesComponent } from './tabla-concentrado-comisiones/tabla-concentrado-comisiones.component';
 
 @Component({
   selector: 'app-comisiones-concentrado',
@@ -16,13 +17,14 @@ import { FiltroComsionesGenericoComponent } from 'src/app/shared/ui/filtro-comsi
 export class ComisionesConcentradoComponent implements OnInit{
   public data: any = []
   public columnasVendedor = configTablaConcentrado;
-  public isLoad =  true;
+  public isLoad =  false;
   configFiltro = { showEstado: false, showVendedor: false, showTipoVenta: false}
   hayDatos = false;
   public totales;
   public modalRef?: BsModalRef;
 
    @ViewChild('formFiltro', { static: false }) formFiltro!: FiltroComsionesGenericoComponent;
+   @ViewChild('tablaConcentradoComisiones', { static: false }) tablaConcentradoComisiones!: TablaConcentradoComisionesComponent;
   
   constructor(private concentradoComisiones: ConcentradoComisionesService,
      private modalService: BsModalService,
@@ -34,36 +36,12 @@ export class ComisionesConcentradoComponent implements OnInit{
 
 
 
- obtenerTotales(rows) {
-  // Buscamos la fila que tenga el texto "TOTAL GENERAL"
-  const totales = rows.find(r => r.vendedor === 'TOTAL GENERAL');
-  return totales || null;
-}
+//  obtenerTotales(rows) {
+//   // Buscamos la fila que tenga el texto "TOTAL GENERAL"
+//   const totales = rows.find(r => r.vendedor === 'TOTAL GENERAL');
+//   return totales || null;
+// }
 
-abrirDetalle(item:any, rubro: string) {
-  if(item.id !==  null){
-    const initialState: ModalOptions = {
-        initialState: {
-          idVendedor : item.id,
-          nroVendedor : item.nro_vendedor_as,
-          nombreVendedor : item.vendedor,
-          rubro: rubro
-        },
-        class: "modal-lg",
-      };
-      this.modalRef = this.modalService.show(
-        ModalDetalleRubroComponent,
-        initialState,
-      );
-      this.modalRef.content.closeBtnName = "Close";
-      this.modalRef.content.event.subscribe(() => {
-        // this.isLoad = true;
-        // // this.mostrar = false;
-         this.buscarDatos(this.agenciaActual);
-      });
-  }
-  
-}
 agenciaActual:any = '0';
   buscarDatos(params:any){
     this.isLoad = true;
@@ -73,7 +51,7 @@ agenciaActual:any = '0';
       (response: any) => {
         if (response) {
           this.data = response.data;
-          this.totales = this.obtenerTotales(response.data);
+          // this.totales = this.obtenerTotales(response.data);
           this.isLoad = false;
         } else {
           console.log(response.message);
@@ -88,8 +66,15 @@ agenciaActual:any = '0';
   }
 
 generarCorte(): void {
+
+  if (this.seleccionados.length === 0) {
+    this.alertas.mostrarAlerta('El corte parece estar vació', 'Selecciona las filas que se incluirán en el corte e intenta nuevamente', 'info', 'info');
+    return;
+  }
+
   Swal.fire({
-    title: 'El corte será generado con los datos que se muestran en pantalla. Ingresa una clave para identificarlo posteriormente',
+    title: 'Ingresa una clave para identificar el corte posteriormente.',
+    text: 'El corte será generado con los datos que se muestran en pantalla.',
     input: 'text',
     inputPlaceholder: 'Ingresa una clave para identificar el corte',
     showCancelButton: true,
@@ -118,9 +103,9 @@ generarCorte(): void {
       fecha_fin: datosFiltro.fechaFinal,
       clave_corte: clave,
       agencia: datosFiltro.agencia,
+      comisiones: this.seleccionados
     };
 
-    // Mostrar spinner mientras se ejecuta la petición
     Swal.fire({
       title: 'Generando corte...',
       allowOutsideClick: false,
@@ -130,10 +115,11 @@ generarCorte(): void {
     });
 
     this.concentradoComisiones.crearCorte(data).subscribe((response: any) => {
-      Swal.close(); // cerrar el spinner
+      Swal.close();
 
       if (response.status === 'success') {
         this.alertas.mostrarAlerta('Listo', response.message, 'success', 'success');
+        this.buscarDatos(this.getAgencia());
       } else {
         this.alertas.mostrarAlerta('Error', response.message, 'error', 'danger');
       }
@@ -142,5 +128,42 @@ generarCorte(): void {
         this.alertas.mostrarAlerta('Error!', error, 'error', 'danger');
     });
   });
+}
+
+  private getAgencia(){
+    return this.formFiltro.getValues();
+  }
+
+  public totalAutorizado(key): number {
+    return this.data.reduce((acc, item) => acc + (Number(item[key]) || 0), 0);
+  }
+
+  onCellClick(event: any) {
+  const item = event.fila
+  const rubro = event.campo
+  if(item.id !==  null){
+    const initialState: ModalOptions = {
+        initialState: {
+          idVendedor : item.id,
+          nroVendedor : item.nro_vendedor_as,
+          nombreVendedor : item.vendedor,
+          rubro: rubro
+        },
+        class: "modal-lg",
+      };
+      this.modalRef = this.modalService.show(
+        ModalDetalleRubroComponent,
+        initialState,
+      );
+      this.modalRef.content.closeBtnName = "Close";
+      this.modalRef.content.event.subscribe(() => {
+         this.buscarDatos(this.getAgencia());
+      });
+  }
+}
+seleccionados: any[] = [];
+
+onSeleccionados(registros: any[]) {
+  this.seleccionados = registros;
 }
 }

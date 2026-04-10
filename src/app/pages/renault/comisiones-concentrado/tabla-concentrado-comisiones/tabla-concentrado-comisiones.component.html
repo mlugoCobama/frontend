@@ -1,0 +1,139 @@
+<div class="d-flex justify-content-end align-items-center m-2">
+    <div class="col-lg-3">
+        <input type="text" class="form-control form-control-sm" placeholder="Buscar..."
+            [(ngModel)]="terminoBusqueda" (input)="buscar()">
+    </div>
+</div>
+<form [formGroup]="form">
+    
+<div class="table-responsive" style="overflow-y: auto; max-height:32rem">
+  <table *ngIf="filasFiltradas.length > 0; else noDataMensaje" class="table table-sm table-bordered">
+    <thead class="table-dark thead-sticky">
+      <tr>
+        <th class="sticky-1">
+          <input type="checkbox" (change)="toggleAll($event)">
+        </th>
+        <th class="sticky-2">
+          &nbsp;&nbsp;#&nbsp;&nbsp;
+        </th>
+        <th (click)="ordenar('vendedor')" style="cursor:pointer" class=" sticky-3 text-nowrap">
+          Vendedor
+          <span *ngIf="columnaOrden === 'vendedor'">
+            {{direccionOrden === 'asc' ? '↑' : '↓'}}
+          </span>
+        </th>
+
+        <th>Nuevos</th>
+        <th>Seminuevos</th>
+        <th>Financiamiento</th>
+        <th>Accesorios</th>
+        <th>Seguros</th>
+        <th>Toma</th>
+        <th class="col-input-number">Otros</th>
+        <th (click)="ordenar('total')" style="cursor:pointer">
+          Total
+          <span *ngIf="columnaOrden === 'total'">
+            {{direccionOrden === 'asc' ? '↑' : '↓'}}
+          </span>
+        </th>
+
+        <th class="text-center col-input-number"> <small>Comisión Factura </small></th>
+        <th class="col-input-number"><small>Desc Nómina</small></th>
+        <th class="text-center col-input-number"><small >PTU/ AG/ DifDeposito/Nom Cheque</small> </th>
+        <th class="text-center col-input-number"><small>Otros descuentos</small></th>
+        <th class="text-center col-input-number"><small>Credito Casa</small></th>
+        <th class="col-input-number">INFONAVIT</th>
+
+        <th (click)="ordenar('monto_dispersar')" style="cursor:pointer" class="text-center col-input-number">
+          <small>Monto a dispersar</small>
+          <span *ngIf="columnaOrden === 'monto_dispersar'">
+            {{direccionOrden === 'asc' ? '↑' : '↓'}}
+          </span>
+        </th>
+
+        <th class="col-input-number">Nómina</th>
+        <th>Observaciones</th>
+      </tr>
+    </thead>
+
+    <tbody formArrayName="filas">
+      <tr *ngFor="let i of filasFiltradas" [formGroupName]="i">
+
+        <td class="sticky-1">
+          <input type="checkbox" formControlName="selected">
+        </td>
+        <td class="sticky-2">
+            {{filas.at(i).value.nro_vendedor_as}}
+        </td>
+
+        <td class="sticky-3 text-nowrap">
+          {{filas.at(i).value.vendedor}}
+        </td>
+
+        <!-- CLICKABLES -->
+        <td class="text-end clickable" [ngClass] = "{'fw-bold text-primary' : filas.at(i).value.pend_nuevos}"
+            (click)="onCellClick($event, filas.at(i).value, 'nuevos')">
+          {{filas.at(i).value.nuevos | currency}}
+        </td>
+
+        <td class="text-end clickable" [ngClass] = "{'fw-bold text-primary' : filas.at(i).value.pend_seminuevos}"
+            (click)="onCellClick($event, filas.at(i).value, 'seminuevos')">
+          {{filas.at(i).value.seminuevos | currency}}
+        </td>
+
+        <td class="text-end clickable" [ngClass] = "{'fw-bold text-primary' : filas.at(i).value.pend_financiamiento}"
+            (click)="onCellClick($event, filas.at(i).value, 'financiamiento')">
+          {{filas.at(i).value.financiamiento | currency}}
+        </td>
+
+        <td class="text-end clickable" [ngClass] = "{'fw-bold text-primary' : filas.at(i).value.pend_accesorios}"
+            (click)="onCellClick($event, filas.at(i).value, 'accesorios')">
+          {{filas.at(i).value.accesorios | currency}}
+        </td>
+ 
+        <td class="text-end clickable" [ngClass] = "{'fw-bold text-primary' : filas.at(i).value.pend_seguros}"
+            (click)="onCellClick($event, filas.at(i).value, 'seguros')">
+          {{filas.at(i).value.seguros | currency}}
+        </td>
+
+        <td class="text-end clickable"  [ngClass] = "{'fw-bold text-primary' : filas.at(i).value.pend_toma}"
+            (click)="onCellClick($event, filas.at(i).value, 'toma_de_unidades')">
+          {{filas.at(i).value.toma_unidades | currency}}
+        </td>
+
+        <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="otros"></td>
+
+        <td class="text-end fw-bold">
+          {{filas.at(i).value.total | currency}}
+        </td>
+
+        <!-- EDITABLES -->
+        <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="comision_factura"></td>
+        <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="desc_nomina"></td>
+        <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="prestaciones"></td>
+        <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="otros_descuentos"></td>
+        <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="desc_c_casa"></td>
+        <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="infonavit"></td>
+
+        <td class="text-end fw-bold">
+          {{filas.at(i).get('monto_dispersar')?.value | currency}}
+        </td>
+
+        <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="nomina"></td>
+         <td><input type="text" class="form-control form-control-sm"  formControlName="observaciones"></td>
+
+      </tr>
+    </tbody>
+  </table>
+    
+</div>
+
+
+
+</form>
+<!-- Templates -->
+<ng-template #noDataMensaje>
+  <div class="text-center text-muted py-3">
+    <strong>No se encontraron registros para mostrar...</strong>
+  </div>
+</ng-template>

@@ -79,6 +79,7 @@ export class FinanciamientoFormComponent implements OnInit {
               
             }
         });
+        
       }
 
 
@@ -109,7 +110,12 @@ export class FinanciamientoFormComponent implements OnInit {
       sub_x_des: data.sub_x_des   ??  0
     });
 
-    this.form.get('archivo')?.setValidators(null);
+     if (data.id) {
+      this.form.get('archivo')?.clearValidators();
+    } else {
+      this.form.get('archivo')?.setValidators([Validators.required]);
+    }
+    
     this.form.get('archivo')?.updateValueAndValidity();
 
   }
@@ -139,8 +145,8 @@ export class FinanciamientoFormComponent implements OnInit {
   onFileChange(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      this.archivo = file;
-      this.form.patchValue({ archivo: file.name });
+      // this.form.patchValue({ archivo: file.name });
+      this.archivo = file;  
     }
   }
 
@@ -184,4 +190,38 @@ private consultarFactura(noFactura: any) {
   );
 }
 
+items: { formData: any; archivo: File; index: number }[] = [];
+private itemCounter = 0;
+
+
+  agregarItem(): void {
+  this.marcarTodo();
+  if (this.form.invalid) return;
+
+  this.items.push({
+    formData: this.form.getRawValue(),
+    archivo:  this.archivo!,
+    index:    ++this.itemCounter,
+  });
+
+  this.limpiar();
+
+  this.form.get('archivo')?.setValidators([Validators.required]);
+  this.form.get('archivo')?.updateValueAndValidity();
+}
+
+  quitarItem(index: number): void {
+    this.items = this.items.filter(item => item.index !== index);
+  }
+
+  getPayload(): { financiamientos: any[]; archivos: File[] } {
+    return {
+      financiamientos: this.items.map(i => i.formData),
+      archivos:        this.items.map(i => i.archivo),
+    };
+  }
+
+  getItems(): { formData: any; archivo: File }[] {
+  return this.items;
+}
 }

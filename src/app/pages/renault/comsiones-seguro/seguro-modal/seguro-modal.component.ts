@@ -37,22 +37,30 @@ export class SeguroModalComponent implements OnInit, AfterViewInit {
   }
 
   guardar(): void {
-    if (!this.formFinanciamiento.esValido()) {
-      this.formFinanciamiento.marcarTodo();
+    if (!this.formSelectAgencia.esValido()) {
+        this.formSelectAgencia.marcarTodo();
       return;
     }
 
     this.loading = true;
-    const valores = {...this.formFinanciamiento.getValores(), ...this.formSelectAgencia.getValues()};
-    const payload = valores;
-    const formData = new FormData();
-    Object.keys(payload).forEach(key => {
-      if (payload[key] !== null && payload[key] !== undefined && key !== 'archivo') {
-        formData.append(key, payload[key]);
-      }
-    });
+    const valores = this.formFinanciamiento.getItems();
+      if (valores.length === 0) {
+        this.alertas.mostrarAlerta('Aviso', 'Agrega al menos una toma de unidad', 'warning', 'warning');
+      return;
+    }
+    const items = valores;
+      const agenciaValues = this.formSelectAgencia.getValues();
+      const formData = new FormData();
 
-    // 5. Llamar servicio
+      items.forEach((item, i) => {
+        const payload = { ...item.formData, ...agenciaValues };
+
+        Object.keys(payload).forEach(key => {
+          // const value = payload[key] !== null && payload[key] !== undefined ? payload[key] : '';
+            formData.append(`seguros[${i}][${key}]`, payload[key]);
+        });
+      });
+
     this.segurosService.create(formData).subscribe((response:any)=>{
       if(response.status = 'success'){
         this.alertas.mostrarAlerta('Listo!', response.message, 'success', 'success');

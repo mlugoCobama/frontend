@@ -17,9 +17,10 @@ export const configTablaTomaUnidades : ColumnaTabla[] = [
 export const configEstadosTomaUnidades  = [
     { value: 12345, label: 'Todos' },
     { value: 1,     label: 'Por autorizar' },
-    { value: 2,     label: 'Autorizada' },
-    { value: 3,     label: 'Pagado' },
-    { value: 4,     label: 'Rechazada' },
+    { value: 2,     label: 'En Espera' },
+    { value: 3,     label: 'Autorizada' },
+    { value: 4,     label: 'Pagada' },
+    { value: 0,     label: 'Rechazada' },
     // { value: 5,     label: 'Pagados' },
 ];
 

@@ -1,7 +1,7 @@
 import { ColumnaTabla } from 'src/app/shared/ui/tabla-generica/tabla-generica.component';
 /** Configuracion de columnas de la tabla generica */
 export const configTablaFinanciamiemto : ColumnaTabla[] = [
-    { campo: "no_vendedor",                     etiqueta: "#",                      bold: true, sticky: true, width:41},
+    { campo: "no_vendedor",                     etiqueta: "  #  ",                      bold: true, sticky: true, width:35},
     { campo: "vendedor",                        etiqueta: "APV",                    bold: true, textNoWrap:true, sticky: true, width:240},
     { campo: "no_contrato",                     etiqueta: "No. Contrato",           bold: true},
     { campo: "numero_factura",                  etiqueta: "No.Factura" },
@@ -28,12 +28,12 @@ export const configTablaFinanciamiemto : ColumnaTabla[] = [
 
 /** configuracion de estados del filtro */
 export const configEstadosFinanciamiento  = [
-    { value: 1,     label: 'Por autorizar' },
-    { value: 2,     label: 'Autorizada' },
-    { value: 3,     label: 'Pagado' },
-    { value: 4,     label: 'Rechazada' },
-    // { value: 5,     label: 'Pagados' },
     { value: 12345, label: 'Todos' },
+    { value: 1,     label: 'Por autorizar' },
+    { value: 2,     label: 'En Espera' },
+    { value: 3,     label: 'Autorizada' },
+    { value: 4,     label: 'Pagada' },
+    { value: 0,     label: 'Rechazada' },
 ];
 
 export const configuracionesAceessLevel = [

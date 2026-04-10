@@ -13,6 +13,7 @@ import { ComisionesTomaUnidadesComponent } from './comisiones-toma-unidades/comi
 
 import { ComsionesSeguroComponent } from './comsiones-seguro/comsiones-seguro.component';
 import { ComisionesAccesoriosComponent } from './comisiones-accesorios/comisiones-accesorios.component';
+import { VisorCortesComponent } from './visor-cortes/visor-cortes.component';
 
 
 const routes: Routes = [
@@ -26,6 +27,7 @@ const routes: Routes = [
   { path: 'comisiones/toma-unidades', component:  ComisionesTomaUnidadesComponent},
   { path: 'comisiones/seguros', component:  ComsionesSeguroComponent},
   { path: 'comisiones/accesorios', component:  ComisionesAccesoriosComponent},
+  { path: 'comisiones/cortes', component:  VisorCortesComponent},
   { path: 'vendedores', component:  VendedoresComponent},
   { path: 'tabulador', component:  TabuladorComponent},
   { path: 'ordenes-servicio', component:  OrdenesServicioComponent},

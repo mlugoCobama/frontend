@@ -170,21 +170,28 @@ export const MENU: MenuItem[] = [
             label: "Concentrado",
             link: "/nissan/comisiones/concentrado",
             parentId: 32,
-            permission: "view submodulo comisiones concentrado renault",
+            permission: "view submodulo comisiones concentrado nissan",
+          },
+          {
+            id: 7,
+            label: "Cortes",
+            link: "/nissan/comisiones/cortes",
+            parentId: 32,
+            permission: "view submodulo comisiones concentrado nissan",
           },
           {
             id: 8,
             label: "Nuevos",
             link: "/nissan/comisiones/nuevos",
             parentId: 32,
-            permission: "view submodulo comisiones nuevos renault",
+            permission: "view submodulo comisiones nuevos nissan",
           },
           {
             id: 9,
             label: "Seminuevos",
             link: "/nissan/comisiones/seminuevos",
             parentId: 32,
-            permission: "view submodulo comisiones seminuevos renault",
+            permission: "view submodulo comisiones seminuevos nissan",
           },
           
           {
@@ -192,14 +199,14 @@ export const MENU: MenuItem[] = [
             label: "Financiamiento",
             link: "/nissan/comisiones/financiamiento",
             parentId: 32,
-            permission: "view submodulo comisiones nrf renault",
+            permission: "view submodulo comisiones nrf nissan",
           },
           {
             id: 11,
             label: "Toma de Unidad",
             link: "/nissan/comisiones/toma-unidades",
             parentId: 32,
-            permission: "view submodulo comisiones toma unidad renault",
+            permission: "view submodulo comisiones toma unidad nissan",
           },
 
            {
@@ -207,14 +214,14 @@ export const MENU: MenuItem[] = [
             label: "Seguros",
             link: "/nissan/comisiones/seguros",
             parentId: 32,
-            permission: "view submodulo comisiones seguro renault",
+            permission: "view submodulo comisiones seguro nissan",
           },
           {
             id: 12,
             label: "Accesorios",
             link: "/nissan/comisiones/accesorios",
             parentId: 32,
-            permission: "view submodulo comisiones accesorios renault",
+            permission: "view submodulo comisiones accesorios nissan",
           },
 
           {
@@ -296,6 +303,13 @@ export const MENU: MenuItem[] = [
             id: 7,
             label: "Concentrado",
             link: "/renault/comisiones/concentrado",
+            parentId: 32,
+            permission: "view submodulo comisiones concentrado renault",
+          },
+                    {
+            id: 7,
+            label: "Cortes",
+            link: "/renault/comisiones/cortes",
             parentId: 32,
             permission: "view submodulo comisiones concentrado renault",
           },

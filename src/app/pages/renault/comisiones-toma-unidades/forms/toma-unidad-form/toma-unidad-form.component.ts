@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FinanciamientoService } from 'src/app/core/services/renault/financiamiento.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-
 import { TomaUnidadesService } from 'src/app/core/services/renault/toma-unidades.service';
 @Component({
   selector: 'app-toma-unidad-form',
@@ -19,7 +18,7 @@ export class TomaUnidadFormComponent {
   @Input() tipoFinanciamiento: any;
   @Input() agencia: any;
 
-  constructor(private fb: FormBuilder, private tomaUnidadesService: TomaUnidadesService) {}
+  constructor(private fb: FormBuilder, private tomaUnidadesService: TomaUnidadesService, private financiamientoService: FinanciamientoService) {}
 
   ngOnInit(): void {
 
@@ -53,16 +52,17 @@ export class TomaUnidadFormComponent {
 
     
 
-    // this.form.get('por_inventario')?.valueChanges
-    //     .pipe(
-    //       debounceTime(500),          // espera 500ms después de que el usuario deja de escribir
-    //       distinctUntilChanged()      // solo emite si el valor cambió
-    //     )
-    //     .subscribe(value => {
-    //       if (value && value.trim() !== '') {
-    //           this.consultarFactura(value);
-    //         }
-    //     });
+        this.form.get('numero_serie')?.valueChanges
+        .pipe(
+          debounceTime(500),          // espera 500ms después de que el usuario deja de escribir
+          distinctUntilChanged()      // solo emite si el valor cambió
+        )
+        .subscribe(value => {
+          if (value && value.trim() !== '') {
+              this.consultarFactura(value);
+              
+            }
+        });
       }
 
 
@@ -126,19 +126,19 @@ export class TomaUnidadFormComponent {
 
 
 public dataVenta:any;
-private consultarFactura(noSerie: any) {
-
-  this.tomaUnidadesService.getDataVenta(`${noSerie}-`).subscribe(
+private consultarFactura(noFactura: any) {
+  this.dataVenta = [];
+  this.financiamientoService.getDataVenta(noFactura).subscribe(
     (response: any) => {
       if (response) {
         this.dataVenta = response.data;
-        if ((!this.data || this.data === undefined) && this.dataVenta) {
-            this.form.patchValue({
+        if(this.dataVenta){
+          this.form.patchValue({
               vehiculo: this.dataVenta.descripcion,
-              numero_serie: this.dataVenta.serie
+              por_inventario: `${this.dataVenta.clave_producto}-${this.dataVenta.anio_vehiculo}-${this.dataVenta.no_inventario}`,
             });
-          }
-
+        }
+        
 
       } else {
         console.log(response.message);
@@ -149,5 +149,30 @@ private consultarFactura(noSerie: any) {
     },
   );
 }
+
+items: { formData: any; index: number }[] = [];
+private itemCounter = 0;
+
+
+agregarItem(): void {
+  this.marcarTodo();
+  if (this.form.invalid) return;
+
+  this.items.push({
+    formData: this.form.getRawValue(),
+    index:    ++this.itemCounter,
+  });
+
+  this.limpiar();
+}
+
+  quitarItem(index: number): void {
+    this.items = this.items.filter(item => item.index !== index);
+  }
+
+  getItems(): { formData: any }[] {
+  return this.items;
+}
+
 
 }

@@ -1,0 +1,54 @@
+.thead-sticky th {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+
+.sticky-1 { 
+  position: sticky;
+  left: 0; 
+  width: 25px;
+  z-index: 2;
+}
+
+.sticky-2 { 
+  position: sticky;
+  left: 25px; 
+  width: 35px;
+  z-index: 2;
+
+}
+
+.sticky-3 { 
+  position: sticky;
+  left: 60px; 
+  width: 240px;
+  z-index: 2;
+  /* box-shadow: 3px 0 5px -2px rgba(0,0,0,0.15);  */
+  /* separador visual */
+}
+
+/* Celdas sticky dentro del thead necesitan z-index mayor para estar sobre el tbody al hacer scroll vertical */
+thead .sticky-1,
+thead .sticky-2,
+thead .sticky-3 {
+  z-index: 4;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+td {
+  transition: background-color 0.3s ease;
+}
+
+td:hover {
+  background-color: var(--bs-primary-bg-subtle);
+}
+
+.col-input-number{
+ width: 7rem;
+ min-width:7rem;
+ max-width:7rem;
+}

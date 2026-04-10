@@ -3,7 +3,7 @@
 <form [formGroup]="form">
     <div class="row">
          <!-- No Contrato -->
-      <div class="mb-2 col-lg-6">
+      <div class="mb-2 col-lg-4">
         <label class="form-label">No. Contrato</label>
         <input type="text" class="form-control form-control-sm"
                placeholder="No. Contrato" formControlName="no_contrato">
@@ -14,7 +14,7 @@
       </div>
 
       <!-- Factura -->
-      <div class="mb-2 col-lg-6">
+      <div class="mb-2 col-lg-4">
         <label class="form-label">Número de Factura</label>
         <input type="text" class="form-control form-control-sm"
                placeholder="Ingresa la factura para ver los datos de venta"
@@ -34,7 +34,7 @@
         readonly>
     </div>
 
-    <div class=" mb-2 col-lg-5">
+    <div class=" mb-2 col-lg-4">
       <label class="form-label">Unidad</label>
       <input 
         type="text" 
@@ -43,7 +43,7 @@
         readonly>
     </div>
 
-    <div class="mb-2 col-lg-3">
+    <div class="mb-2 col-lg-2">
       <label class="form-label">Serie</label>
       <input 
         type="text" 
@@ -53,7 +53,7 @@
     </div>
 
     <!-- Fecha -->
-      <div class="mb-2 col-lg-4">
+      <div class="mb-2 col-lg-3">
         <label class="form-label">Fecha Desembolso</label>
         <input type="date" class="form-control form-control-sm"
                formControlName="fecha_desembolso">
@@ -65,7 +65,7 @@
    
 
       <!-- Monto -->
-      <div class="mb-2 col-lg-4">
+      <div class="mb-2 col-lg-3">
         <label class="form-label">Monto a Financiar</label>
         <input mask="separator" thousandSeparator=","  type="text" placeholder="Monto a Financiar" prefix= "$ " class="form-control form-control-sm"
                formControlName="monto_financiar">
@@ -75,7 +75,7 @@
         </div>               
       </div>
 
-            <div class="mb-2 col-lg-4">
+            <div class="mb-2 col-lg-3">
         <label class="form-label">Kit de Seguridad</label>
         <input mask="separator" thousandSeparator="," type="text" prefix="$ " class="form-control form-control-sm"
           formControlName="kit_seguridad">
@@ -106,7 +106,7 @@
       </div>
 
       <!-- Incentivo -->
-      <div class="mb-2 col-lg-6">
+      <div class="mb-2 col-lg-3">
         <label class="form-label">Incentivo Dealer</label>
         <input mask="separator" thousandSeparator=","  type="text" placeholder="Incentivo Dealer" prefix= "$ "  class="form-control form-control-sm"
                formControlName="incentivo_dealer">
@@ -117,7 +117,7 @@
       </div>
 
       <!-- % Asesor -->
-      <div class="mb-2 col-lg-6">
+      <div class="mb-2 col-lg-3">
         <label class="form-label">Porcentaje Asesor</label>
         <input type="number" mask="separator" thousandSeparator=","  type="text" placeholder="% Asesor" suffix="%" 
                class="form-control form-control-sm"
@@ -129,7 +129,7 @@
       </div>
 
       <!-- Comisión -->
-      <div class="mb-2">
+      <div class="mb-2 col-lg-3">
         <label class="form-label">Comisión (calculada)</label>
         <input mask="separator" thousandSeparator=","  type="text" placeholder="Comisión (calculada)" prefix= "$" class="form-control form-control-sm bg-light"
                formControlName="comision_asesor_pesos" readonly>
@@ -193,3 +193,58 @@
      
 
     </form>
+
+    <!-- Botón para agregar al array -->
+<div class="d-flex justify-content-end mt-2 mb-4">
+  <button type="button" class="btn btn-primary btn-sm" (click)="agregarItem()">
+   <i class="fas fa-plus"></i>Agregar
+  </button>
+</div>
+
+<!-- Tabla de items agregados -->
+<div *ngIf="items.length > 0">
+  <h6 class="mb-2">
+    Financiamientos agregados
+    <span class="badge bg-primary ms-1">{{ items.length }}</span>
+  </h6>
+
+  <div class="table-responsive">
+    <table class="table table-sm table-bordered align-middle">
+      <thead class="table-light">
+        <tr>
+          <!-- <th>#</th> -->
+          <th>Contrato</th>
+          <th>Factura</th>
+          <th>Cliente</th>
+          <th>Monto</th>
+          <th>Incentivo</th>
+          <th>Comision</th>
+          <th>Fecha</th>
+          <th>Archivo</th>
+          <th>-</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items">
+          <!-- <td>{{ item.index }}</td> -->
+          <td>{{ item.formData?.no_contrato }}</td>
+          <td>{{ item.formData?.numero_factura }}</td>
+          <td>{{ item.formData?.razon_social ?? 'No disponible' }}</td>
+          <td>{{ item.formData?.monto_financiar ?? 0 | currency }}</td>
+          <td>{{ item.formData?.incentivo_dealer ?? 0 | currency }}</td>
+          <td>{{ item.formData?.comision_asesor_pesos ?? 0 | currency }}</td>
+          <td>{{ item.formData?.fecha_desembolso | date:'dd/MM/yyyy'}}</td>
+          <td>
+            <span class="badge bg-success">{{ item.archivo?.name ?? 'No aplica' }}</span>
+          </td>
+          <td>
+            <button type="button" class="btn btn-outline-danger btn-sm"
+                    (click)="quitarItem(item.index)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+

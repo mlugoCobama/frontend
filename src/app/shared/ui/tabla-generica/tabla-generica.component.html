@@ -70,6 +70,9 @@
                           'text-start': !col.align || col.align === 'left',
                           'text-center': col.align === 'center',
                           'text-end': col.align === 'right',
+                          'fs-6': col.fontHeaderSize === 'small',
+                          'fs-4': col.fontHeaderSize === 'large'
+
                           }"
               [ngStyle]="col.sticky ? {
                         'position': 'sticky',
@@ -126,7 +129,7 @@
                   {{ item[col.campo] | percent }}
                 </span>
                 <span *ngSwitchCase="'currency'">
-                  {{ item[col.campo] | currency: (col.pipeArgs || '') }}
+                  {{ item[col.campo] || 0 | currency: (col.pipeArgs || '') }}
                 </span>
                 <span *ngSwitchCase="'date'">
                   {{ item[col.campo] | date: (col.pipeArgs || 'dd/MM/yyyy') }}
