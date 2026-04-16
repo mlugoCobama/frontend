@@ -77,6 +77,7 @@ import { TableCardexMovimientosComponent } from './compras/detalle-solicitudes-c
 import { FormDatosPagoComponent } from './proveedores/forms/form-datos-pago/form-datos-pago.component';
 import { ModalActualizarSolicitudComponent } from './compras/modal-actualizar-solicitud/modal-actualizar-solicitud.component';
 import { ModalActualizarSolicitudMacroComponent } from './compras-macro/modal-actualizar-solicitud-macro/modal-actualizar-solicitud-macro.component';
+import { TablaRecargaTokaComponent } from './cat-unidades/tabla-recarga-toka/tabla-recarga-toka.component';
 @NgModule({
   declarations: [
     ComprasComponent,
@@ -147,6 +148,7 @@ import { ModalActualizarSolicitudMacroComponent } from './compras-macro/modal-ac
     FormDatosPagoComponent,
     ModalActualizarSolicitudComponent,
     ModalActualizarSolicitudMacroComponent,
+    TablaRecargaTokaComponent,
     
   ],
   imports: [

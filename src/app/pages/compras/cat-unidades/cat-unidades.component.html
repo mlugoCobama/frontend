@@ -8,56 +8,71 @@
               Parque vehicular
             </h5>
             <div class="flex-shrink-0 d-flex gap-1">
+
+              <!-- intercambiador de vistas -->
+            <div *ngIf = "intercompania && tienePermiso(permisos.btnSwitchViews)" class="btn-group btn-group-sm">
+              <a [class.active]="panelActivo == 1" class="btn btn-outline-dark btn-sm"
+                (click)="cambiarPanel(1)">
+                <i class="fas fa-home"></i> Parque vehicular
+              </a>
+              <a [class.active]="panelActivo == 2" class="btn btn-outline-success btn-sm"
+                (click)="cambiarPanel(2)">
+                <i class="fas fa-credit-card"></i> Recarga Toka
+              </a>
+            </div>
+
+            <ng-container *ngIf="panelActivo == 1">
               <a
-                *ngIf = "mostrar && unidad?.activo == 2 && tienePermiso('view bnt autorizar vehiculo')"
+                *ngIf = "mostrar && unidad?.activo == 2 && tienePermiso(permisos.btnAutorizarVehiculo)"
                 href="javascript:void(0);"
                 class="btn btn-success btn-sm"
                 (click)="openAutorizar()"
                 ><i class="bx bx-check "></i> Autorizar</a
               >
               <a
-                *ngIf = "mostrar"
+                *ngIf = "mostrar && tienePermiso(permisos.btnHistorialPolizas)"
                 href="javascript:void(0);"
                 class="btn btn-dark btn-sm"
                 (click) = "openModalHistorialPolizas()"
                 ><i class="bx bx-check-shield"></i>Historial de pólizas de seguro</a
               >
               <a
-                *ngIf = "mostrar"
+                *ngIf = "mostrar && tienePermiso(permisos.btnHistorialCrios)"
                 href="javascript:void(0);"
                 class="btn btn-primary btn-sm"
                 (click) = "openModalHistorial()"
                 ><i class="bx bx-time-five"></i> Historial de comentarios</a
               >
               <a
-                *ngIf = "mostrar"
+                *ngIf = "mostrar && tienePermiso(permisos.btnHistorialGastos) "
                 href="javascript:void(0);"
                 class="btn btn-info btn-sm"
                 (click) = "openModalInfo()"
                 ><i class="fas fa-donate"></i> Gastos vehículo</a
               >
               <a
-                [disabled] = "true"
-                *ngIf = "mostrar  && tienePermiso('view btn eliminar vehiculo')"
+                *ngIf = "mostrar  && tienePermiso(permisos.btnEliminarVehiculo)"
                 href="javascript:void(0);"
                 class="btn btn-danger btn-sm"
                 (click)="destroy()"
                 ><i class="fas fa-trash"></i> Eliminar</a
               >
               <a
-                *ngIf = "mostrar && tienePermiso('view btn actualizacion vehiculo')"
+                *ngIf = "mostrar && tienePermiso(permisos.btnActualizarVehiculo)"
                 href="javascript:void(0);"
                 class="btn btn-warning btn-sm"
                 (click)="openModalUpdate()"
                 ><i class="fas fa-edit"></i> Actualizar</a
               >
               <a
-                *ngIf = "!mostrar && intercompania != undefined && tienePermiso('view btn alta vehiculo')"
+                *ngIf = "intercompania != undefined && tienePermiso(permisos.btnAddVehiculo)"
                 href="javascript:void(0);"
                 class="btn btn-primary btn-sm"
                 (click) = "openModalNuevo()"
                 ><i class="fas fa-plus"></i> Nuevo</a
               >
+            </ng-container>
+              
               
             </div>
           </div>
@@ -70,7 +85,7 @@
             <div class="col-3">
               <label for="empresa" class="form-label form-label-sm">Empresa: *</label>
               <select
-                *ngIf="usuarioSolicita.intercompania == 333 || usuarioSolicita.multiselect; else nombreEmpresa"
+                *ngIf="tienePermiso(permisos.selectParqueVehicular); else nombreEmpresa"
                 class="form-select form-select-sm"
                 aria-label="Default select example"
                 id="empresa"
@@ -83,23 +98,27 @@
                 <option *ngIf="isLoading" value="" [disabled]="isLoading">
                   Cargando opciones espera...
                 </option>
-                <option *ngFor="let item of empresas" [value]="item.intercompania">
-                  {{ item.name.toUpperCase() }}
-                </option>
+                <ng-container *ngFor="let item of empresas">
+                  <option  [value]="item.intercompania" *ngIf="item.permiso">
+                    {{ item.name.toUpperCase()}}
+                  </option>
+                </ng-container>
+                
               </select>
             </div>
 
-            <div class="col-3 pt-4" *ngIf = "!isLoad">
+            <div class="col-3 pt-4" *ngIf = "!isLoad && panelActivo == 1">
               <input type="text" class="form-control form-control-sm" placeholder="Buscar..." [(ngModel)]="busqueda"  (input)="filtrarTabla()"/>
             </div>
           </div>
 
+          
+         <ng-container *ngIf ="panelActivo == 1">
           <div class="d-flex justify-content-center"  *ngIf = "isLoad">
             <div class="spinner-border" role="status">
               <span class="visually-hidden">Loading...</span>
             </div>
           </div>
-          
           <div *ngIf = "!isLoad && showTable && !isLoad && datosFiltrados.length > 0 ; else elseBlock">
             <div class="tab-page-content mt-3 table-responsive" style="overflow-y: scroll; height: 20rem;">
               <table  class="table table-hover table-sm table-bordered">
@@ -123,11 +142,10 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let item of datosFiltrados" (dblclick)="seleccionar(item, $event)">
+                  <tr *ngFor="let item of datosFiltrados" (click)="seleccionar(item, $event)">
                     <td class="text-center"><span  style="font-size:0.7rem;" [ngClass]="item.clase">{{ item.entidad }}</span></td>
                     <td class="text-center" >
                        <strong [ngClass] = "item.estatus == 1 ? 'text-primary' : '' " > {{item.eco}} </strong>
-                       <i *ngIf="item.activo == 2" class="bx bx-error-alt  text-danger" (click)="openAutorizar(item)" > </i>
                     </td>
                     <td>{{item.marca_vehiculo}}</td>
                     <td>{{item.submarca}}</td>
@@ -164,6 +182,10 @@
                 </tbody>
               </table> 
             </div>
+
+            
+            
+
           </div>
           <p *ngIf = "!isLoad && showTable" class="text-muted pt-3"> Se muestran {{ totalDatosFiltrados }} de {{ totalDatos }} </p>
         <div *ngIf = "!isLoad && showTable" class="d-flex justify-content-between  gap-3 mt-4">
@@ -174,6 +196,22 @@
             <span><small>{{ estado.dsc }}</small></span>
           </div>
         </div>
+        </ng-container> 
+          
+          
+        <ng-container  *ngIf ="panelActivo == 2">
+              <app-tabla-recarga-toka 
+              [intercompania] = "intercompania"
+              [tipo] = "'toka'"
+              />
+        </ng-container>
+
+        <ng-container *ngIf ="panelActivo == 3">
+              <app-tabla-recarga-toka
+              [tipo] = "'tag'"
+              [intercompania] = "intercompania"
+              [vehiculos]="datosFiltrados"  />
+        </ng-container>
         </div>
       </div>
 

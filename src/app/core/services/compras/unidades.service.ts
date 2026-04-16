@@ -54,6 +54,18 @@ export class UnidadesService {
       return this.http.post(environment.apiUrl + `compras/autorizar-alta-vehiculo`, data, {headers});
     }
 
+    public solicitarToka(data: any): Observable<any> {
+      return this.http.post(environment.apiUrl + `compras/CatalogoUnidades/SolicitaToka`, data, {headers});
+    }
+
+    public dispersarToka(data: any): Observable<any> {
+      return this.http.post(environment.apiUrl + `compras/CatalogoUnidades/DispersaToka`, data, {headers});
+    }
+
+    public getParqueConToka(id:any): Observable<any> {
+      return this.http.get(environment.apiUrl + `compras/CatalogoUnidades/ParqueVehicularToka/${id}`, {headers});
+    }
+
 
 
 }

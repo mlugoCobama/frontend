@@ -48,7 +48,6 @@ export class FormDatosVehiculoComponent implements OnInit{
   public formDatosVehiculo: FormGroup;
   public submitted:boolean = false;
   public intercompania:any = 0;
-  private valorOriginalEstatus: any = this.datos?.estatus;
 
   
   constructor(
@@ -62,41 +61,35 @@ export class FormDatosVehiculoComponent implements OnInit{
     private buildForm() {
     return new Promise((resolve, reject) => {
       this.formDatosVehiculo = this.formBuilder.group({
-        id: new FormControl( null),
-        id_sucursal: new FormControl( null),
-        id_cre: new FormControl( null),
-        marca: new FormControl(null, Validators.required),
-        nro_economico: new FormControl(null, Validators.required),
-        submarca: new FormControl( null, Validators.required),
-        modelo: new FormControl(null, [Validators.required,
+        id:               new FormControl( null),
+        id_sucursal:      new FormControl( null),
+        id_cre:           new FormControl( null),
+        marca:            new FormControl(null, Validators.required),
+        nro_economico:    new FormControl(null, Validators.required),
+        submarca:         new FormControl( null, Validators.required),
+        modelo:           new FormControl(null, [Validators.required,
                                       Validators.pattern(/^\d{4}$/),
                                       Validators.min(1900),
                                       Validators.max(new Date().getFullYear())
                                     ]),
-        no_serie: new FormControl(null, [Validators.required, Validators.minLength(17)]),
-        placas: new FormControl(null, [Validators.required]),
-        observacion: new FormControl(null),
-        tipo_vehiculo: new FormControl("", [Validators.required]),
+        no_serie:         new FormControl(null, [Validators.required, Validators.minLength(5), Validators.maxLength(18)]),
+        placas:           new FormControl(null, [Validators.required]),
+        observacion:      new FormControl(null),
+        tipo_vehiculo:    new FormControl("", [Validators.required]),
         tipo_combustible: new FormControl("", [Validators.required]),
-        estatus: new FormControl("", [Validators.required]),
-        categoria: new FormControl("", [Validators.required]),
-        gps: new FormControl("", [Validators.required]),
+        estatus:          new FormControl("", [Validators.required]),
+        categoria:        new FormControl("", [Validators.required]),
+        num_tarjeta_toka: new FormControl(""),
+        num_tag:          new FormControl(""),
+        limite:           new FormControl(""),
+        gps:              new FormControl("", [Validators.required]),
       });
 
-    this.valorOriginalEstatus = this.formDatosVehiculo.get('estatus')?.value || '' || this.datos?.estatus;
-    // Suscripción para detectar cambios
-    this.formDatosVehiculo.get('estatus')?.valueChanges.subscribe(valor => {
-      const observacionControl = this.formDatosVehiculo.get('observacion');
+    const valorOriginalEstatus = this.formDatosVehiculo.get('estatus')?.value || '' || this.datos?.estatus;
+    this.observarCambios('estatus', valorOriginalEstatus );
 
-      if (valor !== this.valorOriginalEstatus && (Object.keys(this.datos).length > 0 || this.datos.length > 0) ) {
-        observacionControl?.setValidators([Validators.required]);
-      } else {
-        observacionControl?.clearValidators();
-      }
-
-      observacionControl?.updateValueAndValidity();
-    });
-
+    const valorOriginalLimite = this.formDatosVehiculo.get('limite')?.value || '' || this.datos?.limite;
+    this.observarCambios('limite', valorOriginalLimite );
 
       resolve(true);
     });
@@ -108,20 +101,23 @@ export class FormDatosVehiculoComponent implements OnInit{
 
   public llenarForm(){
     this.formDatosVehiculo.patchValue({
-      id: this.datos?.id,
-      id_cre: this.datos?.id_cre,
-      nro_economico: this.datos?.eco,
-      id_sucursal: this.datos?.id_sucursal,
-      marca: this.datos?.marca_vehiculo,
-      submarca: this.datos?.submarca,
-      modelo: this.datos?.modelo,
-      no_serie: this.datos?.no_serie,
-      placas: this.datos?.placas,
-      tipo_vehiculo: this.datos?.tipo_vehiculo,
+      id:               this.datos?.id,
+      id_cre:           this.datos?.id_cre,
+      nro_economico:    this.datos?.eco,
+      id_sucursal:      this.datos?.id_sucursal,
+      marca:            this.datos?.marca_vehiculo,
+      submarca:         this.datos?.submarca,
+      modelo:           this.datos?.modelo,
+      no_serie:         this.datos?.no_serie,
+      placas:           this.datos?.placas,
+      tipo_vehiculo:    this.datos?.tipo_vehiculo,
       tipo_combustible: this.datos?.tipo_combustible,
-      estatus: this.datos?.estatus,
-      categoria: this.datos?.categoria,
-      gps: this.datos?.gps,
+      estatus:          this.datos?.estatus,
+      categoria:        this.datos?.categoria,
+      gps:              this.datos?.gps,
+      num_tarjeta_toka: this.datos?.num_tarjeta_toka,
+      num_tag:          this.datos?.num_tag,
+      limite:           this.datos?.limite,
     });
   }
 
@@ -200,6 +196,20 @@ export class FormDatosVehiculoComponent implements OnInit{
     //   html: `<ul style="text-align:left;">${errores.map(e => `<li>${e}</li>`).join('')}</ul>`,
     // });
   }
+}
+
+private observarCambios(controlName: string, valorOriginal: any) {
+  const control = this.formDatosVehiculo.get(controlName);
+  const observacionControl = this.formDatosVehiculo.get('observacion');
+
+  control?.valueChanges.subscribe(valor => {
+    if (valor !== valorOriginal && (Object.keys(this.datos).length > 0 || this.datos.length > 0)) {
+      observacionControl?.setValidators([Validators.required]);
+    } else {
+      observacionControl?.clearValidators();
+    }
+    observacionControl?.updateValueAndValidity();
+  });
 }
 
 

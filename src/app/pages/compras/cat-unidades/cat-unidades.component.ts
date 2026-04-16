@@ -14,7 +14,8 @@ import { LocalStorageServiceService } from "src/app/core/services/local-storage-
 import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
   import { PermisosService } from 'src/app/core/services/permisos.service';
 import Swal from 'sweetalert2';
-
+import { pmsParqueVehciular } from 'src/app/shared/constants/permisos';
+import { estatusColores , categorias, categoriasGPS, modelFiltrado} from 'src/app/shared/constants/constantes-pv';
 @Component({
   selector: "app-cat-unidades",
   templateUrl: "./cat-unidades.component.html",
@@ -35,45 +36,11 @@ export class CatUnidadesComponent implements OnInit {
     // this.getUsuarioActivo();
   }
 
-  public estatusColores = [
-    { color: "#28a745", dsc: "Activa" },
-    { color: "#df2727ff", dsc: "Fuera de circulación" },
-    { color: "#ffc107", dsc: "En taller" },
-    { color: "#17a2b8", dsc: "Vendida" },
-    { color: "#343a40", dsc: "No identificada" },
-    { color: "#e83e8c", dsc: "Descompuesta" },
-    { color: "#007bff", dsc: "En Fiscalía" },
-    { color: "#6610f2", dsc: "En Depósito vehicular" },
-    { color: "#495057", dsc: "Chatarra" },
-    { color: "#fd7e14", dsc: "Vendida como chatarra" },
-    { color: "#dc3545", dsc: "Baja" },
-    { color: "#adb5bd", dsc: "Desconocido" },
-  ];
-
-  categorias = [
-    { id: 1, descripcion: "Propia", abreviatura: "PPA" },
-    {
-      id: 2,
-      descripcion: "Propia prestada a comisionista",
-      abreviatura: "PPC",
-    },
-    { id: 3, descripcion: "Comisionista", abreviatura: "CTA" },
-    { id: 4, descripcion: "No especificado", abreviatura: "NES" },
-  ];
-
-  categoriasGPS = [
-    {
-      id: 1,
-      descripcion: "SI, REPORTANDO",
-      estilo: "fas fa-satellite-dish text-success",
-    },
-    {
-      id: 2,
-      descripcion: "SI, NO REPORTA",
-      estilo: "fas fa-exclamation-triangle text-warning",
-    },
-    { id: 3, descripcion: "NO TIENE", estilo: "fas fa-ban text-danger" },
-  ];
+  estatusColores = estatusColores;
+  categorias = categorias;
+  categoriasGPS = categoriasGPS;
+  modelFiltrado = modelFiltrado;
+  public permisos = pmsParqueVehciular;
 
   public usuarioSolicita: any = {
     id: null,
@@ -88,9 +55,12 @@ export class CatUnidadesComponent implements OnInit {
     isAgencia: false,
   };
 
+
   datosFiltrados: any[] = [];
   private ordenador!: FuncionesTablas<any>;
   busqueda: string = "";
+
+  public panelActivo = 1;
 
   public unidad: any;
   public mostrar: boolean = false;
@@ -120,20 +90,7 @@ export class CatUnidadesComponent implements OnInit {
   public rawEmpresas: any;
 
   filtrarTabla() {
-    this.datosFiltrados = this.ordenador.filtrar(this.busqueda, [
-      "entidad",
-      "marca_vehiculo",
-      "submarca",
-      "modelo",
-      "no_serie",
-      "placas",
-      "marca_tanque",
-      "anio_fabricacion",
-      "capacidad",
-      "tipo_medidor",
-      "serie",
-      "eco",
-    ]);
+    this.datosFiltrados = this.ordenador.filtrar(this.busqueda, this.modelFiltrado);
     this.contarDatos();
   }
 
@@ -261,7 +218,7 @@ export class CatUnidadesComponent implements OnInit {
     this.totalDatos = this.data.length;
   }
 
-  private getCatVehiculos(intercompania) {
+  private getCatVehiculos(intercompania:any) {
     this.mostrar = false;
     this.intercompania = intercompania;
     this.isLoad = true;
@@ -355,17 +312,15 @@ export class CatUnidadesComponent implements OnInit {
     const enpresas = usuarioActivo.empresas;
     this.usuarioSolicita = usuarioActivo;
 
-    if (intercompania !== 333 && !multiselect) {
+    if (!this.tienePermiso(this.permisos.selectParqueVehicular)) {
       this.getCatVehiculos(intercompania);
       this.intercompania = intercompania;
     }
 
-    if (intercompania == 333 || multiselect) {
-      if (enpresas != null) {
-        this.filtrarEmpresas(this.rawEmpresas, enpresas);
-      } else {
+    if (this.tienePermiso(this.permisos.selectParqueVehicular)) {
         this.empresas = this.rawEmpresas;
-      }
+        this.getCatVehiculos(intercompania);
+        this.intercompania = intercompania;
     }
   }
 
@@ -480,6 +435,11 @@ export class CatUnidadesComponent implements OnInit {
         );
       }
     });
+  }
+
+
+  cambiarPanel(value:any){
+    this.panelActivo =  value; 
   }
 
   tienePermiso(permiso: string = null): boolean {
