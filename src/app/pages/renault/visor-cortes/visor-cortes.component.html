@@ -1,0 +1,96 @@
+<app-card-top 
+[title] = "'Visor de Corte'"
+></app-card-top>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    <form [formGroup]="form">
+      <div class="row">
+
+        <!-- SELECT AGENCIA -->
+        <div class="col-md-4 mb-3">
+          <label class="form-label">Agencias</label>
+          <select class="form-select form-select-sm"
+                  formControlName="agencia">
+            <option value="" selected disabled>Seleccione una agencia</option>
+            <option *ngFor="let a of agencias" [value]="a.value">
+              {{ a.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- SELECT CORTE -->
+        <div class="col-md-4 mb-3">
+          <label class="form-label">Corte</label>
+          <select class="form-select form-select-sm"
+                  formControlName="corte"
+                  [disabled]="!cortes.length || cargandoCortes">
+
+            <option value="" selected disabled>Seleccione un corte</option>
+
+            <option *ngFor="let c of cortes" [value]="c.id">
+              {{ c.clave_corte }} - {{ c.fecha_inicio | date: 'dd/MM/yyyy' }} - {{ c.fecha_fin | date: 'dd/MM/yyyy'}}
+            </option>
+          </select>
+
+          <!-- Loader cortes -->
+          <small *ngIf="cargandoCortes" class="text-muted">
+            Cargando cortes...
+          </small>
+        </div>
+
+      </div>
+    </form>
+
+    <!-- Loader consulta -->
+    <!-- <div *ngIf="cargandoConsulta" class="text-center mt-3">
+      <div class="spinner-border spinner-border-sm"></div>
+      <span class="ms-2">Consultando corte...</span>
+    </div> -->
+  </div>
+</div>
+<div class="row">
+    <div class="col">
+        <app-kpi-card-generico
+        title="Total Comisiones"
+        [kpi]="totalAutorizado('total_comisiones') || 0"
+        description="Total por pago de comisiones"
+        colorClass="text-primary">
+        </app-kpi-card-generico>
+    </div>
+     <div class="col">
+        <app-kpi-card-generico
+        title="Comision Factura"
+        [kpi]="totalAutorizado('com_factura') || 0"
+        description="Sobre total de comisiones"
+        colorClass="text-danger">
+        </app-kpi-card-generico>
+    </div>
+     <div class="col">
+        <app-kpi-card-generico
+        title="Desc Nomina"
+        [kpi]="totalAutorizado('desc_nomina')  || 0"
+        description="Descuento por nomina "
+        colorClass="text-info">
+        </app-kpi-card-generico>
+    </div>
+     <div class="col">
+        <app-kpi-card-generico
+        title="Monto a Dispersar"
+        [kpi]="totalAutorizado('monto_dispersar') || 0"
+        description="Pago de comisiones"
+        colorClass="text-success">
+        </app-kpi-card-generico>
+    </div>
+</div>
+
+
+    <app-tabla-generica
+    [data]="data"
+    [columnas]="columnasVendedor"
+    [isLoad]="cargandoConsulta"
+    [mostrarSelect]="false"
+    placeholderSelect="Seleccione una agencia"
+    [mostrarCheck]="false"
+    [mostrarCheck]="false"
+    />

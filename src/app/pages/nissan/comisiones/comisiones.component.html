@@ -6,7 +6,7 @@
 
       
       <app-card-top
-      [title] = "'Comisiones'"
+      [title] = "getVentaAuto() | titlecase"
       ></app-card-top>
       
       <app-filtro
@@ -16,17 +16,27 @@
         (bindingEstado)="bindingEstado($event)"
       ></app-filtro>
       
-      <div class="card">
+      <div class="card shadow-sm">
 
         <div class="card-body border-bottom ">
           <app-spiner 
            *ngIf="isLoadig">
           </app-spiner>
-
+          <div class="d-flex justify-content-end align-items-center m-2">
+            <div class="col-lg-3">
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                placeholder="Buscar..."
+                [ngModel]="searchText"
+                (ngModelChange)="onSearch($event)"
+              />
+            </div>
+          </div>
           <div class="table-responsive" style="max-height: 26rem; overflow-y: auto;"
            *ngIf="ventas.controls.length > 0 && !isLoadig; else mensaje">
             <form [formGroup]="form">
-              <table class="table table-striped table-hover table-sm table-bordered" >
+              <table class="table  table-hover table-sm table-bordered" >
               <thead class="table-light thead-sticky">
                 <tr>
                   <th *ngIf="estado == 1 || estado == 12345 ">Entr.</th>
@@ -55,6 +65,7 @@
                   <th *ngIf="estado > 1">Cortesía</th>
                   <th *ngIf="estado > 1">Accesorios</th>
                   <th *ngIf="estado > 1">Placas</th>
+                  <th *ngIf="estado > 1" class="text-nowrap">Comi. Garantizada</th>
                   <th *ngIf="estado > 1" class="text-nowrap">% BDC</th>
                   <!--  Resultados calculados -->
                   <th *ngIf="estado > 1 "class="text-nowrap">Total Gastos</th> 
@@ -68,29 +79,30 @@
                 </tr>
               </thead>
               <tbody formArrayName="ventas">
-                <tr *ngFor="let v of ventas.controls; let i = index" [formGroupName]="i">
+              <tr [class.table-primary]="filaSeleccionada === i" *ngFor="let i of filteredIndices" [formGroupName]="i">
+                <!-- <tr *ngFor="let v of ventas.controls; let i = index" [formGroupName]="i"> -->
                 <td  *ngIf="estado == 1 || estado == 12345 " > 
                     <span 
                       class="d-flex align-items-center justify-content-center">
                        <input formControlName="entregado"  type="checkbox" class="form-check-input" id="exampleCheck1">
                     </span>
                 </td>
-                <td>{{v.get('fecha_factura')?.value}}</td>
-                <td class="text-nowrap">{{v.get('no_factura')?.value}} 
-                  <span class="text-danger" *ngIf="v.get('observacion')?.value" [title]="v.get('observacion')?.value"> <i class="bx bx-info-circle bx-flashing "></i></span>
+                <td>{{ventas.at(i).get('fecha_factura')?.value}}</td>
+                <td (click)="seleccionarFila(i)" class="text-nowrap">{{ventas.at(i).get('no_factura')?.value}} 
+                  <span class="text-danger" *ngIf="ventas.at(i).get('observacion')?.value" [title]="ventas.at(i).get('observacion')?.value"> <i class="bx bx-info-circle bx-flashing "></i></span>
                 </td>
-                <td class="text-nowrap">{{v.get('razon_social')?.value}}</td>
-                <td>{{v.get('clave_inventario')?.value}}</td>
-                <td>{{v.get('clave_vendedor')?.value }}</td>
-                <td class="text-nowrap">{{v.get('descripcion')?.value}}</td>
-                <td>{{v.get('serie')?.value}}</td>
-                <td>{{v.get('total_venta')?.value | currency}}</td>
-                <td>{{v.get('costos')?.value | currency}}</td>
-                <td>{{v.get('bonificaciones')?.value | currency}}</td>
-                <td>{{v.get('utilidad_inicial')?.value | currency}}</td>
+                <td class="text-nowrap">{{ventas.at(i).get('razon_social')?.value}}</td>
+                <td>{{ventas.at(i).get('clave_inventario')?.value}}</td>
+                <td>{{ventas.at(i).get('clave_vendedor')?.value }}</td>
+                <td class="text-nowrap">{{ventas.at(i).get('descripcion')?.value}}</td>
+                <td>{{ventas.at(i).get('serie')?.value}}</td>
+                <td>{{ventas.at(i).get('total_venta')?.value | currency}}</td>
+                <td>{{ventas.at(i).get('costos')?.value | currency}}</td>
+                <td>{{ventas.at(i).get('bonificaciones')?.value | currency}}</td>
+                <td>{{ventas.at(i).get('utilidad_inicial')?.value | currency}}</td>
 
-                <th class="text-nowrap">{{v.get('tipo_venta')?.value}}</th> <!-- Este valor ya existe solo  es de referencia -->
-                <th class="text-nowrap">{{v.get('tipo_venta_porcentaje')?.value | percent}}</th> <!-- Este valor ya existe solo es de referencia -->
+                <th class="text-nowrap">{{ventas.at(i).get('tipo_venta')?.value}}</th> <!-- Este valor ya existe solo  es de referencia -->
+                <th class="text-nowrap">{{(ventas.at(i).get('comision_garantizada').value > 0 ? 0 : ventas.at(i).get('tipo_venta_porcentaje')?.value ) | percent}}</th> <!-- Este valor ya existe solo es de referencia -->
 
                 <td *ngIf="estado > 1"><input class="form-control form-control-sm" mask="separator" thousandSeparator=","  type="text" placeholder="Otros" formControlName="otros"></td><!-- Input Editable -->
                 <td *ngIf="estado > 1"><input class="form-control form-control-sm" mask="separator" thousandSeparator=","  type="text" placeholder="Gasolina" formControlName="gasolina"></td><!-- Input Editable -->
@@ -103,13 +115,14 @@
                 <td *ngIf="estado > 1"><input class="form-control form-control-sm" mask="separator" thousandSeparator=","  type="text" placeholder="Cortesia" formControlName="cortesia"></td><!-- Input Editable -->
                 <td *ngIf="estado > 1"><input class="form-control form-control-sm" mask="separator" thousandSeparator=","  type="text" placeholder="Accesorios" formControlName="accesorios"></td><!-- Input Editable -->
                 <td *ngIf="estado > 1"><input class="form-control form-control-sm" mask="separator" thousandSeparator=","  type="text" placeholder="Placas" formControlName="placas"></td><!-- Input Editable -->
+                <td *ngIf="estado > 1"><input class="form-control form-control-sm" mask="separator" thousandSeparator=","  type="text" placeholder="ComI. Garantizada" formControlName="comision_garantizada"></td><!-- Input Editable -->
                 <td *ngIf="estado > 1"><input class="form-control form-control-sm" mask="separator" thousandSeparator=","  type="text" placeholder="% BDC" formControlName="porcentaje_bdc" suffix="%"></td><!-- Input Editable -->
                 <!--  Resultados calculados -->
-                <td *ngIf="estado > 1" class="text-nowrap fw-bold text-end">{{ v.get('total_gastos')?.value | currency }}</td>
-                <td *ngIf="estado > 1" class="text-nowrap fw-bold text-end text-muted">{{ v.get('utlidad_gastos')?.value | currency }}</td>  
-                <td *ngIf="estado > 1" class="text-nowrap fw-bold text-end text-primary">{{ v.get('comision_apv')?.value | currency }}</td>
-                <td *ngIf="estado > 1" class="text-nowrap fw-bold text-end text-muted">{{ v.get('comision_bdc')?.value | currency }}</td>
-                <td *ngIf="estado > 1" class="text-nowrap fw-bold text-end text-muted">{{ v.get('utilidad_final')?.value | currency }}</td>
+                <td *ngIf="estado > 1" class="text-nowrap fw-bold text-end">{{ ventas.at(i).get('total_gastos')?.value | currency }}</td>
+                <td *ngIf="estado > 1" class="text-nowrap fw-bold text-end text-muted">{{ ventas.at(i).get('utlidad_gastos')?.value | currency }}</td>  
+                <td *ngIf="estado > 1" class="text-nowrap fw-bold text-end text-primary">{{ ventas.at(i).get('comision_apv')?.value | currency }}</td>
+                <td *ngIf="estado > 1" class="text-nowrap fw-bold text-end text-muted">{{ ventas.at(i).get('comision_bdc')?.value | currency }}</td>
+                <td *ngIf="estado > 1" class="text-nowrap fw-bold text-end text-muted">{{ ventas.at(i).get('utilidad_final')?.value | currency }}</td>
                 <td *ngIf="estado > 2"> 
                     <span class="d-flex align-items-center justify-content-center">
                        <input formControlName="validado"  type="checkbox" class="form-check-input" id="exampleCheck1">
@@ -118,27 +131,32 @@
                  
                 <td *ngIf="estado > 1"> 
                     <span class="d-flex justify-content-betwen align-items-center gap-2">
-                      <button *ngIf="estado > 1 && (+v.get('estatus')?.value) > 1" class="btn btn-sm btn-warning"
-                          [disabled]="devolviendo[i]" (click)="devolver(v.get('id_venta')?.value, i)">
+                      <button *ngIf="estado > 1 && (+ventas.at(i).get('estatus')?.value) > 1" class="btn btn-sm btn-warning"
+                          [disabled]="devolviendo[i]" (click)="devolver(ventas.at(i).get('id_venta')?.value, i)">
                           <span *ngIf="!devolviendo[i]"> Devolver</span>
                           <span *ngIf="devolviendo[i]" class="spinner-border spinner-border-sm" role="status"aria-hidden="true"></span>
                       </button>
-                      <!-- <button *ngIf="estado == 3 &&  (+v.get('estatus')?.value) == 3" class="btn btn-sm btn-info"> Adjuntos </button>  -->
+                      <!-- <button *ngIf="estado == 3 &&  (+ventas.at(i).get('estatus')?.value) == 3" class="btn btn-sm btn-info"> Adjuntos </button>  -->
                      <button *ngIf="estado == 4"  class="btn btn-sm btn-success"
-                          [disabled]="pagando[i]"  (click)="guardarPagado(v.get('id_venta')?.value, i)">
+                          [disabled]="pagando[i]"  (click)="guardarPagado(ventas.at(i).get('id_venta')?.value, i)">
                           <span *ngIf="!pagando[i]"> Pagar</span>
                           <span *ngIf="pagando[i]" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                       </button>
                     </span>
                 </td>
-                <td *ngIf="estado >= 5 && v.get('pagado')?.value == 1">
+                <td *ngIf="estado >= 5 && ventas.at(i).get('pagado')?.value == 1">
                   <span class="text-success fw-bold text-center"> Pagado </span>
                 </td>
                 </tr>
               </tbody>
             </table>
             </form>
+             
           </div>
+
+          <span class="text-muted text-nowrap mt-4">
+            Se muestran {{ filteredIndices.length }} de {{ ventas.controls.length }}
+          </span>
         </div>
     </div>
 

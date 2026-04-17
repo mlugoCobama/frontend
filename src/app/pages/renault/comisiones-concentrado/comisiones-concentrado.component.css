@@ -1,0 +1,12 @@
+.clickable {
+  cursor: pointer;
+}
+
+td {
+  transition: background-color 0.3s ease;
+}
+
+td:hover {
+  background-color: var(--bs-primary-bg-subtle);
+}
+

@@ -1,0 +1,70 @@
+<!-- <form [formGroup]="form">
+  <div class="row mb-3">
+    <div><strong> Detalles de venta de accesorios </strong></div>
+    Cantidad
+    <div class="col-lg-2">
+      <input type="text" class="form-control form-control-sm"
+             placeholder="Cantidad"
+             mask="separator" thousandSeparator=","
+             formControlName="cantidad">
+    </div>
+
+    Concepto
+    <div class="col-lg-5">
+      <input type="text" class="form-control form-control-sm"
+             placeholder="Concepto"
+             formControlName="concepto">
+    </div>
+
+    Importe
+    <div class="col-lg-3">
+      <input type="text" class="form-control form-control-sm "
+             mask="separator" thousandSeparator=","
+             prefix="$ "
+             placeholder="Importe"
+             formControlName="importe">
+    </div>
+
+    Botón Agregar
+    <div class="col-lg-2">
+      <button type="button" class="btn btn-sm btn-primary"
+              (click)="agregarDetalle()"><i class="fas fa-plus"></i> Agregar</button>
+    </div>
+  </div>
+</form> -->
+
+<div class="card-title text-center">
+   Detalles de factura de accesorios 
+</div>
+
+<!-- Tabla de Detalles -->
+<table class="table table-sm">
+  <thead class="table-dark">
+    <tr>
+      <th>Cantidad</th>
+      <th>Concepto</th>
+      <th class="text-end">Importe</th>
+      <!-- <th class="text-center">-</th> -->
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let detalle of detalles; let i = index">
+      <td>{{ detalle.cantidad }}</td>
+      <td>{{ detalle.concepto }}</td>
+      <td class="text-end">{{ detalle.importe | currency }}</td>
+      <!-- <td class="text-center">
+        <button type="button" class="btn btn-sm btn-danger"
+                (click)="removerDetalle(i)"><i class="fas fa-trash"></i></button>
+      </td> -->
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <th colspan="2" class="text-end">Total:</th>
+      <th  class="text-end">{{ calcularTotal() | currency }}</th>
+      <!-- <th >MXN</th> -->
+    </tr>
+  </tfoot>
+</table>
+
+

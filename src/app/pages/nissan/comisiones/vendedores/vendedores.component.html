@@ -18,10 +18,15 @@
     <div *ngIf="!isLoad" class="row justify-content-between align-items-end mb-2">
       <div class="col-auto">
               <label>Agencias</label>
-              <select #selectAgencias class="form-select form-select-sm" (change)="getAll(selectAgencias.value)" aria-label=".form-select-sm example">
-                <option value=""selected>Selecciona uno</option>
-                <option *ngFor = "let agencia of agencias" [hidden]="!tienePermiso(agencia.permiso)" [value]="agencia.value">{{agencia.name}}</option>
-              </select>
+              <ng-container *ngIf="tienePermiso(permisos.selectAgencias); else nombreEmpresa">
+                <select #selectAgencias class="form-select form-select-sm" (change)="getAll(selectAgencias.value)" aria-label=".form-select-sm example">
+                  <option value=""selected>Selecciona uno</option>
+                  <ng-container *ngFor = "let agencia of agencias">
+                    <option *ngIf="tienePermiso(agencia.permiso)"  [value]="agencia.value">{{agencia.name}}</option>
+                  </ng-container>
+                </select>
+              </ng-container>
+              
       </div>
 
         <div class="col-3">
@@ -38,7 +43,9 @@
             <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'nro_vendedor_as', etiqueta:'# Auto System'}"></ng-container>
             <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'tipo_texto', etiqueta:'T. Vendedor'}"></ng-container>
             <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'agencia_nombre', etiqueta:'Agencia'}"></ng-container>
-             <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'procentaje_apv', etiqueta:'%'}"></ng-container>
+            <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'departamento', etiqueta:'Departamento'}"></ng-container>
+            <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'procentaje_apv', etiqueta:'%'}"></ng-container>
+            
           </tr>
         </thead>
         <tbody class="table-bordered">
@@ -48,6 +55,7 @@
             <td>{{item.nro_vendedor_as}}</td>
             <td>{{item.tipo_texto}}</td>
             <td>{{item.agencia_nombre}}</td>
+            <td>{{item.departamento}}</td>
             <td>{{item.procentaje_apv | percent}}</td>
           </tr>
         </tbody>
@@ -69,6 +77,12 @@
 <ng-template #noDataMensaje>
   <div class="text-center text-muted">
     <Strong>No se encontraron registros para mostrar...</Strong>
+  </div>
+</ng-template>
+
+<ng-template #nombreEmpresa>
+  <div class="col-auto">
+    <p class="border rounded py-1 px-2"> <strong>{{getEmpresaActiva().empresaUsuario}} </strong></p>
   </div>
 </ng-template>
 

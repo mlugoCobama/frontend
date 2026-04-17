@@ -1,6 +1,8 @@
 import { Component , OnInit, Input} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
+import { PermisosService } from 'src/app/core/services/permisos.service';
+import { permisosVendedoresAgencias } from 'src/app/shared/constants/permisos';
 @Component({
   selector: 'app-form-vendedores',
   templateUrl: './form-vendedores.component.html',
@@ -22,17 +24,22 @@ export class FormVendedoresComponent implements OnInit {
   ];
 
   /** Data estática de tipos de vendedor */
-  tipos: any[] = [
-    {value : 1 , dsc:'Interno'},
-    { value : 2 , dsc:'Externo'}
-  ];
+   @Input() tiposVendedor: any[] = [];
 
+   @Input() departamentos :any = [];
+
+  public permisos = permisosVendedoresAgencias;
   @Input() datos:any;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private localStorage: LocalStorageServiceService,
+    private permisosService: PermisosService,
+  ) {}
 
   ngOnInit(): void {
     this.buildForm();
+    this.getEmpresaActiva();
   }
 
   /** Construcción del formulario*/
@@ -42,7 +49,8 @@ export class FormVendedoresComponent implements OnInit {
       clave: ['', Validators.required],
       nroAutoSystem: ['', Validators.required],
       agencia: ['', Validators.required],
-      tipo: ['', Validators.required]
+      tipo: ['', Validators.required],
+      departamento: ['', Validators.required],
     });
   }
 
@@ -77,7 +85,28 @@ export class FormVendedoresComponent implements OnInit {
       clave: this.datos?.clave,
       nroAutoSystem: this.datos?.nro_vendedor_as,
       agencia: this.datos?.agencia,
-      tipo: this.datos?.tipo
+      tipo: this.datos?.tipo,
+      departamento: this.datos?.departamento_id,
     });
+  }
+
+  getEmpresaActiva() {
+    const usuarioActual = this.localStorage.getLocalUser();
+    
+    if(!this.tienePermiso(this.permisos.selectAgencias)){
+      this.formulario.patchValue({
+        agencia: usuarioActual.intercompania,
+      });
+    }
+
+    return {
+      intercompania: usuarioActual.intercompania,
+      empresaUsuario: usuarioActual.empresa,
+    };
+  }
+
+    tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
   }
 }

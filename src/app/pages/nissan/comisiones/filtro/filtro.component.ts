@@ -6,7 +6,6 @@ import { PermisosService } from 'src/app/core/services/permisos.service';
 import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
 import { ActivatedRoute } from '@angular/router';
 
-
 @Component({
   selector: 'app-filtro',
   templateUrl: './filtro.component.html',
@@ -59,7 +58,6 @@ export class FiltroComponent implements OnInit{
     this.estado = this.asignarEstado();
     this.agencias = this.filtrarAgencias(this.getEmpresaActiva());
     this.formulario.patchValue({agencia: this.getEmpresaUsuario().intercompania});
-
   }
 
 
@@ -74,6 +72,7 @@ export class FiltroComponent implements OnInit{
       fechaInicial: [haceDosSemanas, Validators.required],
       fechaFinal: [this.hoy, Validators.required],
       vendedor: ['', Validators.required],
+      estatus: ['', Validators.required],
       },
       { validators: this.fechaValidator }
     );
@@ -141,7 +140,7 @@ asignarEstado() {
 
     const param = this.formulario.value;
 
-    this.comisiones.getLibroVentas(this.estado ,param.agencia, param.tipoVenta, param.fechaInicial, param.fechaFinal, param.vendedor).subscribe(
+    this.comisiones.getLibroVentas(param.estatus ,param.agencia, param.tipoVenta, param.fechaInicial, param.fechaFinal, param.vendedor).subscribe(
       (response:any) => {
         if(response.status == 'success'){
           this.data = response.data;
@@ -191,6 +190,14 @@ getEmpresaActiva(){
   const segmento = this.route.parent?.snapshot.url[0].path || '';
   return segmento;
 }
+
+getVentaAuto() {
+  const segments = this.route.snapshot.url;
+  const ventaAuto = segments.length > 0 ? segments[segments.length - 1].path : '';
+  return ventaAuto ?? null;
+}
+
+
   public downloading:boolean = false;
 
   descargarConcentrado() {
@@ -220,6 +227,23 @@ getEmpresaUsuario(){
   const intercompania = usuarioActual['usuarioActivo'][0].intercompania;
   const nombreEmpresa = usuarioActual['usuarioActivo'][0].empresa ?? 'No especificada';
   return { intercompania: intercompania, nombreEmpresa:nombreEmpresa };
+}
+
+showSelectTipoVenta(){
+  const tipoVentaAuto = this.getVentaAuto();
+  if( tipoVentaAuto == 'nuevos'){
+    this.formulario.patchValue({ tipoVenta: 'nu'})
+    return false;
+  }
+
+  if( tipoVentaAuto == 'seminuevos'){
+    this.formulario.patchValue({ tipoVenta: 'semi'})
+    return false;
+  }
+
+  return true
+
+
 }
 
 }

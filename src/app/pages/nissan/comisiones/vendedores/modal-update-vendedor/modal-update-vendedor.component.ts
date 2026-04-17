@@ -28,6 +28,8 @@ export class ModalUpdateVendedorComponent implements AfterViewInit {
   
   /** Datos del elemento seleccionado de la tabla */
   public datos : any;
+  public tiposVendedor : any = [];
+  public departamentos : any = [];
 
   public event: EventEmitter<any> = new EventEmitter();
 

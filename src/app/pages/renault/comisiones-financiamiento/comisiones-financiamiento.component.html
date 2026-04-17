@@ -1,0 +1,42 @@
+
+<app-card-top 
+[title] = "'Comisiones por Financiamiento'"
+[hasButtons] = "true"
+[showBtnNuevo] = "!filaSeleccionada && tienePermiso('view btn add comision financiamiento')"
+[showBtnEditar] = "filaSeleccionada && filaSeleccionada.estatus == 1"
+[showBtnEliminar] = "filaSeleccionada && filaSeleccionada.estatus == 1"
+(nuevo) = "openModalNuevo()"
+(actualizar) = "openModalActualizar()"
+(eliminar) = "confirmarDelete()"
+></app-card-top>
+
+<!-- padre.component.html -->
+<app-filtro-comsiones-generico
+  #formFiltro
+  *ngIf = "showFiltro"
+  [config]="configFiltro"
+  [estadoOpciones]="misEstados"
+  [hasData]="hayDatos"
+  [downloading]="descargando"
+  [searching]="buscando"
+  (buscar)="buscarDatos($event)"
+  (descargar)="onDescargar($event)"
+  (formValidChange)="formularioValido = $event"
+  (resetted)="onReset()"
+  [defaultEstado] = "estadoDefault"
+  >
+</app-filtro-comsiones-generico>
+
+<!-- componente.html -->
+<app-tabla-generica
+  [data]="data"
+  [columnas]="columnasVendedor"
+  [isLoad]="isLoad"
+  [mostrarSelect]="false"
+  placeholderSelect="Seleccione una agencia"
+  (itemSeleccionado)="onItemSeleccionado($event)"
+  [mostrarCheck]="false"
+  [acciones]="accionesTabla"
+  (itemsSeleccionados)="onItemsSeleccionados($event)"
+/>
+

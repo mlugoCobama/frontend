@@ -1,6 +1,7 @@
 import { MenuItem } from './menu.model';
 
 export const MENU: MenuItem[] = [
+  // UCOIP
   {
     id: 1,
     label: "UCoIP",
@@ -46,6 +47,7 @@ export const MENU: MenuItem[] = [
       },
     ],
   },
+  //COMRPAS
   {
     id: 7,
     label: "Compras",
@@ -97,6 +99,7 @@ export const MENU: MenuItem[] = [
       },
     ],
   },
+  // MACRO TALLER
   {
     id: 7,
     label: "Macro Taller",
@@ -119,6 +122,7 @@ export const MENU: MenuItem[] = [
       },
     ],
   },
+  // PARQUE VEHICULAR
   {
      id: 7,
     label: "Parque Vehicular",
@@ -134,6 +138,7 @@ export const MENU: MenuItem[] = [
       },
     ],
   },
+  // NISSAN
   {
     id: 30,
     label: "Nissan",
@@ -160,31 +165,84 @@ export const MENU: MenuItem[] = [
         permission: "view modulo nissan",
         parentId: 30,
         subItems: [
+         {
+            id: 7,
+            label: "Concentrado",
+            link: "/nissan/comisiones/concentrado",
+            parentId: 32,
+            permission: "view submodulo comisiones concentrado nissan",
+          },
+          {
+            id: 7,
+            label: "Cortes",
+            link: "/nissan/comisiones/cortes",
+            parentId: 32,
+            permission: "view submodulo comisiones concentrado nissan",
+          },
           {
             id: 8,
-            label: "Comisiones",
-            link: "/nissan/comisiones",
+            label: "Nuevos",
+            link: "/nissan/comisiones/nuevos",
             parentId: 32,
-            permission: "view submodulo comisiones",
+            permission: "view submodulo comisiones nuevos nissan",
           },
+          {
+            id: 9,
+            label: "Seminuevos",
+            link: "/nissan/comisiones/seminuevos",
+            parentId: 32,
+            permission: "view submodulo comisiones seminuevos nissan",
+          },
+          
+          {
+            id: 10,
+            label: "Financiamiento",
+            link: "/nissan/comisiones/financiamiento",
+            parentId: 32,
+            permission: "view submodulo comisiones nrf nissan",
+          },
+          {
+            id: 11,
+            label: "Toma de Unidad",
+            link: "/nissan/comisiones/toma-unidades",
+            parentId: 32,
+            permission: "view submodulo comisiones toma unidad nissan",
+          },
+
+           {
+            id: 12,
+            label: "Seguros",
+            link: "/nissan/comisiones/seguros",
+            parentId: 32,
+            permission: "view submodulo comisiones seguro nissan",
+          },
+          {
+            id: 12,
+            label: "Accesorios",
+            link: "/nissan/comisiones/accesorios",
+            parentId: 32,
+            permission: "view submodulo comisiones accesorios nissan",
+          },
+
           {
             id: 9,
             label: "Tabulador",
             link: "/nissan/tabulador",
-            parentId: 32,
+            parentId: 30,
             permission: "view submoduloe tabuladores",
           },
           {
             id: 10,
             label: "Vendedores",
             link: "/nissan/vendedores",
-            parentId: 32,
+            parentId: 30,
             permission: "view submodulo vendedores",
           },
         ]
       },
     ],
   },
+  // RENAULT
   {
     id: 30,
     label: "Renault",
@@ -241,27 +299,80 @@ export const MENU: MenuItem[] = [
         permission: "view modulo renault",
         parentId: 30,
         subItems: [
+           {
+            id: 7,
+            label: "Concentrado",
+            link: "/renault/comisiones/concentrado",
+            parentId: 32,
+            permission: "view submodulo comisiones concentrado renault",
+          },
+                    {
+            id: 7,
+            label: "Cortes",
+            link: "/renault/comisiones/cortes",
+            parentId: 32,
+            permission: "view submodulo comisiones concentrado renault",
+          },
           {
             id: 8,
-            label: "Comisiones",
-            link: "/renault/comisiones",
+            label: "Nuevos",
+            link: "/renault/comisiones/nuevos",
             parentId: 32,
-            permission: "view submodulo comisiones renault",
+            permission: "view submodulo comisiones nuevos renault",
           },
           {
             id: 9,
+            label: "Seminuevos",
+            link: "/renault/comisiones/seminuevos",
+            parentId: 32,
+            permission: "view submodulo comisiones seminuevos renault",
+          },
+          
+          {
+            id: 10,
+            label: "Financiamiento",
+            link: "/renault/comisiones/nrfinance",
+            parentId: 32,
+            permission: "view submodulo comisiones nrf renault",
+          },
+          {
+            id: 11,
+            label: "Toma de Unidad",
+            link: "/renault/comisiones/toma-unidades",
+            parentId: 32,
+            permission: "view submodulo comisiones toma unidad renault",
+          },
+
+           {
+            id: 12,
+            label: "Seguros",
+            link: "/renault/comisiones/seguros",
+            parentId: 32,
+            permission: "view submodulo comisiones seguro renault",
+          },
+          {
+            id: 12,
+            label: "Accesorios",
+            link: "/renault/comisiones/accesorios",
+            parentId: 32,
+            permission: "view submodulo comisiones accesorios renault",
+          },
+
+          {
+            id: 14,
             label: "Tabulador",
             link: "/renault/tabulador",
             parentId: 32,
             permission: "view submoduloe tabuladores renault",
           },
           {
-            id: 10,
+            id: 15,
             label: "Vendedores",
             link: "/renault/vendedores",
             parentId: 32,
             permission: "view submodulo vendedores renault",
           },
+
         ]
       },
       {

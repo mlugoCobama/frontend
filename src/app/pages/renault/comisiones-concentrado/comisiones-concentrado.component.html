@@ -1,0 +1,94 @@
+<app-card-top 
+[title] = "'Concentrado de comisiones'"
+></app-card-top>
+<app-filtro-comsiones-generico
+  #formFiltro
+  [config]="configFiltro"
+  [hasData]="hayDatos"
+  [searching]="isLoad"
+  (buscar)="buscarDatos($event)">
+</app-filtro-comsiones-generico>
+
+<div class="row">
+    <div class="col">
+        <app-kpi-card-generico
+        title="Nuevos"
+        [kpi]="totalAutorizado('nuevos') || 0"
+        description="Pago de comisiones"
+        colorClass="text-primary">
+        </app-kpi-card-generico>
+    </div>
+     <div class="col">
+        <app-kpi-card-generico
+        title="Seminuevos"
+        [kpi]="totalAutorizado('seminuevos') || 0"
+        description="Pago de comisiones"
+        colorClass="text-primary">
+        </app-kpi-card-generico>
+    </div>
+     <div class="col">
+        <app-kpi-card-generico
+        title="Financiamientos"
+        [kpi]="totalAutorizado('financiamiento')  || 0"
+        description="Pago de comisiones"
+        colorClass="text-primary">
+        </app-kpi-card-generico>
+    </div>
+     <div class="col">
+        <app-kpi-card-generico
+        title="Seguros"
+        [kpi]="totalAutorizado('seguros') || 0"
+        description="Pago de comisiones"
+        colorClass="text-primary">
+        </app-kpi-card-generico>
+    </div>
+    <div class="col">
+        <app-kpi-card-generico
+        title="Accesorios"
+        [kpi]="totalAutorizado('accesorios') || 0"
+        description="Pago de comisiones"
+        colorClass="text-primary">
+        </app-kpi-card-generico>
+    </div>
+    <div class="col">
+        <app-kpi-card-generico
+        title="T. de unidades"
+        [kpi]="totalAutorizado('toma_unidades') || 0"
+        description="Pago de comisiones"
+        colorClass="text-primary">
+        </app-kpi-card-generico>
+    </div>
+    <div class="col">
+        <app-kpi-card-generico
+        title="TOTAL"
+        [kpi]="totalAutorizado('total') || 0"
+        description="Pago de comisiones"
+        colorClass="text-primary">
+        </app-kpi-card-generico>
+    </div>
+    
+</div>
+<div class="card shadow">
+    <div class="card-body">
+            <app-tabla-concentrado-comisiones
+            #tablaConcentradoComisiones
+            [data]="data"
+            (cellClick)="onCellClick($event)"
+            (seleccionados)="onSeleccionados($event)">
+            </app-tabla-concentrado-comisiones>
+
+    </div>
+
+
+</div>
+
+
+<div *ngIf="data.length > 0" class="card">
+    <div class="card-body">
+        <div class="d-flex justify-content-end align-items-center">
+            <button (click)="generarCorte()" class="btn btn-sm btn-primary">
+                Guardar Corte
+            </button>
+        </div>
+    </div>
+</div>

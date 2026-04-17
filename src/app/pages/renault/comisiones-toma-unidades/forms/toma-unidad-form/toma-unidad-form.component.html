@@ -1,0 +1,139 @@
+<!-- toma-unidad-form.component.html -->
+<form [formGroup]="form">
+  <div class="row">
+
+    <!-- Por Inventario -->
+    <div class="mb-2 col-lg-4">
+      <label class="form-label">Inventario</label>
+      <input type="text" class="form-control form-control-sm"
+             placeholder="Inventario"
+             formControlName="por_inventario">
+      <div class="text-danger small"
+           *ngIf="form.get('por_inventario')?.touched && form.get('por_inventario')?.invalid">
+        El campo Inventario es requerido
+      </div>
+    </div>
+
+        <!-- Fecha Toma -->
+    <div class="mb-2 col-lg-4">
+      <label class="form-label">Fecha Toma</label>
+      <input type="date" class="form-control form-control-sm"
+             formControlName="fecha_toma">
+      <div class="text-danger small"
+           *ngIf="form.get('fecha_toma')?.touched && form.get('fecha_toma')?.invalid">
+        El campo Fecha Toma es requerido
+      </div>
+    </div>
+
+    <!-- Vehículo -->
+    <div class="mb-2 col-lg-4">
+      <label class="form-label">Vehículo</label>
+      <input type="text" class="form-control form-control-sm"
+             placeholder="Vehículo"
+             formControlName="vehiculo">
+      <div class="text-danger small"
+           *ngIf="form.get('vehiculo')?.touched && form.get('vehiculo')?.invalid">
+        El campo Vehículo es requerido
+      </div>
+    </div>
+
+    <!-- Número de Serie -->
+    <div class="mb-2 col-lg-4">
+      <label class="form-label">Número de Serie</label>
+      <input type="text" class="form-control form-control-sm"
+             placeholder="Número de Serie"
+             formControlName="numero_serie">
+      <div class="text-danger small"
+           *ngIf="form.get('numero_serie')?.touched && form.get('numero_serie')?.invalid">
+        El campo Número de Serie es requerido
+      </div>
+    </div>
+
+        <!-- Importe -->
+    <div class="mb-2 col-lg-4">
+      <label class="form-label">Importe</label>
+      <input mask="separator" thousandSeparator="," type="text"
+             placeholder="Importe"
+             prefix="$ " class="form-control form-control-sm"
+             formControlName="comision_apv_pesos">
+      <div class="text-danger small"
+           *ngIf="form.get('comision_apv_pesos')?.touched && form.get('comision_apv_pesos')?.invalid">
+        El campo Importe es requerido
+      </div>
+    </div>
+
+    <!-- Tipo APV -->
+    <div class="mb-2 col-lg-4">
+      <label class="form-label">Tipo APV</label>
+      <input type="text" class="form-control form-control-sm"
+             placeholder="Tipo APV"
+             formControlName="tipo_apv">
+      <div class="text-danger small"
+           *ngIf="form.get('tipo_apv')?.touched && form.get('tipo_apv')?.invalid">
+        El campo Tipo APV es requerido
+      </div>
+    </div>
+
+
+
+
+
+    <!-- Observaciones -->
+    <div class="mb-2">
+      <label class="form-label">Observaciones</label>
+      <textarea formControlName="observaciones" class="form-control" rows="3"></textarea>
+      <div class="text-danger small"
+           *ngIf="form.get('observaciones')?.touched && form.get('observaciones')?.invalid">
+        El campo Observaciones es requerido
+      </div>
+    </div>
+
+  </div>
+</form>
+<!-- Botón para agregar al array -->
+<div class="d-flex justify-content-end mt-2 mb-4">
+  <button type="button" class="btn btn-primary btn-sm" (click)="agregarItem()">
+   <i class="fas fa-plus"></i>Agregar
+  </button>
+</div>
+
+<!-- Tabla de items agregados -->
+<div *ngIf="items.length > 0">
+  <h6 class="mb-2">
+    Toma de unidades agregadas
+    <span class="badge bg-primary ms-1">{{ items.length }}</span>
+  </h6>
+
+  <div class="table-responsive">
+    <table class="table table-sm table-bordered align-middle">
+      <thead class="table-light">
+        <tr>
+          <!-- <th>#</th> -->
+          <th>Inventario</th>
+          <th>Fecha Toma</th>
+          <th>Vehiculo</th>
+          <th>Número de Serie</th>
+          <th>Importe</th>
+          <th>Tipo APV</th>
+          <th>-</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items">
+          <!-- <td>{{ item.index }}</td> -->
+          <td>{{ item.formData?.por_inventario }}</td>
+          <td>{{ item.formData?.fecha_toma | date:'dd/MM/yyyy'}}</td>
+          <td>{{ item.formData?.vehiculo ?? 'No disponible'  }}</td>
+          <td>{{ item.formData?.numero_serie}}</td>
+          <td>{{ item.formData?.comision_apv_pesos ?? 0 | currency }}</td>
+          <td>{{ item.formData?.tipo_apv}}</td>
+          <td>
+            <button type="button" class="btn btn-outline-danger btn-sm"
+                    (click)="quitarItem(item.index)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
