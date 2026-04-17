@@ -53,23 +53,38 @@ export class TableDetallesSolicitudSegComponent implements OnInit{
   }
 
    public getProveedoresCotizacion() {
-    this.cotizacionesService.getOne(this.solicitudCompra.id).subscribe(
-      (response) => {
-        if (response) {
-          this.cotProv = response.data;
-          if(this.cotProv.length > 0){
-            this.calcularTotales();
-          }
-          this.isLoad = false;
-        } else {
-          this.alertasService.mostrarAlerta("Error guardando los datos:", response.message, "error", "danger");
+  this.cotizacionesService.getOne(this.solicitudCompra.id).subscribe(
+    (response) => {
+      if (response) {
+
+        this.cotProv = response.data.map((prov:any) => {
+          const detallesMap: any = {};
+
+          prov.detalles.forEach((d:any) => {
+            detallesMap[d.detalle_solicitud_id] = Number(d.importe_unitario);
+          });
+
+          return {
+            ...prov,
+            detallesMap
+          };
+        });
+
+        if (this.cotProv.length > 0) {
+          this.calcularTotales();
         }
-      },
-      (error) => {
-        this.alertasService.mostrarAlerta("Error guardando los datos:", error, "error", "danger");
+
+        this.isLoad = false;
+
+      } else {
+        this.alertasService.mostrarAlerta("Error guardando los datos:", response.message, "error", "danger");
       }
-    );
-   }
+    },
+    (error) => {
+      this.alertasService.mostrarAlerta("Error guardando los datos:", error, "error", "danger");
+    }
+  );
+}
 
 totals: { [key: string]: number } = {};
 totalMasBajo: number = 0;
@@ -99,5 +114,9 @@ calcularTotales(): void {
   tienePermiso(permiso: string = null): boolean {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
+  }
+  
+  findDetalle(){
+
   }
 }

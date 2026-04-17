@@ -60,7 +60,7 @@
         <td *ngFor="let prov of cotProv; let rowIndex  = index">
           <!-- <td *ngFor="let prov of row.detalles"> -->
           <div *ngIf = "row.confirmado === 1" class="text-end">
-            <strong> {{ prov?.detalles[i]?.importe_unitario || 0 | currency}} </strong>
+            <strong> {{ (prov.detallesMap[row.id] || 0) | currency }} </strong>
           </div>
         </td>
       </tr>
