@@ -24,11 +24,9 @@ export class FormVendedoresComponent implements OnInit {
   ];
 
   /** Data estática de tipos de vendedor */
-  tipos: any[] = [
-    {value : 1 , dsc:'Interno'},
-    { value : 2 , dsc:'Externo'},
-    { value : 2 , dsc:'Nomina'},
-  ];
+   @Input() tiposVendedor: any[] = [];
+
+   @Input() departamentos :any = [];
 
   public permisos = permisosVendedoresAgencias;
   @Input() datos:any;
@@ -51,7 +49,8 @@ export class FormVendedoresComponent implements OnInit {
       clave: ['', Validators.required],
       nroAutoSystem: ['', Validators.required],
       agencia: ['', Validators.required],
-      tipo: ['', Validators.required]
+      tipo: ['', Validators.required],
+      departamento: ['', Validators.required],
     });
   }
 
@@ -86,7 +85,8 @@ export class FormVendedoresComponent implements OnInit {
       clave: this.datos?.clave,
       nroAutoSystem: this.datos?.nro_vendedor_as,
       agencia: this.datos?.agencia,
-      tipo: this.datos?.tipo
+      tipo: this.datos?.tipo,
+      departamento: this.datos?.departamento_id,
     });
   }
 

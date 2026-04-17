@@ -47,7 +47,7 @@
     <label for="tipo" class="form-label">Tipo</label>
     <select id="tipo" class="form-select form-select-sm" formControlName="tipo">
         <option selected disabled value="">Selecciona una opcion</option>
-        <option *ngFor="let t of tipos" [value]="t.value">{{ t.dsc }}</option>
+        <option *ngFor="let t of tiposVendedor" [value]="t.id">{{ t.nombre }}</option>
     </select>
     <div *ngIf="f['tipo'].touched && f['tipo'].invalid" class="text-danger">
       <small>El tipo es obligatorio</small>
@@ -56,13 +56,13 @@
 
   <!-- Tipo -->
   <div class="col-md-6">
-    <label for="tipo" class="form-label">Departamento</label>
-    <select id="tipo" class="form-select form-select-sm" formControlName="tipo">
+    <label for="departamento" class="form-label">Departamento</label>
+    <select id="departamento" class="form-select form-select-sm" formControlName="departamento">
         <option selected disabled value="">Selecciona una opcion</option>
-        <option *ngFor="let t of tipos" [value]="t.value">{{ t.dsc }}</option>
+        <option *ngFor="let t of departamentos" [value]="t.id">{{ t.nombre }}</option>
     </select>
-    <div *ngIf="f['tipo'].touched && f['tipo'].invalid" class="text-danger">
-      <small>El tipo es obligatorio</small>
+    <div *ngIf="f['departamento'].touched && f['departamento'].invalid" class="text-danger">
+      <small>El departamento es obligatorio</small>
     </div>
   </div>
 

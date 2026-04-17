@@ -21,6 +21,8 @@ export class ModalAddVendedorComponent implements AfterViewInit {
   /** bandera para el manejo de botones durante la petición */
   public sending : boolean = false;
   public agencias : any = [];
+  public tiposVendedor : any = [];
+  public departamentos : any = [];
 
   public event: EventEmitter<any> = new EventEmitter();
 

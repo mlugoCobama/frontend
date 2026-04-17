@@ -65,7 +65,10 @@ guardar(): void {
       // }
     });
 
-    formData.append(`financiamientos[${i}][archivo]`, item.archivo, item.archivo.name);
+    if(item.archivo){
+      formData.append(`financiamientos[${i}][archivo]`, item.archivo , item.archivo.name);
+    }
+    
   });
 
   this.financiamientoService.create(formData).subscribe({

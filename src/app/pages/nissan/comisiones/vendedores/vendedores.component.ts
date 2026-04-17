@@ -27,6 +27,7 @@ export class VendedoresComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getCatalogos();
     this.getAll(this.getEmpresaActiva().intercompania);
     
     this.agencias = this.filtrarAgencias(this.getEmpresaActiva().empresa);
@@ -47,6 +48,8 @@ export class VendedoresComponent implements OnInit {
   /** recupera todos los registros de los vendedores */
   private getAll(intercompania) {
     this.isLoad = true;
+    this.data = []
+    this.datosFiltrados = [];
     this.vendedoresService.getOne(intercompania).subscribe(
       (response: any) => {
         if (response) {
@@ -102,10 +105,16 @@ export class VendedoresComponent implements OnInit {
 
   /** Despliega la ventana modal para un nuevo registro  */
   public openModalNuevo() {
+    if(!this.ready){
+      Swal.fire('Espera', 'Aun no se han cargado los catálogos necesarios, espera e intenta nuevamente', 'info');
+      return;
+    }
     // this.modalAbierto =  true;
     const initialState: ModalOptions = {
       initialState: {
         agencias: this.agencias,
+        tiposVendedor: this.tiposVendedor,
+        departamentos: this.departamentos,
       },
       class: "modal-lg",
     };
@@ -123,11 +132,16 @@ export class VendedoresComponent implements OnInit {
 
   /** Despliega la ventana modal para actualizar un registro  */
   public openModalEditar() {
-    // this.modalAbierto =  true;
+    if(!this.ready){
+      Swal.fire('Espera', 'Aun no se han cargado los catálogos necesarios, espera e intenta nuevamente', 'info');
+      return;
+    }
     const initialState: ModalOptions = {
       initialState: {
         datos: this.vendedor,
         agencias: this.agencias,
+        tiposVendedor: this.tiposVendedor,
+        departamentos: this.departamentos,
       },
       class: "modal-lg",
     };
@@ -247,5 +261,34 @@ export class VendedoresComponent implements OnInit {
       intercompania: usuarioActual.intercompania,
       empresaUsuario: usuarioActual.empresa,
     };
+  }
+
+  public tiposVendedor :any;
+  public departamentos :any;
+  public ready:boolean = false;
+
+  getCatalogos(){
+    this.data = []
+    this.datosFiltrados = [];
+    this.ready = false;
+    this.vendedoresService.getAll().subscribe(
+      (response: any) => {
+        if (response) {
+          const data = response.data;
+          this.tiposVendedor = data.tipos;
+          this.departamentos = data.departamentos;
+          this.ready = true;
+          console.log(this.ready)
+        } else {
+          console.log(response.message);
+          this.ready = false;
+        }
+      },
+      (error) => {
+        console.error("Error fetching data:", error);
+        this.isLoad = false;
+        this.ready = false;
+      },
+    );
   }
 }

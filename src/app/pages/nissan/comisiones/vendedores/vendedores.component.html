@@ -43,7 +43,9 @@
             <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'nro_vendedor_as', etiqueta:'# Auto System'}"></ng-container>
             <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'tipo_texto', etiqueta:'T. Vendedor'}"></ng-container>
             <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'agencia_nombre', etiqueta:'Agencia'}"></ng-container>
-             <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'procentaje_apv', etiqueta:'%'}"></ng-container>
+            <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'departamento', etiqueta:'Departamento'}"></ng-container>
+            <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'procentaje_apv', etiqueta:'%'}"></ng-container>
+            
           </tr>
         </thead>
         <tbody class="table-bordered">
@@ -53,6 +55,7 @@
             <td>{{item.nro_vendedor_as}}</td>
             <td>{{item.tipo_texto}}</td>
             <td>{{item.agencia_nombre}}</td>
+            <td>{{item.departamento}}</td>
             <td>{{item.procentaje_apv | percent}}</td>
           </tr>
         </tbody>
