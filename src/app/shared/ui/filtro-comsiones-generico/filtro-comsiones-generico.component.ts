@@ -4,7 +4,7 @@ import { ComisionesService } from 'src/app/core/services/nissan/comisiones.servi
 import { PermisosService } from 'src/app/core/services/permisos.service';
 import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
 import { ActivatedRoute } from '@angular/router';
-
+import { permisosVendedoresAgencias } from '../../constants/permisos';
 
 export interface FiltroConfig {
   showAgencia?:   boolean;
@@ -70,18 +70,19 @@ export class FiltroComsionesGenericoComponent implements OnInit, OnChanges {
 
 
   public hoy = new Date().toISOString().split('T')[0];
+  public permisos = permisosVendedoresAgencias;
   formulario: FormGroup;
   vendedores: { value: string; label: string }[] = [{ value: 'todos', label: 'Todos' }];
 
   rawAgencias = [
     { value: 'todos', name: 'Todas',                permiso: 'view select agencias all' },
-    { value: '710',   name: 'Nissan Universidad',   permiso: 'view select agencias nu'  },
-    { value: '730',   name: 'Nissan Azcapotzalco',  permiso: 'view select agencias na'  },
-    { value: '714',   name: 'Nissan Campestre',     permiso: 'view select agencias nc'  },
-    { value: '1',     name: 'Renault Azcapotzalco', permiso: 'view select agencias ra'  },
-    { value: '2',     name: 'Renault Ecatepec',     permiso: 'view select agencias re'  },
-    { value: '3',     name: 'Renault Vallejo',      permiso: 'view select agencias rv'  },
-    { value: '4',     name: 'Renault Pachuca',      permiso: 'view select agencias rp'  },
+    { value: '710',   name: 'Nissan Universidad',   permiso: this.permisos.optionNU },
+    { value: '730',   name: 'Nissan Azcapotzalco',  permiso: this.permisos.optionNA  },
+    { value: '714',   name: 'Nissan Campestre',     permiso: this.permisos.optionNC  },
+    { value: '1',     name: 'Renault Azcapotzalco', permiso: this.permisos.optionRA  },
+    { value: '2',     name: 'Renault Ecatepec',     permiso: this.permisos.optionRE  },
+    { value: '3',     name: 'Renault Vallejo',      permiso: this.permisos.optionRV  },
+    { value: '4',     name: 'Renault Pachuca',      permiso: this.permisos.optionRP  },
   ];
 
   agencias: typeof this.rawAgencias = [];
@@ -317,6 +318,11 @@ export class FiltroComsionesGenericoComponent implements OnInit, OnChanges {
     const usuarioActual = this.localStorage.getItem('currentUser');
     const intercompania = usuarioActual['usuarioActivo'][0].intercompania;
     const nombreEmpresa = usuarioActual['usuarioActivo'][0].empresa ?? 'No especificada';
+    if(!this.tienePermiso(this.permisos.selectAgencias)){
+      this.formulario.patchValue({
+        agencia: intercompania
+      });
+    }
     return { intercompania, nombreEmpresa };
   }  
 }

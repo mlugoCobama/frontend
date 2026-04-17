@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
 import { PermisosService } from 'src/app/core/services/permisos.service';
 import { ActivatedRoute } from '@angular/router';
+import { permisosVendedoresAgencias } from 'src/app/shared/constants/permisos';
 
 @Component({
   selector: "app-vendedores",
@@ -20,14 +21,15 @@ export class VendedoresComponent implements OnInit {
     private vendedoresService: VendedoresService,
     private modalService: BsModalService,
     private alertas: SwalComprsServiceService,
-    private permisosService:PermisosService,
+    private permisosService: PermisosService,
     private localStorage: LocalStorageServiceService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
     this.getAll(this.getEmpresaActiva().intercompania);
-    this.agencias = this.filtrarAgencias(this.getEmpresaActiva().empresa)
+    
+    this.agencias = this.filtrarAgencias(this.getEmpresaActiva().empresa);
   }
 
   public data: any;
@@ -41,7 +43,7 @@ export class VendedoresComponent implements OnInit {
   public modalRef?: BsModalRef;
 
   public vendedor: any;
-
+  public permisos = permisosVendedoresAgencias;
   /** recupera todos los registros de los vendedores */
   private getAll(intercompania) {
     this.isLoad = true;
@@ -103,7 +105,7 @@ export class VendedoresComponent implements OnInit {
     // this.modalAbierto =  true;
     const initialState: ModalOptions = {
       initialState: {
-        agencias :  this.agencias
+        agencias: this.agencias,
       },
       class: "modal-lg",
     };
@@ -125,7 +127,7 @@ export class VendedoresComponent implements OnInit {
     const initialState: ModalOptions = {
       initialState: {
         datos: this.vendedor,
-        agencias :  this.agencias
+        agencias: this.agencias,
       },
       class: "modal-lg",
     };
@@ -183,20 +185,39 @@ export class VendedoresComponent implements OnInit {
     });
   }
 
-
-   rawAgencias = [
-    { value:"todos", name:"Todas", permiso: "view select agencias all" },
-    { value:"710", name:"Nissan Universidad", permiso: "view select agencias nu"},
-    { value:"0", name:"Nissan Insurgentes", permiso: "view select agencias ni"},
-    { value:"730", name:"Nissan Azcapotzalco", permiso: "view select agencias na"},
-    { value:"714", name:"Nissan Campestre", permiso: "view select agencias nc"},
-    { value:"1", name:"Renault Azcapotzalco", permiso: "view select agencias ra"},
-    { value:"2", name:"Renault Ecatepec", permiso: "view select agencias re"},
-    { value:"3", name:"Renault Vallejo", permiso: "view select agencias rv"},
-    { value:"4", name:"Renault Pachuca", permiso: "view select agencias rp"},
+  rawAgencias = [
+    { value: "todos", name: "Todas", permiso: "view select agencias all" },
+    {
+      value: "710",
+      name: "Nissan Universidad",
+      permiso: this.permisos.optionNU,
+    },
+    {
+      value: "0",
+      name: "Nissan Insurgentes",
+      permiso: this.permisos.optionNI,
+    },
+    {
+      value: "730",
+      name: "Nissan Azcapotzalco",
+      permiso: this.permisos.optionNA,
+    },
+    {
+      value: "714",
+      name: "Nissan Campestre",
+      permiso: this.permisos.optionNC,
+    },
+    {
+      value: "1",
+      name: "Renault Azcapotzalco",
+      permiso: this.permisos.optionRA,
+    },
+    { value: "2", name: "Renault Ecatepec", permiso: this.permisos.optionRE },
+    { value: "3", name: "Renault Vallejo", permiso: this.permisos.optionRV },
+    { value: "4", name: "Renault Pachuca", permiso: this.permisos.optionRP },
   ];
 
-  agencias = []
+  agencias = [];
 
   tienePermiso(permiso: string = null): boolean {
     if (!permiso) return true;
@@ -205,20 +226,26 @@ export class VendedoresComponent implements OnInit {
 
   filtrarAgencias(cadena) {
     const filtro = cadena.toLowerCase();
-      if (filtro === "nissan") {
-        return this.rawAgencias.filter(a => a.name.toLowerCase().includes("nissan"));
-      } else if (filtro === "lille" ||  filtro === "renault") {
-        return this.rawAgencias.filter(a => a.name.toLowerCase().includes("renault"));
-      } else {
-        return this.rawAgencias; 
-      }
+    if (filtro === "nissan") {
+      return this.rawAgencias.filter((a) =>
+        a.name.toLowerCase().includes("nissan"),
+      );
+    } else if (filtro === "lille" || filtro === "renault") {
+      return this.rawAgencias.filter((a) =>
+        a.name.toLowerCase().includes("renault"),
+      );
+    } else {
+      return this.rawAgencias;
+    }
   }
 
-  getEmpresaActiva(){
-    const usuarioActual = this.localStorage.getItem('currentUser');
-    // const empresaActual = usuarioActual['usuarioActivo'][0].empresa.split(" ")[0];
-    const empresaActual = this.route.parent?.snapshot.url[0].path || '';
-    const intercompaniaActual = usuarioActual['usuarioActivo'][0].intercompania;
-    return {empresa : empresaActual, intercompania : intercompaniaActual};
+  getEmpresaActiva() {
+    const usuarioActual = this.localStorage.getLocalUser();
+    const empresaActual = this.route.parent?.snapshot.url[0].path || "";
+    return {
+      empresa: empresaActual,
+      intercompania: usuarioActual.intercompania,
+      empresaUsuario: usuarioActual.empresa,
+    };
   }
 }

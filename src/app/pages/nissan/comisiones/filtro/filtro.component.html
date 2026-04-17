@@ -55,6 +55,21 @@
 
 
             </div>
+             <div class="col-auto">
+              <label>Estatus</label>
+              <select class="form-select form-select-sm " aria-label=".form-select-sm example" formControlName="estatus">
+                <option value=""selected>Selecciona uno</option>
+                <option value="12345">Todos</option>
+                <option value="1">Entregados</option>
+                <option value="2">Gastos</option>
+                <option value="3">Revision</option>
+                <option value="4">Autorizados</option>
+                <option value="5">Pagados</option>
+              </select>
+              <div *ngIf="form.estatus.invalid && form.estatus.touched" class="error">
+                <small> Selecciona un Tipo de venta </small>
+              </div>
+            </div>
            <div class="col-auto">
             <button type="submit"  class="btn btn-sm btn-info mt-4"  [disabled]="finding" (click)="buscarDatos()">
               <ng-container *ngIf="!finding; else loading">

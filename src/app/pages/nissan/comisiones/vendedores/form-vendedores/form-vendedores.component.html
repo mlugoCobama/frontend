@@ -28,11 +28,14 @@
   </div>
 
   <!-- Agencia -->
-  <div class="col-md-6">
+  <div class="col-md-6" *ngIf="tienePermiso(permisos.selectAgencias);else nombreEmpresa">
     <label for="agencia" class="form-label">Agencia</label>
     <select id="agencia" class="form-select form-select-sm" formControlName="agencia">
       <option selected disabled value="">Selecciona una opcion</option>
-      <option *ngFor="let ag of agencias" [value]="ag.value">{{ ag.name }}</option>
+      <ng-container  *ngFor="let ag of agencias">
+        <option *ngIf="tienePermiso(ag.permiso);" [value]="ag.value">{{ ag.name }}</option>
+      </ng-container>
+      
     </select>
     <div *ngIf="f['agencia'].touched && f['agencia'].invalid" class="text-danger">
       <small>La agencia es obligatoria</small>
@@ -50,7 +53,28 @@
       <small>El tipo es obligatorio</small>
     </div>
   </div>
+
+  <!-- Tipo -->
+  <div class="col-md-6">
+    <label for="tipo" class="form-label">Departamento</label>
+    <select id="tipo" class="form-select form-select-sm" formControlName="tipo">
+        <option selected disabled value="">Selecciona una opcion</option>
+        <option *ngFor="let t of tipos" [value]="t.value">{{ t.dsc }}</option>
+    </select>
+    <div *ngIf="f['tipo'].touched && f['tipo'].invalid" class="text-danger">
+      <small>El tipo es obligatorio</small>
+    </div>
+  </div>
+
   </div>
 </form>
+
+<ng-template #nombreEmpresa>
+  <div class="col-auto">
+    <label for="agencia" class="form-label">Agencia</label>
+    <p class="border rounded py-1 px-2"> <strong>{{getEmpresaActiva().empresaUsuario}} </strong></p>
+  </div>
+  
+</ng-template>
 
 

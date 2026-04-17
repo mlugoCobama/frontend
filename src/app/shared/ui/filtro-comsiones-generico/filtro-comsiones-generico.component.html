@@ -5,7 +5,7 @@
 
         <!-- AGENCIA -->
         <ng-container *ngIf="config.showAgencia">
-          <ng-container *ngIf="tienePermiso('view multiselect comisiones agencias'); else nombreEmpresa">
+          <ng-container *ngIf="tienePermiso(permisos.selectAgencias); else nombreEmpresa">
             <div class="col-auto">
               <label>Agencias</label>
               <select class="form-select form-select-sm" formControlName="agencia">

@@ -72,6 +72,7 @@ export class FiltroComponent implements OnInit{
       fechaInicial: [haceDosSemanas, Validators.required],
       fechaFinal: [this.hoy, Validators.required],
       vendedor: ['', Validators.required],
+      estatus: ['', Validators.required],
       },
       { validators: this.fechaValidator }
     );
@@ -139,7 +140,7 @@ asignarEstado() {
 
     const param = this.formulario.value;
 
-    this.comisiones.getLibroVentas(this.estado ,param.agencia, param.tipoVenta, param.fechaInicial, param.fechaFinal, param.vendedor).subscribe(
+    this.comisiones.getLibroVentas(param.estatus ,param.agencia, param.tipoVenta, param.fechaInicial, param.fechaFinal, param.vendedor).subscribe(
       (response:any) => {
         if(response.status == 'success'){
           this.data = response.data;
