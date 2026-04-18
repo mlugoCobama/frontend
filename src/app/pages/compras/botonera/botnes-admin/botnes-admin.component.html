@@ -31,7 +31,7 @@
 
     <a 
     (click) = "clickDevolverRevision()"
-    *ngIf="solicitudSelecionada && status <= enEsts.Solicitado && tienePermiso('view btn cotizar')"
+    *ngIf="solicitudSelecionada && status <= enEsts.Solicitado && tienePermiso('view btn devolver para revision')"
     href="javascript:void(0);" class="btn btn-outline-danger btn-sm">
         <i class="fas fa-reply"></i>
          Devolver para revisión

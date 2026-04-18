@@ -1,9 +1,9 @@
 <app-card-top
     [title] = "'Vendedores'"
     [hasButtons] = "true"
-    [showBtnNuevo] = "!itemSeleccionado"
-    [showBtnEditar] = "itemSeleccionado"
-    [showBtnEliminar] = "itemSeleccionado"
+    [showBtnNuevo] = "!itemSeleccionado && tienePermiso(permisos.btnAddVnededor)"
+    [showBtnEditar] = "itemSeleccionado && tienePermiso(permisos.btnUpdateVendedor)"
+    [showBtnEliminar] = "itemSeleccionado && tienePermiso(permisos.btnDeleteVendedor)"
     (nuevo) = "openModalNuevo()"
     (actualizar) = "openModalEditar()"
     (eliminar) = "confirmarDelete()"

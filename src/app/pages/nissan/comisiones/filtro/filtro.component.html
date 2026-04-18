@@ -55,7 +55,7 @@
 
 
             </div>
-             <div class="col-auto">
+             <div *ngIf="tienePermiso('view comisiones all access')" class="col-auto">
               <label>Estatus</label>
               <select class="form-select form-select-sm " aria-label=".form-select-sm example" formControlName="estatus">
                 <option value=""selected>Selecciona uno</option>

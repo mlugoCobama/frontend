@@ -20,10 +20,10 @@ export const pmsParqueVehciular = {
     btnDispersion : 'view btn dispersion toka',
 };
 export const permisosVendedoresAgencias = {
-    selectAgencias : '',
-    btnAddVnededor : '',
-    btnUpdateVendedor : '',
-    btnDeleteVendedor : '',
+    selectAgencias : 'view select empresas vendedores',
+    btnAddVnededor : 'view btn add vendedores',
+    btnUpdateVendedor : 'view update vendedores',
+    btnDeleteVendedor : 'view btn delete vendedores',
     
     optionNU: 'view select agencias nu',
     optionNI: 'view select agencias ni',

@@ -110,6 +110,7 @@ asignarEstado() {
   ];
 
   const encontrado = permisos.find(p => this.tienePermiso(p.key));
+  this.formulario.patchValue({estatus: encontrado?.value ?? 0})
   return encontrado?.value ?? 0;
 }
 
