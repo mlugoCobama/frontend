@@ -1,25 +1,34 @@
-# Skote -  Angular 13 Responsive Admin Dashboard Template 
+# Desarrollo - Infra
 
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+# 🚀 Liberaciones
+---
+**Fecha de liberación:** 18 de abril de 2025.
+---
+## Módulo de Compras
+### Nuevos Permisos
+- Se integran nuevos permisos en el módulo de Compras para mayor control de acceso.
+### Mejoras Visuales
+- Se realizaron mejoras en la interfaz de usuario del módulo de Compras.
+### Corrección de Bug
+- Se corrigieron errores detectados en el módulo de Compras.
+---
+## Módulo de Parque Vehicular
+### Nuevos Permisos
+- Se integran nuevos permisos en el módulo de Parque Vehicular.
+### Gestión de Dispersión de Recursos de Combustibles
+- Se agrega el apartado de gestión de dispersión de recursos de combustibles.
+---
+## Nuevo Módulo: Gestión de Comisiones
+Se integra el nuevo módulo de Gestión de Comisiones con los siguientes apartados:
+- **Concentrado**
+- **Cortes**
+- **Nuevos**
+- **Financiamientos**
+- **Toma de Unidad**
+- **Seguros**
+- **Accesorios**
+---
