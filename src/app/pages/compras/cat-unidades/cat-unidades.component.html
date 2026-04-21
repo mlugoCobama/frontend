@@ -99,7 +99,7 @@
                   Cargando opciones espera...
                 </option>
                 <ng-container *ngFor="let item of empresas">
-                  <option  [value]="item.intercompania" *ngIf="item.permiso">
+                  <option  [value]="item.intercompania" *ngIf="tienePermiso(item.permiso)">
                     {{ item.name.toUpperCase()}}
                   </option>
                 </ng-container>

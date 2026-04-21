@@ -318,10 +318,11 @@ export class CatUnidadesComponent implements OnInit {
     }
 
     if (this.tienePermiso(this.permisos.selectParqueVehicular)) {
-        this.empresas = this.rawEmpresas;
         this.getCatVehiculos(intercompania);
         this.intercompania = intercompania;
     }
+    
+    this.empresas = this.rawEmpresas;
   }
 
   filtrarEmpresas(data, empRel) {
