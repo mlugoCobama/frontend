@@ -44,6 +44,14 @@ export class ComisionesService {
       return this.http.post(environment.apiUrl + "nissan/datos-venta/validados", data);
     }
 
+    public guardarBDC(data:any): Observable<any> {
+      return this.http.post(environment.apiUrl + "nissan/datos-venta/bdc", data);
+    }
+
+    public guardarValidadosBDC(data:any): Observable<any> {
+      return this.http.post(environment.apiUrl + "nissan/datos-venta/validados_bdc", data);
+    }
+
     /** Actualiza un registro y lo marca como pagado (estatus:5) */
     public guardarPagado(id:any): Observable<any> {
       return this.http.get(environment.apiUrl + `nissan/datos-venta/pagado/${id}`);

@@ -2,7 +2,7 @@
     <div class="card-body">
         <div class="d-flex justify-content-end align-items-end gap-2">
               <button
-                *ngIf="estado == 1 || estado == 12345"
+                *ngIf="(estado == 1 || estado == 12345) && tienePermiso(permisos.btnEntregados)"
                 class="btn btn-sm btn-primary"
                 [disabled]="guardandoE"
                 (click)="guardarEntregados()"
@@ -17,7 +17,7 @@
                 ></span>
               </button>
               <button
-                *ngIf="estado == 2 || estado == 12345"
+                *ngIf="(estado == 2 || estado == 12345) && tienePermiso(permisos.btnGastos)"
                 class="btn btn-sm btn-info"
                 [disabled]="guardandoG"
                 (click)="guardarGastos()"
@@ -31,8 +31,40 @@
                   aria-hidden="true"
                 ></span>
               </button>
+
               <button
-                *ngIf="estado == 3 || estado == 12345"
+                *ngIf="(estado == 2 || estado == 12345) && tienePermiso(permisos.btnGastos)"
+                class="btn btn-sm btn-dark"
+                [disabled]="guardandoBdc"
+                (click)="guardarBDC()"
+              >
+                <span *ngIf="!guardandoBdc">Marcar BDC</span>
+
+                <span
+                  *ngIf="guardandoBdc"
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+              </button>
+
+              <button
+                *ngIf="(estado == 2 || estado == 12345) && tienePermiso(permisos.btnGastos)"
+                class="btn btn-sm btn-warning"
+                [disabled]="guardandovBdc"
+                (click)="guardarValidadosBDC()"
+              >
+                <span *ngIf="!guardandovBdc">Validar BDC</span>
+
+                <span
+                  *ngIf="guardandovBdc"
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+              </button> 
+              <button
+                *ngIf="(estado == 3 || estado == 12345) && tienePermiso(permisos.btnValidados)"
                 class="btn btn-sm btn-success"
                 [disabled]="guardandoV"
                 (click)="guardarValidados()"

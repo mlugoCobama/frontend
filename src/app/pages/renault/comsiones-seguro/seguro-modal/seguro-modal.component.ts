@@ -19,6 +19,8 @@ export class SeguroModalComponent implements OnInit, AfterViewInit {
   public event: EventEmitter<any> = new EventEmitter();
   public loading = false;
   public empresaActiva:any= '';
+
+  
   constructor(
     public bsModalRef: BsModalRef,
     public alertas: SwalComprsServiceService,
@@ -45,6 +47,7 @@ export class SeguroModalComponent implements OnInit, AfterViewInit {
     this.loading = true;
     const valores = this.formFinanciamiento.getItems();
       if (valores.length === 0) {
+        this.loading = false;
         this.alertas.mostrarAlerta('Aviso', 'Agrega al menos una toma de unidad', 'warning', 'warning');
       return;
     }
@@ -56,9 +59,12 @@ export class SeguroModalComponent implements OnInit, AfterViewInit {
         const payload = { ...item.formData, ...agenciaValues };
 
         Object.keys(payload).forEach(key => {
-          // const value = payload[key] !== null && payload[key] !== undefined ? payload[key] : '';
-            formData.append(`seguros[${i}][${key}]`, payload[key]);
+          formData.append(`seguros[${i}][${key}]`, payload[key]);
         });
+
+        if (item.archivo) {
+          formData.append(`seguros[${i}][archivo]`, item.archivo, item.archivo.name);
+        }
       });
 
     this.segurosService.create(formData).subscribe((response:any)=>{

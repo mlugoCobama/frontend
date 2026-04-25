@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FinanciamientoService } from 'src/app/core/services/renault/financiamiento.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { catalogoAseguradoras } from '../../modelos-seguro';
 
 @Component({
   selector: 'app-seguro-form',
@@ -9,13 +10,14 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
   styleUrl: './seguro-form.component.css'
 })
 export class SeguroFormComponent implements OnInit {
-
+  public aseguradoras = catalogoAseguradoras;
   form!: FormGroup;
   loading = false;
   archivo: File | null = null;
   @Input() data: any ;
   @Input() vendedores: any;
   @Input() tipoFinanciamiento: any;
+      
 
   constructor(private fb: FormBuilder, private financiamientoService:FinanciamientoService ) {}
 
@@ -31,7 +33,7 @@ export class SeguroFormComponent implements OnInit {
         nombre: ['', Validators.required],
         unidad: ['', Validators.required],
         serie: ['', Validators.required],
-
+        archivo: [null, Validators.required],
         // fechas
         fecha_emision: ['', Validators.required],
 
@@ -186,7 +188,7 @@ private consultarFactura(noFactura: any) {
   );
 }
 
-items: { formData: any; index: number }[] = [];
+items: { formData: any; archivo: File; index: number }[] = [];
 private itemCounter = 0;
 
 
@@ -196,17 +198,21 @@ agregarItem(): void {
 
   this.items.push({
     formData: this.form.getRawValue(),
+    archivo:  this.archivo!,
     index:    ++this.itemCounter,
   });
 
   this.limpiar();
+
+  this.form.get('archivo')?.setValidators([Validators.required]);
+  this.form.get('archivo')?.updateValueAndValidity();
 }
 
   quitarItem(index: number): void {
     this.items = this.items.filter(item => item.index !== index);
   }
 
-  getItems(): { formData: any }[] {
+  getItems(): { formData: any; archivo: File}[] {
   return this.items;
 }
 

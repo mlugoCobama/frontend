@@ -5,6 +5,7 @@ import { PermisosService } from 'src/app/core/services/permisos.service';
 import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
 import { ActivatedRoute } from '@angular/router';
 import { permisosVendedoresAgencias } from '../../constants/permisos';
+import { distinctUntilChanged } from 'rxjs';
 
 export interface FiltroConfig {
   showAgencia?:   boolean;
@@ -116,18 +117,31 @@ export class FiltroComsionesGenericoComponent implements OnInit, OnChanges {
       this.syncValidators();
     }
 
-    if (changes['defaultEstado'] && !this.formulario.get('estado')?.value) {
-    this.formulario.patchValue({ estado: this.defaultEstado });
+    if (changes['defaultAgencia']) {
+      const ctrl = this.formulario.get('agencia');
+      const nuevoValor = this.defaultAgencia;
+      if (ctrl && ctrl.value !== nuevoValor) {   // ← solo parchea si cambió
+        ctrl.patchValue(nuevoValor);
+      }
     }
-    if (changes['defaultVendedor'] && !this.formulario.get('vendedor')?.value) {
-      this.formulario.patchValue({ vendedor: this.defaultVendedor });
+    if (changes['defaultEstado']) {
+  const ctrl = this.formulario.get('estado');
+  if (ctrl && ctrl.value !== this.defaultEstado) {
+    ctrl.patchValue(this.defaultEstado);
+  }
+  }
+  if (changes['defaultVendedor']) {
+    const ctrl = this.formulario.get('vendedor');
+    if (ctrl && ctrl.value !== this.defaultVendedor) {
+      ctrl.patchValue(this.defaultVendedor);
     }
-    if (changes['defaultAgencia'] && !this.formulario.get('agencia')?.value) {
-      this.formulario.patchValue({ agencia: this.defaultAgencia });
+  }
+  if (changes['defaultTipoVenta']) {
+    const ctrl = this.formulario.get('tipoVenta');
+    if (ctrl && ctrl.value !== this.defaultTipoVenta) {
+      ctrl.patchValue(this.defaultTipoVenta);
     }
-    if (changes['defaultTipoVenta'] && !this.formulario.get('tipoVenta')?.value) {
-      this.formulario.patchValue({ tipoVenta: this.defaultTipoVenta });
-    }
+  }
   }
 
 
@@ -205,7 +219,9 @@ export class FiltroComsionesGenericoComponent implements OnInit, OnChanges {
 
   /** Carga vendedores cuando cambia la agencia seleccionada */
   private watchAgencia(): void {
-    this.formulario.get('agencia')?.valueChanges.subscribe(value => {
+    this.formulario.get('agencia')?.valueChanges.pipe(
+      distinctUntilChanged()      
+    ).subscribe(value => {
       if (!this.config.showVendedor) return;
 
       if (value === 'todos' || !value) {
@@ -316,8 +332,10 @@ export class FiltroComsionesGenericoComponent implements OnInit, OnChanges {
 
   getEmpresaUsuario() {
     const usuarioActual = this.localStorage.getItem('currentUser');
-    const intercompania = usuarioActual['usuarioActivo'][0].intercompania;
+    const numIntercompania = usuarioActual['usuarioActivo'][0].intercompania;
     const nombreEmpresa = usuarioActual['usuarioActivo'][0].empresa ?? 'No especificada';
+    const intercompania = this.parseAgencia(numIntercompania)
+
     if(!this.tienePermiso(this.permisos.selectAgencias)){
       this.formulario.patchValue({
         agencia: intercompania
@@ -325,4 +343,18 @@ export class FiltroComsionesGenericoComponent implements OnInit, OnChanges {
     }
     return { intercompania, nombreEmpresa };
   }  
+
+  private parseAgencia(intercompania: string): string | null {
+  const mapa: Record<string, string | null> = {
+    '7051': '730',
+    '712': '714',
+    '710': '710',
+    '333': '',
+    '7064': '1',
+    '7063': '3',
+    '7062': '2',
+    '7061': '4',
+  };
+  return mapa[intercompania] ?? intercompania;
+}
 }

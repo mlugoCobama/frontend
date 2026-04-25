@@ -8,14 +8,17 @@
       <div class="row">
 
         <!-- SELECT AGENCIA -->
-        <div class="col-md-4 mb-3">
+        <div *ngIf="tienePermiso(permisos.selectAgencias);else nombreEmpresa" class="col-md-4 mb-3">
           <label class="form-label">Agencias</label>
           <select class="form-select form-select-sm"
                   formControlName="agencia">
             <option value="" selected disabled>Seleccione una agencia</option>
-            <option *ngFor="let a of agencias" [value]="a.value">
+            <ng-container *ngFor="let a of agencias">
+            <option  *ngIf="tienePermiso(a.permiso)" [value]="a.value">
               {{ a.name }}
             </option>
+            </ng-container>
+            
           </select>
         </div>
 
@@ -94,3 +97,12 @@
     [mostrarCheck]="false"
     [mostrarCheck]="false"
     />
+
+    <ng-template #nombreEmpresa>
+  <div class="col-md-4 mb-3">
+    <label>Empresa</label>
+    <p class="border rounded py-1 px-2 mb-0">
+      <strong>{{ getEmpresaUsuario().nombreEmpresa }}</strong>
+    </p>
+  </div>
+</ng-template>

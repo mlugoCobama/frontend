@@ -26,8 +26,15 @@
     <!-- Aseguradora -->
     <div class="mb-2 col-lg-4">
       <label class="form-label">Aseguradora</label>
-      <input type="text" class="form-control form-control-sm"
-             formControlName="aseguradora">
+      <select class="form-select form-select-sm"
+          formControlName="aseguradora">
+        <option value="" disabled selected>Seleccione una aseguradora</option>
+        <option *ngFor="let aseguradora of aseguradoras"
+                [value]="aseguradora">
+          {{ aseguradora }}
+        </option>
+
+      </select>
       <div class="text-danger small"
            *ngIf="form.get('aseguradora')?.touched && form.get('aseguradora')?.invalid">
         La aseguradora es obligatoria
@@ -145,6 +152,19 @@
              readonly>
     </div>
 
+    <!-- Archivo -->
+      <div class="mb-3">
+        <label class="form-label">Archivo</label>
+        <input type="file"
+              formControlName="archivo"
+                class="form-control form-control-sm"
+                (change)="onFileChange($event)">
+        <div class="text-danger small"
+             *ngIf="form.get('archivo')?.touched && form.get('archivo')?.invalid">
+            El archivo es requerido
+        </div>
+        </div>
+        
     <!-- Observaciones -->
     <div class="mb-2 col-lg-12">
       <label class="form-label">Observaciones</label>
@@ -181,6 +201,7 @@
           <th>Serie</th>
           <th>Prima Neta</th>
           <th>Comision APV</th>
+          <th>Archivos</th>
           <th>-</th>
         </tr>
       </thead>
@@ -194,6 +215,9 @@
           <td>{{ item.formData?.serie}}</td>
           <td>{{ item.formData?.prima_neta ?? 0 | currency }}</td>
           <td>{{ item.formData?.comision_apv_pesos ?? 0 | currency }}</td>
+          <td>
+            <span class="badge bg-success">{{ item.archivo?.name ?? 'No aplica' }}</span>
+          </td>
           <td>
             <button type="button" class="btn btn-outline-danger btn-sm"
                     (click)="quitarItem(item.index)">

@@ -23,23 +23,7 @@ export class ModalDetalleRubroComponent implements OnInit, AfterViewInit {
   public event: EventEmitter<any> = new EventEmitter();
   public loading = false;
 
-  columnasVendedor = [
-    { campo: "descripcion", etiqueta: "Descripcion", bold: true },
-    { campo: "observaciones", etiqueta: "Observaciones" },
-    {
-      campo: "importe_venta",
-      etiqueta: "Importe",
-      pipe: "currency",
-      align: "right",
-    },
-    {
-      campo: "comision_apv",
-      etiqueta: "Comision APV",
-      pipe: "currency",
-      align: "right",
-      bold: true,
-    },
-  ];
+  columnasVendedor:any = [];
 
   public accionesTabla: any[] = [
     {
@@ -87,7 +71,9 @@ export class ModalDetalleRubroComponent implements OnInit, AfterViewInit {
     private financiamientoService: FinanciamientoService,
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.columnasVendedor = this.setTableRubro(this.rubro)
+  }
 
   ngAfterViewInit(): void {
     this.getAll(this.idVendedor, this.rubro);
@@ -235,5 +221,75 @@ export class ModalDetalleRubroComponent implements OnInit, AfterViewInit {
     } else {
       this.alertas.mostrarAlerta("Error", response.message, "error", "danger");
     }
+  }
+
+  public setTableRubro(rubro:any){
+
+    
+  switch (rubro) {
+    case 'otros':
+      return this.catalogoTablas.talaDefault;
+    case 'nuevos':
+      return this.catalogoTablas.talaVentaVehiculos;
+    case 'seminuevos':
+      return this.catalogoTablas.talaVentaVehiculos;
+    case 'financiamiento':
+      return this.catalogoTablas.talaFinanciamiento;
+    case "toma_de_unidades":
+      return this.catalogoTablas.talaTomaUnidad;
+    case 'seguros':
+      return this.catalogoTablas.talaSeguros;
+    case 'Accesorios':
+      return this.catalogoTablas.talaDefault;
+    default:
+      return this.catalogoTablas.talaDefault;
+  }
+  }
+
+  public catalogoTablas = {
+    talaDefault : [
+    { campo: "descripcion", etiqueta: "Descripcion", bold: true },
+    { campo: "observaciones", etiqueta: "Observaciones" },
+    { campo: "importe_venta", etiqueta: "Importe",  pipe: "currency", align: "right"},
+    { campo: "comision_apv",  etiqueta: "Comision APV", pipe: "currency", align: "right", bold: true},
+  ],
+
+  talaVentaVehiculos : [
+    { campo: "factura", etiqueta: "Factura", bold: true },
+    { campo: "descripcion", etiqueta: "Descripcion", bold: true },
+    { campo: "inventario", etiqueta: "Inventario", bold: true },
+    { campo: "observaciones", etiqueta: "Observaciones" },
+    { campo: "importe_venta", etiqueta: "Importe",  pipe: "currency", align: "right"},
+    { campo: "comision_apv",  etiqueta: "Comision APV", pipe: "currency", align: "right", bold: true},
+  ],
+
+   talaFinanciamiento : [
+    { campo: "numero_factura", etiqueta: "Factura", bold: true },
+    { campo: "descripcion", etiqueta: "Descripcion", bold: true },
+    { campo: "fecha_desembolso", etiqueta: "Fecha D", bold: true, pipe:'date'},
+    { campo: "observaciones", etiqueta: "Observaciones" },
+    { campo: "importe_venta", etiqueta: "Importe",  pipe: "currency", align: "right"},
+    { campo: "vf3", etiqueta: "VF3",  pipe: "currency", align: "right"},
+    { campo: "garantia_ext", etiqueta: "Garantia Ext",  pipe: "currency", align: "right"},
+    { campo: "comision_apv",  etiqueta: "Comision APV", pipe: "currency", align: "right", bold: true},
+  ],
+
+  talaTomaUnidad : [
+    { campo: "inventario", etiqueta: "Inventario", bold: true },
+    { campo: "fecha", etiqueta: "Fecha", bold: true, pipe:'date'},
+    { campo: "descripcion", etiqueta: "Descripcion", bold: true },
+    { campo: "observaciones", etiqueta: "Observaciones" },
+    { campo: "importe_venta", etiqueta: "Importe",  pipe: "currency", align: "right"},
+    { campo: "comision_apv",  etiqueta: "Comision APV", pipe: "currency", align: "right", bold: true},
+  ],
+
+   talaSeguros : [
+    { campo: "folio", etiqueta: "Folio", bold: true },
+    { campo: "fecha", etiqueta: "Fecha", bold: true, pipe:'date'},
+    { campo: "descripcion", etiqueta: "Descripcion", bold: true },
+    { campo: "observaciones", etiqueta: "Observaciones" },
+    { campo: "importe_venta", etiqueta: "Importe",  pipe: "currency", align: "right"},
+    { campo: "comision_apv",  etiqueta: "Comision APV", pipe: "currency", align: "right", bold: true},
+  ],
   }
 }

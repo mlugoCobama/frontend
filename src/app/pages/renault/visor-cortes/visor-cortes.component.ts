@@ -5,7 +5,8 @@ import { LocalStorageServiceService } from 'src/app/core/services/local-storage-
 import { PermisosService } from 'src/app/core/services/permisos.service';
 import { ConcentradoComisionesService } from 'src/app/core/services/renault/concentrado-comisiones.service';
 import { ColumnaTabla } from 'src/app/shared/ui/tabla-generica/tabla-generica.component';
-
+import { permisosVendedoresAgencias } from 'src/app/shared/constants/permisos';
+import { distinctUntilChanged } from 'rxjs';
 @Component({
   selector: 'app-visor-cortes',
   templateUrl: './visor-cortes.component.html'
@@ -22,6 +23,8 @@ export class VisorCortesComponent implements OnInit {
   cargandoConsulta = false;
 
   public data = [];
+
+  permisos = permisosVendedoresAgencias
 
   rawAgencias = [
     { value: 'todos', name: 'Todas',                permiso: 'view select agencias all' },
@@ -70,6 +73,7 @@ columnasVendedor: ColumnaTabla[] = [
     this.initForm();
     this.getAgencias();
     this.handleChanges();
+    this.getEmpresaUsuario();
   }
 
   initForm() {
@@ -83,7 +87,6 @@ columnasVendedor: ColumnaTabla[] = [
 
   getAgencias() {
     this.agencias = this.filtrarAgencias(this.getEmpresaActiva());
-    console.log(this.agencias)
   }
 
   tienePermiso(permiso: string): boolean {
@@ -111,18 +114,20 @@ columnasVendedor: ColumnaTabla[] = [
     return this.route.parent?.snapshot.url[0]?.path || '';
   }
 
-  getEmpresaUsuario() {
-    const usuarioActual = this.localStorage.getItem('currentUser');
-    const intercompania = usuarioActual['usuarioActivo'][0].intercompania;
-    const nombreEmpresa = usuarioActual['usuarioActivo'][0].empresa ?? 'No especificada';
-    return { intercompania, nombreEmpresa };
-  }
+  // getEmpresaUsuario() {
+  //   const usuarioActual = this.localStorage.getItem('currentUser');
+  //   const intercompania = usuarioActual['usuarioActivo'][0].intercompania;
+  //   const nombreEmpresa = usuarioActual['usuarioActivo'][0].empresa ?? 'No especificada';
+  //   return { intercompania, nombreEmpresa };
+  // }
 
 
   handleChanges() {
 
 
-    this.form.get('agencia')?.valueChanges.subscribe(agenciaId => {
+    this.form.get('agencia')?.valueChanges.
+    pipe(distinctUntilChanged())
+    .subscribe(agenciaId => {
 
       if (!agenciaId) return;
 
@@ -133,7 +138,9 @@ columnasVendedor: ColumnaTabla[] = [
       this.getCortes(agenciaId);
     });
 
-    this.form.get('corte')?.valueChanges.subscribe(corteId => {
+    this.form.get('corte')?.valueChanges.
+    pipe(distinctUntilChanged()).
+    subscribe(corteId => {
 
       if (!corteId) return;
 
@@ -171,4 +178,33 @@ columnasVendedor: ColumnaTabla[] = [
       complete: () => this.cargandoConsulta = false
     });
   }
+
+    getEmpresaUsuario() {
+    const usuarioActual = this.localStorage.getItem('currentUser');
+    const numIntercompania = usuarioActual['usuarioActivo'][0].intercompania;
+    const nombreEmpresa = usuarioActual['usuarioActivo'][0].empresa ?? 'No especificada';
+    const intercompania = this.parseAgencia(numIntercompania)
+
+    if(!this.tienePermiso(this.permisos.selectAgencias)){
+      this.form.patchValue({
+        agencia: intercompania
+      });
+      this.form.get('agencia')?.disable();
+    }
+    return { intercompania, nombreEmpresa };
+  }  
+
+  private parseAgencia(intercompania: string): string | null {
+  const mapa: Record<string, string | null> = {
+    '7051': '730',
+    '712': '714',
+    '710': '710',
+    '333': '',
+    '7064': '1',
+    '7063': '3',
+    '7062': '2',
+    '7061': '4',
+  };
+  return mapa[intercompania] ?? intercompania;
+}
 }

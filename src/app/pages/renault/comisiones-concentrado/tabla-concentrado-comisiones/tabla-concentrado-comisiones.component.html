@@ -10,17 +10,16 @@
   <table *ngIf="filasFiltradas.length > 0; else noDataMensaje" class="table table-sm table-bordered">
     <thead class="table-dark thead-sticky">
       <tr>
-        <th class="sticky-1">
-          <input type="checkbox" (change)="toggleAll($event)">
+        <th class="sticky-1"><input type="checkbox" (change)="toggleAll($event)"></th>
+        <th (click)="ordenar('tipo_vendedor')" style="cursor:pointer" class="text-nowrap">Tipo
+          <span *ngIf="columnaOrden === 'tipo_vendedor'">{{tipo_vendedor === 'asc' ? '↑' : '↓'}}</span>
         </th>
-        <th class="sticky-2">
-          &nbsp;&nbsp;#&nbsp;&nbsp;
+        <th class="sticky-2">&nbsp;&nbsp;#&nbsp;&nbsp;</th>
+        <th (click)="ordenar('clave')" style="cursor:pointer" class=" sticky-3 text-nowrap">Clave
+          <span *ngIf="columnaOrden === 'clave'">{{direccionOrden === 'asc' ? '↑' : '↓'}}</span>
         </th>
-        <th (click)="ordenar('vendedor')" style="cursor:pointer" class=" sticky-3 text-nowrap">
-          Vendedor
-          <span *ngIf="columnaOrden === 'vendedor'">
-            {{direccionOrden === 'asc' ? '↑' : '↓'}}
-          </span>
+        <th (click)="ordenar('vendedor')" style="cursor:pointer" class=" sticky-3 text-nowrap">Vendedor
+          <span *ngIf="columnaOrden === 'vendedor'">{{direccionOrden === 'asc' ? '↑' : '↓'}}</span>
         </th>
 
         <th>Nuevos</th>
@@ -28,99 +27,112 @@
         <th>Financiamiento</th>
         <th>Accesorios</th>
         <th>Seguros</th>
+        <th class="text-center"><small>UDI Garantía Ext.</small></th>
+        <th class="text-center"><small>VF3 Y Mantenimiento</small></th>
         <th>Toma</th>
-        <th class="col-input-number">Otros</th>
-        <th (click)="ordenar('total')" style="cursor:pointer">
-          Total
-          <span *ngIf="columnaOrden === 'total'">
-            {{direccionOrden === 'asc' ? '↑' : '↓'}}
-          </span>
+        <th>Otros</th>
+        <th (click)="ordenar('total')" style="cursor:pointer">Total
+          <span *ngIf="columnaOrden === 'total'"> {{direccionOrden === 'asc' ? '↑' : '↓'}}</span>
         </th>
-
         <th class="text-center col-input-number"> <small>Comisión Factura </small></th>
-        <th class="col-input-number"><small>Desc Nómina</small></th>
-        <th class="text-center col-input-number"><small >PTU/ AG/ DifDeposito/Nom Cheque</small> </th>
-        <th class="text-center col-input-number"><small>Otros descuentos</small></th>
-        <th class="text-center col-input-number"><small>Credito Casa</small></th>
-        <th class="col-input-number">INFONAVIT</th>
+        <ng-container *ngIf="tienePermiso(permisos.viewFormDescuentos)">
+          <th class="col-input-number"><small>Desc Nómina</small></th>
+          <th class="text-center col-input-number"><small >PTU/ AG/ DifDeposito/Nom Cheque</small> </th>
+          <th class="text-center col-input-number"><small>Otros descuentos</small></th>
+          <th class="text-center col-input-number"><small>Credito Casa</small></th>
+          <th class="col-input-number">INFONAVIT</th>
+        </ng-container>
+        
 
         <th (click)="ordenar('monto_dispersar')" style="cursor:pointer" class="text-center col-input-number">
-          <small>Monto a dispersar</small>
-          <span *ngIf="columnaOrden === 'monto_dispersar'">
-            {{direccionOrden === 'asc' ? '↑' : '↓'}}
-          </span>
+          <small>Monto a dispersar</small><span *ngIf="columnaOrden === 'monto_dispersar'">{{direccionOrden === 'asc' ? '↑' : '↓'}}</span>
         </th>
-
-        <th class="col-input-number">Nómina</th>
-        <th>Observaciones</th>
+        <ng-container *ngIf="tienePermiso(permisos.viewFormDescuentos)">
+                <th class="col-input-number">Nómina</th>
+                <th>Observaciones</th>
+        </ng-container>
+    
+        <th><small>Unidades vendidas</small></th>
       </tr>
     </thead>
 
     <tbody formArrayName="filas">
       <tr *ngFor="let i of filasFiltradas" [formGroupName]="i">
 
-        <td class="sticky-1">
-          <input type="checkbox" formControlName="selected">
-        </td>
-        <td class="sticky-2">
-            {{filas.at(i).value.nro_vendedor_as}}
-        </td>
+        <td class="sticky-1"><input type="checkbox" formControlName="selected"></td>
+        <td>{{filas.at(i).value.tipo_vendedor}}</td>
+        <td class="sticky-2">{{filas.at(i).value.nro_vendedor_as}}</td>
+        <td class="text-nowrap">{{filas.at(i).value.clave}}</td>
 
-        <td class="sticky-3 text-nowrap">
-          {{filas.at(i).value.vendedor}}
-        </td>
+        <td class="sticky-3 text-nowrap">{{filas.at(i).value.vendedor}}</td>
 
         <!-- CLICKABLES -->
         <td class="text-end clickable" [ngClass] = "{'fw-bold text-primary' : filas.at(i).value.pend_nuevos}"
-            (click)="onCellClick($event, filas.at(i).value, 'nuevos')">
-          {{filas.at(i).value.nuevos | currency}}
+            (click)="onCellClick($event, filas.at(i).value, 'nuevos')">{{filas.at(i).value.nuevos | currency}}
         </td>
 
         <td class="text-end clickable" [ngClass] = "{'fw-bold text-primary' : filas.at(i).value.pend_seminuevos}"
-            (click)="onCellClick($event, filas.at(i).value, 'seminuevos')">
-          {{filas.at(i).value.seminuevos | currency}}
+            (click)="onCellClick($event, filas.at(i).value, 'seminuevos')">{{filas.at(i).value.seminuevos | currency}}
         </td>
 
         <td class="text-end clickable" [ngClass] = "{'fw-bold text-primary' : filas.at(i).value.pend_financiamiento}"
-            (click)="onCellClick($event, filas.at(i).value, 'financiamiento')">
-          {{filas.at(i).value.financiamiento | currency}}
+            (click)="onCellClick($event, filas.at(i).value, 'financiamiento')">{{filas.at(i).value.financiamiento | currency}}
         </td>
 
         <td class="text-end clickable" [ngClass] = "{'fw-bold text-primary' : filas.at(i).value.pend_accesorios}"
-            (click)="onCellClick($event, filas.at(i).value, 'accesorios')">
-          {{filas.at(i).value.accesorios | currency}}
+            (click)="onCellClick($event, filas.at(i).value, 'accesorios')">{{filas.at(i).value.accesorios | currency}}
         </td>
  
         <td class="text-end clickable" [ngClass] = "{'fw-bold text-primary' : filas.at(i).value.pend_seguros}"
-            (click)="onCellClick($event, filas.at(i).value, 'seguros')">
-          {{filas.at(i).value.seguros | currency}}
+            (click)="onCellClick($event, filas.at(i).value, 'seguros')">{{filas.at(i).value.seguros | currency}}
         </td>
-
+        <td class="text-end">{{filas.at(i).value.garantia_extendida | currency}}</td>
+        <td class="text-end">{{filas.at(i).value.seguro_vf3 | currency}}
+        </td>
         <td class="text-end clickable"  [ngClass] = "{'fw-bold text-primary' : filas.at(i).value.pend_toma}"
-            (click)="onCellClick($event, filas.at(i).value, 'toma_de_unidades')">
-          {{filas.at(i).value.toma_unidades | currency}}
+            (click)="onCellClick($event, filas.at(i).value, 'toma_de_unidades')">{{filas.at(i).value.toma_unidades | currency}}
+        </td>
+        <td class="text-end clickable">
+          <div class="d-flex justify-content-between gap-1">
+              <span (click)="onCellClick($event, filas.at(i).value, 'otros')"> {{filas.at(i).value.otros | currency}} </span>   <button *ngIf="tienePermiso(permisos.btnAddOtros)" class="btn btn-sm btn-warning fw-bold" (click)="openModalOtro(filas.at(i).value)"><i class="fas fa-plus"></i></button> 
+          </div> 
         </td>
 
-        <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="otros"></td>
+        <!-- <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="otros"></td> -->
 
         <td class="text-end fw-bold">
           {{filas.at(i).value.total | currency}}
         </td>
 
         <!-- EDITABLES -->
-        <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="comision_factura"></td>
-        <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="desc_nomina"></td>
-        <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="prestaciones"></td>
-        <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="otros_descuentos"></td>
-        <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="desc_c_casa"></td>
-        <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="infonavit"></td>
+        <td class="text-end fw-bold">{{filas.at(i).value.comision_factura | currency}}</td>
 
+        <ng-container *ngIf="tienePermiso(permisos.viewFormDescuentos)">
+          <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="desc_nomina"></td>
+          <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="prestaciones"></td>
+          <td class="text-end clickable">
+            <div class="d-flex justify-content-between gap-1">
+              <span (click)="onCellClick($event, filas.at(i).value, 'otros_descuentos')"> {{filas.at(i).value.otros_descuentos | currency}} </span>   
+              <button  *ngIf="tienePermiso(permisos.btnAddOtros)" class="btn btn-sm btn-warning fw-bold" (click)="openModalOtro(filas.at(i).value)"><i class="fas fa-plus"></i></button> 
+            </div>
+          </td>
+          <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="desc_c_casa"></td>
+          <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="infonavit"></td>
+        </ng-container>
+  
         <td class="text-end fw-bold">
           {{filas.at(i).get('monto_dispersar')?.value | currency}}
         </td>
+        <ng-container *ngIf="tienePermiso(permisos.viewFormDescuentos)">
+          <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="nomina"></td>
+          <td><input type="text" class="form-control form-control-sm"  formControlName="observaciones"></td>
+        </ng-container>
+        
 
-        <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="nomina"></td>
-         <td><input type="text" class="form-control form-control-sm"  formControlName="observaciones"></td>
+
+        <td class="text-center clickable fw-bold">
+          {{filas.at(i).value.unidades_vendidas}}
+        </td>
 
       </tr>
     </tbody>

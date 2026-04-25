@@ -1,6 +1,4 @@
 export const pmsParqueVehciular = {
-    
-
     btnAddVehiculo :'view btn alta vehiculo',
     btnAutorizarVehiculo :'view bnt autorizar vehiculo',
     btnEliminarVehiculo :'view btn eliminar vehiculo',
@@ -35,9 +33,27 @@ export const permisosVendedoresAgencias = {
     optionRP: 'view select agencias rp',
 }
 
-export const catalogos = {
-    switchCambioInterfaz : '',
-    // ver interfazC : '',
-    btnUpdateVendedor : '',
-    btnDeleteVendedor : '',   
+export const  permisosComisonsionesVentasNuevos = {
+     colEntregados : 'view col entregados',
+     colBdc : 'view col bdc',
+     colVBdc : 'view col validacion bdc',
+     colValidados: 'view col validacion gastos',
+     colFormGastos: 'view cols gastos',
+     colAcciones: 'view col acciones',
+     colGastos: 'view cols gastos',
+     colPagados: 'view cols pagados',
+     btnEntregados: 'view btn entrgados vehi',
+     btnGastos: 'view btn gastos vehi',
+     btnValidados: 'view btn validacion gastos vehi', 
+     btnValidaBdc: 'view btn validacion bdc', 
+     btnBdc: 'view btn reclamo bdc', 
+}
+
+export const permisosConcentradoComisiones = {
+    btnBuscarCorte : '',
+    selectAgencias : '',
+    btnGuardarCorte : '',
+    btnAddOtros : '',
+    viewDetalles : '',
+    viewFormDescuentos: ''
 }

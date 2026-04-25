@@ -74,6 +74,7 @@
             #tablaConcentradoComisiones
             [data]="data"
             (cellClick)="onCellClick($event)"
+            (btnModalOtro)="abrirModalOtro($event)"
             (seleccionados)="onSeleccionados($event)">
             </app-tabla-concentrado-comisiones>
 
@@ -86,7 +87,7 @@
 <div *ngIf="data.length > 0" class="card">
     <div class="card-body">
         <div class="d-flex justify-content-end align-items-center">
-            <button (click)="generarCorte()" class="btn btn-sm btn-primary">
+            <button  *ngIf="tienePermiso(permisos.btnGuardarCorte)" (click)="generarCorte()" class="btn btn-sm btn-primary">
                 Guardar Corte
             </button>
         </div>

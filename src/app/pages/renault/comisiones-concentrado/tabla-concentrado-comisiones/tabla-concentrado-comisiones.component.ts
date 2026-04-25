@@ -8,6 +8,10 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
+import { ModalOtroComponent } from '../../comisiones-otros/modal-otro/modal-otro.component';
+import { PermisosService } from 'src/app/core/services/permisos.service';
+import { permisosConcentradoComisiones } from 'src/app/shared/constants/permisos';
 
 @Component({
   selector: 'app-tabla-concentrado-comisiones',
@@ -21,18 +25,22 @@ export class TablaConcentradoComisionesComponent implements OnInit, OnChanges {
   @Output() cambios = new EventEmitter<any>();
   @Output() seleccionados = new EventEmitter<any[]>();
   @Output() cellClick = new EventEmitter<{ fila: any, campo: string }>();
+  @Output() btnModalOtro = new EventEmitter<any>();
 
   form!: FormGroup;
 
   filasFiltradas: number[] = [];
   terminoBusqueda: string = '';
+  public modalRef?: BsModalRef;
 
   columnaOrden: string = '';
   direccionOrden: 'asc' | 'desc' = 'asc';
 
   private inicializando = false;
 
-  constructor(private fb: FormBuilder) {}
+  public permisos = permisosConcentradoComisiones;
+
+  constructor(private fb: FormBuilder, private modalService: BsModalService, private  permisosService: PermisosService) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -66,7 +74,11 @@ export class TablaConcentradoComisionesComponent implements OnInit, OnChanges {
       selected: [false],
       id: [item.id],
       nro_vendedor_as: [item.nro_vendedor_as],
+      agencia: [item.agencia],
+      tipo_vendedor: [item.tipo_vendedor],
       vendedor: [item.vendedor],
+      clave: [item.clave],
+      por_factura: [item.por_factura],
 
       nuevos: [item.nuevos],
       seminuevos: [item.seminuevos],
@@ -81,6 +93,9 @@ export class TablaConcentradoComisionesComponent implements OnInit, OnChanges {
       pend_accesorios: [item.pend_accesorios],
       pend_seguros: [item.pend_seguros],
       pend_toma: [item.pend_toma],
+      garantia_extendida: [item.garantia_extendida],
+      seguro_vf3: [item.seguro_vf3],
+      unidades_vendidas: [item.unidades_vendidas],
 
       otros: [item.otros],
       total: [0],
@@ -117,9 +132,9 @@ calcularFila(group: FormGroup) {
   const toma           = limpiar(group.get('toma_unidades')?.value);
   const otros          = limpiar(group.get('otros')?.value);
   const nomina         = limpiar(group.get('nomina')?.value);
-
+  const por_factura    = limpiar(group.get('por_factura')?.value);
   const total          = parseFloat((nuevos + seminuevos + financiamiento + accesorios + seguros + toma + otros).toFixed(2));
-  const comFactura     = parseFloat((total * 0.12).toFixed(2));
+  const comFactura     = parseFloat((total * por_factura).toFixed(2));
   const descuentos     = parseFloat((
     limpiar(group.get('desc_nomina')?.value)      +
     limpiar(group.get('prestaciones')?.value)     +
@@ -190,14 +205,12 @@ calcularFila(group: FormGroup) {
   }
 
   onCellClick(event: MouseEvent, fila: any, campo: string) {
-    event.stopPropagation();
-    this.cellClick.emit({ fila, campo });
+    if(this.tienePermiso(this.permisos.viewDetalles)){
+          event.stopPropagation();
+          this.cellClick.emit({ fila, campo });
+    }
   }
 
-  // emitirSeleccionados() {
-  //   const seleccionados = this.filas.value.filter((f: any) => f.selected);
-  //   this.seleccionados.emit(seleccionados);
-  // }
 
   emitirSeleccionados() {
     const seleccionados = this.filas.controls
@@ -214,5 +227,15 @@ calcularFila(group: FormGroup) {
   toggleAll(event: any) {
     const checked = event.target.checked;
     this.filas.controls.forEach(f => f.get('selected')?.setValue(checked));
+  }
+
+    public openModalOtro(data:any) {
+      this.btnModalOtro.emit(data);
+    }
+
+    
+tienePermiso(permiso: string = null): boolean {
+  if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
   }
 }

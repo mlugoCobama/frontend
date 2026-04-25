@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
 import { ComisionesService } from 'src/app/core/services/nissan/comisiones.service';
 import { PermisosService } from 'src/app/core/services/permisos.service';
-
+import { permisosVendedoresAgencias } from '../../constants/permisos';
 @Component({
   selector: 'app-select-agencia-vendedor',
   templateUrl: './select-agencia-vendedor.component.html',
@@ -22,6 +22,7 @@ export class SelectAgenciaVendedorComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
   private vendedorPendiente: string | null = null;
+  public permisos = permisosVendedoresAgencias;
 
   constructor(
     private fb: FormBuilder,
@@ -40,6 +41,9 @@ export class SelectAgenciaVendedorComponent implements OnInit, OnDestroy {
 
     const empresa = this.getEmpresaUsuario();
     this.formulario.patchValue({ agencia: empresa.intercompania });
+    if(!this.tienePermiso(this.permisos.selectAgencias)){
+      this.formulario.get('agencia')?.disable();
+    }
   }
 
   ngOnDestroy(): void {
@@ -119,6 +123,21 @@ export class SelectAgenciaVendedorComponent implements OnInit, OnDestroy {
     { value: '4',   name: 'Renault Pachuca',      permiso: 'view select agencias rp' },
   ];
 
+
+  private parseAgencia(intercompania: string): string | null {
+  const mapa: Record<string, string | null> = {
+    '7051': '730',
+    '712': '714',
+    '710': '710',
+    '333': '',
+    '7064': '1',
+    '7063': '3',
+    '7062': '2',
+    '7061': '4',
+  };
+  return mapa[intercompania] ?? intercompania;
+}
+
   filtrarAgencias(cadena: string) {
     const filtro = (cadena || '').toLowerCase();
 
@@ -137,9 +156,9 @@ export class SelectAgenciaVendedorComponent implements OnInit, OnDestroy {
 
   getEmpresaUsuario() {
     const usuarioActual = this.localStorage.getItem('currentUser');
-    const intercompania = usuarioActual['usuarioActivo'][0].intercompania;
+    const numIntercompania = usuarioActual['usuarioActivo'][0].intercompania;
     const nombreEmpresa = usuarioActual['usuarioActivo'][0].empresa ?? 'No especificada';
-
+    const intercompania = this.parseAgencia(numIntercompania);
     return { intercompania, nombreEmpresa };
   }
 

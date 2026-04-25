@@ -28,7 +28,7 @@ export class TomaUnidadFormComponent {
       vehiculo: ['', [Validators.required]],
       numero_serie: ['', [Validators.required]],
       tipo_apv: ['', [Validators.required]],
-      comision_apv_pesos: [null, Validators.required],
+      comision_apv_pesos: [null, [Validators.required, Validators.min(1)]],
       fecha_toma: ['', Validators.required],
       observaciones: [null]
     });

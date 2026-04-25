@@ -3,11 +3,11 @@
   <div class="row">
 
     <!-- Por Inventario -->
-    <div class="mb-2 col-lg-4">
+    <div class="mb-2 col-lg-3">
       <label class="form-label">Inventario</label>
-      <input type="text" class="form-control form-control-sm"
+      <input type="text" class="form-control form-control-sm bg-light"
              placeholder="Inventario"
-             formControlName="por_inventario">
+             formControlName="por_inventario" readonly>
       <div class="text-danger small"
            *ngIf="form.get('por_inventario')?.touched && form.get('por_inventario')?.invalid">
         El campo Inventario es requerido
@@ -15,7 +15,7 @@
     </div>
 
         <!-- Fecha Toma -->
-    <div class="mb-2 col-lg-4">
+    <div class="mb-2 col-lg-3">
       <label class="form-label">Fecha Toma</label>
       <input type="date" class="form-control form-control-sm"
              formControlName="fecha_toma">
@@ -26,11 +26,11 @@
     </div>
 
     <!-- Vehículo -->
-    <div class="mb-2 col-lg-4">
+    <div class="mb-2 col-lg-6">
       <label class="form-label">Vehículo</label>
-      <input type="text" class="form-control form-control-sm"
+      <input type="text" class="form-control form-control-sm bg-light"
              placeholder="Vehículo"
-             formControlName="vehiculo">
+             formControlName="vehiculo" readonly>
       <div class="text-danger small"
            *ngIf="form.get('vehiculo')?.touched && form.get('vehiculo')?.invalid">
         El campo Vehículo es requerido
@@ -40,9 +40,9 @@
     <!-- Número de Serie -->
     <div class="mb-2 col-lg-4">
       <label class="form-label">Número de Serie</label>
-      <input type="text" class="form-control form-control-sm"
+      <input type="text" class="form-control form-control-sm bg-light"
              placeholder="Número de Serie"
-             formControlName="numero_serie">
+             formControlName="numero_serie" readonly>
       <div class="text-danger small"
            *ngIf="form.get('numero_serie')?.touched && form.get('numero_serie')?.invalid">
         El campo Número de Serie es requerido
@@ -59,6 +59,10 @@
       <div class="text-danger small"
            *ngIf="form.get('comision_apv_pesos')?.touched && form.get('comision_apv_pesos')?.invalid">
         El campo Importe es requerido
+      </div>
+      <div class="text-danger small"
+          *ngIf="form.get('comision_apv_pesos')?.touched && form.get('comision_apv_pesos')?.errors?.['min']">
+        El importe mínimo es $1
       </div>
     </div>
 

@@ -8,6 +8,9 @@ import { firstValueFrom } from 'rxjs';
 import Swal from 'sweetalert2';
 import { FiltroComsionesGenericoComponent } from 'src/app/shared/ui/filtro-comsiones-generico/filtro-comsiones-generico.component';
 import { TablaConcentradoComisionesComponent } from './tabla-concentrado-comisiones/tabla-concentrado-comisiones.component';
+import { ModalOtroComponent } from '../comisiones-otros/modal-otro/modal-otro.component';
+import { permisosConcentradoComisiones } from 'src/app/shared/constants/permisos';
+import { PermisosService } from 'src/app/core/services/permisos.service';
 
 @Component({
   selector: 'app-comisiones-concentrado',
@@ -22,27 +25,24 @@ export class ComisionesConcentradoComponent implements OnInit{
   hayDatos = false;
   public totales;
   public modalRef?: BsModalRef;
+  seleccionados: any[] = [];
+  agenciaActual:any = '0';
+  
+  public permisos = permisosConcentradoComisiones;
 
    @ViewChild('formFiltro', { static: false }) formFiltro!: FiltroComsionesGenericoComponent;
    @ViewChild('tablaConcentradoComisiones', { static: false }) tablaConcentradoComisiones!: TablaConcentradoComisionesComponent;
   
   constructor(private concentradoComisiones: ConcentradoComisionesService,
      private modalService: BsModalService,
-     private alertas:SwalComprsServiceService ){
+     private alertas:SwalComprsServiceService,
+     private  permisosService: PermisosService){
   }
 
   ngOnInit(): void {
   }
 
 
-
-//  obtenerTotales(rows) {
-//   // Buscamos la fila que tenga el texto "TOTAL GENERAL"
-//   const totales = rows.find(r => r.vendedor === 'TOTAL GENERAL');
-//   return totales || null;
-// }
-
-agenciaActual:any = '0';
   buscarDatos(params:any){
     this.isLoad = true;
     this.agenciaActual = params.agencia;
@@ -51,7 +51,6 @@ agenciaActual:any = '0';
       (response: any) => {
         if (response) {
           this.data = response.data;
-          // this.totales = this.obtenerTotales(response.data);
           this.isLoad = false;
         } else {
           console.log(response.message);
@@ -161,9 +160,31 @@ generarCorte(): void {
       });
   }
 }
-seleccionados: any[] = [];
+
+public abrirModalOtro(data:any) {
+      const initialState: ModalOptions = {
+        initialState: {
+          vendedor: data
+        },
+        class: "modal-lg",
+      };
+      this.modalRef = this.modalService.show(
+        ModalOtroComponent,
+        initialState,
+      );
+      this.modalRef.content.closeBtnName = "Close";
+      this.modalRef.content.event.subscribe(() => {
+         this.buscarDatos(this.getAgencia());
+      });
+    }
+
 
 onSeleccionados(registros: any[]) {
   this.seleccionados = registros;
 }
+
+tienePermiso(permiso: string = null): boolean {
+  if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
+  }
 }

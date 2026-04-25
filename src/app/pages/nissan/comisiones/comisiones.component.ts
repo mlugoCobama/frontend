@@ -8,6 +8,7 @@ import { PermisosService } from 'src/app/core/services/permisos.service';
 import { FiltroComponent } from "./filtro/filtro.component";
 import { firstValueFrom } from 'rxjs';
 import { ActivatedRoute } from "@angular/router";
+import { permisosComisonsionesVentasNuevos } from "src/app/shared/constants/permisos";
 
 
 @Component({
@@ -24,9 +25,11 @@ export class ComisionesComponent implements AfterViewInit {
   public ready: boolean = false;
   public isLoadig: boolean = false;
   public estado: any = 0;
+  public permisos = permisosComisonsionesVentasNuevos;
 
   public modelCamposGastos = ['otros','gasolina','previa','descuentos','descuento_impulso',
-                              'traslados','subsidios','descuento_da','cortesia','accesorios','placas', 'porcentaje_bdc', 'comision_garantizada'
+                              'traslados','subsidios','descuento_da','cortesia','accesorios','placas',
+                               'comision_garantizada','comision_garantizada_gerencia', 'comision_garantizada_bdc','comision_garantizada_cor_bdc',
                             ];
 
   public hoy = new Date().toISOString().split("T")[0];
@@ -104,6 +107,9 @@ export class ComisionesComponent implements AfterViewInit {
     const fg = this.fb.group({
       id_venta: [row.id ?? false],
       entregado: [row.entregado ?? false],
+      bdc: [row.bdc ?? false],
+      v_bdc: [row.v_bdc ?? false],
+
       estatus: [{ value: row.estatus, disabled: true }],
       fecha_factura: [{ value: row.fecha_factura, disabled: true }],
       no_factura: [{ value: row.no_factura, disabled: true }],
@@ -136,13 +142,18 @@ export class ComisionesComponent implements AfterViewInit {
       accesorios: [0],
       placas: [0],
       porcentaje_bdc: [0],
+      // comisiones garantizadas
       comision_garantizada: [0],
+      comision_garantizada_gerencia: [0],
+      comision_garantizada_bdc: [0],
+      comision_garantizada_cor_bdc: [0],
       // Calculados
       total_gastos: [{ value: 0, disabled: true }],
       utlidad_gastos: [{ value: 0, disabled: true }],
       utilidad_final: [{ value: 0, disabled: true }],
       comision_apv: [{ value: 0, disabled: true }],
       comision_bdc: [{ value: 0, disabled: true }],
+      estatusTexto: [row.estatusTexto ?? ''],
     });
 
     this.calcularResultados(fg);
@@ -158,6 +169,27 @@ export class ComisionesComponent implements AfterViewInit {
 
     if (row.validado) {
       fg.get('validado')?.disable({ emitEvent: false });
+    }
+    if (row.bdc) {
+      fg.get('bdc')?.disable({ emitEvent: false });
+    }
+    if (row.v_bdc) {
+      fg.get('v_bdc')?.disable({ emitEvent: false });
+    }
+
+    if(row.v_bdc && row.bdc){
+      fg.patchValue({
+        porcentaje_bdc : 2
+      })
+    }else{
+      fg.get('porcentaje_bdc')?.disable({ emitEvent: false });
+      fg.get('comision_garantizada_bdc')?.disable({ emitEvent: false });
+      fg.get('comision_garantizada_cor_bdc')?.disable({ emitEvent: false });
+    }
+
+    if(Number(row.estatus) > 2){
+      fg.get('bdc')?.disable({ emitEvent: false });
+      fg.get('v_bdc')?.disable({ emitEvent: false });
     }
 
     return fg;
@@ -179,9 +211,11 @@ export class ComisionesComponent implements AfterViewInit {
 
     const reglas: Record<string, string[]> = {
       NU: ['otros','gasolina','previa','descuentos','descuento_impulso',
-      'traslados','subsidios','cortesia', 'porcentaje_bdc', 'comision_garantizada' ],
+      'traslados','subsidios','cortesia', 'porcentaje_bdc', 'comision_garantizada',
+      'comision_garantizada_gerencia', 'comision_garantizada_bdc','comision_garantizada_cor_bdc' ],
       SEMI: ['otros','gasolina','previa','descuentos','descuento_impulso',
-      'traslados','subsidios','descuento_da','accesorios','placas', 'porcentaje_bdc', 'comision_garantizada'],
+      'traslados','subsidios','descuento_da','accesorios','placas', 'porcentaje_bdc', 'comision_garantizada',
+      'comision_garantizada_gerencia', 'comision_garantizada_bdc','comision_garantizada_cor_bdc'],
     };
 
     const campos = this.modelCamposGastos;
@@ -223,10 +257,11 @@ export class ComisionesComponent implements AfterViewInit {
     const comisionGuardada = Number(fg.get('comision_apv')?.value)
     const utilidadInicial = Number(fg.get('utilidad_inicial')?.value) || 0;
     const porcentaje = (Number(fg.get('tipo_venta_porcentaje')?.value) - porcentajeBdc)  || 0;
-    const comGarantizada =  Number(fg.get('comision_garantizada')?.value)
+    const comGarantizada =  Number(fg.get('comision_garantizada')?.value);
+    const comGarantizadaBdc = Number(fg.get('comision_garantizada_bdc')?.value);
     const utilidadAC = utilidadInicial - totalGastos;
     const comision =  comGarantizada > 0 ? comGarantizada : (utilidadAC > 0 ?  utilidadAC * porcentaje : 0);
-    const comisionBDC = utilidadAC > 0 ? utilidadAC * porcentajeBdc : 0; 
+    const comisionBDC = comGarantizadaBdc > 0 ? comGarantizadaBdc : ( utilidadAC > 0 ? utilidadAC * porcentajeBdc : 0); 
     const utilidadFinal = utilidadAC - comision - comisionBDC;
   
 
@@ -260,7 +295,7 @@ export class ComisionesComponent implements AfterViewInit {
       cortesia: g.cortesia ?? 0,
       accesorios: g.accesorios ?? 0,
       placas: g.placas ?? 0,
-      porcentaje_bdc: g.porcentaje_bdc ?? 0,
+      porcentaje_bdc: g.porcentaje_bdc ?? 0, 
       comision_garantizada: g.comision_garantizada ?? 0
     }, { emitEvent: true });
   }
@@ -270,7 +305,7 @@ export class ComisionesComponent implements AfterViewInit {
    */
   cargarVentas() {
     this.ventas.clear();
-        this.datos.forEach(row => {
+        this.datos.forEach((row:any) => {
           this.ventas.push(this.crearVenta(row));
           this.pagando.push(false);
           this.devolviendo.push(false);
@@ -305,7 +340,10 @@ export class ComisionesComponent implements AfterViewInit {
         cortesia: v.cortesia,
         accesorios: v.accesorios,
         placas: v.placas,
-        comision_garantizada: v.comision_garantizada
+        comision_garantizada: v.comision_garantizada,
+        comision_garantizada_bdc: v.comision_garantizada_comision_garantizada_bdc,
+        comision_garantizada_gerencia: v.comision_garantizada_gerencia,
+        comision_garantizada_cor_bdc: v.comision_garantizada_cor_bdc
       }));
       
       this.comisionesService.save(payload).subscribe((response) => {
@@ -332,20 +370,10 @@ export class ComisionesComponent implements AfterViewInit {
   }
 
   /** Recupera los datos que fueron marcados como entregados */
-  marcarEntregados() {
-    const payload = this.ventas.getRawValue()
-      .filter(v => v.entregado)
-      .map(v => ({
-        id : v.id_venta,
-        entregado: true
-      }));
-    return payload;
-  }
-
   /** Guarda los datos marcados como entregados */
   guardarEntregados(){
     this.guardandoE = true;
-    const seleccionados = this.marcarEntregados();
+    const seleccionados = this.marcarLike('entregado');
     this.comisionesService.guardarEntregados(seleccionados).subscribe((response) => {
       if (response.status === "success") {
           this.swal.mostrarAlerta(
@@ -437,22 +465,10 @@ export class ComisionesComponent implements AfterViewInit {
     this.resetFilter();
   }
 
-
-  /** Recupera los datos que fueron marcados como validados */
-  marcarValidados() {
-    const payload = this.ventas.getRawValue()
-      .filter(v => v.validado)
-      .map(v => ({
-        id : v.id_venta,
-        validado: true
-      }));
-    return payload;
-  }
-
   /** Guarda los datos marcados como validados */
   guardarValidados(){
     this.guardandoV = true;
-    const seleccionados = this.marcarValidados();
+    const seleccionados = this.marcarLike('validado');
     this.comisionesService.guardarValidados(seleccionados).subscribe((response) => {
       if (response.status === "success") {
           this.swal.mostrarAlerta(
@@ -472,6 +488,60 @@ export class ComisionesComponent implements AfterViewInit {
     },(error) => {
           this.swal.mostrarAlerta("Error", `Error fetching data: ${error}`, "error" , "danger" );
           this.guardandoV = false;
+          return;
+      });
+  }
+
+  guardandoBdc: boolean = false;
+  guardandovBdc: boolean = false;
+  guardarBDC(){
+    this.guardandoBdc = true;
+    const seleccionados = this.marcarLike('bdc');
+    this.comisionesService.guardarBDC(seleccionados).subscribe((response) => {
+      if (response.status === "success") {
+          this.swal.mostrarAlerta(
+            "Listo", response.message,
+            "success", "success"
+            );
+            this.resetFormArray();
+            this.guardandoBdc = false;
+      } else {
+          this.swal.mostrarAlerta(
+            "Error", response.message,
+            "error", "danger"
+            );
+            this.guardandoBdc = false;
+            return;
+      }
+    },(error) => {
+          this.swal.mostrarAlerta("Error", `Error fetching data: ${error}`, "error" , "danger" );
+          this.guardandoBdc = false;
+          return;
+      });
+  }
+
+  guardarValidadosBDC(){
+    this.guardandovBdc = true;
+    const seleccionados = this.marcarLike('v_bdc');
+    this.comisionesService.guardarValidadosBDC(seleccionados).subscribe((response) => {
+      if (response.status === "success") {
+          this.swal.mostrarAlerta(
+            "Listo", response.message,
+            "success", "success"
+            );
+            this.resetFormArray();
+            this.guardandovBdc = false;
+      } else {
+          this.swal.mostrarAlerta(
+            "Error", response.message,
+            "error", "danger"
+            );
+            this.guardandovBdc = false;
+            return;
+      }
+    },(error) => {
+          this.swal.mostrarAlerta("Error", `Error fetching data: ${error}`, "error" , "danger" );
+          this.guardandovBdc = false;
           return;
       });
   }
@@ -560,7 +630,14 @@ filaSeleccionada: number | null = null;
     this.filaSeleccionada = id;
   }
 
-
-
+  marcarLike(campo: string) {
+  const payload = this.ventas.getRawValue()
+    .filter(v => v[campo])
+    .map(v => ({
+      id: v.id_venta,
+      [campo]: true
+    }));
+  return payload;
+}
 
 }

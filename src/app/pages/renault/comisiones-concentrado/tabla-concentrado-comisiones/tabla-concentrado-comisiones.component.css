@@ -48,7 +48,5 @@ td:hover {
 }
 
 .col-input-number{
- width: 7rem;
- min-width:7rem;
- max-width:7rem;
+ min-width: 8rem;
 }
