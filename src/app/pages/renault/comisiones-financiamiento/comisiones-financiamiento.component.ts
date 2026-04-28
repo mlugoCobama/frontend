@@ -53,7 +53,7 @@ export class ComisionesFinanciamientoComponent implements OnInit {
       tooltip: 'Ver documento de soporte',
       // Solo si tiene archivo cargado
       visible: (item) => !!item.ruta_archivo,
-      accion:  async (item) => await this.verDocumento(item),
+      accion:  async (item) => await this.verArchivo(item.id),
     },
     {
       icono:   'fas fa-exclamation-triangle',
@@ -304,11 +304,11 @@ public seleccionados: any[] = [];
     this.alertas.mostrarAlerta('Comentario:', item.comentario ?? 'No hay comentarios', 'info', 'info' )
   }
 
-async verDocumento(item: any): Promise<void> {
-    // Abrir el archivo en una nueva pestaña
-    if (item.ruta_archivo) {
-      window.open(`/storage/${item.ruta_archivo}`, '_blank');
-    }
+async verArchivo(id:any) {
+    this.financiamientoService.obtenerArchivo(id).subscribe((data: Blob) => {
+      const url = window.URL.createObjectURL(data);
+      window.open(url); // abre el archivo en una nueva pestaña
+    });
   }
 
 asignarEstado() {

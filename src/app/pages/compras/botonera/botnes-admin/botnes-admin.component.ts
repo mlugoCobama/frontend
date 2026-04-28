@@ -13,6 +13,12 @@ import Swal from 'sweetalert2';
 export class BotnesAdminComponent implements OnInit{
 
   public enEsts = EstadoSolicitud;
+
+  @Input() isLoadingGenerarOrden = false;
+  @Input() isLoadingCotizar = false;
+  @Input() isLoadingVolverACotizar = false;
+  @Input() isLoadingCancelar = false;
+  @Input() isLoadingDevolverRevision = false;
   
   @Input() status :  any = false;
   @Input() mostrarBoton :  any;
@@ -28,6 +34,7 @@ export class BotnesAdminComponent implements OnInit{
   @Output() mostrarCotizacion = new EventEmitter<void>();
   @Output() cancelarSolicitud = new EventEmitter<void>();
   @Output() devolverRevision = new EventEmitter<void>();
+  @Output() volverCotizar = new EventEmitter<void>();
 
   constructor(
     public comprasService: ComprasService,
@@ -45,6 +52,10 @@ export class BotnesAdminComponent implements OnInit{
 
   clickCotizar() {
       this.mostrarCotizacion.emit();
+  }
+
+  clickVolverACotizar() {
+      this.volverCotizar.emit();
   }
 
   clickCancelar() {

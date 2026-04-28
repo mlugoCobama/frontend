@@ -41,4 +41,12 @@ export class FinanciamientoService {
   delete(id: number) {
     return this.http.delete(`${environment.apiUrl}renault/financiamiento/${id}`);
   }
+
+   obtenerArchivo(id: number): Observable<Blob> {
+    return this.http.get(`${environment.apiUrl}renault/financiamiento/archivo/${id}`, {
+      responseType: 'blob' 
+    });
+  }
+
+
 }

@@ -36,6 +36,10 @@ export class CotizacionesService {
     return this.http.get(environment.apiUrl + `compras/solicitar-autorizacion/${id}`, {headers});
   }
 
+    public volverCotizar(id: number): Observable<any> {
+    return this.http.get(environment.apiUrl + `compras/Cotizaciones/volver-a-cotizar/${id}`, {headers});
+  }
+
   /**
    * Guarda los datos y archivos de cotizaciones
    * @param data precios y archivos ligados a la cotización (formData)

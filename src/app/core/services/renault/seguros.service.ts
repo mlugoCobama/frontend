@@ -42,4 +42,10 @@ export class SegurosService {
   delete(id: number) {
     return this.http.delete(`${environment.apiUrl}renault/seguro/${id}`);
   }
+  
+  obtenerArchivo(id: number): Observable<Blob> {
+    return this.http.get(`${environment.apiUrl}renault/financiamiento/archivo/${id}`, {
+      responseType: 'blob' 
+    });
+  }
 }

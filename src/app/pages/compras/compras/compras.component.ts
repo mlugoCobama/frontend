@@ -16,6 +16,7 @@ import { SwalComprsServiceService } from "src/app/core/services/compras/swal-com
 import { UsuariosService } from "src/app/core/services/compras/usuarios.service";
 
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
+import { CotizacionesService } from "src/app/core/services/compras/cotizaciones/cotizaciones.service";
 
 @Component({
   selector: "app-compras",
@@ -46,6 +47,13 @@ export class ComprasComponent implements OnInit {
   public rawEmpresas: any = [];
   public usuarioSolicita: any;
 
+
+  isLoadingGenerarOrden = false;
+  isLoadingCotizar = false;
+  isLoadingVolverACotizar = false;
+  isLoadingCancelar = false;
+  isLoadingDevolverRevision = false;
+
   private readonly STORAGE_KEY_VISTA = 'vistaComprasKanban';
 
   /**
@@ -68,7 +76,8 @@ export class ComprasComponent implements OnInit {
     public comprasService: ComprasService,
     private modalService: BsModalService,
     private localStorage: LocalStorageServiceService,
-    private usuariosService: UsuariosService
+    private usuariosService: UsuariosService,
+    private cotizacionesService: CotizacionesService,
   ) {}
 
   public ngOnInit(): void {
@@ -111,6 +120,33 @@ export class ComprasComponent implements OnInit {
       },
       (error) => {
         this.alertasService.mostrarAlerta("Error!", error, "error", "danger");
+        // console.error("Error fetching data:", error);
+      }
+    );
+  }
+
+  public volverAcotizar() {
+    this.isLoadingVolverACotizar = true;
+    let folio = '';
+    this.cotizacionesService.volverCotizar(this.solicitudCompra.id).subscribe(
+      (response) => {
+        if (response) {
+          this.alertasService.mostrarAlerta("Listo!",response.message,"success","success");
+          folio = this.solicitudCompra.folio;
+          this.regresar();
+          this.busqueda = folio;
+          this.isLoadingVolverACotizar = false;
+          // this.isLoading = false;
+        } else {
+          this.alertasService.mostrarAlerta("Error!",response.message,"error","danger"
+          );
+          this.isLoadingVolverACotizar = false;
+          console.log(response.message);
+        }
+      },
+      (error) => {
+        this.alertasService.mostrarAlerta("Error!", error, "error", "danger");
+        this.isLoadingVolverACotizar = false;
         // console.error("Error fetching data:", error);
       }
     );

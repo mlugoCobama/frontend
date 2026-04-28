@@ -87,10 +87,11 @@ export class BtnsAutorizacionComponent implements OnInit {
       showCancelButton: true,
       cancelButtonText: 'No',
       customClass: {
-        confirmButton: 'btn btn-danger px-4',
+        confirmButton: 'btn btn-danger ms-2 px-4',
         cancelButton: 'btn btn-primary ms-2 px-4',
       },
       buttonsStyling: false,
+      reverseButtons: true,
       preConfirm: (razon) => {
         if (!razon || razon.trim() === '') {
           Swal.showValidationMessage('Debes ingresar una razón válida');
@@ -163,10 +164,11 @@ export class BtnsAutorizacionComponent implements OnInit {
       confirmButtonText: " SI",
       denyButtonText: `NO`,
       customClass: {
-        confirmButton: "btn btn-success px-4",
+        confirmButton: "btn btn-success ms-2 px-4",
         denyButton: "btn btn-danger ms-2 px-4",
       },
       buttonsStyling: false,
+      reverseButtons: true,
     }).then((result) => {
       if (result.isConfirmed) {
         this.working = true;

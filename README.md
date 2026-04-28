@@ -32,3 +32,9 @@ Se integra el nuevo módulo de Gestión de Comisiones con los siguientes apartad
 - **Seguros**
 - **Accesorios**
 ---
+**Fecha de liberación:** 25 de abril de 2025
+## Compras — Cotizaciones
+- Se integra el flujo para recotizacion de compras cuando se encuentren en estado de orden de compra y en surtido
+
+## Comisiones — Seguros, Financiamientos
+- Se integra la capacidad de visualizar archivos previamente cargados

@@ -17,8 +17,15 @@
                 [solicitudSelecionada]="solicitudSelecionada" [tipoCompras]="tipoCompras"
                 [tiposPermitidos]="['1','3']"
                 (devolverRevision)="enviarRevisionSolicitud()"
-                (btnGenerarOC)="btnGenerarOC()" (mostrarCotizacion)="mostrarCotizacion()"
-                (cancelarSolicitud)="cancelarSolicitud()"></app-botnes-admin>
+                (btnGenerarOC)="btnGenerarOC()" 
+                (mostrarCotizacion)="mostrarCotizacion()"
+                (volverCotizar)="volverAcotizar()"
+                (cancelarSolicitud)="cancelarSolicitud()"
+                [isLoadingGenerarOrden] = "isLoadingGenerarOrden"
+                [isLoadingVolverACotizar] = "isLoadingVolverACotizar"
+                [isLoadingCancelar] = "isLoadingCancelar"
+                [isLoadingDevolverRevision] = "isLoadingDevolverRevision"
+                ></app-botnes-admin>
 
               <app-bontones-generales [status]="status" [mostrarBoton]="mostrarBoton"
                 [showBtnAdd] = "tienePermiso('show btn compras generales')"
