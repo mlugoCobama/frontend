@@ -12,6 +12,7 @@ import { UsuariosService } from "src/app/core/services/compras/usuarios.service"
 import { ModalSeguimientoComponent } from '../compras/modal-seguimiento/modal-seguimiento.component';
 import { ModalPreviewOrdenCompraComponent } from '../compras/modal-preview-orden-compra/modal-preview-orden-compra.component';
 import Swal from "sweetalert2";
+import { CotizacionesService } from 'src/app/core/services/compras/cotizaciones/cotizaciones.service';
 
 @Component({
   selector: 'app-compras-macro',
@@ -43,6 +44,12 @@ export class ComprasMacroComponent implements OnInit{
     busqueda2: string = "";
     public usuarioSolicita:any = [];
     public empresas:any = [];
+    
+    isLoadingGenerarOrden = false;
+    isLoadingCotizar = false;
+    isLoadingVolverACotizar = false;
+    isLoadingCancelar = false;
+    isLoadingDevolverRevision = false;
 
   constructor( 
       public ordenesComprasService: OrdenesCompraService,
@@ -51,7 +58,8 @@ export class ComprasMacroComponent implements OnInit{
       private comprasMacro  : ComprasMacroService,
       public comprasService  : ComprasService,
       public localStorage : LocalStorageServiceService,
-      private usuariosService: UsuariosService
+      private usuariosService: UsuariosService,
+      private cotizacionesService: CotizacionesService,
    )
   {}
 
@@ -510,5 +518,32 @@ enviarRevisionSolicitud() {
       );
       }
     });
+  }
+
+    public volverAcotizar() {
+    this.isLoadingVolverACotizar = true;
+    let folio = '';
+    this.cotizacionesService.volverCotizar(this.solicitudCompra.id).subscribe(
+      (response) => {
+        if (response) {
+          this.alertasService.mostrarAlerta("Listo!",response.message,"success","success");
+          folio = this.solicitudCompra.folio;
+          this.regresar();
+          this.busqueda = folio;
+          this.isLoadingVolverACotizar = false;
+          // this.isLoading = false;
+        } else {
+          this.alertasService.mostrarAlerta("Error!",response.message,"error","danger"
+          );
+          this.isLoadingVolverACotizar = false;
+          console.log(response.message);
+        }
+      },
+      (error) => {
+        this.alertasService.mostrarAlerta("Error!", error, "error", "danger");
+        this.isLoadingVolverACotizar = false;
+        // console.error("Error fetching data:", error);
+      }
+    );
   }
 }

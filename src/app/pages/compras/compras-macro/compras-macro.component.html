@@ -27,9 +27,14 @@
               (btnGenerarOC)="btnGenerarOC()"
               (mostrarCotizacion)="mostrarCotizacion()"
               (cancelarSolicitud)="cancelarSolicitud()"
+              (volverCotizar)="volverAcotizar()"
               [tipoCompras] = "tipoCompras"
               [tiposPermitidos]="['2']"
               (devolverRevision)="enviarRevisionSolicitud()"
+              [isLoadingGenerarOrden] = "isLoadingGenerarOrden"
+              [isLoadingVolverACotizar] = "isLoadingVolverACotizar"
+              [isLoadingCancelar] = "isLoadingCancelar"
+              [isLoadingDevolverRevision] = "isLoadingDevolverRevision"
               ></app-botnes-admin>
 
               <app-bontones-generales

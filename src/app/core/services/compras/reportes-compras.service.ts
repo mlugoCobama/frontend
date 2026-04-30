@@ -10,7 +10,7 @@ export class ReportesComprasService {
 
   constructor(private http: HttpClient) {}
 
-  getReportFile(tipo, status, fechaInicial, fechaFinal ){
+  getReportFile(tipo:any, status:any, fechaInicial:any, fechaFinal:any ){
     const url = `${environment.apiUrl}compras/download/SolicutdesCompras/${tipo}/${status}/${fechaInicial}/${fechaFinal}`;
     return this.http.get(url, {
       observe: 'response',
@@ -21,10 +21,11 @@ export class ReportesComprasService {
   private tipoMap: { [key: number]: string } = {
     1: 'compras_grales',
     2: 'compras_macro',
-    3: 'compras_rt'
+    3: 'compras_rt',
+    4: 'compras_autos'
   };
 
-  downloadBlob(response: HttpResponse<Blob>, tipo: number, status: number): void {
+  downloadBlob(response: HttpResponse<Blob>, tipo: number, status: any): void {
     const hoy = new Date();
     const dia   = String(hoy.getDate()).padStart(2, '0');
     const mes   = String(hoy.getMonth() + 1).padStart(2, '0');
@@ -32,8 +33,7 @@ export class ReportesComprasService {
     const fechaStr = `${dia}_${mes}_${anio}`;
 
     const tipoTexto = this.tipoMap[tipo] || `tipo_${tipo}`;
-
-    const filename = `SC_${fechaStr}_${status}_${tipoTexto}.xlsx`;
+    const filename = status == 'all' ?  `GastoGeneralConcentrado_${tipoTexto}_al_${fechaStr}.xlsx` : `SC_${fechaStr}_${status}_${tipoTexto}.xlsx`;
 
     const blob = response.body;
     if (!blob) {
@@ -51,11 +51,11 @@ export class ReportesComprasService {
     a.remove();
   }
 
-  getComprasConcentrado(fechaInicial, fechaFinal, tipo){
+  getComprasConcentrado(fechaInicial:any, fechaFinal:any, tipo:any){
     return this.http.get<any>( `${environment.apiUrl}compras/ReportesCompras/GatoMensualConcentrado/${fechaInicial}/${fechaFinal}/${tipo}`);
   }
 
-  getComprasDetalle(intercompania ,fechaInicial, fechaFinal, tipo){
+  getComprasDetalle(intercompania:any ,fechaInicial:any, fechaFinal:any, tipo:any){
     return this.http.get<any>( `${environment.apiUrl}compras/ReportesCompras/GatoMensualDetalle/${intercompania}/${fechaInicial}/${fechaFinal}/${tipo}`);
   }
 
