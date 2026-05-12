@@ -15,6 +15,7 @@ export class OrdenesServicioComponent implements OnInit{
     { label: 'Taller', number: 11, className: 'alert alert-warning m-0 p-2', color:'warning', nombre: 'Taller', },
     { label: 'Lavado', number: 11, className: 'alert alert-info m-0 p-2', color:'info', nombre: 'Lavado', },
     { label: 'Calidad', number: 11, className: 'alert alert-dark m-0 p-2', color:'dark', nombre: 'Calidad', },
+    { label: 'Terminado', number: 11, className: 'alert alert-success m-0 p-2', color:'primary', nombre: 'Terminado', },
     { label: 'Entregado', number: 11, className: 'alert alert-success m-0 p-2', color:'success', nombre: 'Entregado', },
   ];
 

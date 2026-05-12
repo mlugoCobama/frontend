@@ -1,0 +1,23 @@
+<div class="table-responsive">
+              <table datatable [dtOptions]="dtOptions" class="table table-sm" *ngIf="!isLoad">
+                <thead >
+                  <tr class="text-center">
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Marca</th>
+                    <th scope="col">Modelo</th>
+                    <th scope="col">Núm. de Serie</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of dataInventario"
+                    [ngClass]="{'table-primary': selectedId === item.id}"
+                    (click)="selectRow(item)"
+                   (dblclick)="openEdit(item)">
+                    <td>{{ item.tipo.tipo }}</td>
+                    <td>{{ item.marca }}</td>
+                    <td>{{ item.modelo }}</td>
+                    <td>{{ item.no_serie }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>

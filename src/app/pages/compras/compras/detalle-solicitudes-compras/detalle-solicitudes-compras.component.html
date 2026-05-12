@@ -44,6 +44,10 @@
       (setDataOrdenCompra)="setDataOrdenCompra($event)"
       (actualizarStatus)="updateStatus()" 
       ></app-form-files-facturas>
+      
+    <app-panel-generar-resguardo
+    *ngIf="solicitudCompra.tipo  == 3 && solicitudCompra.estatus >= enEsts.Entregada"
+    ></app-panel-generar-resguardo>
 
   <!-- Fin vista final  -->
   

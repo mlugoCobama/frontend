@@ -1,0 +1,103 @@
+<!-- contrato-form.component.html -->
+<form [formGroup]="contratoForm" class="row g-3">
+
+  <!-- Empresa -->
+  <div class="col-md-4">
+    <label class="form-label">Empresa</label>
+    <select class="form-select form-select-sm" formControlName="empresa">
+      <option value="">Seleccione...</option>
+      <option *ngFor="let e of empresas" [value]="e.intercompania">{{ e.name }}</option>
+    </select>
+  </div>
+
+  <!-- Servicio -->
+  <div class="col-md-4">
+    <label class="form-label">Servicio</label>
+    <select class="form-select form-select-sm" formControlName="servicio">
+      <option value="">Seleccione...</option>
+      <option *ngFor="let s of servicios" [value]="s.id">{{ s.nombre }}</option>
+    </select>
+  </div>
+
+  <!-- Proveedor -->
+  <div class="col-md-4">
+    <label class="form-label">Proveedor</label>
+    <select class="form-select form-select-sm" formControlName="proveedor">
+      <option value="">Seleccione...</option>
+      <option *ngFor="let p of proveedores" [value]="p.id">{{ p.nombre }}</option>
+    </select>
+  </div>
+
+  <!-- Nombre -->
+  <div class="col-md-12">
+    <label class="form-label">Nombre</label>
+    <input type="text" class="form-control form-control-sm" formControlName="nombre" placeholder="Nombre del servicio. Ej. FO 200 mb">
+  </div>
+
+  <!-- Descripción -->
+  <div class="col-12">
+    <label class="form-label">Descripción</label>
+    <textarea class="form-control form-control-sm" rows="3" formControlName="descripcion"></textarea>
+  </div>
+
+
+
+   <!-- Costo base -->
+  <div class="col-md-3">
+    <label class="form-label">Costo base</label>
+    <input type="text" class="form-control form-control-sm" mask="separator.2" thousandSeparator="," prefix="$ " formControlName="costoBase" placeholder="$0.00">
+  </div>
+
+  <!-- Moneda -->
+  <div class="col-md-3">
+    <label class="form-label">Moneda</label>
+    <select class="form-select form-select-sm" formControlName="moneda">
+      <option *ngFor="let m of monedas" [value]="m.value">{{ m.label }}</option>
+    </select>
+  </div>
+
+  <!-- Periodicidad -->
+  <div class="col-md-3">
+    <label class="form-label">Periodicidad <small>(en meses)</small></label>
+    <input type="text" class="form-control form-control-sm" formControlName="periodicidad">
+  </div>
+
+  <!-- Renovable -->
+  <div class="col-md-3 mt-4 pt-4">
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" formControlName="renovable">
+      <label class="form-check-label">Renovable</label>
+    </div>
+    
+  </div>
+
+  <!-- Fechas -->
+  <div class="col-md-4">
+    <label class="form-label">Fecha inicio</label>
+    <input type="date" class="form-control form-control-sm" formControlName="fechaInicio">
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Fecha fin</label>
+    <input type="date" class="form-control form-control-sm" formControlName="fechaFin">
+  </div>
+  <div class="col-md-2">
+    <label class="form-label">Dia Pago</label>
+    <input type="number" min=1 max="31" class="form-control form-control-sm" formControlName="diaPago">
+  </div>
+  
+  <div class="col-md-2">
+    <label class="form-label">Dia Corte</label>
+    <input type="number" min=1 max="31" class="form-control form-control-sm" formControlName="diaCorte">
+  </div>
+
+    <!-- Identificador externo -->
+  <div class="col-md-12">
+    <label class="form-label">Identificador externo</label>
+    <input type="text" class="form-control form-control-sm" placeholder="Identificador Externo. Ej. midomino.com, " formControlName="identificadorExterno">
+  </div>
+
+ 
+
+</form>
+

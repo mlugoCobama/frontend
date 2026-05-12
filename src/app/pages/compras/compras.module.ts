@@ -78,6 +78,8 @@ import { FormDatosPagoComponent } from './proveedores/forms/form-datos-pago/form
 import { ModalActualizarSolicitudComponent } from './compras/modal-actualizar-solicitud/modal-actualizar-solicitud.component';
 import { ModalActualizarSolicitudMacroComponent } from './compras-macro/modal-actualizar-solicitud-macro/modal-actualizar-solicitud-macro.component';
 import { TablaRecargaTokaComponent } from './cat-unidades/tabla-recarga-toka/tabla-recarga-toka.component';
+import { AlmacenComponent } from './almacen/almacen.component';
+import { PanelGenerarResguardoComponent } from './compras/detalle-solicitudes-compras/panel-generar-resguardo/panel-generar-resguardo.component';
 @NgModule({
   declarations: [
     ComprasComponent,
@@ -149,6 +151,8 @@ import { TablaRecargaTokaComponent } from './cat-unidades/tabla-recarga-toka/tab
     ModalActualizarSolicitudComponent,
     ModalActualizarSolicitudMacroComponent,
     TablaRecargaTokaComponent,
+    AlmacenComponent,
+    PanelGenerarResguardoComponent,
     
   ],
   imports: [

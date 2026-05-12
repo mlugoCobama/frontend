@@ -45,6 +45,43 @@ export const MENU: MenuItem[] = [
           },
         ],
       },
+      {
+       id: 3,
+        label: "Servicios",
+        // link: "/ucoip/gestion-servicios/dashboard",
+        parentId: 1,
+        // permission: "view configuracion", 
+        subItems: [
+          {
+            id: 36,
+            label: "Pago de servicios",
+            link: "/ucoip/servicios",
+            parentId: 34,
+            // permission: "view modulos",
+          },
+          {
+            id: 36,
+            label: "Gestión de servicios",
+            link: "/ucoip/servicios/asignacion-servicios",
+            parentId: 34,
+            // permission: "view modulos",
+          },
+          {
+            id: 35,
+            label: "Catalgo de servicios",
+            link: "/ucoip/servicios/cat-servicios",
+            parentId: 34,
+            // permission: "view permisos",
+          },
+          {
+            id: 36,
+            label: "Proveedores de servicios",
+            link: "/ucoip/configuracion/modulos",
+            parentId: 34,
+            // permission: "view modulos",
+          },
+        ],
+      }
     ],
   },
   //COMRPAS
@@ -94,6 +131,13 @@ export const MENU: MenuItem[] = [
         id: 10,
         label: "Unidades de Medida",
         link: "/compras/cat-unidades-medidas",
+        parentId: 7,
+        permission: "view unidades de medida",
+      },
+      {
+        id: 10,
+        label: "Almacén",
+        link: "/compras/almacen",
         parentId: 7,
         permission: "view unidades de medida",
       },

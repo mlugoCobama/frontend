@@ -55,6 +55,7 @@ import { DataTablesModule } from "angular-datatables";
 import { HighchartsChartModule } from 'highcharts-angular';
 import { HasPermissionPipe } from './pipes/has-permission.pipe';
 
+
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }

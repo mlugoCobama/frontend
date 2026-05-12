@@ -16,7 +16,8 @@ import { KpiCardGenericoComponent } from './kpi-card-generico/kpi-card-generico.
 import { SelectAgenciaVendedorComponent } from './select-agencia-vendedor/select-agencia-vendedor.component';
 
 @NgModule({
-  declarations: [PagetitleComponent,  LoaderComponent, TablaGenericaComponent, CardTopComponent, FiltroComsionesGenericoComponent, KpiCardGenericoComponent, SelectAgenciaVendedorComponent],
+  declarations: [PagetitleComponent,  LoaderComponent, TablaGenericaComponent, CardTopComponent, FiltroComsionesGenericoComponent, KpiCardGenericoComponent, SelectAgenciaVendedorComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,

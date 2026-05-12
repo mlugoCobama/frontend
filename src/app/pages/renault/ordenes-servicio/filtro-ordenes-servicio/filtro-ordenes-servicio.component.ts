@@ -48,12 +48,20 @@ export class FiltroOrdenesServicioComponent implements OnInit {
   cargarAgencias(){
 
     this.agencias = [
-      {intercompania:333, nombre:'Todas', permiso: 'view opcion os all' },
-      {intercompania:7064, nombre:'Renault Azcapotzalco', permiso: 'view opcion os ra' },
-      {intercompania:7062, nombre:'Renault Ecatepec', permiso: 'view opcion os re'},
-      {intercompania:7063, nombre:'Renault Vallejo', permiso: 'view opcion os rv'},
-      {intercompania:7061, nombre:'Renault Pachuca', permiso: 'view opcion os rp'},
+      {intercompania:333, nombre:'Todas', permiso: '' },
+      {intercompania:7064, nombre:'Renault Azcapotzalco', permiso: '' },
+      {intercompania:7062, nombre:'Renault Ecatepec', permiso: ''},
+      {intercompania:7063, nombre:'Renault Vallejo', permiso: ''},
+      {intercompania:7061, nombre:'Renault Pachuca', permiso: ''},
     ];
+
+    //  this.agencias = [
+    //   {intercompania:333, nombre:'Todas', permiso: 'view opcion os all' },
+    //   {intercompania:7064, nombre:'Renault Azcapotzalco', permiso: 'view opcion os ra' },
+    //   {intercompania:7062, nombre:'Renault Ecatepec', permiso: 'view opcion os re'},
+    //   {intercompania:7063, nombre:'Renault Vallejo', permiso: 'view opcion os rv'},
+    //   {intercompania:7061, nombre:'Renault Pachuca', permiso: 'view opcion os rp'},
+    // ];
 
   }
 

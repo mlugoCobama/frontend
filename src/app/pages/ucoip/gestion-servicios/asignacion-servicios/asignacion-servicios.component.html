@@ -1,0 +1,14 @@
+<app-card-top 
+ [title]="'Asignación de Servicios'"
+ [hasButtons] = "true"
+ [showBtnNuevo] = "true"
+ [showBtnEditar] = "true"
+ [showBtnEliminar] = "true"
+ (nuevo) = "openModalNuevo()"
+> </app-card-top>
+<app-tabla-generica
+[mostrarSelect] = "true"
+[opcionesSelect] = "empresas"
+>
+
+</app-tabla-generica>

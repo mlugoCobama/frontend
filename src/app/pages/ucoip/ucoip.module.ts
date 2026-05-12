@@ -11,6 +11,7 @@ import { ModalInventarioComponent } from './inventario/modal-inventario/modal-in
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PermisosComponent } from './permisos/permisos.component';
+import { TablaInventarioComponent } from './inventario/tabla-inventario/tabla-inventario.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { PermisosComponent } from './permisos/permisos.component';
     InventarioComponent,
     ModalInventarioComponent,
     PermisosComponent,
+    TablaInventarioComponent,
     
   ],
   imports: [

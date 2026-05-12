@@ -34,7 +34,7 @@ export class InventarioComponent implements OnInit {
   }
 
   private getAll() {
-
+    this.dataInventario = [];
     this.inventarioService.data$.subscribe((data) => {
       this.dataInventario = data;
       this.isLoad = false;
@@ -84,11 +84,11 @@ export class InventarioComponent implements OnInit {
     });
 
     this.modalRef.content.closeBtnName = 'Close';
-    this.modalRef.content.event.subscribe((res) => {
+    this.modalRef.content.event.subscribe((res:any) => {
       this.isLoad = true;
       this.dataInventario = [];
       if (res.data) {
-        this.modalRef.hide();
+        // this.modalRef.hide();
         this.inventarioService.loadData();
       }
     });
@@ -114,7 +114,7 @@ export class InventarioComponent implements OnInit {
     this.modalRef.content.closeBtnName = 'Close';
     this.modalRef.content.event.subscribe((res) => {
       if (res.data) {
-        this.modalRef.hide();
+        // this.modalRef.hide();
         //this.getAll();
       }
     });
