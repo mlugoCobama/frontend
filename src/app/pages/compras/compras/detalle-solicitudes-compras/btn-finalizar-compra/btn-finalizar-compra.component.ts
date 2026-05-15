@@ -35,9 +35,10 @@ export class BtnFinalizarCompraComponent implements OnInit{
         confirmButtonText: 'Sí, Finalizar',
         showCancelButton: true,
         cancelButtonText: 'No',
+        reverseButtons: true,
         customClass: {
-          confirmButton: 'btn btn-danger ms-2 px-4',
-          cancelButton: 'btn btn-primary ms-2 px-4',
+          confirmButton: 'btn btn-primary ms-2 px-4',
+          cancelButton: 'btn btn-danger ms-2 px-4',
         },
         buttonsStyling: false,
       }).then((result) => {

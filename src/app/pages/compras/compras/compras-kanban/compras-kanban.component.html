@@ -45,10 +45,10 @@
         >
         <!-- <span *ngIf="item.estatus != '4' && item.estatus != '14'" title="Dias desde el ultimo cambio" class="position-absolute top-0 start-10 translate-middle badge rounded-pill" [ngClass]="getColorPorDias(item.fecha)" >{{ diferenciaEnDias(item.fecha) }}<span class="visually-hidden"></span></span> -->
           <div class="card-body p-2">
-            <div class="d-flex justify-content-between align-items-start mb-1">
+            <!-- Folio de solicitud, folio de orden de compra, vistas rápidas -->
+            <div class="d-flex justify-content-between align-items-start">
               <h6 class="mb-0 gap-1"> 
                 <strong> {{ item.folio }} </strong>
-                
                 <a
                   *ngIf="item.folio_oc && tienePermiso('view btn descargar orden') && item.folio_oc != '-'"
                   [title]="'Vista previa de la orden de compra'"
@@ -75,51 +75,36 @@
               </div>
             </div>
 
+            <!-- Información de solicitud -->
             <p class="mb-1"><strong> {{ item.empresa || 'No disponible' }} </strong></p>
-            <p class="text-muted mb-1 small">
-              <strong>Solicita:</strong> {{ item.usuario_solicita }}
-            </p>
+            <p class="text-muted mb-1 small"><strong>Solicita:</strong> {{ item.usuario_solicita }}</p>
             <p class="text-muted mb-1 small text-truncate">
               <strong>Destino:</strong>
               {{ item.c_c > 0 ? item.centro_costo : item.usuario_destino.substring(0, 42) }} {{ item.usuario_destino.length > 42 ? '...' : '' }}
             </p>
-            <p class="mb-1 small">
-              <strong> {{ item.fecha }} </strong>
-            </p>
+            <p class="mb-1 small"><strong> {{ item.fecha }} </strong></p>
+
+            <!-- Proveedor Seleccionado -->
             <p *ngIf="item.proveedor != '-' " class="text-muted mb-1 small text-truncate">
               <strong>Proveedor:</strong> {{ item.proveedor.substring(0, 42) }} {{ item.proveedor.length > 42 ? '...' : '' }}
             </p>
 
-             <div class="d-flex justify-content-between align-items-center">
+            <!-- Información de pagos -->
+            <div class="d-flex justify-content-between align-items-center">
               <span *ngIf ="item.modo_pago != null" [title]="'Modo de pago'"
-                  class="badge small pt-1 font-size-11 bg-dark-subtle text-dark">
+                class="badge small pt-1 font-size-11 bg-primary-subtle text-primary">
                 <strong>{{ item.modo_pago }}</strong>
               </span>
-              <span *ngIf="item.folio_oc && tienePermiso('view total orden') && +item.total_orden > 0"> <strong> {{ item.total_orden | currency }} </strong></span>
-              <!-- <p *ngIf="item.pagado != null &&  item.estatus > 5" class="mb-1 small text-truncate">
-                <strong [ngClass]="{ 'text-success': item.pagado === 'PAGADO', 'text-danger': item.pagado !== 'PAGADO' }" > {{ item.pagado }}</strong>
-              </p> -->
-             </div>
-            
-
-            <!-- <div class="d-flex justify-content-between align-items-center mt-1">
-              <span
-                class="badge rounded-pill font-size-11"
-                [ngClass]="item.claseEstado"
-              >
-                {{ item.estado }}
-              </span>
-              <span *ngIf="item.folio_oc && tienePermiso('view total orden') && +item.total_orden > 0"> <strong> {{ item.total_orden | currency }} </strong></span>
-            </div> -->
-
-            <div *ngIf="item.folio_oc && item.folio_oc != '-'" class="d-flex justify-content-around aling-items-center border mt-1 p-1 rounded bg-light-subtle">
-              <!-- <span><i title="Surtido Solicitado" class="fas fa-truck-moving text-secondary" [ngClass] = "{'text-success': item.surtido_solicitado}" ></i></span>  -->
-              <span><i title="Entregado" class="fas fa-box-open text-secondary" [ngClass] = "{'text-success': item.surtido_solicitado}"></i></span> 
-              <div [ngClass] = "{'text-success': item.facturas_xml > 0}" class="fw-bold"><i title="Facturado" class="fas fa-file-invoice" ></i> {{ ' ' + item.facturas_xml}} </div> 
-              <div [ngClass] = "{'text-success': item.comprobantes_pago > 0}" class="fw-bold"><i title="Pagado" class="fas fa-money-bill-wave" > </i> {{' ' + item.comprobantes_pago}} </div> 
-              <span></span> <i title="Complemento de pago" class="fas fa-file-invoice-dollar  text-secondary"></i>
-              <!-- <p  *ngIf="item.modo_pago == 'CREDITO' && item.pagado !== 'PAGADO' && item.estatus > 5" class="m-0"><strong>Pago parcial (factura)</strong></p> -->
-              <!-- <p *ngIf="item.modo_pago == 'CONTADO' && item.pagado !== 'PAGADO'" class="m-0"><strong>Pagar total orden</strong></p> -->
+              <span class="badge small pt-1 font-size-11 bg-dark-subtle text-dark" *ngIf="item.folio_oc &&  tienePermiso('view total orden') && +item.total_orden >= 0 && item.folio_oc != '-'">
+                <strong title="Total Facturado" *ngIf="item.facturas_xml > 0"> F: {{ item.total_facturas || 0 | currency }} - </strong>
+                <strong title="Total Orden Compra">  OC: {{ item.total_orden | currency }} </strong></span>
+            </div>
+            <!-- Cantidad de documentos cargados -->
+            <div *ngIf="item.folio_oc && item.folio_oc != '-' && item.estatus != '5'" class="d-flex justify-content-around aling-items-center border mt-1 p-1 rounded bg-light-subtle">
+              <span [ngClass] = "{'text-success': item.surtido > 0, 'text-danger': !item.vencido && item.surtido == 0 }"     class="fw-bold"><i title="Entregas"            class="fas fa-box-open"></i>{{ ' ' + item.surtido}}</span> 
+              <span [ngClass] = "{'text-success': item.facturas_xml > 0}"       class="fw-bold"><i title="Facturas"            class="fas fa-file-invoice" ></i> {{ ' ' + item.facturas_xml}} </span> 
+              <span [ngClass] = "{'text-success': item.comprobantes_pago > 0}"  class="fw-bold"><i title="Pagos"               class="fas fa-money-bill-wave" > </i> {{' ' + item.comprobantes_pago}} </span> 
+              <span *ngIf="item.modo_pago == 'CREDITO'" [ngClass] = "{'text-success': item.complementos_pago > 0}"  class="fw-bold"><i title="Complemento de pago"  class="fas fa-file-invoice-dollar"></i> {{' ' + item.complementos_pago}}</span> 
             </div>
           </div>
         </div>

@@ -106,6 +106,7 @@ async onDownload(): Promise<void> {
 
   const opcionesStatus: { value: string; label: string }[] = [
     { value: "all", label: "CONCENTRADO" },
+    { value: "seg", label: "SEGUIMIENTO" },
     { value: "1", label: "En espera de autorización" },
     { value: "2", label: "Solicitado" },
     { value: "3", label: "En cotización" },

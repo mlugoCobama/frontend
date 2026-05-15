@@ -33,7 +33,20 @@ export class ReportesComprasService {
     const fechaStr = `${dia}_${mes}_${anio}`;
 
     const tipoTexto = this.tipoMap[tipo] || `tipo_${tipo}`;
-    const filename = status == 'all' ?  `GastoGeneralConcentrado_${tipoTexto}_al_${fechaStr}.xlsx` : `SC_${fechaStr}_${status}_${tipoTexto}.xlsx`;
+    let filename = 'reporte.xlsx'
+    
+    switch (status) {
+      case 'all':
+        filename = `GastoGeneralConcentrado_${tipoTexto}_al_${fechaStr}.xlsx`;
+        break;
+      case 'seg':
+        filename = `SeguimientoCompras_${tipoTexto}_al_${fechaStr}.xlsx`;
+        break;
+    
+      default:
+        filename = `SC_${fechaStr}_${status}_${tipoTexto}.xlsx`
+        break;
+    }
 
     const blob = response.body;
     if (!blob) {

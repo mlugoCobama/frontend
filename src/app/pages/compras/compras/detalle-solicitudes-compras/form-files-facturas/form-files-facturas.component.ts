@@ -355,9 +355,9 @@ getFacturaReferencia(){
     this.mostrarDtsFac = true;
   }
 
-  private validarTiposComprobante(comprobantes, tiposRequeridos) {
-    return tiposRequeridos.every(tipo =>
-      comprobantes.some(c => c.tComprobanteDesc === tipo)
+  private validarTiposComprobante(comprobantes:any, tiposRequeridos:any) {
+    return tiposRequeridos.every((tipo:any) =>
+      comprobantes.some((c:any) => c.tComprobanteDesc === tipo)
     );
   }
 
@@ -490,8 +490,11 @@ public save(){
 
   validarTotales(impTotalXML, impTotalOC) {
   // Redondear a un decimal
-  const xml = Number(Math.ceil(impTotalXML));
-  const oc  = Number(Math.ceil(impTotalOC));
+  // const xml = Number(Math.ceil(impTotalXML));
+  // const oc  = Number(Math.ceil(impTotalOC));
+  // Ignorar los decimales
+    const xml = Math.trunc(impTotalXML);
+    const oc  = Math.trunc(impTotalOC);
 
     // console.log('total xml', xml, 'total', oc);
 

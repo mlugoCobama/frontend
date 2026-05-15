@@ -126,31 +126,58 @@ export class ComprasComponent implements OnInit {
   }
 
   public volverAcotizar() {
-    this.isLoadingVolverACotizar = true;
-    let folio = '';
-    this.cotizacionesService.volverCotizar(this.solicitudCompra.id).subscribe(
-      (response) => {
-        if (response) {
-          this.alertasService.mostrarAlerta("Listo!",response.message,"success","success");
-          folio = this.solicitudCompra.folio;
-          this.regresar();
-          this.busqueda = folio;
-          this.isLoadingVolverACotizar = false;
-          // this.isLoading = false;
-        } else {
-          this.alertasService.mostrarAlerta("Error!",response.message,"error","danger"
-          );
-          this.isLoadingVolverACotizar = false;
-          console.log(response.message);
+  Swal.fire({
+    title: 'Confirmación',
+    text: '¿Seguro que deseas volver a cotizar esta solicitud?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, continuar',
+    cancelButtonText: 'Cancelar',
+    reverseButtons: true,
+    allowOutsideClick: false,
+    buttonsStyling: false,
+    customClass: {
+      confirmButton: 'btn btn-sm btn-primary m-1',
+      cancelButton: 'btn btn-sm btn-secondary m-1'
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.isLoadingVolverACotizar = true;
+      let folio = '';
+
+      Swal.fire({
+        title: 'Procesando...',
+        text: 'Por favor espera',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
         }
-      },
-      (error) => {
-        this.alertasService.mostrarAlerta("Error!", error, "error", "danger");
-        this.isLoadingVolverACotizar = false;
-        // console.error("Error fetching data:", error);
-      }
-    );
-  }
+      });
+
+      this.cotizacionesService.volverCotizar(this.solicitudCompra.id).subscribe(
+        (response) => {
+          this.isLoadingVolverACotizar = false;
+          Swal.close(); // cerrar el loading
+
+          if (response) {
+            this.alertasService.mostrarAlerta("Listo!", response.message, "success", "success");
+            folio = this.solicitudCompra.folio;
+            this.regresar();
+            this.busqueda = folio;
+          } else {
+            this.alertasService.mostrarAlerta("Error!", response.message, "error", "danger");
+            console.log(response.message);
+          }
+        },
+        (error) => {
+          this.isLoadingVolverACotizar = false;
+          Swal.close();
+          this.alertasService.mostrarAlerta("Error!", error, "error", "danger");
+        }
+      );
+    }
+  });
+}
 
   //Recupera todos los registros de solicitudes de compras
   private getAll(intercompania) {
@@ -252,60 +279,6 @@ export class ComprasComponent implements OnInit {
   }
 
   // Cancela la solicitud desde un botón en la botonera
-  public cancelarSolicitud1() {
-    this.isLoad = true;
-    Swal.fire({
-      title: "¿Estas seguro?",
-      text: "La solicitud será marcada como cancelada",
-      input: 'text',
-    inputAttributes: {
-      autocapitalize: 'off'
-    },
-
-
-      icon: "error",
-      confirmButtonText: " SI ",
-      showCancelButton: true,
-      cancelButtonText: " NO ",
-      customClass: {
-        confirmButton: "btn btn-danger px-4",
-        cancelButton: "btn btn-primary ms-2 px-4",
-      },
-      buttonsStyling: false,
-    }).then((result) => {
-      if (result.value) {
-        this.comprasService.destroy(this.solicitudCompra.id).subscribe(
-          (response) => {
-            if (response.status === "success") {
-              this.regresar();
-              this.alertasService.mostrarAlerta(
-                "Cancelada!",
-                "La solicitud ha sido cancelada.",
-                "success",
-                "success"
-              );
-            } else {
-              this.alertasService.mostrarAlerta(
-                "Error!",
-                "Ocurrió un error inesperado",
-                "error",
-                "error"
-              );
-            }
-          },
-          (error) => {
-            this.alertasService.mostrarAlerta(
-              "Error!",
-              error,
-              "error",
-              "error"
-            );
-          }
-        );
-      }
-      this.isLoad = false;
-    });
-  }
   public cancelarSolicitud() {
   Swal.fire({
     title: '¿Estás seguro?',
@@ -319,10 +292,11 @@ export class ComprasComponent implements OnInit {
     showCancelButton: true,
     cancelButtonText: 'No',
     customClass: {
-      confirmButton: 'btn btn-danger px-4',
+      confirmButton: 'btn btn-danger ms-2 px-4',
       cancelButton: 'btn btn-primary ms-2 px-4',
     },
     buttonsStyling: false,
+    reverseButtons:true,
     preConfirm: (razon) => {
       if (!razon || razon.trim() === '') {
         Swal.showValidationMessage('Debes ingresar una razón válida');

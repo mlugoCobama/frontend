@@ -145,7 +145,7 @@
                   <tr *ngFor="let item of datosFiltrados" (click)="seleccionar(item, $event)">
                     <td class="text-center"><span  style="font-size:0.7rem;" [ngClass]="item.clase">{{ item.entidad }}</span></td>
                     <td class="text-center" >
-                       <strong [ngClass] = "item.estatus == 1 ? 'text-primary' : '' " > {{item.eco}} </strong> <i *ngIf="item.activo ==  2" class="text-danger fas fa-exclamation-circle" title="Pendiente de autorización"> </i>
+                       <strong [ngClass] = "item.estatus == 1 ? 'text-primary' : '' " > {{item.eco}} </strong> <i *ngIf="item.activo == 2" class="text-danger fas fa-exclamation-circle" title="Pendiente de autorización"> </i>
                     </td>
                     <td>{{item.marca_vehiculo}}</td>
                     <td>{{item.submarca}}</td>

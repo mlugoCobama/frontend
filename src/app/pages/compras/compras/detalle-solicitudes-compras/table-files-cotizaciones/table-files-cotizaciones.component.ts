@@ -225,6 +225,7 @@ export class TableFilesCotizacionesComponent implements AfterViewInit {
       cotizaciones_id: this.proveedorSeleccionado?.cotizaciones_id,
       id_cotizacion_prov: this.proveedorSeleccionado?.id,
       id_solicitud_compra: this.solicitudCompra?.id,
+      total_orden: this.totalCotizacion(this.proveedorSeleccionado)
     };
     return datos;
   }

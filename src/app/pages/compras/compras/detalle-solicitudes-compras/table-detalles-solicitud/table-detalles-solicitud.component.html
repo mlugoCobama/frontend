@@ -1,4 +1,4 @@
-<div class="card rounded shadow-lg border">
+<div class="card rounded shadow-sm border">
   <div class="card-header text-center text-white bg-primary">
     <strong> Detalles de solicitud </strong>
   </div>
@@ -113,11 +113,11 @@
         </td>
         <td
           *ngFor="let prov of cotProv"
-          [ngClass]="{'bg-success text-white': totals['precio_' + prov.proveedores_id.id] === totalMasBajo}"
+          [ngClass]="{'bg-success-subtle text-success': totals['precio_' + prov.proveedores_id.id] === totalMasBajo}"
           class="text-end"
         >
           <strong>
-            {{ totals["precio_" + prov.proveedores_id.id] | currency }}
+            {{ totals["precio_" + prov.proveedores_id.id] | currency:'MXN':'symbol-narrow':'1.4-4'  }}
           </strong>
         </td>
       </tr>
@@ -127,11 +127,11 @@
         </td>
         <td
           *ngFor="let prov of cotProv"
-          [ngClass]="{'bg-primary text-white': totals['precio_' + prov.proveedores_id.id] === totalMasBajo}"
+          [ngClass]="{'bg-success text-white': totals['precio_' + prov.proveedores_id.id] === totalMasBajo}"
           class="text-end"
         >
           <strong [title]="totals['precio_' + prov.proveedores_id.id] === totalMasBajo ? 'Este es el precio mas bajo' : ''">
-            {{ totals["precio_" + prov.proveedores_id.id] * 1.16 | currency }}
+            {{ totals["precio_" + prov.proveedores_id.id] * 1.16 | currency:'MXN':'symbol-narrow':'1.4-4' }}
           </strong>
         </td>
       </tr>
