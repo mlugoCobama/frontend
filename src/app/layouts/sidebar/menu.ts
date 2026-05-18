@@ -139,7 +139,7 @@ export const MENU: MenuItem[] = [
         label: "Almacén",
         link: "/compras/almacen",
         parentId: 7,
-        permission: "view unidades de medida",
+        permission: "view almacen compras",
       },
     ],
   },
