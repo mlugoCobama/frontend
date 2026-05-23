@@ -3,7 +3,7 @@
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
 </div>
 <div class="modal-body">
-  {{isLoad}}
+  <!-- {{isLoad}} -->
 
   <div class="d-flex justify-content-center" *ngIf="isLoad">
     <div class="spinner-border text-primary" role="status">
@@ -11,15 +11,18 @@
     </div>
   </div>
 
-  <div class="row" >
+  <div class="row" *ngIf="!isLoad">
     <div class="col-6">
-      <label class="form-label requerido">Titular: </label>{{data.firstname}} {{data.realname}}
+      <div class="fw-bold">
+        <p class="mb-1"><label class="form-label requerido">Empresa: </label>&nbsp;{{data.empresa}}</p>
+        <p class="mb-1"><label class="form-label requerido">Titular: </label>&nbsp;{{data.firstname}} {{data.realname}}</p>
+        <p class="mb-1"><label class="form-label requerido">Usuario: </label>&nbsp;{{data.name}}</p>  
+
+      </div>
+      
     </div>
     <div class="col-6" *ngIf="!isLoad">
-
-
       <div class="accordion accordion-flush" id="accordionFlushExample" >
-
         <div class="accordion-item" *ngFor="let item of dataPermisos">
           <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
@@ -30,13 +33,18 @@
             <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item’s accordion body.</div>
           </div>
         </div>
-        
       </div>
-
-
     </div>
+
+    <app-list-resguardos
+    *ngIf = "resguardos.length > 0"
+    [data] = "resguardos"
+    >
+
+    </app-list-resguardos>
   </div>
 </div>
+
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" >Cerrar</button>
     

@@ -12,9 +12,10 @@ export class TableFormExistenciasComponent implements OnInit {
   entradaForm: FormGroup;
   @Input() detalles: any = [];
   @Input() isLoad: boolean; 
+  @Input() requiereInventario: boolean; 
   @Input() submittDetail: boolean = false;
 
-  @Input() entregaCompleta :boolean = false;
+  @Input() entregaCompleta :boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -57,7 +58,8 @@ export class TableFormExistenciasComponent implements OnInit {
         recibidoMax,
         [  Validators.required,  Validators.min(0.01),  Validators.max(recibidoMax)]],
         
-        comentario: ['', []]
+        comentario: ['', []],
+        requiereInventario: [false, []]
         
       });
       if (recibidoMax === 0) {
@@ -121,4 +123,16 @@ export class TableFormExistenciasComponent implements OnInit {
       return errores[0]; // o mostrar todos
     }
   }
+
+ public getInventariables() {
+  return this.detallesArray.controls
+    .filter(control => {
+      const detalle = control.getRawValue();
+
+      return detalle.confirmado &&
+             detalle.requiereInventario;
+    })
+    .map(control => control.getRawValue());
+}
+  
 }

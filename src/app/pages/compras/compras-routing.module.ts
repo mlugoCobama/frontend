@@ -7,11 +7,12 @@ import { CatUnidadesComponent } from './cat-unidades/cat-unidades.component';
 import { ComprasMacroComponent } from './compras-macro/compras-macro.component';
 import { ReporteGastoMensualComponent } from './reportes-compras/reporte-gasto-mensual/reporte-gasto-mensual.component';
 import { AlmacenComponent } from './almacen/almacen.component';
+import { AuthGuard } from 'src/app/core/guards/auth.guard';
 // import { DetallesSolicitudCompraComponent } from './detalles-solicitud-compra/detalles-solicitud-compra.component';
 
 const routes: Routes = [
   { path: '', component: ComprasComponent },
-  { path: 'proveedores', component: ProveedoresComponent },
+  { path: 'proveedores', component: ProveedoresComponent},
   { path: 'almacen', component: AlmacenComponent },
   { path: 'cat-unidades-medidas', component: CatUnidadesMedidasComponent },
   { path: 'cat-unidades', component: CatUnidadesComponent },

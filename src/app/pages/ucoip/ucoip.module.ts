@@ -12,6 +12,9 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PermisosComponent } from './permisos/permisos.component';
 import { TablaInventarioComponent } from './inventario/tabla-inventario/tabla-inventario.component';
+import { ListResguardosComponent } from './ucoip/modal-ucoip/list-resguardos/list-resguardos.component';
+import { ModalUcoipComponent } from './ucoip/modal-ucoip/modal-ucoip.component';
+import { AccordionModule } from 'ngx-bootstrap/accordion';
 
 @NgModule({
   declarations: [
@@ -20,7 +23,8 @@ import { TablaInventarioComponent } from './inventario/tabla-inventario/tabla-in
     ModalInventarioComponent,
     PermisosComponent,
     TablaInventarioComponent,
-    
+    ListResguardosComponent,
+    ModalUcoipComponent,
   ],
   imports: [
     CommonModule,
@@ -28,6 +32,7 @@ import { TablaInventarioComponent } from './inventario/tabla-inventario/tabla-in
     ConfiguracionModule,
     DataTablesModule,
     ModalModule.forRoot(),
+    AccordionModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
   ]

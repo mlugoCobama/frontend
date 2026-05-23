@@ -5,7 +5,7 @@ import { Permisos } from 'src/app/core/models/ucoip/permisos';
 import { AlertErrorService } from 'src/app/core/services/alert-error.service';
 import { AreasDepartamentosService } from 'src/app/core/services/ucoip/areas-departamentos.service';
 import { PermisosService } from 'src/app/core/services/ucoip/permisos.service';
-
+import { ResguardosService } from 'src/app/core/services/ucoip/resguardos.service';
 @Component({
   selector: 'app-modal-ucoip',
   templateUrl: './modal-ucoip.component.html',
@@ -38,7 +38,8 @@ export class ModalUcoipComponent implements OnInit  {
     public modalService: BsModalService,
     public alertService: AlertErrorService,
     private areasDeptosService: AreasDepartamentosService,
-    private permisosService: PermisosService
+    private permisosService: PermisosService,
+    private resguardosService: ResguardosService
   ) {}
 
   public ngOnInit(): void {
@@ -46,6 +47,7 @@ export class ModalUcoipComponent implements OnInit  {
     this.tipo = this.listaDatos[0].tipo;
     this.data = this.listaDatos[0].data;
     this.getPermisos();
+    this.getResguardos();
     this.buildFormModal();
 
     // console.log(this.dataPermisos);
@@ -123,6 +125,22 @@ export class ModalUcoipComponent implements OnInit  {
       next: async (resp) => {
         if (resp.success) {
           this.dataPermisos = resp.data;
+          this.isLoad = false;
+        }
+      },
+      error: (err) => {
+        console.error('Error cargando módulos', err);
+      }
+    });
+  }
+
+  public resguardos = [];
+  private getResguardos() {
+    this.resguardosService.getUcoipResguardos(this.data.id).subscribe({
+      next: async (resp) => {
+        if (resp.success) {
+          this.resguardos = resp.data;
+          console.log(this.resguardos)
           this.isLoad = false;
         }
       },

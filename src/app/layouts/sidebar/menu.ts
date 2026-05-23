@@ -237,6 +237,13 @@ export const MENU: MenuItem[] = [
             parentId: 32,
             permission: "view submodulo comisiones seminuevos nissan",
           },
+          {
+            id: 9,
+            label: "Flotillas",
+            link: "/nissan/comisiones/flotillas",
+            parentId: 32,
+            permission: "view submodulo comisiones seminuevos nissan",
+          },
           
           {
             id: 10,
@@ -370,6 +377,13 @@ export const MENU: MenuItem[] = [
             link: "/renault/comisiones/seminuevos",
             parentId: 32,
             permission: "view submodulo comisiones seminuevos renault",
+          },
+          {
+            id: 9,
+            label: "Flotillas",
+            link: "/renault/comisiones/flotillas",
+            parentId: 32,
+            permission: "view submodulo comisiones seminuevos nissan",
           },
           
           {
@@ -795,6 +809,29 @@ export const MENU: MenuItem[] = [
             permission: "view ventas porcesos",
           },
         ],
+      },
+    ],
+  },
+  // Volumetricos
+  {
+    id: 45,
+    label: "Volumetricos",
+    icon: "bx bxs-gas-pump",
+    permission: "view modulo volumetricos",
+    subItems: [
+      {
+        id: 8,
+        label: "Carga reportes",
+        link: "/volumetricos/carga-reporte",
+        parentId: 45,
+        permission: "view sub modulo carga volumetricos",
+      },
+      {
+        id: 12,
+        label: "Visualiza reportes",
+        link: "/volumetricos/",
+        parentId: 45,
+        permission: "view sub modulo visualizar volumetricos",
       },
     ],
   },

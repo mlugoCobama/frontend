@@ -7,7 +7,8 @@
 
 <div class="modal-body">
   <app-select-agencia-vendedor #formSelectAgencia [empresaActiva]="empresaActiva"></app-select-agencia-vendedor>
-  <app-financiamiento-form #formFinancimiento [vendedores]="vendedores" [tipoFinanciamiento]="'nrfinance'"></app-financiamiento-form>
+  <app-financiamiento-form #formFinancimiento [vendedores]="vendedores" [tipoFinanciamiento]="'nrfinance'"
+   (vendedorAgencia)="actualizarSelectsVendedorAgencia($event)"></app-financiamiento-form>
 
 </div>
 
@@ -17,11 +18,11 @@
     Cancelar
   </button>
 
-  <button class="btn btn-warning btn-sm"
+  <button class="btn btn-info btn-sm"
           [disabled]="loading"
           (click)="guardar()">
 
-    <span *ngIf="!loading">Guardar</span>
+    <span *ngIf="!loading"><i class="fas fa-save"></i> Guardar</span>
     <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
 
   </button>

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FinanciamientoService } from 'src/app/core/services/renault/financiamiento.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -17,6 +17,7 @@ export class FinanciamientoFormComponent implements OnInit {
   @Input() data: any ;
   @Input() vendedores: any;
   @Input() tipoFinanciamiento: any;
+  @Output() vendedorAgencia = new EventEmitter<any>();
 
   constructor(private fb: FormBuilder, private financiamientoService:FinanciamientoService ) {}
 
@@ -29,7 +30,7 @@ export class FinanciamientoFormComponent implements OnInit {
       numero_factura: ['', [Validators.maxLength(45),Validators.required],],
       monto_financiar: [null,Validators.required],
       incentivo_dealer: [null,Validators.required],
-      porcentaje_asesor: [null,Validators.required],
+      porcentaje_asesor: [70 ,Validators.required],
       comision_asesor_pesos: [{ value: null, disabled: true }],
       razon_social: [''],
       descripcion: [''],
@@ -37,7 +38,7 @@ export class FinanciamientoFormComponent implements OnInit {
       tipo_financiamiento: [this.tipoFinanciamiento ?? ''],
       archivo: [null, Validators.required],
       observaciones: [null],
-
+      fecha_factura: [null],
       kit_seguridad: [0],
       sat_finder: [0],
       garantia_extendida: [0],
@@ -89,6 +90,7 @@ export class FinanciamientoFormComponent implements OnInit {
       no_contrato:           data.no_contrato           ?? '',
       fecha_desembolso:      this.formatDateForInputDate(data.fecha_desembolso) ?? '',
       numero_factura:        data.numero_factura        ?? '',
+      fecha_factura:          data.fecha_factura        ?? '',
       monto_financiar:       data.monto_financiar       ?? null,
       incentivo_dealer:      data.incentivo_dealer      ?? null,
       porcentaje_asesor:     data.porcentaje_asesor ?  (Number(data.porcentaje_asesor) * 100) : null,
@@ -172,11 +174,20 @@ private consultarFactura(noFactura: any) {
       if (response) {
         this.dataVenta = response.data;
         if(this.dataVenta){
+          console.log(this.dataVenta)
           this.form.patchValue({
               razon_social: this.dataVenta.razon_social,
               descripcion: `${this.dataVenta.descripcion} ${this.dataVenta.anio_vehiculo}`,
-              serie: this.dataVenta.serie
+              serie: this.dataVenta.serie,
+              fecha_factura: this.formatDateForInputDate(this.dataVenta.fecha_factura),
             });
+            this.vendedorAgencia.emit(
+              {
+                agencia: this.dataVenta.agencia,
+                com_vendedores_id: this.dataVenta.id_vendedor
+              }
+            );
+          
         }
         
 
@@ -195,19 +206,19 @@ private itemCounter = 0;
 
 
   agregarItem(): void {
-  this.marcarTodo();
-  if (this.form.invalid) return;
+    this.marcarTodo();
+    if (this.form.invalid) return;
 
-  this.items.push({
-    formData: this.form.getRawValue(),
-    archivo:  this.archivo!,
-    index:    ++this.itemCounter,
-  });
+    this.items.push({
+      formData: this.form.getRawValue(),
+      archivo:  this.archivo!,
+      index:    ++this.itemCounter,
+    });
 
-  this.limpiar();
+    this.limpiar();
 
-  this.form.get('archivo')?.setValidators([Validators.required]);
-  this.form.get('archivo')?.updateValueAndValidity();
+    this.form.get('archivo')?.setValidators([Validators.required]);
+    this.form.get('archivo')?.updateValueAndValidity();
 }
 
   quitarItem(index: number): void {

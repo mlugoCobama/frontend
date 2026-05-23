@@ -60,7 +60,7 @@ agrupaciones = {
   'Autorizado' : ['AUTORIZADA'],
   'Autorizado a pago' : ['AUTO. A PAGO'],
   'En surtido': ['EN SURTIDO'],
-  'Entregada Parcialmente': ['ENTREGADO'],
+  'Entregada Parcialmente': ['ENTREGADO PARCIALMENTE'],
   'Por facturar': ['POR FACTURAR'],
   'Pago Solicitado': ['PAGO SOLICITADO'],
   'Pagada': ['PAGADO'],

@@ -37,4 +37,53 @@ export class AuthGuard implements CanActivate {
         this.router.navigate(['/auth/login'], { queryParams: { returnUrl: state.url } });
         return false;
     }
+
+    // canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    //     const isAuthenticated = this.checkAuth();
+
+    //     // 1. Si no está autenticado, manda al login
+    //     if (!isAuthenticated) {
+    //         this.router.navigate(['/auth/login'], { queryParams: { returnUrl: state.url } });
+    //         return false;
+    //     }
+
+    //     // 2. Si la ruta requiere un permiso mandarlo a una ruta default
+    //     const requiredPermission = route.data['permission'];
+
+    //     if (requiredPermission) {
+    //         const hasPermission = this.checkPermission(requiredPermission);
+
+    //         if (!hasPermission) {
+    //             this.router.navigate(['/unauthorized']); // 404
+    //             return false;
+    //         }
+    //     }
+
+    //     return true;
+    // }
+
+    // // Validacion para saber si el suario esta uatenticado
+    // private checkAuth(): boolean {
+    //     if (environment.defaultauth === 'firebase') {
+    //         return !!this.authenticationService.currentUser();
+    //     } else {
+    //         if (this.authFackservice.currentUserValue) return true;
+    //         if (localStorage.getItem('currentUser')) return true;
+    //         return false;
+    //     }
+    // }
+
+    // // Valida que el usuario tenga permiso para acceder al modulo
+    // private checkPermission(requiredPermission: string): boolean {
+    //     try {
+    //         const userData = JSON.parse(localStorage.getItem('currentUser') || '{}');
+    //         console.log(userData);
+    //         const rawPermissions: string[] = userData.permisos || [];
+    //         const permissions = rawPermissions.map((p: any) => p.name);
+    //         console.log(permissions)
+    //         return permissions.includes(requiredPermission);
+    //     } catch {
+    //         return false;
+    //     }
+    // }
 }

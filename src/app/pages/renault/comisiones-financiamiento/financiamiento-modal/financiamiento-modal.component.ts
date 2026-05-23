@@ -42,6 +42,7 @@ export class FinanciamientoModalComponent implements OnInit, AfterViewInit {
 guardar(): void {
   if (!this.formSelectAgencia.esValido()) {
     this.formSelectAgencia.marcarTodo();
+   this.loading = false;
     return;
   }
 
@@ -49,6 +50,7 @@ guardar(): void {
 
   if (items.length === 0) {
     this.alertas.mostrarAlerta('Aviso', 'Agrega al menos un financiamiento', 'warning', 'warning');
+    this.loading = false;
     return;
   }
 
@@ -89,6 +91,10 @@ guardar(): void {
     }
   });
 }
+
+  actualizarSelectsVendedorAgencia(data:any){
+    this.formSelectAgencia.setValores(data);
+  }
 
   cerrarModal(): void {
     this.bsModalRef.hide();

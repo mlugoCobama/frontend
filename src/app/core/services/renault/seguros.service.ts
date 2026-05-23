@@ -44,7 +44,7 @@ export class SegurosService {
   }
   
   obtenerArchivo(id: number): Observable<Blob> {
-    return this.http.get(`${environment.apiUrl}renault/financiamiento/archivo/${id}`, {
+    return this.http.get(`${environment.apiUrl}renault/seguro/archivo/${id}`, {
       responseType: 'blob' 
     });
   }

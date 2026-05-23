@@ -1,0 +1,104 @@
+<div class="card">
+
+    <div class="card-header bg-primary text-white">
+        <a class="fw-bold text-white">
+            Confirmación recepción
+        </a>
+    </div>
+
+    <div class="card-body">
+
+        <div class="row text-center mb-4">
+
+            <div class="col">
+                <div class="border rounded p-2">
+                    <a class="text-center fw-bold">Productos</a>
+                    <h3>{{resumen.totalProductos}}</h3>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="border rounded p-2">
+                    <a class="text-center fw-bold">Unidades recibidas</a>
+                    <h3>{{resumen.totalRecibidos}}</h3>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="border rounded p-2">
+                    <a class="text-center fw-bold">Inventariados</a>
+                    <h3>{{resumen.totalInventariados}}</h3>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="border rounded p-2">
+                    <a class="text-center fw-bold">Activos generados</a>
+                    <h3>
+                        {{resumen.totalActivos}}
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+
+        <h6 class="text-center">Productos recibidos</h6>
+        <table class="table table-sm table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Descripción</th>
+                    <th>Recibidos</th>
+                    <th>Inventario</th>
+                    <th>Comentario</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let item of entradas">
+                    <td>{{item.descripcion}}</td>
+
+                    <td>{{item.recibidos}}</td>
+                    <td>
+                        <span class="badge bg-success" *ngIf="item.requiereInventario">
+                            SI
+                        </span>
+                        <span class="badge bg-secondary" *ngIf="!item.requiereInventario">
+                            NO
+                        </span>
+                    </td>
+                    <td>
+                        {{item.comentario || '-'}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <div *ngIf="activos.length>0">
+            <hr>
+            <h6 class="text-center">Activos generados</h6>
+            <table class="table table-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Descripción</th>
+                        <th>Serie</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let activo of activos">
+                        <td>{{activo.tipo?.tipo}}</td>
+                        <td>{{activo.descripcion}}</td>
+                        <td>{{activo.marca}}</td>
+                        <td>{{activo.modelo}}</td>
+                        <td>{{activo.serie || '-' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>

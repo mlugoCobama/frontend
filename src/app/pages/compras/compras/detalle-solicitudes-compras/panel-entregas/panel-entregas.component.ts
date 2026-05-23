@@ -8,6 +8,7 @@ import { AcuseRecibidoService } from 'src/app/core/services/compras/acuse-recibi
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import { MacroService } from 'src/app/core/services/macrotaller/macro.service';
 import { TableFormExistenciasComponent } from './table-form-existencias/table-form-existencias.component';
+import { InventariadoComponent } from './inventariado/inventariado.component';
 
 @Component({
   selector: "app-panel-entregas",
@@ -17,6 +18,8 @@ import { TableFormExistenciasComponent } from './table-form-existencias/table-fo
 export class PanelEntregasComponent implements OnInit, AfterViewInit {
    @ViewChild("formTableEntradas", { static: false })
     formTableEntradas!: TableFormExistenciasComponent;
+    @ViewChild("inventariado", { static: false })
+    inventariado!: InventariadoComponent;
 
   @Input() ordenCompra: any;
   @Input() solicitudCompra: any;
@@ -97,14 +100,19 @@ export class PanelEntregasComponent implements OnInit, AfterViewInit {
       );
       return;
     }
+
+    const proceso = {
+      detalles_entrada:this.resumen?.entradas ?? [],
+      inventario:this.resumen?.activos ?? [],
+      requiereInventario:this.requiereInventario
+    };
+
     const formData = new FormData();
     formData.append("archivo", this.acuseForm.get("archivo")?.value);
-    formData.append(
-      "observaciones",
-      this.acuseForm.get("observaciones")?.value
-    );
+    formData.append("observaciones",this.acuseForm.get("observaciones")?.value);
     formData.append("orden_compra_id", this.ordenCompra?.id);
-    formData.append("detalles_entrada", JSON.stringify(this.formTableEntradas.getEntradas()))
+    formData.append("proceso",JSON.stringify(proceso));
+
     this.acuseRecibido.guardarAcuse(formData).subscribe(
       (response) => {
         if (response.status === "success") {
@@ -246,6 +254,85 @@ export class PanelEntregasComponent implements OnInit, AfterViewInit {
       this.isLoad = false;
       console.error("Error fetching data:", error);
     })
+  }
+
+  currentStep = 1;
+  productosInventariables:any = []
+  public resumen: any = [];
+  nextStep(){
+
+    // Paso 1 → generar inventariables
+    if(this.currentStep===1){
+        
+        // saltar directo a confirmación
+        if(!this.requiereInventario){
+            this.resumen={
+                entradas:
+                this.formTableEntradas.getEntradas(),
+                activos:[]
+            };
+            this.currentStep=3;
+            return;
+        }
+
+        this.productosInventariables = this.formTableEntradas.getInventariables();
+        // Si no requiere inventario,
+    }
+
+    // Paso inventario → generar resumen
+    if(this.currentStep===2){
+      if(!this.inventariado.inventarioValido()){
+        this.alertasService.mostrarAlerta(
+          'Error',
+          'Completa los datos requeridos',
+          'warning',
+          'warning'
+        );
+        return;
+      }
+        this.resumen={
+            entradas:
+            this.formTableEntradas.getEntradas(),
+            activos:
+            this.inventariado?.activosArray
+            ?.getRawValue() ?? []
+        };
+    }
+    this.currentStep++;
+}
+
+  prevStep(){
+      if(
+        !this.requiereInventario &&
+        this.currentStep===3
+      ){
+          this.currentStep=1;
+          return;
+      }
+      this.currentStep--;
+  }
+
+  public porductosInventariables:any =[];
+
+  getInventariables(){
+   const inventariables =  this.formTableEntradas.getInventariables();
+   return inventariables;
+  }
+
+  getResumen(){
+    const entradas = this.formTableEntradas?.getEntradas() ?? [];
+    const activos = this.inventariado?.activosArray?.getRawValue() ?? [];
+    const data = {entradas: entradas, activos:activos}
+    console.log(data)
+    return data
+  }
+
+  goToStep(step:number){
+    this.currentStep = step;
+  }
+
+  get requiereInventario(): boolean {
+    return this.solicitudCompra?.tipo == 3;
   }
 
 }

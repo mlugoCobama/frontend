@@ -24,6 +24,7 @@ const routes: Routes = [
   { path: 'comisiones/concentrado', component:  ComisionesConcentradoComponent},
   { path: 'comisiones/nuevos', component:  ComisionesComponent},
   { path: 'comisiones/seminuevos', component:  ComisionesComponent},
+  { path: 'comisiones/flotillas', component:  ComisionesComponent},
   { path: 'comisiones/toma-unidades', component:  ComisionesTomaUnidadesComponent},
   { path: 'comisiones/seguros', component:  ComsionesSeguroComponent},
   { path: 'comisiones/accesorios', component:  ComisionesAccesoriosComponent},

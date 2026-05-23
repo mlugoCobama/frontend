@@ -80,6 +80,8 @@ import { ModalActualizarSolicitudMacroComponent } from './compras-macro/modal-ac
 import { TablaRecargaTokaComponent } from './cat-unidades/tabla-recarga-toka/tabla-recarga-toka.component';
 import { AlmacenComponent } from './almacen/almacen.component';
 import { PanelGenerarResguardoComponent } from './compras/detalle-solicitudes-compras/panel-generar-resguardo/panel-generar-resguardo.component';
+import { InventariadoComponent } from './compras/detalle-solicitudes-compras/panel-entregas/inventariado/inventariado.component';
+import { ConfirmacionComponent } from './compras/detalle-solicitudes-compras/panel-entregas/confirmacion/confirmacion.component';
 @NgModule({
   declarations: [
     ComprasComponent,
@@ -153,6 +155,8 @@ import { PanelGenerarResguardoComponent } from './compras/detalle-solicitudes-co
     TablaRecargaTokaComponent,
     AlmacenComponent,
     PanelGenerarResguardoComponent,
+    InventariadoComponent,
+    ConfirmacionComponent,
     
   ],
   imports: [

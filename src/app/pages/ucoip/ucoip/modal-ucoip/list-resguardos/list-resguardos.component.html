@@ -1,0 +1,47 @@
+<div class="card bg-primary text-white fw-bold mb-0">
+    <div class="card-body p-2 ">
+        Resguardos
+    </div>
+</div>
+ <accordion class="border">
+  <accordion-group  *ngFor="let resguardo of data" [heading]="'RRT-000'+resguardo.id">
+    <div class="text-center card-title">Resguardo de Recursos Tecnológicos</div>
+    <div class="d-flex justify-content-between aling-items-center">
+        <a>Fecha de asignación: {{ resguardo.fecha_inicio | date:'dd/MM/yyyy'}}</a>
+        <a>Fecha de cancelación: {{ resguardo.fecha_fin != null ? (resguardo.fecha_fin | date:'dd/MM/yyyy') : 'Resguardo aun vigente'  }} </a>
+    </div>
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>TIPO</th>
+                <th>MARCA</th>
+                <th>MODELO</th>
+                <th>SERIE</th>
+                <th>ESTADO</th>
+                <th>DEVUELTO</th>
+            </tr>
+        </thead>
+    <tbody>
+        <tr *ngFor="let detalle of resguardo?.detalles">
+            <td>
+                <span class="badge bg-primary text-white p-1 fw-bold"> {{detalle?.hardware?.tipo?.tipo }} </span>    
+            </td>
+            <td>{{detalle?.hardware?.marca}}</td>
+            <td>{{detalle?.hardware?.modelo}}</td>
+            <td>{{detalle?.hardware?.no_serie}}</td>
+            <td>
+                <span [attr.title]="detalle?.hardware?.estado == 1 ? 'Vigente' : 'Devuelto'">
+                    <i class="fas fa-circle" [ngClass]="{'text-success': detalle?.hardware?.estado == 1, 'text-danger': detalle?.hardware?.estado == 0}"></i>
+                </span>
+            </td>
+            <td>{{(detalle?.hardware?.fecha_devolucion | date:'dd/MM/yyyy') || '-'}}</td>
+        </tr>
+    </tbody>
+    </table>
+    <div class="d-flex justify-content-end aling-items-center">
+        <button class="btn btn-sm btn-danger"> <i class="fas fa-download fa-beat"></i> Resguardo</button>
+    </div>
+  </accordion-group>
+</accordion>
+
+

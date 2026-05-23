@@ -238,7 +238,12 @@ showSelectTipoVenta(){
   }
 
   if( tipoVentaAuto == 'seminuevos'){
-    this.formulario.patchValue({ tipoVenta: 'semi'})
+    this.formulario.patchValue({ tipoVenta: 'us'})
+    return false;
+  }
+
+  if( tipoVentaAuto == 'flotillas'){
+    this.formulario.patchValue({ tipoVenta: 'flotilla'})
     return false;
   }
 

@@ -1,0 +1,62 @@
+<form [formGroup]="inventarioForm">
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <a class="fw-bold text-white">
+                Entrada de insumos a inventario
+            </a>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-sm">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Tipo</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Serie</th>
+                        <th>Caracteristicas</th>
+                        <th>Asignar a</th>
+                    </tr>
+                </thead>
+
+                <tbody formArrayName="activos">
+                    <tr *ngFor="let activo of activosArray.controls; let i=index" [formGroupName]="i">
+                        <td>
+                            {{activo.get('descripcion')?.value}}
+                        </td>
+                        <td>
+                            <select class="form-select form-select-sm" formControlName="tipo"
+                            [class.is-invalid]="getControl(i,'tipo')?.invalid && getControl(i,'tipo')?.touched">
+                                <option  disabled>Selecciona uno</option>
+                                <option *ngFor="let item of dataCatHardware" [ngValue]="item">{{item.tipo}}</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input class="form-control form-control-sm" formControlName="marca" placeholder="Marca"
+                            [class.is-invalid]="getControl(i,'marca')?.invalid && getControl(i,'marca')?.touched">
+                        </td>
+                        <td>
+                            <input class="form-control form-control-sm" formControlName="modelo" placeholder="Modelo"
+                            [class.is-invalid]="getControl(i,'modelo')?.invalid && getControl(i,'modelo')?.touched">
+                        </td>
+                        <td>
+                            <input class="form-control form-control-sm" formControlName="serie"
+                                placeholder="Número de serie" [class.is-invalid]="getControl(i,'serie')?.invalid && getControl(i,'serie')?.touched">
+                        </td>
+                        <td>
+                        <input class="form-control form-control-sm" formControlName="caracteristcas"
+                            placeholder="Caracteristicas" [class.is-invalid]="getControl(i,'caracteristcas')?.invalid && getControl(i,'caracteristcas')?.touched">
+                        </td>
+                        <td>
+                            <select class="form-select form-select-sm" formControlName="usuario_asignar">
+                                <option [value]="" disabled> Seleccionar una opcion</option>
+                                <option *ngFor="let user of usuarios" [ngValue]="user.id" >{{ user.firstname }} {{ user.realname }}-<small>{{user.puesto}}</small></option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>

@@ -40,6 +40,7 @@ export class TomaUnidadesModalComponent implements OnInit, AfterViewInit {
   guardar(): void {
     if (!this.formSelectAgencia.esValido()) {
       this.formSelectAgencia.marcarTodo();
+      this.loading = false;
       return;
     }
 
@@ -47,11 +48,12 @@ export class TomaUnidadesModalComponent implements OnInit, AfterViewInit {
     const valores = this.formFinanciamiento.getItems();
     if (valores.length === 0) {
       this.alertas.mostrarAlerta('Aviso', 'Agrega al menos una toma de unidad', 'warning', 'warning');
+      this.loading = false;
     return;
   }
     const items = valores;
-      const agenciaValues = this.formSelectAgencia.getValues();
-      const formData = new FormData();
+    const agenciaValues = this.formSelectAgencia.getValues();
+    const formData = new FormData();
 
       items.forEach((item, i) => {
         const payload = { ...item.formData, ...agenciaValues };

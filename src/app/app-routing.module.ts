@@ -17,6 +17,7 @@ const routes: Routes = [
   { path: 'tarjetas-de-cliente', component: LayoutComponent, loadChildren: () => import('./pages/tarjeta-de-clientes/tarjeta-de-clientes.module').then(m => m.TarjetaDeClientesModule)},
   { path: 'nissan', component: LayoutComponent, loadChildren: () => import('./pages/nissan/nissan.module').then(m => m.NissanModule), canActivate: [AuthGuard] },
   { path: 'renault', component: LayoutComponent, loadChildren: () => import('./pages/renault/renault.module').then(m => m.RenaultModule), canActivate: [AuthGuard] },
+  { path: 'volumetricos', component: LayoutComponent, loadChildren: () => import('./pages/volumetricos/volumetricos.module').then(m => m.VolumetricosModule), canActivate: [AuthGuard] },
   { path: '**', component: Page404Component },
 ];
 
