@@ -1,0 +1,44 @@
+<!-- form.component.html -->
+<div class="card shadow-sm mt-4">
+  <div class="card-header bg-primary text-white">
+    Formulario de carga
+  </div>
+  <div class="card-body">
+    <form [formGroup]="form" class="row g-3">
+      
+      <!-- Input File -->
+      <div class="col-12">
+        <label for="archivo" class="form-label">Archivo JSON</label>
+        <input id="archivo" type="file" class="form-control" (change)="onFileChange($event)" />
+        <div *ngIf="form.get('archivo')?.invalid && form.get('archivo')?.touched" class="text-danger mt-1">
+          El archivo es obligatorio
+        </div>
+      </div>
+
+      <!-- Select Empresa -->
+      <div class="col-12">
+        <label for="empresa" class="form-label">Empresa</label>
+        <select id="empresa" class="form-select" formControlName="empresa">
+          <option value="">Seleccione una empresa</option>
+          <option *ngFor="let emp of empresas" [value]="emp.intercompania">{{ emp.name }}</option>
+        </select>
+        <div *ngIf="form.get('empresa')?.invalid && form.get('empresa')?.touched" class="text-danger mt-1">
+          La empresa es obligatoria
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div class="col-12 d-flex justify-content-end mt-3">
+        <!-- <button type="button" class="btn btn-outline-primary" (click)="previsualizar()">Previsualizar archivo</button> -->
+        <button type="button" class="btn btn-success" (click)="guardar()">Guardar</button>
+      </div>
+    </form>
+
+    <!-- Previsualización JSON -->
+    <div *ngIf="jsonPreview" class="mt-4">
+      <h5>Contenido del archivo:</h5>
+      <!-- <pre class="bg-light p-3 border rounded">{{ jsonPreview | json }}</pre> -->
+      <app-visor-reporte-volumenes [dataJson]="jsonPreview"></app-visor-reporte-volumenes>
+    </div>
+  </div>
+</div>

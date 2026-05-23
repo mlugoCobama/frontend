@@ -1,0 +1,43 @@
+<div class="card card-custom p-4 bg-white h-100 shadow-sm">
+    <h4 class="text-secondary border-bottom pb-2 mb-3">Identificación Fiscal y Permisos</h4>
+    <table class="table table-sm">
+        <tr>
+            <td class="text-muted">RFC Contribuyente:</td>
+            <th class="text-dark">
+                {{rfcContribuyente}}
+            </th>
+        </tr>
+        <tr>
+            <td class="text-muted">Rep. Legal:</td>
+            <td>
+                {{rfcRepLegal}} 
+            </td>
+        </tr>
+        <tr>
+            <td class="text-muted">Carácter / Modalidad:</td>
+            <td><span class="badge bg-info text-white fw-bold">
+                   {{caracter | uppercase}} 
+                </span> (
+                {{modalidadPermiso}})
+            </td>
+        </tr>
+        <tr>
+            <td class="text-muted">Clave Instalación:</td>
+            <td><span class="fw-bold p-0">{{claveInstalacion}}</span></td>
+        </tr>
+
+        <tr>
+      <td class="text-muted">Geolocalización:</td>
+      <td>
+        <ng-container *ngIf="latitud && longitud; else noUbicacion">
+          <a [href]="'https://www.google.com/maps?q=' + latitud + ',' + longitud"
+             target="_blank"
+             class="btn btn-sm btn-outline-primary py-0 px-2">
+            <i class="fa-solid fa-location-dot"></i> Ver Mapa ({{ latitud }})
+          </a>
+        </ng-container>
+        <ng-template #noUbicacion>N/A</ng-template>
+      </td>
+    </tr>
+    </table>
+</div>

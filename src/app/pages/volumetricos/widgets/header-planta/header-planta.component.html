@@ -1,0 +1,10 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 mb-1 text-primary"><i class="fas fa-gas-pump  me-2"></i>Reporte Mensual de Volúmenes</h1>
+        <p class="mb-0"> Instalación:  <strong> {{ descripcionInstalacion ?? 'No especificada' }} </strong> | Permiso: {{numPermiso ?? 'N/A'}}</p>
+        </div>
+    <div class="text-end">
+        <span class="badge bg-dark p-2 fs-6 fw-bold">Versión JSON: {{ versionJson ?? '1.0'}}</span>
+        <div class="text-muted small mt-1">Corte: {{ (fechaReporte | date:'dd/MM/yyyy HH:mm:ss') || 'N/D' }}</div>
+    </div>
+</div>

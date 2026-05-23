@@ -1,0 +1,30 @@
+<ng-container *ngIf="!jsonPreview">
+    <app-card-top
+    [title]="'Reportes de controles volumétricos'">
+    </app-card-top>
+
+    <app-tabla-generica
+    [isLoad] = "isLoad"
+    [data]="reportes"
+    [columnas]="columnas"
+    [acciones]="acciones">
+
+    </app-tabla-generica>
+</ng-container>
+
+
+<ng-container *ngIf="jsonPreview">
+    <div class="card">
+        <div class="card-body">
+                <div class="d-flex justify-content-between aling-items-center">
+                <p class="card-title">Detalles del reporte</p>
+                <button class="btn btn-sm btn-dark text-white" (click)="volver()">Volver</button>
+            </div>
+        </div>
+    </div>
+    <app-visor-reporte-volumenes
+    [dataJson]="jsonPreview"
+    >
+    </app-visor-reporte-volumenes>
+</ng-container>
+

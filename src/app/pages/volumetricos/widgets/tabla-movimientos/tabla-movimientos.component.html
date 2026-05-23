@@ -1,0 +1,59 @@
+<!-- tabla-dinamica.component.html -->
+
+<div class="d-flex justify-content-end mb-3">
+
+    <input
+        type="text"
+        class="form-control form-control-sm w-25"
+        [placeholder]="placeholder"
+        (keyup)="buscar($event)"
+    >
+
+</div>
+
+<div class="table-responsive" style="overflow-y: auto; height: 20rem">
+
+<table class="table table-hover table-striped">
+
+    <thead class="table-dark thead-sticky">
+
+        <tr>
+
+            <th
+                *ngFor="let col of columns"
+                (click)="ordenar(col.key)"
+                style="cursor:pointer"
+                [class]="col.class"
+            >
+
+                {{col.label}}
+
+                <i [class]="tabla.getIcono(col.key)"></i>
+
+            </th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        <tr *ngFor="let item of datosFiltrados">
+
+            <td
+                *ngFor="let col of columns"
+                [class]="col.class"
+            >
+
+            <span [innerHTML]="obtenerValor(item,col)">
+            </span>
+
+            </td>
+
+        </tr>
+
+    </tbody>
+
+</table>
+</div>
+<p> Mostrando {{datosFiltrados.length}} de {{data.length}}</p>

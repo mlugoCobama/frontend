@@ -1,0 +1,50 @@
+<div class="row">
+    <app-header-planta
+    [descripcionInstalacion] = "dataJson.DescripcionInstalacion"
+    [numPermiso] = "dataJson.NumPermiso"
+    [versionJson] = "dataJson.Version"
+    [fechaReporte] = "dataJson.FechaYHoraReporteMes"
+    ></app-header-planta>
+</div>
+
+<div class="row">
+    <div class="col-xl-3">
+        <app-kpi-card
+         [color] = "'text-warning'"
+         [titulo]= "' Existencias en Mes'" 
+         [sufijo]= "' L'"
+         [valor]= "+existencias.VolumenExistenciasMes"
+        ></app-kpi-card>
+    </div>
+    <div class="col-xl-3">
+        <app-kpi-card
+        [color] = "'text-success'"
+         [titulo]= "' TOTAL RECEPCIONES'"
+         [note]= "'docs'"
+         [valor]= "+recepciones.TotalRecepcionesMes"
+        ></app-kpi-card>
+    </div>
+    <div class="col-xl-3">
+        <app-kpi-card
+        [color] = "'text-success'"
+         [titulo]= "'  Importe Recepciones'"
+         [prefijo]= "'$'" 
+         [valor]= "+recepciones.ImporteTotalRecepcionesMensual"
+        ></app-kpi-card>
+    </div>
+    <div class="col-xl-3">
+        <app-kpi-card
+        [color] = "'text-danger'"
+         [titulo]= "' Importe Entregas'"
+         [prefijo]= "'$'" 
+         [valor]= "+entregas.ImporteTotalEntregasMes"
+        ></app-kpi-card>
+    </div>
+</div>
+
+<div class="row">
+    
+    <app-tabs-resumenes
+    [data] = "dataJson"
+    ></app-tabs-resumenes>
+</div>
