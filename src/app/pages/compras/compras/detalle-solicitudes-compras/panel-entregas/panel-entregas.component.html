@@ -1,23 +1,24 @@
-<div class="card border rounded shadow-sm">
+<div class="card border rounded shadow-sm" [hidden]="ordenCompra.surtido_solicitado != 1">
   <div class=" card-header bg-primary text-white text-center">
     <!-- <p *ngIf = "mostrarBtnSolicitud() && tienePermiso('view btn save precios')" class="m-0"> <strong>  Da click en el siguiente botón si deseas solicitar el surtido de tu orden de compra  </strong> </p> -->
-    <p *ngIf = "!mostrarBtnSolicitud()" class="m-0"> <strong> Carga en el siguiente formulario tus acuses o comprobantes de ENTREGA cuando el proveedor te entregue lo solicitado </strong></p>
+    <p *ngIf="!mostrarBtnSolicitud()" class="m-0"> <strong> Carga en el siguiente formulario tus acuses o comprobantes
+        de ENTREGA cuando el proveedor te entregue lo solicitado </strong></p>
   </div>
   <div class="card-body">
-  <!-- <div *ngIf="mostrarBtnSolicitud() && tienePermiso('view btn save precios')"class="d-flex justify-content-evenly gap-2 col-9 mx-auto">
+    <!-- <div *ngIf="mostrarBtnSolicitud() && tienePermiso('view btn save precios')"class="d-flex justify-content-evenly gap-2 col-9 mx-auto">
     <button (click)="solicitarSurtido()" class="btn btn-info col-md-4" type="button">
       <strong> Solicitar al proveedor que surta la orden de compra</strong>
     </button>
   </div> -->
 
 
-  <div class="card border" *ngIf="!entregaCompleta">
-    <div class="card-body p-2 gap-2">
+    <div class="card border" *ngIf="!entregaCompleta">
+      <div class="card-body p-2 gap-2">
         <ul class="nav nav-pills justify-content-center gap-2">
           <li class="nav-item">
             <a class="nav-link" [class.active]="currentStep >= 1">Recepción de insumos</a>
           </li>
-          <li [hidden] = "!requiereInventario" class="nav-item">
+          <li [hidden]="!requiereInventario" class="nav-item">
             <a class="nav-link" [class.active]="currentStep >= 2">Inventariar insumos</a>
           </li>
           <li class="nav-item">
@@ -25,53 +26,39 @@
           </li>
         </ul>
       </div>
-  </div>
-      <div [hidden]="currentStep !== 1">
-        <!-- <h5>Recepción</h5> -->
-        <div class="card border">
-          <div class="card-header bg-primary text-white">
-            <a class="fw-bold text-white">
-                Recepción de insumos
-            </a>
+    </div>
+    <div [hidden]="currentStep !== 1">
+      <!-- <h5>Recepción</h5> -->
+      <div class="card border">
+        <div class="card-header bg-primary text-white">
+          <a class="fw-bold text-white">
+            Recepción de insumos
+          </a>
         </div>
-          <div class="card-body">
-            <app-table-form-existencias
-            *ngIf = "currentStep >= 1"
-              #formTableEntradas
-              [hidden]="this.detalles.length === 0"
-              [isLoad] = "isLoad"
-              [detalles]="detalles"
-              [entregaCompleta] = "entregaCompleta"
-              [requiereInventario] = "requiereInventario"
-              [submittDetail]="submittDetail"
-              ></app-table-form-existencias>
-          </div>
+        <div class="card-body">
+          <app-table-form-existencias *ngIf="currentStep >= 1" #formTableEntradas [hidden]="this.detalles.length === 0"
+            [isLoad]="isLoad" [detalles]="detalles" [entregaCompleta]="entregaCompleta"
+            [requiereInventario]="requiereInventario" [submittDetail]="submittDetail"></app-table-form-existencias>
         </div>
-        
+      </div>
+
 
     </div>
-      <div [hidden]="currentStep !== 2">
+    <div [hidden]="currentStep !== 2">
 
-        <h5>Inventariado</h5>
+      <h5>Inventariado</h5>
 
-        <!-- Aquí colocas tu tabla actual -->
-        <app-inventariado
-        *ngIf = "currentStep >= 2"
-        #inventariado
-        [productos]="productosInventariables"
-        [intercompania] = "solicitudCompra.intercompania"
-        ></app-inventariado>
+      <!-- Aquí colocas tu tabla actual -->
+      <app-inventariado *ngIf="currentStep >= 2" #inventariado [productos]="productosInventariables"
+        [intercompania]="solicitudCompra.intercompania"></app-inventariado>
 
     </div>
-        <div [hidden]="currentStep !== 3">
+    <div [hidden]="currentStep !== 3">
 
-         <app-confirmacion
-              *ngIf="currentStep===3"
-              [entradas]="getResumen().entradas"
-              [activos]="getResumen().activos">
-          </app-confirmacion> 
-        <form  *ngIf= "!entregaCompleta && this.detalles.length > 0" [formGroup]="acuseForm"  enctype="multipart/form-data">
-          <div class="row align-items-end g-2">
+      <app-confirmacion *ngIf="currentStep===3" [entradas]="getResumen().entradas" [activos]="getResumen().activos">
+      </app-confirmacion>
+      <form *ngIf="!entregaCompleta && this.detalles.length > 0" [formGroup]="acuseForm" enctype="multipart/form-data">
+        <div class="row align-items-end g-2">
           <div class="col-sm-4">
             <label for="archivo" class="form-label">Archivo de acuse</label>
             <input type="file" id="archivo" (change)="onFileChange($event)" class="form-control form-control-sm" />
@@ -79,13 +66,15 @@
 
           <div class="col-sm-6">
             <label for="observaciones" class="form-label">Observaciones</label>
-            <input type="text" id="observaciones" formControlName="observaciones" class="form-control form-control-sm" />
+            <input type="text" id="observaciones" formControlName="observaciones"
+              class="form-control form-control-sm" />
           </div>
 
           <div class="col-sm-2 d-grid">
-            <button (click)="guardar()" [disabled] = "submitted"  *ngIf="tienePermiso('view btn entrada almacen')" class="btn btn-primary btn-sm">
+            <button (click)="guardar()" [disabled]="submitted" *ngIf="tienePermiso('view btn entrada almacen')"
+              class="btn btn-primary btn-sm">
               <i class="fas fa-save"></i>
-              {{ submitted ? 'Guardando...' :  'Guardar' }}
+              {{ submitted ? 'Guardando...' : 'Guardar' }}
             </button>
           </div>
         </div>
@@ -93,57 +82,53 @@
 
     </div>
 
-  <div  class="card" *ngIf="!mostrarBtnSolicitud()">
-    <div *ngIf="this.detalles.length === 0" class="card-body border-bottom">
-        <div class="d-flex justify-content-center" >
-              <div class="spinner-border  text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
+    <div class="card" *ngIf="!mostrarBtnSolicitud()">
+      <div *ngIf="this.detalles.length === 0" class="card-body border-bottom">
+        <div class="d-flex justify-content-center">
+          <div class="spinner-border  text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
         </div>
-    </div>
-
-    
-
-    <div class="card-body border">
-      <div *ngIf="!entregaCompleta" class="d-flex" [ngClass] = "{'justify-content-between' : currentStep > 1, 'justify-content-end' : currentStep == 1, }">
-            <button
-                class="btn btn-sm btn-secondary"
-                *ngIf="currentStep > 1"
-                (click)="prevStep()">
-                <i class="fas fa-arrow-circle-left "></i>
-                Atrás
-            </button>
-            <button
-                class="btn btn-sm btn-primary"
-                *ngIf="currentStep < 3"
-                (click)="nextStep()">
-                Continuar
-                <i class="fas fa-arrow-circle-right "></i>
-            </button>
       </div>
-        <table *ngIf="ordenCompra?.acuses_entrega?.length > 0"  class="table table-sm mt-1 text-center">
-        <thead class="table-light ">
-          <tr>
-            <th>#</th>
-            <th>Fecha</th>
-            <th>Observaciones</th>
-            <th>Acuse</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let acuse of acusesGuardados; let i = index">
-            <td> <strong class="text-muted">{{ i + 1}}</strong></td>
-            <td> Entregado: <strong> {{ acuse.fecha | date: 'dd/MM/yyyy' }} </strong></td>
-            <td>{{ acuse.comentario }}</td>
-            <td>
-            <a (click) ="verArchivos(acuse.ruta)"  class="btn btn-sm btn-danger">
-              <i class="fas fa-file-pdf"></i> Ver Acuse
-            </a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+
+
+
+      <div class="card-body border">
+        <div *ngIf="!entregaCompleta" class="d-flex"
+          [ngClass]="{'justify-content-between' : currentStep > 1, 'justify-content-end' : currentStep == 1, }">
+          <button class="btn btn-sm btn-secondary" *ngIf="currentStep > 1" (click)="prevStep()">
+            <i class="fas fa-arrow-circle-left "></i>
+            Atrás
+          </button>
+          <button class="btn btn-sm btn-primary" *ngIf="currentStep < 3" (click)="nextStep()">
+            Continuar
+            <i class="fas fa-arrow-circle-right "></i>
+          </button>
+        </div>
+        <table *ngIf="ordenCompra?.acuses_entrega?.length > 0" class="table table-sm mt-1 text-center">
+          <thead class="table-light ">
+            <tr>
+              <th>#</th>
+              <th>Fecha</th>
+              <th>Observaciones</th>
+              <th>Acuse</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let acuse of acusesGuardados; let i = index">
+              <td> <strong class="text-muted">{{ i + 1}}</strong></td>
+              <td> Entregado: <strong> {{ acuse.fecha | date: 'dd/MM/yyyy' }} </strong></td>
+              <td>{{ acuse.comentario }}</td>
+              <td>
+                <a (click)="verArchivos(acuse.ruta)" class="btn btn-sm btn-danger">
+                  <i class="fas fa-file-pdf"></i> Ver Acuse
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
-    
+</div>
     

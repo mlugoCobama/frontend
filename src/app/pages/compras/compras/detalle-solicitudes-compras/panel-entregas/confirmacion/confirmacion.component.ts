@@ -19,7 +19,6 @@ export class ConfirmacionComponent implements OnChanges {
   }
 
   generarResumen(){
-    console.log(this.activos)
     this.resumen={
 
       totalProductos:this.entradas.length,

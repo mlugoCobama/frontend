@@ -45,6 +45,7 @@ export class PanelEntregasComponent implements OnInit, AfterViewInit {
     this.buildForm();
     this.cargarAcuses();
     this.buscarDetalles(this.solicitudCompra?.id);
+
   }
 
   ngAfterViewInit(): void {
@@ -323,7 +324,6 @@ export class PanelEntregasComponent implements OnInit, AfterViewInit {
     const entradas = this.formTableEntradas?.getEntradas() ?? [];
     const activos = this.inventariado?.activosArray?.getRawValue() ?? [];
     const data = {entradas: entradas, activos:activos}
-    console.log(data)
     return data
   }
 

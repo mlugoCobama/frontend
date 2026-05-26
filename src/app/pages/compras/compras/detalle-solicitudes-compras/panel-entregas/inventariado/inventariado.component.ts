@@ -110,7 +110,6 @@ export class InventariadoComponent implements OnInit {
                 {id: null, firstname: "No asignar", realname: "", puesto: "" },
                 ...response.data,
               ];
-              console.log(this.usuarios)
               // this.isLoad = true;
             } else {
               this.usuarios = [
