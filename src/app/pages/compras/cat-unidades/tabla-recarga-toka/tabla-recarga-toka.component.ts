@@ -15,6 +15,7 @@ export interface VehiculoInput {
   placas: string;
   modelo: string;
   tipo:string;
+  distanciaRecorrida: string;
   
   saldoMesAnterior: number;
   saldoMesActual: number;
@@ -79,6 +80,7 @@ export class TablaRecargaTokaComponent implements OnChanges {
   get totalSaldoDispersar() :   number { return this.sumarCampo('saldoDispersar'); }
   get totalSaldoMesActual() :   number { return this.sumarCampo('saldoMesActual'); }
   get totalSaldoNuevo()     :   number { return this.sumarCampo('saldoNuevo'); }
+  get totalRecorrido()      :   number { return this.sumarCampo('distanciaRecorrida'); }
 
   private crearGrupo(data: VehiculoInput): FormGroup {
     return this.fb.group({
@@ -90,6 +92,7 @@ export class TablaRecargaTokaComponent implements OnChanges {
       submarca:             [{ value: data.submarca,         disabled: true }],
       tipo:                 [{ value: data.tipo,         disabled: true }],
       numTarjetaToka:       [{ value: data.numTarjetaToka,         disabled: true }],
+      distanciaRecorrida:   [{ value: data.distanciaRecorrida,         disabled: true }],
       modelo:               [{ value: data.modelo,           disabled: true }],
       numeroSerie:          [{ value: data.no_serie,      disabled: true }],
       placas:               [{ value: data.placas,           disabled: true }],

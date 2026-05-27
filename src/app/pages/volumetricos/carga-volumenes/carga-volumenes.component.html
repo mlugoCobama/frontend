@@ -1,4 +1,7 @@
 <!-- form.component.html -->
+ <app-card-top
+    [title]="'Carga de Reportes de controles volumétricos'">
+    </app-card-top>
 <div class="card shadow-sm mt-4">
   <div class="card-header bg-primary text-white">
     Formulario de carga
@@ -9,7 +12,7 @@
       <!-- Input File -->
       <div class="col-12">
         <label for="archivo" class="form-label">Archivo JSON</label>
-        <input id="archivo" type="file" class="form-control" (change)="onFileChange($event)" />
+        <input id="archivo" type="file" class="form-control form-control-sm" (change)="onFileChange($event)" />
         <div *ngIf="form.get('archivo')?.invalid && form.get('archivo')?.touched" class="text-danger mt-1">
           El archivo es obligatorio
         </div>
@@ -18,7 +21,7 @@
       <!-- Select Empresa -->
       <div class="col-12">
         <label for="empresa" class="form-label">Empresa</label>
-        <select id="empresa" class="form-select" formControlName="empresa">
+        <select id="empresa" class="form-select form-select-sm" formControlName="empresa">
           <option value="">Seleccione una empresa</option>
           <option *ngFor="let emp of empresas" [value]="emp.intercompania">{{ emp.name }}</option>
         </select>
@@ -29,8 +32,15 @@
 
       <!-- Botones -->
       <div class="col-12 d-flex justify-content-end mt-3">
-        <!-- <button type="button" class="btn btn-outline-primary" (click)="previsualizar()">Previsualizar archivo</button> -->
-        <button type="button" class="btn btn-success" (click)="guardar()">Guardar</button>
+        <button type="button" class="btn btn-success btn-sm" (click)="guardar()" [disabled]="isLoading">
+          <ng-container *ngIf="!isLoading; else loading">
+            <i class="fas fa-save"></i> Guardar
+          </ng-container>
+          <ng-template #loading>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Guardando...
+          </ng-template>
+        </button>
       </div>
     </form>
 

@@ -148,7 +148,7 @@ public getRecepciones() {
     this.recepciones =
         this.mapearMovimientos('Recepciones');
 
-    console.log(this.recepciones);
+    // console.log(this.recepciones);
 
 }
 
@@ -157,7 +157,7 @@ public getEntregas() {
     this.entregas =
         this.mapearMovimientos('Entregas');
 
-    console.log(this.entregas);
+    // console.log(this.entregas);
 
 }
 
@@ -242,7 +242,7 @@ private mapearMovimientos(
                 (cfdi:any)=>({
 
                     fecha:
-                        cfdi.FechaYHoraTransaccion,
+                        this.formatearFecha(cfdi.FechaYHoraTransaccion),
 
                     nombre:
                         nacional.NombreClienteOProveedor,
@@ -272,5 +272,20 @@ private mapearMovimientos(
 
     });
 
+}
+
+private formatearFecha(fecha: string): string {
+    if (!fecha) return '';
+    const d = new Date(fecha);
+    if (isNaN(d.getTime())) return fecha;
+
+    const dd   = String(d.getDate()).padStart(2, '0');
+    const mm   = String(d.getMonth() + 1).padStart(2, '0');
+    const aaaa = d.getFullYear();
+    const hh   = String(d.getHours()).padStart(2, '0');
+    const min  = String(d.getMinutes()).padStart(2, '0');
+    const ss   = String(d.getSeconds()).padStart(2, '0');
+
+    return `${dd}/${mm}/${aaaa} ${hh}:${min}:${ss}`;
 }
 }

@@ -71,11 +71,9 @@ constructor(
   }
 
    obtenerValor(item: T, column: TableColumn<T>) {
-
      if(column.template){
        return column.template(item);
      }
-
      return item[column.key];
    }
 

@@ -81,7 +81,7 @@ reportes:any[]=[];
       .subscribe({
         next:(resp:any)=>{
 
-          console.log(resp.data);
+          // console.log(resp.data);
 
           // mostrar preview
           this.jsonPreview = resp.data;

@@ -44,3 +44,7 @@ Se integra el nuevo módulo de Gestión de Comisiones con los siguientes apartad
 ### Nuevos Indicadores en la vista de Kanban
 - Se agregan indicadores de estados de documentos (entregas, facturas, pagos y complementos de pago)
 
+# **Fecha de liberación:** 27 de mayo de 2026
+## Compras-Parque vehicular
+- Se agrega el calculo de distancias recorridas en el apartado de recarga toka
+

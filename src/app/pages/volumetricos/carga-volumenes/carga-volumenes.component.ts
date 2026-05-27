@@ -15,7 +15,7 @@ export class CargaVolumenesComponent implements OnInit {
   empresas: any[] = [];
   jsonPreview: any = null;
   public rawEmpresas: any;
-   public isLoading: boolean = true;
+   public isLoading: boolean = false;
 
   constructor(private fb: FormBuilder,
     private usuariosService: UsuariosService,
@@ -109,7 +109,7 @@ export class CargaVolumenesComponent implements OnInit {
             (objeto) => objeto.isAgencia === false
           );
           this.getUsuarioActivo();
-          this.isLoading = false;
+          // this.isLoading = false;
         } else {
           this.alertasService.mostrarAlerta(
             "Error",
@@ -151,9 +151,12 @@ export class CargaVolumenesComponent implements OnInit {
           "error",
           "danger"
         );
+        this.form.markAllAsTouched();
+        this.isLoading = false;
     return;
+    
   }
-
+  this.isLoading = true;
   const formData = new FormData();
 
   formData.append('archivo',this.form.get('archivo')?.value);
@@ -165,7 +168,6 @@ export class CargaVolumenesComponent implements OnInit {
   this.volumetricos.store(formData)
     .subscribe({
       next: (resp) => {
-        console.log(resp);
        this.alertasService.mostrarAlerta(
           "Listo",
           `Archivo Guardado Correctamente`,
@@ -174,9 +176,11 @@ export class CargaVolumenesComponent implements OnInit {
         );
         this.form.reset();
         this.jsonPreview = null;
+        this.isLoading = false;
       },
       error: (err) => {
         console.log(err);
+        this.isLoading = false;
       }
     });
 }

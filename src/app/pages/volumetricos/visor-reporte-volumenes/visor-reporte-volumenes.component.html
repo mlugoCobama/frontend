@@ -8,33 +8,37 @@
 </div>
 
 <div class="row">
-    <div class="col-xl-3">
+    <div class=" col-6 col-xl-3">
         <app-kpi-card
          [color] = "'text-warning'"
+         [icono] = "'fas fa-boxes'"
          [titulo]= "' Existencias en Mes'" 
          [sufijo]= "' L'"
          [valor]= "+existencias.VolumenExistenciasMes"
         ></app-kpi-card>
     </div>
-    <div class="col-xl-3">
+    <div class=" col-6  col-xl-3">
         <app-kpi-card
         [color] = "'text-success'"
+        [icono] = "'fas fa-sign-out-alt '"
          [titulo]= "' TOTAL RECEPCIONES'"
          [note]= "'docs'"
          [valor]= "+recepciones.TotalRecepcionesMes"
         ></app-kpi-card>
     </div>
-    <div class="col-xl-3">
+    <div class=" col-6  col-xl-3">
         <app-kpi-card
         [color] = "'text-success'"
+        [icono] = "'fas fa-money-bill-wave'"
          [titulo]= "'  Importe Recepciones'"
          [prefijo]= "'$'" 
          [valor]= "+recepciones.ImporteTotalRecepcionesMensual"
         ></app-kpi-card>
     </div>
-    <div class="col-xl-3">
+    <div class=" col-6  col-xl-3">
         <app-kpi-card
         [color] = "'text-danger'"
+        [icono] = "'fas fa-sign-out-alt '"
          [titulo]= "' Importe Entregas'"
          [prefijo]= "'$'" 
          [valor]= "+entregas.ImporteTotalEntregasMes"

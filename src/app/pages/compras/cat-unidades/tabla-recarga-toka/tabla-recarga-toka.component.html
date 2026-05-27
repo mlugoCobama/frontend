@@ -39,7 +39,8 @@
             <th>Núm. de serie</th>
             <th>Placas</th>
             <th class="text-nowrap">Núm. Tarjeta Toka</th>
-            <th class="text-nowrap">Saldo  Dispersado Mes Anterior</th>
+            <th>Distancia Recorrida</th>
+            <th class="text-nowrap"> <small>Saldo  Dispersado Mes Anterior </small></th>
             <ng-container *ngIf="tienePermiso(permisos.colFormSolicitud)">
               <th class="text-nowrap">Venta litros</th>
               <th class="text-nowrap">Saldo solicitado</th>
@@ -75,14 +76,19 @@
             <!-- Datos del vehiculo -->
             <td class="text-center fw-bold">{{ getValor( i ,'eco') }}</td>
             <td>{{ getValor( i ,'marca') }}</td>
-            <td>{{ getValor( i ,'submarca') }}</td>
+            <td class="text-nowrap">{{ getValor( i ,'submarca') }}</td>
             <td>{{ getValor( i ,'modelo') }}</td>
             <td>{{ getValor( i ,'numeroSerie') }}</td>
             <td>{{ getValor( i ,'placas') }}</td>
             <td [ngClass]="{'text-primary fw-bold': getValor( i ,'saldoSolictado') > 0}">{{ getValor( i ,'numTarjetaToka') }}</td>
-
-
-            
+            <td class="text-center">
+              <span class="fw-bold text-nowrap" [ngClass]="{
+                'text-primary' : getValor( i ,'distanciaRecorrida') > 1,
+                'text-danger' : getValor( i ,'distanciaRecorrida') < 1 
+              }">
+                {{ getValor( i ,'distanciaRecorrida') | number: '1.2-2' }} Km 
+              </span>
+            </td>
             <td class="text-end">
               <input [title]= "'Se realizaron ' + getValor(i, 'numAbonosMesAnterior') + ' abonos.'" mask="separator.2" thousandSeparator="," prefix="$ "
               class="form-control form-control-sm text-end bg-light" 
@@ -150,7 +156,7 @@
         <tfoot class="table-secondary fw-semibold">
           <tr>
             <td colspan="7" class="text-end text-muted">Totales</td>
-
+            <td class="text-center text-nowrap">{{ totalRecorrido |  number:'1.2-2' }} Km</td>
             <td class="text-end">{{ totalSaldoAnterior | currency }}</td>
             <ng-container *ngIf="tienePermiso(permisos.colFormSolicitud)">
               <td class="text-end">{{ totalVentaLitros | number:'1.2-2' }} L</td>
