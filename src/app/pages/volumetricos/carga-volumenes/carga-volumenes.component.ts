@@ -58,7 +58,9 @@ export class CargaVolumenesComponent implements OnInit {
           this.jsonPreview = JSON.parse(this.rawContent); // intentamos parsear JSON
         } catch (e) {
           this.jsonPreview = null;
-          alert('El archivo no es un JSON válido');
+          this.alertasService.mostrarAlerta("Error",
+          `El archivo no es un JSON válido`,"error","danger"
+        );
         }
       };
       reader.readAsText(file);
@@ -73,7 +75,12 @@ export class CargaVolumenesComponent implements OnInit {
         try {
           this.jsonPreview = JSON.parse(reader.result as string);
         } catch (e) {
-          alert('El archivo no es un JSON válido');
+          this.alertasService.mostrarAlerta(
+          "Error",
+          `El archivo no es un JSON válido`,
+          "error",
+          "danger"
+        );
         }
       };
       reader.readAsText(file);
@@ -132,15 +139,18 @@ export class CargaVolumenesComponent implements OnInit {
     const enpresas = usuarioActivo.empresas;
     
     this.empresas = this.rawEmpresas;
-
-    console.log(this.empresas)
   }
 
   
 
   guardar() {
   if (this.form.invalid) {
-    alert('Completa todos los campos obligatorios');
+    this.alertasService.mostrarAlerta(
+          "Error",
+          `Debes llenar todos los campos`,
+          "error",
+          "danger"
+        );
     return;
   }
 
