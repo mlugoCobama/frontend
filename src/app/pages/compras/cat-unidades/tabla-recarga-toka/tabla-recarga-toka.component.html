@@ -82,9 +82,9 @@
             <td>{{ getValor( i ,'placas') }}</td>
             <td [ngClass]="{'text-primary fw-bold': getValor( i ,'saldoSolictado') > 0}">{{ getValor( i ,'numTarjetaToka') }}</td>
             <td class="text-center">
-              <span class="fw-bold text-nowrap" [ngClass]="{
-                'text-primary' : getValor( i ,'distanciaRecorrida') > 1,
-                'text-danger' : getValor( i ,'distanciaRecorrida') < 1 
+              <span class="fw-bold badge fs-6 text-nowrap text-white" [ngClass]="{
+                'bg-primary' : getValor( i ,'distanciaRecorrida') > 1,
+                'bg-danger' : getValor( i ,'distanciaRecorrida') < 1 
               }">
                 {{ getValor( i ,'distanciaRecorrida') | number: '1.2-2' }} Km 
               </span>
