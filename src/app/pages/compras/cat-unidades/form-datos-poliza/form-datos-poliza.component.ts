@@ -6,6 +6,8 @@ import {
   Validators,
 } from "@angular/forms";
 import { obtenerErroresFormulario } from 'src/app/core/helpers/errores-forrmulario';
+import { catalogoAseguradoras } from 'src/environments/catalogo_aseguradora';
+
 @Component({
   selector: 'app-form-datos-poliza',
   templateUrl: './form-datos-poliza.component.html',
@@ -43,6 +45,8 @@ export class FormDatosPolizaComponent implements OnInit{
     { codigo: "2", Nombre: "Flotilla"},
   ];
 
+  public aseguradoras  = catalogoAseguradoras;
+
   constructor(
       public formBuilder: FormBuilder,
     ){}
@@ -60,7 +64,7 @@ export class FormDatosPolizaComponent implements OnInit{
       this.formDatosPoliza = this.formBuilder.group({
         idSeguro: new FormControl( null),
         id_vehiculo_seguro: new FormControl(null),
-        aseguradora: new FormControl(null, Validators.required),
+        aseguradora: new FormControl("", Validators.required),
         ramo: new FormControl("", Validators.required),
         subramo: new FormControl("", Validators.required),
         periodicidad_pago: new FormControl("", Validators.required),

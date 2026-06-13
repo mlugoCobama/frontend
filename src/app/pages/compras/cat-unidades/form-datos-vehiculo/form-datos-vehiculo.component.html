@@ -12,7 +12,7 @@
         </div>
 
         <div class="col-md-6">
-            <label for="id_cre" class="form-label"> ID CRE: *</label>
+            <label for="id_cre" class="form-label"> ID CRE: </label>
             <input type="text" class="form-control form-control-sm" formControlName="id_cre" id="id_cre"
                 name="id_cre" aria-label="id_cre" placeholder="# ID CRE" />
             <div *ngIf="datosVehiculoFormControl.id_cre.touched || submitted">
@@ -95,10 +95,7 @@
                 (change)="selectChange()"
                 >
                 <option value="">Selecciona uno</option>
-                <option value="reparto">Reparto</option>
-                <option value="utilitario">Utilitario</option>
-                <option value="autotanque">Auto Tanque</option>
-                <option value="portable">Portable</option>
+                <option *ngFor="let item of usosVehiculos" [value]="item.id"> {{item.descripcion}}</option>
             </select>
             <div *ngIf="datosVehiculoFormControl.tipo_vehiculo.touched || submitted">
                 <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.tipo_vehiculo.errors?.['required']">
@@ -114,10 +111,7 @@
                 (change)="selectChange()"
                 >
                 <option value="">Selecciona uno</option>
-                <option value="gasolina">Gasolina</option>
-                <option value="diesel">Diésel</option>
-                <option value="gas_natural">Gas Natural</option>
-                <option value="gas_lp">Gas LP</option>
+                <option  *ngFor="let item of tiposCombustible" [value]="item.id"> {{item.descripcion}}</option>
             </select>
             <div *ngIf="datosVehiculoFormControl.tipo_combustible.touched || submitted">
                 <div class="text-danger form-text"
@@ -168,10 +162,15 @@
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
             <label for="num_tarjeta_toka" class="form-label">Num. Tarjeta Toka: </label>
-            <input type="text" class="form-control form-control-sm" formControlName="num_tarjeta_toka" id="num_tarjeta_toka" name="num_tarjeta_toka"
-                aria-label="num_tarjeta_toka" placeholder="Numero de tarjeta Toka (16 Digitos)" />
+            <!-- <input type="text" class="form-control form-control-sm" formControlName="num_tarjeta_toka" mask="0000-0000-0000-0000" id="num_tarjeta_toka" name="num_tarjeta_toka"
+                aria-label="num_tarjeta_toka" placeholder="Numero de tarjeta Toka (0000-0000-0000-0000)" /> -->
+            <select class="form-select form-select-sm" formControlName="num_tarjeta_toka" id="num_tarjeta_toka" name="num_tarjeta_toka"
+                aria-label="num_tarjeta_toka">
+                <option value="" disabled selected>Selecciona uno</option>
+                <option *ngFor=" let item of tarjetasDisponibles" [value]="item.id">{{item.tarjeta}}</option>
+            </select>
             <div *ngIf="datosVehiculoFormControl.num_tarjeta_toka.touched || submitted">
                 <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.num_tarjeta_toka.errors?.['required']">
                     Debes de ingresar un numero de tarjeta Toka.
@@ -179,7 +178,19 @@
             </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-3">
+            <label for="limite_toka" class="form-label">Limite Autorizado Toka: </label>
+            <input type="text" class="form-control form-control-sm" formControlName="limite_toka" id="limite_toka" name="limite_toka"
+                aria-label="limite_toka" placeholder="Limite Autorizado Toka" 
+                mask="separator.2" thousandSeparator="," decimalMarker="."  prefix="$ "/>
+            <div *ngIf="datosVehiculoFormControl.limite_toka.touched || submitted">
+                <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.limite_toka.errors?.['required']">
+                    Debes de ingresar un limite de tarjeta Toka.
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
             <label for="num_tag" class="form-label">Num. TAG: </label>
             <input type="text" class="form-control form-control-sm" formControlName="num_tag" id="num_tag" name="num_tag"
                 aria-label="num_tag" placeholder="Numero de TAG" />
@@ -190,10 +201,11 @@
             </div>
         </div>
 
-        <div class="col-md-4">
-            <label for="limite" class="form-label">Limite Máximo Autorizado (tag): </label>
+        <div class="col-md-3">
+            <label for="limite" class="form-label">Limite Autorizado Tag: </label>
             <input type="text" class="form-control form-control-sm" formControlName="limite" id="limite" name="limite"
-                aria-label="limite" placeholder="Limite Autorizado" />
+                aria-label="limite" placeholder="Limite Autorizado"
+                mask="separator.2" thousandSeparator="," decimalMarker="."  prefix="$ " />
             <div *ngIf="datosVehiculoFormControl.limite.touched || submitted">
                 <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.limite.errors?.['required']">
                     Debes de ingresar un limite de vehiculo.

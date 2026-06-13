@@ -22,4 +22,30 @@ export class AlmacenService {
   public getAll(): Observable<any> {
     return this.http.get(environment.apiUrl + `compras/AlmacenCompras`, {headers});
   }
+
+  /**
+   * Recupera los técnicos de ti
+   * @returns
+   */
+  public getTecnicosTi(): Observable<any> {
+    return this.http.get(environment.apiUrl + `compras/getTecnicos`, {headers});
+  }
+
+  /**
+   * Recupera los técnicos de ti
+   * @returns
+   */
+  public getExistencias(): Observable<any> {
+    
+    return this.http.get(environment.apiUrl + `compras/getExsitencias/3`, {headers});
+  }
+
+  public getMovimientos(): Observable<any> {
+    
+    return this.http.get(environment.apiUrl + `compras/getMovimientos`, {headers});
+  }
+
+  public storeMovimientos(data:any): Observable<any> {
+    return this.http.post(environment.apiUrl + `compras/AlmacenCompras`, data,{headers});
+  }
 }

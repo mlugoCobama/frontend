@@ -46,6 +46,8 @@ export class PanelEntregasComponent implements OnInit, AfterViewInit {
     this.cargarAcuses();
     this.buscarDetalles(this.solicitudCompra?.id);
 
+    console.log(this.solicitudCompra)
+
   }
 
   ngAfterViewInit(): void {
@@ -81,6 +83,7 @@ export class PanelEntregasComponent implements OnInit, AfterViewInit {
         "Falta algo", "Debes de adjuntar un archivo",
         "warning", "warning"
       );
+      this.submitted = false;
       return;
     }
 
@@ -91,6 +94,7 @@ export class PanelEntregasComponent implements OnInit, AfterViewInit {
         "Error", "Debes de seleccionar por lo menos un detalle",
         "warning", "warning"
       );
+      this.submitted = false;
       return;
     }
 
@@ -99,6 +103,7 @@ export class PanelEntregasComponent implements OnInit, AfterViewInit {
         "Error", `Debes de llenar correctamente el detalle`,
         "warning","warning"
       );
+      this.submitted = false;
       return;
     }
 
@@ -112,6 +117,8 @@ export class PanelEntregasComponent implements OnInit, AfterViewInit {
     formData.append("archivo", this.acuseForm.get("archivo")?.value);
     formData.append("observaciones",this.acuseForm.get("observaciones")?.value);
     formData.append("orden_compra_id", this.ordenCompra?.id);
+    formData.append("intercompania", this.solicitudCompra?.intercompania);
+    formData.append("usuario_destino", this.solicitudCompra?.usuario_destino_id);
     formData.append("proceso",JSON.stringify(proceso));
 
     this.acuseRecibido.guardarAcuse(formData).subscribe(

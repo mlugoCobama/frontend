@@ -13,6 +13,7 @@
 <div class="modal-body">
     <h5>Datos del Vehiculo</h5>
     <app-form-datos-vehiculo
+    [intercompania]="intercompania"
     (cambioSelect)="mostrarFormTanque()"
     #formDatosVehiculo
     ></app-form-datos-vehiculo>

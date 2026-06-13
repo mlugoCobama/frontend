@@ -82,6 +82,12 @@ import { AlmacenComponent } from './almacen/almacen.component';
 import { PanelGenerarResguardoComponent } from './compras/detalle-solicitudes-compras/panel-generar-resguardo/panel-generar-resguardo.component';
 import { InventariadoComponent } from './compras/detalle-solicitudes-compras/panel-entregas/inventariado/inventariado.component';
 import { ConfirmacionComponent } from './compras/detalle-solicitudes-compras/panel-entregas/confirmacion/confirmacion.component';
+import { FormSalidaInventarioComponent } from './almacen/form-salida-inventario/form-salida-inventario.component';
+import { ModalSalidaInventarioComponent } from './almacen/modal-salida-inventario/modal-salida-inventario.component';
+import { CatTarjetasTokaComponent } from './cat-tarjetas-toka/cat-tarjetas-toka.component';
+import { ModalTarjetasTokaComponent } from './cat-tarjetas-toka/modal-tarjetas-toka/modal-tarjetas-toka.component';
+import { DispersionesComponent } from './dispersiones/dispersiones.component';
+import { TablaDispersionesComponent } from './dispersiones/tabla-dispersiones/tabla-dispersiones.component';
 @NgModule({
   declarations: [
     ComprasComponent,
@@ -157,6 +163,12 @@ import { ConfirmacionComponent } from './compras/detalle-solicitudes-compras/pan
     PanelGenerarResguardoComponent,
     InventariadoComponent,
     ConfirmacionComponent,
+    FormSalidaInventarioComponent,
+    ModalSalidaInventarioComponent,
+    CatTarjetasTokaComponent,
+    ModalTarjetasTokaComponent,
+    DispersionesComponent,
+    TablaDispersionesComponent,
     
   ],
   imports: [

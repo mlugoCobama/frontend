@@ -81,7 +81,7 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
 
                   
                 } else {
-                  this.alertasService.mostrarAlerta("Error", response.message, "error", "danger");
+                  this.alertasService.mostrarAlerta("Error", `${response.message }. ${response.error ?? ''}`, "error", "danger");
                   this.deshabilitado = false;
                 }
               },
@@ -110,8 +110,8 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
    const tipoCombustible =  this.formDatosVehiculo.datosVehiculoFormControl.tipo_combustible.value
    const tipoVehiculo = this.formDatosVehiculo.datosVehiculoFormControl.tipo_vehiculo.value
 
-   if(tipoVehiculo == 'autotanque' || tipoVehiculo == 'reparto' 
-    || tipoCombustible == 'gas_natural' || tipoCombustible == 'gas_lp'){
+   if(tipoVehiculo == '3' || tipoVehiculo == '1' 
+    || tipoCombustible == '3' || tipoCombustible == '4'){
       this.openFormTanque = true;
       this.formDatosTanque.actualizarValidadoresTanque();
     }else{

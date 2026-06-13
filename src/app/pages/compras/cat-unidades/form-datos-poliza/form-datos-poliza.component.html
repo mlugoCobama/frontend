@@ -2,16 +2,14 @@
     <div class="row">
         <div class="col-md-6">
         <label for="aseguradora" class="form-label">Aseguradora: *</label>
-        <input
-            type="text"
-            title="Nombre de aseguradora con la que se contrata el seguro"
-            class="form-control form-control-sm"
-            formControlName="aseguradora"
-            id="aseguradora"
-            name="aseguradora"
-            aria-label="aseguradora"
-            placeholder="Aseguradora"
-        />
+        <select class="form-select form-select-sm"
+          formControlName="aseguradora">
+        <option value="" disabled selected>Seleccione una aseguradora</option>
+        <option *ngFor="let aseguradora of aseguradoras"
+                [value]="aseguradora">
+          {{ aseguradora }}
+        </option>
+      </select>
         <div *ngIf="datosPolizaFormControl.aseguradora.touched || submitted">
         <div
             class="text-danger form-text"

@@ -38,13 +38,20 @@ Se integra el nuevo módulo de Gestión de Comisiones con los siguientes apartad
 
 ## Comisiones — Seguros, Financiamientos
 - Se integra la capacidad de visualizar archivos previamente cargados
-
-# **Fecha de liberación:** 15 de mayo de 2026
+---
+## **Fecha de liberación:** 15 de mayo de 2026
 ## Módulo de Compras
 ### Nuevos Indicadores en la vista de Kanban
 - Se agregan indicadores de estados de documentos (entregas, facturas, pagos y complementos de pago)
-
-# **Fecha de liberación:** 27 de mayo de 2026
+---
+## **Fecha de liberación:** 27 de mayo de 2026
 ## Compras-Parque vehicular
 - Se agrega el calculo de distancias recorridas en el apartado de recarga toka
-
+---
+## **Fecha de liberación:** 13 de junio de 2026
+## Parque vehicular - Toka
+- Se integra un formulario para la captura de información como periodo de inicio, periodo de fin y precio de combustible, ademas el calculo de saldo se calcula automáticamente a partir de el precio de el combustible y la cantidad de litros requerida.
+## Compras - Catalogo de tarjetas Toka
+- Se genera un catalogo de tarjetas de toka de las empresas
+## Compras - Dispersiones de diesel
+- Se genera un apartado especifico para la dispersion de tajetas toka, dividiendo la solicitud y disperion en dos pasos, ademas de poder consultar solicitudes dispersion y solicitudes ya dispersadas

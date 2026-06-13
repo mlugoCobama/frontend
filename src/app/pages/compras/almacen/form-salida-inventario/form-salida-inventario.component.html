@@ -1,0 +1,188 @@
+<form [formGroup]="formulario" class="row">
+<div class="card shadow-sm border">
+  <div class="card-body">
+    <div class="col-lg-12 mb-1">
+      <label for="tecnico" class="form-label">Asignado a:</label>
+      <select id="tecnico" formControlName="tecnico" class="form-select form-select-sm">
+        <option value="" selected disabled>Selecciona una opción</option>
+        <option *ngFor="let t of tecnicos" [value]="t.id">
+        {{ t.firstname }} {{ t.realname }} - {{t.puesto}}
+        </option>
+      </select>
+    </div>
+    <div *ngIf="solicitudCompraFormControl.tecnico.touched || submitted">
+        <div
+          class="text-danger form-text" *ngIf="solicitudCompraFormControl.tecnico.errors?.['required']">
+          Tecnico es requerido
+        </div>
+      </div>
+  </div>
+</div>
+
+  <!-- <div class="col-lg-12 mb-1">
+    <label for="motivo" class="form-label">Descripción del trabajo a realizar: </label>
+    <textarea  id="motivo" formControlName="motivo" class="form-control form-control-sm" rows="3"></textarea>
+  </div> -->
+
+<div class="card  shadow-sm border">
+    <div class="card-body">
+        <h5>Existencias en almacén</h5>
+        <ng-container *ngIf="!isLoad; else noData">
+            <div class="row mb-3">
+            <div class="col-md-12">
+                <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    placeholder="Buscar material..."
+                    [(ngModel)]="filtroBusqueda"
+                    [ngModelOptions]="{standalone: true}"
+                    (input)="filtrarMateriales()">
+            </div>
+        </div>
+
+        <div class="table-responsive border" style="max-height: 15rem; overflow-y: auto;">
+            <table class="table table-hover table-striped table-sm" >
+
+                <thead class="thead-light thead-sticky">
+                    <tr>
+                        <th>Emp</th>
+                        <th>Descripción</th>
+                        <th>Categoría</th>
+                        <th>Stock</th>
+                        <th>Unidad</th>
+                        <th>Observaciones</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                  <ng-container *ngIf="materialesFiltrados.length > 0">
+                    <tr *ngFor="let item of materialesFiltrados">
+
+                        <td>{{ item.empresa }}</td>
+                        <td><strong>{{ item.descripcion }}</strong></td>
+                        <td>{{ item.categoria }}</td>
+                        <td class="text-center">{{ item.existencia }}</td>
+                        <td>{{ item.unidad }}</td>
+                        <td>{{ item.observaciones || '-' }}</td>
+                        <td class="text-nowrap text-center">
+                            <button
+                                class="btn btn-primary btn-sm"
+                                (click)="agregarMaterial(item)">
+                                <i class="fas fa-plus"></i>
+                                Agregar
+                            </button>
+                        </td>
+                    </tr>
+                  </ng-container>   
+                    <tr *ngIf="materialesFiltrados.length === 0">
+                        <td colspan="7" class="text-center">Sin resultados</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <span class="badge bg-info text-withe mt-2 text-nowrap">
+              <strong>
+                    Articulos encontrados:
+                </strong>
+                {{ materialesFiltrados.length }}
+        </span>
+        </ng-container>
+        
+    </div>
+</div>
+
+<div class="card shadow-sm border">
+
+    <div class="card-body">
+      <h5> Materiales seleccionados </h5>
+        <div class="table-responsive border" style="max-height: 15rem; overflow-y: auto;">
+            <table class="table table-hover table-striped table-sm">
+                <thead class="thead-light thead-sticky">
+                    <tr>
+                        <th>Emp</th>
+                        <th>Descripción</th>
+                        <th>Stock</th>
+                        <th>Unidad</th>
+                        <th width="100">Entrega</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of materialesSeleccionados">
+                        <td>{{ item.empresa }}</td>
+                        <td><strong>{{ item.descripcion }}</strong>
+                        </td>
+                        <td>{{ item.existencia }}</td>
+                        <td>{{ item.unidad }}</td>
+                        <td>
+                          <div class="d-flex justify-content-around m-0">
+                            <div class=" ">
+                              <button class="btn btn-outline-secondary btn-sm" (click)="disminuirCantidad(item)">-</button>
+                            </div>
+                            <input
+                              type="number"
+                              min="1"
+                              [max]="item.existencia"
+                              class="form-control form-control-sm text-center p-0"
+                              [(ngModel)]="item.cantidad"
+                              [ngModelOptions]="{standalone: true}"
+                              (change)="validarCantidad(item)">
+                            <div class="">
+                              <button class="btn btn-outline-secondary btn-sm" (click)="aumentarCantidad(item)">+</button>
+                            </div>
+                          </div>
+                        </td>
+
+                        <td class="text-nowrap text-center">
+
+                            <button
+                                class="btn btn-danger btn-sm"
+                                (click)="eliminarMaterial(item)">
+                                <i class="fas fa-trash"></i>
+                                Quitar
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                    <tr *ngIf="materialesSeleccionados.length === 0">
+
+                        <td colspan="6" class="text-center text-muted">
+
+                            No hay materiales agregados
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+            
+        </div>
+        <span class="badge bg-info text-withe mt-2 text-nowrap">
+              <strong>
+                    Total de artículos:
+                </strong>
+                {{ materialesSeleccionados.length }}
+            </span>
+    </div>
+</div>
+
+
+<!-- <div class="d-grid">
+    <button type="submit" class="btn btn-success btn-sm">Enviar</button>
+  </div> -->
+</form>
+
+<ng-template #noData>
+  <div *ngIf="isLoad" class="text-center py-3">
+      <div class="spinner-border  text-secondary" role="status"></div>
+      <div class="text-center text-secondary">
+        Preparando existencias...
+      </div>
+</div>
+</ng-template>

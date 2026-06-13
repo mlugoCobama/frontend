@@ -82,7 +82,7 @@
 
     </div>
 
-    <div class="card" *ngIf="!mostrarBtnSolicitud()">
+    <div class="card mt-1" *ngIf="!mostrarBtnSolicitud()">
       <div *ngIf="this.detalles.length === 0" class="card-body border-bottom">
         <div class="d-flex justify-content-center">
           <div class="spinner-border  text-primary" role="status">
@@ -93,7 +93,7 @@
 
 
 
-      <div class="card-body border">
+      <div class="card-body border p-2">
         <div *ngIf="!entregaCompleta" class="d-flex"
           [ngClass]="{'justify-content-between' : currentStep > 1, 'justify-content-end' : currentStep == 1, }">
           <button class="btn btn-sm btn-secondary" *ngIf="currentStep > 1" (click)="prevStep()">

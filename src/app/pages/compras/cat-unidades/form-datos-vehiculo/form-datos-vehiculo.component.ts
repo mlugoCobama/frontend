@@ -5,8 +5,8 @@ import {
   FormGroup,
   Validators,
 } from "@angular/forms";
-
-import Swal from 'sweetalert2';
+import { TokaService } from 'src/app/core/services/compras/toka.service';
+import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 
 @Component({
   selector: 'app-form-datos-vehiculo',
@@ -43,19 +43,37 @@ export class FormDatosVehiculoComponent implements OnInit{
     {"id": 2, "descripcion": "SI, NO REPORTA", "class": "fa-solid fa-triangle-exclamation text-warning" },
     {"id": 3,  "descripcion": "NO TIENE", "class": "fa-solid fa-ban text-danger" },
   ];
+  
+  public usosVehiculos = [
+    {id: 1, descripcion: "Reparto",     clave:"reparto"},
+    {id: 2, descripcion: "Utilitario",  clave:"utilitario"},
+    {id: 3, descripcion: "Auto Tanque", clave:"autotanque"},
+    {id: 4, descripcion: "Portable",    clave:"portable"},
+  ];
+
+  public tiposCombustible = [
+    {id: 1, descripcion: "Gasolina",    clave:"gasolina"},
+    {id: 2, descripcion: "Diesel",      clave:"diesel"},
+    {id: 3, descripcion: "Gas Natural", clave:"gas_natural"},
+    {id: 4, descripcion: "Gas LP",      clave:"gas_lp"},
+  ];
 
   @Input() datos: any = [];
-  public formDatosVehiculo: FormGroup;
+  public formDatosVehiculo!: FormGroup;
   public submitted:boolean = false;
-  public intercompania:any = 0;
+  @Input()  intercompania:any = 0;
 
-  
+  public tarjetasDisponibles:any = [];
+
   constructor(
     public formBuilder: FormBuilder,
+    private toka: TokaService, 
+    private alertasService: SwalComprsServiceService
   ){}
 
   ngOnInit(): void {
     this.buildForm();
+    this.getTarjetasDisponibles(this.intercompania);
   }
 
     private buildForm() {
@@ -82,6 +100,7 @@ export class FormDatosVehiculoComponent implements OnInit{
         num_tarjeta_toka: new FormControl(""),
         num_tag:          new FormControl(""),
         limite:           new FormControl(""),
+        limite_toka:           new FormControl(""),
         gps:              new FormControl("", [Validators.required]),
       });
 
@@ -188,13 +207,7 @@ export class FormDatosVehiculoComponent implements OnInit{
   });
 
   if (errores.length > 0) {
-
     return errores[0];
-    // Swal.fire({
-    //   icon: 'error',
-    //   title: 'Errores en el formulario',
-    //   html: `<ul style="text-align:left;">${errores.map(e => `<li>${e}</li>`).join('')}</ul>`,
-    // });
   }
 }
 
@@ -211,6 +224,29 @@ private observarCambios(controlName: string, valorOriginal: any) {
     observacionControl?.updateValueAndValidity();
   });
 }
+
+
+
+private getTarjetasDisponibles(intercompania:any) {
+    this.toka.getTarjetasEmpresa(intercompania).subscribe(
+      (response) => {
+        if (response) {
+          this.tarjetasDisponibles = [
+            { id: null, tarjeta: 'Sin Tarjeta' },
+            ...response.data
+          ];
+        } else {
+          this.alertasService.mostrarAlerta(
+            "Error",response.message,"error","danger"
+          );
+        }
+      },
+      (error) => {
+        this.alertasService.mostrarAlerta("Error", 
+          `Error fetching data: ${error}`,"error","danger");
+      }
+    );
+  }
 
 
 

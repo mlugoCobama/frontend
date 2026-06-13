@@ -140,7 +140,7 @@ export class ModalUcoipComponent implements OnInit  {
       next: async (resp) => {
         if (resp.success) {
           this.resguardos = resp.data;
-          console.log(this.resguardos)
+
           this.isLoad = false;
         }
       },

@@ -106,8 +106,8 @@ export class ModalUpdtAutotanqueComponent implements AfterViewInit {
    const tipoCombustible =  this.formDatosVehiculo.datosVehiculoFormControl.tipo_combustible.value
    const tipoVehiculo = this.formDatosVehiculo.datosVehiculoFormControl.tipo_vehiculo.value
 
-   if(tipoVehiculo == 'autotanque' || tipoVehiculo == 'reparto' 
-    || tipoCombustible == 'gas_natural' || tipoCombustible == 'gas_lp'){
+   if(tipoVehiculo == '3' || tipoVehiculo == '1' 
+    || tipoCombustible == '3' || tipoCombustible == '4'){
       this.openFormTanque = true;
       this.formDatosTanque.actualizarValidadoresTanque();
     }else{

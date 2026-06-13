@@ -13,10 +13,12 @@ export class CardTopComponent {
   @Input() showBtnNuevo : boolean = false;
   @Input() showBtnEditar : boolean = false;
   @Input() showBtnEliminar : boolean = false;
+  @Input() showBtnVolver : boolean = false;
 
   @Output() nuevo = new EventEmitter<void>();
   @Output() actualizar = new EventEmitter<void>();
   @Output() eliminar = new EventEmitter<void>();
+  @Output() volver = new EventEmitter<void>();
 
   clickNuevo(){
     this.nuevo.emit();
@@ -28,6 +30,10 @@ export class CardTopComponent {
 
   clickEliminar(){
     this.eliminar.emit();
+  }
+  
+  clickVolver(){
+    this.volver.emit();
   }
 
 }

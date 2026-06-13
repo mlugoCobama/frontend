@@ -29,6 +29,7 @@ export interface VehiculoInput {
   idSolicitud:number; 
   saldoActual: number;
   saldoDispersar:number;
+  id_asignacion:number;
 }
 
 
@@ -43,8 +44,9 @@ export class TablaRecargaTokaComponent implements OnChanges {
   @Input() tipo: any;
   @Input() intercompania: any;
 
-  vehiculos: VehiculoInput[] = []; 
+   @Input() vehiculos: VehiculoInput[] = []; 
   form!: FormGroup;
+  formulario: FormGroup;
   public isLoad:boolean = false;
   public deshabilitado:boolean = false;
   public permisos = pmsParqueVehciular;
@@ -56,6 +58,11 @@ export class TablaRecargaTokaComponent implements OnChanges {
     private permisosService: PermisosService,
   ) {
     this.form = this.fb.group({ vehiculos: this.fb.array([]) });
+    this.formulario = this.fb.group({
+      periodoInicio: ['', Validators.required],
+      periodoFin: ['', Validators.required],
+      precioCombustible: ['', [Validators.required, Validators.min(0)]]
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -103,12 +110,13 @@ export class TablaRecargaTokaComponent implements OnChanges {
       numAbonosMesActual:   [{ value: data.numAbonosMesActual ?? 0, disabled: true }],
       //-- Informacion Extra--
       ventaLitros:          [{ value: data.ventasLitros ?? 0, disabled:   (data.saldoSolicitado ?? 0) > 0  }, [Validators.min(0)]],
-      saldoSolictado:       [{ value: data.saldoSolicitado ?? 0,   disabled: (data.saldoSolicitado ?? 0) > 0},[Validators.min(0)]],
-
+      // saldoSolictado:       [{ value: data.saldoSolicitado ?? 0,   disabled: (data.saldoSolicitado ?? 0) > 0},[Validators.min(0)]],
+      saldoSolictado:       [{ value: data.saldoSolicitado ?? 0,   disabled: true},[Validators.min(0)]],
       idSolicitud:          [{ value: data.idSolicitud ?? null, disabled: true }],
       saldoActual:          [{ value: data.saldoActual ?? 0, disabled: !((data.saldoSolicitado ?? 0) > 0) } ,[Validators.min(0)]],
       saldoDispersar:       [ {value: 0, disabled: true }, [Validators.min(0)]],
       saldoNuevo:           [{ value: data.saldoMesActual ?? 0, disabled: true }],
+      id_asignacion:        [{ value: data.id_asignacion ?? 0, disabled: true }],
     });
   }
 
@@ -123,6 +131,14 @@ export class TablaRecargaTokaComponent implements OnChanges {
 
     grupo.get('saldoDispersar')?.setValue(saldoDispersar);
   
+  }
+
+  calcularSaldoSolicitado(index: number){
+    const precioCombustible   =  parseFloat(this.formulario.get('precioCombustible')?.value) || 0;
+    const grupo    = this.vehiculosArray.at(index) as FormGroup;
+    const litrosSolicitados   =  parseFloat(grupo.get('ventaLitros')?.value) || 0;
+    const saldoSolicitado = parseFloat((precioCombustible * litrosSolicitados).toFixed(2));
+    grupo.get('saldoSolictado')?.setValue(saldoSolicitado);
   }
 
   get seleccionados(): number[] {
@@ -167,6 +183,7 @@ getValor(index: number, campo: string) {
   getValoresCapturados() {
     const dataCapturados =  this.vehiculosArray.controls.map((ctrl) => ({
       id:               ctrl.get('id')?.value,
+      id_asignacion:    ctrl.get('id_asignacion')?.value,
       abonoNuevo:       ctrl.get('saldoSolictado')?.value,
       ventaLitros:      ctrl.get('ventaLitros')?.value,
 
@@ -192,7 +209,14 @@ getValor(index: number, campo: string) {
     }
 
     const data = this.getValoresCapturados();
-    this.unidadesService.solicitarToka(data).subscribe(
+    const contexto = {
+      empresa : this.intercompania,
+       ...this.formulario.value
+      };
+
+    const payload = {solicitud: contexto, ...data}
+
+    this.unidadesService.solicitarToka(payload).subscribe(
       (response) => {
         if (response.status === "success") {
           this.deshabilitado = false;

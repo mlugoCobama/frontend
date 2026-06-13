@@ -33,16 +33,11 @@
       <!-- datos de la tabla detalle -->
       <tr *ngFor="let row of detalles; let i = index">
         <td class="text-center"> {{row.cantidad}} </td>
-        <td>
-            {{ row.unidadMedida.nombre }} ({{ row.unidadMedida.abreviatura }})
-        <td>
-          {{row.descripcion}}
-        </td>
-        <td>
-          {{ row.observaciones }}
-        </td>
+        <td>{{ row.unidadMedida.nombre }} ({{ row.unidadMedida.abreviatura }})</td>
+        <td>{{row.descripcion}}</td>
+        <td>{{ row.observaciones }}</td>
         <td *ngIf = "solicitudCompra.multiUnidad" >
-          <span
+            <span
              data-bs-toggle="tooltip" data-bs-placement="top" (click)="copiarTexto(row?.DetalleAutotanque?.DatosVehiculo?.eco || '')" [attr.title]="row?.DetalleAutotanque?.DatosVehiculo?.no_serie || ''">
               {{ row?.DetalleAutotanque?.DatosVehiculo?.eco || '' }}
             </span>

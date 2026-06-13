@@ -279,7 +279,7 @@ export class CatUnidadesComponent implements OnInit {
           const rawData = response.data;
           /**Filtro para solo mostrar las empresas que tienen acceso a macrotaller */
           this.rawEmpresas = rawData.filter(
-            (objeto) => objeto.isAgencia === false
+            (objeto:any) => objeto.isAgencia === false
           );
           this.getUsuarioActivo();
           this.isLoading = false;

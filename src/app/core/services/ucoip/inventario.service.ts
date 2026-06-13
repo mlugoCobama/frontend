@@ -28,7 +28,6 @@ export class InventarioService {
 
     loadData() {
       this.http.get<ResponseInvetario>(environment.apiUrl + 'ucoip/hardware').subscribe((data) => {
-        console.log(data.data);
         
         this.dataSubject.next(data.data);
       });

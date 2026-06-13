@@ -135,12 +135,27 @@ export const MENU: MenuItem[] = [
         permission: "view unidades de medida",
       },
       {
-        id: 10,
+        id: 11,
         label: "Almacén",
         link: "/compras/almacen",
         parentId: 7,
         permission: "view almacen compras",
       },
+      {
+        id: 12,
+        label: "Tarjetas Toka",
+        link: "/compras/cat-tarjetas-toka",
+        parentId: 7,
+        permission: "view tarjetas toka",
+      },
+      {
+        id: 14,
+        label: "Dispersiones Diésel",
+        link: "/compras/dispersiones",
+        parentId: 7,
+        permission: "view dispersion diesel",
+      },
+      
     ],
   },
   // MACRO TALLER

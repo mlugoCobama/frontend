@@ -1,0 +1,152 @@
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <div class="row g-3 align-items-center">
+            <!-- Información -->
+            <div class="col-12 col-lg">
+                <div class="row g-2">
+                    <div class="col-12 col-md-auto alert alert-primary m-1 p-1 fw-bold">
+                        <strong>Folio:</strong>
+                        <span>{{ solicitud.folio }}</span>
+                    </div>
+                    <div class="col-12 col-md-auto">
+                        <strong>Fecha:</strong>
+                        <span>{{ solicitud.fecha | date:'dd/MM/yyyy' }}</span>
+                    </div>
+                    <div class="col-12 col-md-auto">
+                        <strong>Periodo:</strong>
+                        <span>
+                            {{ solicitud.inicio_periodo | date:'dd/MM/yyyy' }}
+                            al
+                            {{ solicitud.fin_periodo | date:'dd/MM/yyyy' }}
+                        </span>
+                    </div>
+                    <div class="col-12 col-md-auto">
+                        <strong>Solicita:</strong>
+                        <span>{{ solicitud.solicita }} <small>{{ solicitud.empresa }}</small></span>
+                    </div>
+                    <div class="col-12 col-md-auto">
+                        <strong>Precio:</strong>
+                        <span>{{ solicitud.precio_combustible | currency }}</span>
+                    </div>
+                    <div  *ngIf ="solicitud.fecha_dispersion" class="col-12 col-md-auto alert alert-success m-1 p-1 fw-bold">
+                        <strong>Fecha dispersion:</strong>
+                        <span>{{solicitud.fecha_dispersion | date:'dd/MM/yyyy'}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones -->
+            <div class="col-12 col-lg-auto">
+                <div class="d-flex flex-column flex-sm-row gap-2 justify-content-lg-end">
+                    <!-- <button
+                        *ngIf="!solicitud.fecha_dispersion"
+                        type="button"
+                        class="btn btn-outline-success btn-sm">
+                        <i class="fas fa-file-excel me-2"></i>
+                        Descargar plantilla
+                    </button> -->
+                    <button
+                      *ngIf="!solicitud.fecha_dispersion"
+                      (click)="dispersion()"
+                      type="button"
+                      class="btn btn-primary btn-sm"
+                      [disabled]="deshabilitado">
+
+                      <span
+                          *ngIf="deshabilitado"
+                          class="spinner-border spinner-border-sm me-2"
+                          role="status"
+                          aria-hidden="true">
+                      </span>
+
+                      <i *ngIf="!deshabilitado" class="fas fa-save me-2"></i>
+
+                      {{ deshabilitado ? 'Guardando...' : 'Guardar dispersión' }}
+                  </button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<form [formGroup]="form">
+  <div class="table-responsive bordered">
+    <table class="table table-sm table-bordered table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th class="text-center">Eco</th>
+          <th>Vehículo</th>
+          <th>Placas</th>
+          <th class="text-center">Recorrido</th>
+          <th>Tarjeta Toka</th>
+          <th>Litros</th>
+          <th>Precio</th>
+          <th>Saldo Solicitado</th>
+          <th>{{solicitud.fecha_dispersion ? 'Saldo Actual' : 'Saldo'}}</th>
+          <th>{{solicitud.fecha_dispersion ? 'Saldo Dispersado' : 'Saldo a Dispersar'}}</th>
+        </tr>
+      </thead>
+      <tbody formArrayName="vehiculos">
+        <tr
+          *ngFor="let grupo of vehiculosArray.controls; let i = index"
+          [formGroupName]="i">
+          <td class="fw-bold text-center">
+            {{ grupo.get('eco')?.value }}
+          </td>
+          <td>
+            <strong> {{ grupo.get('marca')?.value }}</strong><small>{{ grupo.get('submarca')?.value }} {{ grupo.get('modelo')?.value }}</small>
+          </td>
+          <td> {{ grupo.get('placas')?.value }} </td>
+          <td class="text-center">
+            <span
+              class="fw-bold badge fs-6 text-nowrap text-white"
+              [ngClass]="{
+                'bg-danger': grupo.get('distanciaRecorrida')?.value <= 0,
+                'bg-success': grupo.get('distanciaRecorrida')?.value > 0
+              }">
+              {{ grupo.get('distanciaRecorrida')?.value | number:'1.2-2' }} Km
+            </span>
+          </td>
+          <td [ngClass]="{'text-primary fw-bold': getValor( i ,'saldoSolictado') > 0}">{{ getValor( i ,'numTarjetaToka') }}</td>
+          <td class="text-end fw-bold"> {{grupo.get('litros')?.value | number}} </td>
+          <td class="text-end fw-bold"> {{solicitud.precio_combustible | currency}}</td>
+          <td class="text-end fw-bold"> {{grupo.get('saldoSolicitado')?.value | currency}}</td>
+          
+            <ng-container *ngIf="!solicitud.fecha_dispersion">
+                <td>
+                <input
+                    formControlName="saldoActual"
+                    class="form-control form-control-sm text-end"
+                    mask="separator.2"
+                    thousandSeparator=","
+                    prefix="$ "
+                    (input)="calcularSaldoDispersar(i)"
+                    >   
+                </td>
+            </ng-container>
+            <ng-container *ngIf="grupo.get('saldoDispersado')?.value > 0 && solicitud.fecha_dispersion">
+                <td class="text-end fw-bold text-success">
+                    {{grupo.get('saldoActual')?.value ?? 0 | currency}}
+                </td>
+            </ng-container>
+            
+            
+          <td class="text-end fw-bold text-primary">{{ grupo.get('saldoDispersar')?.value | currency }}</td>
+
+        </tr>
+
+      </tbody>
+
+      <tfoot class="table-secondary">
+        <tr>
+          <td colspan="7" class="text-end">Totales</td>
+          <td class="text-end fw-bold">{{ totalSolicitado | currency }}</td>
+          <td class="text-end fw-bold">{{ totalActual | currency }}</td>
+          <td class="text-end fw-bold">{{ totalDispersar | currency }}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</form>

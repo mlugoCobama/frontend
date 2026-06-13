@@ -27,7 +27,7 @@ export class FormDatosTanqueComponent implements OnInit {
     this.buildForm();
   }
 
-    private buildForm() {
+  private buildForm() {
     return new Promise((resolve, reject) => {
       this.formDatosTanques = this.formBuilder.group({
         id: new FormControl( null),

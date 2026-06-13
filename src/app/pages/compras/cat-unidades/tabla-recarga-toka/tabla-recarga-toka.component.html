@@ -17,6 +17,76 @@
     No hay vehículos cargados <span *ngIf = "isLoad">espera</span>
   </div>
 
+<ng-container *ngIf="vehiculosArray.length > 0">
+  <div *ngIf="!isLoad" class="border rounded shadow p-2">
+    
+    <div class="row g-2 align-items-end">
+
+      <!-- Formulario -->
+      <div class="col-12 col-xl">
+        <form [formGroup]="formulario">
+          <div class="row g-2">
+            <div class="col-12 col-md-auto">
+              <label class="form-label mb-0">Periodo Inicio</label>
+              <input
+                class="form-control form-control-sm"
+                type="date"
+                formControlName="periodoInicio">
+            </div>
+            <div class="col-12 col-md-auto">
+              <label class="form-label mb-0">Periodo Fin</label>
+              <input
+                class="form-control form-control-sm"
+                type="date"
+                formControlName="periodoFin">
+            </div>
+            <div class="col-12 col-md-auto">
+              <label class="form-label mb-0">Precio Combustible</label>
+              <input
+                class="form-control form-control-sm"
+                mask="separator.2"
+                thousandSeparator=","
+                prefix="$ "
+                placeholder="Ingresa el precio del combustible"
+                formControlName="precioCombustible">
+            </div>
+
+          </div>
+        </form>
+      </div>
+
+      <!-- Botones -->
+      <div class="col-12 col-xl-auto">
+        <div class="d-flex flex-column flex-md-row gap-2">
+
+          <button
+            *ngIf="tienePermiso(permisos.btnSolicitud)"
+            [disabled]="deshabilitado"
+            (click)="guardar()"
+            class="btn btn-sm btn-success">
+            <span *ngIf="deshabilitado" class="spinner-border spinner-border-sm me-2"></span>
+            <i *ngIf="!deshabilitado" class="fas fa-paper-plane me-2"></i>
+            Solicitar saldo
+          </button>
+
+          <!-- <button
+            *ngIf="tienePermiso(permisos.btnDispersion)"
+            [disabled]="deshabilitado"
+            (click)="dispersion()"
+            class="btn btn-sm btn-primary">
+            <span *ngIf="deshabilitado" class="spinner-border spinner-border-sm me-2"></span>
+            <i *ngIf="!deshabilitado" class="fas fa-paper-plane me-2"></i>
+            Guardar dispersión
+          </button> -->
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</ng-container>
+
   <form [formGroup]="form" *ngIf="vehiculosArray.length > 0">
     <div class="tab-page-content mt-3 table-responsive" style="overflow-y: scroll; height: 22rem;">
       <table *ngIf="!isLoad" class="table table-sm table-bordered table-hover align-middle mb-0">
@@ -42,7 +112,7 @@
             <th>Distancia Recorrida</th>
             <th class="text-nowrap"> <small>Saldo  Dispersado Mes Anterior </small></th>
             <ng-container *ngIf="tienePermiso(permisos.colFormSolicitud)">
-              <th class="text-nowrap">Venta litros</th>
+              <th class="text-nowrap">Litros</th>
               <th class="text-nowrap">Saldo solicitado</th>
             </ng-container>
             
@@ -103,7 +173,7 @@
                   class="form-control form-control-sm text-end"
                   formControlName="ventaLitros"
                   placeholder="Venta Litros"
-                  (input)="calcularSaldoNuevo(i)"
+                  (input)="calcularSaldoSolicitado(i)"
                 />
               </td>
               <td>
@@ -159,10 +229,9 @@
             <td class="text-center text-nowrap">{{ totalRecorrido |  number:'1.2-2' }} Km</td>
             <td class="text-end">{{ totalSaldoAnterior | currency }}</td>
             <ng-container *ngIf="tienePermiso(permisos.colFormSolicitud)">
-              <td class="text-end">{{ totalVentaLitros | number:'1.2-2' }} L</td>
+              <td class="text-end text-nowrap">{{ totalVentaLitros | number:'1.2-2' }} L</td>
               <td class="text-end">{{ totalSaldoSolicitado | currency }}</td>
             </ng-container>
-            
             <ng-container *ngIf="tienePermiso(permisos.colFormDispersion)">
               <td class="text-end">{{ totalSaldoActual | currency }}</td>
               <td class="text-end text-primary">{{ totalSaldoDispersar | currency }}</td>
@@ -177,27 +246,4 @@
         {{ vehiculosArray.length }} vehículo(s)
      </span>
   </form>
-
-  <div *ngIf="vehiculosArray.length > 0" class="d-flex justify-content-end align-items-center gap-3 mt-2">
-    <button  
-      *ngIf="tienePermiso(permisos.btnSolicitud)"
-      [disabled]="deshabilitado"  
-      (click)="guardar()"  
-      class="btn btn-sm btn-success">
-      <span *ngIf="deshabilitado" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-      <i *ngIf="!deshabilitado" class="fas fa-paper-plane me-2"></i>
-      Solicitar saldo
-    </button>
-
-    <button  
-      *ngIf="tienePermiso(permisos.btnDispersion)"
-      [disabled]="deshabilitado"  
-      (click)="dispersion()"  
-      class="btn btn-sm btn-primary">
-      <span *ngIf="deshabilitado" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-      <i *ngIf="!deshabilitado" class="fas fa-paper-plane me-2"></i>
-        Guardar Dispersion
-    </button>
-  </div>
-
 </div>

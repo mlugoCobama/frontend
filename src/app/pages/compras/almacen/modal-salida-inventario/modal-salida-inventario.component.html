@@ -1,0 +1,29 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">
+    Salida de almacén - Por mantenimiento
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="cerrarModal()"></button>
+</div>
+<div class="modal-body">
+
+    <app-form-salida-inventario
+    #formSalidaInventario
+    [tecnicos] = "tecnicos"
+    [materiales] = "data"
+    [isLoad] = "isLoad"
+    >
+    </app-form-salida-inventario>
+
+</div>
+<div class="modal-footer">
+  <button
+    type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="cerrarModal()"
+  >
+    Cerrar
+  </button>
+  <button
+    type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal" (click)="guardarDatos()"
+  >
+    Guardar
+  </button>
+</div>
