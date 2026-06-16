@@ -38,13 +38,21 @@
             <!-- Botones -->
             <div class="col-12 col-lg-auto">
                 <div class="d-flex flex-column flex-sm-row gap-2 justify-content-lg-end">
-                    <!-- <button
-                        *ngIf="!solicitud.fecha_dispersion"
+                    <button
+                        *ngIf="solicitud.fecha_dispersion"
+                        (click)="descargarPlantilla()"
                         type="button"
-                        class="btn btn-outline-success btn-sm">
-                        <i class="fas fa-file-excel me-2"></i>
-                        Descargar plantilla
-                    </button> -->
+                        class="btn btn-outline-success btn-sm"
+                        [disabled]="descargando">
+                        <span
+                          *ngIf="descargando"
+                          class="spinner-border spinner-border-sm me-2"
+                          role="status"
+                          aria-hidden="true">
+                      </span>
+                        <i *ngIf="!descargando" class="fas fa-file-excel me-2"></i>
+                        {{ descargando ? 'Descargando...' : 'Descargar plantilla' }}
+                    </button>
                     <button
                       *ngIf="!solicitud.fecha_dispersion"
                       (click)="dispersion()"

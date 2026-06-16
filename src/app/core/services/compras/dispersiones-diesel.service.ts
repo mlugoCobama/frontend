@@ -27,4 +27,13 @@ export class DispersionesDieselService {
     return this.http.get(environment.apiUrl + `compras/DispersionesDiesel/${id}`, {headers});
   }
 
+  descargarPlantilla(id:any): Observable<Blob> {
+    return this.http.get(environment.apiUrl +'compras/DispersionesDiesel/Plantilla/'+id,
+      {
+        headers: headers, 
+        responseType: 'blob'
+      }
+    );
+  }
+
 }

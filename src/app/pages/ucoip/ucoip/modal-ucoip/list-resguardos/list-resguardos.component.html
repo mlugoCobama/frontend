@@ -4,7 +4,7 @@
     </div>
 </div>
  <accordion class="border">
-  <accordion-group  *ngFor="let resguardo of data" [heading]="'RRT-000'+resguardo.id">
+  <accordion-group  *ngFor="let resguardo of data" [heading]="resguardo.folio">
     <div class="text-center card-title">Resguardo de Recursos Tecnológicos</div>
     <div class="d-flex justify-content-between aling-items-center">
         <a>Fecha de asignación: {{ resguardo.fecha_inicio | date:'dd/MM/yyyy'}}</a>

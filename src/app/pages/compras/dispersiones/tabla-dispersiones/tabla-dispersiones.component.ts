@@ -5,6 +5,7 @@ import {
   FormGroup,
   Validators
 } from '@angular/forms';
+import { DispersionesDieselService } from 'src/app/core/services/compras/dispersiones-diesel.service';
 
 export interface VehiculoDispersion {
   idSolicitud: number;
@@ -37,7 +38,8 @@ export class TablaDispersionesComponent {
   constructor(
     private fb: FormBuilder,
     private alertasService: SwalComprsServiceService,
-    private unidadesService: UnidadesService
+    private unidadesService: UnidadesService,
+    private dispersiones: DispersionesDieselService
   ) {
     this.form = this.fb.group({
       vehiculos: this.fb.array([])
@@ -188,6 +190,7 @@ export class TablaDispersionesComponent {
         if (response.status === "success") {
           this.deshabilitado = false;
           this.alertasService.mostrarAlerta("Guardado","Datos guardados correctamente","success","success");
+          this.descargarPlantilla();
           this.volver.emit();
           // this.getCatVehiculos(this.intercompania);
         } else {
@@ -201,4 +204,27 @@ export class TablaDispersionesComponent {
       },
     );
   }
+
+  public descargando:boolean = false;
+  descargarPlantilla(): void {
+    this.descargando =  true;
+  this.dispersiones.descargarPlantilla(this.solicitud.id)
+    .subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `GenerarPedidoDeAltas_${this.solicitud.folio}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        this.descargando =  false;
+      },
+      error: (error) => {
+        console.error(error);
+        this.descargando =  false;
+      }
+    });
+}
 }
