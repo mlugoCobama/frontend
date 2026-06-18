@@ -8,7 +8,7 @@
 </div>
 
 <div class="row">
-    <div class=" col-6 col-xl-3">
+    <div class=" col-12 col-xl-12 ">
         <app-kpi-card
          [color] = "'text-warning'"
          [icono] = "'fas fa-boxes'"
@@ -17,32 +17,74 @@
          [valor]= "+existencias.VolumenExistenciasMes"
         ></app-kpi-card>
     </div>
-    <div class=" col-6  col-xl-3">
-        <app-kpi-card
-        [color] = "'text-success'"
-        [icono] = "'fas fa-sign-out-alt '"
-         [titulo]= "' TOTAL RECEPCIONES'"
-         [note]= "'docs'"
-         [valor]= "+recepciones.TotalRecepcionesMes"
-        ></app-kpi-card>
+
+    <div class="col-xl-4 col-12">
+        <div class="row">
+            <div class="col-xl-12 col-6">
+                <app-kpi-card
+                [color] = "'text-success'"
+                [icono] = "'fas fa-sign-out-alt '"
+                [titulo]= "' TOTAL RECEPCIONES'"
+                [note]= "'docs'"
+                [valor]= "+recepciones.TotalRecepcionesMes"
+                ></app-kpi-card>
+            </div>
+            <div class="col-xl-12 col-6">
+                <app-kpi-card
+                [color] = "'text-danger'"
+                [icono] = "'fas fa-sign-out-alt '"
+                [titulo]= "' TOTAL ENTREGAS'"
+                [note]= "'docs'"
+                [valor]= "+entregas.TotalDocumentosMes"
+                ></app-kpi-card>  
+            </div>
+            
+            
+        </div>
     </div>
-    <div class=" col-6  col-xl-3">
-        <app-kpi-card
-        [color] = "'text-success'"
-        [icono] = "'fas fa-money-bill-wave'"
-         [titulo]= "'  Importe Recepciones'"
-         [prefijo]= "'$'" 
-         [valor]= "+recepciones.ImporteTotalRecepcionesMensual"
-        ></app-kpi-card>
+    <div class="col-xl-4 col-12">
+         <div class="row">
+            <div class="col-xl-12 col-6">
+                <app-kpi-card
+                [color] = "'text-success'"
+                [icono] = "'fas fa-arrow-alt-circle-down '"
+                [titulo]= "' VOLUMENES RECIBIDOS'"
+                [sufijo]= "' L'"
+                [valor]= "+recepciones.SumaVolumenRecepcionMes.ValorNumerico"
+                ></app-kpi-card>
+            </div>
+            <div class="col-xl-12 col-6">
+                <app-kpi-card
+                [color] = "'text-danger'"
+                [icono] = "'fas fa-arrow-alt-circle-up'"
+                [titulo]= "' VOLUMENES ENTREGADOS'"
+                [sufijo]= "' L'"
+                [valor]= "+entregas.SumaVolumenEntregadoMes.ValorNumerico"
+                ></app-kpi-card>    
+            </div>
+        </div>
     </div>
-    <div class=" col-6  col-xl-3">
-        <app-kpi-card
-        [color] = "'text-danger'"
-        [icono] = "'fas fa-sign-out-alt '"
-         [titulo]= "' Importe Entregas'"
-         [prefijo]= "'$'" 
-         [valor]= "+entregas.ImporteTotalEntregasMes"
-        ></app-kpi-card>
+    <div class="col-xl-4 col-12">
+        <div class="row">
+            <div class="col-xl-12 col-6">
+                <app-kpi-card
+                [color] = "'text-success'"
+                [icono] = "'fas fa-money-bill-wave'"
+                [titulo]= "'  Importe Recepciones'"
+                [prefijo]= "'$'" 
+                [valor]= "+recepciones.ImporteTotalRecepcionesMensual"
+                ></app-kpi-card>
+            </div>
+            <div class="col-xl-12 col-6">
+                <app-kpi-card
+                [color] = "'text-danger'"
+                [icono] = "'fas fa-money-bill-wave'"
+                [titulo]= "' Importe Entregas'"
+                [prefijo]= "'$'" 
+                [valor]= "+entregas.ImporteTotalEntregasMes"
+                ></app-kpi-card>       
+            </div>
+        </div>
     </div>
 </div>
 

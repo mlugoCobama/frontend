@@ -54,6 +54,21 @@
                         {{ descargando ? 'Descargando...' : 'Descargar plantilla' }}
                     </button>
                     <button
+                        *ngIf="solicitud.fecha_dispersion && solicitud.estatus == 1"
+                        (click)="notificarDispersion()"
+                        type="button"
+                        class="btn btn-outline-info btn-sm"
+                        [disabled]="notificando">
+                        <span
+                          *ngIf="notificando"
+                          class="spinner-border spinner-border-sm me-2"
+                          role="status"
+                          aria-hidden="true">
+                      </span>
+                        <i *ngIf="!notificando" class="fas fa-paper-plane me-2"></i>
+                        {{ notificando ? 'Notificando...' : 'Notificar Dispersion' }}
+                    </button>
+                    <button
                       *ngIf="!solicitud.fecha_dispersion"
                       (click)="dispersion()"
                       type="button"
@@ -134,7 +149,7 @@
                     >   
                 </td>
             </ng-container>
-            <ng-container *ngIf="grupo.get('saldoDispersado')?.value > 0 && solicitud.fecha_dispersion">
+            <ng-container *ngIf="solicitud.fecha_dispersion">
                 <td class="text-end fw-bold text-success">
                     {{grupo.get('saldoActual')?.value ?? 0 | currency}}
                 </td>

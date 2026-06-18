@@ -108,48 +108,30 @@ export class TablaDispersionesComponent {
   calcularSaldoDispersar(index: number): void {
 
     const grupo = this.vehiculosArray.at(index) as FormGroup;
-
-    const solicitado =
-      Number(grupo.get('saldoSolicitado')?.value) || 0;
-
-    const actual =
-      Number(grupo.get('saldoActual')?.value) || 0;
-
-    const saldoDispersar = Math.max(
-      0,
-      +(solicitado - actual).toFixed(2)
-    );
-
-    grupo.get('saldoDispersar')?.setValue(
-      saldoDispersar,
-      { emitEvent: false }
-    );
+    const solicitado = Number(grupo.get('saldoSolicitado')?.value) || 0;
+    const actual =  Number(grupo.get('saldoActual')?.value) || 0;
+    const saldoDispersar = Math.max( 0, +(solicitado - actual).toFixed(2));
+    grupo.get('saldoDispersar')?.setValue( saldoDispersar, { emitEvent: false });
   }
 
   get totalSolicitado(): number {
     return this.vehiculosArray.controls.reduce(
       (acc, ctrl) =>
-        acc +
-        (Number(ctrl.get('saldoSolicitado')?.value) || 0),
-      0
+        acc + (Number(ctrl.get('saldoSolicitado')?.value) || 0), 0
     );
   }
 
   get totalActual(): number {
     return this.vehiculosArray.controls.reduce(
       (acc, ctrl) =>
-        acc +
-        (Number(ctrl.get('saldoActual')?.value) || 0),
-      0
+        acc + (Number(ctrl.get('saldoActual')?.value) || 0), 0
     );
   }
 
   get totalDispersar(): number {
     return this.vehiculosArray.controls.reduce(
       (acc, ctrl) =>
-        acc +
-        (Number(ctrl.get('saldoDispersar')?.value) || 0),
-      0
+        acc + (Number(ctrl.get('saldoDispersar')?.value) || 0), 0
     );
   }
 
@@ -201,6 +183,41 @@ export class TablaDispersionesComponent {
       (error) => {
         this.alertasService.mostrarAlerta("Error",`Error fetching data: ${error}`,"error","danger",);
         this.deshabilitado = false;
+      },
+    );
+  }
+
+  public notificando:boolean = false;
+  // 
+  public notificarDispersion(){
+    this.notificando = true;
+    if(this.totalDispersar == 0){
+      this.alertasService.mostrarAlerta("Algo parece estar mal", "El saldo a dispersar no puede ser 0",
+                                        "warning", "warning");
+      this.notificando = false;
+      return
+    }
+
+    const data = this.getValoresCapturados();
+    const payload = {
+      solicitudDiesel : this.solicitud,
+      saldosDispersar : data,
+    }
+
+    this.dispersiones.notificarDispersion(payload).subscribe(
+      (response) => {
+        if (response.status === "success") {
+          this.notificando = false;
+          this.alertasService.mostrarAlerta("Listo","Se ha notificado la dispersion de combustible","success","success");
+          this.volver.emit();
+        } else {
+          this.alertasService.mostrarAlerta("Error",response.message,"error","danger");
+          this.notificando = false;
+        }
+      },
+      (error) => {
+        this.alertasService.mostrarAlerta("Error",`Error fetching data: ${error}`,"error","danger",);
+        this.notificando = false;
       },
     );
   }
