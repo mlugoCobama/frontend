@@ -7,6 +7,9 @@ import { Inventario } from 'src/app/core/models/ucoip/inventario';
 import { AlertErrorService } from 'src/app/core/services/alert-error.service';
 import { InventarioService } from 'src/app/core/services/ucoip/inventario.service';
 import { ModalInventarioComponent } from './modal-inventario/modal-inventario.component';
+import { CatHardwareService
+ } from 'src/app/core/services/ucoip/cat-hardware.service';
+ import { EmpresasService } from 'src/app/core/services/ucoip/empresas.service';
 
 @Component({
   selector: 'app-inventario',
@@ -27,23 +30,30 @@ export class InventarioComponent implements OnInit {
       public inventarioService : InventarioService,
       public alertService: AlertErrorService,
       private modalService: BsModalService,
+      private empresasService:  EmpresasService,
+      private catHardwareService: CatHardwareService,
     ) {}
 
   ngOnInit(): void {
+    
     this.getAll();
+    this.getEmpresas();
+    this.getCatHardware();
   }
 
   private getAll() {
     this.dataInventario = [];
-    this.inventarioService.data$.subscribe((data) => {
-      this.dataInventario = data;
-      this.isLoad = false;
-    });
+    this.isLoad =  true;
+    // this.inventarioService.data$.subscribe((data) => {
+    //   this.dataInventario = data;
+    //   console.log(data)
+    //   this.isLoad = false;
+    // });
 
-    this.inventarioService.loadData();
-    this.isLoad = false
+    // this.inventarioService.loadData();
+    // this.isLoad = false
 
-    /*this.inventarioService.getAll().subscribe(
+  this.inventarioService.getAll().subscribe(
       (data: any) => {
         if (data.success) {
 
@@ -64,8 +74,11 @@ export class InventarioComponent implements OnInit {
       (error) => {
         this.alertService.alertError(error, false);
       }
-    );*/
+    );
   }
+
+  public dataCatHardware :any  = [];
+  public empresas :any  = [];
 
   public openModal() {
     const initialState = {
@@ -73,8 +86,11 @@ export class InventarioComponent implements OnInit {
         {
           data: [],
           tipo: 'agregar',
+          
         },
       ],
+      dataCatHardware: this.dataCatHardware,
+      empresas: this.empresas
     };
 
     this.modalRef = this.modalService.show(ModalInventarioComponent, {
@@ -101,8 +117,11 @@ export class InventarioComponent implements OnInit {
         {
           data: item,
           tipo: 'editar',
+          
         },
       ],
+      dataCatHardware: this.dataCatHardware,
+      empresas: this.empresas
     };
 
     this.modalRef = this.modalService.show(ModalInventarioComponent, {
@@ -120,4 +139,40 @@ export class InventarioComponent implements OnInit {
     });
   }
 
+  public getCatalogos(){
+
+  }
+
+  private getCatHardware() {
+    this.catHardwareService.getAll().subscribe(
+      (data: any) => {
+        if (data.success) {
+          this.dataCatHardware = data.data;
+        } else {
+          this.alertService.alertError(data.message, data.success);
+        }
+      },
+      (error) => {
+        this.alertService.alertError(error, false);
+      }
+    );
+  }
+
+  private getEmpresas() {
+    this.empresas = [];
+    this.empresasService.getAll().subscribe({
+      next: async (resp) => {
+        if (resp.status == 'success') {
+          this.empresas = resp.data;
+          console.log(this.empresas)
+          // this.isLoad = false;
+        }else{
+          console.error('Error al recuperar recursos');
+        }
+      },
+      error: (err) => {
+        console.error('Error al recuperar recursos', err);
+      }
+    });
+  }
 }

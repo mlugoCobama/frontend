@@ -98,7 +98,11 @@
             <span [ngClass]="getColorClass()" class="avatar-title rounded-circle font-size-16 
             header-profile-user d-flex align-items-center justify-content-center" > {{ inciales }} </span>
           </div>
-          &nbsp;{{this.userName.role.name}}
+          &nbsp;
+          <div class="d-flex flex-column">
+            <span class="">{{ userName.role.name }}</span>
+            <small class="text-muted">{{ userName.role.email}}</small>
+          </div>
           <span class="d-none d-xl-inline-block ms-1">  </span>
           <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
         </button>

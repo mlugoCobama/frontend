@@ -11,19 +11,129 @@
     </div>
   </div>
 
+
   <div class="row" *ngIf="!isLoad">
-    <div class="col-6">
-      <div class="fw-bold">
-        <p class="mb-1"><label class="form-label requerido">Empresa: </label>&nbsp;{{data.empresa}}</p>
-        <p class="mb-1"><label class="form-label requerido">Titular: </label>&nbsp;{{data.firstname}} {{data.realname}}</p>
-        <p class="mb-1"><label class="form-label requerido">Usuario: </label>&nbsp;{{data.name}}</p>  
+
+      <!-- BOTONES DE NAVEGACIÓN -->
+      <div class="col-12 mb-3">
+          <div class="d-flex justify-content-center gap-2 flex-wrap">
+              <button
+                  class="btn btn-sm"
+                  [ngClass]="tabActiva === 'general' ? 'btn-secondary' : 'btn-outline-secondary'"
+                  (click)="tabActiva = 'general'">
+                  Información General
+              </button>
+
+              <ng-container *ngIf="ucoip">
+                <button
+                  class="btn btn-sm"
+                  [ngClass]="tabActiva === 'activos' ? 'btn-secondary' : 'btn-outline-secondary'"
+                  (click)="tabActiva = 'activos'">
+                  Activos
+              </button>
+
+              <button
+                  class="btn btn-sm"
+                  [ngClass]="tabActiva === 'sistemas' ? 'btn-secondary' : 'btn-outline-secondary'"
+                  (click)="tabActiva = 'sistemas'">
+                  Sistemas
+              </button>
+
+              <button
+                  class="btn btn-sm"
+                  [ngClass]="tabActiva === 'infraestructura' ? 'btn-secondary' : 'btn-outline-secondary'"
+                  (click)="tabActiva = 'infraestructura'">
+                  Network
+              </button>
+
+              <button
+                  class="btn btn-sm"
+                  [ngClass]="tabActiva === 'licencias' ? 'btn-secondary' : 'btn-outline-secondary'"
+                  (click)="tabActiva = 'licencias'">
+                  Licenciamientos
+              </button>     
+
+              </ng-container>
+
+
+
+          </div>
+      </div>
+
+      <!-- TAB INFORMACIÓN GENERAL -->
+      <div class="col-12" *ngIf="tabActiva === 'general'">
+          <app-card-info-ucoip
+              [data]="data"
+              [ucoip]="ucoip"
+              [catalogo] ="catalogo"
+              [areas] ="areas"
+              (actualizarUcoip)="getDataUcoip()"
+              >
+          </app-card-info-ucoip>
+      </div>
+
+      <!-- TAB ACTIVOS -->
+      <ng-container *ngIf="tabActiva === 'activos'">
+          <app-list-resguardos
+              [data]="resguardos"
+              [ucoip]="data"
+              (actualizarAsignados)="getResguardos()">
+          </app-list-resguardos>
+      </ng-container>
+
+      <!-- TAB LICENCIAMIENTOS -->
+      <!-- <div class="col-12" *ngIf="tabActiva === 'licencias'">
+          <div class="card">
+              <div class="card-body">
+                  Contenido de licenciamientos
+              </div>
+          </div>
+      </div> -->
+
+      <!-- TAB SISTEMAS -->
+      <div class="col-12" *ngIf="tabActiva === 'sistemas'">
+          <div class="card">
+              <app-card-sistemas
+              [data]="resguardos"
+              [ucoip]="ucoip"
+              [catSistemas]="catSistemas"
+              (actualizarAsignados)="getResguardos()">
+          </app-card-sistemas>
+          </div>
+      </div>
+
+      <!-- TAB INFRAESTRUCTURA -->
+      <div class="col-12" *ngIf="tabActiva === 'infraestructura'">
+          <div class="card">
+              <app-card-network
+              [data]="resguardos"
+              [ucoip]="ucoip"
+              [catRecursosRed]="catRecurso"
+              (actualizarAsignados)="getResguardos()"
+              >
+              </app-card-network>
+          </div>
+      </div>
+
+      <div class="col-12" *ngIf="tabActiva === 'licencias'">
+            <app-card-licenciamientos
+              [data]="resguardos"
+              [ucoip]="ucoip"
+              ></app-card-licenciamientos>
 
       </div>
-      
-    </div>
-    <div class="col-6" *ngIf="!isLoad">
-      <div class="accordion accordion-flush" id="accordionFlushExample" >
-        <div class="accordion-item" *ngFor="let item of dataPermisos">
+
+  </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" >Cerrar</button>
+
+</div>
+
+  <!-- <div class="col-6" *ngIf="!isLoad">
+    <div class="accordion accordion-flush" id="accordionFlushExample" >
+      <div class="accordion-item" *ngFor="let item of dataPermisos">
           <h2 class="accordion-header">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
               {{ item }}
@@ -34,19 +144,5 @@
           </div>
         </div>
       </div>
-    </div>
-
-    <app-list-resguardos
-    *ngIf = "resguardos.length > 0"
-    [data] = "resguardos"
-    >
-
-    </app-list-resguardos>
-  </div>
-</div>
-
-<div class="modal-footer">
-    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" >Cerrar</button>
-    
-</div>
+    </div> -->
 

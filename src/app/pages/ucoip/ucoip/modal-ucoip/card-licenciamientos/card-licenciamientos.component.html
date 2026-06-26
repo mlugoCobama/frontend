@@ -1,7 +1,7 @@
 
 <div class="card  shadow-sm">
 <div class="card-header bg-secondary-subtle d-flex justify-content-between align-items-center">
-        <span class="fw-bold">ACTIVOS</span>
+        <span class="fw-bold">Licenciamientos</span>
         <div class="d-flex gap-2">
             <!-- Botón toggle -->
             <button 
@@ -41,8 +41,8 @@
         <div class="row">
             <!-- Select Tipo -->
             <div class="col-sm-5">
-                <label for="tipoHardware" class="form-label">Tipo de Hardware</label>
-                <select id="tipoHardware" class="form-select form-select-sm" formControlName="tipoHardware">
+                <label for="tipoHardware" class="form-label">Software</label>
+                <select id="tipoHardware" class="form-select form-select-sm" formControlName="tipoSoftware">
                     <option [ngValue]="null">Seleccione un tipo</option>
                     <option *ngFor="let tipo of datos" [value]="tipo.id">
                         {{ tipo.tipo }}
@@ -52,11 +52,11 @@
 
             <!-- Select Hardware -->
             <div class="col-sm-5">
-                <label for="hardware" class="form-label">Hardware Disponible</label>
-                <select id="hardware" class="form-select form-select-sm" formControlName="hardware">
+                <label for="hardware" class="form-label">Licencias Disponibles</label>
+                <select id="hardware" class="form-select form-select-sm" formControlName="software">
                     <option [ngValue]="null">Seleccione hardware</option>
                     <option *ngFor="let hw of hardwareFiltrado" [value]="hw.id">
-                        {{ hw.marca }} - {{ hw.modelo }} ({{ hw.no_serie }})
+                        {{ hw.version }} ({{ hw.licencia }})
                     </option>
                 </select>
             </div>
@@ -76,15 +76,18 @@
 
 
     </form>
-    <table class="table table-sm border mt-2">
+    <div class="d-flex justify-content-center" *ngIf="isLoad">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+    </div>
+    <ng-container *ngIf="!isLoad">
+            <table class="table table-sm border mt-2">
         <thead>
             <tr>
-                <th></th>
                 <th>TIPO</th>
-                <th>MARCA</th>
-                <th>MODELO</th>
-                <th>SERIE</th>
-                <th>ESTADO</th>
+                <th>VERSION</th>
+                <th>CLAVE</th>
                 <th>ASIGNADO</th>
                 <th>DEVUELTO</th>
                 <th>-</th>
@@ -97,30 +100,16 @@
             <ng-container *ngIf="data.length > 0">
                 <tr *ngFor="let detalle of data">
                     <td>
-                        <input type="checkbox" class="form-check-input"
-                            [checked]="idsSeleccionados.includes(detalle.id)"
-                            (change)="toggleSeleccion(detalle.id, $event)" />
-                    </td>
-
-                    <td>
                         <span class="badge bg-primary text-white p-1 fw-bold">
-                            {{detalle?.hardware?.tipo_hardware?.tipo}}
+                            {{detalle?.licencia?.tipo_software?.tipo}}
                         </span>
                     </td>
-                    <td>{{detalle?.hardware?.marca}}</td>
-                    <td>{{detalle?.hardware?.modelo}}</td>
-                    <td>{{detalle?.hardware?.no_serie}}</td>
+                    <td>{{detalle?.licencia?.version}}</td>
+                    <td>{{detalle?.licencia?.licencia}}</td>
+                    <td>{{(detalle?.fecha_asignacion | date:'dd/MM/yyyy') || '-'}}</td>
+                    <td>{{(detalle?.fecha_retiro | date:'dd/MM/yyyy') || '-'}}</td>
                     <td>
-                        <span [attr.title]="detalle?.estatus == 1 ? 'Vigente' : 'Devuelto'">
-                            <i class="fas fa-circle"
-                                [ngClass]="{'text-success': detalle?.estatus, 'text-danger': detalle?.estatus == 0}">
-                            </i>
-                        </span>
-                    </td>
-                    <td>{{(detalle?.fecha_inicio | date:'dd/MM/yyyy') || '-'}}</td>
-                    <td>{{(detalle?.fecha_fin | date:'dd/MM/yyyy') || '-'}}</td>
-                    <td>
-                        <button *ngIf="!detalle.fecha_fin" class="btn btn-danger btn-sm" (click)="remover(detalle?.id)">
+                        <button *ngIf="!detalle.fecha_retiro" class="btn btn-danger btn-sm" (click)="remover(detalle?.id)">
                             <i class="fas fa-minus"></i>
                         </button>
                     </td>
@@ -129,6 +118,11 @@
         </tbody>
     </table>
     <span class="text-muted"> {{ data.length }} Activos Asignados</span>
+
+
+    </ng-container>
+
 </div>
 </div>
+
 

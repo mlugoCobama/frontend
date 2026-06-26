@@ -40,6 +40,16 @@ export class ErrorInterceptor implements HttpInterceptor {
                 });
             }
 
+            if (err.status === 500) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error interno',
+                    text: 'Ha ocurrido un problema en el servidor. Intenta más tarde.',
+                    confirmButtonText: 'OK'
+                });
+            }
+
+
             const error = err.error.message || err.statusText;
             return throwError(error);
         }))

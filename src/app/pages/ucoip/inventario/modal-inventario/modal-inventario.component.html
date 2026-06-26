@@ -7,7 +7,30 @@
     <form [formGroup]="formModalInventario">
         <div class="row">
           <!-- Tipo de Hardware -->
-          <div class="col-sm-12 col-md-4">
+          <div class="col-sm-12 col-md-6">
+            <div class="form-group">
+              <label class="form-label requerido">Empresa *</label>
+              <div>
+
+                <select
+                    class="form-select form-select-sm ng-dirty !ng-invalid"
+                    formControlName="empresa"
+                    [style]="{ width: '100%' }"
+                >
+                    <option value="">Selecciona una opción</option>
+                    <option *ngFor="let item of empresas" value="{{item.id}}">{{item.nombre}}</option>
+                </select>
+
+              </div>
+              <div class="text-danger">
+                <div *ngIf="formModalInventario.controls['cat_hardware_id'].errors?.required">
+                  {{ this.mensajeCampoRequerido }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Tipo de Hardware -->
+          <div class="col-sm-12 col-md-6">
             <div class="form-group">
               <label class="form-label requerido">Tipo de Hardware *</label>
               <div>
@@ -30,7 +53,7 @@
             </div>
           </div>
           <!-- Marca -->
-          <div class="col-sm-12 col-md-4">
+          <div class="col-sm-12 col-md-3">
             <div class="form-group">
               <label class="form-label requerido">Marca*</label>
               <div>
@@ -50,7 +73,7 @@
             </div>
           </div>
 
-          <div class="col-sm-12 col-md-4">
+          <div class="col-sm-12 col-md-3">
             <div class="form-group">
               <label class="form-label requerido">Modelo*</label>
               <div>
@@ -69,11 +92,8 @@
               </div>
             </div>
           </div>
-        </div>
-
-        <div class="row mt-2">
-            <!-- Tipo de Hardware -->
-            <div class="col-sm-12 col-md-4">
+                      <!-- Tipo de Hardware -->
+            <div class="col-sm-12 col-md-3">
               <div class="form-group">
                 <label class="form-label requerido">Número de Serie *</label>
                 <div>
@@ -92,8 +112,32 @@
                 </div>
               </div>
             </div>
+            <!-- Tipo de Hardware -->
+            <div class="col-sm-12 col-md-3">
+              <div class="form-group">
+                <label class="form-label requerido">Estatus de Hardware *</label>
+                <div>
+                  <select
+                    class="form-select form-select-sm ng-dirty !ng-invalid"
+                    name="estado" id="estado"
+                    formControlName="estado"
+                    [style]="{ width: '100%' }"
+                  >
+                    <option value="">Selecciona una opción</option>
+                    <option value="1">Asignado</option>
+                    <option value="2">Disponible</option>
+                    <option value="3">Obsoleto</option>
+                  </select>
+                </div>
+                <div class="text-danger">
+                  <div *ngIf="formModalInventario.controls['estado'].errors?.required">
+                    {{ this.mensajeCampoRequerido }}
+                  </div>
+                </div>
+              </div>
+            </div>
             <!-- Marca -->
-            <div class="col-sm-12 col-md-4">
+            <div   *ngIf="mostrarCampo('tipo_cpu')" class="col-sm-12 col-md-4">
               <div class="form-group">
                 <label class="form-label requerido">Tipo de CPU*</label>
                 <div>
@@ -120,7 +164,7 @@
               </div>
             </div>
 
-            <div class="col-sm-12 col-md-4">
+            <div *ngIf="mostrarCampo('mac')" class="col-sm-12 col-md-4">
               <div class="form-group">
                 <label class="form-label requerido">MAC de Equipo*</label>
                 <div>
@@ -139,11 +183,9 @@
                 </div>
               </div>
             </div>
-        </div>
 
-        <div class="row mt-2">
             <!-- Tipo de Hardware -->
-            <div class="col-sm-12 col-md-4">
+            <div *ngIf="mostrarCampo('memoria_ram')" class="col-sm-12 col-md-4">
               <div class="form-group">
                 <label class="form-label requerido">Memoria RAM *</label>
                 <div>
@@ -163,7 +205,7 @@
               </div>
             </div>
             <!-- Marca -->
-            <div class="col-sm-12 col-md-4">
+            <div *ngIf="mostrarCampo('disco_duro')" class="col-sm-12 col-md-4">
               <div class="form-group">
                 <label class="form-label requerido">Capacidad Disco Duro*</label>
                 <div>
@@ -183,7 +225,7 @@
               </div>
             </div>
 
-            <div class="col-sm-12 col-md-4">
+            <div *ngIf="mostrarCampo('procesador')" class="col-sm-12  col-md-8">
               <div class="form-group">
                 <label class="form-label requerido">Procesador*</label>
                 <div>
@@ -202,45 +244,20 @@
                 </div>
               </div>
             </div>
-        </div>
 
-        <div class="row mt-2">
-            <!-- Tipo de Hardware -->
-            <div class="col-sm-12 col-md-4">
-              <div class="form-group">
-                <label class="form-label requerido">Estatus de Hardware *</label>
-                <div>
-                  <select
-                    class="form-select form-select-sm ng-dirty !ng-invalid"
-                    name="estado" id="estado"
-                    formControlName="estado"
-                    [style]="{ width: '100%' }"
-                  >
-                    <option value="">Selecciona una opción</option>
-                    <option value="1">Asignado</option>
-                    <option value="2">Disponible</option>
-                    <option value="3">Obsoleto</option>
-                  </select>
-                </div>
-                <div class="text-danger">
-                  <div *ngIf="formModalInventario.controls['estado'].errors?.required">
-                    {{ this.mensajeCampoRequerido }}
-                  </div>
-                </div>
-              </div>
-            </div>
+            
             <!-- Marca -->
-            <div class="col-sm-12 col-md-4">
+            <div class="col-sm-12 col-md-12">
               <div class="form-group">
                 <label class="form-label requerido">Caracteristicas*</label>
                 <div>
-                  <input
+                  <textarea
                     class="form-control form-control-sm ng-dirty !ng-invalid"
                     formControlName="caracteristicas"
                     placeholder="Ingresar Caracteristicas"
                     maxlength="255"
                     [style]="{ width: '100%' }"
-                  />
+                  rows="2"></textarea>
                 </div>
                 <div class="text-danger">
                   <div *ngIf="formModalInventario.controls['caracteristicas'].errors?.required">
@@ -250,17 +267,17 @@
               </div>
             </div>
 
-            <div class="col-sm-12 col-md-4">
+            <div class="col-sm-12 col-md-12">
               <div class="form-group">
                 <label class="form-label requerido">Observaciones*</label>
                 <div>
-                  <input
+                  <textarea
                     class="form-control form-control-sm ng-dirty !ng-invalid"
                     formControlName="observaciones"
                     placeholder="Ingresar Observaciones"
                     maxlength="255"
                     [style]="{ width: '100%' }"
-                  />
+                  rows="2"></textarea>
                 </div>
                 <div class="text-danger">
                   <div *ngIf="formModalInventario.controls['observaciones'].errors?.required">
@@ -269,6 +286,9 @@
                 </div>
               </div>
             </div>
+
+
+
         </div>
     </form>
 

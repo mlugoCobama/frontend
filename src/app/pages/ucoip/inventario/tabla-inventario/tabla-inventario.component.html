@@ -1,11 +1,51 @@
+<div class="row mb-3">
+
+  <div class="col-md-4">
+    <select class="form-select form-select-sm"
+            [(ngModel)]="filtros.empresa"
+            (change)="aplicarFiltros()">
+      <option value="">Todas las empresas</option>
+      <option *ngFor="let empresa of empresas" [value]="empresa">
+        {{ empresa }}
+      </option>
+    </select>
+  </div>
+
+  <div class="col-md-4">
+    <select class="form-select form-select-sm"
+            [(ngModel)]="filtros.tipo"
+            (change)="aplicarFiltros()">
+      <option value="">Todos los tipos</option>
+      <option *ngFor="let tipo of tipos" [value]="tipo">
+        {{ tipo }}
+      </option>
+    </select>
+  </div>
+
+  <div class="col-md-4">
+    <select class="form-select form-select-sm"
+            [(ngModel)]="filtros.estado"
+            (change)="aplicarFiltros()">
+      <option value="">Todos los estados</option>
+      <option value="Disponible">Disponible</option>
+      <option value="Asignado">Asignado</option>
+      <option value="Obsoleto">Obsoleto</option>
+    </select>
+  </div>
+
+</div>
+
 <div class="table-responsive">
               <table datatable [dtOptions]="dtOptions" class="table table-sm" *ngIf="!isLoad">
                 <thead >
                   <tr class="text-center">
-                    <th scope="col">Tipo</th>
+                    
+                    <th scope="col" class="text-center">Tipo</th>
+                    <th scope="col" class="text-center">Estado</th>
                     <th scope="col">Marca</th>
                     <th scope="col">Modelo</th>
                     <th scope="col">Núm. de Serie</th>
+                    <th scope="col" class="text-center">Empresa</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -13,10 +53,18 @@
                     [ngClass]="{'table-primary': selectedId === item.id}"
                     (click)="selectRow(item)"
                    (dblclick)="openEdit(item)">
-                    <td>{{ item.tipo.tipo }}</td>
-                    <td>{{ item.marca }}</td>
+                   <td class="text-center"><span class="badge text-bg-dark bg-gradient fw-bold position-relative">{{ item.tipo.tipo }}
+                      <span  class="position-absolute top-0 start-100 translate-middle p-1   rounded-circle"  
+                      [ngClass] = "{'bg-primary' : item.estado == 1, 'bg-danger' : item.estado == 3 , 'bg-success' : item.estado == 2}">
+                        <span class="visually-hidden">New alerts</span>
+                      </span>
+                    </span></td>
+                    <td class="text-center fw-bold" [ngClass] = "{'text-primary' : item.estado == 1, 'text-success' : item.estado == 2 , 'text-danger' : item.estado == 3}"> {{ getEstatus(item.estado)}}</td>
+                    <td >{{ item.marca }}</td>
                     <td>{{ item.modelo }}</td>
                     <td>{{ item.no_serie }}</td>
+                    <td >{{ item.empresa }}</td>
+                  
                   </tr>
                 </tbody>
               </table>

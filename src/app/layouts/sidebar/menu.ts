@@ -257,7 +257,7 @@ export const MENU: MenuItem[] = [
             label: "Flotillas",
             link: "/nissan/comisiones/flotillas",
             parentId: 32,
-            permission: "view submodulo comisiones seminuevos nissan",
+            permission: "view submodulo comisiones flotillas nissan",
           },
           
           {

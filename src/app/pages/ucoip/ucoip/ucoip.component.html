@@ -2,18 +2,52 @@
 
   <div class="row">
     <div class="col-xl-12">
-      <div class="card">
-        <div class="card-header text-bg-secondary p-3">
+      <div class="card text-bg-secondary shadow-sm border">
+        <div class="card-body card-title text-white m-0">
           UcoIP
         </div>
+      </div>
+      <div class="card shadow-sm border">
         <div class="card-body">
           <div class="d-flex justify-content-center" *ngIf="!showTable">
             <div class="spinner-border" role="status">
               <span class="visually-hidden">Loading...</span>
             </div>
           </div>
+          <div class="row" *ngIf="showTable">
+            <div class="col-md-4 mb-2">
+              <select class="form-select form-select-sm" [(ngModel)]="filtros.empresa" (change)="aplicarFiltros()">
+                <option value="">Todas las empresas</option>
+                <option *ngFor="let empresa of empresas" [value]="empresa">
+                  {{ empresa }}
+                </option>
+            
+              </select>
+            </div>
+            
+            <div class="col-md-4 mb-1">
+              <select class="form-select form-select-sm" [(ngModel)]="filtros.area" (change)="aplicarFiltros()">
+                <option value="">Todas las áreas</option>
+                <option *ngFor="let area of areas" [value]="area">
+                  {{ area }}
+                </option>
+              </select>
+            </div>
+            
+            <div class="col-md-4 mb-1">
+              <select class="form-select form-select-sm" [(ngModel)]="filtros.puesto" (change)="aplicarFiltros()">
+                <option value="">Todos los puestos</option>
+                <option *ngFor="let puesto of puestos" [value]="puesto">
+                  {{ puesto }}
+                </option>
+            
+              </select>
+            </div>
+            
+            </div>
 
-          <table datatable [dtOptions]="dtOptions" class="table table-striped table-hover table-sm table-bordered" *ngIf="showTable">
+          <table datatable [dtOptions]="dtOptions" class="table table-striped table-hover table-sm table-bordered"
+            *ngIf="showTable">
             <thead class="table-light">
               <tr>
                 <th>Empresa</th>
@@ -28,13 +62,13 @@
                 <td>{{item.empresa}}</td>
                 <td>{{item.name}}</td>
                 <td>{{item.firstname}} {{item.realname}}</td>
-                <td></td>
-                <td></td>
+                <td>{{item.area}}</td>
+                <td>{{item.puesto}}</td>
               </tr>
             </tbody>
           </table>
         </div><!--div.card-body-->
-    </div>
+      </div>
     </div>
   </div>
 

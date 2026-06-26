@@ -15,6 +15,10 @@ import { TablaInventarioComponent } from './inventario/tabla-inventario/tabla-in
 import { ListResguardosComponent } from './ucoip/modal-ucoip/list-resguardos/list-resguardos.component';
 import { ModalUcoipComponent } from './ucoip/modal-ucoip/modal-ucoip.component';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
+import { CardInfoUcoipComponent } from './ucoip/modal-ucoip/card-info-ucoip/card-info-ucoip.component';
+import { CardNetworkComponent } from './ucoip/modal-ucoip/card-network/card-network.component';
+import { CardSistemasComponent } from './ucoip/modal-ucoip/card-sistemas/card-sistemas.component';
+import { CardLicenciamientosComponent } from './ucoip/modal-ucoip/card-licenciamientos/card-licenciamientos.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +29,10 @@ import { AccordionModule } from 'ngx-bootstrap/accordion';
     TablaInventarioComponent,
     ListResguardosComponent,
     ModalUcoipComponent,
+    CardInfoUcoipComponent,
+    CardNetworkComponent,
+    CardSistemasComponent,
+    CardLicenciamientosComponent,
   ],
   imports: [
     CommonModule,

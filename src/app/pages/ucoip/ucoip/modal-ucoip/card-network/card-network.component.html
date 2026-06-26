@@ -1,7 +1,7 @@
 
 <div class="card  shadow-sm">
 <div class="card-header bg-secondary-subtle d-flex justify-content-between align-items-center">
-        <span class="fw-bold">ACTIVOS</span>
+        <span class="fw-bold">NETWORK</span>
         <div class="d-flex gap-2">
             <!-- Botón toggle -->
             <button 
@@ -11,15 +11,6 @@
                 <i class="fas" [ngClass]="mostrarFormulario ? 'fa-eye-slash' : 'fa-plus'"></i>
                 {{ mostrarFormulario ? 'Ocultar formulario' : 'Nueva Asignación' }}
             </button>
-            <!-- <button
-                *ngIf = "idsSeleccionados.length > 0"
-                title="Imprimir resguardo"
-                (click)="imprimirResguardo()"
-                class="btn btn-outline-dark btn-sm">
-                <i class="fas fa-print"></i>
-                Resguardo
-            </button> -->
-
             <button  *ngIf = "idsSeleccionados.length > 0"
                 title="Imprimir resguardo"
                 (click)="imprimirResguardo()"
@@ -36,31 +27,47 @@
         
     </div>
 <div class="card-body">
-
     <form *ngIf="mostrarFormulario" [formGroup]="form">
         <div class="row">
             <!-- Select Tipo -->
-            <div class="col-sm-5">
-                <label for="tipoHardware" class="form-label">Tipo de Hardware</label>
-                <select id="tipoHardware" class="form-select form-select-sm" formControlName="tipoHardware">
+            <div class="col-sm-3">
+                <label for="tipo" class="form-label">Tipo</label>
+                <select id="tipo" class="form-select form-select-sm" formControlName="tipo">
                     <option [ngValue]="null">Seleccione un tipo</option>
-                    <option *ngFor="let tipo of datos" [value]="tipo.id">
-                        {{ tipo.tipo }}
+                    <option *ngFor="let tipo of catRecursosRed" [value]="tipo.id">
+                        {{ tipo.nombre }}
                     </option>
                 </select>
+            </div> 
+
+            <div class="col-sm-7">
+                <label for="valor" class="form-label">Valor</label>
+                <input id="valor" class=" form-control form-control-sm" formControlName="valor"/>
             </div>
 
-            <!-- Select Hardware -->
+            
+
+            <div class="col-sm-2">
+                <label for="restrictivo" class="form-label">Nivel R.</label>
+                <input id="restrictivo" class=" form-control form-control-sm" formControlName="restrictivo"/>
+            </div>
+
             <div class="col-sm-5">
-                <label for="hardware" class="form-label">Hardware Disponible</label>
+                <label for="hardware" class="form-label">Dispositivo</label>
                 <select id="hardware" class="form-select form-select-sm" formControlName="hardware">
-                    <option [ngValue]="null">Seleccione hardware</option>
-                    <option *ngFor="let hw of hardwareFiltrado" [value]="hw.id">
-                        {{ hw.marca }} - {{ hw.modelo }} ({{ hw.no_serie }})
+                    <option selected [ngValue]="null">Seleccione un tipo</option>
+                    <option [ngValue]="null">Sin Especificar</option>
+                    <option *ngFor="let item of data" [value]="item.hardware.id">
+                        {{ item.hardware.tipo_hardware.tipo }} - {{ item.hardware.marca}} - {{ item.hardware.modelo}}
                     </option>
                 </select>
+            </div> 
+
+            <div class="col-sm-5">
+                <label for="observaciones" class="form-label">Observaciones</label>
+                <textarea id="observaciones" class=" form-control form-control-sm" formControlName="observaciones" rows="1">  </textarea>
             </div>
-            <!-- Botón -->
+
             <div class="col-sm-2 mt-4 text-end">
                 <button type="button" class="btn btn-primary btn-sm" (click)="asignar()">
                     <ng-container *ngIf="!loading; else spinner">
@@ -76,40 +83,46 @@
 
 
     </form>
-    <table class="table table-sm border mt-2">
+
+    <div class="d-flex justify-content-center" *ngIf="isLoad">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+    </div>
+    <ng-container *ngIf="!isLoad">
+            <table class="table table-sm border mt-2">
         <thead>
             <tr>
-                <th></th>
                 <th>TIPO</th>
-                <th>MARCA</th>
-                <th>MODELO</th>
-                <th>SERIE</th>
-                <th>ESTADO</th>
+                <th>VALOR</th>
+                <th>N.R</th>
+                <th>EST.</th>
                 <th>ASIGNADO</th>
-                <th>DEVUELTO</th>
+                <th>REMOVIDO</th>
                 <th>-</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngIf="data.length == 0">
-                <td colspan="9" class="text-muted text-center p-3 fw-bold"> Aun no tienen activos asignado</td>
+            <tr *ngIf="datos.length == 0">
+                <td colspan="9" class="text-muted text-center p-3 fw-bold"> Aun no tiene elementos asignado</td>
             </tr>
-            <ng-container *ngIf="data.length > 0">
-                <tr *ngFor="let detalle of data">
-                    <td>
+            <ng-container *ngIf="datos.length > 0">
+                <tr *ngFor="let detalle of datos">
+                    <!-- <td>
                         <input type="checkbox" class="form-check-input"
                             [checked]="idsSeleccionados.includes(detalle.id)"
                             (change)="toggleSeleccion(detalle.id, $event)" />
-                    </td>
+                    </td> -->
 
                     <td>
                         <span class="badge bg-primary text-white p-1 fw-bold">
-                            {{detalle?.hardware?.tipo_hardware?.tipo}}
+                            {{detalle?.recurso_red?.nombre}}
                         </span>
                     </td>
-                    <td>{{detalle?.hardware?.marca}}</td>
-                    <td>{{detalle?.hardware?.modelo}}</td>
-                    <td>{{detalle?.hardware?.no_serie}}</td>
+                    <td>{{detalle?.valor}}</td>
+                    <td>
+                        {{detalle?.nivel_restrictivo ?? 'N/E'}}
+                    </td>
                     <td>
                         <span [attr.title]="detalle?.estatus == 1 ? 'Vigente' : 'Devuelto'">
                             <i class="fas fa-circle"
@@ -117,10 +130,10 @@
                             </i>
                         </span>
                     </td>
-                    <td>{{(detalle?.fecha_inicio | date:'dd/MM/yyyy') || '-'}}</td>
-                    <td>{{(detalle?.fecha_fin | date:'dd/MM/yyyy') || '-'}}</td>
+                    <td>{{(detalle?.fecha_asignacion | date:'dd/MM/yyyy') || '-'}}</td>
+                    <td>{{(detalle?.fecha_retiro | date:'dd/MM/yyyy') || '-'}}</td>
                     <td>
-                        <button *ngIf="!detalle.fecha_fin" class="btn btn-danger btn-sm" (click)="remover(detalle?.id)">
+                        <button *ngIf="!detalle.fecha_retiro" class="btn btn-danger btn-sm" (click)="remover(detalle?.id)">
                             <i class="fas fa-minus"></i>
                         </button>
                     </td>
@@ -128,7 +141,13 @@
             </ng-container>
         </tbody>
     </table>
-    <span class="text-muted"> {{ data.length }} Activos Asignados</span>
+    </ng-container>
+
+    <span class="text-muted"> {{ datos.length }}  Asignados</span>
 </div>
 </div>
+
+
+
+
 

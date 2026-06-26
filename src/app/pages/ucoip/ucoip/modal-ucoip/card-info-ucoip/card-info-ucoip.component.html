@@ -1,0 +1,250 @@
+<!-- PANEL INFORMACION -->
+<div *ngIf="vistaActual === 'info'" class="card shadow-sm rounded">
+    <div class="card-header bg-secondary-subtle d-flex justify-content-between align-items-center">
+        <span class="fw-bold">EMPRESA: {{ data.empresa }}</span>
+
+        <button
+            class="btn btn-dark btn-sm"
+            (click)="vistaActual = 'formulario'">
+            <i class="fas fa-edit"></i>
+        </button>
+    </div>
+
+    <div class="card-body">
+        <table class="table table-border mb-0">
+            <tbody>
+                <tr>
+                    <td class="fw-bold text-end" width="40%">Titular:</td>
+                    <td>{{ data.firstname }} {{ data.realname }}</td>
+                </tr>
+                <tr>
+                    <td class="fw-bold text-end">Fecha de alta:</td>
+                    <td>{{ (ucoip?.created_at | date:'dd/MM/yyyy') || 'Sin Ucoip' }}</td>
+                </tr>
+                <tr>
+                    <td class="fw-bold text-end">Área:</td>
+                    <td>{{ ucoip?.puesto?.departamento?.area?.nombre || 'Sin Definir'  }}</td>
+                </tr>
+                <tr>
+                    <td class="fw-bold text-end">Departamento:</td>
+                    <td>{{ ucoip?.puesto?.departamento?.nombre || 'Sin Definir'  }}</td>
+                </tr>
+                <tr>
+                    <td class="fw-bold text-end">Puesto:</td>
+                    <td>{{ ucoip?.puesto?.nombre  || 'Sin Definir' }}</td>
+                </tr>
+                <tr>
+                    <td class="fw-bold text-end">Correo:</td>
+                    <td>{{ data.name || 'Sin Definir'  }}</td>
+                </tr>
+                <tr>
+                    <td class="fw-bold text-end">Extensión:</td>
+                    <td>{{ data.extension || 'Sin Definir'  }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- PANEL FORMULARIO -->
+<div *ngIf="vistaActual === 'formulario'" class="card shadow-sm rounded">
+
+    <div class="card-header bg-secondary-subtle d-flex justify-content-between align-items-center">
+        <span class="fw-bold">Editar Información</span>
+
+        <button
+            type="button"
+            class="btn btn-dark btn-sm"
+            (click)="vistaActual = 'info'">
+            <i class="far fa-arrow-alt-circle-left"></i>
+        </button>
+    </div>
+
+    <div class="card-body">
+
+        <form [formGroup]="form" (ngSubmit)="guardar()">
+
+            <div class="row">
+                <!-- <div class="col-md-6 fw-bold">
+                    Titular:  {{ data.firstname }} {{ data.realname }}
+                </div>
+                <div class="col-md-6 fw-bold"> Empresa:  {{data.empresa}} </div> -->
+
+                <!-- NOMBRE -->
+                <div class="col-md-6">
+                    <label class="form-label">Nombre(s)</label>
+
+                    <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        formControlName="nombre">
+                </div>
+
+                <!-- APELLIDOS -->
+                <div class="col-md-6">
+                    <label class="form-label">Apellidos</label>
+
+                    <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        formControlName="apellidos">
+                </div>
+
+                <!-- AREA -->
+                <div class="col-md-4">
+                    <label class="form-label">Área</label>
+                    <select
+                        class="form-select form-select-sm" formControlName="area_id" (change)="onAreaChange()">
+                        <option [ngValue]="null">
+                            Seleccione...
+                        </option>
+                        <option
+                            *ngFor="let area of areas"
+                            [ngValue]="area.id">
+                            {{ area.nombre }}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- DEPARTAMENTO -->
+                <div class="col-md-4">
+                    <label class="form-label">Departamento</label>
+
+                    <select class="form-select form-select-sm" formControlName="departamento_id" (change)="onDepartamentoChange()">
+                        <option [ngValue]="null">
+                            Seleccione...
+                        </option>
+                        <option
+                            *ngFor="let departamento of departamentos"
+                            [ngValue]="departamento.id">
+                            {{ departamento.nombre }}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- PUESTO -->
+                <div class="col-md-4">
+                    <label class="form-label">Puesto</label>
+                    <select class="form-select form-select-sm" formControlName="puesto_id">
+                        <option [ngValue]="null">
+                            Seleccione...
+                        </option>
+                        <option
+                            *ngFor="let puesto of puestos"
+                            [ngValue]="puesto.id">
+                            {{ puesto.nombre }}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- FECHA DE ALTA -->
+                <!-- <div class="col-md-4">
+                    <label class="form-label">Fecha de alta </label>
+                    <input
+                        type="date"
+                        class="form-control form-control-sm"
+                        formControlName="ucoip">
+                </div> -->
+
+                <!-- UCOIP -->
+                <div class="col-md-6">
+                    <label class="form-label">
+                        UCoIP
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        formControlName="ucoip">
+                </div>
+
+                <!-- CONTRASEÑA -->
+                <div class="col-md-6">
+                    <label class="form-label">
+                        Contraseña
+                    </label>
+                    <div class="input-group">
+                        <input class="form-control form-control-sm" [type]="mostrarPassword ? 'text' : 'password'" formControlName="password">
+                        <button
+                            type="button"
+                            class="btn btn-outline-secondary  btn-sm"
+                            (click)="mostrarPassword = !mostrarPassword">
+                            <i
+                                class="far"
+                                [ngClass]="mostrarPassword ? 'far fa-eye-slash' : 'fa-eye '">
+                            </i>
+                        </button>
+                        <button
+                                *ngIf ="ucoip"
+                                type="button"
+                                class="btn btn-outline-info  btn-sm"
+                                (click)="openPass()">
+                                <i class="fas fa-unlock-alt "> </i>Ver Password
+                        </button>
+                    </div>
+
+                    
+                </div>
+
+                <!-- CORREO -->
+                <!-- <div class="col-md-6">
+                    <label class="form-label">
+                        Correo
+                    </label>
+                    <input
+                        type="email"
+                        class="form-control form-control-sm"
+                        formControlName="correo">
+                </div> -->
+
+                
+
+                <!-- CONTRASEÑA EMAIL -->
+                <!-- <div class="col-md-6">
+                    <label class="form-label">
+                        Contraseña Email
+                    </label>
+                    <div class="input-group">
+                        <input
+                            class="form-control form-control-sm"
+                            [type]="mostrarPasswordEmail ? 'text' : 'password'"
+                            formControlName="password_email">
+                        <button
+                            type="button"
+                            class="btn btn-outline-secondary btn-sm"
+                            (click)="mostrarPasswordEmail = !mostrarPasswordEmail">
+
+                            <i
+                                class="far"
+                                [ngClass]="mostrarPasswordEmail ? 'fa-eye-slash' : 'fa-eye'">
+                            </i>
+
+                        </button>
+                        <button
+                                *ngIf ="ucoip"
+                                type="button"
+                                class="btn btn-outline-info  btn-sm"
+                                (click)="openPass()">
+                                <i class="fas fa-unlock-alt "> </i>Ver Password
+                        </button>
+
+                    </div>
+                </div> -->
+
+                
+            </div>
+            <!-- form-example.component.html -->
+            
+
+
+            <div class="mt-4 text-end">
+                <button
+                    type="submit"
+                    class="btn btn-sm btn-primary">
+                    Guardar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+

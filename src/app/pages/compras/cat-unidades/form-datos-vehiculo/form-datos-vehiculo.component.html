@@ -169,7 +169,7 @@
             <select class="form-select form-select-sm" formControlName="num_tarjeta_toka" id="num_tarjeta_toka" name="num_tarjeta_toka"
                 aria-label="num_tarjeta_toka">
                 <option value="" disabled selected>Selecciona uno</option>
-                <option *ngFor=" let item of tarjetasDisponibles" [value]="item.id">{{item.tarjeta}}</option>
+                <option *ngFor=" let item of tarjetasDisponibles" [disabled]="item.estatus == 1" [value]="item.id">{{item.tarjeta}}</option>
             </select>
             <div *ngIf="datosVehiculoFormControl.num_tarjeta_toka.touched || submitted">
                 <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.num_tarjeta_toka.errors?.['required']">

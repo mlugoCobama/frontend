@@ -6,6 +6,7 @@ import { Inventario } from 'src/app/core/models/ucoip/inventario';
 import { AlertErrorService } from 'src/app/core/services/alert-error.service';
 import { CatHardwareService } from 'src/app/core/services/ucoip/cat-hardware.service';
 import { InventarioService } from 'src/app/core/services/ucoip/inventario.service';
+import { EmpresasService } from 'src/app/core/services/ucoip/empresas.service';
 
 @Component({
   selector: 'app-modal-inventario',
@@ -22,7 +23,8 @@ export class ModalInventarioComponent implements OnInit {
 
   public formModalInventario: FormGroup;
 
-  public dataCatHardware: CatHardware[];
+  public dataCatHardware: CatHardware[] = []; 
+  public empresas: any[] = []; 
 
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -31,45 +33,65 @@ export class ModalInventarioComponent implements OnInit {
     public modalRef: BsModalRef,
     public modalService: BsModalService,
     public alertService: AlertErrorService,
-    private catHardwareService: CatHardwareService,
     private inventarioService: InventarioService,
   ) {}
 
   public ngOnInit(): void {
-    this.getCatHardware();
     this.buildFormModal();
+
+    this.configurarCamposDinamicos();
 
     this.tipo = this.listaDatos[0].tipo;
     this.data = this.listaDatos[0].data;
 
     if (this.tipo == 'editar') {
-      this.formModalInventario.get('marca').setValue(this.data.marca);
-      this.formModalInventario.get('modelo').setValue(this.data.modelo);
-      this.formModalInventario.get('no_serie').setValue(this.data.no_serie);
-      this.formModalInventario.get('tipo_cpu').setValue(this.data.tipo_cpu);
-      this.formModalInventario.get('mac').setValue(this.data.mac);
-      this.formModalInventario.get('memoria_ram').setValue(this.data.memoria_ram);
-      this.formModalInventario.get('disco_duro').setValue(this.data.disco_duro);
-      this.formModalInventario.get('procesador').setValue(this.data.procesador);
-      this.formModalInventario.get('caracteristicas').setValue(this.data.caracteristicas);
-      this.formModalInventario.get('observaciones').setValue(this.data.observaciones);
-      this.formModalInventario.get('estado').setValue(this.data.estado);
-      this.formModalInventario.get('cat_hardware_id').setValue(this.data.tipo.id);
+
+      console.log(this.data)
+      this.formModalInventario.patchValue({
+      'marca' : this.data.marca,
+      'empresa' :this.data.id_empresa, 
+      'modelo' : this.data.modelo,
+      'no_serie' : this.data.no_serie,
+      'tipo_cpu' : this.data.tipo_cpu,
+      'mac' : this.data.mac,
+      'memoria_ram' : this.data.memoria_ram,
+      'disco_duro' : this.data.disco_duro,
+      'procesador' : this.data.procesador,
+      'caracteristicas' : this.data.caracteristicas,
+      'observaciones' : this.data.observaciones,
+      'estado' : this.data.estado,
+      'cat_hardware_id' : this.data.tipo?.id,
+      });
     } 
   }
+
+  public hardwareFields: { [key: number]: string[] } = {
+    1: ['tipo_cpu', 'mac', 'memoria_ram', 'disco_duro', 'procesador'], // CPU
+    2: [], // Monitor
+    3: [], // Teclado
+    4: [], // Mouse
+    5: [], // Diadema
+    6: [], // Regulador
+    7: ['mac'], // Teléfono fijo
+    8: ['mac', 'memoria_ram', 'disco_duro', 'procesador'], // Teléfono móvil
+    9: ['mac'], // Multifuncional
+    10: ['mac', 'memoria_ram', 'disco_duro', 'procesador'], // Tableta
+    11: [] // Otro
+  };
 
 
   private buildFormModal() {
     return new Promise((resolve, reject) => {
       this.formModalInventario = this.formBuilder.group({
+        empresa: new FormControl("", [Validators.required]),
         marca: new FormControl(null, [Validators.required]),
         modelo: new FormControl(null, [Validators.required]),
         no_serie: new FormControl(null, [Validators.required]),
         tipo_cpu: new FormControl("", []),
         mac: new FormControl(null, []),
-        memoria_ram: new FormControl(null, [Validators.required]),
-        disco_duro: new FormControl(null, [Validators.required]),
-        procesador: new FormControl(null, [Validators.required]),
+        memoria_ram: new FormControl(null),
+        disco_duro: new FormControl(null),
+        procesador: new FormControl(null),
         caracteristicas: new FormControl(null, []),
         observaciones: new FormControl(null, []),
         estado: new FormControl("", []),
@@ -83,39 +105,27 @@ export class ModalInventarioComponent implements OnInit {
     this.modalRef.hide();
   }
 
-  private getCatHardware() {
-    this.catHardwareService.getAll().subscribe(
-      (data: any) => {
-        if (data.success) {
-          this.dataCatHardware = data.data;
-        } else {
-          this.alertService.alertError(data.message, data.success);
-        }
-      },
-      (error) => {
-        this.alertService.alertError(error, false);
-      }
-    );
-  }
+
 
   public save() {
 
     let datos: Inventario;
 
-    datos = {
-      marca: this.formModalInventario.controls['marca'].value,
-      modelo: this.formModalInventario.controls['modelo'].value,
-      no_serie: this.formModalInventario.controls['no_serie'].value,
-      tipo_cpu: this.formModalInventario.controls['tipo_cpu'].value,
-      mac: this.formModalInventario.controls['mac'].value,
-      disco_duro: this.formModalInventario.controls['disco_duro'].value,
-      procesador: this.formModalInventario.controls['procesador'].value,
-      memoria_ram: this.formModalInventario.controls['memoria_ram'].value,
-      caracteristicas: this.formModalInventario.controls['caracteristicas'].value,
-      observaciones: this.formModalInventario.controls['observaciones'].value,
-      estado: this.formModalInventario.controls['estado'].value,
-      cat_hardware_id: this.formModalInventario.controls['cat_hardware_id'].value,
-    };
+    datos = this.formModalInventario.value;
+    // {
+    //   marca: this.formModalInventario.controls['marca'].value,
+    //   modelo: this.formModalInventario.controls['modelo'].value,
+    //   no_serie: this.formModalInventario.controls['no_serie'].value,
+    //   tipo_cpu: this.formModalInventario.controls['tipo_cpu'].value,
+    //   mac: this.formModalInventario.controls['mac'].value,
+    //   disco_duro: this.formModalInventario.controls['disco_duro'].value,
+    //   procesador: this.formModalInventario.controls['procesador'].value,
+    //   memoria_ram: this.formModalInventario.controls['memoria_ram'].value,
+    //   caracteristicas: this.formModalInventario.controls['caracteristicas'].value,
+    //   observaciones: this.formModalInventario.controls['observaciones'].value,
+    //   estado: this.formModalInventario.controls['estado'].value,
+    //   cat_hardware_id: this.formModalInventario.controls['cat_hardware_id'].value,
+    // };
 
     // console.log(datos);
     
@@ -135,6 +145,43 @@ export class ModalInventarioComponent implements OnInit {
 
   public update() {
     this.event.emit({ data: true, res: 200 });
+  }
+
+  public mostrarCampo(campo: string): boolean {
+    const tipo = Number(
+      this.formModalInventario?.get('cat_hardware_id')?.value
+    );
+    if (!tipo) {
+      return false;
+    }
+    return this.hardwareFields[tipo]?.includes(campo);
+  }
+
+  private configurarCamposDinamicos(): void {
+
+    this.formModalInventario
+      .get('cat_hardware_id')
+      ?.valueChanges
+      .subscribe((tipo: number) => {
+        const campos = [
+          'tipo_cpu',
+          'mac',
+          'memoria_ram',
+          'disco_duro',
+          'procesador'
+        ];
+        campos.forEach(campo => {
+          const control = this.formModalInventario.get(campo);
+          control?.clearValidators();
+          if (
+            this.hardwareFields[tipo] &&
+            this.hardwareFields[tipo].includes(campo)
+          ) {
+            control?.setValidators([Validators.required]);
+          }
+          control?.updateValueAndValidity();
+        });
+      });
   }
 
 }

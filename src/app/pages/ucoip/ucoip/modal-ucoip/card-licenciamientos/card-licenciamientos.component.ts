@@ -1,16 +1,17 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { AsingLicenciamientosUcoipService } from 'src/app/core/services/ucoip/asing-licenciamientos-ucoip.service';
 import { CatHardwareService } from 'src/app/core/services/ucoip/cat-hardware.service';
 import { ResguardosService } from 'src/app/core/services/ucoip/resguardos.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-list-resguardos',
-  templateUrl: './list-resguardos.component.html',
-  styleUrl: './list-resguardos.component.css'
+  selector: 'app-card-licenciamientos',
+  templateUrl: './card-licenciamientos.component.html',
+  styleUrl: './card-licenciamientos.component.css'
 })
-export class ListResguardosComponent implements OnInit{
-  @Input() data = [];
+export class CardLicenciamientosComponent  implements OnInit{
+   data = [];
 
   @Input() ucoip:any;
   @Input() glpi:any;
@@ -24,31 +25,33 @@ export class ListResguardosComponent implements OnInit{
   hardwareFiltrado: any[] = [];
 
   constructor(private fb: FormBuilder, 
-    private catHardware: CatHardwareService,
+    private software: AsingLicenciamientosUcoipService,
     private resguardos: ResguardosService
   ) {}
 
   ngOnInit(): void {
 
-    this.getHwDisponible();
+    this.getSwDisponible();
+    this.getSwAsignado();
+
     this.form = this.fb.group({
-      tipoHardware: [null],
-      hardware: [null]
+      tipoSoftware: [null],
+      software: [null]
     });
 
     // 
-    this.form.get('tipoHardware')?.valueChanges.subscribe(tipoId => {
+    this.form.get('tipoSoftware')?.valueChanges.subscribe(tipoId => {
       const seleccionado = this.datos.find((d:any) => d.id === +tipoId);
-      this.hardwareFiltrado = seleccionado ? seleccionado.hardware_disponible : [];
-      this.form.get('hardware')?.reset();
+      this.hardwareFiltrado = seleccionado ? seleccionado.licencias_disponible : [];
+      this.form.get('software')?.reset();
     });
   }
 
   public loading:boolean = false;
   asignar() {
-    const payload = {...this.ucoip, ...this.form.value};
+    const payload = {idUcoip: this.ucoip?.id ?? null , ...this.ucoip, ...this.form.value};
     this.loading = true;
-      this.resguardos.save(payload).subscribe({
+      this.software.save(payload).subscribe({
         next: (res) => {
           this.loading = false;
           Swal.fire({
@@ -57,8 +60,8 @@ export class ListResguardosComponent implements OnInit{
             text: res.message || 'Activos asignados correctamente'
           });
           this.form.reset();
-          this.getHwDisponible();
-          this.actualizarAsignados.emit();
+          this.getSwDisponible();
+         this.getSwAsignado();
         },
         error: () => {
           this.loading = false;
@@ -84,7 +87,7 @@ export class ListResguardosComponent implements OnInit{
     }).then((result) => {
       if (result.isConfirmed) {
         this.removing = true;
-        this.resguardos.remove(id).subscribe({
+        this.software.remove(id).subscribe({
           next: (res) => {
             this.removing = false;
             Swal.fire({
@@ -92,8 +95,8 @@ export class ListResguardosComponent implements OnInit{
               title: '¡Éxito!',
               text: res.message || 'Activo removido correctamente'
             });
-            this.getHwDisponible();
-            this.actualizarAsignados.emit();
+            this.getSwDisponible();
+            this.getSwAsignado();
           },
           error: () => {
             this.removing = false;
@@ -109,9 +112,9 @@ export class ListResguardosComponent implements OnInit{
   }
 
 
-  public getHwDisponible(){
+  public getSwDisponible(){
     this.datos = [];
-    this.catHardware.getHardwareDisponible().subscribe({
+    this.software.getSoftwareDisponible().subscribe({
       next: async (resp) => {
         if (resp.status = 'success') {
           this.datos = resp.data;
@@ -119,6 +122,27 @@ export class ListResguardosComponent implements OnInit{
         }
       },
       error: (err) => {
+        console.error('Error cargando módulos', err);
+      }
+    });
+  }
+
+  public isLoad:boolean = true;
+  public getSwAsignado(){
+    this.isLoad = true;
+    this.data = [];
+    this.software.getUcoipLicencias(this.ucoip?.id).subscribe({
+      next: async (resp) => {
+        if (resp.status = 'success') {
+          this.isLoad = false;
+          this.data = resp.data;
+          console.log(this.data)
+        }else{
+          this.isLoad = false;
+        }
+      },
+      error: (err) => {
+        this.isLoad = false;
         console.error('Error cargando módulos', err);
       }
     });
@@ -141,52 +165,53 @@ export class ListResguardosComponent implements OnInit{
     }
   }
 
-  public downloading:boolean = false;
-  public imprimirResguardo() {
-    const payload = {
-      idSleccionados: this.idsSeleccionados
-    };
+  // public downloading:boolean = false;
+  // public imprimirResguardo() {
+  //   const payload = {
+  //     idSleccionados: this.idsSeleccionados
+  //   };
 
-    this.downloading = true;
+  //   this.downloading = true;
 
-    this.resguardos.print(this.ucoip.id, payload).subscribe({
-      next: (response: any) => {
+  //   this.software.print(this.ucoip.id, payload).subscribe({
+  //     next: (response: any) => {
 
-        this.downloading = false;
+  //       this.downloading = false;
 
-        const blob = new Blob(
-          [response.body],
-          { type: 'application/pdf' }
-        );
+  //       const blob = new Blob(
+  //         [response.body],
+  //         { type: 'application/pdf' }
+  //       );
 
-        const fileName =
-          response.headers.get('X-Filename') ||
-          'Resguardo.pdf';
+  //       const fileName =
+  //         response.headers.get('X-Filename') ||
+  //         'Resguardo.pdf';
 
-        const url = window.URL.createObjectURL(blob);
+  //       const url = window.URL.createObjectURL(blob);
 
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = fileName;
+  //       const link = document.createElement('a');
+  //       link.href = url;
+  //       link.download = fileName;
 
-        document.body.appendChild(link);
-        link.click();
+  //       document.body.appendChild(link);
+  //       link.click();
 
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
-      },
+  //       document.body.removeChild(link);
+  //       window.URL.revokeObjectURL(url);
+  //     },
 
-      error: () => {
+  //     error: () => {
 
-        this.downloading = false;
+  //       this.downloading = false;
 
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'No se pudo generar el PDF'
-        });
-      }
-    });
-  }
+  //       Swal.fire({
+  //         icon: 'error',
+  //         title: 'Error',
+  //         text: 'No se pudo generar el PDF'
+  //       });
+  //     }
+  //   });
+  // }
 
 }
+
