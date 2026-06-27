@@ -174,5 +174,7 @@ export class ModalUcoipComponent implements OnInit  {
     });
   }
 
-  
+    public cerrarModal(): void {
+    this.modalRef.hide();
+  }
 }

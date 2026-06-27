@@ -37,6 +37,13 @@ export const MENU: MenuItem[] = [
             permission: "view permisos",
           },
           {
+            id: 37,
+            label: "Asignacion Permisos",
+            link: "/ucoip/testing/provisional/permisos",
+            parentId: 34,
+            permission: "view permisos",
+          },
+          {
             id: 36,
             label: "Modulos",
             link: "/ucoip/configuracion/modulos",

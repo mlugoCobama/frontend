@@ -22,7 +22,27 @@
           <app-spiner 
            *ngIf="isLoadig">
           </app-spiner>
-          <div class="d-flex justify-content-end align-items-center m-2">
+          <div class="d-flex justify-content-between align-items-center m-2 gap-2">
+            <div class="btn-group">
+              <button
+                  class="btn btn-sm"
+                  [class.btn-primary]="vista === 'pendientes'"
+                  [class.btn-outline-primary]="vista !== 'pendientes'"
+                  (click)="vista = 'pendientes'; cambiarVista('pendientes')">
+
+                  Pendientes
+              </button>
+
+              <button
+                  class="btn btn-sm"
+                  [class.btn-success]="vista === 'realizados'"
+                  [class.btn-outline-success]="vista !== 'realizados'"
+                  (click)="vista = 'realizados'; cambiarVista('realizados')">
+
+                  Realizados
+                  
+              </button>
+          </div>
             <div class="col-lg-3">
               <input
                 type="text"
@@ -217,7 +237,7 @@
     </div>
 
     <app-botonera
-     *ngIf="estado > 0"
+     *ngIf="estado > 0 && vista === 'pendientes'"
       [estado] = "estado"
       [guardandoE] = "guardandoE"
       [guardandoV] = "guardandoV"

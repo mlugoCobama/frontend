@@ -104,7 +104,7 @@ export class InventarioComponent implements OnInit {
       this.isLoad = true;
       this.dataInventario = [];
       if (res.data) {
-        // this.modalRef.hide();
+        this.modalRef?.hide();
         this.inventarioService.loadData();
       }
     });
@@ -131,10 +131,10 @@ export class InventarioComponent implements OnInit {
     });
 
     this.modalRef.content.closeBtnName = 'Close';
-    this.modalRef.content.event.subscribe((res) => {
+    this.modalRef.content.event.subscribe((res:any) => {
       if (res.data) {
-        // this.modalRef.hide();
-        //this.getAll();
+        this.modalRef?.hide();
+        this.getAll();
       }
     });
   }

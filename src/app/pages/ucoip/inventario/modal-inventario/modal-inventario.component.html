@@ -304,25 +304,45 @@
 
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="cerrarModal()">Cerrar</button>
-    <app-button
-        [disabled]="formModalInventario.invalid"
-        *ngIf="tipo == 'agregar'"
-        class="btn btn-primary btn-sm"
-        type="submit"
-        [disabled]="!formModalInventario.valid"
-        (click)="save()"
-      >
-        <i class="fa fa-check-circle"></i> Guardar
-      </app-button>
-      <app-button
-        [disabled]="formModalInventario.invalid"
-        *ngIf="tipo != 'agregar'"
-        class="btn btn-primary btn-sm"
-        type="submit"
-        (click)="update()"
-      >
-        <i class="fa fa-check-circle"></i> Guardar
-      </app-button>
+  <button 
+    type="button" 
+    class="btn btn-secondary btn-sm" 
+    data-bs-dismiss="modal" 
+    (click)="cerrarModal()">
+    Cerrar
+  </button>
+
+  <app-button
+    *ngIf="tipo == 'agregar'"
+    class="btn btn-primary btn-sm"
+    type="submit"
+    [disabled]="saving || !formModalInventario.valid"
+    (click)="save()"
+  >
+    <ng-container *ngIf="!saving">
+      <i class="fa fa-check-circle"></i> Guardar
+    </ng-container>
+    <ng-container *ngIf="saving">
+      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      Guardando...
+    </ng-container>
+  </app-button>
+
+  <app-button
+    *ngIf="tipo != 'agregar'"
+    class="btn btn-primary btn-sm"
+    type="submit"
+    [disabled]="saving || formModalInventario.invalid"
+    (click)="update()"
+  >
+    <ng-container *ngIf="!saving">
+      <i class="fa fa-check-circle"></i> Guardar
+    </ng-container>
+    <ng-container *ngIf="saving">
+      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      Guardando...
+    </ng-container>
+  </app-button>
 </div>
+
 

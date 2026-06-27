@@ -29,31 +29,31 @@ export class ModalUcoipHardwareComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.getAll();
+    // this.getAll();
   }
   
-  private getAll() {
-    this.inventarioService.get(10).subscribe(
-      (data: any) => {
-        if (data.success) {
+  // private getAll() {
+  //   this.inventarioService.get(10).subscribe(
+  //     (data: any) => {
+  //       if (data.success) {
 
-          this.dataInventario = data.data;
+  //         this.dataInventario = data.data;
 
-          this.dtOptionsModal = {
-            searching: true, 
-            paging: true, 
-            info: false,
-            order: [0,'asc']
-          }
+  //         this.dtOptionsModal = {
+  //           searching: true, 
+  //           paging: true, 
+  //           info: false,
+  //           order: [0,'asc']
+  //         }
 
-        } else {
-          this.alertService.alertError(data.message, data.success);
-        }
-      },
-      (error) => {
-        this.alertService.alertError(error, false);
-      }
-    );
-  }
+  //       } else {
+  //         this.alertService.alertError(data.message, data.success);
+  //       }
+  //     },
+  //     (error) => {
+  //       this.alertService.alertError(error, false);
+  //     }
+  //   );
+  // }
   
 }

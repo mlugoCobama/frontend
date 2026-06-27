@@ -11,6 +11,7 @@ import { ActivatedRoute } from "@angular/router";
 import { permisosComisonsionesVentasNuevos } from "src/app/shared/constants/permisos";
 
 
+
 @Component({
   selector: "app-comisiones",
   templateUrl: "./comisiones.component.html",
@@ -43,6 +44,8 @@ export class ComisionesComponent implements AfterViewInit {
 
   searchText: string = '';
   filteredIndices: number[] = [];
+
+  public vista: 'pendientes' | 'realizados' = 'pendientes';
   
   @ViewChild('formFiltro', { static: false }) formFiltro!:  FiltroComponent;
 
@@ -69,23 +72,23 @@ export class ComisionesComponent implements AfterViewInit {
   }
 
   /** Validador de permisos */
-  tienePermiso(permiso: string = null): boolean {
+  tienePermiso(permiso: string = ''): boolean {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
   }
 
   /**Puente para manejar el spinner */
-  bindingSpiner(value) {
+  bindingSpiner(value:any) {
     this.isLoadig = value;
   }
 
   /**Puente para manejar el estado */
-  bindingEstado(value) {
+  bindingEstado(value:any) {
     this.estado = value;
   }
 
   /**Puente para manejar la carga de datos nuevos */
-  bindingData(value) {
+  bindingData(value:any) {
     this.datos = value;
     if (this.datos.length > 0) {
       this.cargarVentas();
@@ -638,6 +641,16 @@ filaSeleccionada: number | null = null;
       [campo]: true
     }));
   return payload;
+}
+
+cambiarVista(vista: 'pendientes' | 'realizados') {
+    this.vista = vista;
+    this.datos = vista === 'pendientes'
+        ? this.formFiltro.data
+        : this.formFiltro.realizados;
+
+    this.bindingData(this.datos)
+    // this.cargarVentas();
 }
 
 }

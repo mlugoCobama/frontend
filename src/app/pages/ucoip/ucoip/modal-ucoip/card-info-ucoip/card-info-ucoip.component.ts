@@ -97,7 +97,10 @@ vistaActual: 'info' | 'formulario' = 'info';
     });
   }
 
+  public saving: boolean = false;
+
   guardar(): void {
+    this.saving = true;
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.alertasService.mostrarAlerta(
@@ -106,6 +109,7 @@ vistaActual: 'info' | 'formulario' = 'info';
              "warning",
              "warning"
            );
+      this.saving = false;
       return;
     }
 
@@ -123,11 +127,13 @@ vistaActual: 'info' | 'formulario' = 'info';
              "success",
              "success"
            );
+           this.saving = false;
           this.form.reset();
            this.actualizarUcoip.emit();
 
         },
         error: (err) => {
+          this.saving = false;
           console.log(err);
         }
       });
@@ -159,7 +165,7 @@ vistaActual: 'info' | 'formulario' = 'info';
     area_id: usuario.puesto?.departamento?.area?.id,
     departamento_id: usuario.puesto?.departamento?.id,
     puesto_id: usuario.puesto?.id,
-    password: usuario.password,
+    // password: usuario.password,
     // password_email: usuario.password_email,
     ucoip: usuario.ucoip,
     // correo: this?.data?.name ?? null

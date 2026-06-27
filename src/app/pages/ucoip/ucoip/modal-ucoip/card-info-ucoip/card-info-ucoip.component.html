@@ -240,9 +240,14 @@
             <div class="mt-4 text-end">
                 <button
                     type="submit"
-                    class="btn btn-sm btn-primary">
-                    Guardar
-                </button>
+                    class="btn btn-sm btn-primary"
+                    [disabled]="saving">
+                    <span *ngIf="!saving">Guardar</span>
+                    <span *ngIf="saving">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Guardando...
+                    </span>
+                    </button>
             </div>
         </form>
     </div>

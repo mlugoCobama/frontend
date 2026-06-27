@@ -17,9 +17,11 @@ export class FiltroComponent implements OnInit{
 
   public data:any = [];
 
+  public realizados:any = [];
+
   public hoy = new Date().toISOString().split("T")[0];
   
-  formulario: FormGroup;
+  formulario!: FormGroup;
 
   public estado: any = 0;
 
@@ -37,7 +39,7 @@ export class FiltroComponent implements OnInit{
     { value:"4", name:"Renault Pachuca", permiso: "view select agencias rp"},
   ];
   
-  agencias = []
+  agencias:any = []
 
    @Output() bindingSpiner = new EventEmitter<boolean>();
    @Output() bindingData = new EventEmitter<any>();
@@ -145,6 +147,7 @@ asignarEstado() {
       (response:any) => {
         if(response.status == 'success'){
           this.data = response.data;
+          this.realizados = response.realizados;
           this.finding = false;
           const estado = response.estado
           this.bindingSpiner.emit(false);

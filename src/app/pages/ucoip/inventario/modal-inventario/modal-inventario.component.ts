@@ -45,8 +45,6 @@ export class ModalInventarioComponent implements OnInit {
     this.data = this.listaDatos[0].data;
 
     if (this.tipo == 'editar') {
-
-      console.log(this.data)
       this.formModalInventario.patchValue({
       'marca' : this.data.marca,
       'empresa' :this.data.id_empresa, 
@@ -106,9 +104,9 @@ export class ModalInventarioComponent implements OnInit {
   }
 
 
-
+saving = false;
   public save() {
-
+this.saving = true;
     let datos: Inventario;
 
     datos = this.formModalInventario.value;
@@ -132,9 +130,11 @@ export class ModalInventarioComponent implements OnInit {
 
     this.inventarioService.save(datos).subscribe((resp) => {
       if (resp.success) {
+        this.saving = false
         this.event.emit({ data: true, res: 200 });
         this.alertService.alertError(resp.message, resp.success);
       } else {
+        this.saving = false
         this.event.emit({ data: false, res: 200 });
         this.alertService.alertError(resp.message, resp.success);
       }
