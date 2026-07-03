@@ -54,6 +54,7 @@ export class CardNetworkComponent implements OnInit{
             text: res.message || 'Activos asignados correctamente'
           });
           this.getRecursosUcoip();
+          this.form.reset();
         },
         error: () => {
           this.loading = false;

@@ -88,6 +88,8 @@ import { CatTarjetasTokaComponent } from './cat-tarjetas-toka/cat-tarjetas-toka.
 import { ModalTarjetasTokaComponent } from './cat-tarjetas-toka/modal-tarjetas-toka/modal-tarjetas-toka.component';
 import { DispersionesComponent } from './dispersiones/dispersiones.component';
 import { TablaDispersionesComponent } from './dispersiones/tabla-dispersiones/tabla-dispersiones.component';
+import { CatTagsComponent } from './cat-tags/cat-tags.component';
+import { ModalTagsComponent } from './cat-tags/modal-tags/modal-tags.component';
 @NgModule({
   declarations: [
     ComprasComponent,
@@ -169,6 +171,8 @@ import { TablaDispersionesComponent } from './dispersiones/tabla-dispersiones/ta
     ModalTarjetasTokaComponent,
     DispersionesComponent,
     TablaDispersionesComponent,
+    CatTagsComponent,
+    ModalTagsComponent,
     
   ],
   imports: [

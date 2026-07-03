@@ -120,6 +120,7 @@
                 </div>
             </div>
         </div>
+        
 
         <div class="col-md-6">
             <label for="estatus" class="form-label">Estatus: *</label>
@@ -131,6 +132,30 @@
             <div *ngIf="datosVehiculoFormControl.estatus.touched || submitted">
                 <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.estatus.errors?.['required']">
                     Debes de seleccionar un estatus
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label for="tipo_combustible" class="form-label">Capacidad Tanque de Combustible:*</label>
+            <input placeholder="Capacidad Tanque de Combustible" type="text" class="form-control form-control-sm" formControlName="tanque_combustible"
+                id="tanque_combustible" name="tanque_combustible" aria-label="tanque_combustible" 
+                mask="separator.2" thousandSeparator="," decimalMarker="."  suffix=" L"
+                />
+            <div *ngIf="datosVehiculoFormControl.tanque_combustible.touched || submitted">
+                <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.tanque_combustible.errors?.['required']">
+                    Debes de ingresar la capacidad del tanque de combustible del vehículo.
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <label for="rendimiento" class="form-label">Rend. X Litro: *</label>
+            <input placeholder="Rendimiento por litro" type="text" class="form-control form-control-sm" formControlName="rendimiento"
+                id="rendimiento" name="rendimiento" aria-label="rendimiento"
+                mask="separator.2" thousandSeparator="," decimalMarker="."  suffix=" km/L" />
+            <div *ngIf="datosVehiculoFormControl.rendimiento.touched || submitted">
+                <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.rendimiento.errors?.['required']">
+                    Debes de ingresar el rendimiento por litro de combustible.
                 </div>
             </div>
         </div>
@@ -192,8 +217,13 @@
 
         <div class="col-md-3">
             <label for="num_tag" class="form-label">Num. TAG: </label>
-            <input type="text" class="form-control form-control-sm" formControlName="num_tag" id="num_tag" name="num_tag"
-                aria-label="num_tag" placeholder="Numero de TAG" />
+            <!-- <input type="text" class="form-control form-control-sm" formControlName="num_tag" id="num_tag" name="num_tag"
+                aria-label="num_tag" placeholder="Numero de TAG" /> -->
+            <select class="form-select form-select-sm" formControlName="num_tag" id="num_tag" name="num_tag"
+                aria-label="num_tag">
+                <option value="" disabled selected>Selecciona uno</option>
+                <option *ngFor=" let item of tagsDisponibles" [disabled]="item.estatus == 1" [value]="item.id">{{ (item.proveedor ?? '') +' - '+ item.num_tag }}</option>
+            </select>
             <div *ngIf="datosVehiculoFormControl.num_tag.touched || submitted">
                 <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.num_tag.errors?.['required']">
                     Debes de ingresar un numero de TAG de vehiculo.

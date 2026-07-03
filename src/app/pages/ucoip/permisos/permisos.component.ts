@@ -15,6 +15,9 @@ export class PermisosComponent {
   usuarioConsultado: string = '';
   loading: boolean = false;
 
+  activeTab: number = 0;
+
+
   constructor(private permisosService: PermisosService) {}
 
   buscarPermisos() {
@@ -65,6 +68,11 @@ export class PermisosComponent {
       }
     });
   }
+
+
+  trackByPermiso(index: number, permiso: any): number {
+  return permiso.id;
+}
 
 
 }

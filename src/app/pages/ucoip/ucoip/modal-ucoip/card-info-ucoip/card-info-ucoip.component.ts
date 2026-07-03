@@ -148,7 +148,7 @@ vistaActual: 'info' | 'formulario' = 'info';
   );
 
   this.departamentos = area?.departamentos ?? [];
-  // console.log(this.departamentos)
+  console.log(this.departamentos)
   // Buscar departamento
   const departamento = this.departamentos.find(
     item => item.id == usuario.puesto?.departamento?.id
@@ -156,7 +156,7 @@ vistaActual: 'info' | 'formulario' = 'info';
 
   this.puestos = departamento?.puestos ?? [];
 
-  // console.log(this.puestos);
+  console.log(this.puestos);
 
   // Llenar formulario
   this.form.patchValue({
@@ -169,6 +169,15 @@ vistaActual: 'info' | 'formulario' = 'info';
     // password_email: usuario.password_email,
     ucoip: usuario.ucoip,
     // correo: this?.data?.name ?? null
+  });
+
+  this.onAreaChange()
+  this.form.patchValue({
+    departamento_id: usuario.puesto?.departamento?.id,
+  });
+  this.onDepartamentoChange()
+  this.form.patchValue({
+    puesto_id: usuario.puesto?.id,
   });
 }
   public openPass(){

@@ -14,19 +14,39 @@ import { CardTopComponent } from './card-top/card-top.component';
 import { FiltroComsionesGenericoComponent } from './filtro-comsiones-generico/filtro-comsiones-generico.component';
 import { KpiCardGenericoComponent } from './kpi-card-generico/kpi-card-generico.component';
 import { SelectAgenciaVendedorComponent } from './select-agencia-vendedor/select-agencia-vendedor.component';
+import { DatatableGenericoComponent } from './datatable-generico/datatable-generico.component';
+import { DataTablesModule } from 'angular-datatables';
 
 @NgModule({
-  declarations: [PagetitleComponent,  LoaderComponent, TablaGenericaComponent, CardTopComponent, FiltroComsionesGenericoComponent, KpiCardGenericoComponent, SelectAgenciaVendedorComponent
+  declarations: [
+    PagetitleComponent,  
+    LoaderComponent, 
+    TablaGenericaComponent, 
+    CardTopComponent, 
+    FiltroComsionesGenericoComponent, 
+    KpiCardGenericoComponent, 
+    SelectAgenciaVendedorComponent, 
+    DatatableGenericoComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    DataTablesModule,
     BsDatepickerModule.forRoot(),
     TimepickerModule.forRoot(),
     BsDropdownModule.forRoot(),
     
   ],
-  exports: [PagetitleComponent, LoaderComponent, TablaGenericaComponent, CardTopComponent, FiltroComsionesGenericoComponent,  KpiCardGenericoComponent, SelectAgenciaVendedorComponent]
+  exports: [
+    PagetitleComponent, 
+    LoaderComponent, 
+    TablaGenericaComponent, 
+    CardTopComponent, 
+    FiltroComsionesGenericoComponent,  
+    KpiCardGenericoComponent, 
+    SelectAgenciaVendedorComponent, 
+    DatatableGenericoComponent
+  ]
 })
 export class UIModule { }

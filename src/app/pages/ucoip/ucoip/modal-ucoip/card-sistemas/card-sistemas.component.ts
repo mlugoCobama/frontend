@@ -52,6 +52,7 @@ export class CardSistemasComponent implements OnInit{
             text: res.message || 'Activos asignados correctamente'
           });
           this.getSistemas();
+          this.form.reset()
         },
         error: () => {
           this.loading = false;

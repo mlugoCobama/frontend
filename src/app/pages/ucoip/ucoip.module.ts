@@ -19,6 +19,10 @@ import { CardInfoUcoipComponent } from './ucoip/modal-ucoip/card-info-ucoip/card
 import { CardNetworkComponent } from './ucoip/modal-ucoip/card-network/card-network.component';
 import { CardSistemasComponent } from './ucoip/modal-ucoip/card-sistemas/card-sistemas.component';
 import { CardLicenciamientosComponent } from './ucoip/modal-ucoip/card-licenciamientos/card-licenciamientos.component';
+import { SoftwareComponent } from './software/software.component';
+import { TokensAgenciasComponent } from './tokens-agencias/tokens-agencias.component';
+import { UIModule } from 'src/app/shared/ui/ui.module';
+import { ModalSoftwareComponent } from './software/modal-software/modal-software.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +37,9 @@ import { CardLicenciamientosComponent } from './ucoip/modal-ucoip/card-licenciam
     CardNetworkComponent,
     CardSistemasComponent,
     CardLicenciamientosComponent,
+    SoftwareComponent,
+    TokensAgenciasComponent,
+    ModalSoftwareComponent,
   ],
   imports: [
     CommonModule,
@@ -43,6 +50,7 @@ import { CardLicenciamientosComponent } from './ucoip/modal-ucoip/card-licenciam
     AccordionModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
+    UIModule
   ]
 })
 export class UcoipModule { }

@@ -1,0 +1,90 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">{{tipo | titlecase}} Licencia de Software</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="cerrarModal()"
+    ></button>
+  </div>
+  <div class="modal-body">
+
+    <form [formGroup]="formSoftware">
+                <div class="modal-body">
+                    <div class="row g-2">
+                        <div class="col-md-4">
+                            <label class="form-label">Software</label>
+                            <select
+                                class="form-select form-select-sm"
+                                formControlName="cat_software_id">
+                                <option [ngValue]="null">
+                                    Seleccione...
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Versión</label>
+                            <input
+                                type="text"
+                                class="form-control form-control-sm"
+                                formControlName="version">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Licencia</label>
+                            <input
+                                type="text"
+                                class="form-control form-control-sm"
+                                formControlName="licencia">
+                        </div>
+
+                        
+
+                        <!-- <div class="col-md-6">
+                            <label class="form-label">
+                                Usuario Empresa
+                            </label>
+
+                            <select
+                                class="form-select form-select-sm"
+                                formControlName="usuario_empresa_id">
+                                <option [ngValue]="null">
+                                    Seleccione...
+                                </option>
+                            </select>
+                        </div> -->
+
+                        <div class="col-12">
+                            <label class="form-label">
+                                Observaciones
+                            </label>
+
+                            <textarea
+                                rows="3"
+                                class="form-control form-control-sm"
+                                formControlName="observaciones">
+                            </textarea>
+                        </div>
+
+                    </div>
+
+                </div>
+            </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      data-bs-dismiss="modal"
+      (click)="cerrarModal()"
+    >
+      Cerrar
+    </button>
+    <button type="button" class="btn btn-primary btn-sm" (click)="save()">
+      <i class="fas fa-save"></i>
+        Guardar
+    </button>
+  </div>

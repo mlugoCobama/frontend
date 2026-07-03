@@ -1,45 +1,100 @@
-<div class="card shadow-sm mb-3">
-    <div class="card-body">
-        <div class="row g-3 align-items-center">
-            <!-- Información -->
-            <div class="col-12 col-lg">
-                <div class="row g-2">
-                    <div class="col-12 col-md-auto alert alert-primary m-1 p-1 fw-bold">
-                        <strong>Folio:</strong>
-                        <span>{{ solicitud.folio }}</span>
-                    </div>
-                    <div class="col-12 col-md-auto">
-                        <strong>Fecha:</strong>
-                        <span>{{ solicitud.fecha | date:'dd/MM/yyyy' }}</span>
-                    </div>
-                    <div class="col-12 col-md-auto">
-                        <strong>Periodo:</strong>
-                        <span>
-                            {{ solicitud.inicio_periodo | date:'dd/MM/yyyy' }}
-                            al
-                            {{ solicitud.fin_periodo | date:'dd/MM/yyyy' }}
-                        </span>
-                    </div>
-                    <div class="col-12 col-md-auto">
-                        <strong>Solicita:</strong>
-                        <span>{{ solicitud.solicita }} <small>{{ solicitud.empresa }}</small></span>
-                    </div>
-                    <div class="col-12 col-md-auto">
-                        <strong>Precio:</strong>
-                        <span>{{ solicitud.precio_combustible | currency }}</span>
-                    </div>
-                    <div  *ngIf ="solicitud.fecha_dispersion" class="col-12 col-md-auto alert alert-success m-1 p-1 fw-bold">
-                        <strong>Fecha dispersion:</strong>
-                        <span>{{solicitud.fecha_dispersion | date:'dd/MM/yyyy'}}</span>
-                    </div>
+
+<div class="row g-3 mb-2">
+
+    <!-- Información -->
+    <div class="col-12 col-lg-10">
+
+        <!-- Primera fila -->
+        <div class="row g-2 mb-2">
+
+            <div class="col-6 col-md-4 col-xl-4  ">
+                <div class="border rounded px-3 py-2 h-100">
+                    <small class="text-muted d-block">Empresa</small>
+                    <span class="fw-semibold">
+                        {{ solicitud.empresa }}
+                    </span>
                 </div>
             </div>
 
-            <!-- Botones -->
-            <div class="col-12 col-lg-auto">
-                <div class="d-flex flex-column flex-sm-row gap-2 justify-content-lg-end">
-                    <button
-                        *ngIf="solicitud.fecha_dispersion"
+            <div class="col-6 col-md-4 col-xl-4 ">
+                <div class="border rounded px-3 py-2 h-100">
+                    <small class="text-muted d-block">Folio</small>
+                    <span class="fw-semibold text-primary">
+                        {{ solicitud.folio }}
+                    </span>
+                </div>
+            </div>
+
+            
+
+            <div class="col-12 col-md-4 col-xl-4  ">
+                <div class="border rounded px-3 py-2 h-100">
+                    <small class="text-muted d-block">Solicita</small>
+                    <span class="fw-semibold">
+                        {{ solicitud.solicita }}
+                    </span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Segunda fila -->
+        <div class="row g-2">
+
+          <div class="col-12 col-md-6 col-xl-3  ">
+                <div class="border rounded px-3 py-2 h-100">
+                    <small class="text-muted d-block">Fecha Solicitud</small>
+                    <span class="fw-semibold">
+                        {{ solicitud.fecha | date:'dd/MM/yyyy' }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-xl-3  ">
+                <div class="border rounded px-3 py-2 h-100">
+                    <small class="text-muted d-block">Periodo</small>
+                    <span class="fw-semibold">
+                        {{ solicitud.inicio_periodo | date:'dd/MM/yyyy' }}
+                        -
+                        {{ solicitud.fin_periodo | date:'dd/MM/yyyy' }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-6 col-xl-3  ">
+                <div class="border rounded px-3 py-2 h-100">
+                    <small class="text-muted d-block">Precio combustible</small>
+                    <span class="fw-semibold text-primary">
+                        {{ solicitud.precio_combustible | currency }}
+                    </span>
+                </div>
+            </div>
+
+            <div
+                *ngIf="solicitud.fecha_dispersion"
+                class="col-6 col-md-6 col-xl-3  ">
+
+                <div class="border border-success rounded px-3 py-2 h-100">
+                    <small class="text-success d-block">
+                        Fecha dispersión
+                    </small>
+
+                    <span class="fw-semibold text-success">
+                        {{ solicitud.fecha_dispersion | date:'dd/MM/yyyy' }}
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Botones -->
+    <div class="col-12 col-lg-2">
+        <div class="d-flex flex-column gap-2 h-100 justify-content-end">
+              <button
+                        *ngIf="solicitud.estatus >= 2"
                         (click)="descargarPlantilla()"
                         type="button"
                         class="btn btn-outline-success btn-sm"
@@ -54,7 +109,7 @@
                         {{ descargando ? 'Descargando...' : 'Descargar plantilla' }}
                     </button>
                     <button
-                        *ngIf="solicitud.fecha_dispersion && solicitud.estatus == 1"
+                        *ngIf="solicitud.estatus == 2"
                         (click)="notificarDispersion()"
                         type="button"
                         class="btn btn-outline-info btn-sm"
@@ -69,7 +124,7 @@
                         {{ notificando ? 'Notificando...' : 'Notificar Dispersion' }}
                     </button>
                     <button
-                      *ngIf="!solicitud.fecha_dispersion"
+                      *ngIf="solicitud.estatus == 1"
                       (click)="dispersion()"
                       type="button"
                       class="btn btn-primary btn-sm"
@@ -86,13 +141,11 @@
 
                       {{ deshabilitado ? 'Guardando...' : 'Guardar dispersión' }}
                   </button>
-                </div>
-            </div>
-
         </div>
-
     </div>
 </div>
+
+
 
 <form [formGroup]="form">
   <div class="table-responsive bordered">

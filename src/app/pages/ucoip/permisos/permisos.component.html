@@ -5,52 +5,89 @@
     </div>
 </div>
 
-  <div class="card ">
-    <div class="card-body">
-      <!-- Campo de búsqueda -->
-      <form (ngSubmit)="buscarPermisos()" class="mb-3">
-        <div class="input-group">
-          <input type="email"
-                 class="form-control form-control-sm"
-                 placeholder="Correo del usuario"
-                 [(ngModel)]="correo"
-                 name="correo">
-          <button class="btn btn-primary btn-sm" type="submit">Buscar</button>
-        </div>
-      </form>
+<div class="card shadow-sm">
+  <div class="card-body">
 
-      <div *ngIf="loading" class="text-center my-3">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Cargando...</span>
+    <!-- Campo de búsqueda -->
+    <form (ngSubmit)="buscarPermisos()" class="mb-3">
+      <div class="input-group gap-1">
+        <input type="email"
+               class="form-control form-control-sm"
+               placeholder="Correo del usuario"
+               [(ngModel)]="correo"
+               name="correo">
+        <button class="btn btn-primary btn-sm" type="submit">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+          <i *ngIf="!loading" class="bx bx-search-alt-2"></i>   
+          Buscar
+        </button>
+        <button *ngIf="idUsuario" class="btn btn-success btn-sm" (click)="guardarPermisos()" [disabled]="loading">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+            <i *ngIf="!loading" class="bx bx-save"></i>   
+          Guardar
+      </button>
+      </div>
+    </form>
+
+    <div class="mt-3 d-flex justify-content-end" >
+      
     </div>
-  </div>
 
-      <!-- Lista de permisos -->
-      <div class="row" *ngIf="permisos.length > 0">
-        <div *ngFor="let modulo of permisos" class="mb-3 col-lg-6">
-          <p class="border-start border-bottom border-seconday"> 
-            <i class="fas fa-toolbox">
-            </i> <strong> {{ modulo.nombre }} - {{ usuarioConsultado }} </strong></p>
-          <div class="form-check form-switch  py-1 border-start border-bottom border-seconday" *ngFor="let permiso of modulo.permisos">
-            <!-- <i class="m-e fas" [ngClass]="permiso.activo ? 'text-success fa-lock-open' : 'text-secondary fa-lock'" ></i> -->
-            <input class="form-check-input ms-1"
-                   type="checkbox"
-                   [(ngModel)]="permiso.activo"
-                   [ngClass]="permiso.activo ? 'bg-success border-success' : ''"
-                   [name]="'permiso_' + permiso.id">
-            <label class="form-check-label">
-              {{ permiso.descripcion | titlecase }}<small class="text-muted"><em>-{{ permiso.nombre }}</em></small>
-            </label>
+    <!-- Spinner -->
+    <div *ngIf="loading" class="text-center my-3">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div>
+
+    <!-- Pestañas de módulos -->
+     <div class="d-flex justify-content-center aling-items-center">
+        <div class="btn-group gap-1" role="group" *ngIf="permisos.length > 0">
+      <button type="button"
+              class="btn btn-sm"
+              [ngClass]="i === activeTab ? 'btn-primary' : 'btn-outline-primary'"
+              *ngFor="let modulo of permisos; let i = index"
+              (click)="activeTab = i">
+        {{ modulo.nombre }}
+      </button>
+    </div>
+     </div>
+    
+
+
+    <!-- Contenido de cada pestaña -->
+    <div class="tab-content mt-3" *ngIf="permisos.length > 0">
+      <div *ngFor="let modulo of permisos; let i = index"
+           class="tab-pane fade"
+           [class.show]="i === activeTab"
+           [class.active]="i === activeTab">
+
+        <div class="card mb-3">
+          <div class="card-header">
+            <i class="fas fa-toolbox"></i>
+            <strong>{{ modulo.nombre }} - {{ usuarioConsultado }}</strong>
+          </div>
+          <div class="card-body">
+            <div class="form-check form-switch py-1 border-bottom"
+                 *ngFor="let permiso of modulo.permisos; trackBy: trackByPermiso">
+              <input class="form-check-input ms-1"
+                     type="checkbox"
+                     [(ngModel)]="permiso.activo"
+                     [ngClass]="permiso.activo ? 'bg-success border-success' : ''"
+                     [name]="'permiso_' + permiso.id">
+              <label class="form-check-label">
+                {{ permiso.descripcion | titlecase }}
+                <small class="text-muted"><em>-{{ permiso.nombre }}</em></small>
+              </label>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Botón de guardar solo si hay idUsuario -->
-      <div class="mt-3 d-flex justify-content-end" *ngIf="idUsuario">
-        <button class="btn btn-success btn-sm" (click)="guardarPermisos()" [disabled]="loading">
-        <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-            Guardar
-        </button>
       </div>
     </div>
+
+    <!-- Botón de guardar -->
+
+
   </div>
+</div>

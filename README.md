@@ -54,4 +54,17 @@ Se integra el nuevo módulo de Gestión de Comisiones con los siguientes apartad
 ## Compras - Catalogo de tarjetas Toka
 - Se genera un catalogo de tarjetas de toka de las empresas
 ## Compras - Dispersiones de diesel
-- Se genera un apartado especifico para la dispersion de tajetas toka, dividiendo la solicitud y disperion en dos pasos, ademas de poder consultar solicitudes dispersion y solicitudes ya dispersadas
+- Se genera un apartado especifico para la dispersion de tajetas toka, dividiendo la solicitud y dispersion en dos pasos, ademas de poder consultar solicitudes dispersion y solicitudes ya dispersadas
+
+---
+## **Fecha de liberación:** 3 de julio de 2026
+## Compras - Dispersiones de diesel
+- Se integra un nuevo estado en el apartado de dispersiones de diesel para identificar con mayor facilidad, solicitudes pendientes, guardadas y realizadas ( notificadas ).
+- Se agrega un fitro de fechas pendientes (fecha de solicitud), guardadas y realizadas (fecha de dispersion).
+- Se modifica el encabezado de datos de solicitud
+## Compras - Catalogo de Tags
+- Se genera un catalogo de tarjetas de tags para las empresas
+
+## UCOIP - MODAL UCOIP
+- Asignación de sistemas y almacenado de credenciales
+- Asignación de recursos de red

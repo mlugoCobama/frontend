@@ -10,6 +10,7 @@ import { AlmacenComponent } from './almacen/almacen.component';
 import { AuthGuard } from 'src/app/core/guards/auth.guard';
 import { CatTarjetasTokaComponent } from './cat-tarjetas-toka/cat-tarjetas-toka.component';
 import { DispersionesComponent } from './dispersiones/dispersiones.component';
+import { CatTagsComponent } from './cat-tags/cat-tags.component';
 // import { DetallesSolicitudCompraComponent } from './detalles-solicitud-compra/detalles-solicitud-compra.component';
 
 const routes: Routes = [
@@ -20,7 +21,8 @@ const routes: Routes = [
   { path: 'cat-unidades', component: CatUnidadesComponent },
   { path: 'compras-macro', component: ComprasMacroComponent },
   { path: 'cat-tarjetas-toka', component: CatTarjetasTokaComponent },
-  {path:'dispersiones', component: DispersionesComponent},
+  { path: 'cat-tags', component: CatTagsComponent },
+  { path: 'dispersiones', component: DispersionesComponent},
   { path: 'reporte-gasto-mensual', component: ReporteGastoMensualComponent}
   // { path: 'detalles-solicitud-compra', component: DetallesSolicitudCompraComponent},
 ];

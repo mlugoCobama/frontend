@@ -18,9 +18,32 @@ export const MENU: MenuItem[] = [
       {
         id: 2,
         label: "Inventario",
-        link: "/ucoip/inventario",
+        
         parentId: 1,
         permission: "view inventario",
+        subItems: [
+            {
+              id: 2,
+              label: "Hardware",
+              link: "/ucoip/inventario",
+              parentId: 1,
+              permission: "view inventario",
+            },
+            {
+              id: 3,
+              label: "Licencias de software",
+              link: "/ucoip/software",
+              parentId: 1,
+              permission: "view inventario",
+            },
+            {
+              id: 3,
+              label: "Tokens",
+              link: "/ucoip/tokens",
+              parentId: 1,
+              permission: "view inventario",
+            },
+          ]
       },
       {
         id: 3,
@@ -39,7 +62,7 @@ export const MENU: MenuItem[] = [
           {
             id: 37,
             label: "Asignacion Permisos",
-            link: "/ucoip/testing/provisional/permisos",
+            link: "/ucoip/asignacion/permisos",
             parentId: 34,
             permission: "view permisos",
           },
@@ -152,6 +175,13 @@ export const MENU: MenuItem[] = [
         id: 12,
         label: "Tarjetas Toka",
         link: "/compras/cat-tarjetas-toka",
+        parentId: 7,
+        permission: "view tarjetas toka",
+      },
+      {
+        id: 12,
+        label: "Tags",
+        link: "/compras/cat-tags",
         parentId: 7,
         permission: "view tarjetas toka",
       },
@@ -405,7 +435,7 @@ export const MENU: MenuItem[] = [
             label: "Flotillas",
             link: "/renault/comisiones/flotillas",
             parentId: 32,
-            permission: "view submodulo comisiones seminuevos nissan",
+            permission: "view submodulo comisiones flotillas renault",
           },
           
           {

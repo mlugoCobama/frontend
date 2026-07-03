@@ -8,22 +8,28 @@ import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-com
   styleUrl: "./dispersiones.component.css",
 })
 export class DispersionesComponent implements OnInit {
+  
   constructor(
     private dispersiones: DispersionesDieselService,
     private alertasService: SwalComprsServiceService,
   ) {}
+
   ngOnInit(): void {
     this.getDisperiones();
   }
 
-  tabActiva: "pendientes" | "realizadas" = "pendientes";
+  tabActiva: 'pendientes' | 'guardadas' | 'realizadas' = 'pendientes';
+
+  public fechaInicio = '';
+  public fechaFin = '';
 
   pendientes = [];
   realizadas = [];
+  guardadas = [];
 
-  procesar(item: any): void {
-    console.log(item);
-  }
+  pendientesOriginal = [];
+  guardadasOriginal = [];
+  realizadasOriginal = [];
 
   public mostrar: boolean = false;
   public dispersion: any;
@@ -54,8 +60,13 @@ export class DispersionesComponent implements OnInit {
     this.dispersiones.getAll().subscribe(
       (response) => {
         if (response) {
-          this.pendientes = response.data.pendientes;
-          this.realizadas = response.data.realizadas;
+          this.pendientesOriginal = response.data.pendientes;
+          this.guardadasOriginal = response.data.guardadas;
+          this.realizadasOriginal = response.data.realizadas;
+
+          this.pendientes = [...this.pendientesOriginal];
+          this.guardadas = [...this.guardadasOriginal];
+          this.realizadas = [...this.realizadasOriginal];
           this.loading = false;
         } else {
           this.loading = false;
@@ -91,5 +102,48 @@ export class DispersionesComponent implements OnInit {
         this.alertasService.mostrarAlerta("Error", `Error fetching data: ${error}`, "error", "danger",);
       },
     );
+  }
+
+  filtrarPorFechas(): void {
+    this.pendientes = this.pendientesOriginal.filter(
+      (x:any) => this.estaEnRango(x.fecha)
+    );
+    this.guardadas = this.guardadasOriginal.filter(
+      (x:any) => this.estaEnRango(x.fecha_dispersion)
+    );
+    this.realizadas = this.realizadasOriginal.filter(
+      (x:any) => this.estaEnRango(x.fecha_dispersion)
+    );
+  }
+
+  private estaEnRango(fechaRegistro: string): boolean {
+
+    if (!fechaRegistro) {
+      return false;
+    }
+    const fecha = new Date(fechaRegistro);
+    const inicio = this.fechaInicio
+      ? new Date(`${this.fechaInicio}T00:00:00`)
+      : null;
+    const fin = this.fechaFin
+      ? new Date(`${this.fechaFin}T23:59:59`)
+      : null;
+    if (inicio && fecha < inicio) {
+      return false;
+    }
+    if (fin && fecha > fin) {
+      return false;
+    }
+    return true;
+  }
+
+  limpiarFiltros(): void {
+
+    this.fechaInicio = '';
+    this.fechaFin = '';
+
+    this.pendientes = [...this.pendientesOriginal];
+    this.guardadas = [...this.guardadasOriginal];
+    this.realizadas = [...this.realizadasOriginal];
   }
 }

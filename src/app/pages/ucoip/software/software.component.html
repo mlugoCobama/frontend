@@ -1,0 +1,34 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xl-12">
+            <div class="card shadow-sm">
+                <div class="card-body border-bottom border-primary border-2">
+                    <div class="d-flex align-items-center">
+                        <h5 class="mb-0 card-title flex-grow-1">Inventario de Licencias de Software</h5>
+
+                        <div class="flex-shrink-0 d-flex gap-1">
+                            <a class="btn btn-primary btn-sm" (click)="openModalNuevo()"><i class="fas fa-plus"></i> Nuevo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div *ngIf="isLoad" class="text-center py-3">
+            <div class="spinner-border  text-secondary" role="status"></div>
+        </div>
+        <app-datatable-generico
+        *ngIf="dataInventario.length > 0"
+        [data]="dataInventario"
+        [isLoad]="isLoad"
+        [columnas]="columnas"
+        [filtros]="filtros"
+        (rowDoubleClick)="openEdit($event)">
+        </app-datatable-generico>
+    </div>
+</div>
+

@@ -6,6 +6,7 @@ import {
   Validators,
 } from "@angular/forms";
 import { TokaService } from 'src/app/core/services/compras/toka.service';
+import { TagService } from 'src/app/core/services/compras/tag.service';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 
 @Component({
@@ -64,16 +65,19 @@ export class FormDatosVehiculoComponent implements OnInit{
   @Input()  intercompania:any = 0;
 
   public tarjetasDisponibles:any = [];
+  public tagsDisponibles:any = [];
 
   constructor(
     public formBuilder: FormBuilder,
     private toka: TokaService, 
+    private tag: TagService,
     private alertasService: SwalComprsServiceService
   ){}
 
   ngOnInit(): void {
     this.buildForm();
     this.getTarjetasDisponibles(this.intercompania);
+    this.getTags(this.intercompania);
   }
 
     private buildForm() {
@@ -100,8 +104,10 @@ export class FormDatosVehiculoComponent implements OnInit{
         num_tarjeta_toka: new FormControl(""),
         num_tag:          new FormControl(""),
         limite:           new FormControl(""),
-        limite_toka:           new FormControl(""),
+        limite_toka:      new FormControl(""),
         gps:              new FormControl("", [Validators.required]),
+        tanque_combustible:              new FormControl("", [Validators.required]),
+        rendimiento:              new FormControl("", [Validators.required]),
       });
 
     const valorOriginalEstatus = this.formDatosVehiculo.get('estatus')?.value || '' || this.datos?.estatus;
@@ -137,6 +143,8 @@ export class FormDatosVehiculoComponent implements OnInit{
       num_tarjeta_toka: this.datos?.num_tarjeta_toka,
       num_tag:          this.datos?.num_tag,
       limite:           this.datos?.limite,
+      tanque_combustible:this.datos?.capacidad_combustible,
+      rendimiento:      this.datos?.rendimiento_x_litro,
     });
   }
 
@@ -235,6 +243,29 @@ private getTarjetasDisponibles(intercompania:any) {
             { id: null, tarjeta: 'Sin Tarjeta' },
             ...response.data
           ];
+        } else {
+          this.alertasService.mostrarAlerta(
+            "Error",response.message,"error","danger"
+          );
+        }
+      },
+      (error) => {
+        this.alertasService.mostrarAlerta("Error", 
+          `Error fetching data: ${error}`,"error","danger");
+      }
+    );
+  }
+
+  private getTags(intercompania:any) {
+    this.tag.getTagsDisponibles(intercompania).subscribe(
+      (response) => {
+        if (response) {
+          this.tagsDisponibles = [
+            { id: null, num_tag: 'Sin Tag' },
+            ...response.data
+          ];
+
+          console.log(this.tagsDisponibles)
         } else {
           this.alertasService.mostrarAlerta(
             "Error",response.message,"error","danger"

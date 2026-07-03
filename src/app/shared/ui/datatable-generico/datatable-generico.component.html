@@ -1,0 +1,61 @@
+<!-- tabla-generica.component.html -->
+
+<!-- Filtros dinámicos -->
+<div class="row" *ngIf="filtros.length">
+  <div class="col-md-4 mb-3" *ngFor="let filtro of filtros">
+    <select class="form-select form-select-sm"
+            [(ngModel)]="valoresFiltros[filtro.field]"
+            (change)="aplicarFiltros()">
+      <option value="">{{ filtro.label }}</option>
+      <option *ngFor="let op of getOpciones(filtro)" [value]="op">
+        {{ op }}
+      </option>
+    </select>
+  </div>
+</div>
+
+<!-- Tabla -->
+<div class="table-responsive">
+  <table datatable [dtOptions]="dtOptions"
+         class="table table-sm" *ngIf="!isLoad">
+    <thead>
+      <tr>
+        <th *ngFor="let col of columnas"
+            [class.text-center]="col.centered">
+          {{ col.header }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of data"
+          [ngClass]="{'table-primary': selectedId === item.id}"
+          (click)="selectRow(item)"
+          (dblclick)="openEdit(item)">
+
+        <td *ngFor="let col of columnas"
+            [class.text-center]="col.centered"
+            [class.fw-bold]="!!col.colorField"
+            [ngClass]="getColorClass(item, col)">
+
+          <!-- Badge con dot de estado -->
+          <ng-container *ngIf="col.badge; else textoSimple">
+            <span class="badge text-bg-dark bg-gradient fw-bold position-relative">
+              {{ resolveField(item, col.field) }}
+              <span *ngIf="col.badge.dotField"
+                    class="position-absolute top-0 start-100 translate-middle p-1 rounded-circle"
+                    [ngClass]="getBadgeDotClass(item, col)">
+                <span class="visually-hidden">status</span>
+              </span>
+            </span>
+          </ng-container>
+
+          <!-- Texto normal (con transform opcional) -->
+          <ng-template #textoSimple>
+            {{ getDisplayValue(item, col) }}
+          </ng-template>
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

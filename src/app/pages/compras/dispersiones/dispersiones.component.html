@@ -1,113 +1,169 @@
-<app-card-top [title]="'Dispersion de combustible'"
-[hasButtons] = "true"
-[showBtnVolver] = "dispersion"
-(volver) = "volver()"
-></app-card-top>
+<app-card-top [title]="'Dispersion de combustible'" [hasButtons]="true" [showBtnVolver]="dispersion"
+    (volver)="volver()"></app-card-top>
 
 
-<div class="card shadow-sm">
-    <div class="card-body">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <!-- TABS -->
+            <ng-container *ngIf="!dispersion && !loading">
+                <div class="d-flex justify-content-between align-items-end mb-3 flex-wrap gap-2">
+
+        <!-- FILTROS -->
+        <div class="d-flex gap-2 align-items-end">
+            <div>
+                <label class="form-label mb-1 small">Desde</label>
+                <input
+                    type="date"
+                    class="form-control form-control-sm"
+                    [(ngModel)]="fechaInicio"
+                    (change)="filtrarPorFechas()">
+            </div>
+            <div>
+                <label class="form-label mb-1 small">Hasta</label>
+                <input
+                    type="date"
+                    class="form-control form-control-sm"
+                    [(ngModel)]="fechaFin"
+                    (change)="filtrarPorFechas()">
+            </div>
+            <button
+                class="btn btn-outline-secondary btn-sm"
+                (click)="limpiarFiltros()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
         <!-- TABS -->
-        <ng-container *ngIf="!dispersion && !loading">
-        <div class="d-flex justify-content-end mb-3">
-            <div class="btn-group shadow-sm" role="group">
-                <button
-                    type="button"
-                    class="btn btn-sm"
-                    [class.btn-primary]="tabActiva === 'pendientes'"
-                    [class.btn-outline-primary]="tabActiva !== 'pendientes'"
-                    (click)="tabActiva = 'pendientes'">
+        <div class="btn-group shadow-sm gap-1" role="group">
 
-                    Pendientes
-                    <span class="badge bg-danger ms-2">
-                        {{ pendientes.length }}
-                    </span>
-                </button>
+            <button
+                type="button"
+                class="btn btn-sm fw-semibold"
+                [class.btn-primary]="tabActiva === 'pendientes'"
+                [class.btn-outline-primary]="tabActiva !== 'pendientes'"
+                (click)="tabActiva = 'pendientes'">
 
-                <button
-                    type="button"
-                    class="btn btn-sm"
-                    [class.btn-success]="tabActiva === 'realizadas'"
-                    [class.btn-outline-success]="tabActiva !== 'realizadas'"
-                    (click)="tabActiva = 'realizadas'">
+                PENDIENTES
 
-                    Realizadas
-                </button>
-            </div>
+                <span class="badge bg-danger ms-2 fw-semibold">
+                    {{ pendientes.length }}
+                </span>
+
+            </button>
+
+            <button
+                type="button"
+                class="btn btn-sm fw-semibold"
+                [class.btn-info]="tabActiva === 'guardadas'"
+                [class.btn-outline-info]="tabActiva !== 'guardadas'"
+                (click)="tabActiva = 'guardadas'">
+                GUARDADAS
+                <span class="badge bg-danger ms-2 fw-semibold">
+                    {{ guardadas.length }}
+                </span>
+            </button>
+            <button
+                type="button"
+                class="btn btn-sm fw-semibold"
+                [class.btn-success]="tabActiva === 'realizadas'"
+                [class.btn-outline-success]="tabActiva !== 'realizadas'"
+                (click)="tabActiva = 'realizadas'">
+                REALIZADAS
+                <span class="badge bg-danger ms-2 fw-semibold">
+                    {{ realizadas.length }}
+                </span>
+            </button>
         </div>
+    </div>
 
-        <!-- PENDIENTES -->
-        <div *ngIf="tabActiva === 'pendientes'">
-            <div class="table-responsive border">
-                <table class="table table-sm table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Folio</th>
-                            <th>Fecha</th>
-                            <th>Empresa</th>
-                            <th>Solicita </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngIf="pendientes.length === 0">
-                            <td colspan="5" class="text-center py-5 text-muted">
-                                No existen solicitudes pendientes
-                            </td>
-                        </tr>
-                        <tr *ngFor="let item of pendientes" (click)="seleccionar(item, $event)">
-                            <td><strong>{{ item.folio }}</strong></td>
-                            <td>{{ item.fecha | date:'dd/MM/yyyy' }}</td>
-                            <td><strong>{{ item.empresa ?? 'No disponible' }}</strong></td>
-                            <td>{{ item.solicita ?? 'No disponible' }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- REALIZADAS -->
-        <div *ngIf="tabActiva === 'realizadas'">
-            <!-- <div class="row mb-3">
-                <div class="col-md-4">
-                    <input
-                        type="text"
-                        class="form-control form-control-sm"
-                        placeholder="Buscar folio">
+            <!-- PENDIENTES -->
+            <div *ngIf="tabActiva === 'pendientes'">
+                <div class="table-responsive  border " style="overflow-y: scroll; height: 20rem;">
+                    <table class="table table-sm table-hover align-middle">
+                        <thead class="table-light thead-sticky">
+                            <tr>
+                                <th>Folio</th>
+                                <th>Fecha</th>
+                                <th>Empresa</th>
+                                <th>Solicita </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngIf="pendientes.length === 0">
+                                <td colspan="5" class="text-center py-5 text-muted">
+                                    No existen solicitudes pendientes
+                                </td>
+                            </tr>
+                            <tr *ngFor="let item of pendientes" (click)="seleccionar(item, $event)">
+                                <td><strong>{{ item.folio }}</strong></td>
+                                <td>{{ item.fecha | date:'dd/MM/yyyy' }}</td>
+                                <td><strong>{{ item.empresa ?? 'No disponible' }}</strong></td>
+                                <td>{{ item.solicita ?? 'No disponible' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="col-md-3">
-                    <input
-                        type="date"
-                        class="form-control form-control-sm">
-                </div>
-            </div> -->
-            <div class="table-responsive border">
-                <table class="table table-sm table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Folio</th>
-                            <th>Fecha</th>
-                            <th>Empresa</th>
-                            <th>Solicita </th>
-                            <th>Fecha Dispersion</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngIf="realizadas.length === 0">
-                            <td colspan="5" class="text-center py-5 text-muted">
-                                No existen registros
-                            </td>
-                        </tr>
-                        <tr *ngFor="let item of realizadas" (click)="seleccionar(item, $event)">
-                            <td><strong>{{ item.folio }}</strong></td>
-                            <td>{{ item.fecha | date:'dd/MM/yyyy' }}</td>
-                            <td>{{ item.empresa ?? 'No disponible' }}</td>
-                            <td>{{ item.solicita ?? 'No disponible' }}</td>
-                            <td><strong>{{ (item.fecha_dispersion | date:'dd/MM/yyyy') ?? 'N/D'}}</strong></td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
-        </div>
+
+            <!-- REALIZADAS -->
+            <div *ngIf="tabActiva === 'guardadas'">
+                <div class="table-responsive border " style="overflow-y: scroll; height: 20rem;">
+                    <table class="table table-sm table-hover align-middle">
+                        <thead class="table-light thead-sticky">
+                            <tr>
+                                <th>Folio</th>
+                                <th>Fecha</th>
+                                <th>Empresa</th>
+                                <th>Solicita </th>
+                                <th>Fecha Guardado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngIf="guardadas.length === 0">
+                                <td colspan="5" class="text-center py-5 text-muted">
+                                    No existen registros
+                                </td>
+                            </tr>
+                            <tr *ngFor="let item of guardadas" (click)="seleccionar(item, $event)">
+                                <td><strong>{{ item.folio }}</strong></td>
+                                <td>{{ item.fecha | date:'dd/MM/yyyy' }}</td>
+                                <td>{{ item.empresa ?? 'No disponible' }}</td>
+                                <td>{{ item.solicita ?? 'No disponible' }}</td>
+                                <td><strong>{{ (item.fecha_dispersion | date:'dd/MM/yyyy') ?? 'N/D'}}</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div *ngIf="tabActiva === 'realizadas'">
+                <div class="table-responsive border " style="overflow-y: scroll; height: 20rem;">
+                    <table class="table table-sm table-hover align-middle">
+                        <thead class="table-light thead-sticky">
+                            <tr>
+                                <th>Folio</th>
+                                <th>Fecha</th>
+                                <th>Empresa</th>
+                                <th>Solicita </th>
+                                <th>Fecha Dispersion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngIf="realizadas.length === 0">
+                                <td colspan="5" class="text-center py-5 text-muted">
+                                    No existen registros
+                                </td>
+                            </tr>
+                            <tr *ngFor="let item of realizadas" (click)="seleccionar(item, $event)">
+                                <td><strong>{{ item.folio }}</strong></td>
+                                <td>{{ item.fecha | date:'dd/MM/yyyy' }}</td>
+                                <td>{{ item.empresa ?? 'No disponible' }}</td>
+                                <td>{{ item.solicita ?? 'No disponible' }}</td>
+                                <td><strong>{{ (item.fecha_dispersion | date:'dd/MM/yyyy') ?? 'N/D'}}</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </ng-container>
         <!-- Spinner -->
         <div *ngIf="loading" class="text-center py-5">
@@ -120,25 +176,19 @@
             </div>
         </div>
 
-
-
         <ng-container *ngIf="dispersion">
 
-        <div *ngIf="loadingDispersion" class="text-center py-5">
-            <div class="spinner-border" role="status">
-                <span class="visually-hidden">Cargando...</span>
-            </div>
+            <div *ngIf="loadingDispersion" class="text-center py-5">
+                <div class="spinner-border" role="status">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
 
-            <div class="mt-2 text-muted">
-                Cargando información de la dispersión...
+                <div class="mt-2 text-muted">
+                    Cargando información de la dispersión...
+                </div>
             </div>
-        </div>
-        <app-tabla-dispersiones
-        *ngIf =  "!loadingDispersion && dataDispersion.length > 0"
-        [vehiculos] = "dataDispersion"
-        [solicitud] = "dispersion"
-        
-        ></app-tabla-dispersiones>
+            <app-tabla-dispersiones *ngIf="!loadingDispersion && dataDispersion.length > 0" [vehiculos]="dataDispersion"
+                [solicitud]="dispersion"></app-tabla-dispersiones>
         </ng-container>
 
 
