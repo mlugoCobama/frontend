@@ -45,7 +45,7 @@ export class ComisionesTomaUnidadesComponent implements OnInit {
       clase: "btn-warning",
       tooltip: "Devolver al estado anterior",
       // Solo si NO está en el primer estado ni pagada
-      visible: (item) => item.estatus > 1 && item.estatus !== 4,
+      visible: (item) => item.estatus > 1 && item.estatus !== 4 && this.tienePermiso('view btn devolver toma'),
       accion: async (item) => await this.devolver(item),
     },
     {
@@ -61,7 +61,7 @@ export class ComisionesTomaUnidadesComponent implements OnInit {
       clase: "btn-primary",
       tooltip: "Visto bueno",
       // Solo si está por autorizar o autorizada (no pagada ni rechazada)
-      visible: (item) => [1, 2].includes(item.estatus),
+      visible: (item) => [1, 2].includes(item.estatus) && this.tienePermiso('view btn vobo toma'),
       accion: async (item) => await this.avanzarEstado(item),
     },
   ];
