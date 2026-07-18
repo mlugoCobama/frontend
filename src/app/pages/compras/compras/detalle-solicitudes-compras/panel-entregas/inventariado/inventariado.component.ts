@@ -68,7 +68,8 @@ export class InventariadoComponent implements OnInit {
             modelo:['',[Validators.required]],
             serie:['',[Validators.required]],
             caracteristcas:['',[Validators.required]],
-            usuario_asignar:[null]
+            usuario_asignar:[null],
+            asing_equipo_usuario: false
           })
         );
       }

@@ -6,7 +6,7 @@
 
 <div class="modal-body">
   <h5>Datos del Vehiculo</h5>
-  <app-form-datos-vehiculo [datos]="datos" [intercompania]="intercompania" #formUdtDatosVehiculo
+  <app-form-datos-vehiculo [datos]="datos" [tipo] = "tipo" [intercompania]="intercompania" #formUdtDatosVehiculo
     (cambioSelect)="mostrarFormTanque()"></app-form-datos-vehiculo>
 
   <div [hidden]="!openFormTanque">

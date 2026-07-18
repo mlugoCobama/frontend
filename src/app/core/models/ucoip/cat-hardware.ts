@@ -1,6 +1,7 @@
 export interface CatHardware {
     "id": number;
     "tipo": string;
+    "campos"?: any;
 }
 
 export interface ResponseCatHardware {

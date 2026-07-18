@@ -64,7 +64,7 @@ export function obtenerPrimerError(form: FormGroup): string | null {
   for (const campo of Object.keys(form.controls)) {
     const control = form.get(campo);
     if (control && control.invalid && control.errors) {
-    const exclusiones = ['id', 'codigo', 'clave', 'cat'];
+    const exclusiones = ['id', 'codigo', 'clave', 'cat', 'ucoip_'];
     const nombreCampo = campo
             .replace(/_/g, ' ')
             .replace(new RegExp(`\\b(${exclusiones.join('|')})\\b`, 'gi'), '')

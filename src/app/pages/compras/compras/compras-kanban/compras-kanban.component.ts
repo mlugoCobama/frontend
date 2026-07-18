@@ -171,6 +171,8 @@ agrupaciones = {
 //     return "bg-dark"; // sin clase
 //   }
 // }
-
+trackBySolicitud(index: number, item: any) {
+    return item.id;
+}
 
 }

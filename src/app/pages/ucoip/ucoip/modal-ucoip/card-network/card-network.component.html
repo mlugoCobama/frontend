@@ -38,11 +38,28 @@
                         {{ tipo.nombre }}
                     </option>
                 </select>
+                <div *ngIf="f.tipo.touched || submitted">
+                    <div
+                        class="text-danger form-text"
+                        *ngIf="f.tipo.errors?.['required']"
+                    >
+                        Debe seleccionar un tipo.
+                    </div>
+                </div>
             </div> 
 
             <div class="col-sm-7">
                 <label for="valor" class="form-label">Valor</label>
                 <input id="valor" class=" form-control form-control-sm" formControlName="valor"/>
+                <div *ngIf="f.valor.touched || submitted">
+                    <div
+                        class="text-danger form-text"
+                        *ngIf="f.valor.errors?.['required']"
+                    >
+                        Debes ingresar el valor del tipo seleccionado
+                    </div>
+                </div>
+            
             </div>
 
             
@@ -124,9 +141,9 @@
                         {{detalle?.nivel_restrictivo ?? 'N/E'}}
                     </td>
                     <td>
-                        <span [attr.title]="detalle?.estatus == 1 ? 'Vigente' : 'Devuelto'">
+                        <span [attr.title]="!detalle?.fecha_retiro ? 'Vigente' : 'Devuelto'">
                             <i class="fas fa-circle"
-                                [ngClass]="{'text-success': detalle?.estatus, 'text-danger': detalle?.estatus == 0}">
+                                [ngClass]="{'text-success': !detalle?.fecha_retiro, 'text-danger': detalle?.fecha_retiro}">
                             </i>
                         </span>
                     </td>

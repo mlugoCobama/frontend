@@ -35,8 +35,8 @@
 
 </div>
 
-<div class="table-responsive">
-              <table datatable [dtOptions]="dtOptions" class="table table-sm" *ngIf="!isLoad">
+<div class="table-responsive ">
+              <table  datatable [dtOptions]="dtOptions" class="table table-sm border" *ngIf="!isLoad">
                 <thead >
                   <tr class="text-center">
                     
@@ -53,13 +53,18 @@
                     [ngClass]="{'table-primary': selectedId === item.id}"
                     (click)="selectRow(item)"
                    (dblclick)="openEdit(item)">
-                   <td class="text-center"><span class="badge text-bg-dark bg-gradient fw-bold position-relative">{{ item.tipo.tipo }}
+                   <td class="text-center"><span class="badge text-bg-dark bg-gradient  fw-bold font-size-11 position-relative">{{ item.tipo.tipo }}
                       <span  class="position-absolute top-0 start-100 translate-middle p-1   rounded-circle"  
-                      [ngClass] = "{'bg-primary' : item.estado == 1, 'bg-danger' : item.estado == 3 , 'bg-success' : item.estado == 2}">
+                      [ngClass] = "'bg-' + EstadoRecursoConfig[item.estado].color">
                         <span class="visually-hidden">New alerts</span>
                       </span>
                     </span></td>
-                    <td class="text-center fw-bold" [ngClass] = "{'text-primary' : item.estado == 1, 'text-success' : item.estado == 2 , 'text-danger' : item.estado == 3}"> {{ getEstatus(item.estado)}}</td>
+                    <td class="text-center "> 
+                     <span [ngClass]="'fw-bold badge text-bg-' + EstadoRecursoConfig[item.estado].color + ' font-size-11'">
+                      {{ EstadoRecursoConfig[item.estado].label | uppercase }}
+                     </span>
+                     
+                    </td>
                     <td >{{ item.marca }}</td>
                     <td>{{ item.modelo }}</td>
                     <td>{{ item.no_serie }}</td>

@@ -10,19 +10,14 @@
     
     <div class="col-lg-12">
         <label class="form-label">Empresa</label>
-        
         <select
-            type="text"
             class="form-select form-select-sm"
-            placeholder="Intercompañía"
             formControlName="intercompania">
             <option [value]="''"disabled selected> Selecciona una opción </option>
             <option *ngFor="let item of empresas" [value]="item.intercompania">
                 {{ item.name.toUpperCase() }}
             </option>
         </select>
-
-
         <div *ngIf="f['intercompania'].touched && f['intercompania'].invalid"
             class="form-text text-danger">
             La empresa es obligatoria.
@@ -31,12 +26,14 @@
 
     <div class="col-lg-6">
         <label class="form-label">Marca TAG.</label>
-        <input
-            type="text"
-            class="form-control form-control-sm"
-            placeholder="Proveedor"
+        <select
+            class="form-select form-select-sm"
             formControlName="proveedor">
-
+            <option [value]="''"disabled selected> Selecciona una opción </option>
+            <option *ngFor="let item of marcasTag" [value]="item.marca">
+                {{ item.label }}
+            </option>
+        </select>
         <div *ngIf="f['proveedor'].touched && f['proveedor'].invalid"
             class="form-text text-danger">
             La marca del tag es obligatoria.
@@ -56,68 +53,25 @@
             El número de TAG es obligatorio.
         </div>
     </div>
-
     <div class="col-lg-6">
-        <label class="form-label">Número de Cuenta</label>
+        <label class="form-label">Clave</label>
         <input
             type="text"
             class="form-control form-control-sm"
-            placeholder="Número de cuenta"
-            formControlName="numero_cuenta"
-            mask="0*">
-
-        <div *ngIf="f['numero_cuenta'].touched && f['numero_cuenta'].invalid"
-            class="form-text text-danger">
-            El número de cuenta es obligatorio.
-        </div>
-    </div>
-
-    <div class="col-lg-6">
-        <label class="form-label">Serie</label>
-        <input
-            type="text"
-            class="form-control form-control-sm"
-            placeholder="Serie"
+            placeholder="Clave"
             formControlName="serie">
 
         <div *ngIf="f['serie'].touched && f['serie'].invalid"
             class="form-text text-danger">
-            La serie es obligatoria.
+            La clave es obligatoria.
         </div>
     </div>
 
-    <div class="col-lg-4">
-        <label class="form-label">Fecha Alta</label>
-        <input
-            type="date"
-            class="form-control form-control-sm"
-            formControlName="fecha_alta">
-
-        <div *ngIf="f['fecha_alta'].touched && f['fecha_alta'].invalid"
-            class="form-text text-danger">
-            La fecha de alta es obligatoria.
-        </div>
-    </div>
-
-    <div class="col-lg-4">
-        <label class="form-label">Fecha Vencimiento</label>
-        <input
-            type="date"
-            class="form-control form-control-sm"
-            formControlName="fecha_vencimiento">
-
-        <div *ngIf="f['fecha_vencimiento'].touched && f['fecha_vencimiento'].invalid"
-            class="form-text text-danger">
-            La fecha de vencimiento es obligatoria.
-        </div>
-    </div>
-
-    <div class="col-lg-4">
+    <div class="col-lg-6">
         <label class="form-label">Estatus</label>
         <select
             class="form-select form-select-sm"
             formControlName="estatus">
-
             <option value="">Seleccione un estatus</option>
             <option value="1">Activo</option>
             <option value="2">Inactivo</option>
@@ -130,9 +84,6 @@
             El estatus es obligatorio.
         </div>
     </div>
-
-    
-
     <div class="col-lg-12">
         <label class="form-label">Observaciones</label>
         <textarea

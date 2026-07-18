@@ -26,6 +26,10 @@ export class InventarioService {
       return this.http.post<ResponseInvetario>(environment.apiUrl + 'ucoip/hardware', data);
     }
 
+    public update(data: Inventario, id:number): Observable<ResponseInvetario> {
+      return this.http.put<ResponseInvetario>(environment.apiUrl + 'ucoip/hardware/'+id, data);
+    }
+
     loadData() {
       this.http.get<ResponseInvetario>(environment.apiUrl + 'ucoip/hardware').subscribe((data) => {
         

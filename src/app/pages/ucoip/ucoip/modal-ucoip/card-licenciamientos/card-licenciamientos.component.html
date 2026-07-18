@@ -41,24 +41,40 @@
         <div class="row">
             <!-- Select Tipo -->
             <div class="col-sm-5">
-                <label for="tipoHardware" class="form-label">Software</label>
-                <select id="tipoHardware" class="form-select form-select-sm" formControlName="tipoSoftware">
+                <label for="tipoSoftware" class="form-label">Tipo de Software</label>
+                <select id="tipoSoftware" class="form-select form-select-sm" formControlName="tipoSoftware">
                     <option [ngValue]="null">Seleccione un tipo</option>
                     <option *ngFor="let tipo of datos" [value]="tipo.id">
                         {{ tipo.tipo }}
                     </option>
                 </select>
+                <div *ngIf="f.tipoSoftware.touched || submitted">
+                    <div
+                        class="text-danger form-text"
+                        *ngIf="f.tipoSoftware.errors?.['required']"
+                    >
+                        Debes de seleccionar un tipo de software
+                    </div>
+                </div>
             </div>
 
             <!-- Select Hardware -->
             <div class="col-sm-5">
-                <label for="hardware" class="form-label">Licencias Disponibles</label>
-                <select id="hardware" class="form-select form-select-sm" formControlName="software">
-                    <option [ngValue]="null">Seleccione hardware</option>
+                <label for="software" class="form-label">Licencias de Software Disponibles</label>
+                <select id="software" class="form-select form-select-sm" formControlName="software">
+                    <option [ngValue]="null">Seleccione software</option>
                     <option *ngFor="let hw of hardwareFiltrado" [value]="hw.id">
                         {{ hw.version }} ({{ hw.licencia }})
                     </option>
                 </select>
+                <div *ngIf="f.software.touched || submitted">
+                    <div
+                        class="text-danger form-text"
+                        *ngIf="f.software.errors?.['required']"
+                    >
+                        Debes de seleccionar una licencia de software
+                    </div>
+                </div>
             </div>
             <!-- Botón -->
             <div class="col-sm-2 mt-4 text-end">

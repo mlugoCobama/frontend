@@ -19,6 +19,7 @@ export class ModalUpdtAutotanqueComponent implements AfterViewInit {
 
   public openFormTanque: boolean = false;
   public mostrarFormulario: boolean = false;
+  public tipo:any = '';
 
   @ViewChild('formUdtDatosTanque', { static: false }) formDatosTanque!:  FormDatosTanqueComponent;
   @ViewChild('formUdtDatosVehiculo', { static: false }) formDatosVehiculo!:  FormDatosVehiculoComponent;

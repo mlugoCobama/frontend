@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { obtenerPrimerError } from 'src/app/core/helpers/errores-forrmulario';
 import { AsingLicenciamientosUcoipService } from 'src/app/core/services/ucoip/asing-licenciamientos-ucoip.service';
 import { CatHardwareService } from 'src/app/core/services/ucoip/cat-hardware.service';
 import { ResguardosService } from 'src/app/core/services/ucoip/resguardos.service';
@@ -11,7 +12,6 @@ import Swal from 'sweetalert2';
   styleUrl: './card-licenciamientos.component.css'
 })
 export class CardLicenciamientosComponent  implements OnInit{
-   data = [];
 
   @Input() ucoip:any;
   @Input() glpi:any;
@@ -19,10 +19,17 @@ export class CardLicenciamientosComponent  implements OnInit{
   @Output() actualizarAsignados = new EventEmitter<any>();
   form!: FormGroup;
 
-  mostrarFormulario = false;
-  datos:any = [];
+  public isLoad:boolean = true;
+  public removing:boolean = false;
+  public mostrarFormulario:boolean = false;
+  public loading:boolean = false;
 
+  datos:any = [];
   hardwareFiltrado: any[] = [];
+  idsSeleccionados: number[] = [];
+  data = [];
+    
+  
 
   constructor(private fb: FormBuilder, 
     private software: AsingLicenciamientosUcoipService,
@@ -33,13 +40,8 @@ export class CardLicenciamientosComponent  implements OnInit{
 
     this.getSwDisponible();
     this.getSwAsignado();
+    this.buildForm();
 
-    this.form = this.fb.group({
-      tipoSoftware: [null],
-      software: [null]
-    });
-
-    // 
     this.form.get('tipoSoftware')?.valueChanges.subscribe(tipoId => {
       const seleccionado = this.datos.find((d:any) => d.id === +tipoId);
       this.hardwareFiltrado = seleccionado ? seleccionado.licencias_disponible : [];
@@ -47,10 +49,31 @@ export class CardLicenciamientosComponent  implements OnInit{
     });
   }
 
-  public loading:boolean = false;
+  public buildForm(){
+    this.form = this.fb.group({
+        tipoSoftware: [null, [Validators.required]],
+        software: [null, Validators.required]
+      });
+  }
+
+  get f() {
+    return this.form.controls;
+  }
+
   asignar() {
-    const payload = {idUcoip: this.ucoip?.id ?? null , ...this.ucoip, ...this.form.value};
-    this.loading = true;
+    if (!this.form.valid) {
+          Swal.fire({
+            icon: "warning",
+            title: "Error",
+            text: "Falta informacion Importante: "+ obtenerPrimerError(this.form) ,
+          });
+          this.loading = false;
+          this.form.markAllAsTouched();
+          return;
+        }
+        
+        const payload = {idUcoip: this.ucoip?.id ?? null , ...this.ucoip, ...this.form.value};
+
       this.software.save(payload).subscribe({
         next: (res) => {
           this.loading = false;
@@ -74,7 +97,7 @@ export class CardLicenciamientosComponent  implements OnInit{
       });
   }
 
-  public removing:boolean = false;
+
   remover(id: any) {
     Swal.fire({
       title: '¿Estás seguro?',
@@ -114,11 +137,11 @@ export class CardLicenciamientosComponent  implements OnInit{
 
   public getSwDisponible(){
     this.datos = [];
-    this.software.getSoftwareDisponible().subscribe({
+
+    this.software.getSoftwareDisponible(this.ucoip?.cat_empresa_id).subscribe({
       next: async (resp) => {
         if (resp.status = 'success') {
           this.datos = resp.data;
-          console.log(this.datos)
         }
       },
       error: (err) => {
@@ -127,7 +150,6 @@ export class CardLicenciamientosComponent  implements OnInit{
     });
   }
 
-  public isLoad:boolean = true;
   public getSwAsignado(){
     this.isLoad = true;
     this.data = [];
@@ -136,7 +158,6 @@ export class CardLicenciamientosComponent  implements OnInit{
         if (resp.status = 'success') {
           this.isLoad = false;
           this.data = resp.data;
-          console.log(this.data)
         }else{
           this.isLoad = false;
         }
@@ -152,8 +173,6 @@ export class CardLicenciamientosComponent  implements OnInit{
     this.mostrarFormulario = !this.mostrarFormulario;
   }
 
-  idsSeleccionados: number[] = [];
-
   toggleSeleccion(id: number, event: Event): void {
     const checked = (event.target as HTMLInputElement).checked;
     if (checked) {
@@ -164,54 +183,6 @@ export class CardLicenciamientosComponent  implements OnInit{
       );
     }
   }
-
-  // public downloading:boolean = false;
-  // public imprimirResguardo() {
-  //   const payload = {
-  //     idSleccionados: this.idsSeleccionados
-  //   };
-
-  //   this.downloading = true;
-
-  //   this.software.print(this.ucoip.id, payload).subscribe({
-  //     next: (response: any) => {
-
-  //       this.downloading = false;
-
-  //       const blob = new Blob(
-  //         [response.body],
-  //         { type: 'application/pdf' }
-  //       );
-
-  //       const fileName =
-  //         response.headers.get('X-Filename') ||
-  //         'Resguardo.pdf';
-
-  //       const url = window.URL.createObjectURL(blob);
-
-  //       const link = document.createElement('a');
-  //       link.href = url;
-  //       link.download = fileName;
-
-  //       document.body.appendChild(link);
-  //       link.click();
-
-  //       document.body.removeChild(link);
-  //       window.URL.revokeObjectURL(url);
-  //     },
-
-  //     error: () => {
-
-  //       this.downloading = false;
-
-  //       Swal.fire({
-  //         icon: 'error',
-  //         title: 'Error',
-  //         text: 'No se pudo generar el PDF'
-  //       });
-  //     }
-  //   });
-  // }
 
 }
 

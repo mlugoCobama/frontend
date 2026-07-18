@@ -164,7 +164,6 @@ export class ModalUcoipComponent implements OnInit  {
       next: async (resp) => {
         if (resp.status == "success") {
           this.ucoip = resp.data;
-          console.log(this.ucoip)
           this.isLoad = false;
         }
       },

@@ -8,7 +8,7 @@
         <div class="row g-2 mb-2">
 
             <div class="col-6 col-md-4 col-xl-4  ">
-                <div class="border rounded px-3 py-2 h-100">
+                <div class="border rounded-4 px-3 py-2 h-100">
                     <small class="text-muted d-block">Empresa</small>
                     <span class="fw-semibold">
                         {{ solicitud.empresa }}
@@ -17,7 +17,7 @@
             </div>
 
             <div class="col-6 col-md-4 col-xl-4 ">
-                <div class="border rounded px-3 py-2 h-100">
+                <div class="border rounded-4 px-3 py-2 h-100">
                     <small class="text-muted d-block">Folio</small>
                     <span class="fw-semibold text-primary">
                         {{ solicitud.folio }}
@@ -28,7 +28,7 @@
             
 
             <div class="col-12 col-md-4 col-xl-4  ">
-                <div class="border rounded px-3 py-2 h-100">
+                <div class="border rounded-4 px-3 py-2 h-100">
                     <small class="text-muted d-block">Solicita</small>
                     <span class="fw-semibold">
                         {{ solicitud.solicita }}
@@ -42,7 +42,7 @@
         <div class="row g-2">
 
           <div class="col-12 col-md-6 col-xl-3  ">
-                <div class="border rounded px-3 py-2 h-100">
+                <div class="border rounded-4 px-3 py-2 h-100">
                     <small class="text-muted d-block">Fecha Solicitud</small>
                     <span class="fw-semibold">
                         {{ solicitud.fecha | date:'dd/MM/yyyy' }}
@@ -51,7 +51,7 @@
             </div>
 
             <div class="col-12 col-md-6 col-xl-3  ">
-                <div class="border rounded px-3 py-2 h-100">
+                <div class="border rounded-4 px-3 py-2 h-100">
                     <small class="text-muted d-block">Periodo</small>
                     <span class="fw-semibold">
                         {{ solicitud.inicio_periodo | date:'dd/MM/yyyy' }}
@@ -62,7 +62,7 @@
             </div>
 
             <div class="col-6 col-md-6 col-xl-3  ">
-                <div class="border rounded px-3 py-2 h-100">
+                <div class="border rounded-4 px-3 py-2 h-100">
                     <small class="text-muted d-block">Precio combustible</small>
                     <span class="fw-semibold text-primary">
                         {{ solicitud.precio_combustible | currency }}
@@ -74,7 +74,7 @@
                 *ngIf="solicitud.fecha_dispersion"
                 class="col-6 col-md-6 col-xl-3  ">
 
-                <div class="border border-success rounded px-3 py-2 h-100">
+                <div class="border border-success rounded-4 px-3 py-2 h-100">
                     <small class="text-success d-block">
                         Fecha dispersión
                     </small>
@@ -148,7 +148,7 @@
 
 
 <form [formGroup]="form">
-  <div class="table-responsive bordered">
+  <div class="table-responsive rounded-4 border">
     <table class="table table-sm table-bordered table-hover align-middle">
       <thead class="table-light">
         <tr>

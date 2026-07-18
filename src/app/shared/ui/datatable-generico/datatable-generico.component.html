@@ -39,8 +39,10 @@
 
           <!-- Badge con dot de estado -->
           <ng-container *ngIf="col.badge; else textoSimple">
-            <span class="badge text-bg-dark bg-gradient fw-bold position-relative">
-              {{ resolveField(item, col.field) }}
+            <span class="badge bg-gradient fw-bold position-relative font-size-11"
+            [ngClass]="getBadgeColorClass(item, col)"
+            >
+              {{ getBadgeValue(item, col) }}
               <span *ngIf="col.badge.dotField"
                     class="position-absolute top-0 start-100 translate-middle p-1 rounded-circle"
                     [ngClass]="getBadgeDotClass(item, col)">

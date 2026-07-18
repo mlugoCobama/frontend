@@ -43,22 +43,38 @@
             <div class="col-sm-5">
                 <label for="tipoHardware" class="form-label">Tipo de Hardware</label>
                 <select id="tipoHardware" class="form-select form-select-sm" formControlName="tipoHardware">
-                    <option [ngValue]="null">Seleccione un tipo</option>
+                    <option [ngValue]="''">Seleccione un tipo</option>
                     <option *ngFor="let tipo of datos" [value]="tipo.id">
                         {{ tipo.tipo }}
                     </option>
                 </select>
+                <div *ngIf="f.tipoHardware.touched || submitted">
+                    <div
+                        class="text-danger form-text"
+                        *ngIf="f.tipoHardware.errors?.['required']"
+                    >
+                        Debe seleccionar un tipo de hardware.
+                    </div>
+                </div>
             </div>
 
             <!-- Select Hardware -->
             <div class="col-sm-5">
                 <label for="hardware" class="form-label">Hardware Disponible</label>
                 <select id="hardware" class="form-select form-select-sm" formControlName="hardware">
-                    <option [ngValue]="null">Seleccione hardware</option>
+                    <option [ngValue]="''">Seleccione hardware</option>
                     <option *ngFor="let hw of hardwareFiltrado" [value]="hw.id">
                         {{ hw.marca }} - {{ hw.modelo }} ({{ hw.no_serie }})
                     </option>
                 </select>
+                <div *ngIf="f.hardware.touched || submitted">
+                    <div
+                        class="text-danger form-text"
+                        *ngIf="f.hardware.errors?.['required']"
+                    >
+                        Hardware es requerido.
+                    </div>
+                </div>
             </div>
             <!-- Botón -->
             <div class="col-sm-2 mt-4 text-end">

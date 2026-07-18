@@ -14,4 +14,8 @@ export class CatSoftwareService {
   public getAll(): Observable<any> {
         return this.http.get<any>(environment.apiUrl + 'ucoip/cat-software');
   }
+
+  public save(data:any): Observable<any> {
+        return this.http.post<any>(environment.apiUrl + 'ucoip/cat-software', data);
+  }
 }

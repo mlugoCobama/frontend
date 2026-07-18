@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { Observable } from "rxjs";
+import { data } from 'jquery';
 
 const token = localStorage.getItem('token');
 
@@ -22,8 +23,8 @@ export class UnidadesService {
    * Recupera el catalogo de vehículos
    * @returns colección vehículos 
    */
-    public getVehiculos(intercompania: number): Observable<any> {
-      return this.http.get(environment.apiUrl + `compras/CatalogoUnidades/${intercompania}`, {headers});
+    public getVehiculos(intercompania: number, tipo:string): Observable<any> {
+      return this.http.get(environment.apiUrl + `compras/CatalogoUnidades/${intercompania}/${tipo}`, {headers});
     }
 
     public save(data: any): Observable<any> {

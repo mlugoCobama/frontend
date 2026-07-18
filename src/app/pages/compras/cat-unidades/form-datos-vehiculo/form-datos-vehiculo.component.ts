@@ -17,6 +17,7 @@ import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-com
 export class FormDatosVehiculoComponent implements OnInit{
 
   @Output() cambioSelect = new EventEmitter<any>();
+  @Input() tipo:any = '';
 
   etatusVehiculo = [
     {"numero": 1 , "descripcion": "Activa"},
@@ -97,10 +98,10 @@ export class FormDatosVehiculoComponent implements OnInit{
         no_serie:         new FormControl(null, [Validators.required, Validators.minLength(5), Validators.maxLength(18)]),
         placas:           new FormControl(null, [Validators.required]),
         observacion:      new FormControl(null),
-        tipo_vehiculo:    new FormControl("", [Validators.required]),
+        tipo_vehiculo:    new FormControl(this.tipo == 'utlitarios' ? 2 :  "", [Validators.required]),
         tipo_combustible: new FormControl("", [Validators.required]),
         estatus:          new FormControl("", [Validators.required]),
-        categoria:        new FormControl("", [Validators.required]),
+        categoria:        new FormControl(this.tipo == 'utlitarios' ? 1 :  "", [Validators.required]),
         num_tarjeta_toka: new FormControl(""),
         num_tag:          new FormControl(""),
         limite:           new FormControl(""),

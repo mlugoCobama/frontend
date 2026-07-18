@@ -24,24 +24,31 @@ export const MENU: MenuItem[] = [
         subItems: [
             {
               id: 2,
-              label: "Hardware",
+              label: "Inv. Hardware",
               link: "/ucoip/inventario",
               parentId: 1,
-              permission: "view inventario",
+              permission: "view inventario hardware",
+            },
+            {
+              id: 2,
+              label: "Inv. Infra.",
+              link: "/ucoip/inventario-infraestructura",
+              parentId: 1,
+              permission: "view inventario infraestructura",
             },
             {
               id: 3,
               label: "Licencias de software",
               link: "/ucoip/software",
               parentId: 1,
-              permission: "view inventario",
+              permission: "view inventario software",
             },
             {
               id: 3,
               label: "Tokens",
               link: "/ucoip/tokens",
               parentId: 1,
-              permission: "view inventario",
+              permission: "view inventario tokens",
             },
           ]
       },
@@ -80,7 +87,7 @@ export const MENU: MenuItem[] = [
         label: "Servicios",
         // link: "/ucoip/gestion-servicios/dashboard",
         parentId: 1,
-        // permission: "view configuracion", 
+        permission: "view modulo servicios", 
         subItems: [
           {
             id: 36,
@@ -227,8 +234,15 @@ export const MENU: MenuItem[] = [
     subItems: [
       {
         id: 11,
-        label: "Parque Vehicular",
-        link: "/compras/cat-unidades",
+        label: "Autotanques y portátiles",
+        link: "/compras/cat-unidades/reparto",
+        parentId: 7,
+        permission: "view parque vehicular",
+      },
+      {
+        id: 11,
+        label: "Utilitarios",
+        link: "/compras/cat-unidades/utlitarios",
         parentId: 7,
         permission: "view parque vehicular",
       },

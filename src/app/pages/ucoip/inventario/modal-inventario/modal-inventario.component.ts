@@ -1,12 +1,15 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { CatHardware } from 'src/app/core/models/ucoip/cat-hardware';
 import { Inventario } from 'src/app/core/models/ucoip/inventario';
 import { AlertErrorService } from 'src/app/core/services/alert-error.service';
 import { CatHardwareService } from 'src/app/core/services/ucoip/cat-hardware.service';
 import { InventarioService } from 'src/app/core/services/ucoip/inventario.service';
 import { EmpresasService } from 'src/app/core/services/ucoip/empresas.service';
+import Swal from 'sweetalert2';
+import { obtenerPrimerError } from 'src/app/core/helpers/errores-forrmulario';
+import { OrdenesCompraService } from 'src/app/core/services/compras/ordenesCompra/ordenes-compra.service';
 
 @Component({
   selector: 'app-modal-inventario',
@@ -15,13 +18,15 @@ import { EmpresasService } from 'src/app/core/services/ucoip/empresas.service';
 })
 export class ModalInventarioComponent implements OnInit {
   
+  tabActiva = 'asignaciones';
+  mostrarHistorial = false;
   public tipo: string = '';
 
   public data: any = [];
   
   public listaDatos: any[] = [];
 
-  public formModalInventario: FormGroup;
+  public formModalInventario!: FormGroup;
 
   public dataCatHardware: CatHardware[] = []; 
   public empresas: any[] = []; 
@@ -34,11 +39,12 @@ export class ModalInventarioComponent implements OnInit {
     public modalService: BsModalService,
     public alertService: AlertErrorService,
     private inventarioService: InventarioService,
+    private ordenesCompra: OrdenesCompraService,
   ) {}
 
   public ngOnInit(): void {
+    this.setHardwareFields();
     this.buildFormModal();
-
     this.configurarCamposDinamicos();
 
     this.tipo = this.listaDatos[0].tipo;
@@ -63,18 +69,14 @@ export class ModalInventarioComponent implements OnInit {
     } 
   }
 
+
+  setHardwareFields(){
+    this.dataCatHardware.forEach(item => {
+        this.hardwareFields[item.id] = item.campos;
+    });
+  }
   public hardwareFields: { [key: number]: string[] } = {
-    1: ['tipo_cpu', 'mac', 'memoria_ram', 'disco_duro', 'procesador'], // CPU
-    2: [], // Monitor
-    3: [], // Teclado
-    4: [], // Mouse
-    5: [], // Diadema
-    6: [], // Regulador
-    7: ['mac'], // Teléfono fijo
-    8: ['mac', 'memoria_ram', 'disco_duro', 'procesador'], // Teléfono móvil
-    9: ['mac'], // Multifuncional
-    10: ['mac', 'memoria_ram', 'disco_duro', 'procesador'], // Tableta
-    11: [] // Otro
+
   };
 
 
@@ -82,9 +84,11 @@ export class ModalInventarioComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.formModalInventario = this.formBuilder.group({
         empresa: new FormControl("", [Validators.required]),
+        cat_hardware_id: new FormControl("", [Validators.required]),
         marca: new FormControl(null, [Validators.required]),
         modelo: new FormControl(null, [Validators.required]),
         no_serie: new FormControl(null, [Validators.required]),
+        estado: new FormControl("", [Validators.required]),
         tipo_cpu: new FormControl("", []),
         mac: new FormControl(null, []),
         memoria_ram: new FormControl(null),
@@ -92,8 +96,8 @@ export class ModalInventarioComponent implements OnInit {
         procesador: new FormControl(null),
         caracteristicas: new FormControl(null, []),
         observaciones: new FormControl(null, []),
-        estado: new FormControl("", []),
-        cat_hardware_id: new FormControl("", [Validators.required]),
+        
+        
       });
       resolve(true);
     });
@@ -107,27 +111,20 @@ export class ModalInventarioComponent implements OnInit {
 saving = false;
   public save() {
 this.saving = true;
+    if (!this.formModalInventario.valid) {
+          Swal.fire({
+            icon: "warning",
+            title: "Error",
+            text: "Falta informacion Importante: " + obtenerPrimerError(this.formModalInventario),
+          });
+          this.formModalInventario.markAllAsTouched();
+          this.saving = false;
+          return;
+        }
+
     let datos: Inventario;
 
     datos = this.formModalInventario.value;
-    // {
-    //   marca: this.formModalInventario.controls['marca'].value,
-    //   modelo: this.formModalInventario.controls['modelo'].value,
-    //   no_serie: this.formModalInventario.controls['no_serie'].value,
-    //   tipo_cpu: this.formModalInventario.controls['tipo_cpu'].value,
-    //   mac: this.formModalInventario.controls['mac'].value,
-    //   disco_duro: this.formModalInventario.controls['disco_duro'].value,
-    //   procesador: this.formModalInventario.controls['procesador'].value,
-    //   memoria_ram: this.formModalInventario.controls['memoria_ram'].value,
-    //   caracteristicas: this.formModalInventario.controls['caracteristicas'].value,
-    //   observaciones: this.formModalInventario.controls['observaciones'].value,
-    //   estado: this.formModalInventario.controls['estado'].value,
-    //   cat_hardware_id: this.formModalInventario.controls['cat_hardware_id'].value,
-    // };
-
-    // console.log(datos);
-    
-
     this.inventarioService.save(datos).subscribe((resp) => {
       if (resp.success) {
         this.saving = false
@@ -140,11 +137,35 @@ this.saving = true;
       }
     });
 
-    this.event.emit({ data: true, res: 200 });
+    // this.event.emit({ data: true, res: 200 });
   }
 
   public update() {
-    this.event.emit({ data: true, res: 200 });
+  this.saving = true;
+    if (!this.formModalInventario.valid) {
+          Swal.fire({
+            icon: "warning",
+            title: "Error",
+            text: "Falta informacion Importante: " + obtenerPrimerError(this.formModalInventario),
+          });
+          this.formModalInventario.markAllAsTouched();
+          this.saving = false;
+          return;
+        }
+
+    const datos = this.formModalInventario.value;
+
+    this.inventarioService.update(datos, this.data.id).subscribe((resp) => {
+      if (resp.success) {
+        this.saving = false
+        this.event.emit({ data: true, res: 200 });
+        this.alertService.alertError(resp.message, resp.success);
+      } else {
+        this.saving = false
+        this.event.emit({ data: false, res: 200 });
+        this.alertService.alertError(resp.message, resp.success);
+      }
+    });
   }
 
   public mostrarCampo(campo: string): boolean {
@@ -184,4 +205,24 @@ this.saving = true;
       });
   }
 
+  public openModalOC(item:any) {
+  this.ordenesCompra.pdfOrdenCompra(item.detalle?.solicitudes_compra_id).subscribe(
+    (response) => {
+      const blob = new Blob([response.body!], { type: "application/pdf" });
+      //  console.log(response.headers)
+      const fileName = response.headers.get('X-Filename') || 'orden_compra.pdf';
+
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName;
+      link.click();
+      window.URL.revokeObjectURL(url);
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+
+}
 }

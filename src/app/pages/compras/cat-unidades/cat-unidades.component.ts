@@ -16,6 +16,9 @@ import { SwalComprsServiceService } from "src/app/core/services/compras/swal-com
 import Swal from 'sweetalert2';
 import { pmsParqueVehciular } from 'src/app/shared/constants/permisos';
 import { estatusColores , categorias, categoriasGPS, modelFiltrado} from 'src/app/shared/constants/constantes-pv';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
+
 @Component({
   selector: "app-cat-unidades",
   templateUrl: "./cat-unidades.component.html",
@@ -28,14 +31,24 @@ export class CatUnidadesComponent implements OnInit {
     private usuariosService: UsuariosService,
     private localStorage: LocalStorageServiceService,
     private alertasService: SwalComprsServiceService,
-    private permisosService: PermisosService
+    private permisosService: PermisosService,
+    private route: ActivatedRoute,
   ) {}
 
+    private routeSub!: Subscription;
+
   ngOnInit(): void {
-    this.getEmpresas();
-    // this.getUsuarioActivo();
+    this.routeSub = this.route.paramMap.subscribe(params => {
+      this.concepto = params.get('concepto');
+      this.getEmpresas();
+    });
   }
 
+  ngOnDestroy(): void {
+    this.routeSub.unsubscribe();
+  }
+
+  concepto:any = ''
   estatusColores = estatusColores;
   categorias = categorias;
   categoriasGPS = categoriasGPS;
@@ -101,6 +114,7 @@ export class CatUnidadesComponent implements OnInit {
       initialState: {
         intercompania: this.intercompania,
         empresas: this.empresas,
+        tipo: this.concepto
       },
       class: "modal-lg",
     };
@@ -196,6 +210,7 @@ export class CatUnidadesComponent implements OnInit {
         datos: this.unidad,
         intercompania: this.intercompania,
         empresas: this.empresas,
+        tipo: this.concepto
       },
       class: "modal-lg",
     };
@@ -223,7 +238,8 @@ export class CatUnidadesComponent implements OnInit {
     this.intercompania = intercompania;
     this.isLoad = true;
     this.showTable = false;
-    this.unidades.getVehiculos(intercompania).subscribe(
+    
+    this.unidades.getVehiculos(intercompania, this.concepto).subscribe(
       (response) => {
         if (response) {
           this.data = response.data;

@@ -124,8 +124,8 @@
                     [style]="{ width: '100%' }"
                   >
                     <option value="">Selecciona una opción</option>
-                    <option value="1">Asignado</option>
-                    <option value="2">Disponible</option>
+                    <option value="1">Disponible</option>
+                    <option value="2">Asignado</option>
                     <option value="3">Obsoleto</option>
                   </select>
                 </div>
@@ -287,23 +287,30 @@
               </div>
             </div>
 
-
-
         </div>
     </form>
-
-    <div class="row mt-4 " *ngIf="tipo == 'editar'">
-        <nav class="navbar bg-info rounded"
-        >
-        <!-- style="background-color: #75c6ff;" -->
-            <div class="container-fluid">
-              <a class="navbar-brand fw-bold text-white px-2" href="#">Historial</a>
-            </div>
-        </nav>
-    </div>
+    <ng-container *ngIf="tipo == 'editar' && mostrarHistorial ">
+      <app-historial-equipo
+          [data]="data"
+          (verCompra)="openModalOC($event)">
+      </app-historial-equipo>
+    </ng-container>
 
 </div>
 <div class="modal-footer">
+
+  <button
+   *ngIf="tipo == 'editar'"
+        type="button"
+        class="btn btn-sm btn-outline-secondary me-auto"
+        (click)="mostrarHistorial = !mostrarHistorial">
+        <i
+            class="fas"
+            [ngClass]="mostrarHistorial ? 'fa-history fa-rotate-180' : 'fa-history'">
+        </i>
+        {{ mostrarHistorial ? 'Ocultar historial' : 'Ver historial' }}
+  </button>
+
   <button 
     type="button" 
     class="btn btn-secondary btn-sm" 

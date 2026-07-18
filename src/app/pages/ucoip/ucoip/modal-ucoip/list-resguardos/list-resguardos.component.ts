@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { obtenerPrimerError } from 'src/app/core/helpers/errores-forrmulario';
 import { CatHardwareService } from 'src/app/core/services/ucoip/cat-hardware.service';
 import { ResguardosService } from 'src/app/core/services/ucoip/resguardos.service';
 import Swal from 'sweetalert2';
@@ -13,15 +14,20 @@ export class ListResguardosComponent implements OnInit{
   @Input() data = [];
 
   @Input() ucoip:any;
+  @Input() ucoip2:any;
   @Input() glpi:any;
 
   @Output() actualizarAsignados = new EventEmitter<any>();
   form!: FormGroup;
 
-  mostrarFormulario = false;
-  datos:any = [];
+  public mostrarFormulario:boolean = false;
+  public downloading:boolean = false;
+  public removing:boolean = false;
+  public loading:boolean = false;
 
+  datos:any = [];
   hardwareFiltrado: any[] = [];
+  idsSeleccionados: number[] = [];
 
   constructor(private fb: FormBuilder, 
     private catHardware: CatHardwareService,
@@ -31,12 +37,7 @@ export class ListResguardosComponent implements OnInit{
   ngOnInit(): void {
 
     this.getHwDisponible();
-    this.form = this.fb.group({
-      tipoHardware: [null],
-      hardware: [null]
-    });
-
-    // 
+    this.buildForm();
     this.form.get('tipoHardware')?.valueChanges.subscribe(tipoId => {
       const seleccionado = this.datos.find((d:any) => d.id === +tipoId);
       this.hardwareFiltrado = seleccionado ? seleccionado.hardware_disponible : [];
@@ -44,10 +45,33 @@ export class ListResguardosComponent implements OnInit{
     });
   }
 
-  public loading:boolean = false;
+  public buildForm(){
+    this.form = this.fb.group({
+      tipoHardware: ['', Validators.required],
+      hardware: ['', Validators.required]
+    });
+  }
+
+  get f() {
+    return this.form.controls;
+  }
+
+
   asignar() {
-    const payload = {...this.ucoip, ...this.form.value};
     this.loading = true;
+    if(!this.form.valid){
+      Swal.fire({
+            icon: 'warning',
+            title: 'Error',
+            text: "Falta informacion Importante "+ obtenerPrimerError(this.form)
+          });
+      this.form.markAllAsTouched();
+      this.loading = false;
+      return;
+    }
+
+    const payload = {...this.ucoip, ...this.form.value};
+    
       this.resguardos.save(payload).subscribe({
         next: (res) => {
           this.loading = false;
@@ -71,7 +95,7 @@ export class ListResguardosComponent implements OnInit{
       });
   }
 
-  public removing:boolean = false;
+
   remover(id: any) {
     Swal.fire({
       title: '¿Estás seguro?',
@@ -111,11 +135,10 @@ export class ListResguardosComponent implements OnInit{
 
   public getHwDisponible(){
     this.datos = [];
-    this.catHardware.getHardwareDisponible().subscribe({
+    this.catHardware.getHardwareDisponible(this.ucoip2?.cat_empresa_id).subscribe({
       next: async (resp) => {
         if (resp.status = 'success') {
           this.datos = resp.data;
-          console.log(this.datos)
         }
       },
       error: (err) => {
@@ -128,8 +151,6 @@ export class ListResguardosComponent implements OnInit{
     this.mostrarFormulario = !this.mostrarFormulario;
   }
 
-  idsSeleccionados: number[] = [];
-
   toggleSeleccion(id: number, event: Event): void {
     const checked = (event.target as HTMLInputElement).checked;
     if (checked) {
@@ -141,7 +162,6 @@ export class ListResguardosComponent implements OnInit{
     }
   }
 
-  public downloading:boolean = false;
   public imprimirResguardo() {
     const payload = {
       idSleccionados: this.idsSeleccionados
@@ -164,22 +184,17 @@ export class ListResguardosComponent implements OnInit{
           'Resguardo.pdf';
 
         const url = window.URL.createObjectURL(blob);
-
         const link = document.createElement('a');
         link.href = url;
         link.download = fileName;
-
         document.body.appendChild(link);
         link.click();
-
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
       },
 
       error: () => {
-
         this.downloading = false;
-
         Swal.fire({
           icon: 'error',
           title: 'Error',

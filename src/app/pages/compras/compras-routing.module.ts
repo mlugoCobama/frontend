@@ -18,7 +18,7 @@ const routes: Routes = [
   { path: 'proveedores', component: ProveedoresComponent},
   { path: 'almacen', component: AlmacenComponent },
   { path: 'cat-unidades-medidas', component: CatUnidadesMedidasComponent },
-  { path: 'cat-unidades', component: CatUnidadesComponent },
+  { path: 'cat-unidades/:concepto', component: CatUnidadesComponent },
   { path: 'compras-macro', component: ComprasMacroComponent },
   { path: 'cat-tarjetas-toka', component: CatTarjetasTokaComponent },
   { path: 'cat-tags', component: CatTagsComponent },

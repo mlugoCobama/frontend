@@ -3,6 +3,8 @@ import { Config } from 'datatables.net';
 import { DataTableDirective } from 'angular-datatables';
 
 import { ViewChild } from '@angular/core';
+import { EstadoRecursoConfig } from 'src/app/shared/configs';
+import { EstadoRecurso } from 'src/app/shared/Enums';
 
 @Component({
   selector: 'app-tabla-inventario',
@@ -10,6 +12,9 @@ import { ViewChild } from '@angular/core';
   styleUrl: './tabla-inventario.component.css'
 })
 export class TablaInventarioComponent implements OnInit {
+
+    EstadoRecurso = EstadoRecurso;
+  EstadoRecursoConfig = EstadoRecursoConfig;
 
   selectedId: number | null = null;
 
@@ -22,7 +27,10 @@ export class TablaInventarioComponent implements OnInit {
             searching: true, 
             paging: true, 
             info: false,
-            order: [0,'asc']
+            order: [0,'asc'],
+            language: {
+              url: '/assets/es-mx.json'
+            },
           };
 
   empresas: string[] = [];
@@ -32,6 +40,9 @@ export class TablaInventarioComponent implements OnInit {
   @ViewChild(DataTableDirective, { static: false })
   dtElement!: DataTableDirective;
 
+
+  @Input()  estadoRecurso:any ;
+  @Input()  estadoRecursoConfig:any;
 
 
           ngOnInit(): void {
@@ -50,7 +61,10 @@ export class TablaInventarioComponent implements OnInit {
             searching: true, 
             paging: true, 
             info: false,
-            order: [0,'asc']
+            order: [0,'asc'],
+            language: {
+              url: '/assets/es-mx.json'
+            },
           };
           }
   
@@ -68,16 +82,16 @@ getEstatus(status:any){
   let label = 'Desconcido'
   switch (status) {
     case 1:
-        label  = "Asignado"
+        label  = "Disponible"
       break;
     case 2:
-        label  = "Disponible"
+        label  = "Asignado"
       break;
     case 3:
         label  = "Obsoleto"
       break;
     default:
-      label ='Desconcido'
+      label ='Desconocido'
       break;
   }
   return label;

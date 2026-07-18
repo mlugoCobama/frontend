@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
 })
 export class ModalTagsComponent implements OnInit{
 
-   public event: EventEmitter<any> = new EventEmitter();
+  public event: EventEmitter<any> = new EventEmitter();
   public submitted = false;
   public sending = false;
   tagForm!: FormGroup;
@@ -26,6 +26,16 @@ export class ModalTagsComponent implements OnInit{
     '0': { pattern: new RegExp('[0-9*]') },
   };
 
+  public marcasTag: any = [
+    {marca: 1, label: 'PASE'},
+    {marca: 2, label: 'IAVE'},
+    {marca: 3, label: 'TeleVia'},
+    {marca: 4, label: 'ViaPass'},
+    {marca: 5, label: 'EasyTrip'},
+    {marca: 5, label: 'Otro'},
+
+  ]
+
   constructor(
     public modalRef: BsModalRef,
     private fb: FormBuilder,
@@ -37,23 +47,22 @@ export class ModalTagsComponent implements OnInit{
     this.buildForm();
     if(this.tipo == 'actualizar'){
       this.patchFormValues();
-      console.log(this.data)
     }
   }
 
   private buildForm(){
     this.tagForm = this.fb.group({
-    id: [null],
-    proveedor: ['', Validators.required],
-    num_tag: ['', Validators.required],
-    numero_cuenta: ['', Validators.required],
-    serie: ['', Validators.required],
-    fecha_alta: ['', Validators.required],
-    fecha_vencimiento: ['', Validators.required],
-    estatus: ['', Validators.required],
-    observaciones: [''],
-    intercompania: ['', Validators.required],
-});
+        id: [null],
+        proveedor: ['', Validators.required],
+        num_tag: ['', Validators.required],
+        // numero_cuenta: ['', Validators.required],
+        serie: ['', Validators.required],
+        // fecha_alta: ['', Validators.required],
+        // fecha_vencimiento: ['', Validators.required],
+        estatus: ['', Validators.required],
+        observaciones: [''],
+        intercompania: ['', Validators.required],
+    });
   }
 
   get f() {

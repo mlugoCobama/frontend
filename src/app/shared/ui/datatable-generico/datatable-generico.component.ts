@@ -11,11 +11,16 @@ export interface ColumnaConfig {
   centered?: boolean;       // Alineación centrada
   badge?: BadgeConfig;      // Renderizar como badge
   colorField?: ColorConfig; // Colorear celda según valor
+  transform?: (value: any, item?: any) => any;
 }
 
 export interface BadgeConfig {
+  background?: string ;
+  backField?: string ;
+  backColorMap?: Record<any, string> ;
   dotField?: string;        // Campo que determina el color del dot (ej: 'estado')
   dotColorMap?: Record<any, string>; // { 1: 'bg-primary', 2: 'bg-success' }
+  transform?: (val: any) => string;
 }
 
 export interface ColorConfig {
@@ -47,7 +52,13 @@ export class DatatableGenericoComponent implements OnInit, OnChanges {
   @Input() columnas: ColumnaConfig[] = [];
   @Input() filtros:  FiltroConfig[]  = [];
   @Input() dtOptions: Config = {
-    searching: true, paging: true, info: false, order: [[0, 'asc']]
+    searching: true, 
+    paging: true, 
+    info: true, 
+    order: [[0, 'asc']],
+    language: {
+      url: '../assets/es-mx.json'
+    },
   };
 
   @ViewChild(DataTableDirective, { static: false })
@@ -136,6 +147,11 @@ export class DatatableGenericoComponent implements OnInit, OnChanges {
   /** Devuelve el valor transformado si hay función transform */
   getDisplayValue(item: any, col: ColumnaConfig): string {
     const raw = this.resolveField(item, col.field);
+    // Transform del badge
+    if (col.badge?.transform) {
+      return col.badge.transform(raw);
+    }
+
     if (col.colorField?.transform) {
       return col.colorField.transform(this.resolveField(item, col.colorField.field));
     }
@@ -148,4 +164,20 @@ export class DatatableGenericoComponent implements OnInit, OnChanges {
     const val = this.resolveField(item, col.badge.dotField);
     return col.badge.dotColorMap[val] ?? '';
   }
+
+  getBadgeColorClass(item: any, col: ColumnaConfig): string {
+    if (!col.badge?.backColorMap || !col.badge?.backField) return 'text-bg-dark';
+    const val = this.resolveField(item, col.badge?.backField);
+    return col.badge?.backColorMap[val] ?? 'text-bg-dark';
+  }
+
+  getBadgeValue(item: any, col: ColumnaConfig): any {
+  const value = this.resolveField(item, col.field);
+
+  if (col.badge?.transform) {
+    return col.badge.transform(value);
+  }
+
+  return value;
+}
 }

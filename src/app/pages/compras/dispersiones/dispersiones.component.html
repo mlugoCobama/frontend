@@ -2,7 +2,7 @@
     (volver)="volver()"></app-card-top>
 
 
-    <div class="card shadow-sm">
+    <div class="card shadow-sm rounded-4">
         <div class="card-body">
             <!-- TABS -->
             <ng-container *ngIf="!dispersion && !loading">
@@ -77,7 +77,7 @@
 
             <!-- PENDIENTES -->
             <div *ngIf="tabActiva === 'pendientes'">
-                <div class="table-responsive  border " style="overflow-y: scroll; height: 20rem;">
+                <div class="table-responsive  border rounded-4" style="overflow-y: scroll; height: 20rem;">
                     <table class="table table-sm table-hover align-middle">
                         <thead class="table-light thead-sticky">
                             <tr>
@@ -106,7 +106,7 @@
 
             <!-- REALIZADAS -->
             <div *ngIf="tabActiva === 'guardadas'">
-                <div class="table-responsive border " style="overflow-y: scroll; height: 20rem;">
+                <div class="table-responsive border rounded-4" style="overflow-y: scroll; height: 20rem;">
                     <table class="table table-sm table-hover align-middle">
                         <thead class="table-light thead-sticky">
                             <tr>
@@ -136,7 +136,7 @@
             </div>
 
             <div *ngIf="tabActiva === 'realizadas'">
-                <div class="table-responsive border " style="overflow-y: scroll; height: 20rem;">
+                <div class="table-responsive border rounded-4" style="overflow-y: scroll; height: 20rem;">
                     <table class="table table-sm table-hover align-middle">
                         <thead class="table-light thead-sticky">
                             <tr>

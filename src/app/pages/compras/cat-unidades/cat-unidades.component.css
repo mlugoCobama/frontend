@@ -3,3 +3,41 @@
     top: 0;
     z-index: 1;
 }
+
+/* Contenedor sutil para agrupar la leyenda */
+.legend-container {
+  background-color: #f8f9fa; /* Fondo gris extra claro */
+  padding: 0.6rem 1.2rem;
+  border-radius: 20px; /* Bordes muy redondeados (estilo píldora) */
+  display: inline-flex; /* Hace que el contenedor solo ocupe el ancho necesario */
+  border: 1px solid #e9ecef;
+}
+
+/* Cada elemento de la leyenda */
+.legend-item {
+  transition: opacity 0.2s ease;
+  cursor: default;
+}
+
+/* Efecto sutil: cuando pasas el mouse, los otros se apagan un poquito */
+.legend-container:hover .legend-item:not(:hover) {
+  opacity: 0.5;
+}
+
+/* El punto exacto de tu tabla, pero mejorado */
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0; /* Evita que el punto se deforme si el texto es largo */
+}
+
+/* Tipografía moderna */
+.legend-text {
+  font-size: 0.78rem;
+  font-weight: 500; /* Un poco más firme que el texto común */
+  color: #495057; /* Gris oscuro elegante, evita el negro puro que se ve tosco */
+  letter-spacing: 0.3px; /* Espaciado sutil entre letras */
+  text-transform: capitalize; /* Primera letra en mayúscula automáticamente */
+}

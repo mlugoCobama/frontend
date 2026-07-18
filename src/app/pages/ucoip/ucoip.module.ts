@@ -23,6 +23,10 @@ import { SoftwareComponent } from './software/software.component';
 import { TokensAgenciasComponent } from './tokens-agencias/tokens-agencias.component';
 import { UIModule } from 'src/app/shared/ui/ui.module';
 import { ModalSoftwareComponent } from './software/modal-software/modal-software.component';
+import { ModalTokenAgenciaComponent } from './tokens-agencias/modal-token-agencia/modal-token-agencia.component';
+import { CardTokensComponent } from './ucoip/modal-ucoip/card-tokens/card-tokens.component';
+import { HistorialEquipoComponent } from './inventario/historial-equipo/historial-equipo.component';
+import { InventarioInfraComponent } from './inventario-infra/inventario-infra.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +44,10 @@ import { ModalSoftwareComponent } from './software/modal-software/modal-software
     SoftwareComponent,
     TokensAgenciasComponent,
     ModalSoftwareComponent,
+    ModalTokenAgenciaComponent,
+    CardTokensComponent,
+    HistorialEquipoComponent,
+    InventarioInfraComponent,
   ],
   imports: [
     CommonModule,

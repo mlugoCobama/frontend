@@ -51,7 +51,14 @@
                   [ngClass]="tabActiva === 'licencias' ? 'btn-secondary' : 'btn-outline-secondary'"
                   (click)="tabActiva = 'licencias'">
                   Licenciamientos
-              </button>     
+              </button> 
+              
+              <button
+                  class="btn btn-sm"
+                  [ngClass]="tabActiva === 'tokens' ? 'btn-secondary' : 'btn-outline-secondary'"
+                  (click)="tabActiva = 'tokens'">
+                  Tokens
+              </button> 
 
               </ng-container>
 
@@ -77,6 +84,7 @@
           <app-list-resguardos
               [data]="resguardos"
               [ucoip]="data"
+              [ucoip2]="ucoip"
               (actualizarAsignados)="getResguardos()">
           </app-list-resguardos>
       </ng-container>
@@ -120,6 +128,14 @@
               [data]="resguardos"
               [ucoip]="ucoip"
               ></app-card-licenciamientos>
+
+      </div>
+
+      <div class="col-12" *ngIf="tabActiva === 'tokens'">
+            <app-card-tokens
+              [data]="resguardos"
+              [ucoip]="ucoip"
+              ></app-card-tokens>
 
       </div>
 

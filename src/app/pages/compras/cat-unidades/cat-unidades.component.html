@@ -1,16 +1,16 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-xl-12">
-      <div class="card rounded shadow-lg">
+      <div class="card rounded-4 shadow-lg">
         <div class="card-body border-bottom">
           <div class="d-flex align-items-center">
             <h5 class="mb-0 card-title flex-grow-1">
-              Parque vehicular
+              Parque vehicular - {{concepto | titlecase}}
             </h5>
             <div class="flex-shrink-0 d-flex gap-1">
 
               <!-- intercambiador de vistas -->
-            <div *ngIf = "intercompania && tienePermiso(permisos.btnSwitchViews)" class="btn-group btn-group-sm">
+            <div *ngIf = "intercompania && tienePermiso(permisos.btnSwitchViews) && concepto != 'utlitarios'" class="btn-group btn-group-sm">
               <a [class.active]="panelActivo == 1" class="btn btn-outline-dark btn-sm"
                 (click)="cambiarPanel(1)">
                 <i class="fas fa-home"></i> Vehiculos
@@ -79,7 +79,7 @@
         </div>
       </div>
 
-      <div class="card rounded shadow-lg">
+      <div class="card rounded shadow-lg rounded-4">
         <div class="card-body border-bottom">
           <div class="row justify-content-between" >
             <div class="col-3">
@@ -120,8 +120,8 @@
             </div>
           </div>
           <div *ngIf = "!isLoad && showTable && !isLoad && datosFiltrados.length > 0 ; else elseBlock">
-            <div class="tab-page-content mt-3 table-responsive" style="overflow-y: scroll; height: 20rem;">
-              <table  class="table table-hover table-sm table-bordered">
+            <div class="tab-page-content mt-3 table-responsive rounded-4 border" style="overflow-y: scroll; height: 20rem; ">
+              <table  class="table table-hover table-sm table-bordered ">
                 <thead class="table-light border thead-sticky">
                   <tr class="text-center">
                     <th style="cursor: pointer" (click)="ordenarPor('entidad')">Empresa<i [ngClass]="getIconoOrden('entidad')"></i></th>
@@ -188,12 +188,12 @@
 
           </div>
           <p *ngIf = "!isLoad && showTable" class="text-muted pt-3"> Se muestran {{ totalDatosFiltrados }} de {{ totalDatos }} </p>
-        <div *ngIf = "!isLoad && showTable" class="d-flex justify-content-between  gap-3 mt-4">
-          <div class="d-flex align-items-center" *ngFor="let estado of estatusColores">
-            <span class="rounded-circle d-inline-block me-1"
+        <div *ngIf = "!isLoad && showTable" class="d-flex justify-content-around border bg-light rounded-pill p-2 gap-3 mt-4">
+          <div class="d-flex align-items-center " *ngFor="let estado of estatusColores">
+            <span class="rounded-circle d-inline-block me-1 "
                   [style.background-color]="estado.color"
                   style="width: 10px; height: 10px;"></span>
-            <span><small>{{ estado.dsc }}</small></span>
+            <span class="fw-semibold small" >{{ estado.dsc | uppercase }}</span>
           </div>
         </div>
         </ng-container> 

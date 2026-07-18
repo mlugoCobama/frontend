@@ -16,7 +16,7 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
 
   public openFormTanque: boolean = false;
   public mostrarFormulario: boolean = true;
-
+  public tipo:any = '';
 
   constructor(
     public bsModalRef: BsModalRef,

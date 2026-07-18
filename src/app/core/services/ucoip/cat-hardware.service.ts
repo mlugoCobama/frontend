@@ -18,8 +18,13 @@ export class CatHardwareService {
       return this.http.get<ResponseCatHardware>(environment.apiUrl + 'ucoip/cat-hardware');
     }
 
-    public getHardwareDisponible(): Observable<any> {
-      return this.http.get<any>(environment.apiUrl + 'ucoip/hardware/catalogo/disponible');
+    public getCatInfra(): Observable<ResponseCatHardware> {
+      return this.http.get<ResponseCatHardware>(environment.apiUrl + 'ucoip/cat/hardware/infra');
+    }
+
+
+    public getHardwareDisponible(idEmpresa:number): Observable<any> {
+      return this.http.get<any>(environment.apiUrl + 'ucoip/hardware/catalogo/disponible/'+idEmpresa);
     }
 
 

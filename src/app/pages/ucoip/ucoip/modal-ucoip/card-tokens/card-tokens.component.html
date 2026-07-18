@@ -1,0 +1,192 @@
+<div class="card shadow-sm">
+
+    <div class="card-header fw-bold bg-secondary-subtle d-flex justify-content-between">
+
+        Tokens
+
+        <button
+            class="btn btn-dark btn-sm"
+            (click)="toggleFormulario()">
+
+            <i class="fas"
+               [ngClass]="mostrarFormulario ? 'fa-eye-slash':'fa-plus'"></i>
+
+            {{mostrarFormulario ? 'Ocultar':'Nueva Asignación'}}
+
+        </button>
+
+    </div>
+
+    <div class="card-body">
+
+        <form
+            *ngIf="mostrarFormulario"
+            [formGroup]="form">
+
+            <div class="row">
+
+                <div class="col-md-3">
+
+                    <label>Token</label>
+
+                    <select
+                        class="form-select form-select-sm"
+                        formControlName="token">
+                        <option [value]="''">
+                            Seleccione
+                        </option>
+                        <option
+                            *ngFor="let item of tokens"
+                            [value]="item.id">
+
+                            {{item.token}}
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label>Usuario</label>
+
+                    <input
+                        class="form-control form-control-sm"
+                        formControlName="usuario">
+
+                </div>
+
+                <div class="col-md-2">
+
+                    <label>Acceso</label>
+
+                    <input
+                        type="password"
+                        class="form-control form-control-sm"
+                        formControlName="acceso">
+
+                </div>
+
+                <div class="col-md-2">
+
+                    <label>Contraseña</label>
+
+                    <input
+                        type="password"
+                        class="form-control form-control-sm"
+                        formControlName="contrasenia">
+
+                </div>
+
+                <div class="col-auto text-end">
+
+                    <button
+                        class="btn btn-primary btn-sm mt-4"
+                        type="button"
+                        (click)="asignar()">
+
+                        <span *ngIf="!loading">
+
+                            Guardar
+
+                        </span>
+
+                        <span *ngIf="loading">
+
+                            <i class="fas fa-spinner fa-spin"></i>
+
+                            Guardando...
+
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+        <div
+            class="text-center p-3"
+            *ngIf="isLoad">
+
+            <div class="spinner-border"></div>
+
+        </div>
+
+        <table
+            *ngIf="!isLoad"
+            class="table table-sm mt-3">
+
+            <thead>
+                <tr>
+                    <th>TOKEN</th>
+                    <th>USUARIO</th>
+                    <th>ACCESO</th>
+                    <th>CONTRASEÑA</th>
+                    <th>ASIGNADO</th>
+                    <th>RETIRADO</th>
+                    <th>EST</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngIf="datos.length==0">
+                    <td
+                        colspan="8" class="text-center">
+                        No existen registros.
+                    </td>
+                </tr>
+                <tr *ngFor="let detalle of datos">
+                    <td>
+                        <span class="badge bg-primary fw-bold font-size-11">
+                            {{detalle?.token?.token}}
+                        </span>
+                    </td>
+                    <td>{{detalle?.usuario}}</td>
+                    <td>
+                        <button
+                            *ngIf="!detalle.fecha_retiro"
+                            class="btn btn-primary btn-sm"
+                            (click)="openPass(detalle?.id, 'acc' )">
+                            Password
+                        </button>
+                    </td>
+                    <td>
+                        <button
+                            *ngIf="!detalle.fecha_retiro"
+                            class="btn btn-info btn-sm"
+                          (click)="openPass(detalle?.id, 'pass')">
+                            Password
+                        </button>
+                    </td>
+                    <td>
+                        {{detalle?.fecha_asignacion | date:'dd/MM/yyyy'}}
+                    </td>
+                    <td>
+                        {{(detalle?.fecha_retiro | date:'dd/MM/yyyy') ?? ''}}
+                    </td>
+                    <td>
+                        <i
+                          class="fas fa-circle" [ngClass]="{
+                                'text-success':!detalle?.fecha_retiro,
+                                'text-danger':detalle?.fecha_retiro
+                            }">
+                        </i>
+                    </td>
+                    <td>
+                        <button
+                            *ngIf="!detalle.fecha_retiro"
+                            class="btn btn-danger btn-sm"
+                            (click)="remover(detalle?.id)">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

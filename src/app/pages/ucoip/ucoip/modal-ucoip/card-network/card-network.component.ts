@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CatHardwareService } from 'src/app/core/services/ucoip/cat-hardware.service';
 import { AsingRecursoUcoipService } from 'src/app/core/services/ucoip/asing-recurso-ucoip.service';
 import Swal from 'sweetalert2';
+import { obtenerPrimerError } from 'src/app/core/helpers/errores-forrmulario';
 
 @Component({
   selector: 'app-card-network',
@@ -13,16 +14,20 @@ export class CardNetworkComponent implements OnInit{
   @Input() data = [];
   @Input() ucoip:any;
   @Input() glpi:any;
+  @Input() catRecursosRed: any[] = [];
 
   @Output() actualizarAsignados = new EventEmitter<any>();
-  form!: FormGroup;
 
-  mostrarFormulario = false;
+  public mostrarFormulario:boolean = false;
+  public loading:boolean = false;
+  public removing:boolean = false;
+  public isLoad:boolean =  true;
+
   datos:any = [];
-
   hardwareFiltrado: any[] = [];
+  idsSeleccionados: number[] = [];
 
-  @Input() catRecursosRed: any[] = [];
+  form!: FormGroup;
 
   constructor(private fb: FormBuilder, 
     private catHardware: CatHardwareService,
@@ -30,21 +35,39 @@ export class CardNetworkComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
-
+    this.buildForm();
     this.getRecursosUcoip();
-    this.form = this.fb.group({
-      tipo: [null],
-      valor: [null],
-      hardware: [null],
-      restrictivo: [null],
-      observaciones: [null]
-    });
+    
   }
 
-  public loading:boolean = false;
+  public buildForm(){
+    this.form = this.fb.group({
+          tipo: [null, [Validators.required]],
+          valor: [null, [ Validators.required]],
+          hardware: [null],
+          restrictivo: [null],
+          observaciones: [null]
+        });
+  }
+
+  get f() {
+    return this.form.controls;
+  }
+
+
   asignar() {
-    const payload = {idUcoip : this.ucoip.id, ...this.ucoip, ...this.form.value};
     this.loading = true;
+    if (!this.form.valid) {
+      Swal.fire({
+        icon: "warning",
+        title: "Error",
+        text: "Falta informacion Importante: " + obtenerPrimerError(this.form),
+      });
+      this.form.markAllAsTouched();
+      this.loading = false;
+      return;
+    }
+    const payload = {idUcoip : this.ucoip.id, ...this.ucoip, ...this.form.value};
       this.asignacion.save(payload).subscribe({
         next: (res) => {
           this.loading = false;
@@ -67,7 +90,7 @@ export class CardNetworkComponent implements OnInit{
       });
   }
 
-  public removing:boolean = false;
+
   remover(id: any) {
     Swal.fire({
       title: '¿Estás seguro?',
@@ -103,7 +126,7 @@ export class CardNetworkComponent implements OnInit{
     });
   }
 
-  public isLoad:boolean =  true;
+
   public getRecursosUcoip(){
     this.isLoad = true;
 
@@ -128,7 +151,6 @@ export class CardNetworkComponent implements OnInit{
     this.mostrarFormulario = !this.mostrarFormulario;
   }
 
-  idsSeleccionados: number[] = [];
 
   toggleSeleccion(id: number, event: Event): void {
     const checked = (event.target as HTMLInputElement).checked;
@@ -140,53 +162,4 @@ export class CardNetworkComponent implements OnInit{
       );
     }
   }
-
-  // public downloading:boolean = false;
-  // public imprimirResguardo() {
-  //   const payload = {
-  //     idSleccionados: this.idsSeleccionados
-  //   };
-
-  //   this.downloading = true;
-
-  //   this.asignacion.print(this.ucoip.id, payload).subscribe({
-  //     next: (response: any) => {
-
-  //       this.downloading = false;
-
-  //       const blob = new Blob(
-  //         [response.body],
-  //         { type: 'application/pdf' }
-  //       );
-
-  //       const fileName =
-  //         response.headers.get('X-Filename') ||
-  //         'Resguardo.pdf';
-
-  //       const url = window.URL.createObjectURL(blob);
-
-  //       const link = document.createElement('a');
-  //       link.href = url;
-  //       link.download = fileName;
-
-  //       document.body.appendChild(link);
-  //       link.click();
-
-  //       document.body.removeChild(link);
-  //       window.URL.revokeObjectURL(url);
-  //     },
-
-  //     error: () => {
-
-  //       this.downloading = false;
-
-  //       Swal.fire({
-  //         icon: 'error',
-  //         title: 'Error',
-  //         text: 'No se pudo generar el PDF'
-  //       });
-  //     }
-  //   });
-  // }
-
 }

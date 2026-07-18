@@ -25,7 +25,7 @@ export class CatTagsComponent implements OnInit{
 
     public columnas: ColumnaTabla[] = [
       {etiqueta: 'Empresa', campo:'empresa'},
-      {etiqueta: 'Marca del TAG', campo:'proveedor'},
+      {etiqueta: 'Marca del TAG', campo:'marca'},
       {etiqueta: 'Nro. TAG',  campo:'num_tag'},
       {etiqueta: 'Serie',  campo:'serie'},
       {etiqueta: 'Estatus', campo:'estado', bold: true, textColor:"primary" }

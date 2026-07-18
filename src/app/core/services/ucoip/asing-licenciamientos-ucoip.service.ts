@@ -12,8 +12,8 @@ export class AsingLicenciamientosUcoipService {
 
   constructor(private http: HttpClient) { }
 
-      public getSoftwareDisponible(): Observable<any> {
-        return this.http.get<any>(environment.apiUrl + 'ucoip/software/catalogo/disponible');
+      public getSoftwareDisponible(id:number): Observable<any> {
+        return this.http.get<any>(environment.apiUrl + 'ucoip/software/catalogo/disponible/'+id);
       }
 
         public getUcoipLicencias(id:any): Observable<any> {

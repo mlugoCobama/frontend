@@ -11,7 +11,7 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-6" *ngIf = "tipo != 'utlitarios'">
             <label for="id_cre" class="form-label"> ID CRE: </label>
             <input type="text" class="form-control form-control-sm" formControlName="id_cre" id="id_cre"
                 name="id_cre" aria-label="id_cre" placeholder="# ID CRE" />
@@ -88,7 +88,7 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-6" *ngIf = "tipo != 'utlitarios'">
             <label for="tipo_vehiculo" class="form-label">Uso Vehículo: *</label>
             <select class="form-select form-select-sm" formControlName="tipo_vehiculo" id="tipo_vehiculo"
                 name="tipo_vehiculo" aria-label="tipo_vehiculo"
@@ -159,7 +159,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6"  *ngIf = "tipo != 'utlitarios'">
             <label for="categoria" class="form-label">Categoría: *</label>
             <select class="form-select form-select-sm" formControlName="categoria" id="categoria" name="categoria"
                 aria-label="categoria">

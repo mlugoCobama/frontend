@@ -11,6 +11,8 @@ import { CatHardwareService
  } from 'src/app/core/services/ucoip/cat-hardware.service';
  import { EmpresasService } from 'src/app/core/services/ucoip/empresas.service';
 
+
+
 @Component({
   selector: 'app-inventario',
   templateUrl: './inventario.component.html',
@@ -20,12 +22,23 @@ export class InventarioComponent implements OnInit {
 
   public isLoad: boolean = true;
 
+  public dataCatHardware :any  = [];
+  public empresas :any  = [];
+
   public dataInventario: any[] = [];
 
-  public dtOptions: Config = {};
+  public dtOptions: Config = {
+    searching: true, 
+    paging: true, 
+    info: true, 
+    order: [[0, 'asc']],
+    language: {
+    url: '/assets/es-mx.json'
+  }
+  };
 
   public modalRef?: BsModalRef;
-
+  
   constructor(
       public inventarioService : InventarioService,
       public alertService: AlertErrorService,
@@ -44,14 +57,6 @@ export class InventarioComponent implements OnInit {
   private getAll() {
     this.dataInventario = [];
     this.isLoad =  true;
-    // this.inventarioService.data$.subscribe((data) => {
-    //   this.dataInventario = data;
-    //   console.log(data)
-    //   this.isLoad = false;
-    // });
-
-    // this.inventarioService.loadData();
-    // this.isLoad = false
 
   this.inventarioService.getAll().subscribe(
       (data: any) => {
@@ -61,11 +66,15 @@ export class InventarioComponent implements OnInit {
           this.isLoad = false
 
           this.dtOptions = {
-            searching: true, 
-            paging: true, 
-            info: false,
-            order: [0,'asc']
+              searching: true, 
+              paging: true, 
+              info: true, 
+              order: [[0, 'asc']],
+              language: {
+              url: '/assets/es-mx.json'
+            },
           }
+         
 
         } else {
           this.alertService.alertError(data.message, data.success);
@@ -77,8 +86,7 @@ export class InventarioComponent implements OnInit {
     );
   }
 
-  public dataCatHardware :any  = [];
-  public empresas :any  = [];
+  
 
   public openModal() {
     const initialState = {
@@ -164,7 +172,6 @@ export class InventarioComponent implements OnInit {
       next: async (resp) => {
         if (resp.status == 'success') {
           this.empresas = resp.data;
-          console.log(this.empresas)
           // this.isLoad = false;
         }else{
           console.error('Error al recuperar recursos');

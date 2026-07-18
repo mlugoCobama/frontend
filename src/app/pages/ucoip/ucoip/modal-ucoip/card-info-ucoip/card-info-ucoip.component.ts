@@ -4,6 +4,7 @@ import { AreasDepartamentosService } from 'src/app/core/services/ucoip/areas-dep
 import { UcoipService } from 'src/app/core/services/ucoip/ucoip.service';
 import Swal from 'sweetalert2';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
+import { obtenerPrimerError } from 'src/app/core/helpers/errores-forrmulario';
 @Component({
   selector: 'app-card-info-ucoip',
   templateUrl: './card-info-ucoip.component.html',
@@ -69,6 +70,10 @@ vistaActual: 'info' | 'formulario' = 'info';
     });
   }
 
+  get f() {
+    return this.form.controls;
+  }
+
 
 
 
@@ -105,7 +110,7 @@ vistaActual: 'info' | 'formulario' = 'info';
       this.form.markAllAsTouched();
       this.alertasService.mostrarAlerta(
              "Listo",
-             `Llena correctamente los campos`,
+             `Llena correctamente los campos: ${obtenerPrimerError(this.form)}`,
              "warning",
              "warning"
            );
@@ -148,7 +153,6 @@ vistaActual: 'info' | 'formulario' = 'info';
   );
 
   this.departamentos = area?.departamentos ?? [];
-  console.log(this.departamentos)
   // Buscar departamento
   const departamento = this.departamentos.find(
     item => item.id == usuario.puesto?.departamento?.id
@@ -156,7 +160,6 @@ vistaActual: 'info' | 'formulario' = 'info';
 
   this.puestos = departamento?.puestos ?? [];
 
-  console.log(this.puestos);
 
   // Llenar formulario
   this.form.patchValue({

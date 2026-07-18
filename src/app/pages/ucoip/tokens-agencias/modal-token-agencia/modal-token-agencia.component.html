@@ -1,0 +1,122 @@
+<div class="modal-header">
+    <h5 class="modal-title">
+        {{ formToken.value.id > 0 ? 'Editar Token' : 'Nuevo Token' }}
+    </h5>
+
+    <button
+        type="button"
+        class="btn-close"
+        (click)="cerrarModal()">
+    </button>
+
+</div>
+
+<div class="modal-body">
+    <form [formGroup]="formToken">
+        <input type="hidden" formControlName="id">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">
+                    Sucursal<span class="text-danger">*</span>
+                </label>
+                <select
+                    class="form-select form-select-sm"
+                    formControlName="cat_empresas_id">
+                    <option [ngValue]="null">
+                        Seleccione...
+                    </option>
+                    <option
+                        *ngFor="let item of empresas"
+                        [value]="item.id">
+                        {{ item.nombre }}
+                    </option>
+                </select>
+                <div
+                    class="text-danger small"
+                    *ngIf="submitted && tokenFormControl['cat_empresas_id'].errors">
+                    Seleccione un sistema.
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">
+                    Puesto Marca
+                    <span class="text-danger">*</span>
+                </label>
+
+                <select
+                    class="form-select form-select-sm"
+                    formControlName="puesto_marca">
+                    <option [ngValue]="null">
+                        Seleccione...
+                    </option>
+                    <option
+                        *ngFor="let item of puestos"
+                        [value]="item.id">
+                        {{ item.puesto }}
+                    </option>
+                </select>
+                <div
+                    class="text-danger small"
+                    *ngIf="submitted && tokenFormControl['puesto_marca'].errors">
+                    El puesto es obligatorio.
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">
+                    Token
+                    <span class="text-danger">*</span>
+                </label>
+                <input
+                    class="form-control form-control-sm"
+                    formControlName="token">
+                <div
+                    class="text-danger small"
+                    *ngIf="submitted && tokenFormControl['token'].errors">
+                    El token es obligatorio.
+                </div>
+
+            </div>
+
+            <div class="col-md-12">
+
+                <label class="form-label">
+
+                    Observaciones
+
+                </label>
+
+                <textarea
+                rows="1"
+                    class="form-control form-control-sm"
+                    formControlName="observaciones"></textarea>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+<div class="modal-footer">
+
+    <button
+        class="btn btn-secondary btn-sm"
+        (click)="cerrarModal()">
+
+        Cancelar
+
+    </button>
+
+    <button
+        class="btn btn-primary btn-sm"
+        (click)="save()">
+
+        <i class="fas fa-save me-1"></i>
+
+        Guardar
+
+    </button>
+
+</div>

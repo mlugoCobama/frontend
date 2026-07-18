@@ -53,6 +53,12 @@
                                 <option [value]="" disabled> Seleccionar una opcion</option>
                                 <option *ngFor="let user of usuarios" [ngValue]="user.id" >{{ user.firstname }} {{ user.realname }}-<small>{{user.puesto}}</small></option>
                             </select>
+                            <div *ngIf="getControl(i,'usuario_asignar')?.value != '' && getControl(i,'usuario_asignar')?.value != null" class="form-check">
+                            <input formControlName="asing_equipo_usuario" class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <label class="form-check-label small" for="flexCheckDefault">
+                                    Asignar a su equipo de computo
+                                </label>
+                            </div>
                         </td>
                     </tr>
                 </tbody>

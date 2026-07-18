@@ -1,17 +1,59 @@
 <div class="container-fluid">
     <div class="row">
-        <div class="col-xl-12">
-            <div class="card shadow-sm">
-                <div class="card-body border-bottom border-primary border-2">
+        <div class="col-12">
+            <div class="card shadow-sm rounded-4">
+                <div class="card-body border-bottom border-primary border-2 rounded-4 ">
                     <div class="d-flex align-items-center">
-                        <h5 class="mb-0 card-title flex-grow-1">Tokens</h5>
-
-                        <div class="flex-shrink-0 d-flex gap-1">
-                            <a class="btn btn-primary btn-sm">Nuevo</a>
+                        <h5 class="mb-0 card-title flex-grow-1">
+                            Tokens de Agencias
+                        </h5>
+                        <div class="flex-shrink-0">
+                            <button
+                                class="btn btn-primary btn-sm"
+                                (click)="openModalNuevo()">
+                                <i class="fas fa-plus me-1"></i>
+                                Nuevo
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<div class="card rounded-4 shadow-sm">
+
+    <div class="card-body">
+
+        <div
+            *ngIf="isLoad"
+            class="text-center py-5">
+
+            <div
+                class="spinner-border text-primary"
+                role="status">
+
+            </div>
+
+        </div>
+
+        <app-datatable-generico
+
+            *ngIf="!isLoad"
+
+            [data]="dataTokens"
+
+            [columnas]="columnas"
+
+            [filtros]="filtros"
+
+            [isLoad]="isLoad"
+
+            (rowDoubleClick)="openEdit($event)">
+
+        </app-datatable-generico>
+
+    </div>
+
 </div>
