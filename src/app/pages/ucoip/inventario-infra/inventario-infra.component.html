@@ -8,7 +8,7 @@
                     <h5 class="mb-0 card-title flex-grow-1">Inventario de Activos de Infraestructura</h5>
 
                     <div class="flex-shrink-0 d-flex gap-1">
-                        <a class="btn btn-primary btn-sm" (click)="openModal()">Nuevo</a>
+                        <a class="btn btn-primary btn-sm" (click)="openModal()"> <i class="fas fa-plus"></i> Nuevo</a>
                     </div>
                 </div>
             </div>
@@ -28,27 +28,6 @@
             (abrirModal) = "openEdit($event)"
             [isLoad]="isLoad"
             ></app-tabla-inventario>
-  
-            <!-- <div class="table-responsive">
-              <table datatable [dtOptions]="dtOptions" class="table table-sm table-striped" *ngIf="!isLoad">
-                <thead >
-                  <tr class="text-center">
-                    <th scope="col">Tipo</th>
-                    <th scope="col">Marca</th>
-                    <th scope="col">Modelo</th>
-                    <th scope="col">Núm. de Serie</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of dataInventario" (dblclick)="openEdit(item)">
-                    <td>{{ item.tipo.tipo }}</td>
-                    <td>{{ item.marca }}</td>
-                    <td>{{ item.modelo }}</td>
-                    <td>{{ item.no_serie }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div> -->
           </div>
         </div>
       </div>

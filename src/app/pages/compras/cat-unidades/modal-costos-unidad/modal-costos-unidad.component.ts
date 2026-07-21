@@ -62,4 +62,42 @@ export class ModalCostosUnidadComponent implements OnInit{
         );
         
       }
+
+  descargandoExcel = false;
+  descargarGastos(): void {
+  if (this.descargandoExcel) {
+    this.descargandoExcel = false;
+    return;
+  }
+
+  this.descargandoExcel = true;
+
+  const nombreArchivo = `Gastos_Vehiculo_${this.unidad.eco}_${this.unidad.entidad} _${this.unidad.no_serie}.xlsx`;
+
+  this.unidades.descargarGastosUnidad(this.unidad.id)
+    .subscribe({
+      next: (blob: Blob) => {
+
+        const url = window.URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = nombreArchivo;
+
+        document.body.appendChild(link);
+        link.click();
+
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+        this.descargandoExcel = false;
+      },
+
+      error: (error) => {
+        this.descargandoExcel = false;
+        console.error(error);
+      }
+
+    });
+
+}
 }

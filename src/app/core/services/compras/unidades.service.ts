@@ -67,6 +67,16 @@ export class UnidadesService {
       return this.http.get(environment.apiUrl + `compras/CatalogoUnidades/ParqueVehicularToka/${id}`, {headers});
     }
 
+    descargarGastosUnidad(idVehiculo: number) {
+    return this.http.get(
+      `${environment.apiUrl}compras/descargar-gastos-vehiculo/${idVehiculo}`,
+      {
+        responseType: 'blob',
+        // observe: 'response'
+      }
+    );
+  }
+
 
 
 }
