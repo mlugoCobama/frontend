@@ -77,10 +77,12 @@ export class InventarioComponent implements OnInit {
          
 
         } else {
+          this.isLoad = false;
           this.alertService.alertError(data.message, data.success);
         }
       },
       (error) => {
+        this.isLoad = false;
         this.alertService.alertError(error, false);
       }
     );
@@ -113,7 +115,8 @@ export class InventarioComponent implements OnInit {
       this.dataInventario = [];
       if (res.data) {
         this.modalRef?.hide();
-        this.inventarioService.loadData();
+        this.getAll();
+        // this.inventarioService.loadData();
       }
     });
 
