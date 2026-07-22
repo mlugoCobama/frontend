@@ -22,9 +22,9 @@
                 </select>
 
               </div>
-              <div class="text-danger">
-                <div *ngIf="formModalInventario.controls['cat_hardware_id'].errors?.required">
-                  {{ this.mensajeCampoRequerido }}
+              <div class="text-danger small ">
+                <div *ngIf="formModalInventario.controls['empresa'].touched && formModalInventario.controls['empresa'].errors?.required">
+                  {{ mensajeCampoRequerido }}
                 </div>
               </div>
             </div>
@@ -45,9 +45,9 @@
                 </select>
 
               </div>
-              <div class="text-danger">
-                <div *ngIf="formModalInventario.controls['cat_hardware_id'].errors?.required">
-                  {{ this.mensajeCampoRequerido }}
+              <div class="text-danger small">
+                <div *ngIf="formModalInventario.controls['cat_hardware_id'].touched && formModalInventario.controls['cat_hardware_id'].errors?.required">
+                  {{ mensajeCampoRequerido }}
                 </div>
               </div>
             </div>
@@ -65,9 +65,9 @@
                   [style]="{ width: '100%' }"
                 />
               </div>
-              <div class="text-danger">
-                <div *ngIf="formModalInventario.controls['marca'].errors?.required">
-                  {{ this.mensajeCampoRequerido }}
+              <div class="text-danger small">
+                <div *ngIf="formModalInventario.controls['marca'].touched && formModalInventario.controls['marca'].errors?.required">
+                  {{ mensajeCampoRequerido }}
                 </div>
               </div>
             </div>
@@ -85,9 +85,9 @@
                   [style]="{ width: '100%' }"
                 />
               </div>
-              <div class="text-danger">
-                <div *ngIf="formModalInventario.controls['modelo'].errors?.required">
-                  {{ this.mensajeCampoRequerido }}
+              <div class="text-danger small">
+                <div *ngIf="formModalInventario.controls['modelo'].touched && formModalInventario.controls['modelo'].errors?.required">
+                  {{ mensajeCampoRequerido }}
                 </div>
               </div>
             </div>
@@ -105,9 +105,9 @@
                     [style]="{ width: '100%' }"
                   />
                 </div>
-                <div class="text-danger">
-                  <div *ngIf="formModalInventario.controls['no_serie'].errors?.required">
-                    {{ this.mensajeCampoRequerido }}
+                <div class="text-danger small">
+                  <div *ngIf="formModalInventario.controls['no_serie'].touched && formModalInventario.controls['no_serie'].errors?.required">
+                    {{ mensajeCampoRequerido }}
                   </div>
                 </div>
               </div>
@@ -129,9 +129,9 @@
                     <option value="3">Obsoleto</option>
                   </select>
                 </div>
-                <div class="text-danger">
-                  <div *ngIf="formModalInventario.controls['estado'].errors?.required">
-                    {{ this.mensajeCampoRequerido }}
+                <div class="text-danger small">
+                  <div *ngIf="formModalInventario.controls['estado'].touched && formModalInventario.controls['estado'].errors?.required">
+                    {{ mensajeCampoRequerido }}
                   </div>
                 </div>
               </div>
@@ -156,9 +156,9 @@
                     <option value="6">Laptop Consult</option>
                   </select>
                 </div>
-                <div class="text-danger">
-                  <div *ngIf="formModalInventario.controls['tipo_cpu'].errors?.required">
-                    {{ this.mensajeCampoRequerido }}
+                <div class="text-danger small">
+                  <div *ngIf="formModalInventario.controls['tipo_cpu'].touched && formModalInventario.controls['tipo_cpu'].errors?.required">
+                    {{ mensajeCampoRequerido }}
                   </div>
                 </div>
               </div>
@@ -176,9 +176,9 @@
                     [style]="{ width: '100%' }"
                   />
                 </div>
-                <div class="text-danger">
-                  <div *ngIf="formModalInventario.controls['mac'].errors?.required">
-                    {{ this.mensajeCampoRequerido }}
+                <div class="text-danger small">
+                  <div *ngIf="formModalInventario.controls['mac'].touched && formModalInventario.controls['mac'].errors?.required">
+                    {{ mensajeCampoRequerido }}
                   </div>
                 </div>
               </div>
@@ -197,9 +197,9 @@
                     [style]="{ width: '100%' }"
                   />
                 </div>
-                <div class="text-danger">
-                  <div *ngIf="formModalInventario.controls['memoria_ram'].errors?.required">
-                    {{ this.mensajeCampoRequerido }}
+                <div class="text-danger small">
+                  <div *ngIf="formModalInventario.controls['memoria_ram'].touched && formModalInventario.controls['memoria_ram'].errors?.required">
+                    {{ mensajeCampoRequerido }}
                   </div>
                 </div>
               </div>
@@ -217,9 +217,9 @@
                     [style]="{ width: '100%' }"
                   />
                 </div>
-                <div class="text-danger">
-                  <div *ngIf="formModalInventario.controls['disco_duro'].errors?.required">
-                    {{ this.mensajeCampoRequerido }}
+                <div class="text-danger small">
+                  <div *ngIf="formModalInventario.controls['disco_duro'].touched && formModalInventario.controls['disco_duro'].errors?.required">
+                    {{ mensajeCampoRequerido }}
                   </div>
                 </div>
               </div>
@@ -237,9 +237,9 @@
                     [style]="{ width: '100%' }"
                   />
                 </div>
-                <div class="text-danger">
-                  <div *ngIf="formModalInventario.controls['procesador'].errors?.required">
-                    {{ this.mensajeCampoRequerido }}
+                <div class="text-danger small">
+                  <div *ngIf="formModalInventario.controls['procesador'].touched && formModalInventario.controls['procesador'].errors?.required">
+                    {{ mensajeCampoRequerido }}
                   </div>
                 </div>
               </div>
@@ -259,9 +259,9 @@
                     [style]="{ width: '100%' }"
                   rows="2"></textarea>
                 </div>
-                <div class="text-danger">
-                  <div *ngIf="formModalInventario.controls['caracteristicas'].errors?.required">
-                    {{ this.mensajeCampoRequerido }}
+                <div class="text-danger small">
+                  <div *ngIf="formModalInventario.controls['caracteristicas'].touched && formModalInventario.controls['caracteristicas'].errors?.required">
+                    {{ mensajeCampoRequerido }}
                   </div>
                 </div>
               </div>
@@ -279,9 +279,9 @@
                     [style]="{ width: '100%' }"
                   rows="2"></textarea>
                 </div>
-                <div class="text-danger">
-                  <div *ngIf="formModalInventario.controls['observaciones'].errors?.required">
-                    {{ this.mensajeCampoRequerido }}
+                <div class="text-danger small">
+                  <div *ngIf="formModalInventario.controls['observaciones'].touched && formModalInventario.controls['observaciones'].errors?.required">
+                    {{ mensajeCampoRequerido }}
                   </div>
                 </div>
               </div>

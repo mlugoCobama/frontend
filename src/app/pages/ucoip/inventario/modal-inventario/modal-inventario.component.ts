@@ -30,7 +30,7 @@ export class ModalInventarioComponent implements OnInit {
 
   public dataCatHardware: CatHardware[] = []; 
   public empresas: any[] = []; 
-
+  public mensajeCampoRequerido = 'Este campo es requerido';
   public event: EventEmitter<any> = new EventEmitter();
 
   constructor(
