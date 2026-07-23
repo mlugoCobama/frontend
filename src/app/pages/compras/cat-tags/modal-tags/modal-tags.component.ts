@@ -70,8 +70,6 @@ export class ModalTagsComponent implements OnInit{
   }
 
   patchFormValues() {
-    console.log(this.data)
-    
   this.tagForm.patchValue({
     id: this.data?.id,
     proveedor: this.data?.proveedor,

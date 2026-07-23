@@ -225,7 +225,7 @@
               </div>
             </div>
 
-            <div *ngIf="mostrarCampo('procesador')" class="col-sm-12  col-md-8">
+            <div *ngIf="mostrarCampo('procesador')" class="col-sm-12  col-md-4">
               <div class="form-group">
                 <label class="form-label requerido">Procesador*</label>
                 <div>
@@ -239,6 +239,32 @@
                 </div>
                 <div class="text-danger small">
                   <div *ngIf="formModalInventario.controls['procesador'].touched && formModalInventario.controls['procesador'].errors?.required">
+                    {{ mensajeCampoRequerido }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div  class="col-sm-12 col-md-4">
+              <div class="form-group">
+                <label class="form-label requerido">Estado Fisico*</label>
+                <div>
+                  <select
+                    class="form-select form-select-sm ng-dirty !ng-invalid"
+                    name="estado_fisico" id="estado_fisico"
+                    formControlName="estado_fisico"
+                    [style]="{ width: '100%' }"
+                  >
+                    <option value="">Selecciona una opción</option>
+                    <option value="1">Excelente</option>
+                    <option value="2">Bueno</option>
+                    <option value="3">Regular</option>
+                    <option value="4">Malo</option>
+                    <option value="5">Inutilizable</option>
+                  </select>
+                </div>
+                <div class="text-danger small">
+                  <div *ngIf="formModalInventario.controls['estado_fisico'].touched && formModalInventario.controls['estado_fisico'].errors?.required">
                     {{ mensajeCampoRequerido }}
                   </div>
                 </div>

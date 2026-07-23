@@ -125,6 +125,7 @@ export class ModalSoftwareComponent {
   public setValues(data:any){
     this.formSoftware.patchValue({
       id: data?.id,
+      empresa: data?.empresa,
       cat_software_id: data?.tipo_software?.id,
       version:  data?.version,
       licencia: data?.licencia,

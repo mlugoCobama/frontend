@@ -65,6 +65,7 @@ export class ModalInventarioComponent implements OnInit {
       'observaciones' : this.data.observaciones,
       'estado' : this.data.estado,
       'cat_hardware_id' : this.data.tipo?.id,
+      'estado_fisico' : this.data.estado_fisico
       });
     } 
   }
@@ -96,6 +97,7 @@ export class ModalInventarioComponent implements OnInit {
         procesador: new FormControl(null),
         caracteristicas: new FormControl(null, []),
         observaciones: new FormControl(null, []),
+        estado_fisico: new FormControl("", []),
         
         
       });

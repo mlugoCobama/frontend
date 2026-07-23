@@ -46,6 +46,8 @@
                     <th scope="col">Modelo</th>
                     <th scope="col">Núm. de Serie</th>
                     <th scope="col" class="text-center">Empresa</th>
+                    <th scope="col" class="text-center">Usuario Actual</th>
+                    <th scope="col" class="text-center">Estado Físico</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -69,7 +71,13 @@
                     <td>{{ item.modelo }}</td>
                     <td>{{ item.no_serie }}</td>
                     <td >{{ item.empresa }}</td>
-                  
+                    <td class="fw-bold">{{ item.usuario_actual }}</td>
+                    <td class="text-center "> 
+                      <span [ngClass]="'fw-bold badge bg-' + item.color_est_fisico + '-subtle text-'+ item.color_est_fisico +' font-size-11'">
+                        {{ item.lbl_est_fisico | uppercase }}
+                      </span>
+                      
+                      </td>
                   </tr>
                 </tbody>
               </table>

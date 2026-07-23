@@ -13,7 +13,7 @@ import { EstadoRecurso } from 'src/app/shared/Enums';
 })
 export class TablaInventarioComponent implements OnInit {
 
-    EstadoRecurso = EstadoRecurso;
+  EstadoRecurso = EstadoRecurso;
   EstadoRecursoConfig = EstadoRecursoConfig;
 
   selectedId: number | null = null;
