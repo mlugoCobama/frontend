@@ -1,0 +1,20 @@
+<div [formGroup]="group">
+    <div class="card rounded-4 shadow-sm">
+        <div class="card-header rounded-4 fw-bold ">Checklist</div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4" *ngFor="let item of checklist">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" [formControlName]="item.control">
+                        <label class="form-check-label">{{ item.label }}</label>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <label>Comentarios</label>
+            <textarea rows="3" class="form-control form-control-sm" formControlName="comentarios"></textarea>
+            <label class="mt-2">Observaciones</label>
+            <textarea rows="3" class="form-control form-control-sm" formControlName="observaciones"></textarea>
+        </div>
+    </div>
+</div>

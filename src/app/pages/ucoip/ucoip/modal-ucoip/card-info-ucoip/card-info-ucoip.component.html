@@ -1,6 +1,6 @@
 <!-- PANEL INFORMACION -->
-<div *ngIf="vistaActual === 'info'" class="card shadow-sm rounded">
-    <div class="card-header bg-secondary-subtle d-flex justify-content-between align-items-center">
+<div *ngIf="vistaActual === 'info'" class="card shadow-sm rounded-4">
+    <div class="card-header bg-secondary-subtle d-flex justify-content-between align-items-center rounded-4">
         <span class="fw-bold">EMPRESA: {{ data.empresa }}</span>
 
         <button
@@ -11,53 +11,55 @@
     </div>
 
     <div class="card-body">
-        <table class="table table-border mb-0">
-            <tbody>
-                <tr>
-                    <td class="fw-bold text-end" width="40%">Titular:</td>
-                    <td>{{ data.firstname }} {{ data.realname }}</td>
-                </tr>
-                <tr>
-                    <td class="fw-bold text-end">Fecha de alta:</td>
-                    <td>{{ (ucoip?.created_at | date:'dd/MM/yyyy') || 'Sin Ucoip' }}</td>
-                </tr>
-                <tr>
-                    <td class="fw-bold text-end">Área:</td>
-                    <td>{{ ucoip?.puesto?.departamento?.area?.nombre || 'Sin Definir'  }}</td>
-                </tr>
-                <tr>
-                    <td class="fw-bold text-end">Departamento:</td>
-                    <td>{{ ucoip?.puesto?.departamento?.nombre || 'Sin Definir'  }}</td>
-                </tr>
-                <tr>
-                    <td class="fw-bold text-end">Puesto:</td>
-                    <td>{{ ucoip?.puesto?.nombre  || 'Sin Definir' }}</td>
-                </tr>
-                <tr>
-                    <td class="fw-bold text-end">Correo:</td>
-                    <td>{{ data.name || 'Sin Definir'  }}</td>
-                </tr>
-            <ng-container *ngIf="ucoip?.extensiones.length == 0 || !ucoip?.extensiones">
-                <tr>
-                    <td class="fw-bold text-end">Extensión:</td>
-                    <td>{{ 'Sin Definir'  }}</td>      
-                </tr>
-            </ng-container>
-            <ng-container *ngIf="ucoip?.extensiones.length > 0" >
-                <tr *ngFor="let ext of ucoip?.extensiones">
-                    <td class="fw-bold text-end">Extensión:</td>
-                    <td>{{ ext.valor || 'Sin Definir'  }}</td>    
-                </tr>
-            </ng-container>
-            </tbody>
-        </table>
+        <div class="table-responsive rounded-4 border">
+            <table class="table table-border mb-0">
+                <tbody>
+                    <tr>
+                        <td class="fw-bold text-end" width="40%">Titular:</td>
+                        <td>{{ data.firstname }} {{ data.realname }}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold text-end">Fecha de alta:</td>
+                        <td>{{ (ucoip?.created_at | date:'dd/MM/yyyy') || 'Sin Ucoip' }}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold text-end">Área:</td>
+                        <td>{{ ucoip?.puesto?.departamento?.area?.nombre || 'Sin Definir'  }}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold text-end">Departamento:</td>
+                        <td>{{ ucoip?.puesto?.departamento?.nombre || 'Sin Definir'  }}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold text-end">Puesto:</td>
+                        <td>{{ ucoip?.puesto?.nombre  || 'Sin Definir' }}</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold text-end">Correo:</td>
+                        <td>{{ data.name || 'Sin Definir'  }}</td>
+                    </tr>
+                <ng-container *ngIf="ucoip?.extensiones.length == 0 || !ucoip?.extensiones">
+                    <tr>
+                        <td class="fw-bold text-end">Extensión:</td>
+                        <td>{{ 'Sin Definir'  }}</td>      
+                    </tr>
+                </ng-container>
+                <ng-container *ngIf="ucoip?.extensiones.length > 0" >
+                    <tr *ngFor="let ext of ucoip?.extensiones">
+                        <td class="fw-bold text-end">Extensión:</td>
+                        <td>{{ ext.valor || 'Sin Definir'  }}</td>    
+                    </tr>
+                </ng-container>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
 <!-- PANEL FORMULARIO -->
-<div *ngIf="vistaActual === 'formulario'" class="card shadow-sm rounded">
+<div *ngIf="vistaActual === 'formulario'" class="card shadow-sm rounded-4">
 
-    <div class="card-header bg-secondary-subtle d-flex justify-content-between align-items-center">
+    <div class="card-header bg-secondary-subtle d-flex justify-content-between align-items-center rounded-4">
         <span class="fw-bold">Editar Información</span>
 
         <button

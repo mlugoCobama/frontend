@@ -20,6 +20,7 @@ export class TablaInventarioComponent implements OnInit {
 
 
   @Output() abrirModal = new EventEmitter<any>();
+  @Output() abrirModalMantenimiento = new EventEmitter<any>();
 
 @Input() isLoad: boolean = true;
 @Input() dataInventario: any[] = [];
@@ -73,6 +74,11 @@ public openEdit(item:any){
  this.abrirModal.emit(item)
 }
 
+public showModalMantenimiento(item:any){
+  this.selectedId = item.id;
+ this.abrirModalMantenimiento.emit(item)
+}
+
 selectRow(item: any) {
   this.selectedId = item.id;
 }
@@ -113,7 +119,7 @@ aplicarFiltros() {
     dtInstance.column(1).search(this.filtros.estado);
 
     // Empresa
-    dtInstance.column(5).search(this.filtros.empresa);
+    dtInstance.column(6).search(this.filtros.empresa);
 
     dtInstance.draw();
   });

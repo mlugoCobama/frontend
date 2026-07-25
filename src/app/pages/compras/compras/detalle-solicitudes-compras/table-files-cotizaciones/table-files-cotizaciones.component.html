@@ -1,5 +1,5 @@
-<div class="card rounded shadow-sm" [hidden] = "cotProv?.length === 0" >
-  <div class="card-header bg-primary text-center text-white">
+<div class="card rounded-4 shadow-sm" [hidden] = "cotProv?.length === 0" >
+  <div class="card-header  rounded-4 bg-light text-dark text-center">
    <strong>  Marca la casilla de la fila con el proveedor seleccionado para generar la
     orden de compra </strong> 
   </div>
@@ -50,9 +50,9 @@
           </td>
           <td>
             {{ prov?.proveedores_id.nombre }}
-            <span *ngIf="prov?.seleccionado === 1"  class="text-success" >
+            <span *ngIf="prov?.seleccionado === 1"  class="badge text-bg-success font-size-11" >
               <i class="bx bx-check-circle bx-burst"></i>
-              <strong> (SELECCIONADO) </strong>
+              <strong> SELECCIONADO </strong>
             </span>
           </td>
           <td>
@@ -110,7 +110,7 @@
     ></app-form-datos-entrega-oc>
     <!-- form observaciones orden de compra -->
     <div *ngIf="solicitudCompra?.estatus >= enEsts.OrdenCompra" class="row pt-2">
-      <div *ngIf="ordenCompra" class="alert alert-primary text-center" role="alert">
+      <div *ngIf="ordenCompra" class="alert alert-primary text-center rounded-pill" role="alert">
                   ORDEN DE COMPRA:
                   <strong>{{ ordenCompra?.folio_oc }}</strong>
       </div>

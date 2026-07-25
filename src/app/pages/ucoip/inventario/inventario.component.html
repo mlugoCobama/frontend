@@ -26,6 +26,7 @@
             *ngIf = "dataInventario.length > 0"
             [dataInventario]="dataInventario"
             (abrirModal) = "openEdit($event)"
+            (abrirModalMantenimiento) = "openModalMantenimiento($event)"
             [isLoad]="isLoad"
             ></app-tabla-inventario>
   

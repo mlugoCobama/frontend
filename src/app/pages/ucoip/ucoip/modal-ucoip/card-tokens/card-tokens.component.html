@@ -1,6 +1,6 @@
-<div class="card shadow-sm">
+<div class="card shadow-sm rounded-4">
 
-    <div class="card-header fw-bold bg-secondary-subtle d-flex justify-content-between">
+    <div class="card-header fw-bold bg-secondary-subtle d-flex justify-content-between align-items-center rounded-4">
 
         Tokens
 
@@ -116,77 +116,77 @@
 
         </div>
 
-        <table
-            *ngIf="!isLoad"
-            class="table table-sm mt-3">
+        <div class="table-responsive rounded-4 border mt-3" *ngIf="!isLoad">
+            <table class="table table-sm mb-0">
 
-            <thead>
-                <tr>
-                    <th>TOKEN</th>
-                    <th>USUARIO</th>
-                    <th>ACCESO</th>
-                    <th>CONTRASEÑA</th>
-                    <th>ASIGNADO</th>
-                    <th>RETIRADO</th>
-                    <th>EST</th>
-                    <th></th>
-                </tr>
-            </thead>
+                <thead>
+                    <tr>
+                        <th>TOKEN</th>
+                        <th>USUARIO</th>
+                        <th>ACCESO</th>
+                        <th>CONTRASEÑA</th>
+                        <th>ASIGNADO</th>
+                        <th>RETIRADO</th>
+                        <th>EST</th>
+                        <th></th>
+                    </tr>
+                </thead>
 
-            <tbody>
-                <tr *ngIf="datos.length==0">
-                    <td
-                        colspan="8" class="text-center">
-                        No existen registros.
-                    </td>
-                </tr>
-                <tr *ngFor="let detalle of datos">
-                    <td>
-                        <span class="badge bg-primary fw-bold font-size-11">
-                            {{detalle?.token?.token}}
-                        </span>
-                    </td>
-                    <td>{{detalle?.usuario}}</td>
-                    <td>
-                        <button
-                            *ngIf="!detalle.fecha_retiro"
-                            class="btn btn-primary btn-sm"
-                            (click)="openPass(detalle?.id, 'acc' )">
-                            Password
-                        </button>
-                    </td>
-                    <td>
-                        <button
-                            *ngIf="!detalle.fecha_retiro"
-                            class="btn btn-info btn-sm"
-                          (click)="openPass(detalle?.id, 'pass')">
-                            Password
-                        </button>
-                    </td>
-                    <td>
-                        {{detalle?.fecha_asignacion | date:'dd/MM/yyyy'}}
-                    </td>
-                    <td>
-                        {{(detalle?.fecha_retiro | date:'dd/MM/yyyy') ?? ''}}
-                    </td>
-                    <td>
-                        <i
-                          class="fas fa-circle" [ngClass]="{
-                                'text-success':!detalle?.fecha_retiro,
-                                'text-danger':detalle?.fecha_retiro
-                            }">
-                        </i>
-                    </td>
-                    <td>
-                        <button
-                            *ngIf="!detalle.fecha_retiro"
-                            class="btn btn-danger btn-sm"
-                            (click)="remover(detalle?.id)">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                <tbody>
+                    <tr *ngIf="datos.length==0">
+                        <td
+                            colspan="8" class="text-center">
+                            No existen registros.
+                        </td>
+                    </tr>
+                    <tr *ngFor="let detalle of datos">
+                        <td>
+                            <span class="badge bg-primary fw-bold font-size-11">
+                                {{detalle?.token?.token}}
+                            </span>
+                        </td>
+                        <td>{{detalle?.usuario}}</td>
+                        <td>
+                            <button
+                                *ngIf="!detalle.fecha_retiro"
+                                class="btn btn-primary btn-sm"
+                                (click)="openPass(detalle?.id, 'acc' )">
+                                Password
+                            </button>
+                        </td>
+                        <td>
+                            <button
+                                *ngIf="!detalle.fecha_retiro"
+                                class="btn btn-info btn-sm"
+                              (click)="openPass(detalle?.id, 'pass')">
+                                Password
+                            </button>
+                        </td>
+                        <td>
+                            {{detalle?.fecha_asignacion | date:'dd/MM/yyyy'}}
+                        </td>
+                        <td>
+                            {{(detalle?.fecha_retiro | date:'dd/MM/yyyy') ?? ''}}
+                        </td>
+                        <td>
+                            <i
+                              class="fas fa-circle" [ngClass]="{
+                                    'text-success':!detalle?.fecha_retiro,
+                                    'text-danger':detalle?.fecha_retiro
+                                }">
+                            </i>
+                        </td>
+                        <td>
+                            <button
+                                *ngIf="!detalle.fecha_retiro"
+                                class="btn btn-danger btn-sm"
+                                (click)="remover(detalle?.id)">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

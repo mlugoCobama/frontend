@@ -18,4 +18,10 @@ export class CatSoftwareService {
   public save(data:any): Observable<any> {
         return this.http.post<any>(environment.apiUrl + 'ucoip/cat-software', data);
   }
+
+  
+  public getLicenciasDiponiblesByTipo(id:any, tipo:any): Observable<any> {
+          return this.http.get<any>(environment.apiUrl + 'ucoip/software/licencias/disponibles/'+id+'/'+tipo);
+  }
+
 }

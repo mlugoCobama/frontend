@@ -271,6 +271,63 @@
               </div>
             </div>
 
+            <!-- Sistema Operativo -->
+            <div *ngIf="mostrarCampo('licencia_so_id')" class="col-md-6">
+                <label class="form-label">Sistema Operativo</label>
+                <div class="input-group">
+                    <select
+                        class="form-select form-select-sm"
+                        formControlName="licencia_so_id">
+                        <option selected disabled [ngValue]="">
+                            Selecciona una opción
+                        </option>
+                        <option [ngValue]="0">
+                            Sin licencia
+                        </option>
+                        <option
+                            *ngFor="let item of licenciasSO"
+                            [value]="item.id">
+                            {{item.version}} | {{item.licencia}}
+                        </option>
+                    </select>
+                    <button
+                        class="btn btn-sm btn-outline-primary"
+                        type="button"
+                        (click)="nuevaLicencia('windows')">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+
+
+            <!-- Office -->
+            <div *ngIf="mostrarCampo('licencia_office_id')" class="col-md-6">
+                <label class="form-label">Microsoft Office</label>
+                <div class="input-group">
+                    <select
+                        class="form-select form-select-sm"
+                        formControlName="licencia_office_id">
+                        <option selected disabled [ngValue]="">
+                            Selecciona una opción
+                        </option>
+                        <option [ngValue]="0">
+                            Sin licencia
+                        </option>
+                        <option
+                            *ngFor="let item of licenciasOffice"
+                            [value]="item.id">
+                            {{item.version}} | {{item.licencia}}
+                        </option>
+                    </select>
+                    <button
+                        class="btn btn-sm btn-outline-warning"
+                        type="button"
+                        (click)="nuevaLicencia('office')">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+
             
             <!-- Marca -->
             <div class="col-sm-12 col-md-12">

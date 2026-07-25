@@ -75,10 +75,19 @@
 
                         <div class="col-md-6">
                             <label class="form-label">Contraseña</label>
-                            <input
-                                type="password"
-                                class="form-control form-control-sm"
-                                formControlName="pass_cuenta">
+                            <div class="input-group">
+                                <input
+                                    [type]="mostrarPassword ? 'text' : 'password'"
+                                    class="form-control form-control-sm"
+                                    formControlName="pass_cuenta">
+                                <button
+                                    type="button"
+                                    class="btn btn-outline-secondary btn-sm"
+                                    (click)="mostrarPassword = !mostrarPassword"
+                                    title="{{ mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña' }}">
+                                    <i class="far" [ngClass]="mostrarPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                                </button>
+                            </div>
                         </div>
 
                         <div class="col-md-4">

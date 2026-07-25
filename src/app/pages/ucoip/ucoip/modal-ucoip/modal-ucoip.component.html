@@ -100,27 +100,23 @@
 
       <!-- TAB SISTEMAS -->
       <div class="col-12" *ngIf="tabActiva === 'sistemas'">
-          <div class="card">
-              <app-card-sistemas
+          <app-card-sistemas
               [data]="resguardos"
               [ucoip]="ucoip"
               [catSistemas]="catSistemas"
               (actualizarAsignados)="getResguardos()">
           </app-card-sistemas>
-          </div>
       </div>
 
       <!-- TAB INFRAESTRUCTURA -->
       <div class="col-12" *ngIf="tabActiva === 'infraestructura'">
-          <div class="card">
-              <app-card-network
+          <app-card-network
               [data]="resguardos"
               [ucoip]="ucoip"
               [catRecursosRed]="catRecurso"
               (actualizarAsignados)="getResguardos()"
               >
-              </app-card-network>
-          </div>
+          </app-card-network>
       </div>
 
       <div class="col-12" *ngIf="tabActiva === 'licencias'">

@@ -39,15 +39,15 @@
               <table  datatable [dtOptions]="dtOptions" class="table table-sm border" *ngIf="!isLoad">
                 <thead >
                   <tr class="text-center">
-                    
                     <th scope="col" class="text-center">Tipo</th>
                     <th scope="col" class="text-center">Estado</th>
                     <th scope="col">Marca</th>
                     <th scope="col">Modelo</th>
                     <th scope="col">Núm. de Serie</th>
+                    <th scope="col" class="text-center">Estado Físico</th>
                     <th scope="col" class="text-center">Empresa</th>
                     <th scope="col" class="text-center">Usuario Actual</th>
-                    <th scope="col" class="text-center">Estado Físico</th>
+                    <th scope="col" class="text-center">Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -68,16 +68,21 @@
                      
                     </td>
                     <td >{{ item.marca }}</td>
-                    <td>{{ item.modelo }}</td>
+                    <td class="text-nowrap">{{ item.modelo }}</td>
                     <td>{{ item.no_serie }}</td>
-                    <td >{{ item.empresa }}</td>
-                    <td class="fw-bold">{{ item.usuario_actual }}</td>
                     <td class="text-center "> 
-                      <span [ngClass]="'fw-bold badge bg-' + item.color_est_fisico + '-subtle text-'+ item.color_est_fisico +' font-size-11'">
+                      <span [ngClass]="'fw-bold badge bg-' + item.color_est_fisico + '-subtle text-'+ item.color_est_fisico +' font-size-11 rounded-pill'">
                         {{ item.lbl_est_fisico | uppercase }}
                       </span>
-                      
-                      </td>
+                    </td>
+                    <td class="text-nowrap">{{ item.empresa }}</td>
+                    <td class="fw-bold text-nowrap">{{ item.usuario_actual }}</td>
+                    
+                    <td class="text-center">
+                      <button (click)="showModalMantenimiento(item)" *ngIf="item.tipo.mantenible == 1" title="Documentar mantenimiento" class="btn btn-sm btn-primary rounded-circle">
+                        <i class="fas fa-tools"></i>
+                      </button>
+                    </td>
                   </tr>
                 </tbody>
               </table>

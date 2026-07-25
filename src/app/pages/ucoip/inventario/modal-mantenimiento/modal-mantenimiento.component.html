@@ -1,0 +1,82 @@
+<form [formGroup]="form">
+    <div class="modal-header">
+        <h5 class="modal-title">Reporte de mantenimiento</h5>
+        <button type="button" class="btn-close" (click)="cerrarModal()"></button>
+    </div>
+    <div class="modal-body">
+        <div class="row g-2">
+            <div class="col-md-12">
+                <label for="realizado_por" class="form-label small">Realizado por</label>
+                <select id="realizado_por" formControlName="realizado_por" class="form-select form-select-sm">
+                    <option value="" selected disabled>Selecciona una opción</option>
+                    <option *ngFor="let t of tecnicos" [value]="t.id">
+                    {{ t.firstname }} {{ t.realname }} - {{t.puesto}}
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label small">Tipo</label>
+                <select class="form-select form-select-sm" formControlName="tipo">
+                    <option value="preventivo">Preventivo</option>
+                    <option value="correctivo">Correctivo</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label small">Fecha</label>
+                <input type="date" class="form-control form-control-sm" formControlName="fecha">
+            </div>
+            <!-- <div class="col-md-4">
+                <label class="form-label small">Duración (min)</label>
+                <input type="number" class="form-control form-control-sm" formControlName="duracion">
+            </div> -->
+        </div>
+        
+    <!-- <div *ngIf="solicitudCompraFormControl.tecnico.touched || submitted">
+        <div
+          class="text-danger form-text" *ngIf="solicitudCompraFormControl.tecnico.errors?.['required']">
+          Tecnico es requerido
+        </div>
+      </div> -->
+
+        <!-- PREVENTIVO -->
+        <app-preventivo-form
+            *ngIf="form.get('tipo')?.value === 'preventivo'"
+            [group]="preventivoGroup"
+            class="d-block mt-3">
+        </app-preventivo-form>
+
+        <!-- CORRECTIVO -->
+        <app-correctivo-form
+            *ngIf="form.get('tipo')?.value === 'correctivo'"
+            [group]="correctivoGroup"
+            class="d-block mt-3">
+        </app-correctivo-form>
+
+        <div class="row mt-3"> 
+            <div class="col-md-6">
+                <app-evidencia-uploader
+                    label="Evidencia antes"
+                    bordeContainer="border-warning"
+                    (filesChange)="onEvidenciaAntes($event)">
+                </app-evidencia-uploader>
+            </div>
+            <div class="col-md-6">
+                <app-evidencia-uploader
+                    label="Evidencia después"
+                    bordeContainer="border-success"
+                    (filesChange)="onEvidenciaDespues($event)">
+                </app-evidencia-uploader>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" (click)="cerrarModal()">
+            Cerrar
+        </button>
+        <button type="button" class="btn btn-primary btn-sm" [disabled]="form.invalid || saving"
+            (click)="tipo === 'agregar' ? save() : update()">
+            Guardar
+        </button>
+    </div>
+</form>

@@ -1,6 +1,6 @@
 
-<div class="card  shadow-sm">
-<div class="card-header bg-secondary-subtle d-flex justify-content-between align-items-center">
+<div class="card shadow-sm rounded-4">
+<div class="card-header bg-secondary-subtle d-flex justify-content-between align-items-center rounded-4">
         <span class="fw-bold">ACCESOS SISTEMAS</span>
         <div class="d-flex gap-2">
             <!-- Botón toggle -->
@@ -103,74 +103,76 @@
             </div>
     </div>
     <ng-container *ngIf="!isLoad">
-            <table class="table table-sm border mt-2">
-        <thead>
-            <tr>
-                <th>SISTEMA</th>
-                <th>USUARIO</th>
-                <th>CONTRASEÑA</th>
-                <th>RESPONSIVA</th>
-                <th>EST</th>
-                <th>ASIGNADO</th>
-                <th>REMOVIDO</th>
-                <th>-</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngIf="datos.length == 0">
-                <td colspan="9" class="text-muted text-center p-3 fw-bold"> Aun no tienen activos asignado</td>
-            </tr>
-            <ng-container *ngIf="datos.length > 0">
-                <tr *ngFor="let detalle of datos">
-                    <!-- <td>
-                        <input type="checkbox" class="form-check-input"
-                            [checked]="idsSeleccionados.includes(detalle.id)"
-                            (change)="toggleSeleccion(detalle.id, $event)" />
-                    </td> -->
+        <div class="table-responsive rounded-4 border mt-2">
+            <table class="table table-sm mb-0">
+                <thead>
+                    <tr>
+                        <th>SISTEMA</th>
+                        <th>USUARIO</th>
+                        <th>CONTRASEÑA</th>
+                        <th>RESPONSIVA</th>
+                        <th>EST</th>
+                        <th>ASIGNADO</th>
+                        <th>REMOVIDO</th>
+                        <th>-</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngIf="datos.length == 0">
+                        <td colspan="9" class="text-muted text-center p-3 fw-bold"> Aun no tienen activos asignado</td>
+                    </tr>
+                    <ng-container *ngIf="datos.length > 0">
+                        <tr *ngFor="let detalle of datos">
+                            <!-- <td>
+                                <input type="checkbox" class="form-check-input"
+                                    [checked]="idsSeleccionados.includes(detalle.id)"
+                                    (change)="toggleSeleccion(detalle.id, $event)" />
+                            </td> -->
 
-                    <td>
-                        <span class="badge bg-primary text-white p-1 fw-bold">
-                            {{detalle?.sistema?.nombre}}
-                        </span>
-                    </td>
-                    <td>{{detalle?.username}}</td>
-                    <td>
-                          <button *ngIf="!detalle.fecha_fin" 
-                                class="btn btn-info btn-sm" 
-                                (click)="openPass(detalle?.id)" 
-                                [disabled]="loadingPass">
-                            <ng-container *ngIf="!loadingPass; else spinner">
-                            <i class="fas fa-unlock-alt"></i> Password
-                            </ng-container>
-                            <ng-template #spinner>
-                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            Cargando...
-                            </ng-template>
-                        </button>
-                    </td>
-                    <td>
-                        <button *ngIf="!detalle.fecha_fin" class="btn btn-dark btn-sm">
-                            <i class="fas fa-file-pdf "></i> Resp.
-                        </button>
-                    </td>
-                    <td>
-                        <span [attr.title]="detalle?.activo == 1 ? 'Vigente' : 'Devuelto'">
-                            <i class="fas fa-circle"
-                                [ngClass]="{'text-success': detalle?.activo, 'text-danger': detalle?.activo == 0}">
-                            </i>
-                        </span>
-                    </td>
-                    <td>{{(detalle?.fecha_asignacion | date:'dd/MM/yyyy') || '-'}}</td>
-                    <td>{{(detalle?.fecha_fin | date:'dd/MM/yyyy') || '-'}}</td>
-                    <td>
-                        <button *ngIf="!detalle.fecha_fin" class="btn btn-danger btn-sm" (click)="remover(detalle?.id)">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                    </td>
-                </tr>
-            </ng-container>
-        </tbody>
-    </table>
+                            <td>
+                                <span class="badge bg-primary text-white p-1 fw-bold">
+                                    {{detalle?.sistema?.nombre}}
+                                </span>
+                            </td>
+                            <td>{{detalle?.username}}</td>
+                            <td>
+                                  <button *ngIf="!detalle.fecha_fin" 
+                                        class="btn btn-info btn-sm" 
+                                        (click)="openPass(detalle?.id)" 
+                                        [disabled]="loadingPass">
+                                    <ng-container *ngIf="!loadingPass; else spinner">
+                                    <i class="fas fa-unlock-alt"></i> Password
+                                    </ng-container>
+                                    <ng-template #spinner>
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    Cargando...
+                                    </ng-template>
+                                </button>
+                            </td>
+                            <td>
+                                <button *ngIf="!detalle.fecha_fin" class="btn btn-dark btn-sm">
+                                    <i class="fas fa-file-pdf "></i> Resp.
+                                </button>
+                            </td>
+                            <td>
+                                <span [attr.title]="detalle?.activo == 1 ? 'Vigente' : 'Devuelto'">
+                                    <i class="fas fa-circle"
+                                        [ngClass]="{'text-success': detalle?.activo, 'text-danger': detalle?.activo == 0}">
+                                    </i>
+                                </span>
+                            </td>
+                            <td>{{(detalle?.fecha_asignacion | date:'dd/MM/yyyy') || '-'}}</td>
+                            <td>{{(detalle?.fecha_fin | date:'dd/MM/yyyy') || '-'}}</td>
+                            <td>
+                                <button *ngIf="!detalle.fecha_fin" class="btn btn-danger btn-sm" (click)="remover(detalle?.id)">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
     <span class="text-muted"> {{ datos.length }}  Asignados</span>
     </ng-container>
 

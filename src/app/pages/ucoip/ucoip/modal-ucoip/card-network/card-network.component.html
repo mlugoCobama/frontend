@@ -1,6 +1,6 @@
 
-<div class="card  shadow-sm">
-<div class="card-header bg-secondary-subtle d-flex justify-content-between align-items-center">
+<div class="card shadow-sm rounded-4">
+<div class="card-header bg-secondary-subtle d-flex justify-content-between align-items-center rounded-4">
         <span class="fw-bold">NETWORK</span>
         <div class="d-flex gap-2">
             <!-- Botón toggle -->
@@ -107,57 +107,59 @@
             </div>
     </div>
     <ng-container *ngIf="!isLoad">
-            <table class="table table-sm border mt-2">
-        <thead>
-            <tr>
-                <th>TIPO</th>
-                <th>VALOR</th>
-                <th>N.R</th>
-                <th>EST.</th>
-                <th>ASIGNADO</th>
-                <th>REMOVIDO</th>
-                <th>-</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngIf="datos.length == 0">
-                <td colspan="9" class="text-muted text-center p-3 fw-bold"> Aun no tiene elementos asignado</td>
-            </tr>
-            <ng-container *ngIf="datos.length > 0">
-                <tr *ngFor="let detalle of datos">
-                    <!-- <td>
-                        <input type="checkbox" class="form-check-input"
-                            [checked]="idsSeleccionados.includes(detalle.id)"
-                            (change)="toggleSeleccion(detalle.id, $event)" />
-                    </td> -->
+        <div class="table-responsive rounded-4 border mt-2">
+            <table class="table table-sm mb-0">
+                <thead>
+                    <tr>
+                        <th>TIPO</th>
+                        <th>VALOR</th>
+                        <th>N.R</th>
+                        <th>EST.</th>
+                        <th>ASIGNADO</th>
+                        <th>REMOVIDO</th>
+                        <th>-</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngIf="datos.length == 0">
+                        <td colspan="9" class="text-muted text-center p-3 fw-bold"> Aun no tiene elementos asignado</td>
+                    </tr>
+                    <ng-container *ngIf="datos.length > 0">
+                        <tr *ngFor="let detalle of datos">
+                            <!-- <td>
+                                <input type="checkbox" class="form-check-input"
+                                    [checked]="idsSeleccionados.includes(detalle.id)"
+                                    (change)="toggleSeleccion(detalle.id, $event)" />
+                            </td> -->
 
-                    <td>
-                        <span class="badge bg-primary text-white p-1 fw-bold">
-                            {{detalle?.recurso_red?.nombre}}
-                        </span>
-                    </td>
-                    <td>{{detalle?.valor}}</td>
-                    <td>
-                        {{detalle?.nivel_restrictivo ?? 'N/E'}}
-                    </td>
-                    <td>
-                        <span [attr.title]="!detalle?.fecha_retiro ? 'Vigente' : 'Devuelto'">
-                            <i class="fas fa-circle"
-                                [ngClass]="{'text-success': !detalle?.fecha_retiro, 'text-danger': detalle?.fecha_retiro}">
-                            </i>
-                        </span>
-                    </td>
-                    <td>{{(detalle?.fecha_asignacion | date:'dd/MM/yyyy') || '-'}}</td>
-                    <td>{{(detalle?.fecha_retiro | date:'dd/MM/yyyy') || '-'}}</td>
-                    <td>
-                        <button *ngIf="!detalle.fecha_retiro" class="btn btn-danger btn-sm" (click)="remover(detalle?.id)">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                    </td>
-                </tr>
-            </ng-container>
-        </tbody>
-    </table>
+                            <td>
+                                <span class="badge bg-primary text-white p-1 fw-bold">
+                                    {{detalle?.recurso_red?.nombre}}
+                                </span>
+                            </td>
+                            <td>{{detalle?.valor}}</td>
+                            <td>
+                                {{detalle?.nivel_restrictivo ?? 'N/E'}}
+                            </td>
+                            <td>
+                                <span [attr.title]="!detalle?.fecha_retiro ? 'Vigente' : 'Devuelto'">
+                                    <i class="fas fa-circle"
+                                        [ngClass]="{'text-success': !detalle?.fecha_retiro, 'text-danger': detalle?.fecha_retiro}">
+                                    </i>
+                                </span>
+                            </td>
+                            <td>{{(detalle?.fecha_asignacion | date:'dd/MM/yyyy') || '-'}}</td>
+                            <td>{{(detalle?.fecha_retiro | date:'dd/MM/yyyy') || '-'}}</td>
+                            <td>
+                                <button *ngIf="!detalle.fecha_retiro" class="btn btn-danger btn-sm" (click)="remover(detalle?.id)">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
     </ng-container>
 
     <span class="text-muted"> {{ datos.length }}  Asignados</span>

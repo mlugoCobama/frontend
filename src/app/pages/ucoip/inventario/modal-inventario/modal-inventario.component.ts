@@ -10,13 +10,16 @@ import { EmpresasService } from 'src/app/core/services/ucoip/empresas.service';
 import Swal from 'sweetalert2';
 import { obtenerPrimerError } from 'src/app/core/helpers/errores-forrmulario';
 import { OrdenesCompraService } from 'src/app/core/services/compras/ordenesCompra/ordenes-compra.service';
-
+import { CatSoftwareService } from 'src/app/core/services/ucoip/cat-software.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-modal-inventario',
   templateUrl: './modal-inventario.component.html',
   styleUrls: ['./modal-inventario.component.css']
 })
 export class ModalInventarioComponent implements OnInit {
+  private empresaSub?: Subscription;
+  private tipoSub?: Subscription;
   
   tabActiva = 'asignaciones';
   mostrarHistorial = false;
@@ -25,6 +28,8 @@ export class ModalInventarioComponent implements OnInit {
   public data: any = [];
   
   public listaDatos: any[] = [];
+  licenciasSO:any[] = [];
+  licenciasOffice:any[] = [];
 
   public formModalInventario!: FormGroup;
 
@@ -40,6 +45,7 @@ export class ModalInventarioComponent implements OnInit {
     public alertService: AlertErrorService,
     private inventarioService: InventarioService,
     private ordenesCompra: OrdenesCompraService,
+    private software: CatSoftwareService,
   ) {}
 
   public ngOnInit(): void {
@@ -68,6 +74,11 @@ export class ModalInventarioComponent implements OnInit {
       'estado_fisico' : this.data.estado_fisico
       });
     } 
+
+   this.empresaSub  = this.formModalInventario.get('empresa')?.valueChanges.subscribe(idEmpresa=>{
+        this.obtenerLicenciasSO(idEmpresa);
+        this.obtenerLicenciasOffice(idEmpresa);
+    });
   }
 
 
@@ -95,17 +106,19 @@ export class ModalInventarioComponent implements OnInit {
         memoria_ram: new FormControl(null),
         disco_duro: new FormControl(null),
         procesador: new FormControl(null),
+        licencia_so_id: new FormControl(""),
+        licencia_office_id: new FormControl(""),
         caracteristicas: new FormControl(null, []),
         observaciones: new FormControl(null, []),
         estado_fisico: new FormControl("", []),
-        
-        
       });
       resolve(true);
     });
   }
 
   public cerrarModal(): void {
+    this.empresaSub?.unsubscribe();
+    this.tipoSub?.unsubscribe();
     this.modalRef.hide();
   }
 
@@ -181,17 +194,10 @@ this.saving = true;
   }
 
   private configurarCamposDinamicos(): void {
-
-    this.formModalInventario
-      .get('cat_hardware_id')
-      ?.valueChanges
-      .subscribe((tipo: number) => {
+   this.tipoSub = this.formModalInventario.get('cat_hardware_id')?.valueChanges.subscribe((tipo: number) => {
         const campos = [
-          'tipo_cpu',
-          'mac',
-          'memoria_ram',
-          'disco_duro',
-          'procesador'
+          'tipo_cpu','mac','memoria_ram','disco_duro',
+          'procesador','licencia_so_id','licencia_office_id'
         ];
         campos.forEach(campo => {
           const control = this.formModalInventario.get(campo);
@@ -226,5 +232,101 @@ this.saving = true;
     }
   );
 
+}
+
+obtenerLicenciasSO(idEmpresa:number){
+    this.software.getLicenciasDiponiblesByTipo(idEmpresa, 1)
+        .subscribe(resp=>{
+            this.licenciasSO = resp.data;
+        });
+}
+
+obtenerLicenciasOffice(idEmpresa:number){
+    this.software.getLicenciasDiponiblesByTipo(idEmpresa, 2)
+        .subscribe(resp=>{
+            this.licenciasOffice = resp.data;
+        });
+}
+
+
+async nuevaLicencia(tipo:'windows'|'office'){
+
+    const titulo = tipo == 'windows'
+        ? 'Nueva licencia de SO'
+        : 'Nueva licencia de Office';
+
+    const cat_software_id = tipo == 'windows'
+        ? 1
+        : 2;
+
+    const {value} = await Swal.fire({
+        title: titulo,
+        html:`
+          <div class="row">
+              <div class="col-12">
+                <input
+                  id="version"
+                  class="form-control form-control-sm m-1"
+                  placeholder="Versión">
+
+                <input
+                  id="licencia"
+                  class="form-control form-control-sm  m-1"
+                  placeholder="Licencia">
+              </div>
+          </div>
+        `,
+        position: 'top',
+        reverseButtons: true,
+        showCancelButton:true,
+        confirmButtonText:' <i class="fas fa-save"> </i> Guardar',
+        cancelButtonText:' <i class="fas fa-window-close"> </i> Cancelar',
+        focusConfirm:false,
+        buttonsStyling: false,
+        customClass: {
+          confirmButton: 'btn btn-sm btn-primary m-1',
+          cancelButton: 'btn btn-sm btn-secondary m-1'
+        },
+        preConfirm:()=>{
+            const version = (<HTMLInputElement>document.getElementById('version')).value;
+            const licencia = (<HTMLInputElement>document.getElementById('licencia')).value;
+            if(!version || !licencia){
+                Swal.showValidationMessage("Todos los campos son obligatorios");
+                return;
+            }
+            return{
+                empresa:this.formModalInventario.get('empresa')?.value,
+                cat_software_id : cat_software_id,
+                version: version,
+                licencia : licencia
+            };
+        }
+    });
+    if(!value){
+        return;
+    }
+
+    this.software.save(value)
+        .subscribe(resp=>{
+            if(resp.status == 'success'){
+                if(tipo == 'windows'){
+                    this.licenciasSO.push(resp.data);
+                    this.formModalInventario.patchValue({
+                        licencia_so_id:resp.data.id
+                    });
+                }else{
+                    this.licenciasOffice.push(resp.data);
+                    this.formModalInventario.patchValue({
+                        licencia_office_id:resp.data.id
+                    });
+                }
+                Swal.fire({
+                    icon:'success',
+                    title:'Licencia registrada',
+                    timer:1200,
+                    showConfirmButton:false
+                });
+            }
+        });
 }
 }

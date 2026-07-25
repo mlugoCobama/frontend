@@ -10,6 +10,7 @@ import { ModalInventarioComponent } from './modal-inventario/modal-inventario.co
 import { CatHardwareService
  } from 'src/app/core/services/ucoip/cat-hardware.service';
  import { EmpresasService } from 'src/app/core/services/ucoip/empresas.service';
+import { ModalMantenimientoComponent } from './modal-mantenimiento/modal-mantenimiento.component';
 
 
 
@@ -184,5 +185,37 @@ export class InventarioComponent implements OnInit {
         console.error('Error al recuperar recursos', err);
       }
     });
+  }
+
+  public openModalMantenimiento() {
+    const initialState = {
+      listaDatos: [
+        {
+          data: [],
+          tipo: 'agregar',
+          
+        },
+      ],
+      dataCatHardware: this.dataCatHardware,
+      empresas: this.empresas
+    };
+
+    this.modalRef = this.modalService.show(ModalMantenimientoComponent, {
+      // initialState,
+      class: 'modal-lg',
+      backdrop: 'static',
+    });
+
+    this.modalRef.content.closeBtnName = 'Close';
+    this.modalRef.content.event.subscribe((res:any) => {
+      this.isLoad = true;
+      this.dataInventario = [];
+      if (res.data) {
+        this.modalRef?.hide();
+        this.getAll();
+        // this.inventarioService.loadData();
+      }
+    });
+
   }
 }

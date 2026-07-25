@@ -27,6 +27,10 @@ import { ModalTokenAgenciaComponent } from './tokens-agencias/modal-token-agenci
 import { CardTokensComponent } from './ucoip/modal-ucoip/card-tokens/card-tokens.component';
 import { HistorialEquipoComponent } from './inventario/historial-equipo/historial-equipo.component';
 import { InventarioInfraComponent } from './inventario-infra/inventario-infra.component';
+import { ModalMantenimientoComponent } from './inventario/modal-mantenimiento/modal-mantenimiento.component';
+import { PreventivoFormComponent } from './inventario/preventivo-form/preventivo-form.component';
+import { CorrectivoFormComponent } from './inventario/correctivo-form/correctivo-form.component';
+import { EvidenciaUploaderComponent } from './inventario/evidencia-uploader/evidencia-uploader.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +52,10 @@ import { InventarioInfraComponent } from './inventario-infra/inventario-infra.co
     CardTokensComponent,
     HistorialEquipoComponent,
     InventarioInfraComponent,
+    ModalMantenimientoComponent,
+    PreventivoFormComponent,
+    CorrectivoFormComponent,
+    EvidenciaUploaderComponent,
   ],
   imports: [
     CommonModule,

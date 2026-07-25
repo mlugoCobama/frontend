@@ -1,6 +1,6 @@
 
-<div class="card  shadow-sm">
-<div class="card-header bg-secondary-subtle d-flex justify-content-between align-items-center">
+<div class="card shadow-sm rounded-4">
+<div class="card-header bg-secondary-subtle d-flex justify-content-between align-items-center rounded-4">
         <span class="fw-bold">Licenciamientos</span>
         <div class="d-flex gap-2">
             <!-- Botón toggle -->
@@ -98,44 +98,44 @@
             </div>
     </div>
     <ng-container *ngIf="!isLoad">
-            <table class="table table-sm border mt-2">
-        <thead>
-            <tr>
-                <th>TIPO</th>
-                <th>VERSION</th>
-                <th>CLAVE</th>
-                <th>ASIGNADO</th>
-                <th>DEVUELTO</th>
-                <th>-</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngIf="data.length == 0">
-                <td colspan="9" class="text-muted text-center p-3 fw-bold"> Aun no tienen activos asignado</td>
-            </tr>
-            <ng-container *ngIf="data.length > 0">
-                <tr *ngFor="let detalle of data">
-                    <td>
-                        <span class="badge bg-primary text-white p-1 fw-bold">
-                            {{detalle?.licencia?.tipo_software?.tipo}}
-                        </span>
-                    </td>
-                    <td>{{detalle?.licencia?.version}}</td>
-                    <td>{{detalle?.licencia?.licencia}}</td>
-                    <td>{{(detalle?.fecha_asignacion | date:'dd/MM/yyyy') || '-'}}</td>
-                    <td>{{(detalle?.fecha_retiro | date:'dd/MM/yyyy') || '-'}}</td>
-                    <td>
-                        <button *ngIf="!detalle.fecha_retiro" class="btn btn-danger btn-sm" (click)="remover(detalle?.id)">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                    </td>
-                </tr>
-            </ng-container>
-        </tbody>
-    </table>
-    <span class="text-muted"> {{ data.length }} Activos Asignados</span>
-
-
+        <div class="table-responsive rounded-4 border mt-2">
+            <table class="table table-sm mb-0">
+                <thead>
+                    <tr>
+                        <th>TIPO</th>
+                        <th>VERSION</th>
+                        <th>CLAVE</th>
+                        <th>ASIGNADO</th>
+                        <th>DEVUELTO</th>
+                        <th>-</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngIf="data.length == 0">
+                        <td colspan="9" class="text-muted text-center p-3 fw-bold"> Aun no tienen activos asignado</td>
+                    </tr>
+                    <ng-container *ngIf="data.length > 0">
+                        <tr *ngFor="let detalle of data">
+                            <td>
+                                <span class="badge bg-primary text-white p-1 fw-bold">
+                                    {{detalle?.licencia?.tipo_software?.tipo}}
+                                </span>
+                            </td>
+                            <td>{{detalle?.licencia?.version}}</td>
+                            <td>{{detalle?.licencia?.licencia}}</td>
+                            <td>{{(detalle?.fecha_asignacion | date:'dd/MM/yyyy') || '-'}}</td>
+                            <td>{{(detalle?.fecha_retiro | date:'dd/MM/yyyy') || '-'}}</td>
+                            <td>
+                                <button *ngIf="!detalle.fecha_retiro" class="btn btn-danger btn-sm" (click)="remover(detalle?.id)">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+        <span class="text-muted"> {{ data.length }} Activos Asignados</span>
     </ng-container>
 
 </div>
