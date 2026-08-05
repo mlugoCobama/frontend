@@ -28,6 +28,7 @@ export class SoftwareComponent implements OnInit{
   dataInventario:any = [];
   tiposSoftware:any = []
   isLoad:any = true;
+  public itemSeleccionado: any =  null;
 
 
 columnas: ColumnaConfig[] = [
@@ -44,7 +45,7 @@ columnas: ColumnaConfig[] = [
       backField: 'estatus',
       backColorMap: { 1: 'bg-success', 2: 'bg-primary', 3: 'bg-danger' },
       transform: (val:any) => ({ 1: 'DISPONIBLE', 2: 'ASIGNADO', 3: 'OBSOLETO' }[val] ?? 'DESCONOCIDO')
-    
+
     },
   },
 
@@ -53,7 +54,7 @@ columnas: ColumnaConfig[] = [
   { header: 'Empresa', field: 'sucursal.nombre' },
   { header: 'Tipo', field: 'tipo_texto' },
   { header: 'F. Adquisición', field: 'fecha' },
-  
+
 ];
 
 filtros: FiltroConfig[] = [
@@ -111,7 +112,7 @@ public getSoftware(){
 }
 
 // Despliega la ventana modal para un nuevo registro
-    public openModalNuevo() { 
+    public openModalNuevo() {
       const initialState: ModalOptions = {
         initialState: {
           tipo: 'agregar',
@@ -152,5 +153,58 @@ public getSoftware(){
         console.error('Error al recuperar recursos', err);
       }
     });
+  }
+
+
+  confirmarEliminacion(id: number | string) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción no se puede deshacer',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true, // Pone el botón de confirmación del lado derecho
+      customClass: {
+        confirmButton: 'btn btn-danger ms-2',
+        cancelButton: 'btn btn-secondary'
+      },
+      buttonsStyling: false // Permite usar clases personalizadas (ej. Bootstrap)
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.eliminarRegistro(id);
+      }
+    });
+  }
+
+  eliminarRegistro(id: number | string) {
+    // Lógica para llamar a tu servicio y eliminar el registro
+    this.software.destroy(id).subscribe(
+          (response) => {
+            if (response.success) {
+              Swal.fire({
+                title: "¡Eliminado!",
+                text: "El registro ha sido eliminado correctamente.",
+                icon: "success",
+                showConfirmButton: false,
+              });
+              this.itemSeleccionado = null;
+              this.getSoftware();
+            } else {
+              this.itemSeleccionado = null;
+              console.log(response.message);
+            }
+          },
+          (error) => {
+            this.itemSeleccionado = null;
+            console.error("Error fetching data:", error);
+          },
+        );
+        this.itemSeleccionado = null;
+  }
+
+
+  public setItemSeleccionado(item:any){
+      this.itemSeleccionado =  item;
   }
 }

@@ -34,6 +34,7 @@ export class CardTokensComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log(this.ucoip)
     this.buildForm();
     this.getAsignaciones();
     this.getTokensDisponibles();
@@ -42,13 +43,13 @@ export class CardTokensComponent implements OnInit {
   public buildForm(){
     this.form = this.fb.group({
           token: ['', Validators.required],
-          usuario: ['', Validators.required],
+          // usuario: ['', Validators.required],
           acceso: [''],
           contrasenia: ['', Validators.required]
         });
   }
 
-  
+
   get f() {
     return this.form.controls;
   }
@@ -104,6 +105,7 @@ export class CardTokensComponent implements OnInit {
     const payload = {
 
       ucoip_ucoip_id: this.ucoip.id,
+      usuario: this.ucoip.ucoip,
       ...this.form.value
     };
 

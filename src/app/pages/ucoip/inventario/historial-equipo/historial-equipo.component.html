@@ -1,12 +1,12 @@
 <div class="row mt-2">
-    
+
 <div class="btn-group btn-group-sm gap-2 mb-2" role="group">
           <button
               type="button"
               class="btn btn-sm fw-bold"
               [ngClass]="tabActiva == 'asignaciones' ? 'btn-primary' : 'btn-outline-primary'"
               (click)="tabActiva='asignaciones'">
-              ASIGNACIONES
+              <i class="fas fa-user-tag"> </i> ASIGNACIONES
           </button>
 
           <button
@@ -14,7 +14,7 @@
               class="btn btn-sm fw-bold"
               [ngClass]="tabActiva == 'modificaciones' ? 'btn-info' : 'btn-outline-info'"
               (click)="tabActiva='modificaciones'">
-              COMPRAS DE ESTE EQUIPO
+              <i class="fas fa-shopping-bag"> </i> COMPRAS DE ESTE EQUIPO
           </button>
 
           <button
@@ -22,7 +22,14 @@
               class="btn btn-sm fw-bold"
               [ngClass]="tabActiva == 'intercambios' ? 'btn-secondary' : 'btn-outline-secondary'"
               (click)="tabActiva='intercambios'">
-              CAMBIO DE EMPRESA
+              <i class="fas fa-exchange-alt"> </i> CAMBIO DE EMPRESA
+          </button>
+          <button
+              type="button"
+              class="btn btn-sm fw-bold"
+              [ngClass]="tabActiva == 'mantenimientos' ? 'btn-warning' : 'btn-outline-warning'"
+              (click)="tabActiva='mantenimientos'">
+              <i class="fas fa-cogs"> </i> MANTENIMIENTOS
           </button>
       </div>
       <div class="">
@@ -52,7 +59,7 @@
                                   </td>
                               </tr>
                               </ng-container>
-                              
+
 
                               <tr *ngIf="data?.asignacion.length == 0" >
                                 <td colspan="5" class="text-muted p-3 text-center"> Aun no se le han realizado asignaciones a este equipo </td>
@@ -73,7 +80,7 @@
                                   <th>Descripcion</th>
                                   <th>Precio</th>
                                   <th>Total</th>
-                                  <th>Compra</th>
+                                  <th class="text-center">Compra</th>
                               </tr>
                           </thead>
 
@@ -84,7 +91,7 @@
                                 <td>{{ item.detalle.descripcion }}</td>
                                 <td>{{ (item.costo_unitario ?? 0) | currency }}</td>
                                 <td>{{ (item.costo_total?? 0) | currency}}</td>
-                                <td> <a (click)="openCompra(item)" class="fw-bold badge text-bg-primary font-size-11">VER COMPRA</a></td>
+                                <td class="text-center"><button (click)="openCompra(item)" class="fw-bold badge text-bg-primary font-size-11 border-0">VER COMPRA</button></td>
                               </tr>
                               <tr>
                                 <th colspan="2"></th>
@@ -130,5 +137,117 @@
                       </table>
                   </div>
           </ng-container>
+
+          <ng-container *ngIf="tabActiva=='mantenimientos'">
+    <div class="table-responsive border rounded-4">
+        <table class="table table-sm table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 30px;"></th>
+                    <th>Fecha</th>
+                    <th>Tipo</th>
+                    <th>Realizado por</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngIf="data?.mantenimientos?.length > 0; else sinMantenimientos">
+                    <ng-container *ngFor="let m of data?.mantenimientos">
+                        <tr style="cursor: pointer;" (click)="toggleDetalle(m)">
+                            <td><i class="fa" [ngClass]="filaExpandidaId === m.id ? 'fa-chevron-down' : 'fa-chevron-right'"></i></td>
+                            <td>{{ m.fecha | date:'dd/MM/yyyy' }}</td>
+                            <td>
+                                <span class="badge fw-bold font-size-11" [ngClass]="esPreventivo(m.tipo) ? 'text-bg-info ' : 'text-bg-warning'">
+                                    {{ esPreventivo(m.tipo) ? 'Preventivo' : 'Correctivo' }}
+                                </span>
+                            </td>
+                            <td>{{ m.tecnico?.firstname ?? '' }} {{m.tecnico?.realname  ?? '' }}</td>
+                        </tr>
+                        <tr *ngIf="filaExpandidaId === m.id">
+                            <td colspan="4" class="">
+                                <div class="p-3 text-center" *ngIf="loadingDetalle">
+                                    <span class="spinner-border spinner-border-sm"></span> Cargando detalle...
+                                </div>
+                                <div class="" *ngIf="!loadingDetalle && detalle">
+                                    <div class="mb-2"  *ngIf="checklistMarcados().length">
+                                        <div class="small text-muted fw-bold mb-1">Checklist realizado</div>
+                                        <div class="row ">
+                                            <div class="col-md-4 mb-1 mt-1" *ngFor="let item of checklistMarcados()">
+                                                <i class="fa fa-check-circle text-success"></i> {{ item.etiqueta }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row g-2 mb-2" *ngIf="!esPreventivo(detalle.tipo)">
+                                        <div class="col-md-6">
+                                            <div class="small text-muted fw-bold" >Falla</div>
+                                            <div>{{ detalle.falla || '—' }}</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="small text-muted fw-bold">Diagnóstico</div>
+                                            <div>{{ detalle.diagnostico || '—' }}</div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <table class="table table-sm rounded-3 border mb-2" *ngIf="detalle.piezas?.length">
+                                        <thead>
+                                            <tr><th>Pieza</th><th>Serie ant.</th><th>Serie nueva</th><th>Cant.</th></tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let p of detalle.piezas">
+                                                <td>{{ p.descripcion }}</td>
+                                                <td>{{ p.no_serie_anterior }}</td>
+                                                <td>{{ p.no_serie_nueva }}</td>
+                                                <td>{{ p.cantidad }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <hr>
+                                    <div class="row g-2 mb-2">
+                                        <div class="col-md-6">
+                                            <div class="small text-muted fw-bold">Comentarios</div>
+                                            <div>{{ detalle.comentarios || '—' }}</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="small text-muted fw-bold">Observaciones</div>
+                                            <div>{{ detalle.observaciones || '—' }}</div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row g-2 ">
+                                        <div class="col-md-6">
+                                            <div class="small fw-bold text-muted mb-1">Evidencia antes</div>
+                                            <div class="d-flex flex-wrap gap-2">
+                                                <a *ngFor="let ev of detalle.evidencia_antes" [href]="ev.url" target="_blank">
+                                                    <img [src]="ev.url" style="width:60px;height:60px;object-fit:cover;" class="border rounded">
+                                                </a>
+                                                <span class="text-muted small" *ngIf="!detalle.evidencia_antes?.length">Sin evidencia</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="small fw-bold text-muted mb-1">Evidencia después</div>
+                                            <div class="d-flex flex-wrap gap-2">
+                                                <a *ngFor="let ev of detalle.evidencia_despues" [href]="ev.url" target="_blank">
+                                                    <img [src]="ev.url" style="width:60px;height:60px;object-fit:cover;" class="border rounded">
+                                                </a>
+                                                <span class="text-muted small" *ngIf="!detalle.evidencia_despues?.length">Sin evidencia</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </ng-container>
+
+                <ng-template #sinMantenimientos>
+                    <tr>
+                        <td colspan="4" class="text-muted p-3 text-center">Aun no se le han realizado mantenimientos a este equipo</td>
+                    </tr>
+                </ng-template>
+            </tbody>
+        </table>
+    </div>
+</ng-container>
       </div>
 </div>

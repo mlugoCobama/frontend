@@ -32,7 +32,7 @@ export class InventarioService {
 
     loadData() {
       this.http.get<ResponseInvetario>(environment.apiUrl + 'ucoip/hardware').subscribe((data) => {
-        
+
         this.dataSubject.next(data.data);
       });
     }
@@ -41,5 +41,13 @@ export class InventarioService {
       return this.http.post('/api/data', newRecord).pipe(
         tap(() => this.loadData()) // Refrescar datos después de agregar
       );
+    }
+
+    public getCatMantenimientos(): Observable<any> {
+      return this.http.get<any>(environment.apiUrl + 'ucoip/catalogos/mantenimiento');
+    }
+
+    public destroy(id: any): Observable<any> {
+      return this.http.delete(environment.apiUrl +'ucoip/hardware/'+id);
     }
 }

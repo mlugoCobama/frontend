@@ -7,7 +7,14 @@
                 <div class="d-flex align-items-center">
                     <h5 class="mb-0 card-title flex-grow-1">Inventario de Activos de Infraestructura</h5>
 
-                    <div class="flex-shrink-0 d-flex gap-1">
+                    <div class="d-flex flex-shrink-0 gap-2">
+                            <button
+                                *ngIf="filaSeleccionada"
+                                class="btn btn-danger btn-sm"
+                                (click)="confirmarEliminacion(filaSeleccionada?.id)">
+                                <i class="fas fa-trash me-1"></i>
+                                Eliminar
+                            </button>
                         <a class="btn btn-primary btn-sm" (click)="openModal()"> <i class="fas fa-plus"></i> Nuevo</a>
                     </div>
                 </div>
@@ -16,7 +23,7 @@
 
         <div class="card  shadow-sm rounded-4">
           <div class="card-body border-bottom">
-  
+
             <div class="d-flex justify-content-center" *ngIf="dataInventario.length == 0 && isLoad">
               <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
@@ -26,12 +33,13 @@
             *ngIf = "dataInventario.length > 0 && !isLoad"
             [dataInventario]="dataInventario"
             (abrirModal) = "openEdit($event)"
+            (abrirModalMantenimiento) = "openModalMantenimiento($event)"
+            (itemSeleccionado) = "setFilaSeleccionada($event)"
             [isLoad]="isLoad"
             ></app-tabla-inventario>
           </div>
         </div>
       </div>
     </div>
-  
+
   </div>
-  

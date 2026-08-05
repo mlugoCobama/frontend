@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, Pipe, SimpleChanges } from '@angular/core';
 import { FuncionesTablas } from 'src/app/core/helpers/funciones-tablas';
 import { PipeTransform } from '@angular/core';
 import { Type } from '@angular/core';
@@ -11,7 +11,7 @@ interface TableColumn<T> {
   class?: string;
   template?: (item: T) => string;
   pipe?: PipeTipo;
-  pipeArgs?: string; 
+  pipeArgs?: string;
 }
 
 @Component({
@@ -115,6 +115,13 @@ constructor(
   //   }
   // }
 
-  
 
+
+}
+
+@Pipe({ name: 'valorCelda', pure: true })
+export class ValorCeldaPipe implements PipeTransform {
+  transform(item: any, column: TableColumn<any>) {
+    return column.template ? column.template(item) : item[column.key];
+  }
 }

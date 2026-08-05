@@ -26,6 +26,7 @@ export class TokensAgenciasComponent implements OnInit {
   public empresas: any[] = [];
   public sistemas: any[] = [];
   public isLoad = true;
+  public itemSeleccionado: any =  null;
 
   ngOnInit(): void {
     this.getTokens();
@@ -39,7 +40,7 @@ export class TokensAgenciasComponent implements OnInit {
         backColorMap: {  1: 'bg-success',
                          2: 'bg-primary' },
         transform: (val:any) => ({ 1: 'DISPONIBLE', 2: 'ASIGNADO'}[val] ?? 'DESCONOCIDO')
-      
+
       },
     },
     {
@@ -75,7 +76,7 @@ export class TokensAgenciasComponent implements OnInit {
       columnIndex: 3,
       dynamic: true
     },
-    
+
 
   ];
 
@@ -172,4 +173,53 @@ export class TokensAgenciasComponent implements OnInit {
 
   }
 
+  confirmarEliminacion(id: number | string) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción no se puede deshacer',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true,
+      customClass: {
+        confirmButton: 'btn btn-danger ms-2',
+        cancelButton: 'btn btn-secondary'
+      },
+      buttonsStyling: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.eliminarRegistro(id);
+      }
+    });
+  }
+
+  eliminarRegistro(id: any) {
+      this.tokensService.delete(id).subscribe(
+            (response) => {
+              if (response.success) {
+                Swal.fire({
+                  title: "¡Eliminado!",
+                  text: "El registro ha sido eliminado correctamente.",
+                  icon: "success",
+                  showConfirmButton: false,
+                });
+                this.itemSeleccionado = null;
+                this.getTokens();
+              } else {
+                this.itemSeleccionado = null;
+                console.log(response.message);
+              }
+            },
+            (error) => {
+              this.itemSeleccionado = null;
+              console.error("Error fetching data:", error);
+            },
+          );
+          this.itemSeleccionado = null;
+    }
+
+  public setItemSeleccionado(item:any){
+      this.itemSeleccionado =  item;
+  }
 }

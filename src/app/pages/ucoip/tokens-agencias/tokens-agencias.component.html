@@ -7,13 +7,22 @@
                         <h5 class="mb-0 card-title flex-grow-1">
                             Tokens de Agencias
                         </h5>
-                        <div class="flex-shrink-0">
+                        <div class="d-flex flex-shrink-0 gap-2">
+                            <button
+                            *ngIf="itemSeleccionado"
+                                class="btn btn-danger btn-sm"
+                                (click)="confirmarEliminacion(itemSeleccionado?.id)">
+                                <i class="fas fa-trash me-1"></i>
+                                Eliminar
+                            </button>
+
                             <button
                                 class="btn btn-primary btn-sm"
                                 (click)="openModalNuevo()">
                                 <i class="fas fa-plus me-1"></i>
                                 Nuevo
                             </button>
+
                         </div>
                     </div>
                 </div>
@@ -49,6 +58,8 @@
             [filtros]="filtros"
 
             [isLoad]="isLoad"
+
+            (rowClick)="setItemSeleccionado($event)"
 
             (rowDoubleClick)="openEdit($event)">
 

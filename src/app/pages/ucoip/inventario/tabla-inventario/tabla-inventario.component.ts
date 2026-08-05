@@ -18,21 +18,21 @@ export class TablaInventarioComponent implements OnInit {
 
   selectedId: number | null = null;
 
-
+  @Output() itemSeleccionado = new EventEmitter<any>();
   @Output() abrirModal = new EventEmitter<any>();
   @Output() abrirModalMantenimiento = new EventEmitter<any>();
 
-@Input() isLoad: boolean = true;
-@Input() dataInventario: any[] = [];
-@Input() dtOptions: Config = {
-            searching: true, 
-            paging: true, 
-            info: false,
-            order: [0,'asc'],
-            language: {
-              url: '/assets/es-mx.json'
-            },
-          };
+  @Input() isLoad: boolean = true;
+  @Input() dataInventario: any[] = [];
+  @Input() dtOptions: Config = {
+              searching: true,
+              paging: true,
+              info: false,
+              order: [0,'asc'],
+              language: {
+                url: '/assets/es-mx.json'
+              },
+            };
 
   empresas: string[] = [];
   tipos: string[] = [];
@@ -59,8 +59,8 @@ export class TablaInventarioComponent implements OnInit {
                 this.dataInventario.map((x:any) => this.getEstatus(x.estado))
               )].sort();
             this.dtOptions = {
-            searching: true, 
-            paging: true, 
+            searching: true,
+            paging: true,
             info: false,
             order: [0,'asc'],
             language: {
@@ -68,60 +68,63 @@ export class TablaInventarioComponent implements OnInit {
             },
           };
           }
-  
-public openEdit(item:any){
-  this.selectedId = item.id;
- this.abrirModal.emit(item)
-}
 
-public showModalMantenimiento(item:any){
-  this.selectedId = item.id;
- this.abrirModalMantenimiento.emit(item)
-}
-
-selectRow(item: any) {
-  this.selectedId = item.id;
-}
-
-getEstatus(status:any){
-
-  let label = 'Desconcido'
-  switch (status) {
-    case 1:
-        label  = "Disponible"
-      break;
-    case 2:
-        label  = "Asignado"
-      break;
-    case 3:
-        label  = "Obsoleto"
-      break;
-    default:
-      label ='Desconocido'
-      break;
+  public openEdit(item:any){
+    this.selectedId = item.id;
+  this.abrirModal.emit(item)
   }
-  return label;
-}
 
-filtros = {
-  empresa: '',
-  tipo: '',
-  estado: ''
-};
+  public showModalMantenimiento(item:any){
+    this.selectedId = item.id;
+  this.abrirModalMantenimiento.emit(item)
+  }
 
-aplicarFiltros() {
-  this.dtElement.dtInstance.then((dtInstance: any) => {
+  selectRow(item: any) {
+    const isAlreadySelected = this.selectedId === item.id;
 
-    // Tipo
-    dtInstance.column(0).search(this.filtros.tipo);
+    this.selectedId = isAlreadySelected ? null : item.id;
+    this.itemSeleccionado.emit(isAlreadySelected ? null : item);
+  }
 
-    // Estado
-    dtInstance.column(1).search(this.filtros.estado);
+  getEstatus(status:any){
 
-    // Empresa
-    dtInstance.column(6).search(this.filtros.empresa);
+    let label = 'Desconcido'
+    switch (status) {
+      case 1:
+          label  = "Disponible"
+        break;
+      case 2:
+          label  = "Asignado"
+        break;
+      case 3:
+          label  = "Obsoleto"
+        break;
+      default:
+        label ='Desconocido'
+        break;
+    }
+    return label;
+  }
 
-    dtInstance.draw();
-  });
-}
+  filtros = {
+    empresa: '',
+    tipo: '',
+    estado: ''
+  };
+
+  aplicarFiltros() {
+    this.dtElement.dtInstance.then((dtInstance: any) => {
+
+      // Tipo
+      dtInstance.column(0).search(this.filtros.tipo);
+
+      // Estado
+      dtInstance.column(1).search(this.filtros.estado);
+
+      // Empresa
+      dtInstance.column(6).search(this.filtros.empresa);
+
+      dtInstance.draw();
+    });
+  }
 }

@@ -328,7 +328,7 @@
                 </div>
             </div>
 
-            
+
             <!-- Marca -->
             <div class="col-sm-12 col-md-12">
               <div class="form-group">
@@ -375,6 +375,7 @@
     <ng-container *ngIf="tipo == 'editar' && mostrarHistorial ">
       <app-historial-equipo
           [data]="data"
+          [checklistCatalogo] = "checklistCatalogo"
           (verCompra)="openModalOC($event)">
       </app-historial-equipo>
     </ng-container>
@@ -382,8 +383,9 @@
 </div>
 <div class="modal-footer">
 
-  <button
-   *ngIf="tipo == 'editar'"
+  <ng-container *ngIf="tipo == 'editar'">
+     <button
+
         type="button"
         class="btn btn-sm btn-outline-secondary me-auto"
         (click)="mostrarHistorial = !mostrarHistorial">
@@ -392,47 +394,49 @@
             [ngClass]="mostrarHistorial ? 'fa-history fa-rotate-180' : 'fa-history'">
         </i>
         {{ mostrarHistorial ? 'Ocultar historial' : 'Ver historial' }}
-  </button>
+    </button>
+  </ng-container>
 
-  <button 
-    type="button" 
-    class="btn btn-secondary btn-sm" 
-    data-bs-dismiss="modal" 
-    (click)="cerrarModal()">
-    Cerrar
-  </button>
 
-  <app-button
-    *ngIf="tipo == 'agregar'"
-    class="btn btn-primary btn-sm"
-    type="submit"
-    [disabled]="saving || !formModalInventario.valid"
-    (click)="save()"
-  >
-    <ng-container *ngIf="!saving">
-      <i class="fa fa-check-circle"></i> Guardar
-    </ng-container>
-    <ng-container *ngIf="saving">
-      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-      Guardando...
-    </ng-container>
-  </app-button>
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      data-bs-dismiss="modal"
+      (click)="cerrarModal()">
+      Cerrar
+    </button>
 
-  <app-button
-    *ngIf="tipo != 'agregar'"
-    class="btn btn-primary btn-sm"
-    type="submit"
-    [disabled]="saving || formModalInventario.invalid"
-    (click)="update()"
-  >
-    <ng-container *ngIf="!saving">
-      <i class="fa fa-check-circle"></i> Guardar
-    </ng-container>
-    <ng-container *ngIf="saving">
-      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-      Guardando...
-    </ng-container>
-  </app-button>
+    <button
+      *ngIf="tipo == 'agregar'"
+      class="btn btn-primary btn-sm"
+      type="submit"
+      [disabled]="saving || !formModalInventario.valid"
+      (click)="save()"
+    >
+      <ng-container *ngIf="!saving">
+        <i class="fa fa-check-circle"></i> Guardar
+      </ng-container>
+      <ng-container *ngIf="saving">
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Guardando...
+      </ng-container>
+    </button>
+
+    <button
+      *ngIf="tipo != 'agregar'"
+      class="btn btn-primary btn-sm"
+      type="submit"
+      [disabled]="saving || formModalInventario.invalid"
+      (click)="update()"
+    >
+      <ng-container *ngIf="!saving">
+        <i class="fa fa-check-circle"></i> Guardar
+      </ng-container>
+      <ng-container *ngIf="saving">
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        Guardando...
+      </ng-container>
+    </button>
 </div>
 
 

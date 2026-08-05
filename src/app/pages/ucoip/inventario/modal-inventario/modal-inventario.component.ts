@@ -20,21 +20,22 @@ import { Subscription } from 'rxjs';
 export class ModalInventarioComponent implements OnInit {
   private empresaSub?: Subscription;
   private tipoSub?: Subscription;
-  
+
   tabActiva = 'asignaciones';
   mostrarHistorial = false;
   public tipo: string = '';
 
   public data: any = [];
-  
+
   public listaDatos: any[] = [];
   licenciasSO:any[] = [];
   licenciasOffice:any[] = [];
 
   public formModalInventario!: FormGroup;
+  public checklistCatalogo:any[] = [];
 
-  public dataCatHardware: CatHardware[] = []; 
-  public empresas: any[] = []; 
+  public dataCatHardware: CatHardware[] = [];
+  public empresas: any[] = [];
   public mensajeCampoRequerido = 'Este campo es requerido';
   public event: EventEmitter<any> = new EventEmitter();
 
@@ -59,7 +60,7 @@ export class ModalInventarioComponent implements OnInit {
     if (this.tipo == 'editar') {
       this.formModalInventario.patchValue({
       'marca' : this.data.marca,
-      'empresa' :this.data.id_empresa, 
+      'empresa' :this.data.id_empresa,
       'modelo' : this.data.modelo,
       'no_serie' : this.data.no_serie,
       'tipo_cpu' : this.data.tipo_cpu,
@@ -73,7 +74,11 @@ export class ModalInventarioComponent implements OnInit {
       'cat_hardware_id' : this.data.tipo?.id,
       'estado_fisico' : this.data.estado_fisico
       });
-    } 
+
+      this.obtenerLicenciasSO(this.data.id_empresa);
+      this.obtenerLicenciasOffice(this.data.id_empresa);
+
+    }
 
    this.empresaSub  = this.formModalInventario.get('empresa')?.valueChanges.subscribe(idEmpresa=>{
         this.obtenerLicenciasSO(idEmpresa);

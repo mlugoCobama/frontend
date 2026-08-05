@@ -7,16 +7,12 @@ import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule } from '@angular
   templateUrl: './correctivo-form.component.html'
 })
 export class CorrectivoFormComponent {
-
-  /** FormGroup 'correctivo' del form padre. */
   @Input({ required: true }) group!: FormGroup;
+  @Input({ required: true }) checklistGroup!: FormGroup;
 
-  correctivoChecklist = [
-    { control: 'reinstalacion_so', label: 'Reinstalación SO' },
-    { control: 'instalacion_drivers', label: 'Instalación drivers' },
-    { control: 'configuracion', label: 'Configuración' },
-    { control: 'pruebas', label: 'Pruebas' }
-  ];
+  @Input() items: any[] = [];
+
+  @Input() loading = false;
 
   constructor(private fb: FormBuilder) {}
 
@@ -27,10 +23,13 @@ export class CorrectivoFormComponent {
   agregarPieza(): void {
     this.piezas.push(
       this.fb.group({
-        pieza: [''],
-        anterior: [''],
-        nueva: [''],
-        serie: [''],
+        descripcion: [''],
+        origen: [''],
+        no_serie_anterior: [''],
+        no_serie_nueva: [''],
+        cantidad: [''],
+        costo_unitario: [''],
+        costo_total: [''],
         observacion: ['']
       })
     );

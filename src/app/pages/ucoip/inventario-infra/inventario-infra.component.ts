@@ -11,6 +11,8 @@ import { CatHardwareService
  } from 'src/app/core/services/ucoip/cat-hardware.service';
  import { EmpresasService } from 'src/app/core/services/ucoip/empresas.service';
 import { InventarioInfraService } from 'src/app/core/services/ucoip/inventario-infra.service';
+import Swal from 'sweetalert2';
+import { ModalMantenimientoComponent } from '../inventario/modal-mantenimiento/modal-mantenimiento.component';
 
 @Component({
   selector: 'app-inventario-infra',
@@ -29,7 +31,9 @@ export class InventarioInfraComponent implements OnInit {
   public dtOptions: Config = {};
 
   public modalRef?: BsModalRef;
-  
+  public catCheckMantenimiento: any = [];
+  public filaSeleccionada: any = null;
+
   constructor(
       public inventarioService : InventarioInfraService,
       public alertService: AlertErrorService,
@@ -39,7 +43,7 @@ export class InventarioInfraComponent implements OnInit {
     ) {}
 
   ngOnInit(): void {
-    
+
     this.getAll();
     this.getEmpresas();
     this.getCatHardware();
@@ -53,19 +57,19 @@ export class InventarioInfraComponent implements OnInit {
       (data: any) => {
         if (data.success) {
           this.dataInventario = data.data;
- 
+
           this.isLoad = false;
 
           this.dtOptions = {
-              searching: true, 
-              paging: true, 
-              info: true, 
+              searching: true,
+              paging: true,
+              info: true,
               order: [[0, 'asc']],
               language: {
               url: '../assets/es-mx.json'
             }
           }
-         
+
 
         } else {
           this.alertService.alertError(data.message, data.success);
@@ -79,7 +83,7 @@ export class InventarioInfraComponent implements OnInit {
     );
   }
 
-  
+
 
   public openModal() {
     const initialState = {
@@ -87,7 +91,7 @@ export class InventarioInfraComponent implements OnInit {
         {
           data: [],
           tipo: 'agregar',
-          
+
         },
       ],
       dataCatHardware: this.dataCatHardware,
@@ -119,7 +123,7 @@ export class InventarioInfraComponent implements OnInit {
         {
           data: item,
           tipo: 'editar',
-          
+
         },
       ],
       dataCatHardware: this.dataCatHardware,
@@ -175,5 +179,103 @@ export class InventarioInfraComponent implements OnInit {
         console.error('Error al recuperar recursos', err);
       }
     });
+  }
+
+  public getCatalogoMantenimientos() {
+    this.inventarioService.getCatMantenimientos().subscribe(
+      (res: any) => {
+        if (res.status == "success") {
+          this.catCheckMantenimiento = res.data;
+        } else {
+          this.alertService.alertError(res.message, res.success);
+        }
+      },
+      (error) => {
+        this.alertService.alertError(error, false);
+      },
+    );
+  }
+
+    public openModalMantenimiento(item: any) {
+      const initialState = {
+        listaDatos: [
+          {
+            data: [],
+            tipo: "agregar",
+          },
+        ],
+        data: item,
+        // dataCatHardware: this.dataCatHardware,
+        checklistCatalogo: this.catCheckMantenimiento,
+        // empresas: this.empresas
+      };
+
+      this.modalRef = this.modalService.show(ModalMantenimientoComponent, {
+        initialState,
+        class: "modal-lg",
+        backdrop: "static",
+      });
+
+      this.modalRef.content.closeBtnName = "Close";
+      this.modalRef.content.event.subscribe((res: any) => {
+        this.isLoad = true;
+        this.dataInventario = [];
+        if (res.data) {
+          this.modalRef?.hide();
+          this.getAll();
+          // this.inventarioService.loadData();
+        }
+      });
+    }
+
+    public setFilaSeleccionada(row: any) {
+      this.filaSeleccionada = null;
+      this.filaSeleccionada = row;
+    }
+
+  confirmarEliminacion(id: number | string) {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Esta acción no se puede deshacer",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+      reverseButtons: true, // Pone el botón de confirmación del lado derecho
+      customClass: {
+        confirmButton: "btn btn-danger ms-2",
+        cancelButton: "btn btn-secondary",
+      },
+      buttonsStyling: false, // Permite usar clases personalizadas (ej. Bootstrap)
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.eliminarRegistro(id);
+      }
+    });
+  }
+
+  eliminarRegistro(id: number | string) {
+    this.inventarioService.destroy(id).subscribe(
+      (response) => {
+        if (response.success) {
+          Swal.fire({
+            title: "¡Eliminado!",
+            text: "El registro ha sido eliminado correctamente.",
+            icon: "success",
+            // timer: 2000,
+            showConfirmButton: false,
+          });
+          this.getAll();
+          this.filaSeleccionada = null;
+        } else {
+          console.log(response.message);
+          this.filaSeleccionada = null;
+        }
+      },
+      (error) => {
+        console.error("Error fetching data:", error);
+        this.filaSeleccionada = null;
+      },
+    );
   }
 }

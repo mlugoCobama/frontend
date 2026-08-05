@@ -1,12 +1,8 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-
-import { PreventivoFormComponent } from '../preventivo-form/preventivo-form.component';
-import { CorrectivoFormComponent } from '../correctivo-form/correctivo-form.component';
-import { EvidenciaUploaderComponent } from '../evidencia-uploader/evidencia-uploader.component';
 import { AlmacenService } from 'src/app/core/services/compras/almacen.service';
+import { MantenimientoService } from 'src/app/core/services/ucoip/mantenimiento.service';
 
 @Component({
   selector: 'app-modal-mantenimiento',
@@ -24,11 +20,19 @@ export class ModalMantenimientoComponent implements OnInit {
   evidenciaAntes: File[] = [];
   evidenciaDespues: File[] = [];
 
+  // checklistItems:any = [];
+  checklistCatalogo: any[] = [];
+  loadingChecklist = false;
+
+  checklistPreventivo: any[] = [];
+  checklistCorrectivo: any[] = [];
+
   constructor(
     private fb: FormBuilder,
     public modalRef: BsModalRef,
     public modalService: BsModalService,
-    private almacenService: AlmacenService
+    private almacenService: AlmacenService,
+    private mantenimientoService: MantenimientoService
   ) {}
 
   ngOnInit(): void {
@@ -36,55 +40,26 @@ export class ModalMantenimientoComponent implements OnInit {
     this.tipo = this.data?.tipo ?? 'agregar';
     this.buildForm();
 
-    if (this.data?.hardware_id) {
-      this.form.patchValue({ hardware_id: this.data.hardware_id });
+    if (this.data?.id) {
+      this.form.patchValue({ hardware_id: this.data.id });
     }
+
+    console.log(this.checklistCatalogo)
+    this.construirChecklistCompleto();
   }
 
   buildForm(): void {
     this.form = this.fb.group({
       hardware_id: [null, Validators.required],
-      tipo: ['preventivo', Validators.required],
+      tipo: ['1', Validators.required],
       fecha: [this.fechaHoy(), Validators.required],
       realizado_por: ['', Validators.required],
-      duracion: [null],
-
-      preventivo: this.fb.group({
-        limpieza_externa: [false],
-        limpieza_interna: [false],
-        limpieza_ventiladores: [false],
-        limpieza_disipadores: [false],
-        limpieza_fuente: [false],
-        pasta_termica: [false],
-        revision_ram: [false],
-        revision_disco: [false],
-        revision_conexiones: [false],
-        revision_cables: [false],
-        revision_usb: [false],
-        revision_red: [false],
-        revision_teclado: [false],
-        revision_mouse: [false],
-        revision_monitor: [false],
-        actualizacion_so: [false],
-        actualizacion_drivers: [false],
-        actualizacion_antivirus: [false],
-        limpieza_temporales: [false],
-        optimizacion: [false],
-        comentarios: [''],
-        observaciones: ['']
-      }),
-
-      correctivo: this.fb.group({
-        falla: [''],
-        diagnostico: [''],
-        reinstalacion_so: [false],
-        instalacion_drivers: [false],
-        configuracion: [false],
-        pruebas: [false],
-        piezas: this.fb.array([]),
-        comentarios: [''],
-        observaciones: ['']
-      })
+      checklist: this.fb.group({}),
+      comentarios: [''],
+      observaciones: [''],
+      falla: ['', Validators.required],
+      diagnostico: ['', Validators.required],
+      piezas: this.fb.array([])
     });
   }
 
@@ -112,25 +87,50 @@ export class ModalMantenimientoComponent implements OnInit {
     this.modalRef.hide();
   }
 
-  save(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-
-    this.saving = true;
-
-    // Se arma FormData para poder enviar también las imágenes de evidencia,
-    // que antes se guardaban en memoria pero nunca se emitían.
-    const payload = new FormData();
-    payload.append('data', JSON.stringify(this.form.value));
-    this.evidenciaAntes.forEach(f => payload.append('evidencia_antes[]', f, f.name));
-    this.evidenciaDespues.forEach(f => payload.append('evidencia_despues[]', f, f.name));
-
-    this.event.emit(payload);
-    this.modalRef.hide();
+save(): void {
+  if (this.form.invalid) {
+    this.form.markAllAsTouched();
+    return;
   }
 
+  this.saving = true;
+
+  const tipoActual = this.form.get('tipo')!.value;
+  const itemsDelTipoActual = String(tipoActual) === '1'
+    ? this.checklistPreventivo
+    : this.checklistCorrectivo;
+
+  const checklistPayload = itemsDelTipoActual.map((item: any) => ({
+    cat_checklist_mantenimiento_id: item.id,
+    completado: this.checklistFormGroup.get(item.codigo_control)?.value ? 1 : 0
+  }));
+
+  const payload = new FormData();
+  payload.append('data', JSON.stringify({
+    ...this.form.value,
+    checklist: checklistPayload // sobreescribe el checklist crudo con el ya mapeado
+  }));
+
+  this.evidenciaAntes.forEach(f => payload.append('evidencia_antes[]', f, f.name));
+  this.evidenciaDespues.forEach(f => payload.append('evidencia_despues[]', f, f.name));
+
+  this.mantenimientoService.save(payload).subscribe({
+    next: (response) => {
+      this.saving = false;
+
+      if (response.status === 'success') {
+        this.event.emit(response.data);
+        this.modalRef.hide();
+      } else {
+        console.log('Error', response.message ?? 'Algo salió mal', 'error', 'danger');
+      }
+    },
+    error: (error) => {
+      this.saving = false;
+      console.log('Error', `Error al guardar: ${error?.error?.message ?? error}`, 'error', 'danger');
+    }
+  });
+}
   update(): void {
     this.save();
   }
@@ -154,4 +154,26 @@ export class ModalMantenimientoComponent implements OnInit {
         }
     );
   }
+
+  get checklistFormGroup(): FormGroup {
+      return this.form.get('checklist') as FormGroup;
+    }
+
+    private construirChecklistCompleto(): void {
+    const checklistGroup = this.checklistFormGroup;
+    console.log(this.checklistCatalogo);
+    this.checklistCatalogo
+      .filter((item: any) => item.activo === '1' || item.activo === 1 || item.activo === true)
+      .forEach((item: any) => {
+        const valorPrevio = this.data?.checklist?.[item.codigo_control] ?? false;
+        checklistGroup.addControl(item.codigo_control, this.fb.control(valorPrevio));
+      });
+    this.checklistPreventivo = this.checklistCatalogo.filter(
+      (item: any) => String(item.tipo) === '1'
+    );
+    this.checklistCorrectivo = this.checklistCatalogo.filter(
+      (item: any) => String(item.tipo) === '2'
+    );
+  }
+
 }

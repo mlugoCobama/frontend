@@ -1,42 +1,72 @@
 <div [formGroup]="group">
-    <div class="card rounded-4  shadow-sm">
+    <div class="card rounded-4 shadow-sm">
         <div class="card-header rounded-4 fw-bold">Correctivo</div>
         <div class="card-body">
-            <label>Falla</label>
-            <textarea rows="2" class="form-control form-control-sm" formControlName="falla"></textarea>
-            <label class="mt-2">Diagnóstico</label>
-            <textarea rows="2" class="form-control form-control-sm" formControlName="diagnostico"></textarea>
 
-            <div class="row mt-2">
-                <div class="col-md-3" *ngFor="let item of correctivoChecklist">
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" [formControlName]="item.control">
-                        <label class="form-check-label">{{ item.label }}</label>
+            <label>Falla*</label>
+            <textarea rows="2" class="form-control form-control-sm" formControlName="falla"></textarea>
+            <div
+                class="invalid-feedback"
+                *ngIf="group.get('falla')?.invalid && group.get('falla')?.touched">
+                Describe la falla.
+            </div>
+            <label class="mt-2">Diagnóstico *</label>
+            <textarea rows="2" class="form-control form-control-sm" formControlName="diagnostico"></textarea>
+            <div
+                class="invalid-feedback"
+                *ngIf="group.get('falla')?.invalid && group.get('falla')?.touched">
+                Describe tu diagnostico
+            </div>
+            <hr>
+
+            <div [formGroup]="checklistGroup" class="row">
+                <div class="text-muted small" *ngIf="loading">Cargando checklist...</div>
+
+                <ng-container *ngIf="!loading">
+                    <div class="col-md-3" *ngFor="let item of items">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" [formControlName]="item.codigo_control">
+                            <label class="form-check-label">{{ item.etiqueta }}</label>
+                        </div>
                     </div>
-                </div>
+
+                    <div class="text-muted small" *ngIf="!items.length">
+                        No hay ítems de checklist configurados para correctivo.
+                    </div>
+                </ng-container>
             </div>
 
             <hr>
-            <button type="button" class="btn btn-sm btn-primary" (click)="agregarPieza()">
-                Agregar pieza
-            </button>
-
+            <div class="text-end">
+              <button type="button" class="btn btn-sm btn-primary" (click)="agregarPieza()">
+                  Agregar pieza
+              </button>
+            </div>
             <div formArrayName="piezas" class="mt-3">
                 <div *ngFor="let pieza of piezas.controls; let i = index" [formGroupName]="i"
                     class="border rounded p-2 mb-2">
                     <div class="row g-2">
                         <div class="col">
-                            <input class="form-control form-control-sm" formControlName="pieza" placeholder="Pieza">
+                            <input class="form-control form-control-sm" formControlName="descripcion" placeholder="Descripción">
+                        </div>
+                        <!-- <div class="col">
+                            <input class="form-control form-control-sm" formControlName="origen" placeholder="Origen">
+                        </div> -->
+                        <div class="col">
+                            <input class="form-control form-control-sm" formControlName="no_serie_anterior" placeholder="Serie anterior">
                         </div>
                         <div class="col">
-                            <input class="form-control form-control-sm" formControlName="anterior" placeholder="Anterior">
+                            <input class="form-control form-control-sm" formControlName="no_serie_nueva" placeholder="Serie nueva">
                         </div>
                         <div class="col">
-                            <input class="form-control form-control-sm" formControlName="nueva" placeholder="Nueva">
+                            <input class="form-control form-control-sm" formControlName="cantidad" placeholder="Cantidad">
+                        </div>
+                        <!-- <div class="col">
+                            <input class="form-control form-control-sm" formControlName="costo_unitario" placeholder="Costo unitario">
                         </div>
                         <div class="col">
-                            <input class="form-control form-control-sm" formControlName="serie" placeholder="Serie">
-                        </div>
+                            <input class="form-control form-control-sm" formControlName="costo_total" placeholder="Costo total">
+                        </div> -->
                         <div class="col">
                             <input class="form-control form-control-sm" formControlName="observacion" placeholder="Observación">
                         </div>
@@ -49,10 +79,6 @@
                 </div>
             </div>
 
-            <label>Comentarios</label>
-            <textarea rows="3" class="form-control form-control-sm" formControlName="comentarios"></textarea>
-            <label class="mt-2">Observaciones</label>
-            <textarea rows="3" class="form-control form-control-sm" formControlName="observaciones"></textarea>
         </div>
     </div>
 </div>

@@ -1,7 +1,6 @@
 import { Component, Input, OnInit, EventEmitter } from "@angular/core";
 import { CatSoftwareService } from "src/app/core/services/ucoip/cat-software.service";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { CatUnidadesMedidasService } from "src/app/core/services/compras/unidadesMedidas/cat-unidades-medidas.service";
 
 import Swal from "sweetalert2";
 
@@ -97,7 +96,7 @@ export class ModalSoftwareComponent {
           this.formSoftware.reset();
           Swal.fire({
             title: "Guardado",
-            text: "Unidad registrada correctamente",
+            text: "Licencia registrada correctamente",
             buttonsStyling: false,
             icon: "success",
             customClass: {

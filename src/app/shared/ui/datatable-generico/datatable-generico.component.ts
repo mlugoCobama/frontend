@@ -52,9 +52,9 @@ export class DatatableGenericoComponent implements OnInit, OnChanges {
   @Input() columnas: ColumnaConfig[] = [];
   @Input() filtros:  FiltroConfig[]  = [];
   @Input() dtOptions: Config = {
-    searching: true, 
-    paging: true, 
-    info: true, 
+    searching: true,
+    paging: true,
+    info: true,
     order: [[0, 'asc']],
     language: {
       url: '../assets/es-mx.json'
@@ -92,7 +92,7 @@ export class DatatableGenericoComponent implements OnInit, OnChanges {
       // Inicializar valor vacío
       if (!(f.field in this.valoresFiltros)) {
         this.valoresFiltros[f.field] = '';
-        
+
       }
       // Extraer opciones dinámicas de los datos
       if (f.dynamic) {
@@ -120,10 +120,11 @@ export class DatatableGenericoComponent implements OnInit, OnChanges {
 
   // ─── Filas ───────────────────────────────────────────────────
 
-  selectRow(item: any): void {
-    this.selectedId = item.id;
-    this.rowClick.emit(item);
-  }
+selectRow(item: any): void {
+  const isAlreadySelected = this.selectedId === item.id;
+  this.selectedId = isAlreadySelected ? null : item.id;
+  this.rowClick.emit(isAlreadySelected ? null : item);
+}
 
   openEdit(item: any): void {
     this.selectedId = item.id;
