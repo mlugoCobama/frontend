@@ -1,23 +1,23 @@
 <div class="card mb-3 rounded-4 shadow-sm">
   <div class="card-header rounded-4 bg-light text-dark" [ngClass]="solicitudCompra?.motivo_revision
-    ? 'd-flex align-items-center justify-content-between' 
+    ? 'd-flex align-items-center justify-content-between'
     : 'text-center'">
-   <strong> <i class="fas fa-info-circle"></i> Información general de la solicitud de compra. </strong> 
+   <strong> <i class="fas fa-info-circle"></i> Información general de la solicitud de compra. </strong>
    <button *ngIf="solicitudCompra?.motivo_revision" class="btn btn-sm btn-outline-light" (click)="clickEditarSolicitud()"> <i class="fas fa-edit"></i> Modificar Solicitud</button>
   </div>
   <div class="card-body">
     <div class="row"> <!--Inicia div datos solicitud -->
     <div class="col-md-6">
-      <p><strong>Folio: </strong>{{ solicitudCompra.folio }} <span class="text-danger fw-bold"  *ngIf ="solicitudCompra.requiere_anticipo" > REQUIERE ANTICIPO </span></p> 
+      <p><strong>Folio: </strong>{{ solicitudCompra.folio }} <span class="text-danger fw-bold"  *ngIf ="solicitudCompra.requiere_anticipo" > REQUIERE ANTICIPO </span></p>
       <p >
         <strong>Usuario solicita: </strong>{{ solicitudCompra.usuario_solicita }}
       </p>
       <p><strong>Empresa: </strong>{{solicitudCompra.empresa}}</p>
       <p> <strong>Estatus: </strong>  <span [ngClass]="'badge rounded-pill font-size-11 ' + solicitudCompra.claseEstado "> {{solicitudCompra.estado}} </span>
       <p *ngIf="solicitudCompra.razon_cancelacion" class="alert alert-danger p-1"><strong> Razón de cancelación: </strong>{{solicitudCompra.razon_cancelacion}}</p>
-      <p *ngIf="solicitudCompra.tipo === 2"> <strong>Orden de trabajo: </strong> {{ solicitudCompra.orden_trabajo }} 
-        &nbsp; 
-        <span *ngIf="solicitudCompra.formato_orden" (click)= "verArchivos(solicitudCompra.formato_orden)" class="btn btn-sm btn-info"><i class="bx bx-info-circle"></i> Ver  </span>   
+      <p *ngIf="solicitudCompra.tipo === 2"> <strong>Orden de trabajo: </strong> {{ solicitudCompra.orden_trabajo }}
+        &nbsp;
+        <span *ngIf="solicitudCompra.formato_orden" (click)= "verArchivos(solicitudCompra.formato_orden)" class="btn btn-sm btn-info"><i class="bx bx-info-circle"></i> Ver  </span>
       </p>
       <p *ngIf="solicitudCompra.motivo_revision" class="alert alert-warningn p-1"><strong class="text-danger"> Correcciones sugeridas: </strong>{{solicitudCompra.motivo_revision}} </p>
     </div>
@@ -27,7 +27,7 @@
       <p *ngIf="solicitudCompra.tipo === 2"> <strong>Folio Requisicion: </strong> {{ solicitudCompra.folio_requisicion ?? 'No especificada' }}</p>
       <p><strong>Fecha: </strong>{{ solicitudCompra.fecha}}</p>
       <p *ngIf="solicitudCompra.c_c === 0">
-        <strong>U. Destino: </strong>{{solicitudCompra.usuario_destino}} 
+        <strong>U. Destino: </strong>{{solicitudCompra.usuario_destino}}
       </p>
       <p *ngIf="solicitudCompra.c_c != 0">
         <strong>Centro de costos: </strong> {{ centrosCostos[solicitudCompra.c_c-1].Descripcion }}

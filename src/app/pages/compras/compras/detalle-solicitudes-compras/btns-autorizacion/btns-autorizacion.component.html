@@ -1,6 +1,6 @@
 <!-- botones aceptar o rechazar orden -->
- <div class="card border rounded shadow-sm" *ngIf = "isLoad && tienePermiso('view panel auto orden compra') ">
-    <div class="card-header bg-primary text-white text-center">
+ <div class="card border rounded-4 shadow-sm" *ngIf = "isLoad && tienePermiso('view panel auto orden compra') ">
+    <div class="card-header rounded-4 bg-light text-dark text-center">
       <strong> Da click en el botón "Aceptar" para marcar la solicitud como aprobada o "Rechazada" para marcarla como rechazada. </strong>
     </div>
     <div class="card-body ">
@@ -14,7 +14,7 @@
             <ng-container *ngIf="!working; else spinner">
               Orden de compra <strong> Rechazada </strong>
             </ng-container>
-              
+
             </button>
 
             <button
@@ -26,7 +26,7 @@
             <ng-container *ngIf="!working; else spinner">
               <strong> Cambiar de proveedor </strong>
             </ng-container>
-              
+
             </button>
 
             <button
@@ -38,7 +38,7 @@
             <ng-container *ngIf="!working; else spinner">
                 Orden de compra <strong>  Autorizada </strong>
             </ng-container>
-              
+
             </button>
         </div>
     </div>

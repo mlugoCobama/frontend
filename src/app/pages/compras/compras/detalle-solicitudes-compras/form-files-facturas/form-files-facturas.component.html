@@ -6,8 +6,8 @@
 <app-panel-entregas *ngIf="ordenCompra && ordenCompra?.estatus > 2" [solicitudCompra]="solicitudCompra"
   [ordenCompra]="ordenCompra" (actualizarStatus1)="actualizadorEstatus()"></app-panel-entregas>
 
-<div class="card border rounded shadow-sm" *ngIf="solicitudCompra.estatus >= enEsts.Autorizado && ordenCompra?.tipo_pago">
-  <div class="card-header bg-primary text-center text-white"
+<div class="card border rounded-4 shadow-sm" *ngIf="solicitudCompra.estatus >= enEsts.Autorizado && ordenCompra?.tipo_pago">
+  <div class="card-header rounded-4 bg-light text-dark text-center"
     *ngIf="solicitudCompra.estatus >= enEsts.Autorizado && ordenCompra?.tipo_pago">
     <p *ngIf="solicitudCompra.estatus != enEsts.Finalizada" class="m-0">
       <strong> Adjunta los siguientes archivos para la orden de compra: </strong>
@@ -31,7 +31,7 @@
             </div>
           </div>
 
-          <div class="card border">
+          <div class="card border rounded">
             <div class="card-body">
               <div class="tab-content mt-3">
                 <!-- Tab subir Facturas -->
@@ -80,7 +80,7 @@
                       <label for="comprobante_pago" class="col-form-label"><strong>Comprobante de pago *</strong></label>
                     </div>
                     <div class="col">
-                      <input class="form-control form-control-sm" id="comprobante_pago" type="file" 
+                      <input class="form-control form-control-sm" id="comprobante_pago" type="file"
                       accept="application/pdf,image/jpeg,image/png" (change)="onFileChange1($event, 'comprobante_pago')" />
                     </div>
                   </form>
@@ -132,7 +132,7 @@
           [metodoPago]="metodoPago" (getOrdenCompra)="getOrdenCompra()"></app-datos-facturas>
       </div>
       </div>
-      
+
   </div>
 </div>
 

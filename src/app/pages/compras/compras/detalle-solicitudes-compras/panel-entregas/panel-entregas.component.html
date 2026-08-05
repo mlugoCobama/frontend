@@ -1,5 +1,5 @@
-<div class="card border rounded shadow-sm" [hidden]="ordenCompra.surtido_solicitado != 1">
-  <div class=" card-header bg-primary text-white text-center">
+<div class="card border rounded-4 shadow-sm" [hidden]="ordenCompra.surtido_solicitado != 1">
+  <div class="card-header rounded-4 bg-light text-dark text-center">
     <!-- <p *ngIf = "mostrarBtnSolicitud() && tienePermiso('view btn save precios')" class="m-0"> <strong>  Da click en el siguiente botón si deseas solicitar el surtido de tu orden de compra  </strong> </p> -->
     <p *ngIf="!mostrarBtnSolicitud()" class="m-0"> <strong> Carga en el siguiente formulario tus acuses o comprobantes
         de ENTREGA cuando el proveedor te entregue lo solicitado </strong></p>
@@ -12,7 +12,7 @@
   </div> -->
 
 
-    <div class="card border" *ngIf="!entregaCompleta">
+    <div class="card border rounded-4" *ngIf="!entregaCompleta">
       <div class="card-body p-2 gap-2">
         <ul class="nav nav-pills justify-content-center gap-2">
           <li class="nav-item">
@@ -29,9 +29,9 @@
     </div>
     <div [hidden]="currentStep !== 1">
       <!-- <h5>Recepción</h5> -->
-      <div class="card border">
-        <div class="card-header bg-primary text-white">
-          <a class="fw-bold text-white">
+      <div class="card border rounded-4">
+        <div class="card-header rounded-4 bg-light text-dark text-center">
+          <a class="fw-bold">
             Recepción de insumos
           </a>
         </div>
@@ -93,7 +93,7 @@
 
 
 
-      <div class="card-body border p-2">
+      <div class="card-body border rounded-4 p-2">
         <div *ngIf="!entregaCompleta" class="d-flex"
           [ngClass]="{'justify-content-between' : currentStep > 1, 'justify-content-end' : currentStep == 1, }">
           <button class="btn btn-sm btn-secondary" *ngIf="currentStep > 1" (click)="prevStep()">
@@ -131,4 +131,4 @@
     </div>
   </div>
 </div>
-    
+

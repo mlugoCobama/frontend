@@ -1,6 +1,6 @@
-<div class="card border" *ngIf="mostrarDtsFac">
-  <div class="card-header bg-primary text-center text-white">
-   <strong> Datos de facturación</strong>  
+<div class="card rounded-4 border" *ngIf="mostrarDtsFac">
+  <div class="card-header rounded-4 bg-light text-dark text-center">
+   <strong> Datos de facturación</strong>
   </div>
   <div class="card-body">
     <div >
@@ -15,7 +15,7 @@
           {{ factura.receptor?.domicilioFiscalReceptor || 'Esperando Factura' }}
         </p>
         <p><strong>USO CFDI: </strong> {{ factura.receptor?.usoCFDIDesc }} ({{ factura.receptor?.usoCFDI || 'Esperando Factura' }})</p>
-        
+
       </div>
       <div class="col-6 text-end">
         <h5><strong>EMISOR: </strong></h5>
@@ -26,9 +26,9 @@
         </p>
         <p>
           <strong>REGIMEN FISCAL: </strong>
-          {{ factura.emisor?.regimenFiscalDesc }} ({{ factura.emisor?.regimenFiscal || 'Esperando Factura' }}) 
+          {{ factura.emisor?.regimenFiscalDesc }} ({{ factura.emisor?.regimenFiscal || 'Esperando Factura' }})
         </p>
-        
+
       </div>
       <div class="table-responsive">
         <table
@@ -102,7 +102,7 @@
               </div>
             </td> -->
             <ng-template #noArchivo>
-              
+
               <span class="badge badge-pill fs-4 badge-soft-secondary"><i class="fas fa-ban"></i></span>
             </ng-template>
             <ng-template #noComplemento>

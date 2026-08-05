@@ -1,5 +1,5 @@
-<div class="card rounded shadow-lg border m-0">
-  <div class="card-header text-center text-white bg-primary">
+<div class="card rounded-4 shadow-lg border m-0">
+  <div class="card-header rounded-4 bg-light text-dark text-center">
     <strong> Detalles de solicitud </strong>
   </div>
 
@@ -15,7 +15,7 @@
     class="table table-sm table-responsive m-0"
     id="tableCompraInsumos"
     *ngIf="!isLoad"
-  > 
+  >
     <thead class="table-light">
       <tr>
         <th>Cant.</th>
@@ -24,7 +24,7 @@
         <th>Observaciones</th>
         <th *ngIf = "solicitudCompra.multiUnidad" >AT</th>
         <!-- <th>-</th> -->
-        <th *ngFor="let prov of cotProv" class="text-center" > 
+        <th *ngFor="let prov of cotProv" class="text-center" >
           <strong> {{ prov.proveedores_id.nombre }} </strong> <i [ngClass]="{'bg-success text-white': totals['precio_' + prov.proveedores_id.id] === totalMasBajo}"></i>
         </th>
       </tr>
