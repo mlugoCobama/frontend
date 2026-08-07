@@ -1,7 +1,7 @@
 <div class="card rounded-4 shadow-sm" [hidden] = "cotProv?.length === 0" >
-  <div class="card-header  rounded-4 bg-light text-dark text-center">
+  <div class="card-header  rounded-4 bg-primary text-white fw-semibold text-center">
    <strong>  Marca la casilla de la fila con el proveedor seleccionado para generar la
-    orden de compra </strong> 
+    orden de compra </strong>
   </div>
   <!-- <div class="d-flex justify-content-center pt-3" *ngIf="cotProv?.length === 0 && !isLoad">
       <div class="spinner-border" role="status">
@@ -11,7 +11,7 @@
   <div class="card-body">
     <div *ngIf ="cotProv?.length > 0" class="row">
   <!-- <div class="alert alert-warning text-center" role="alert">
-    
+
   </div> -->
   <div class="col-1" *ngIf="solicitudCompra?.estatus >= enEsts.OrdenCompra"></div>
   <div class="col-10">
@@ -21,9 +21,10 @@
       </div>
     </div>
     <!--Tabla documentos cotizaciones-->
+    <div class="border rounded-4">
     <table
       *ngIf="isLoad"
-      class="table table-sm table-hover rounded border"
+      class="table table-sm table-hover rounded-4 border"
     >
       <thead class="table-light" >
         <tr class="text-center">
@@ -76,9 +77,9 @@
               </a>
             </div>
           </td>
-          <td *ngIf="solicitudCompra?.estatus <= 3 && tienePermiso('view btn reenviar correo')"> 
-            <button 
-              (click)="reenviarSC(prov)" 
+          <td *ngIf="solicitudCompra?.estatus <= 3 && tienePermiso('view btn reenviar correo')">
+            <button
+              (click)="reenviarSC(prov)"
               [disabled]="prov?.loading"
               class="btn btn-sm btn-primary"
               title="Reenviar correo de solicitud de cotización al proveedor">
@@ -101,6 +102,8 @@
         </tr>
       </tbody>
     </table>
+    </div>
+
     <!-- form Observaciones -->
     <app-form-datos-entrega-oc
     #formDatosOC
@@ -170,7 +173,7 @@
       </ng-template>
       </button>
     </div>
-    <button 
+    <button
       *ngIf = "!ordenCompra && proveedorSeleccionado && tienePermiso('view btn generar orden')"
       type="submit"
       class="btn btn-sm btn-primary"

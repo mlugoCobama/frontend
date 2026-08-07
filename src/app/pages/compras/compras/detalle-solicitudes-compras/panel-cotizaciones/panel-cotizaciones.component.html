@@ -1,9 +1,9 @@
-<div class="card border rounded shadow-lg">
-  <div class="card-header bg-primary d-flex justify-content-between">
+<div class="card border rounded-4 shadow-lg">
+  <div class="card-header rounded-4 bg-primary d-flex justify-content-between fw-semibold">
     <strong class="text text-white">Seleccione los proveedores con los que se realizará la cotización.</strong>
 
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   class="btn btn-sm btn-light text-primary"
                   (click)="agregarProveedor()"
                   [disabled]="isDisabled">
@@ -12,24 +12,24 @@
   </div>
   <div class="card-body">
     <form class="row g-2" [formGroup]="formProveedoresCotizacion">
-      
+
       <!-- FormArray de Proveedores -->
       <div class="col-12">
         <label class="form-label form-label-sm mb-2">
           <strong>Proveedores: *</strong>
         </label>
-        
+
         <div class="row g-2" formArrayName="proveedores">
-          <div  *ngFor="let proveedor of proveedoresArray.controls; let i = index" 
+          <div  *ngFor="let proveedor of proveedoresArray.controls; let i = index"
           [formGroupName]="i"
             class="col-md-4">
-            
+
             <div class="card border shadow-sm h-100">
               <div class="card-body p-2">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                   <small class="text-muted fw-bold">Proveedor {{ i + 1 }}</small>
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     class="btn btn-sm btn-outline-danger"
                     (click)="eliminarProveedor(i)"
                     [disabled]="proveedoresArray.length === 1 || isDisabled"
@@ -37,13 +37,13 @@
                     <i class="fas fa-trash"></i>
                   </button>
                 </div>
-                
-                <!-- <select 
-                  class="form-select form-select-sm" 
+
+                <!-- <select
+                  class="form-select form-select-sm"
                   [formControlName]="i"
                   [id]="'proveedor' + i"
                   aria-label="Seleccionar proveedor"
-                  
+
                   >
                   <option value="" disabled>Selecciona una opción</option>
                   <option *ngFor="let item of proveedores" [value]="item?.id">
@@ -65,8 +65,8 @@
                     </select>
 
                 <div *ngIf="proveedoresArray.at(i).get('proveedor_id').touched || submitted">
-                  <div 
-                    class="text-danger form-text small" 
+                  <div
+                    class="text-danger form-text small"
                     *ngIf="proveedoresArray.at(i).get('proveedor_id').errors?.['required']">
                     Selecciona un proveedor
                   </div>
@@ -85,8 +85,8 @@
                           </option>
                         </select>
                         <div *ngIf="proveedoresArray.at(i).get('contacto_id').touched || submitted">
-                      <div 
-                        class="text-danger form-text small" 
+                      <div
+                        class="text-danger form-text small"
                         *ngIf="proveedoresArray.at(i).get('contacto_id').errors?.['required']">
                         Selecciona un contacto del proveedor
                       </div>
@@ -101,8 +101,8 @@
           <!-- <div class="col-md-4">
             <div class="card border-success h-100 bg-light">
               <div class="card-body p-2 d-flex align-items-center justify-content-center">
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   class="btn btn-sm btn-primary"
                   (click)="agregarProveedor()"
                   [disabled]="isDisabled">
@@ -117,16 +117,16 @@
       <!-- Campo de Consideraciones -->
       <div class="col-md-12 mt-3">
         <label for="consideraciones" class="form-label">Consideraciones:</label>
-        <textarea 
-          class="form-control" 
-          formControlName="consideraciones" 
-          id="consideraciones" 
+        <textarea
+          class="form-control"
+          formControlName="consideraciones"
+          id="consideraciones"
           rows="3">
         </textarea>
-        
+
         <div *ngIf="solicitudCotizacionFormControl.consideraciones.touched || submitted">
-          <div 
-            class="text-danger form-text" 
+          <div
+            class="text-danger form-text"
             *ngIf="solicitudCotizacionFormControl.consideraciones.errors?.['required']">
             Consideraciones es requerido.
           </div>
@@ -135,18 +135,18 @@
 
       <!-- Botón de envío -->
       <div class="col-sm-12 d-flex justify-content-end mt-3">
-        <button 
-          class="btn btn-sm btn-primary" 
-          type="button" 
-          (click)="enviarSolicitudCotizacion()" 
+        <button
+          class="btn btn-sm btn-primary"
+          type="button"
+          (click)="enviarSolicitudCotizacion()"
           [disabled]="isDisabled">
           <span>
-           <i class="bx bxs-paper-plane " [ngClass] = "{ 'bx-fade-up' : isDisabled }" ></i> {{ isDisabled ? 'Enviando' : 'Solicitar Cotización' }} 
+           <i class="bx bxs-paper-plane " [ngClass] = "{ 'bx-fade-up' : isDisabled }" ></i> {{ isDisabled ? 'Enviando' : 'Solicitar Cotización' }}
           </span>
-          <!-- <span 
-            *ngIf="isDisabled" 
-            class="spinner-grow spinner-grow-sm ms-2" 
-            role="status" 
+          <!-- <span
+            *ngIf="isDisabled"
+            class="spinner-grow spinner-grow-sm ms-2"
+            role="status"
             aria-hidden="true">
           </span> -->
           <!-- <span class="visually-hidden" *ngIf="isDisabled">

@@ -31,10 +31,10 @@ export class DispersionesDieselService {
     return this.http.post(environment.apiUrl + `compras/CatalogoUnidades/NotificarDispersion`, payload, {headers});
   }
 
-  descargarPlantilla(id:any): Observable<Blob> {
-    return this.http.get(environment.apiUrl +'compras/DispersionesDiesel/Plantilla/'+id,
+  descargarPlantilla(id:any, numDispersion: number): Observable<Blob> {
+    return this.http.get(environment.apiUrl +'compras/DispersionesDiesel/Plantilla/'+id+'/'+numDispersion,
       {
-        headers: headers, 
+        headers: headers,
         responseType: 'blob'
       }
     );

@@ -8,7 +8,7 @@ import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-com
   styleUrl: "./dispersiones.component.css",
 })
 export class DispersionesComponent implements OnInit {
-  
+
   constructor(
     private dispersiones: DispersionesDieselService,
     private alertasService: SwalComprsServiceService,
@@ -18,7 +18,7 @@ export class DispersionesComponent implements OnInit {
     this.getDisperiones();
   }
 
-  tabActiva: 'pendientes' | 'guardadas' | 'realizadas' = 'pendientes';
+  tabActiva: 'pendientes' | 'guardadas' |'parciales'| 'realizadas' = 'pendientes';
 
   public fechaInicio = '';
   public fechaFin = '';
@@ -26,10 +26,12 @@ export class DispersionesComponent implements OnInit {
   pendientes = [];
   realizadas = [];
   guardadas = [];
+  parciales = [];
 
   pendientesOriginal = [];
   guardadasOriginal = [];
   realizadasOriginal = [];
+  parcialesOriginal = [];
 
   public mostrar: boolean = false;
   public dispersion: any;
@@ -55,7 +57,7 @@ export class DispersionesComponent implements OnInit {
     this.getDisperiones();
   }
 
-  private getDisperiones() {
+  public getDisperiones() {
     this.loading = true;
     this.dispersiones.getAll().subscribe(
       (response) => {
@@ -63,10 +65,11 @@ export class DispersionesComponent implements OnInit {
           this.pendientesOriginal = response.data.pendientes;
           this.guardadasOriginal = response.data.guardadas;
           this.realizadasOriginal = response.data.realizadas;
-
+          this.parcialesOriginal = response.data.parciales;
           this.pendientes = [...this.pendientesOriginal];
           this.guardadas = [...this.guardadasOriginal];
           this.realizadas = [...this.realizadasOriginal];
+          this.parciales = [...this.parcialesOriginal];
           this.loading = false;
         } else {
           this.loading = false;
@@ -80,6 +83,7 @@ export class DispersionesComponent implements OnInit {
     );
   }
 
+
   public dataDispersion: any = [];
   public loadingDispersion: boolean = false;
 
@@ -90,8 +94,7 @@ export class DispersionesComponent implements OnInit {
       (response) => {
         if (response) {
           this.loadingDispersion = false;
-          this.dataDispersion = response.data;
-          // console.log(this.dataDispersion);
+          this.dataDispersion = response.data.dispersiones;
         } else {
           this.loadingDispersion = false;
           this.alertasService.mostrarAlerta( "Error", response.message, "error", "danger",);
@@ -112,6 +115,9 @@ export class DispersionesComponent implements OnInit {
       (x:any) => this.estaEnRango(x.fecha_dispersion)
     );
     this.realizadas = this.realizadasOriginal.filter(
+      (x:any) => this.estaEnRango(x.fecha_dispersion)
+    );
+    this.parciales = this.parcialesOriginal.filter(
       (x:any) => this.estaEnRango(x.fecha_dispersion)
     );
   }
@@ -145,5 +151,6 @@ export class DispersionesComponent implements OnInit {
     this.pendientes = [...this.pendientesOriginal];
     this.guardadas = [...this.guardadasOriginal];
     this.realizadas = [...this.realizadasOriginal];
+    this.parciales = [...this.parcialesOriginal];
   }
 }

@@ -233,12 +233,12 @@ export class CatUnidadesComponent implements OnInit {
     this.totalDatos = this.data.length;
   }
 
-  private getCatVehiculos(intercompania:any) {
+  public getCatVehiculos(intercompania:any) {
     this.mostrar = false;
     this.intercompania = intercompania;
     this.isLoad = true;
     this.showTable = false;
-    
+
     this.unidades.getVehiculos(intercompania, this.concepto).subscribe(
       (response) => {
         if (response) {
@@ -337,7 +337,7 @@ export class CatUnidadesComponent implements OnInit {
         this.getCatVehiculos(intercompania);
         this.intercompania = intercompania;
     }
-    
+
     this.empresas = this.rawEmpresas;
   }
 
@@ -456,7 +456,7 @@ export class CatUnidadesComponent implements OnInit {
 
 
   cambiarPanel(value:any){
-    this.panelActivo =  value; 
+    this.panelActivo =  value;
   }
 
   tienePermiso(permiso: string = null): boolean {

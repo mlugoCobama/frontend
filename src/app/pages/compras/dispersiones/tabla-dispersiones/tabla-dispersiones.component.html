@@ -3,10 +3,8 @@
 
     <!-- Información -->
     <div class="col-12 col-lg-10">
-
         <!-- Primera fila -->
         <div class="row g-2 mb-2">
-
             <div class="col-6 col-md-4 col-xl-4  ">
                 <div class="border rounded-4 px-3 py-2 h-100">
                     <small class="text-muted d-block">Empresa</small>
@@ -15,7 +13,6 @@
                     </span>
                 </div>
             </div>
-
             <div class="col-6 col-md-4 col-xl-4 ">
                 <div class="border rounded-4 px-3 py-2 h-100">
                     <small class="text-muted d-block">Folio</small>
@@ -24,9 +21,6 @@
                     </span>
                 </div>
             </div>
-
-            
-
             <div class="col-12 col-md-4 col-xl-4  ">
                 <div class="border rounded-4 px-3 py-2 h-100">
                     <small class="text-muted d-block">Solicita</small>
@@ -35,12 +29,9 @@
                     </span>
                 </div>
             </div>
-
         </div>
-
         <!-- Segunda fila -->
         <div class="row g-2">
-
           <div class="col-12 col-md-6 col-xl-3  ">
                 <div class="border rounded-4 px-3 py-2 h-100">
                     <small class="text-muted d-block">Fecha Solicitud</small>
@@ -49,7 +40,6 @@
                     </span>
                 </div>
             </div>
-
             <div class="col-12 col-md-6 col-xl-3  ">
                 <div class="border rounded-4 px-3 py-2 h-100">
                     <small class="text-muted d-block">Periodo</small>
@@ -60,7 +50,6 @@
                     </span>
                 </div>
             </div>
-
             <div class="col-6 col-md-6 col-xl-3  ">
                 <div class="border rounded-4 px-3 py-2 h-100">
                     <small class="text-muted d-block">Precio combustible</small>
@@ -69,32 +58,29 @@
                     </span>
                 </div>
             </div>
-
             <div
-                *ngIf="solicitud.fecha_dispersion"
+                *ngIf="this.dispersionActual?.get('fechaDispersion')?.value"
                 class="col-6 col-md-6 col-xl-3  ">
 
                 <div class="border border-success rounded-4 px-3 py-2 h-100">
                     <small class="text-success d-block">
                         Fecha dispersión
                     </small>
-
                     <span class="fw-semibold text-success">
-                        {{ solicitud.fecha_dispersion | date:'dd/MM/yyyy' }}
+                      {{ this.dispersionActual?.get('fechaDispersion')?.value | date:'dd/MM/yyyy' }}
+                        <!-- {{ solicitud.fecha_dispersion | date:'dd/MM/yyyy' }} -->
                     </span>
                 </div>
-
             </div>
-
         </div>
-
     </div>
+
 
     <!-- Botones -->
     <div class="col-12 col-lg-2">
         <div class="d-flex flex-column gap-2 h-100 justify-content-end">
               <button
-                        *ngIf="solicitud.estatus >= 2"
+                       *ngIf="this.dispersionActual?.get('guardada')?.value == true"
                         (click)="descargarPlantilla()"
                         type="button"
                         class="btn btn-outline-success btn-sm"
@@ -109,7 +95,7 @@
                         {{ descargando ? 'Descargando...' : 'Descargar plantilla' }}
                     </button>
                     <button
-                        *ngIf="solicitud.estatus == 2"
+                        *ngIf="this.dispersionActual?.get('notificada')?.value == false && this.dispersionActual?.get('guardada')?.value == true"
                         (click)="notificarDispersion()"
                         type="button"
                         class="btn btn-outline-info btn-sm"
@@ -124,8 +110,8 @@
                         {{ notificando ? 'Notificando...' : 'Notificar Dispersion' }}
                     </button>
                     <button
-                      *ngIf="solicitud.estatus == 1"
-                      (click)="dispersion()"
+                      *ngIf="this.dispersionActual?.get('guardada')?.value == false"
+                      (click)="guardarDispersionActual()"
                       type="button"
                       class="btn btn-primary btn-sm"
                       [disabled]="deshabilitado">
@@ -145,12 +131,29 @@
     </div>
 </div>
 
+<ul class="nav nav-pills mb-3 gap-2">
+    <li
+        class="nav-item"
+        *ngFor="let item of noDispersiones; let i = index">
+        <button
+            type="button"
+            class="nav-link btn-sm fw-semibold rounded-4 border-primary"
+            [disabled]=""
+            [class.active]="tabSeleccionado === i"
+            (click)="seleccionarTab(i)">
+            DISPERSIÓN - {{ i + 1 }}
+        </button>
+    </li>
+</ul>
 
-
-<form [formGroup]="form">
+<ng-container *ngFor="let item of noDispersiones; let i = index">
+<form [formGroup]="dispersionActual" *ngIf="tabSeleccionado === i && dispersionActual">
   <div class="table-responsive rounded-4 border">
     <table class="table table-sm table-bordered table-hover align-middle">
       <thead class="table-light">
+        <tr>
+          <th class="text-center py-2" colspan="11">DISPERSIÓN - {{ i + 1 }}</th>
+        </tr>
         <tr>
           <th class="text-center">Eco</th>
           <th>Vehículo</th>
@@ -160,13 +163,13 @@
           <th>Litros</th>
           <th>Precio</th>
           <th>Saldo Solicitado</th>
-          <th>{{solicitud.fecha_dispersion ? 'Saldo Actual' : 'Saldo'}}</th>
+          <th>Limite Autorizado</th>
+          <th>{{solicitud.fecha_dispersion ? 'Saldo Actual' : 'Saldo En Tarjeta'}}</th>
           <th>{{solicitud.fecha_dispersion ? 'Saldo Dispersado' : 'Saldo a Dispersar'}}</th>
         </tr>
       </thead>
       <tbody formArrayName="vehiculos">
-        <tr
-          *ngFor="let grupo of vehiculosArray.controls; let i = index"
+        <tr *ngFor="let grupo of vehiculosArray.controls; let i = index"
           [formGroupName]="i">
           <td class="fw-bold text-center">
             {{ grupo.get('eco')?.value }}
@@ -189,8 +192,18 @@
           <td class="text-end fw-bold"> {{grupo.get('litros')?.value | number}} </td>
           <td class="text-end fw-bold"> {{solicitud.precio_combustible | currency}}</td>
           <td class="text-end fw-bold"> {{grupo.get('saldoSolicitado')?.value | currency}}</td>
-          
-            <ng-container *ngIf="!solicitud.fecha_dispersion">
+          <td class="border">
+          <input
+
+                    formControlName="saldoAutorizado"
+                    class="form-control form-control-sm text-end"
+                    mask="separator.2"
+                    thousandSeparator=","
+                    prefix="$ "
+                    (input)="calcularSaldoDispersar(i)"
+                    >
+          </td>
+            <ng-container *ngIf="this.dispersionActual?.get('guardada')?.value == false">
                 <td>
                 <input
                     formControlName="saldoActual"
@@ -199,16 +212,16 @@
                     thousandSeparator=","
                     prefix="$ "
                     (input)="calcularSaldoDispersar(i)"
-                    >   
+                    >
                 </td>
             </ng-container>
-            <ng-container *ngIf="solicitud.fecha_dispersion">
+            <ng-container *ngIf="this.dispersionActual?.get('guardada')?.value == true">
                 <td class="text-end fw-bold text-success">
                     {{grupo.get('saldoActual')?.value ?? 0 | currency}}
                 </td>
             </ng-container>
-            
-            
+
+
           <td class="text-end fw-bold text-primary">{{ grupo.get('saldoDispersar')?.value | currency }}</td>
 
         </tr>
@@ -219,6 +232,7 @@
         <tr>
           <td colspan="7" class="text-end">Totales</td>
           <td class="text-end fw-bold">{{ totalSolicitado | currency }}</td>
+          <td class="text-end fw-bold">{{ totalAutorizado | currency }}</td>
           <td class="text-end fw-bold">{{ totalActual | currency }}</td>
           <td class="text-end fw-bold">{{ totalDispersar | currency }}</td>
         </tr>
@@ -226,3 +240,6 @@
     </table>
   </div>
 </form>
+
+</ng-container>
+

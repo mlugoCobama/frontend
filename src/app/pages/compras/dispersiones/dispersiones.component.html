@@ -64,6 +64,17 @@
             <button
                 type="button"
                 class="btn btn-sm fw-semibold"
+                [class.btn-warning]="tabActiva === 'parciales'"
+                [class.btn-outline-warning]="tabActiva !== 'parciales'"
+                (click)="tabActiva = 'parciales'">
+                PARCIALES
+                <span class="badge bg-danger ms-2 fw-semibold">
+                    {{ parciales.length }}
+                </span>
+            </button>
+            <button
+                type="button"
+                class="btn btn-sm fw-semibold"
                 [class.btn-success]="tabActiva === 'realizadas'"
                 [class.btn-outline-success]="tabActiva !== 'realizadas'"
                 (click)="tabActiva = 'realizadas'">
@@ -135,6 +146,36 @@
                 </div>
             </div>
 
+            <div *ngIf="tabActiva === 'parciales'">
+                <div class="table-responsive border rounded-4" style="overflow-y: scroll; height: 20rem;">
+                    <table class="table table-sm table-hover align-middle">
+                        <thead class="table-light thead-sticky">
+                            <tr>
+                                <th>Folio</th>
+                                <th>Fecha</th>
+                                <th>Empresa</th>
+                                <th>Solicita </th>
+                                <th>Fecha Guardado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngIf="parciales.length === 0">
+                                <td colspan="5" class="text-center py-5 text-muted">
+                                    No existen registros
+                                </td>
+                            </tr>
+                            <tr *ngFor="let item of parciales" (click)="seleccionar(item, $event)">
+                                <td><strong>{{ item.folio }}</strong></td>
+                                <td>{{ item.fecha | date:'dd/MM/yyyy' }}</td>
+                                <td>{{ item.empresa ?? 'No disponible' }}</td>
+                                <td>{{ item.solicita ?? 'No disponible' }}</td>
+                                <td><strong>{{ (item.fecha_dispersion | date:'dd/MM/yyyy') ?? 'N/D'}}</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <div *ngIf="tabActiva === 'realizadas'">
                 <div class="table-responsive border rounded-4" style="overflow-y: scroll; height: 20rem;">
                     <table class="table table-sm table-hover align-middle">
@@ -187,8 +228,9 @@
                     Cargando información de la dispersión...
                 </div>
             </div>
-            <app-tabla-dispersiones *ngIf="!loadingDispersion && dataDispersion.length > 0" [vehiculos]="dataDispersion"
-                [solicitud]="dispersion"></app-tabla-dispersiones>
+            <app-tabla-dispersiones *ngIf="!loadingDispersion && dataDispersion.length > 0" [dispersionesData]="dataDispersion"
+                [solicitud]="dispersion"
+                (actualizarDispersiones)="getDisperiones()"></app-tabla-dispersiones>
         </ng-container>
 
 
