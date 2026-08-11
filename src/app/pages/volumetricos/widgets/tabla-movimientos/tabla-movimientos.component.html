@@ -1,59 +1,50 @@
 <!-- tabla-dinamica.component.html -->
 
 <div class="d-flex justify-content-end mb-3">
-
-    <input
-        type="text"
-        class="form-control form-control-sm w-25"
-        [placeholder]="placeholder"
-        (keyup)="buscar($event)"
-    >
-
+  <input
+    type="text"
+    class="form-control form-control-sm w-25"
+    [placeholder]="placeholder"
+    (keyup)="buscar($event)"
+  />
 </div>
 
-<div class="table-responsive" style="overflow-y: auto; height: 20rem">
-
-<table class="table table-hover table-striped">
-
-    <thead class="table-dark thead-sticky">
-
-        <tr>
-
-            <th
-                *ngFor="let col of columns"
-                (click)="ordenar(col.key)"
-                style="cursor:pointer"
-                [class]="col.class"
-            >
-
-                {{col.label}}
-
-                <i [class]="tabla.getIcono(col.key)"></i>
-
-            </th>
-
-        </tr>
-
+<div class="card border">
+  <div class="rounded-4">
+    <table class="table table-dark mb-0 table-fixed">
+    <thead class="thead-dark">
+      <tr>
+        <th
+          *ngFor="let col of columns; trackBy: trackByColumn"
+          (click)="ordenar(col.key)"
+          style="cursor: pointer"
+          [class]="col.class"
+        >
+          {{ col.label }}
+          <i [class]="tabla.getIcono(col.key)"></i>
+        </th>
+      </tr>
     </thead>
+  </table>
+  </div>
 
+
+<!-- 2. Viewport solo para el Cuerpo con Scroll -->
+<cdk-virtual-scroll-viewport itemSize="48" class="table-container rounded-4">
+  <table class="table table-hover table-striped mb-0 table-fixed rounded-4">
     <tbody>
-
-        <tr *ngFor="let item of datosFiltrados">
-
-            <td
-                *ngFor="let col of columns"
-                [class]="col.class"
-            >
-
-            <span [innerHTML]="obtenerValor(item,col)">
-            </span>
-
-            </td>
-
-        </tr>
-
+      <tr *cdkVirtualFor="let item of datosFiltrados; trackBy: trackById">
+        <td
+          *ngFor="let col of columns; trackBy: trackByColumn"
+          [class]="col.class"
+        >
+          <span [innerHTML]="obtenerValor(item, col)"></span>
+        </td>
+      </tr>
     </tbody>
-
-</table>
+  </table>
+</cdk-virtual-scroll-viewport>
 </div>
-<p> Mostrando {{datosFiltrados.length}} de {{data.length}}</p>
+
+
+<p class="mt-2">Mostrando {{ datosFiltrados.length }} de {{ data.length }}</p>

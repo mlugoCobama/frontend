@@ -18,7 +18,7 @@ export const MENU: MenuItem[] = [
       {
         id: 2,
         label: "Inventario",
-        
+
         parentId: 1,
         permission: "view inventario",
         subItems: [
@@ -87,7 +87,7 @@ export const MENU: MenuItem[] = [
         label: "Servicios",
         // link: "/ucoip/gestion-servicios/dashboard",
         parentId: 1,
-        permission: "view modulo servicios", 
+        permission: "view modulo servicios",
         subItems: [
           {
             id: 36,
@@ -125,7 +125,7 @@ export const MENU: MenuItem[] = [
   {
     id: 7,
     label: "Compras",
-    icon: "bx-tone",
+    icon: "bx bx-shopping-bag",
     permission: "view modulo compras",
     subItems: [
       {
@@ -199,7 +199,7 @@ export const MENU: MenuItem[] = [
         parentId: 7,
         permission: "view dispersion diesel",
       },
-      
+
     ],
   },
   // MACRO TALLER
@@ -310,7 +310,7 @@ export const MENU: MenuItem[] = [
             parentId: 32,
             permission: "view submodulo comisiones flotillas nissan",
           },
-          
+
           {
             id: 10,
             label: "Financiamiento",
@@ -451,7 +451,7 @@ export const MENU: MenuItem[] = [
             parentId: 32,
             permission: "view submodulo comisiones flotillas renault",
           },
-          
+
           {
             id: 10,
             label: "Financiamiento",
@@ -898,6 +898,13 @@ export const MENU: MenuItem[] = [
         link: "/volumetricos/",
         parentId: 45,
         permission: "view sub modulo visualizar volumetricos",
+      },
+      {
+        id: 14,
+        label: "Generar reporte",
+        link: "/volumetricos/genera-reporte",
+        parentId: 45,
+        permission: "view submodulo generar reportes volumetricos",
       },
     ],
   },

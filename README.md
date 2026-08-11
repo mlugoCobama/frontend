@@ -87,3 +87,10 @@ Se integra el nuevo módulo de Gestión de Comisiones con los siguientes apartad
 * **Control de Asignación de Compras:** Se revisó y optimizó la lógica de asignación de compras, asegurando la correcta vinculación de insumos tanto a nivel de Equipos como a nivel de Usuarios individuales.
 
 ---
+## **Fecha de liberación:**- 11 de agosto de 2026
+
+### Volumetricos
+* **Convertir excel a json:** Se intrega la funcionalidad de poder convertir un formato de excel a un json valido
+* **Visor de reporte** Se grega un card para visualizar las sumotoria de volumenes por consceptos de autoconsumo, trapasos y movimientos sin cfdi
+- Se agregan nuevos valores, como un nombre de empresa legibe y fecha de periodo reportado
+- Se integra actualizacion de registros y archivos ademas de borrado fisico

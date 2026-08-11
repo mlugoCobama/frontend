@@ -1,0 +1,66 @@
+<div class="card p-3 card-custom bg-white rounded-4 shadow-sm border">
+  <!-- Título -->
+  <div class="card-title d-flex align-items-center justify-content-between mb-2">
+    <span>
+      <i class="fas fa-th-large  text-dark me-1"></i>
+       ACLARACIONES - {{ title  | uppercase }}
+    </span>
+    <div>
+        <span class="text-dark fw-semibold">
+        {{ (volumenSinCfdi + volumenTraspaso + volumenAutoconsumo) | number:'1.0-2' }} L
+      </span>
+      <small class="text-muted fs-6">Total acumulado</small>
+    </div>
+
+    <!-- <span class="badge bg-light text-dark border">Litros</span> -->
+  </div>
+
+  <!-- Valor Total Acumulado -->
+  <!-- <h3 class="fw-bold mb-3">
+    <span class="text-dark">
+      {{ (volumenSinCfdi + volumenTraspaso + volumenAutoconsumo) | number:'1.0-2' }} L
+    </span>
+    <small class="text-muted fs-6">Total acumulado</small>
+  </h3> -->
+
+  <!-- Desglose por categoría -->
+
+
+  <div class="row g-2 text-center">
+    <!-- Sin CFDI -->
+    <div class="col-4 border-end">
+      <div class="text-warning mb-1">
+        <i class="fas fa-file-invoice-dollar fs-5"></i>
+      </div>
+      <span class="d-block text-muted fw-semibold">Sin CFDI</span>
+      <h4 class="fw-bold text-dark mb-0 mt-1">
+        {{ volumenSinCfdi | number:'1.0-0' }}
+      </h4>
+      <small class="text-muted" style="font-size: 0.75rem;">Lts</small>
+    </div>
+
+    <!-- Traspaso -->
+    <div class="col-4 border-end">
+      <div class="text-info mb-1">
+        <i class="fas fa-truck-loading fs-5"></i>
+      </div>
+      <span class="d-block text-muted  fw-semibold">Traspaso</span>
+      <h4 class="fw-bold text-dark mb-0 mt-1">
+        {{ volumenTraspaso | number:'1.0-0' }}
+      </h4>
+      <small class="text-muted" style="font-size: 0.75rem;">Lts</small>
+    </div>
+
+    <!-- Autoconsumo -->
+    <div class="col-4">
+      <div class="text-primary mb-1">
+        <i class="fas fa-gas-pump fs-5"></i>
+      </div>
+      <span class="d-block text-muted  fw-semibold">Autoconsumo</span>
+      <h4 class="fw-bold text-dark mb-0 mt-1">
+        {{ volumenAutoconsumo | number:'1.0-0' }}
+      </h4>
+      <small class="text-muted" style="font-size: 0.75rem;">Lts</small>
+    </div>
+  </div>
+</div>

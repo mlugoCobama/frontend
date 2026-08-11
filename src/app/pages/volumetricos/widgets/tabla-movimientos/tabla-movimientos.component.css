@@ -1,5 +1,19 @@
-.thead-sticky th {
+.table-container {
+  height: 20rem; /* Mantiene la altura fija anterior */
+  width: 100%;
+}
+
+/* .thead-sticky th {
     position: sticky;
     top: 0;
     z-index: 1;
+} */
+.table-fixed {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.table-container {
+  height: 20rem;
+  width: 100%;
 }

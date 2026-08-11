@@ -22,12 +22,16 @@ export class VisorVolumetricosService {
     return this.http.post(environment.apiUrl + 'volumetricos/volumetricos',data);
   }
 
+  public parse(data): Observable<any> {
+    return this.http.post(environment.apiUrl + 'volumetricos/generacion',data);
+  }
+
   public update(id, data): Observable<any> {
-    return this.http.put(environment.apiUrl + 'volumetricos/volumetricos/'+id,data);
+    return this.http.post(environment.apiUrl + 'volumetricos/volumetricos/'+id,data);
   }
 
 
-  public delete(): Observable<any> {
-    return this.http.delete(environment.apiUrl + 'volumetricos/volumetricos');
+  public delete(id:any): Observable<any> {
+    return this.http.delete(environment.apiUrl + 'volumetricos/volumetricos/'+id);
   }
 }

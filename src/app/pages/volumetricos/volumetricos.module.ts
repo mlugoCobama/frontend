@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { VolumetricosRoutingModule } from './volumetricos-routing.module';
 import { CargaVolumenesComponent } from './carga-volumenes/carga-volumenes.component';
 import { VisorReporteVolumenesComponent } from './visor-reporte-volumenes/visor-reporte-volumenes.component';
@@ -17,6 +17,9 @@ import { TablaMovimientosComponent } from './widgets/tabla-movimientos/tabla-mov
 import { DecimalPipe, DatePipe, CurrencyPipe } from '@angular/common';
 import { UIModule } from 'src/app/shared/ui/ui.module';
 import { ReporteVolumenesComponent } from './reporte-volumenes/reporte-volumenes.component';
+import { ParserVolumetricosComponent } from './parser-volumetricos/parser-volumetricos.component';
+import { CardAclaracionesComponent } from './widgets/card-aclaraciones/card-aclaraciones.component';
+import { A11yModule } from "@angular/cdk/a11y";
 
 @NgModule({
   declarations: [
@@ -28,7 +31,9 @@ import { ReporteVolumenesComponent } from './reporte-volumenes/reporte-volumenes
     IdentificationCardComponent,
     TabsResumenesComponent,
     TablaMovimientosComponent,
-    ReporteVolumenesComponent
+    ReporteVolumenesComponent,
+    ParserVolumetricosComponent,
+    CardAclaracionesComponent
   ],
   imports: [
     CommonModule,
@@ -39,9 +44,11 @@ import { ReporteVolumenesComponent } from './reporte-volumenes/reporte-volumenes
     FormsModule,
     ReactiveFormsModule,
     UIModule,
-  ],
+    ScrollingModule,
+    A11yModule
+],
   providers: [
-    DecimalPipe,  
+    DecimalPipe,
     DatePipe,
     CurrencyPipe
   ]

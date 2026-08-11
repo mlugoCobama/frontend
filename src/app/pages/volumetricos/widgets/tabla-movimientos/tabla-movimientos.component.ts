@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, Pipe, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, Pipe, SimpleChanges } from '@angular/core';
 import { FuncionesTablas } from 'src/app/core/helpers/funciones-tablas';
 import { PipeTransform } from '@angular/core';
 import { Type } from '@angular/core';
@@ -17,7 +17,8 @@ interface TableColumn<T> {
 @Component({
   selector: 'app-tabla-movimientos',
   templateUrl: './tabla-movimientos.component.html',
-  styleUrl: './tabla-movimientos.component.css'
+  styleUrl: './tabla-movimientos.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class TablaMovimientosComponent<T> implements OnInit, OnChanges {
@@ -45,6 +46,14 @@ constructor(
     if(changes['data']){
       this.inicializar();
     }
+  }
+
+  trackById(index: number, item: any): any {
+    return item.id || index;
+  }
+
+  trackByColumn(index: number, col: any): string {
+    return col.key;
   }
 
   inicializar() {

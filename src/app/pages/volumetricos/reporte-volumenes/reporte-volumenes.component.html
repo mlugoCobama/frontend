@@ -1,30 +1,73 @@
 <ng-container *ngIf="!jsonPreview">
     <app-card-top
-    [title]="'Reportes de controles volumétricos'">
+    [title]="'Reportes de controles volumétricos'"
+    [hasButtons] ="true"
+    [showBtnEditar] ="(itemSeleccionado ? true : false) && tienePermiso('view btn delete reportes volumetricos')"
+    [showBtnEliminar] ="(itemSeleccionado ? true : false) && tienePermiso('vview btn update reportes volumetricos')"
+    (actualizar)="openUpdate()"
+    (eliminar)="eliminarRegistro()"
+    >
+
     </app-card-top>
 
     <app-tabla-generica
     [isLoad] = "isLoad"
     [data]="reportes"
     [columnas]="columnas"
-    [acciones]="acciones">
+    [acciones]="acciones"
+    (itemSeleccionado) = "setItemSeleccionado($event)"
+    >
 
     </app-tabla-generica>
 </ng-container>
 
 
+
 <ng-container *ngIf="jsonPreview">
-    <div class="card">
-        <div class="card-body">
+    <div class="card  rounded-4 shadow-sm">
+        <div class="card-body ">
                 <div class="d-flex justify-content-between aling-items-center">
                 <p class="card-title">Detalles del reporte</p>
-                <button class="btn btn-sm btn-dark text-white" (click)="volver()">Volver</button>
+                <button class="btn btn-sm btn-dark text-white" (click)="volver()"> <i class="fas fa-arrow-left me-1"></i>Volver</button>
             </div>
         </div>
     </div>
-    <app-visor-reporte-volumenes
-    [dataJson]="jsonPreview"
-    >
-    </app-visor-reporte-volumenes>
+    <ng-container *ngIf="isOpenPanelEdicion ">
+      <app-parser-volumetricos
+      [idReporte] = "itemSeleccionado?.id"
+      (finished)="volver()"
+      >
+
+      </app-parser-volumetricos>
+  </ng-container>
+    <div class="card rounded-4 shadow-sm">
+      <div class="card-header rounded-4 bg-primary text-white fw-semibold d-flex justify-content-between">
+       <span>
+          Datos del reporte <ng-container *ngIf="isOpenPanelEdicion">- Antiguos</ng-container>
+       </span>
+       <div class=" d-flex gap-3">
+      <button type="button" class="btn btn-outline-light btn-sm fw-semibold" (click)="descargarExcel()">
+            <i class="fas fa-file-excel me-1"></i> Descarga Plantilla
+        </button>
+
+        <button type="button" class="btn btn-outline-light btn-sm fw-semibold" (click)="descargarJson()">
+            <i class="fas fa-download me-1"></i> Descargar JSON
+        </button>
+
+        <button type="button" class="btn btn-outline-light btn-sm fw-semibold" (click)="descargarXml()" *ngIf="tienePermiso('view xml options')">
+            <i class="fas fa-download me-1"></i> Descargar XML
+        </button>
+
+    </div>
+      </div>
+      <div class="card-body">
+            <app-visor-reporte-volumenes
+              [dataJson]="jsonPreview"
+              >
+            </app-visor-reporte-volumenes>
+      </div>
+    </div>
+
 </ng-container>
+
 

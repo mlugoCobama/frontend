@@ -1,20 +1,20 @@
-<ul class="nav nav-tabs mb-4 border-bottom fw-semibold" role="tablist">
+<ul class="nav nav-pills rounded-4 mb-2 border-bottom fw-semibold gap-2" role="tablist">
   <li class="nav-item">
-    <button class="nav-link"
+    <button class="nav-link border shadow-sm"
             [class.active]="activeTab === 'general'"
             (click)="setTab('general')">
       <i class="fas fa-info-circle me-1"></i> Datos Generales
     </button>
   </li>
   <li class="nav-item">
-    <button class="nav-link"
+    <button class="nav-link border shadow-sm"
             [class.active]="activeTab === 'recep'"
             (click)="setTab('recep')">
       <i class="fas fa-download me-1"></i> Recepciones
     </button>
   </li>
   <li class="nav-item">
-    <button class="nav-link"
+    <button class="nav-link border shadow-sm"
             [class.active]="activeTab === 'entreg'"
             (click)="setTab('entreg')">
       <i class="fas fa-upload me-1"></i> Entregas

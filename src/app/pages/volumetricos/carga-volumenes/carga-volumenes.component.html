@@ -3,8 +3,8 @@
     [title]="'Carga de Reportes de controles volumétricos'">
     </app-card-top>
 <div class="card  rounded-4 shadow-sm mt-4">
-  <div class="card-header  rounded-4 bg-primary text-white">
-    Formulario de carga
+  <div class="card-header  rounded-4 bg-primary text-white fw-semibold">
+    Formulario de carga de JSON de controles volumetricos
   </div>
   <div class="card-body">
     <form [formGroup]="form" class="row g-3">
@@ -50,5 +50,6 @@
       <!-- <pre class="bg-light p-3 border rounded">{{ jsonPreview | json }}</pre> -->
       <app-visor-reporte-volumenes [dataJson]="jsonPreview"></app-visor-reporte-volumenes>
     </div>
+
   </div>
 </div>

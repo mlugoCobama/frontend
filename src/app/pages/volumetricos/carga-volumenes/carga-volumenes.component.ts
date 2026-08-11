@@ -27,7 +27,7 @@ export class CargaVolumenesComponent implements OnInit {
   ngOnInit(): void {
     this.form = this.fb.group({
       archivo: [null, Validators.required],
-      empresa: [null, Validators.required],
+      empresa: ["", Validators.required],
     });
 
     this.getEmpresas();
@@ -137,11 +137,11 @@ export class CargaVolumenesComponent implements OnInit {
     const intercompania = usuarioActivo.intercompania;
     const enpresa = usuarioActivo.empresa;
     const enpresas = usuarioActivo.empresas;
-    
+
     this.empresas = this.rawEmpresas;
   }
 
-  
+
 
   guardar() {
   if (this.form.invalid) {
@@ -154,7 +154,7 @@ export class CargaVolumenesComponent implements OnInit {
         this.form.markAllAsTouched();
         this.isLoading = false;
     return;
-    
+
   }
   this.isLoading = true;
   const formData = new FormData();
@@ -165,18 +165,29 @@ export class CargaVolumenesComponent implements OnInit {
   formData.append('descripcion', this.jsonPreview.DescripcionInstalacion)
   formData.append('fecha_reporte', this.jsonPreview.FechaYHoraReporteMes)
 
+
   this.volumetricos.store(formData)
     .subscribe({
       next: (resp) => {
-       this.alertasService.mostrarAlerta(
-          "Listo",
-          `Archivo Guardado Correctamente`,
-          "success",
-          "success"
-        );
-        this.form.reset();
-        this.jsonPreview = null;
-        this.isLoading = false;
+        if(resp.success){
+          this.alertasService.mostrarAlerta(
+            "Guardado Correctamente",
+            `El archivo fue almacenado y esta disponible para consultarlo`,
+            "success",
+            "success"
+          );
+          this.form.reset();
+          this.jsonPreview = null;
+          this.isLoading = false;
+        }else{
+          this.alertasService.mostrarAlerta(
+            "Ocurrio un error inesperado",
+            `Ocurrio un error al guardarlo`,
+            "error",
+            "danger"
+          );
+        }
+
       },
       error: (err) => {
         console.log(err);
@@ -184,4 +195,6 @@ export class CargaVolumenesComponent implements OnInit {
       }
     });
 }
+
+
 }

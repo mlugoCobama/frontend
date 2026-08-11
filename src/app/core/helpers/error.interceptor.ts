@@ -35,7 +35,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                 Swal.fire({
                     icon: 'info',
                     title: 'Lo sentimos',
-                    text: 'La función que intentas usar no está disponible',
+                    text: 'El recurso al que intentas acceder no está disponible',
                     confirmButtonText: 'OK'
                 });
             }

@@ -1,0 +1,117 @@
+<!-- form.component.html -->
+ <app-card-top
+    [title]="'Generar Reporte de Controles Volumétricos'">
+    </app-card-top>
+<div class="card  rounded-4 shadow-sm mt-4">
+  <div class="card-header  rounded-4 bg-primary text-white fw-semibold">
+    <i class="fas fa-file-excel me-1"> </i> Realice la carga de su plantilla
+  </div>
+  <div class="card-body">
+    <form [formGroup]="form" class="row g-3">
+      <!-- Input File -->
+
+            <!-- Select Empresa -->
+      <div class="col-12">
+        <label for="empresa" class="form-label">Empresa</label>
+        <select id="empresa" class="form-select form-select-sm" formControlName="empresa">
+          <option value="">Seleccione una empresa</option>
+          <option *ngFor="let emp of empresas" [value]="emp.intercompania">{{ emp.name }}</option>
+        </select>
+        <div *ngIf="form.get('empresa')?.invalid && form.get('empresa')?.touched" class="text-danger mt-1">
+          La empresa es obligatoria
+        </div>
+      </div>
+
+      <div class="col-6">
+        <label for="archivo" class="form-label">Plantilla .XLSX</label>
+        <input id="archivo" type="file" class="form-control form-control-sm" (change)="onFileChange($event)" />
+        <div *ngIf="form.get('archivo')?.invalid && form.get('archivo')?.touched" class="text-danger mt-1">
+          El archivo es obligatorio
+        </div>
+      </div>
+
+      <!-- <div class="col-6">
+        <label for="formato" class="form-label">Exportar a formato:</label>
+        <select id="formato" class="form-select form-select-sm" formControlName="formato">
+          <option value="">Seleccione una opcion</option>
+          <option value="json">JSON</option>
+          <option value="xml">XML</option>
+        </select>
+        <div *ngIf="form.get('formato')?.invalid && form.get('formato')?.touched" class="text-danger mt-1">
+          El formato es obligatorio
+        </div>
+      </div> -->
+
+
+
+      <!-- Botones -->
+      <div *ngIf="!jsonPreview" class="col-12 d-flex justify-content-end mt-3">
+        <button type="button" class="btn btn-primary btn-sm" (click)="generarArchivo()" [disabled]="isLoading">
+          <ng-container *ngIf="!isLoading; else loading">
+            <i class="fas fa-save me-1"></i> Procesar
+          </ng-container>
+          <ng-template #loading>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Trabajando...
+          </ng-template>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+<div *ngIf="jsonPreview" class="card  rounded-4 shadow-sm mt-4">
+  <div class="card-header rounded-4 bg-primary text-white fw-semibold d-flex justify-content-between align-items-center">
+    <div> <i class="fas fa-clipboard-check  me-1"> </i> Valida que tu información sea correcta </div>
+    <div class=" d-flex gap-3">
+      <button  *ngIf="!idReporte" type="button" class="btn btn-outline-light btn-sm fw-semibold" (click)="guardar()" [disabled]="isLoading">
+          <ng-container *ngIf="!isLoading; else loading">
+            <i class="fas fa-save"></i> Guardar
+          </ng-container>
+          <ng-template #loading>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Trabajando...
+          </ng-template>
+        </button>
+
+        <button *ngIf="idReporte" type="button" class="btn btn-outline-light btn-sm fw-semibold" (click)="update()" [disabled]="isLoading">
+          <ng-container *ngIf="!isLoading; else loading">
+            <i class="fas fa-save"></i> Actualizar
+          </ng-container>
+          <ng-template #loading>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Trabajando...
+          </ng-template>
+        </button>
+
+        <button type="button" class="btn btn-outline-light btn-sm fw-semibold" (click)="descargarJson()" [disabled]="isLoading">
+          <ng-container *ngIf="!isLoading; else loading">
+            <i class="fas fa-download "></i> Descargar JSON
+          </ng-container>
+          <ng-template #loading>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Trabajando...
+          </ng-template>
+        </button>
+
+        <button type="button" class="btn btn-outline-light btn-sm fw-semibold" *ngIf="tienePermiso('view xml options')" (click)="descargarXml()" [disabled]="isLoading">
+          <ng-container *ngIf="!isLoading; else loading">
+            <i class="fas fa-download "></i> Descargar XML
+          </ng-container>
+          <ng-template #loading>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Trabajando...
+          </ng-template>
+        </button>
+
+    </div>
+
+  </div>
+  <div class="card-body border rounded-4">
+    <div *ngIf="jsonPreview" class="mt-4">
+      <!-- <h5>Contenido del archivo:</h5> -->
+      <!-- <pre class="bg-light p-3 border rounded">{{ jsonPreview | json }}</pre> -->
+      <!-- Previsualización JSON -->
+      <app-visor-reporte-volumenes [dataJson]="jsonPreview"></app-visor-reporte-volumenes>
+    </div>
+  </div>
+</div>

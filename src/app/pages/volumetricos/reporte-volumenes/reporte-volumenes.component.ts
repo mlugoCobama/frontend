@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { VisorVolumetricosService } from 'src/app/core/services/volumetricos/visor-volumetricos.service';
+import { VolumetricosExportService } from 'src/app/core/services/volumetricos/volumetricos-export-service.service';
+import Swal from 'sweetalert2';
+import { PermisosService } from 'src/app/core/services/permisos.service';
 
 @Component({
   selector: 'app-reporte-volumenes',
@@ -8,31 +11,47 @@ import { VisorVolumetricosService } from 'src/app/core/services/volumetricos/vis
 })
 export class ReporteVolumenesComponent implements OnInit{
 
-  constructor(private volumetricos: VisorVolumetricosService){
+  constructor(
+    private volumetricos: VisorVolumetricosService,
+    private exportService: VolumetricosExportService,
+    private permisosService:PermisosService
+  ){
   }
 
   public jsonPreview:any;
+  public itemSeleccionado = null;
+  public isOpenPanelEdicion = false;
 
 reportes:any[]=[];
-
   columnas: any[] = [
     {
-      campo:'empresa',
-      etiqueta:'Empresa'
-    },
-    {
-      campo:'tipo',
-      etiqueta:'Tipo'
-    },
-    {
-      campo:'descripcion',
-      etiqueta:'Descripción'
+      campo:'nombre_empresa',
+      etiqueta:'EMPRESA',
+      bold: true,
+      align: 'center'
     },
     {
       campo:'created_at',
-      etiqueta:'Fecha',
+      etiqueta:'FECHA',
       pipe:'date'
-    }
+    },
+
+    {
+      campo:'descripcion',
+      etiqueta:'DESCRIPCION'
+    },
+    {
+      campo:'tipo',
+      etiqueta:'CLAVE DE INSTALACION',
+      align: 'center'
+    },
+    {
+      campo:'fecha_reporte_txt',
+      etiqueta:'PERIODO REPORTADO',
+      bold: true,
+      align: 'center'
+    },
+
   ];
 
   acciones: any[]=[];
@@ -54,6 +73,7 @@ reportes:any[]=[];
         }
       }
     ];
+
   }
 
   isLoad= false;
@@ -84,6 +104,7 @@ reportes:any[]=[];
           // console.log(resp.data);
 
           // mostrar preview
+          this.itemSeleccionado = item;
           this.jsonPreview = resp.data;
 
           resolve();
@@ -102,8 +123,93 @@ reportes:any[]=[];
 
   }
 
+  tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
+  }
+
   public volver(){
     this.jsonPreview = null;
+    this.itemSeleccionado = null;
+    this.isOpenPanelEdicion = false;
     this.cargarReportes();
+  }
+
+  public setItemSeleccionado(item:any){
+    this.itemSeleccionado =  item;
+  }
+
+  public eliminarRegistro(){
+
+      Swal.fire({
+        title: "¿Estas seguro?",
+        text: "Se eliminara el registro seleccionado",
+        icon: "error",
+        confirmButtonText: "Eliminiar",
+        showCancelButton: true,
+        reverseButtons: true,
+        customClass: {
+          confirmButton: "btn btn-danger ms-2 px-4 fw-semibold",
+          cancelButton: "btn btn-primary ms-2 px-4 fw-semibold",
+        },
+        buttonsStyling: false,
+      }).then((result) => {
+        if (result.value) {
+          this.volumetricos.delete(this.itemSeleccionado?.id).subscribe(
+            (response:any) => {
+              if (response.status === "success") {
+                // console.log(response.message);
+                this.cargarReportes();
+                Swal.fire({
+                  title: "Borrado!",
+                  text: "El registro ha sido borrado.",
+                  buttonsStyling: false,
+                  icon: "success",
+                  customClass: {
+                    confirmButton: "btn btn-danger px-4",
+                    cancelButton: "btn btn- ms-2 px-4",
+                  },
+                });
+              } else {
+                console.log(response.message);
+                Swal.fire({
+                  title: "Error!",
+                  text: "Your file has been deleted.",
+                  buttonsStyling: false,
+                  icon: "success",
+                  customClass: {
+                    confirmButton: "btn btn-danger px-4",
+                    cancelButton: "btn btn- ms-2 px-4",
+                  },
+                });
+              }
+            },
+            (error) => {
+              console.error("Error fetching data:", error);
+            }
+          );
+        }
+        this.isLoad = false;
+      });
+  }
+
+  descargarJson() {
+    console.log('funcino')
+    this.exportService.descargarJson(this.jsonPreview);
+  }
+
+  descargarXml() {
+     console.log('funcino2')
+    this.exportService.descargarXml(this.jsonPreview);
+  }
+
+  public openUpdate(){
+    this.isOpenPanelEdicion = true;
+    this.verArchivo(this.itemSeleccionado)
+  }
+
+  descargarExcel() {
+    console.log(this.itemSeleccionado)
+    this.exportService.descargarExcelDesdeServidor(this.itemSeleccionado?.id);
   }
 }

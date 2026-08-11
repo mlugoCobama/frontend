@@ -12,7 +12,7 @@
         <app-kpi-card
          [color] = "'text-warning'"
          [icono] = "'fas fa-boxes'"
-         [titulo]= "' Existencias en Mes'" 
+         [titulo]= "' Existencias en Mes'"
          [sufijo]= "' L'"
          [valor]= "+existencias.VolumenExistenciasMes"
         ></app-kpi-card>
@@ -26,7 +26,7 @@
                 [icono] = "'fas fa-sign-out-alt '"
                 [titulo]= "' TOTAL RECEPCIONES'"
                 [note]= "'docs'"
-                [valor]= "+recepciones.TotalRecepcionesMes"
+                [valor]= "+recepciones.TotalDocumentosMes"
                 ></app-kpi-card>
             </div>
             <div class="col-xl-12 col-6">
@@ -36,10 +36,10 @@
                 [titulo]= "' TOTAL ENTREGAS'"
                 [note]= "'docs'"
                 [valor]= "+entregas.TotalDocumentosMes"
-                ></app-kpi-card>  
+                ></app-kpi-card>
             </div>
-            
-            
+
+
         </div>
     </div>
     <div class="col-xl-4 col-12">
@@ -60,7 +60,7 @@
                 [titulo]= "' VOLUMENES ENTREGADOS'"
                 [sufijo]= "' L'"
                 [valor]= "+entregas.SumaVolumenEntregadoMes.ValorNumerico"
-                ></app-kpi-card>    
+                ></app-kpi-card>
             </div>
         </div>
     </div>
@@ -71,7 +71,7 @@
                 [color] = "'text-success'"
                 [icono] = "'fas fa-money-bill-wave'"
                 [titulo]= "'  Importe Recepciones'"
-                [prefijo]= "'$'" 
+                [prefijo]= "'$'"
                 [valor]= "+recepciones.ImporteTotalRecepcionesMensual"
                 ></app-kpi-card>
             </div>
@@ -80,16 +80,34 @@
                 [color] = "'text-danger'"
                 [icono] = "'fas fa-money-bill-wave'"
                 [titulo]= "' Importe Entregas'"
-                [prefijo]= "'$'" 
+                [prefijo]= "'$'"
                 [valor]= "+entregas.ImporteTotalEntregasMes"
-                ></app-kpi-card>       
+                ></app-kpi-card>
             </div>
         </div>
+    </div>
+    <div class="col-xl-6 col-12">
+       <app-card-aclaraciones
+          [title]="'Recepciones'"
+          [volumenSinCfdi] = "aclaracionesRecepciones.sinCfdi"
+          [volumenTraspaso] =  "aclaracionesRecepciones.autoconsumo"
+          [volumenAutoconsumo] = "aclaracionesRecepciones.traspaso"
+       >
+       </app-card-aclaraciones>
+    </div>
+    <div class="col-xl-6 col-12">
+       <app-card-aclaraciones
+          [title]="'Entregas'"
+          [volumenSinCfdi] = "aclaracionesEntregas.sinCfdi"
+          [volumenTraspaso] =  "aclaracionesEntregas.autoconsumo"
+          [volumenAutoconsumo] = "aclaracionesEntregas.traspaso"
+       >
+       </app-card-aclaraciones>
     </div>
 </div>
 
 <div class="row">
-    
+
     <app-tabs-resumenes
     [data] = "dataJson"
     ></app-tabs-resumenes>
