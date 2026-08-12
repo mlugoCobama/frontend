@@ -22,7 +22,7 @@
         </div>
       </div>
 
-      <div class="col-6">
+      <div class="col-12">
         <label for="archivo" class="form-label">Plantilla .XLSX</label>
         <input id="archivo" type="file" class="form-control form-control-sm" (change)="onFileChange($event)" />
         <div *ngIf="form.get('archivo')?.invalid && form.get('archivo')?.touched" class="text-danger mt-1">
