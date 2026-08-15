@@ -1,9 +1,9 @@
 <div class="row">
     <app-header-planta
-    [descripcionInstalacion] = "dataJson.DescripcionInstalacion"
-    [numPermiso] = "dataJson.NumPermiso"
-    [versionJson] = "dataJson.Version"
-    [fechaReporte] = "dataJson.FechaYHoraReporteMes"
+    [descripcionInstalacion] = "dataJson?.DescripcionInstalacion"
+    [numPermiso] = "dataJson?.NumPermiso"
+    [versionJson] = "dataJson?.Version"
+    [fechaReporte] = "dataJson?.FechaYHoraReporteMes  || 0"
     ></app-header-planta>
 </div>
 
@@ -14,7 +14,7 @@
          [icono] = "'fas fa-boxes'"
          [titulo]= "' Existencias en Mes'"
          [sufijo]= "' L'"
-         [valor]= "+existencias.VolumenExistenciasMes"
+         [valor]= "+existencias?.VolumenExistenciasMes  || 0"
         ></app-kpi-card>
     </div>
 
@@ -26,7 +26,7 @@
                 [icono] = "'fas fa-sign-out-alt '"
                 [titulo]= "' TOTAL RECEPCIONES'"
                 [note]= "'docs'"
-                [valor]= "+recepciones.TotalDocumentosMes"
+                [valor]= "+recepciones?.TotalDocumentosMes || 0"
                 ></app-kpi-card>
             </div>
             <div class="col-xl-12 col-6">
@@ -35,7 +35,7 @@
                 [icono] = "'fas fa-sign-out-alt '"
                 [titulo]= "' TOTAL ENTREGAS'"
                 [note]= "'docs'"
-                [valor]= "+entregas.TotalDocumentosMes"
+                [valor]= "+entregas?.TotalDocumentosMes || 0"
                 ></app-kpi-card>
             </div>
 
@@ -50,7 +50,7 @@
                 [icono] = "'fas fa-arrow-alt-circle-down '"
                 [titulo]= "' VOLUMENES RECIBIDOS'"
                 [sufijo]= "' L'"
-                [valor]= "+recepciones.SumaVolumenRecepcionMes.ValorNumerico"
+                [valor]= "+recepciones?.SumaVolumenRecepcionMes?.ValorNumerico || 0"
                 ></app-kpi-card>
             </div>
             <div class="col-xl-12 col-6">
@@ -59,7 +59,7 @@
                 [icono] = "'fas fa-arrow-alt-circle-up'"
                 [titulo]= "' VOLUMENES ENTREGADOS'"
                 [sufijo]= "' L'"
-                [valor]= "+entregas.SumaVolumenEntregadoMes.ValorNumerico"
+                [valor]= "+entregas?.SumaVolumenEntregadoMes?.ValorNumerico || 0"
                 ></app-kpi-card>
             </div>
         </div>
@@ -72,7 +72,7 @@
                 [icono] = "'fas fa-money-bill-wave'"
                 [titulo]= "'  Importe Recepciones'"
                 [prefijo]= "'$'"
-                [valor]= "+recepciones.ImporteTotalRecepcionesMensual"
+                [valor]= "+recepciones?.ImporteTotalRecepcionesMensual"
                 ></app-kpi-card>
             </div>
             <div class="col-xl-12 col-6">
@@ -81,7 +81,7 @@
                 [icono] = "'fas fa-money-bill-wave'"
                 [titulo]= "' Importe Entregas'"
                 [prefijo]= "'$'"
-                [valor]= "+entregas.ImporteTotalEntregasMes"
+                [valor]= "+entregas?.ImporteTotalEntregasMes"
                 ></app-kpi-card>
             </div>
         </div>

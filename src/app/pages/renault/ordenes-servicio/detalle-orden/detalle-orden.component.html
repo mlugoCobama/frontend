@@ -241,14 +241,54 @@
            <h5 class="fw-bold text-dark m-0"><i class="fas fa-camera text-warning me-2"></i> Estado del Vehículo</h5>
         </div>
         <div class="card-body">
-            <ng-container *ngIf="dataEntrada?.testigos_fotograficos?.length > 0; else noData" >
-                <div class="row">
-                    <div *ngFor="let item of dataEntrada.testigos_fotograficos" class="col-lg-4 mb-3">
-                        <img [src]="item.imagen" alt="Imagen del testigo" class="img-fluid">
-                    </div>
+              <ng-container
+    *ngIf="dataEntrada?.testigos_fotograficos?.length > 0; else noData">
+
+    <div class="row">
+
+      <ng-container *ngFor="let item of dataEntrada.testigos_fotograficos">
+            <div
+              class="col-lg-4 col-md-6 mb-3"
+              *ngIf="item.categoria === 'entrada'">
+
+              <div class="card rounded-4 h-100 shadow-sm">
+
+                <!-- IMAGEN -->
+                <img
+                  *ngIf="item.media_type === 'image'"
+                  [src]="item.imagen"
+                  class="card-img-top  rounded-4 border"
+                  alt="Imagen del testigo"
+                  style="height: 220px;"
+                >
+
+                <!-- VIDEO -->
+                <video
+                  *ngIf="item.media_type === 'video'"
+                  class="card-img-top  rounded-4 border"
+                  controls
+                  style="height: 220px;"
+                >
+                  <source [src]="item.imagen" type="video/mp4">
+                  Tu navegador no soporta videos.
+                </video>
+
+                <div class="card-body">
+                  <p class="card-text">
+                   <span class="fw-semibold">Descripción: </span> {{ item.descripcion || 'Sin anotaciones' }}
+                  </p>
                 </div>
 
-            </ng-container>
+              </div>
+
+            </div>
+
+          </ng-container>
+
+        </div>
+
+      </ng-container>
+
         </div>
     </div>
     </div>
@@ -260,14 +300,61 @@
            <h5 class="fw-bold text-dark m-0"><i class="fas fa-camera text-warning me-2"></i> Evidencias del porceso</h5>
         </div>
         <div class="card-body">
-            <ng-container *ngIf="dataEntrada?.testigos_fotograficos?.length > 0; else noData" >
-                <div class="row">
-                    <div *ngFor="let item of dataEntrada.testigos_fotograficos" class="col-lg-4 mb-3">
-                        <img [src]="item.imagen" alt="Imagen del testigo" class="img-fluid">
-                    </div>
+            <div class="card-body">
+  <ng-container
+    *ngIf="dataEntrada?.testigos_fotograficos?.length > 0; else noData">
+
+    <div class="row">
+
+      <ng-container *ngFor="let item of dataEntrada.testigos_fotograficos">
+            <div
+              class="col-lg-4 col-md-6 mb-3"
+              *ngIf="item.categoria === 'proceso'">
+
+              <div class="card rounded-4 h-100 shadow-sm">
+
+                <!-- IMAGEN -->
+                <img
+                  *ngIf="item.media_type === 'image'"
+                  [src]="item.imagen"
+                  class="card-img-top rounded-4 border"
+                  alt="Imagen del testigo"
+                  style="height: 220px; "
+                >
+
+                <!-- VIDEO -->
+                <video
+                  *ngIf="item.media_type === 'video'"
+                  class="card-img-top rounded-4 border"
+                  controls
+                  style="height: 220px; "
+                >
+                  <source [src]="item.imagen" type="video/mp4">
+                  Tu navegador no soporta videos.
+                </video>
+
+                <div class="card-body">
+                  <p class="card-text">
+                   <span class="fw-semibold">Descripción: </span> {{ item.descripcion || 'Sin anotaciones' }}
+                  </p>
                 </div>
 
-            </ng-container>
+              </div>
+
+            </div>
+
+          </ng-container>
+
+        </div>
+
+      </ng-container>
+
+      <ng-template #noData>
+        <div class="alert alert-info">
+          No hay testigos fotográficos registrados.
+        </div>
+      </ng-template>
+    </div>
         </div>
     </div>
     </div>
@@ -275,7 +362,7 @@
 <div class="row">
     <div class="col-12">
         <div class="card border-warning mb-3">
-  <div class="card-header bg-light rounded-4">
+  <div class="card-header rounded-4">
       <h5 class="fw-bold text-dark m-0"><i class="fas fa-tasks text-warning me-2"></i> Proceso del Servicio</h5>
   </div>
   <div class="card-body">

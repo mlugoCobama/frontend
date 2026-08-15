@@ -4,14 +4,13 @@ import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { CatHardware } from 'src/app/core/models/ucoip/cat-hardware';
 import { Inventario } from 'src/app/core/models/ucoip/inventario';
 import { AlertErrorService } from 'src/app/core/services/alert-error.service';
-import { CatHardwareService } from 'src/app/core/services/ucoip/cat-hardware.service';
 import { InventarioService } from 'src/app/core/services/ucoip/inventario.service';
-import { EmpresasService } from 'src/app/core/services/ucoip/empresas.service';
-import Swal from 'sweetalert2';
 import { obtenerPrimerError } from 'src/app/core/helpers/errores-forrmulario';
 import { OrdenesCompraService } from 'src/app/core/services/compras/ordenesCompra/ordenes-compra.service';
 import { CatSoftwareService } from 'src/app/core/services/ucoip/cat-software.service';
 import { Subscription } from 'rxjs';
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-modal-inventario',
   templateUrl: './modal-inventario.component.html',
@@ -104,7 +103,7 @@ export class ModalInventarioComponent implements OnInit {
         cat_hardware_id: new FormControl("", [Validators.required]),
         marca: new FormControl(null, [Validators.required]),
         modelo: new FormControl(null, [Validators.required]),
-        no_serie: new FormControl(null, [Validators.required]),
+        no_serie: new FormControl(null),
         estado: new FormControl("", [Validators.required]),
         tipo_cpu: new FormControl("", []),
         mac: new FormControl(null, []),
@@ -149,12 +148,29 @@ this.saving = true;
       if (resp.success) {
         this.saving = false
         this.event.emit({ data: true, res: 200 });
-        this.alertService.alertError(resp.message, resp.success);
+        Swal.fire({
+            icon: "success",
+            title: "Listo!",
+            text: "Registro guardado correctamente",
+          });
       } else {
         this.saving = false
-        this.event.emit({ data: false, res: 200 });
-        this.alertService.alertError(resp.message, resp.success);
+        // this.event.emit({ data: false, res: 200 });
+        Swal.fire({
+            icon: "error",
+            title: "Ocurrio un error!",
+            text: resp.message,
+          });
       }
+    },(error) => {
+      console.error("Error en la petición:", error);
+      this.saving = false;
+      // this.event.emit({ data: false, res: 500 });
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: 'Error: '+error,
+      });
     });
 
     // this.event.emit({ data: true, res: 200 });
@@ -179,12 +195,29 @@ this.saving = true;
       if (resp.success) {
         this.saving = false
         this.event.emit({ data: true, res: 200 });
-        this.alertService.alertError(resp.message, resp.success);
+        Swal.fire({
+            icon: "success",
+            title: "Listo!",
+            text: "Registro actualizado correctamente",
+          });
       } else {
         this.saving = false
         this.event.emit({ data: false, res: 200 });
-        this.alertService.alertError(resp.message, resp.success);
+        Swal.fire({
+              icon: "error",
+              title: "Ocurrio un error!",
+              text: resp.message,
+            });
       }
+    },(error) => {
+      console.error("Error en la petición:", error);
+      this.saving = false;
+      // this.event.emit({ data: false, res: 500 });
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: 'Error: '+error,
+      });
     });
   }
 
@@ -222,7 +255,6 @@ this.saving = true;
   this.ordenesCompra.pdfOrdenCompra(item.detalle?.solicitudes_compra_id).subscribe(
     (response) => {
       const blob = new Blob([response.body!], { type: "application/pdf" });
-      //  console.log(response.headers)
       const fileName = response.headers.get('X-Filename') || 'orden_compra.pdf';
 
       const url = window.URL.createObjectURL(blob);
@@ -256,28 +288,16 @@ obtenerLicenciasOffice(idEmpresa:number){
 
 async nuevaLicencia(tipo:'windows'|'office'){
 
-    const titulo = tipo == 'windows'
-        ? 'Nueva licencia de SO'
-        : 'Nueva licencia de Office';
-
-    const cat_software_id = tipo == 'windows'
-        ? 1
-        : 2;
+    const titulo = tipo == 'windows' ? 'Nueva licencia de SO' : 'Nueva licencia de Office';
+    const cat_software_id = tipo == 'windows' ? 1 : 2;
 
     const {value} = await Swal.fire({
         title: titulo,
         html:`
           <div class="row">
               <div class="col-12">
-                <input
-                  id="version"
-                  class="form-control form-control-sm m-1"
-                  placeholder="Versión">
-
-                <input
-                  id="licencia"
-                  class="form-control form-control-sm  m-1"
-                  placeholder="Licencia">
+                <input id="version" class="form-control form-control-sm m-1" placeholder="Versión">
+                <input id="licencia" class="form-control form-control-sm  m-1" placeholder="Licencia">
               </div>
           </div>
         `,
@@ -333,5 +353,20 @@ async nuevaLicencia(tipo:'windows'|'office'){
                 });
             }
         });
+}
+
+// Método para alternar el estado del input
+toggleCampoNoSerie(event: Event): void {
+  const check = (event.target as HTMLInputElement).checked;
+  const control = this.formModalInventario.get('no_serie');
+
+  if (!control) return;
+
+  if (check) {
+    control.enable();
+  } else {
+    control.disable();
+    control.setValue('');
+  }
 }
 }

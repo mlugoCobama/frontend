@@ -60,6 +60,7 @@
     "datatables.net": "^2.0.3",
     "datatables.net-bs5": "^2.0.3",
     "echarts": "^5.4.3",
+    "fast-xml-parser": "^5.10.1",
     "firebase": "^10.7.0",
     "fix": "^0.0.3",
     "flatpickr": "^4.6.13",

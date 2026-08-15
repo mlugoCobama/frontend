@@ -57,7 +57,7 @@ export class TabsResumenesComponent implements OnInit {
 {
     key:'fecha',
     label:'Fecha Transacción',
-   
+
 },
 {
     key:'nombre',

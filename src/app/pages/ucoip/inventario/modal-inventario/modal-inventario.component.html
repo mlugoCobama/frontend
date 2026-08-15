@@ -11,7 +11,6 @@
             <div class="form-group">
               <label class="form-label requerido">Empresa *</label>
               <div>
-
                 <select
                     class="form-select form-select-sm ng-dirty !ng-invalid"
                     formControlName="empresa"
@@ -95,18 +94,39 @@
                       <!-- Tipo de Hardware -->
             <div class="col-sm-12 col-md-3">
               <div class="form-group">
-                <label class="form-label requerido">Número de Serie *</label>
+                <!-- Contenedor flex para alinear label y checkbox -->
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <div class="form-check form-switch mb-0">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="toggleNoSerie"
+                      [checked]="!formModalInventario.controls['no_serie'].disabled"
+                      (change)="toggleCampoNoSerie($event)"
+                    />
+                    <!-- <label class="form-check-label" for="toggleNoSerie">
+
+                    </label> -->
+                  </div>
+                  <label class="form-label requerido mb-0"> {{ formModalInventario.controls['no_serie'].disabled ? 'Sin Numero de Serie' : 'Numero de Serie *' }} </label>
+
+                  <!-- Checkbox para activar/desactivar -->
+
+                </div>
+
                 <div>
                   <input
-                    class="form-control form-control-sm ng-dirty !ng-invalid"
+                    class="form-control form-control-sm"
                     formControlName="no_serie"
                     placeholder="Ingresar Número de Serie"
                     maxlength="255"
                     [style]="{ width: '100%' }"
                   />
                 </div>
+
+                <!-- Validaciones -->
                 <div class="text-danger small">
-                  <div *ngIf="formModalInventario.controls['no_serie'].touched && formModalInventario.controls['no_serie'].errors?.required">
+                  <div *ngIf="formModalInventario.controls['no_serie'].touched && formModalInventario.controls['no_serie'].errors?.['required']">
                     {{ mensajeCampoRequerido }}
                   </div>
                 </div>
