@@ -202,7 +202,7 @@ this.saving = true;
           });
       } else {
         this.saving = false
-        this.event.emit({ data: false, res: 200 });
+        // this.event.emit({ data: false, res: 200 });
         Swal.fire({
               icon: "error",
               title: "Ocurrio un error!",

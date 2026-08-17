@@ -4,7 +4,7 @@
     </app-card-top>
 <div class="card  rounded-4 shadow-sm mt-4">
   <div class="card-header  rounded-4 bg-primary text-white fw-semibold">
-    Formulario de carga de JSON de controles volumetricos
+    Formulario de carga de reportes de controles volumetricos
   </div>
   <div class="card-body">
     <form [formGroup]="form" class="row g-3">
@@ -46,9 +46,10 @@
 
     <!-- Previsualización JSON -->
     <div *ngIf="jsonPreview" class="mt-4">
-      <h5>Contenido del archivo:</h5>
+      <h5>Contenido del archivo: {{selectedViewer}} </h5>
       <!-- <pre class="bg-light p-3 border rounded">{{ jsonPreview | json }}</pre> -->
-      <app-visor-reporte-volumenes [dataJson]="jsonPreview"></app-visor-reporte-volumenes>
+      <app-visor-reporte-volumenes *ngIf ="selectedViewer == 'json'" [dataJson]="jsonPreview"></app-visor-reporte-volumenes>
+      <app-visor-reporte-xml *ngIf ="selectedViewer == 'xml'" [dataJson]="jsonPreview"></app-visor-reporte-xml>
     </div>
 
   </div>

@@ -20,6 +20,8 @@ import { ReporteVolumenesComponent } from './reporte-volumenes/reporte-volumenes
 import { ParserVolumetricosComponent } from './parser-volumetricos/parser-volumetricos.component';
 import { CardAclaracionesComponent } from './widgets/card-aclaraciones/card-aclaraciones.component';
 import { A11yModule } from "@angular/cdk/a11y";
+import { VisorReporteXmlComponent } from './visor-reporte-xml/visor-reporte-xml.component';
+import { TabResumenesXmlComponent } from './widgets/tab-resumenes-xml/tab-resumenes-xml.component';
 
 @NgModule({
   declarations: [
@@ -30,10 +32,12 @@ import { A11yModule } from "@angular/cdk/a11y";
     InfraestructuraCardComponent,
     IdentificationCardComponent,
     TabsResumenesComponent,
+    TabResumenesXmlComponent,
     TablaMovimientosComponent,
     ReporteVolumenesComponent,
     ParserVolumetricosComponent,
-    CardAclaracionesComponent
+    CardAclaracionesComponent,
+    VisorReporteXmlComponent,
   ],
   imports: [
     CommonModule,

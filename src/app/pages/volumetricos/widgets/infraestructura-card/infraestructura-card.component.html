@@ -20,6 +20,18 @@
             <div class="small text-muted">Pozos</div>
         </div>
     </div>
+    <hr class="p-0 b-0">
+    <div class="d-flex justify-content-center gap-3 mt-1">
+      <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-6 p-2">
+          Ductos Entrada/Salida
+          <span class="badge bg-primary text-white ms-1">{{ ductosEdaSda || 0 | number }}</span>
+      </span>
+
+      <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle fs-6 p-2">
+          Ductos Transporte/Distribución
+          <span class="badge bg-secondary text-white ms-1">{{ ductosTptDsn || 0 | number }}</span>
+      </span>
+  </div>
     <div class="alert alert-secondary mt-4 mb-0 py-2 rounded-pill fw-semibold">
         <i class="fas fa-cube me-1"></i> Producto Reportado: <strong>
            {{ claveProducto || 'Desconocido'}}

@@ -1,19 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
-
   interface SumatoriaVolumenes {
   sinCfdi: number;
   autoconsumo: number;
   traspaso: number;
 }
-
 @Component({
-  selector: 'app-visor-reporte-volumenes',
-  templateUrl: './visor-reporte-volumenes.component.html',
-  styleUrl: './visor-reporte-volumenes.component.css'
+  selector: 'app-visor-reporte-xml',
+  templateUrl: './visor-reporte-xml.component.html',
+  styleUrl: './visor-reporte-xml.component.css'
 })
-
-
-export class VisorReporteVolumenesComponent implements OnInit{
+export class VisorReporteXmlComponent implements OnInit{
   @Input() dataJson:any = [];
   public producto:any;
   public recepciones:any;
@@ -24,16 +20,23 @@ export class VisorReporteVolumenesComponent implements OnInit{
   public aclaracionesRecepciones:any;
 
   ngOnInit(): void {
+    console.log(this.dataJson);
     this.getPrincipalBlock();
+
   }
 
   public getPrincipalBlock(){
+    this.dataJson.NumPermiso = this.dataJson.Caracter[0].NumPermiso
+    this.dataJson.ModalidadPermiso = this.dataJson.Caracter[0].ModalidadPermiso
+    this.dataJson.Caracter = this.dataJson.Caracter[0].TipoCaracter
     this.producto = (this.dataJson['Producto'][0]) ? this.dataJson['Producto'][0] : null;
-    this.recepciones = (this.producto['ReporteDeVolumenMensual']['Recepciones']) ? this.producto['ReporteDeVolumenMensual']['Recepciones'] : null;
-    this.entregas = (this.producto['ReporteDeVolumenMensual']['Entregas']) ? this.producto['ReporteDeVolumenMensual']['Entregas'] : null;
-    this.existencias = (this.producto['ReporteDeVolumenMensual']['ControlDeExistencias']) ? this.producto['ReporteDeVolumenMensual']['ControlDeExistencias'] : null;
-    this.aclaracionesEntregas = this.obtenerSumatoriasPorAclaracion(this.entregas['Complemento']);
-    this.aclaracionesRecepciones = this.obtenerSumatoriasPorAclaracion(this.recepciones['Complemento']);
+    this.recepciones = (this.producto['ReporteDeVolumenMensual']['Recepciones']) ? this.producto['ReporteDeVolumenMensual']['Recepciones'][0] : null;
+    this.entregas = (this.producto['ReporteDeVolumenMensual']['Entregas']) ? this.producto['ReporteDeVolumenMensual']['Entregas'][0] : null;
+    this.existencias = (this.producto['ReporteDeVolumenMensual']['ControlDeExistencias']) ? this.producto['ReporteDeVolumenMensual']['ControlDeExistencias']: null;
+    this.existencias.VolumenExistenciasMes = this.existencias.VolumenExistenciasMes.ValorNumerico
+    this.aclaracionesEntregas = this.obtenerSumatoriasPorAclaracion(this.entregas['Complemento']['Complemento_Almacenamiento']['Nacional']);
+    this.aclaracionesEntregas = this.obtenerSumatoriasPorAclaracion(this.recepciones['Complemento']['Complemento_Almacenamiento']['Nacional']);
+    // this.aclaracionesRecepciones = this.obtenerSumatoriasPorAclaracion(this.recepciones['Complemento']);
   }
 
 
@@ -83,4 +86,3 @@ export class VisorReporteVolumenesComponent implements OnInit{
 
 
   }
-

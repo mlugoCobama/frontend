@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient  } from '@angular/common/http';
+import { SwalComprsServiceService } from '../compras/swal-comprs-service.service';
 @Injectable({
   providedIn: 'root'
 })
 export class VolumetricosExportService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private alerta: SwalComprsServiceService) { }
 
   descargarExcelDesdeServidor(reporteId: number, nombrePersonalizado?: string): void {
     const url = `${environment.apiUrl}reportes/${reporteId}/descargar-excel`;
@@ -17,6 +18,22 @@ export class VolumetricosExportService {
         this.triggerDownload(blob, fileName);
       },
       error: (err) => {
+        this.alerta.mostrarAlerta('error',`'Error al descargar el archivo:', ${err}`,'error', 'danger' )
+        console.error('Error al descargar el archivo Excel:', err);
+      }
+    });
+  }
+
+    descargarJsonDesdeServidor(reporteId: number, nombrePersonalizado?: string): void {
+    const url = `${environment.apiUrl}reportes/${reporteId}/descargar-reporte`;
+
+    this.http.get(url, { responseType: 'blob' }).subscribe({
+      next: (blob: Blob) => {
+        const fileName = nombrePersonalizado ;
+        this.triggerDownload(blob, fileName);
+      },
+      error: (err) => {
+        this.alerta.mostrarAlerta('error',`'Error al descargar el archivo:', ${err}`,'error', 'danger' )
         console.error('Error al descargar el archivo Excel:', err);
       }
     });

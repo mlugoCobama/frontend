@@ -10,7 +10,7 @@
   <div class="card-header rounded-4 bg-primary text-white fw-semibold text-center"
     *ngIf="solicitudCompra.estatus >= enEsts.Autorizado && ordenCompra?.tipo_pago">
     <p *ngIf="solicitudCompra.estatus != enEsts.Finalizada" class="m-0">
-      <strong> Adjunta los siguientes archivos para la orden de compra: </strong>
+      <strong> <i class="fas fa-file-invoice me-1"></i>Adjunta los siguientes archivos para la orden de compra: </strong>
       <strong>{{ ordenCompra?.folio_oc }}</strong>
     </p>
   </div>

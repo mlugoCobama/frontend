@@ -119,6 +119,8 @@ export class ParserVolumetricosComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
+        this.alertasService.mostrarAlerta(
+            "Error", err, "error", "danger" );
         console.log(err);
         this.isLoading = false;
       }

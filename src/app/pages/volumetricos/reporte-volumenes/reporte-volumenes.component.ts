@@ -3,6 +3,7 @@ import { VisorVolumetricosService } from 'src/app/core/services/volumetricos/vis
 import { VolumetricosExportService } from 'src/app/core/services/volumetricos/volumetricos-export-service.service';
 import Swal from 'sweetalert2';
 import { PermisosService } from 'src/app/core/services/permisos.service';
+import { ProcessVolumetricosService } from 'src/app/core/services/volumetricos/process-volumetricos.service';
 
 @Component({
   selector: 'app-reporte-volumenes',
@@ -14,13 +15,16 @@ export class ReporteVolumenesComponent implements OnInit{
   constructor(
     private volumetricos: VisorVolumetricosService,
     private exportService: VolumetricosExportService,
-    private permisosService:PermisosService
+    private permisosService:PermisosService,
+    private processVolumetricos: ProcessVolumetricosService
   ){
   }
 
   public jsonPreview:any;
   public itemSeleccionado = null;
   public isOpenPanelEdicion = false;
+
+  public selectedViewer = 'json';
 
 reportes:any[]=[];
   columnas: any[] = [
@@ -95,17 +99,25 @@ reportes:any[]=[];
 
   async verArchivo(item:any){
     this.jsonPreview = null;
+    this.selectedViewer = 'json';
     return new Promise<void>((resolve,reject)=>{
 
       this.volumetricos.getOne(item.id)
       .subscribe({
         next:(resp:any)=>{
+          console.group(resp)
+          if(resp.tipo == 'json'){
+          this.selectedViewer = 'json';
+            this.itemSeleccionado = item;
+            this.jsonPreview = resp.data;
+          }
 
-          // console.log(resp.data);
-
-          // mostrar preview
-          this.itemSeleccionado = item;
-          this.jsonPreview = resp.data;
+          if(resp.tipo == 'xml'){
+            this.selectedViewer = 'xml';
+            this.itemSeleccionado = item;
+            const jsonParcial = this.processVolumetricos.convertirXml(resp.data);
+            this.jsonPreview = jsonParcial.ControlesVolumetricos
+          }
 
           resolve();
 
@@ -194,14 +206,13 @@ reportes:any[]=[];
   }
 
   descargarJson() {
-    console.log('funcino')
-    this.exportService.descargarJson(this.jsonPreview);
+    this.exportService.descargarJsonDesdeServidor(this.itemSeleccionado?.id, `${this.itemSeleccionado?.descripcion}_${this.itemSeleccionado?.nombre_empresa}_${this.itemSeleccionado?.fecha_reporte_txt}.${this.selectedViewer}`);
   }
 
-  descargarXml() {
-     console.log('funcino2')
-    this.exportService.descargarXml(this.jsonPreview);
-  }
+  // descargarXml() {
+  //    console.log('funcino2')
+  //   this.exportService.descargarXml(this.jsonPreview);
+  // }
 
   public openUpdate(){
     this.isOpenPanelEdicion = true;

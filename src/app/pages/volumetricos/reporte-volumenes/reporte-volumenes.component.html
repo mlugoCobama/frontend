@@ -51,20 +51,27 @@
         </button>
 
         <button type="button" class="btn btn-outline-light btn-sm fw-semibold" (click)="descargarJson()">
-            <i class="fas fa-download me-1"></i> Descargar JSON
+            <i class="fas fa-download me-1"></i> Descargar {{ selectedViewer || '' }}
         </button>
 
-        <button type="button" class="btn btn-outline-light btn-sm fw-semibold" (click)="descargarXml()" *ngIf="tienePermiso('view xml options')">
+        <!-- <button type="button" class="btn btn-outline-light btn-sm fw-semibold" (click)="descargarXml()" *ngIf="tienePermiso('view xml options')">
             <i class="fas fa-download me-1"></i> Descargar XML
-        </button>
+        </button> -->
 
     </div>
       </div>
       <div class="card-body">
             <app-visor-reporte-volumenes
+            *ngIf="selectedViewer == 'json'"
               [dataJson]="jsonPreview"
               >
             </app-visor-reporte-volumenes>
+
+            <app-visor-reporte-xml
+            *ngIf="selectedViewer == 'xml'"
+              [dataJson]="jsonPreview"
+              >
+            </app-visor-reporte-xml>
       </div>
     </div>
 

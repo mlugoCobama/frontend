@@ -1,6 +1,6 @@
 <div class="card rounded-4 border" *ngIf="mostrarDtsFac">
   <div class="card-header rounded-4 bg-primary text-white fw-semibold text-center">
-   <strong> Datos de facturación</strong>
+   <strong> <i class="fas fa-file-invoice-dollar me-1"></i> Datos de facturación</strong>
   </div>
   <div class="card-body">
     <div >
@@ -18,7 +18,7 @@
 
       </div>
       <div class="col-6 text-end">
-        <h5><strong>EMISOR: </strong></h5>
+        <h5><strong>EMISOR </strong></h5>
         <p><strong>RFC: </strong> {{ factura.emisor?.rfc || 'Esperando Factura' }}</p>
         <p><strong>NOMBRE: </strong> {{ factura.emisor?.nombre || 'Esperando Factura' }}</p>
         <p>
@@ -30,11 +30,11 @@
         </p>
 
       </div>
-      <div class="table-responsive">
+      <div class="table-responsive rounded-4 border overflow-hidden">
         <table
-        class="text-center table table-sm table-borderless table-responsive"
+        class="text-center table table-sm table-borderless mb-0"
       >
-        <thead class="table-light">
+        <thead class="table-light y78rounded-4">
           <tr>
             <th>FECHA</th>
             <th>T.COMP.</th>

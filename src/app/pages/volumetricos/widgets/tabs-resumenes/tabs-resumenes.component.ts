@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ProcessVolumetricosService } from 'src/app/core/services/volumetricos/process-volumetricos.service';
 
 interface Recepcion {
 
@@ -37,11 +38,17 @@ interface MovimientoVolumen {
   templateUrl: './tabs-resumenes.component.html',
   styleUrl: './tabs-resumenes.component.css'
 })
+
 export class TabsResumenesComponent implements OnInit {
  activeTab: string = 'general';
   @Input() data:any
   recepciones: MovimientoVolumen[] = [];
   entregas: MovimientoVolumen[] = [];
+
+
+  constructor(private processVolumetricos: ProcessVolumetricosService)
+  {}
+
 
   ngOnInit(): void {
     this.getEntregas()
@@ -256,13 +263,13 @@ private mapearMovimientos(
                     tipoCfdi:
                         cfdi.TipoCfdi,
 
-                    volumen:
+                    volumen: this.processVolumetricos.numero(
                         cfdi.VolumenDocumentado?.ValorNumerico ??
                         cfdi.VolumenDocumented?.ValorNumerico ??
-                        0,
+                        0),
 
                     precio:
-                        cfdi.PrecioVentaOCompraOContrap ?? 0,
+                    this.processVolumetricos.moneda(cfdi.PrecioVentaOCompraOContrap ?? 0),
 
                     aclaracion:null
 

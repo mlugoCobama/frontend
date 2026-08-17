@@ -32,6 +32,7 @@ import { FormSolicitudMacroComponent } from './forms-solicitud/form-solicitud-ma
 import { FormDetalleSolicitudComponent } from './forms-solicitud/form-detalle-solicitud/form-detalle-solicitud.component';
 import { FormSolicitudComponent } from './forms-solicitud/form-solicitud/form-solicitud.component';
 import { FormActualizarDetalleComponent } from './forms-solicitud/form-actualizar-detalle/form-actualizar-detalle.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { TablaDetallesSolicitudComponent } from './compras/detalle-solicitudes-compras/tabla-detalles-solicitud/tabla-detalles-solicitud.component';
@@ -173,7 +174,7 @@ import { ModalTagsComponent } from './cat-tags/modal-tags/modal-tags.component';
     TablaDispersionesComponent,
     CatTagsComponent,
     ModalTagsComponent,
-    
+
   ],
   imports: [
     CommonModule,
@@ -186,6 +187,7 @@ import { ModalTagsComponent } from './cat-tags/modal-tags/modal-tags.component';
     TabsModule.forRoot(),
     NgxMaskDirective,
     NgxMaskPipe,
+    ScrollingModule,
 
   ],
   providers: [

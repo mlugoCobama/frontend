@@ -2,7 +2,7 @@
   <div class="card-header rounded-4 bg-primary text-white fw-semibold" [ngClass]="solicitudCompra?.motivo_revision
     ? 'd-flex align-items-center justify-content-between'
     : 'text-center'">
-   <strong> <i class="fas fa-info-circle"></i> Información general de la solicitud de compra. </strong>
+   <strong> <i class="fas fa-info-circle  me-1"></i> Información general de la solicitud de compra. </strong>
    <button *ngIf="solicitudCompra?.motivo_revision" class="btn btn-sm btn-outline-light" (click)="clickEditarSolicitud()"> <i class="fas fa-edit"></i> Modificar Solicitud</button>
   </div>
   <div class="card-body">

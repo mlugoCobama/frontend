@@ -47,7 +47,7 @@
           <div class="card-body p-2">
             <!-- Folio de solicitud, folio de orden de compra, vistas rápidas -->
             <div class="d-flex justify-content-between align-items-start">
-              <h6 class="mb-0 gap-1"> 
+              <h6 class="mb-0 gap-1">
                 <strong> {{ item.folio }} </strong>
                 <a
                   *ngIf="item.folio_oc && tienePermiso('view btn descargar orden') && item.folio_oc != '-'"
@@ -61,9 +61,9 @@
                 <small class="text-danger fw-bold"  *ngIf ="item.requiere_anticipo" > <i class="fas fa-dot-circle"></i> </small>
               </h6>
               <div>
-                <i 
-                  title="Requiere autorización" 
-                  class="fas fa-signature px-2 text-danger" 
+                <i
+                  title="Requiere autorización"
+                  class="fas fa-signature px-2 text-danger"
                   *ngIf="validarAutorizaciones(item)"
                 ></i>
                 <i
@@ -101,10 +101,10 @@
             </div>
             <!-- Cantidad de documentos cargados -->
             <div *ngIf="item.folio_oc && item.folio_oc != '-' && item.estatus != '5'" class="d-flex justify-content-around aling-items-center border mt-1 p-1 rounded-pill bg-light-subtle">
-              <span [ngClass] = "{'text-success': item.surtido > 0, 'text-danger': !item.vencido && item.surtido == 0 }"     class="fw-bold"><i title="Entregas"            class="fas fa-box-open"></i>{{ ' ' + item.surtido}}</span> 
-              <span [ngClass] = "{'text-success': item.facturas_xml > 0}"       class="fw-bold"><i title="Facturas"            class="fas fa-file-invoice" ></i> {{ ' ' + item.facturas_xml}} </span> 
-              <span [ngClass] = "{'text-success': item.comprobantes_pago > 0}"  class="fw-bold"><i title="Pagos"               class="fas fa-money-bill-wave" > </i> {{' ' + item.comprobantes_pago}} </span> 
-              <span *ngIf="item.modo_pago == 'CREDITO'" [ngClass] = "{'text-success': item.complementos_pago > 0}"  class="fw-bold"><i title="Complemento de pago"  class="fas fa-file-invoice-dollar"></i> {{' ' + item.complementos_pago}}</span> 
+              <span [ngClass] = "{'text-success': item.surtido > 0, 'text-danger': !item.vencido && item.surtido == 0 }"     class="fw-bold"><i title="Entregas"            class="fas fa-box-open"></i>{{ ' ' + item.surtido}}</span>
+              <span [ngClass] = "{'text-success': item.facturas_xml > 0}"       class="fw-bold"><i title="Facturas"            class="fas fa-file-invoice" ></i> {{ ' ' + item.facturas_xml}} </span>
+              <span [ngClass] = "{'text-success': item.comprobantes_pago > 0}"  class="fw-bold"><i title="Pagos"               class="fas fa-money-bill-wave" > </i> {{' ' + item.comprobantes_pago}} </span>
+              <span *ngIf="item.modo_pago == 'CREDITO'" [ngClass] = "{'text-success': item.complementos_pago > 0}"  class="fw-bold"><i title="Complemento de pago"  class="fas fa-file-invoice-dollar"></i> {{' ' + item.complementos_pago}}</span>
             </div>
           </div>
         </div>
