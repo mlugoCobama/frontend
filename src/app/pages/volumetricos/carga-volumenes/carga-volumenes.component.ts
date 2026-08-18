@@ -133,10 +133,13 @@ export class CargaVolumenesComponent implements OnInit {
       (response) => {
         if (response) {
           const rawData = response.data;
-          /**Filtro para solo mostrar las empresas que tienen acceso a macrotaller */
-          this.rawEmpresas = rawData.filter(
-            (objeto) => objeto.isAgencia === false
-          );
+          const intercompaniasExcluidas = [200, 119, 201, 700, 333, 119, 200 ];
+          this.rawEmpresas = rawData.filter((objeto: any) => {
+          const noEsAgencia = objeto.isAgencia === false; // o simplemente !objeto.isAgencia
+          const noEsIntercompaniaExcluida = !intercompaniasExcluidas.includes(objeto.intercompania);
+
+          return noEsAgencia && noEsIntercompaniaExcluida;
+        });
           this.getUsuarioActivo();
           // this.isLoading = false;
         } else {
@@ -175,16 +178,23 @@ export class CargaVolumenesComponent implements OnInit {
   guardar() {
   if (this.form.invalid) {
     this.alertasService.mostrarAlerta(
-          "Error",
-          `Debes llenar todos los campos`,
-          "error",
-          "danger"
+          "Error",`Debes llenar todos los campos`,"error","danger"
         );
         this.form.markAllAsTouched();
         this.isLoading = false;
     return;
 
   }
+
+  if(!this.jsonPreview){
+    this.alertasService.mostrarAlerta(
+          "Error",`Debes de cargar un archivo valido`,"error","danger"
+        );
+        this.form.markAllAsTouched();
+        this.isLoading = false;
+    return;
+  }
+
   this.isLoading = true;
   const formData = new FormData();
 

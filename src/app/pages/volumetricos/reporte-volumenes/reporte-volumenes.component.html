@@ -46,7 +46,7 @@
           Datos del reporte <ng-container *ngIf="isOpenPanelEdicion">- Antiguos</ng-container>
        </span>
        <div class=" d-flex gap-3">
-      <button type="button" class="btn btn-outline-light btn-sm fw-semibold" (click)="descargarExcel()">
+      <button *ngIf="esExcel(itemSeleccionado?.ruta_plantilla)" type="button" class="btn btn-outline-light btn-sm fw-semibold" (click)="descargarExcel()">
             <i class="fas fa-file-excel me-1"></i> Descarga Plantilla
         </button>
 

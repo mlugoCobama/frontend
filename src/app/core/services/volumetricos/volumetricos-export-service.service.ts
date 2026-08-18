@@ -42,10 +42,10 @@ export class VolumetricosExportService {
   /**
    * Descarga el objeto de reporte en formato JSON usando Blob (más eficiente para archivos grandes)
    */
-  descargarJson(data: any, fileName?: string): void {
+  descargarJson(data: any, uuid?:any, fileName?: string): void {
     if (!data) return;
 
-    const nombreArchivo = fileName || this.createSatFileName(data);
+    const nombreArchivo = fileName || this.createSatFileName(data, uuid);
     const jsonStr = JSON.stringify(data, null, 2);
     const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8;' });
 
@@ -55,10 +55,10 @@ export class VolumetricosExportService {
   /**
    * Transforma el objeto a XML y lo descarga en el navegador
    */
-  descargarXml(data: any, fileName?: string): void {
+  descargarXml(data: any, uuid?:any, fileName?: string): void {
     if (!data) return;
 
-    const nombreArchivo = fileName || this.createSatFileName(data);
+    const nombreArchivo = fileName || this.createSatFileName(data, uuid);
     const xmlData = this.jsonToXml(data);
     const blob = new Blob([xmlData], { type: 'application/xml;charset=utf-8;' });
 
@@ -68,13 +68,13 @@ export class VolumetricosExportService {
   /**
    * Genera el nombre estandarizado del archivo según datos del SAT
    */
-  createSatFileName(d: any): string {
+  createSatFileName(d: any, reportId:any ): string {
     if (!d) return 'reporte_volumetrico';
 
     const fecha = d.FechaYHoraReporteMes ? new Date(d.FechaYHoraReporteMes) : new Date();
     const mesFormateado = `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, '0')}-31`;
 
-    const uuid = d.IdEnvio || crypto.randomUUID();
+    const uuid = reportId || crypto.randomUUID();
     const clave = (d.ClaveInstalacion || "").trim().toUpperCase();
     const caracter = clave.startsWith("EXO") ? 'EXO' : 'DIS';
 

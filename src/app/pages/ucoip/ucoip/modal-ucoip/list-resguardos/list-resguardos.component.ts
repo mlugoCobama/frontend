@@ -29,7 +29,7 @@ export class ListResguardosComponent implements OnInit{
   hardwareFiltrado: any[] = [];
   idsSeleccionados: number[] = [];
 
-  constructor(private fb: FormBuilder, 
+  constructor(private fb: FormBuilder,
     private catHardware: CatHardwareService,
     private resguardos: ResguardosService
   ) {}
@@ -71,7 +71,7 @@ export class ListResguardosComponent implements OnInit{
     }
 
     const payload = {...this.ucoip, ...this.form.value};
-    
+
       this.resguardos.save(payload).subscribe({
         next: (res) => {
           this.loading = false;
@@ -134,6 +134,7 @@ export class ListResguardosComponent implements OnInit{
 
 
   public getHwDisponible(){
+    console.log(this.ucoip2)
     this.datos = [];
     this.catHardware.getHardwareDisponible(this.ucoip2?.cat_empresa_id).subscribe({
       next: async (resp) => {

@@ -18,6 +18,7 @@ export class ParserVolumetricosComponent implements OnInit {
   jsonPreview: any = null;
   public rawEmpresas: any;
   public isLoading: boolean = false;
+  public uuidReporte = null;
 
   @Input() idReporte:any =  null;
   @Output() finished = new EventEmitter<any>();
@@ -66,10 +67,15 @@ export class ParserVolumetricosComponent implements OnInit {
       (response) => {
         if (response) {
           const rawData = response.data;
-          /**Filtro para solo mostrar las empresas que tienen acceso a macrotaller */
-          this.rawEmpresas = rawData.filter(
-            (objeto:any) => objeto.isAgencia === false
-          );
+
+          const intercompaniasExcluidas = [200, 119, 201, 700, 333, 119, 200 ];
+          this.rawEmpresas = rawData.filter((objeto: any) => {
+          const noEsAgencia = objeto.isAgencia === false; // o simplemente !objeto.isAgencia
+          const noEsIntercompaniaExcluida = !intercompaniasExcluidas.includes(objeto.intercompania);
+
+          return noEsAgencia && noEsIntercompaniaExcluida;
+        });
+
           this.getUsuarioActivo();
           // this.isLoading = false;
         } else {
@@ -99,6 +105,7 @@ export class ParserVolumetricosComponent implements OnInit {
 
 
   generarArchivo() {
+    this.uuidReporte = null;
   if (this.form.invalid) {
     this.alertasService.mostrarAlerta( "Error", `Debes llenar todos los campos`, "error", "danger");
         this.form.markAllAsTouched();
@@ -115,7 +122,9 @@ export class ParserVolumetricosComponent implements OnInit {
     .subscribe({
       next: (resp) => {
        this.alertasService.mostrarAlerta( "Listo", `Archivo Generado Correctamente`,  "success",  "success");
-        this.jsonPreview = resp;
+      //  console.log(resp)
+        this.uuidReporte = resp.headers.get('X-Report-UUID')
+        this.jsonPreview = resp.body;
         this.isLoading = false;
       },
       error: (err) => {
@@ -142,8 +151,9 @@ if (this.form.invalid) {
   formData.append('empresa',this.form.get('empresa')?.value);
   formData.append('formato',this.form.get('formato')?.value);
   formData.append('tipo', this.jsonPreview.ClaveInstalacion);
-  formData.append('descripcion', this.jsonPreview.DescripcionInstalacion)
-  formData.append('fecha_reporte', this.jsonPreview.FechaYHoraReporteMes)
+  formData.append('descripcion', this.jsonPreview.DescripcionInstalacion);
+  formData.append('fecha_reporte', this.jsonPreview.FechaYHoraReporteMes);
+  formData.append('uuid_plantilla', this.uuidReporte ?? '')
 
   this.volumetricos.store(formData)
     .subscribe({
@@ -183,6 +193,7 @@ if (this.form.invalid) {
   formData.append('tipo', this.jsonPreview.ClaveInstalacion);
   formData.append('descripcion', this.jsonPreview.DescripcionInstalacion);
   formData.append('fecha_reporte', this.jsonPreview.FechaYHoraReporteMes);
+  formData.append('uuid_plantilla', this.uuidReporte ?? '');
   formData.append('_method', 'PUT');
 
   this.volumetricos.update( this.idReporte ,formData)
@@ -211,11 +222,11 @@ if (this.form.invalid) {
 
 
   descargarJson() {
-    this.exportService.descargarJson(this.jsonPreview);
+    this.exportService.descargarJson(this.jsonPreview, this.uuidReporte);
   }
 
   descargarXml() {
-    this.exportService.descargarXml(this.jsonPreview);
+    this.exportService.descargarXml(this.jsonPreview, this.uuidReporte);
   }
 
     tienePermiso(permiso: string = null): boolean {

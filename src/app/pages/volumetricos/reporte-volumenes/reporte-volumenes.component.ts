@@ -220,7 +220,10 @@ reportes:any[]=[];
   }
 
   descargarExcel() {
-    console.log(this.itemSeleccionado)
     this.exportService.descargarExcelDesdeServidor(this.itemSeleccionado?.id);
+  }
+
+   esExcel(ruta: string): boolean {
+    return /\.xl(s|sx|sm|sb)$/i.test(ruta);
   }
 }
