@@ -887,7 +887,7 @@ export const MENU: MenuItem[] = [
     subItems: [
       {
         id: 8,
-        label: "Carga reportes",
+        label: "Validar JSON",
         link: "/volumetricos/carga-reporte",
         parentId: 45,
         permission: "view sub modulo carga volumetricos",
@@ -901,7 +901,7 @@ export const MENU: MenuItem[] = [
       },
       {
         id: 14,
-        label: "Generar reporte",
+        label: "Generar JSON",
         link: "/volumetricos/genera-reporte",
         parentId: 45,
         permission: "view submodulo generar reportes volumetricos",

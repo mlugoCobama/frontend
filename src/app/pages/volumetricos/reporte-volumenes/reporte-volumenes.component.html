@@ -3,7 +3,7 @@
     [title]="'Reportes de controles volumétricos'"
     [hasButtons] ="true"
     [showBtnEditar] ="(itemSeleccionado ? true : false) && tienePermiso('view btn delete reportes volumetricos')"
-    [showBtnEliminar] ="(itemSeleccionado ? true : false) && tienePermiso('vview btn update reportes volumetricos')"
+    [showBtnEliminar] ="(itemSeleccionado ? true : false) && tienePermiso('view btn update reportes volumetricos')"
     (actualizar)="openUpdate()"
     (eliminar)="eliminarRegistro()"
     >
@@ -13,6 +13,7 @@
     <app-tabla-generica
     [isLoad] = "isLoad"
     [data]="reportes"
+    [mostrarSelect]="true"
     [columnas]="columnas"
     [acciones]="acciones"
     (itemSeleccionado) = "setItemSeleccionado($event)"

@@ -34,6 +34,9 @@ import { VisorCortesComponent } from './visor-cortes/visor-cortes.component';
 import { ComisionesOtrosComponent } from './comisiones-otros/comisiones-otros.component';
 import { ModalOtroComponent } from './comisiones-otros/modal-otro/modal-otro.component';
 import { AddOtroFormComponent } from './comisiones-otros/forms/add-otro-form/add-otro-form.component';
+import { MediaGalleryComponent } from './ordenes-servicio/detalle-orden/media-gallery/media-gallery.component';
+import { StatusCardButtonComponent } from './ordenes-servicio/detalle-orden/status-card-button/status-card-button.component';
+import { TimeLineCitaComponent } from './ordenes-servicio/detalle-orden/time-line-cita/time-line-cita.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +66,9 @@ import { AddOtroFormComponent } from './comisiones-otros/forms/add-otro-form/add
     ComisionesOtrosComponent,
     ModalOtroComponent,
     AddOtroFormComponent,
+    MediaGalleryComponent,
+    StatusCardButtonComponent,
+    TimeLineCitaComponent,
   ],
   imports: [
     CommonModule,

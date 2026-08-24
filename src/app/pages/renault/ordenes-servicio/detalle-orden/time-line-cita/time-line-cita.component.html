@@ -1,0 +1,76 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card border-0 shadow-sm rounded-4 mb-3">
+      <div class="card-header bg-light rounded-top-4 py-3">
+        <h5 class="fw-bold text-dark m-0 d-flex align-items-center">
+          <i class="fas fa-tasks text-warning me-2"></i> Proceso del Servicio
+          <span class="badge bg-warning text-dark ms-auto rounded-pill fs-7">
+            {{ porcentajeProgreso }}% Completado
+          </span>
+        </h5>
+      </div>
+
+      <div class="card-body p-4">
+        <!-- Contenedor con la barra de progreso y los nodos posicionados -->
+        <div class="position-relative my-2 px-3">
+
+          <!-- Barra de progreso de fondo -->
+          <div class="progress" style="height: 6px;">
+            <div
+              class="progress-bar bg-warning progress-bar-striped progress-bar-animated"
+              role="progressbar"
+              [style.width.%]="porcentajeProgreso">
+            </div>
+          </div>
+
+          <!-- Pasos distribuidos equitativamente -->
+          <div class="d-flex justify-content-between position-relative" style="margin-top: -18px;">
+            <div *ngFor="let paso of lineaDelTiempo" class="text-center bg-white px-2 rounded-3" style="min-width: 110px;">
+
+              <!-- Círculo / Botón Indicador de Estado -->
+              <div class="mb-2">
+                <span
+                (click)="mostrarTexto(paso.nombre)"
+                  class="btn btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center shadow-sm"
+                  style="width: 32px; height: 32px; font-size: 14px;"
+                  [ngClass]="{
+                    'btn-success text-white': paso.completado,
+                    'btn-warning text-dark fw-bold pulse-animation': paso.enProceso,
+                    'btn-secondary bg-opacity-25 text-muted border-0': !paso.completado && !paso.enProceso
+                  }">
+                  <i *ngIf="paso.completado" class="fas fa-check"></i>
+                  <i *ngIf="paso.enProceso" class="fas fa-spinner fa-spin"></i>
+                  <i *ngIf="!paso.completado && !paso.enProceso" class="fas fa-circle" style="font-size: 8px;"></i>
+                </span>
+              </div>
+
+              <!-- Nombre del Evento -->
+              <h6 class="fw-bold mb-1 text-dark small">{{ paso.nombre }}</h6>
+
+              <!-- Badge de Estatus -->
+              <span
+                class="badge rounded-pill mb-1"
+                [ngClass]="{
+                  'bg-success-subtle text-success border border-success': paso.completado,
+                  'bg-warning-subtle text-dark border border-warning': paso.enProceso,
+                  'bg-light text-muted border': !paso.completado && !paso.enProceso
+                }">
+                <ng-container [ngSwitch]="paso.estatus">
+                  <span *ngSwitchCase="'completado'">Finalizado</span>
+                  <span *ngSwitchCase="'en_proceso'">En Proceso</span>
+                  <span *ngSwitchDefault>Pendiente</span>
+                </ng-container>
+              </span>
+
+              <!-- Fecha / Hora del evento -->
+              <p class="mb-0 text-muted fs-8" *ngIf="paso.fecha">
+                <i class="far fa-clock me-1"></i>{{ paso.fecha | date: 'dd/MM/yyyy HH:mm' }}
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -17,14 +17,17 @@ export class OrdenesServicioComponent implements OnInit{
     { label: 'Calidad', number: 11, className: 'alert alert-dark m-0 p-2', color:'dark', nombre: 'Calidad', },
     { label: 'Terminado', number: 11, className: 'alert alert-success m-0 p-2', color:'primary', nombre: 'Terminado', },
     { label: 'Entregado', number: 11, className: 'alert alert-success m-0 p-2', color:'success', nombre: 'Entregado', },
+    { label: 'Finalizada', number: 11, className: 'alert alert-success m-0 p-2', color:'dark', nombre: 'Finalizada', },
   ];
 
   agrupaciones = {
     'Entrada': ['AC'],
     'Taller': ['AT'],
-    'Lavado': [''],
-    'Calidad': [''],
-    'Entregado' : [''],
+    'Lavado': ['AL'],
+    'Calidad': ['CA'],
+    'Terminado' : ['TE'],
+    'Entregado' : ['EN'],
+    'Finalizada' : ['FN'],
   };
 
   public ordenesServicio:any = [];

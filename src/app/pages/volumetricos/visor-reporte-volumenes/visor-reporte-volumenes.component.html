@@ -25,8 +25,8 @@
                 [color] = "'text-success'"
                 [icono] = "'fas fa-sign-out-alt '"
                 [titulo]= "' TOTAL RECEPCIONES'"
-                [note]= "'docs'"
-                [valor]= "+recepciones?.TotalDocumentosMes || 0"
+                [note]= " (+recepciones?.TotalDocumentosMes || 0) + ' docs'"
+                [valor]= "+recepciones?.TotalRecepcionesMes || 0"
                 ></app-kpi-card>
             </div>
             <div class="col-xl-12 col-6">
@@ -34,12 +34,10 @@
                 [color] = "'text-danger'"
                 [icono] = "'fas fa-sign-out-alt '"
                 [titulo]= "' TOTAL ENTREGAS'"
-                [note]= "'docs'"
-                [valor]= "+entregas?.TotalDocumentosMes || 0"
+                [note]= " (+entregas?.TotalDocumentosMes || 0) + ' docs'"
+                [valor]= "+entregas?.TotalEntregasMes || 0"
                 ></app-kpi-card>
             </div>
-
-
         </div>
     </div>
     <div class="col-xl-4 col-12">

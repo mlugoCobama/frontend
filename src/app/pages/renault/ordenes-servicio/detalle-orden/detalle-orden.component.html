@@ -234,156 +234,146 @@
     </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-lg-12">
-        <div class="card shadow-sm rounded-4">
-        <div class="card-header bg-light rounded-4 ">
-           <h5 class="fw-bold text-dark m-0"><i class="fas fa-camera text-warning me-2"></i> Estado del Vehículo</h5>
-        </div>
-        <div class="card-body">
-              <ng-container
-    *ngIf="dataEntrada?.testigos_fotograficos?.length > 0; else noData">
+<!-- Estado del Vehículo (Entrada) -->
+ <app-media-gallery
+  title="Estado del Vehículo (Entrada)"
+  iconClass="fas fa-camera"
+  [items]="dataEntrada?.testigos_fotograficos"
+  categoryFilter="entrada"
+  [showUploadButton]="canUploadEntrada"
+  uploadButtonText="Adjuntar Fotos/Videos"
+  (uploadRequested)="onUploadFiles($event)"
+  (itemDeleted)="onDeleteGalleryItem($event)">
+</app-media-gallery>
 
-    <div class="row">
-
-      <ng-container *ngFor="let item of dataEntrada.testigos_fotograficos">
-            <div
-              class="col-lg-4 col-md-6 mb-3"
-              *ngIf="item.categoria === 'entrada'">
-
-              <div class="card rounded-4 h-100 shadow-sm">
-
-                <!-- IMAGEN -->
-                <img
-                  *ngIf="item.media_type === 'image'"
-                  [src]="item.imagen"
-                  class="card-img-top  rounded-4 border"
-                  alt="Imagen del testigo"
-                  style="height: 220px;"
-                >
-
-                <!-- VIDEO -->
-                <video
-                  *ngIf="item.media_type === 'video'"
-                  class="card-img-top  rounded-4 border"
-                  controls
-                  style="height: 220px;"
-                >
-                  <source [src]="item.imagen" type="video/mp4">
-                  Tu navegador no soporta videos.
-                </video>
-
-                <div class="card-body">
-                  <p class="card-text">
-                   <span class="fw-semibold">Descripción: </span> {{ item.descripcion || 'Sin anotaciones' }}
-                  </p>
-                </div>
-
-              </div>
-
-            </div>
-
-          </ng-container>
-
-        </div>
-
-      </ng-container>
-
-        </div>
-    </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-lg-12">
-        <div class="card shadow-sm rounded-4">
-        <div class="card-header bg-light rounded-4 ">
-           <h5 class="fw-bold text-dark m-0"><i class="fas fa-camera text-warning me-2"></i> Evidencias del porceso</h5>
-        </div>
-        <div class="card-body">
-            <div class="card-body">
-  <ng-container
-    *ngIf="dataEntrada?.testigos_fotograficos?.length > 0; else noData">
-
-    <div class="row">
-
-      <ng-container *ngFor="let item of dataEntrada.testigos_fotograficos">
-            <div
-              class="col-lg-4 col-md-6 mb-3"
-              *ngIf="item.categoria === 'proceso'">
-
-              <div class="card rounded-4 h-100 shadow-sm">
-
-                <!-- IMAGEN -->
-                <img
-                  *ngIf="item.media_type === 'image'"
-                  [src]="item.imagen"
-                  class="card-img-top rounded-4 border"
-                  alt="Imagen del testigo"
-                  style="height: 220px; "
-                >
-
-                <!-- VIDEO -->
-                <video
-                  *ngIf="item.media_type === 'video'"
-                  class="card-img-top rounded-4 border"
-                  controls
-                  style="height: 220px; "
-                >
-                  <source [src]="item.imagen" type="video/mp4">
-                  Tu navegador no soporta videos.
-                </video>
-
-                <div class="card-body">
-                  <p class="card-text">
-                   <span class="fw-semibold">Descripción: </span> {{ item.descripcion || 'Sin anotaciones' }}
-                  </p>
-                </div>
-
-              </div>
-
-            </div>
-
-          </ng-container>
-
-        </div>
-
-      </ng-container>
-
-      <ng-template #noData>
-        <div class="alert alert-info">
-          No hay testigos fotográficos registrados.
-        </div>
-      </ng-template>
-    </div>
-        </div>
-    </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-12">
-        <div class="card border-warning mb-3">
-  <div class="card-header rounded-4">
-      <h5 class="fw-bold text-dark m-0"><i class="fas fa-tasks text-warning me-2"></i> Proceso del Servicio</h5>
+<div class="row g-3 mb-3">
+<ng-container *ngIf="isFinalizado(1)">
+ <div class="col-12 col-md-4">
+    <app-status-card-button
+      title="Proceso de Taller"
+      description="Taller mecanico"
+      [isActive]="isEnProceso(2)"
+      [isCompleted]="isFinalizado(2)"
+      [observaciones]="getObservaciones(2)"
+      [isLoading]="loadingEventos[2]"
+      (actionToggled)="manejarEvento($event, 2)">
+    </app-status-card-button>
   </div>
-  <div class="card-body">
-    <!-- Línea de progreso -->
-    <div class="progress" style="height: 4px; position: relative;">
-      <div class="progress-bar bg-warning" style="width: 25%;"></div>
-    </div>
+  <div class="col-12 col-md-8">
+       <app-media-gallery
+        title="Evidencias del Proceso"
+          iconClass="fas fa-tasks"
+          [items]="dataEntrada?.testigos_fotograficos"
+          categoryFilter="proceso"
+          [showUploadButton]="canUploadProceso && isEnProceso(2)"
+          uploadButtonText="Subir Evidencia"
 
-    <!-- Pasos distribuidos horizontalmente -->
-    <div class="d-flex justify-content-between mt-3 text-center">
-      <div *ngFor="let evento of eventos">
-        <button class="btn btn-sm fw-bold shadow-sm" [ngClass]="evento.completado ? 'btn-warning' : 'btn-secondary'">{{evento.estatus}}</button>
-        <p class="mb-0"><small>{{evento.fecha}}</small></p>
-        <p class="mb-0"><small>Por: {{evento.usuario}}</small></p>
-      </div>
-    </div>
+          (uploadRequested)="onUploadFiles($event)"
+          (itemDeleted)="onDeleteGalleryItem($event)">
+        </app-media-gallery>
   </div>
-</div>
+
+</ng-container>
+  <!-- Proceso de Lavado (Tipo 1) -->
+
+
+
+<ng-container *ngIf="isFinalizado(2)">
+<div class="col-12 col-md-4">
+    <app-status-card-button
+      title="Proceso de Lavado"
+      description="Bahía de lavado"
+      [isActive]="isEnProceso(3)"
+      [isCompleted]="isFinalizado(3)"
+      [observaciones]="getObservaciones(3)"
+      [isLoading]="loadingEventos[3]"
+      (actionToggled)="manejarEvento($event, 3)">
+    </app-status-card-button>
+  </div>
+  <div class="col-12 col-md-8">
+
+    <app-media-gallery
+      title="Evidencias del Lavado"
+        iconClass="fas fa-tasks"
+        [items]="dataEntrada?.testigos_fotograficos"
+        categoryFilter="lavado"
+        [showUploadButton]="canUploadProceso && isEnProceso(3)"
+        uploadButtonText="Subir Evidencia"
+
+        (uploadRequested)="onUploadFiles($event)"
+        (itemDeleted)="onDeleteGalleryItem($event)">
+      </app-media-gallery>
+  </div>
+</ng-container>
+  <!-- Proceso de Lavado (Tipo 1) -->
+
+<ng-container *ngIf="isFinalizado(3)">
+  <div class="col-12 col-md-4">
+    <app-status-card-button
+      title="Revisión de Calidad"
+      description="Área de inspección"
+      [isActive]="isEnProceso(4)"
+      [isCompleted]="isFinalizado(4)"
+      [observaciones]="getObservaciones(4)"
+      [isLoading]="loadingEventos[4]"
+      (actionToggled)="manejarEvento($event, 4)">
+    </app-status-card-button>
+  </div>
+  <div class="col-12 col-md-8">
+  <app-media-gallery
+    title="Evidencias de revision de calidad"
+    iconClass="fas fa-tasks"
+    [items]="dataEntrada?.testigos_fotograficos"
+    categoryFilter="Calidad"
+    [showUploadButton]="canUploadProceso && isEnProceso(4)"
+    uploadButtonText="Subir Evidencia"
+
+    (uploadRequested)="onUploadFiles($event)"
+    (itemDeleted)="onDeleteGalleryItem($event)">
+  </app-media-gallery>
+  </div>
+</ng-container>
+  <!-- Revisión de Calidad (Tipo 2) -->
+
+<ng-container *ngIf="isFinalizado(4)">
+    <div class="col-12 col-md-4">
+    <app-status-card-button
+      title="Proceso de Entrega"
+      description="Entrega al cliente"
+      [isActive]="isEnProceso(6)"
+      [isCompleted]="isFinalizado(6)"
+      [observaciones]="getObservaciones(6)"
+      [isLoading]="loadingEventos[6]"
+      (actionToggled)="manejarEvento($event, 6)">
+    </app-status-card-button>
+  </div>
+
+    <div class="col-12 col-md-8">
+      <app-media-gallery
+            title="Evidencias de entrega del vehiculo"
+            iconClass="fas fa-tasks"
+            [items]="dataEntrada?.testigos_fotograficos"
+            categoryFilter="Entrega"
+            [showUploadButton]="canUploadProceso && isEnProceso(6)"
+            uploadButtonText="Subir Evidencia"
+
+            (uploadRequested)="onUploadFiles($event)"
+            (itemDeleted)="onDeleteGalleryItem($event)">
+      </app-media-gallery>
 
     </div>
+</ng-container>
+  <!-- Entrega (Tipo 3) -->
+
 </div>
+
+<app-time-line-cita
+  [catEventos]="catEventos"
+  [eventosEstado]="eventosEstado"
+  [cita]="cita"
+  >
+</app-time-line-cita>
+
 </ng-container>
 
 

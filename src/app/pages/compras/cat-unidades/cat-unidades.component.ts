@@ -1,5 +1,6 @@
 import { Component, OnInit} from '@angular/core';
-import { FuncionesTablas } from '../compras/funciones-tablas';
+// import { FuncionesTablas } from '../compras/funciones-tablas';
+import { FuncionesTablas } from 'src/app/core/helpers/funciones-tablas';
 import { UnidadesService } from 'src/app/core/services/compras/unidades.service';
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 
@@ -322,10 +323,7 @@ export class CatUnidadesComponent implements OnInit {
   public getUsuarioActivo() {
     const currentUser = this.localStorage.getItem("currentUser");
     const usuarioActivo = currentUser["usuarioActivo"][0];
-    const multiselect = usuarioActivo.multiselect;
     const intercompania = usuarioActivo.intercompania;
-    const enpresa = usuarioActivo.empresa;
-    const enpresas = usuarioActivo.empresas;
     this.usuarioSolicita = usuarioActivo;
 
     if (!this.tienePermiso(this.permisos.selectParqueVehicular)) {

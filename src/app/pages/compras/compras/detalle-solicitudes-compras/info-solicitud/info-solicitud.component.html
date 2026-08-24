@@ -1,46 +1,210 @@
 <div class="card mb-3 rounded-4 shadow-sm">
-  <div class="card-header rounded-4 bg-primary text-white fw-semibold" [ngClass]="solicitudCompra?.motivo_revision
-    ? 'd-flex align-items-center justify-content-between'
-    : 'text-center'">
-   <strong> <i class="fas fa-info-circle  me-1"></i> Información general de la solicitud de compra. </strong>
-   <button *ngIf="solicitudCompra?.motivo_revision" class="btn btn-sm btn-outline-light" (click)="clickEditarSolicitud()"> <i class="fas fa-edit"></i> Modificar Solicitud</button>
+  <div class="card-header rounded-4 bg-primary text-white fw-semibold"
+       [ngClass]="solicitudCompra?.motivo_revision
+         ? 'd-flex align-items-center justify-content-between'
+         : 'text-center'">
+    <strong>
+      <i class="fas fa-info-circle me-1"></i>Información general de la solicitud de compra.
+    </strong>
+    <button
+      *ngIf="solicitudCompra?.motivo_revision"
+      class="btn btn-sm btn-outline-light"
+      (click)="clickEditarSolicitud()">
+      <i class="fas fa-edit"></i> Modificar Solicitud
+    </button>
   </div>
+
+
   <div class="card-body">
-    <div class="row"> <!--Inicia div datos solicitud -->
-    <div class="col-md-6">
-      <p><strong>Folio: </strong>{{ solicitudCompra.folio }} <span class="text-danger fw-bold"  *ngIf ="solicitudCompra.requiere_anticipo" > REQUIERE ANTICIPO </span></p>
-      <p >
-        <strong>Usuario solicita: </strong>{{ solicitudCompra.usuario_solicita }}
-      </p>
-      <p><strong>Empresa: </strong>{{solicitudCompra.empresa}}</p>
-      <p> <strong>Estatus: </strong>  <span [ngClass]="'badge rounded-pill font-size-11 ' + solicitudCompra.claseEstado "> {{solicitudCompra.estado}} </span>
-      <p *ngIf="solicitudCompra.razon_cancelacion" class="alert alert-danger p-1"><strong> Razón de cancelación: </strong>{{solicitudCompra.razon_cancelacion}}</p>
-      <p *ngIf="solicitudCompra.tipo === 2"> <strong>Orden de trabajo: </strong> {{ solicitudCompra.orden_trabajo }}
-        &nbsp;
-        <span *ngIf="solicitudCompra.formato_orden" (click)= "verArchivos(solicitudCompra.formato_orden)" class="btn btn-sm btn-info"><i class="bx bx-info-circle"></i> Ver  </span>
-      </p>
-      <p *ngIf="solicitudCompra.motivo_revision" class="alert alert-warningn p-1"><strong class="text-danger"> Correcciones sugeridas: </strong>{{solicitudCompra.motivo_revision}} </p>
-    </div>
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="mb-2">
+          <div class="text-muted mb-1">
+            <i class="fas fa-hashtag me-1"></i>Folio
+          </div>
+          <div class="fw-semibold">
+            {{ solicitudCompra.folio }}
+            <span
+              *ngIf="solicitudCompra.requiere_anticipo"
+              class="badge rounded-pill bg-warning text-white ms-2 font-size-11">
+              <!-- <i class="fas fa-money-bill-wave me-1"></i> -->
+              REQUIERE ANTICIPO
+            </span>
+          </div>
+        </div>
 
+        <!-- Usuario -->
+        <div class="mb-2">
+          <div class="text-muted mb-1">
+            <i class="fas fa-user me-1"></i>Usuario solicita
+          </div>
+          <div class="fw-semibold">
+            {{ solicitudCompra.usuario_solicita }}
+          </div>
+        </div>
 
-    <div class="col-md-6">
-      <p *ngIf="solicitudCompra.tipo === 2"> <strong>Folio Requisicion: </strong> {{ solicitudCompra.folio_requisicion ?? 'No especificada' }}</p>
-      <p><strong>Fecha: </strong>{{ solicitudCompra.fecha}}</p>
-      <p *ngIf="solicitudCompra.c_c === 0">
-        <strong>U. Destino: </strong>{{solicitudCompra.usuario_destino}}
-      </p>
-      <p *ngIf="solicitudCompra.c_c != 0">
-        <strong>Centro de costos: </strong> {{ centrosCostos[solicitudCompra.c_c-1].Descripcion }}
-     </p>
-      <p><strong>Motivo: </strong>{{ solicitudCompra.motivo }}</p>
-      <div *ngIf="mostrarTotal" class="row">
-        <p *ngIf="cotizacion">
-          <strong>Consideraciones: </strong> {{ cotizacion.consideraciones }}
-        </p>
+        <!-- Empresa -->
+        <div class="mb-2">
+          <div class="text-muted mb-1">
+            <i class="fas fa-building me-1"></i>Empresa
+          </div>
+          <div class="fw-semibold">
+            {{ solicitudCompra.empresa }}
+          </div>
+        </div>
+
+        <!-- Estatus -->
+        <div class="mb-2">
+          <div class="text-muted mb-1">
+            <i class="fas fa-info-circle me-1"></i>Estatus
+          </div>
+          <span
+          class="fw-semibold"
+            [ngClass]="'badge rounded-pill font-size-11 ' + solicitudCompra.claseEstado">
+            {{ solicitudCompra.estado }}
+          </span>
+        </div>
+
+        <!-- Razón cancelación -->
+        <div
+          *ngIf="solicitudCompra.razon_cancelacion"
+          class="alert alert-danger rounded-4 py-2 px-3 mb-3">
+          <div class="fw-semibold mb-1">
+            <i class="fas fa-ban me-1"></i>
+            Razón de cancelación
+          </div>
+          <div>
+            {{ solicitudCompra.razon_cancelacion }}
+          </div>
+        </div>
+
+        <!-- Orden de trabajo -->
+        <div
+          *ngIf="solicitudCompra.tipo === 2"
+          class="mb-2">
+          <div class="text-muted mb-1">
+            <i class="fas fa-clipboard-list  me-1"></i>
+            Orden de trabajo
+          </div>
+
+          <div class="d-flex align-items-center gap-2">
+            <span class="fw-semibold">
+              {{ solicitudCompra.orden_trabajo }}
+            </span>
+            <button
+              *ngIf="solicitudCompra.formato_orden"
+              type="button"
+              class="btn btn-sm btn-outline-info rounded-pill fw-semibold"
+              (click)="verArchivos(solicitudCompra.formato_orden)">
+              <i class="bx bx-info-circle me-1"></i>
+              Ver archivo
+            </button>
+          </div>
+        </div>
+        <!-- Correcciones -->
+        <div
+          *ngIf="solicitudCompra.motivo_revision"
+          class="alert alert-warning rounded-4 py-2 px-3 mb-0">
+          <div class="fw-semibold text-danger mb-1">
+            <i class="fas fa-triangle-exclamation me-1"></i>
+            Correcciones sugeridas
+          </div>
+          <div>
+            {{ solicitudCompra.motivo_revision }}
+          </div>
+        </div>
       </div>
-      <p *ngIf="solicitudCompra.observaciones" class="alert alert-info p-1"> <strong>Observaciones: </strong> {{solicitudCompra.observaciones}}</p>
+
+
+      <div class="col-md-6">
+
+        <!-- Folio requisición -->
+        <div
+          *ngIf="solicitudCompra.tipo === 2"
+          class="mb-2">
+          <div class="text-muted mb-1">
+            <i class="fas fa-file-alt me-1"></i>
+            Folio requisición
+          </div>
+          <div class="fw-semibold">
+            {{ solicitudCompra.folio_requisicion ?? 'No especificada' }}
+          </div>
+        </div>
+
+        <!-- Fecha -->
+        <div class="mb-2">
+          <div class="text-muted mb-1">
+            <i class="fas fa-calendar me-1"></i>
+            Fecha
+          </div>
+          <div class="fw-semibold">
+            {{ solicitudCompra.fecha }}
+          </div>
+        </div>
+        <!-- Usuario destino -->
+        <div
+          *ngIf="solicitudCompra.c_c === 0"
+          class="mb-2">
+          <div class="text-muted mb-1">
+            <i class="fas fa-map-pin me-1"></i>
+            U. Destino
+          </div>
+          <div class="fw-semibold">
+            {{ solicitudCompra.usuario_destino }}
+          </div>
+        </div>
+
+
+        <!-- Centro de costos -->
+        <div
+          *ngIf="solicitudCompra.c_c != 0"
+          class="mb-2">
+          <div class="text-muted mb-1">
+            <i class="fas fa-sitemap me-1"></i>
+            Centro de costos
+          </div>
+          <div class="fw-semibold">
+            {{ centrosCostos[solicitudCompra.c_c - 1].Descripcion }}
+          </div>
+        </div>
+
+        <!-- Motivo -->
+        <div class="mb-2">
+          <div class="text-muted mb-1">
+            <i class="fas fa-comment-dots me-1"></i>
+            Motivo
+          </div>
+          <div class="fw-semibold">
+            {{ solicitudCompra.motivo }}
+          </div>
+        </div>
+
+        <!-- Consideraciones -->
+        <div
+          *ngIf="mostrarTotal && cotizacion"
+          class="mb-2">
+          <div class="text-muted mb-1">
+            <i class="fas fa-lightbulb me-1"></i>
+            Consideraciones
+          </div>
+          <div class="fw-semibold">
+            {{ cotizacion.consideraciones }}
+          </div>
+        </div>
+
+        <!-- Observaciones -->
+        <div
+          *ngIf="solicitudCompra.observaciones"
+          class="alert alert-info rounded-4 py-2 px-3 mb-0">
+          <div class="fw-semibold mb-1">
+            <i class="fas fa-search me-1"></i>
+            Observaciones
+          </div>
+          <div>
+            {{ solicitudCompra.observaciones }}
+          </div>
+        </div>
+      </div>
     </div>
-  </div> <!--Fin div datos solicitud -->
   </div>
 </div>
-
