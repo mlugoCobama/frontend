@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-xl-12">
-      <div class="card rounded shadow-lg">
+      <div class="card rounded-4 shadow-sm">
         <div class="card-body border-bottom">
           <div class="d-flex align-items-center">
             <h5 class="mb-0 card-title flex-grow-1">Proveedores</h5>
@@ -32,14 +32,14 @@
                 href="javascript:void(0);"
                 class="btn btn-primary btn-sm"
                 (click)="openModalNuevo()"
-                *ngIf= "tienePermiso('view btn add proveedor')"              
+                *ngIf= "tienePermiso('view btn add proveedor')"
                 ><i class="fas fa-plus"></i> Nuevo</a
               >
             </div>
           </div>
         </div>
-      </div>  
-        <div class="card rounded shadow-lg">
+      </div>
+        <div class="card rounded-4 shadow-sm">
           <div class="card-body border-bottom">
           <div class="d-flex justify-content-center" *ngIf="isLoad">
             <div class="spinner-border" role="status">
@@ -52,7 +52,7 @@
             </div>
           </div>
           <div >
-            <div class="tab-page-content mt-3 table-responsive" style="overflow-y: scroll; height: 20rem;">
+            <div class="tab-page-content mt-3 table-responsive rounded-4" style="overflow-y: scroll; height: 20rem;">
               <table
               class="table table-hover table-sm table-responsive  border"
               *ngIf="!isLoad"
@@ -89,7 +89,7 @@
                     </tr>
                 </tbody>
             </table>
-            
+
             </div>
           </div>
           <p class="mt-2 text-muted">Se muestran {{ datosFiltrados?.length ?? 0 }} de {{ data?.length ?? 0 }}</p>

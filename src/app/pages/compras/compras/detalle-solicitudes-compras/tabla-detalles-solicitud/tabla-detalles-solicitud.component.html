@@ -164,7 +164,7 @@
           </td>
 
           <td *ngIf="solicitudCompra?.multiUnidad" style="width: 3.5rem" (click)="copiarTexto(getDetalleControl(i, 'no_serie')?.value)" class="text-center">
-            <span
+            <span class="small fw-semibold"
              data-bs-toggle="tooltip" data-bs-placement="top" [attr.title]="getDetalleControl(i, 'no_serie')?.value">
               {{ getDetalleControl(i, 'autotanque')?.value }}
             </span>

@@ -50,7 +50,7 @@
                     </span>
                 </div>
             </div>
-            <div class="col-6 col-md-6 col-xl-3  ">
+            <div class="col-4 col-md-4 col-xl-2  ">
                 <div class="border rounded-4 px-3 py-2 h-100">
                     <small class="text-muted d-block">Precio combustible</small>
                     <span class="fw-semibold text-primary">
@@ -58,9 +58,28 @@
                     </span>
                 </div>
             </div>
+            <div *ngIf="dispersionActual" [formGroup]="dispersionActual" class="col-4 col-md-4 col-xl-2">
+                <div class="border border-primary rounded-4 px-3 py-2 h-100 bg-white">
+                    <small class="text-primary d-block">Porcentaje dispersión</small>
+                    <div class="d-flex align-items-center">
+                        <input
+                           *ngIf="this.dispersionActual?.get('guardada')?.value == false"
+                            type="number"
+                            formControlName="porcentaje"
+                            (input)="calcularSaldoDispersar()"
+                            class="form-control form-control-sm border-0 p-0 fw-semibold text-primary shadow-none w-100"
+                            placeholder="100"
+                            min="0"
+                            max="100"
+                            style="background: transparent; font-size: 1rem;">
+                        <span *ngIf="this.dispersionActual?.get('guardada')?.value == true" class="fw-semibold text-primary ms-1">{{ this.dispersionActual?.get('porcentaje')?.value }} </span>
+                        <span class="fw-semibold text-primary ms-1">%</span>
+                    </div>
+                </div>
+            </div>
             <div
                 *ngIf="this.dispersionActual?.get('fechaDispersion')?.value"
-                class="col-6 col-md-6 col-xl-3  ">
+                class="col-4 col-md-4 col-xl-2  ">
 
                 <div class="border border-success rounded-4 px-3 py-2 h-100">
                     <small class="text-success d-block">
@@ -151,7 +170,7 @@
   <div class="table-responsive rounded-4 border">
     <table class="table table-sm table-bordered table-hover align-middle">
       <thead class="table-light">
-        <tr>
+        <tr class="table-dark">
           <th class="text-center py-2" colspan="11">DISPERSIÓN - {{ i + 1 }}</th>
         </tr>
         <tr>
@@ -161,7 +180,7 @@
           <th class="text-center">Recorrido</th>
           <th>Tarjeta Toka</th>
           <th>Litros</th>
-          <th>Precio</th>
+          <!-- <th>Precio</th> -->
           <th>Saldo Solicitado</th>
           <th>Limite Autorizado</th>
           <th>{{solicitud.fecha_dispersion ? 'Saldo Actual' : 'Saldo En Tarjeta'}}</th>
@@ -190,7 +209,7 @@
           </td>
           <td [ngClass]="{'text-primary fw-bold': getValor( i ,'saldoSolictado') > 0}">{{ getValor( i ,'numTarjetaToka') }}</td>
           <td class="text-end fw-bold"> {{grupo.get('litros')?.value | number}} </td>
-          <td class="text-end fw-bold"> {{solicitud.precio_combustible | currency}}</td>
+          <!-- <td class="text-end fw-bold"> {{solicitud.precio_combustible | currency}}</td> -->
           <td class="text-end fw-bold"> {{grupo.get('saldoSolicitado')?.value | currency}}</td>
           <td class="border">
           <input
@@ -230,7 +249,7 @@
 
       <tfoot class="table-secondary">
         <tr>
-          <td colspan="7" class="text-end">Totales</td>
+          <td colspan="6" class="text-end  fw-bold">Totales</td>
           <td class="text-end fw-bold">{{ totalSolicitado | currency }}</td>
           <td class="text-end fw-bold">{{ totalAutorizado | currency }}</td>
           <td class="text-end fw-bold">{{ totalActual | currency }}</td>

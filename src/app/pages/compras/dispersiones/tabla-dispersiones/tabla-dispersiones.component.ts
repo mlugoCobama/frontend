@@ -1,19 +1,16 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
-import {
-  FormArray,
-  FormBuilder,
-  FormGroup,
-  Validators
-} from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DispersionData, VehiculoDispersion } from 'src/app/core/models/compras/dispersiones-diesel';
 import { DispersionesDieselService } from 'src/app/core/services/compras/dispersiones-diesel.service';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import { UnidadesService } from 'src/app/core/services/compras/unidades.service';
+
 @Component({
   selector: 'app-tabla-dispersiones',
   templateUrl: './tabla-dispersiones.component.html',
   styleUrls: ['./tabla-dispersiones.component.css']
 })
+
 export class TablaDispersionesComponent implements OnInit{
 
   public form: FormGroup;
@@ -76,6 +73,7 @@ export class TablaDispersionesComponent implements OnInit{
         guardada: primerVehiculo?.guardada ?? false,
         notificada: primerVehiculo?.notificada ?? false,
         dispersada: primerVehiculo?.dispersada ?? false,
+        porcentaje: primerVehiculo?.porcentaje ?? 100,
       });
 
       const vehiculosFormArray = grupoDispersion.get('vehiculos') as FormArray;
@@ -138,16 +136,16 @@ generarTabs(cantidad: number): void {
     });
   }
 
-  private crearDispersion(estado?: { fechaDispersion:any, guardada: boolean; notificada: boolean; dispersada: boolean }): FormGroup {
+  private crearDispersion(estado?: { fechaDispersion:any, guardada: boolean; notificada: boolean; dispersada: boolean; porcentaje?: number  }): FormGroup {
     return this.fb.group({
       fechaDispersion: [estado?.fechaDispersion ?? null],
       guardada: [estado?.guardada ?? false],
       notificada: [estado?.notificada ?? false],
       dispersada: [estado?.dispersada ?? false],
+      porcentaje: [estado?.porcentaje ?? 100, [Validators.min(0), Validators.max(100)]],
       vehiculos: this.fb.array([])
     });
   }
-
 
 
   seleccionarTab(index: number): void {
@@ -176,24 +174,36 @@ generarTabs(cantidad: number): void {
       saldoDispersado:    [{ value: v.saldoMesActual, disabled: true }],
       distanciaRecorrida: [{  value: v.distanciaRecorrida,  disabled: true}],
       fechaDispersion:    [{  value: v.fechaDispersion,  disabled: true}],
-
+      porcentaje:         [{  value: v.porcentaje ?? 100,  disabled: true}],
       saldoAutorizado:    [  v.saldoAutorizado ?? 0,  [Validators.required, Validators.min(0)]],
       saldoSolicitado:    [{ value: v.saldoSolicitado,  disabled: true}],
       saldoActual:        [  v.saldoActual ?? 0,  [Validators.required, Validators.min(0)]],
-      saldoDispersar:     [{  value: Math.max(0 , +((v.saldoAutorizado ?? 0) - (v.saldoActual ?? 0)).toFixed(2)) ?? 0,  disabled: true}]
+      saldoDispersar:     [{  value: Math.max(0 , +(((v.saldoAutorizado ?? 0) *  (v.porcentaje / 100)) - (v.saldoActual ?? 0)).toFixed(2)) ?? 0,  disabled: true}]
 
     });
   }
 
-  calcularSaldoDispersar(index: number): void {
+  calcularSaldoDispersar(index?: number): void {
+  const porcentaje = Number(this.dispersionActual?.get('porcentaje')?.value);
+  const factorPorcentaje = isNaN(porcentaje) ? 1 : porcentaje / 100;
 
+  const recargarVehiculo = (ctrl: FormGroup) => {
+    const autorizado = Number(ctrl.get('saldoAutorizado')?.value) || 0;
+    const actual = Number(ctrl.get('saldoActual')?.value) || 0;
+
+    const autorizadoConPorcentaje = autorizado * factorPorcentaje;
+    const saldoDispersar = Math.max(0, +(autorizadoConPorcentaje - actual).toFixed(2));
+
+    ctrl.get('saldoDispersar')?.setValue(saldoDispersar, { emitEvent: false });
+  };
+
+  if (index !== undefined) {
     const grupo = this.vehiculosArray.at(index) as FormGroup;
-    const solicitado = Number(grupo.get('saldoSolicitado')?.value) || 0;
-    const autorizado = Number(grupo.get('saldoAutorizado')?.value) || 0;
-    const actual =  Number(grupo.get('saldoActual')?.value) || 0;
-    const saldoDispersar = Math.max( 0, +(autorizado - actual).toFixed(2));
-    grupo.get('saldoDispersar')?.setValue( saldoDispersar, { emitEvent: false });
+    recargarVehiculo(grupo);
+  } else {
+    this.vehiculosArray.controls.forEach(ctrl => recargarVehiculo(ctrl as FormGroup));
   }
+}
 
   get totalSolicitado(): number {
     return this.vehiculosArray.controls.reduce(
@@ -215,7 +225,6 @@ generarTabs(cantidad: number): void {
         acc + (Number(ctrl.get('saldoDispersar')?.value) || 0), 0
     );
   }
-
 
   get totalAutorizado(): number {
     return this.vehiculosArray.controls.reduce(
@@ -249,6 +258,7 @@ generarTabs(cantidad: number): void {
 
   return {
     no_dispersion: this.tabSeleccionado + 1,
+    porcentaje: Number(dispersion.get('porcentaje')?.value) || 100,
     solicitudDiesel: this.solicitud,
     saldosDispersar: vehiculos.controls.map(ctrl => ({
     idSolicitud: ctrl.get('idSolicitud')?.value,
@@ -385,7 +395,9 @@ public marcarDispersionNotificada(): void {
 }
 
 public deshabilitarTab(){
+  const porcentajeRestante = 100 - this.porcentajeUtilizadoPrevio ;
   if(this.dispersionActual?.get('guardada')?.value == true){
+    this.dispersionActual.get('porcentaje')?.disable({ emitEvent: false });
     this.vehiculosArray.controls.forEach((ctrl) => {
     ctrl.get('saldoAutorizado')?.disable({ emitEvent: false });
     ctrl.get('saldoActual')?.disable({ emitEvent: false });
@@ -394,9 +406,19 @@ public deshabilitarTab(){
   }
 
   if(this.tabSeleccionado > 0){
+    this.dispersionActual?.get('porcentaje')?.patchValue(porcentajeRestante)
      this.vehiculosArray.controls.forEach((ctrl) => {
         ctrl.get('saldoAutorizado')?.disable({ emitEvent: false });
       });
   }
+}
+
+get porcentajeUtilizadoPrevio(): number {
+  let acumulado = 0;
+  for (let i = 0; i < this.tabSeleccionado; i++) {
+    const dispersion = this.dispersionesArray.at(i) as FormGroup;
+    acumulado += Number(dispersion.get('porcentaje')?.value) || 0;
+  }
+  return acumulado;
 }
 }

@@ -1,6 +1,6 @@
 
-<div class="accordion" id="miAcordeon">
-  <div class="accordion-item ">
+<div class="accordion  rounded-4 shadow-sm" id="miAcordeon">
+  <div class="accordion-item  rounded-4 shadow-sm">
     <h2 class="accordion-header ">
       <button
         class="accordion-button bg-dark text-white"
@@ -20,7 +20,7 @@
       [ngClass]="{ 'show': isOpen1 }"
       data-bs-parent="#miAcordeon"
     >
-      <div class="accordion-body"> 
+      <div class="accordion-body">
         <highcharts-chart
           *ngIf="isHighcharts"
           [Highcharts]="Highcharts"

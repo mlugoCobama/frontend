@@ -25,14 +25,14 @@ export class TablaInventarioComponent implements OnInit {
   @Input() isLoad: boolean = true;
   @Input() dataInventario: any[] = [];
   @Input() dtOptions: Config = {
-              searching: true,
-              paging: true,
-              info: false,
-              order: [0,'asc'],
-              language: {
-                url: '/assets/es-mx.json'
-              },
-            };
+    searching: true,
+    paging: true,
+    info: true,
+    order: [[0, 'asc']],
+    language: {
+      url: '../assets/es-mx.json'
+    },
+  };
 
   empresas: string[] = [];
   tipos: string[] = [];
@@ -59,14 +59,14 @@ export class TablaInventarioComponent implements OnInit {
                 this.dataInventario.map((x:any) => this.getEstatus(x.estado))
               )].sort();
             this.dtOptions = {
-            searching: true,
-            paging: true,
-            info: false,
-            order: [0,'asc'],
-            language: {
-              url: '/assets/es-mx.json'
-            },
-          };
+                                searching: true,
+                                paging: true,
+                                info: true,
+                                order: [[0, 'asc']],
+                                language: {
+                                  url: '../assets/es-mx.json'
+                                },
+                              };
           }
 
   public openEdit(item:any){

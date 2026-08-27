@@ -34,9 +34,9 @@ export class InventarioComponent implements OnInit {
     searching: true,
     paging: true,
     info: true,
-    order: [[0, "asc"]],
+    order: [[0, 'asc']],
     language: {
-      url: "/assets/es-mx.json",
+      url: '../assets/es-mx.json'
     },
   };
 
@@ -71,9 +71,9 @@ export class InventarioComponent implements OnInit {
             searching: true,
             paging: true,
             info: true,
-            order: [[0, "asc"]],
+            order: [[0, 'asc']],
             language: {
-              url: "/assets/es-mx.json",
+              url: '../assets/es-mx.json'
             },
           };
         } else {
@@ -238,12 +238,12 @@ export class InventarioComponent implements OnInit {
       showCancelButton: true,
       confirmButtonText: "Sí, eliminar",
       cancelButtonText: "Cancelar",
-      reverseButtons: true, // Pone el botón de confirmación del lado derecho
+      reverseButtons: true,
       customClass: {
         confirmButton: "btn btn-danger ms-2",
         cancelButton: "btn btn-secondary",
       },
-      buttonsStyling: false, // Permite usar clases personalizadas (ej. Bootstrap)
+      buttonsStyling: false,
     }).then((result) => {
       if (result.isConfirmed) {
         this.eliminarRegistro(id);

@@ -19,10 +19,12 @@ export interface VehiculoDispersion {
   notificada?:any;
   dispersada?:any;
   fechaDispersion?:any;
+  porcentaje?: any;
 }
 
 export interface DispersionData {
   fechaDispersion?: any;
+  porcentaje?: any;
   numero_exhibicion: number;
   guardada?: number;
   notificada?: number;

@@ -1,8 +1,8 @@
 
-<div class="card" *ngIf="!isLoad">
+<div class="card rounded-4 shadow-sm" *ngIf="!isLoad">
     <div class="card-body">
         <div class="row">
-            <div class="col-12 table-responsive">
+            <div class="col-12 table-responsive rounded-4 border">
                 <table  class="table table-sm table-striped-columns">
                     <thead>
                         <tr >
@@ -23,13 +23,13 @@
                             <!-- <div *ngIf="( dataEnergeticos.mes[i][concepto]  > (dataTotales[2][0][this.concepto] != null ? dataEnergeticos.anioAnt[i][concepto] : 0) );else templateName" > -->
                                 <i class='bx bx-up-arrow-alt fs-3 text-success'></i>
                                 <!-- <i class='bx bx-caret-up fs-3 text-success'></i> -->
-                                
+
                                 </div>
                                     <ng-template #templateName>
                                     <i class='bx bx-down-arrow-alt fs-3 text-danger' ></i>
                                     <!-- <i class='bx bx-caret-down fs-3 text-danger' ></i> -->
                                     </ng-template>
-                            </td> 
+                            </td>
                             <ng-template #celdaVacia><td class="text-end"> 0 </td></ng-template>
 
                         </tr>
@@ -40,7 +40,7 @@
                             <td class="text-end" [ngClass]="{'text-danger': dataTotales[1][0][this.concepto] < 0 }"><b>{{ dataTotales[1][0][this.concepto] || 0 | number }}</b></td>
                             <td class="text-end" [ngClass]="{'text-danger': dataTotales[0][0][this.concepto] < 0 }"><b>{{ dataTotales[0][0][this.concepto] || 0 | number }}</b></td>
                             <td class="text-end" [ngClass]="{'text-danger': dataTotales[2][0][this.concepto] < 0 }"><b>{{ dataTotales[2][0][this.concepto] || 0 | number }}</b></td>
-                            
+
                         </tr>
                     </tfoot>
                 </table>

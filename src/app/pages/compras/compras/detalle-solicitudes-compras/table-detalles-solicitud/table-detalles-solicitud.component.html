@@ -59,9 +59,13 @@
           {{ row.observaciones }}
         </td>
         <td *ngIf = "solicitudCompra.multiUnidad" >
-          <span
+          <span class="small fw-semibold"
              data-bs-toggle="tooltip" data-bs-placement="top" (click)="copiarTexto(row?.DetalleAutotanque?.DatosVehiculo?.eco || '' )" [attr.title]="row?.DetalleAutotanque?.DatosVehiculo?.no_serie || ''">
-              {{ row?.DetalleAutotanque?.DatosVehiculo?.eco || null }}
+              {{ row?.DetalleAutotanque?.DatosVehiculo?.eco || '' }}:
+              {{ row?.DetalleAutotanque?.DatosVehiculo?.marca || '' }}
+              {{ row?.DetalleAutotanque?.DatosVehiculo?.submarca || '' }}
+              ({{ row?.DetalleAutotanque?.DatosVehiculo?.modelo || '' }}) -
+              {{ row?.DetalleAutotanque?.DatosVehiculo?.no_serie || '' }}
             </span>
         </td>
         <td class="text-center">

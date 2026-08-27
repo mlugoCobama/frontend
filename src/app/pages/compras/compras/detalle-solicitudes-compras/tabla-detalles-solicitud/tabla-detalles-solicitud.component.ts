@@ -26,11 +26,11 @@ export class TablaDetallesSolicitudComponent implements OnInit {
   public cotizacion: any;
 
   public enEsts = EstadoSolicitud;
-  
+
   public mostrarTotal = false;
-  public formDisabled: boolean = false; 
-  public isLoad: boolean = true; 
-  public sending: boolean = false; 
+  public formDisabled: boolean = false;
+  public isLoad: boolean = true;
+  public sending: boolean = false;
   public modoLectura:boolean = false;
 
   @Output() openModal = new EventEmitter<string>();
@@ -54,7 +54,7 @@ export class TablaDetallesSolicitudComponent implements OnInit {
     this.getUnidades();
     this.buildForm();
   }
-   
+
   /**
    * Recupera los detalles de la solicitud
    */
@@ -106,16 +106,17 @@ export class TablaDetallesSolicitudComponent implements OnInit {
       detalles: this.formBuilder.array([])
     });
   }
-  
+
   /** Atajo para acceder al FormArray */
   get detalles(): FormArray {
     return this.formulario.get('detalles') as FormArray;
   }
 
-  /** 
-   * Crea un FormGroup a partir de un objeto (o vacío si no se pasa algun valor) 
+  /**
+   * Crea un FormGroup a partir de un objeto (o vacío si no se pasa algun valor)
   */
   private crearDetalle(dato?: any): FormGroup {
+    const unidad = `${dato?.DetalleAutotanque?.DatosVehiculo?.eco} ${dato?.DetalleAutotanque?.DatosVehiculo?.marca } ${dato?.DetalleAutotanque?.DatosVehiculo?.submarca } (${dato?.DetalleAutotanque?.DatosVehiculo?.modelo }) - ${dato?.DetalleAutotanque?.DatosVehiculo?.no_serie}`
     return this.formBuilder.group({
       id: [dato?.id ?? null],
       cantidad: [dato?.cantidad  ?? 1,Validators.required],
@@ -124,7 +125,7 @@ export class TablaDetallesSolicitudComponent implements OnInit {
       unidadMedida: [dato?.unidadMedida?.id ?? null, Validators.required],
       img_referencia: [dato?.img_referencia ?? null],
       solicitudes_compra_id: [dato?.solicitudes_compra_id ?? null],
-      autotanque: [dato?.DetalleAutotanque?.DatosVehiculo?.eco ?? null],
+      autotanque: [ unidad  ?? ''],
       no_serie: [dato?.DetalleAutotanque?.DatosVehiculo?.no_serie ?? null],
       confirmado: [dato?.confirmado ?? 0],
       recuperable: [dato?.recuperable ?? 0]
@@ -150,7 +151,7 @@ export class TablaDetallesSolicitudComponent implements OnInit {
 
   /**
    * Formatea de los datos del form array y genera un array de datos
-   * Normalizamos confirmado a 1/0 antes de enviar al backend 
+   * Normalizamos confirmado a 1/0 antes de enviar al backend
    * @returns array datos formateados para la bd
    */
   getValuesform(): void {
@@ -222,7 +223,7 @@ export class TablaDetallesSolicitudComponent implements OnInit {
       }
     this.sending =  false;
     }
-  
+
     validarTamaño(datos) {
     const contador = datos.reduce((acc, detalle) => acc + detalle.confirmado, 0);
     return contador !== 0;
