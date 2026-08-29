@@ -15,7 +15,7 @@
         <label for="empresa" class="form-label">Empresa</label>
         <select id="empresa" class="form-select form-select-sm" formControlName="empresa">
           <option value="">Seleccione una empresa</option>
-          <option *ngFor="let emp of empresas" [value]="emp.intercompania">{{ emp.name }}</option>
+          <option *ngFor="let emp of rawEmpresas" [value]="emp.intercompania">{{ emp.name }}</option>
         </select>
         <div *ngIf="form.get('empresa')?.invalid && form.get('empresa')?.touched" class="text-danger mt-1">
           La empresa es obligatoria

@@ -21,7 +21,7 @@ export class PanelCotizacionesComponent implements OnInit {
   @Input() cotProv: any = null;
   @Output() actualizarStatus = new EventEmitter<void>();
 
-  public formProveedoresCotizacion: FormGroup;
+  public formProveedoresCotizacion!: FormGroup;
   public submitted: boolean = false;
   public isDisabled: boolean = false;
   public proveedores: any = [];
@@ -132,13 +132,13 @@ export class PanelCotizacionesComponent implements OnInit {
     try {
       const idSolicitud = this.solicitudCompra.id;
       const proveedoresSeleccionados = this.proveedoresArray.value.filter((p: string) => p !== "");
-      
+
       const data = {
         proveedores: proveedoresSeleccionados,
         consideraciones: this.formProveedoresCotizacion.value.consideraciones,
         solicitudes_compra_id: idSolicitud,
       };
-      
+
       this.comprasService.sendMail(data).subscribe(
         (response) => {
           if (response.status === "success") {
@@ -186,7 +186,7 @@ export class PanelCotizacionesComponent implements OnInit {
       );
       this.isDisabled = false;
     }
-    
+
     this.submitted = false;
     this.actualizarStatus.emit();
   }
@@ -228,10 +228,10 @@ export class PanelCotizacionesComponent implements OnInit {
 
 
 /**
- * Maneja el cambio en el dorm group cuando existen o no 
+ * Maneja el cambio en el dorm group cuando existen o no
  * muestra u oculta un campo
  * @param index index del formArray para todo el formulario
- */  
+ */
 onProveedorChange(index: number) {
   const proveedorCtrl = this.proveedoresArray.at(index) as FormGroup;
   const contactoCtrl = proveedorCtrl.get('contacto_id');
@@ -246,7 +246,7 @@ onProveedorChange(index: number) {
 
   contactoCtrl?.updateValueAndValidity();
   }
-  
+
 }
 
 /**

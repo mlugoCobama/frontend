@@ -174,8 +174,21 @@ export class CargaVolumenesComponent implements OnInit {
   }
 
 
+  public  findNombreGasera(intercompania:string){
+    const nombreEmpresa = this.rawEmpresas.find(item => item.intercompania === intercompania)?.name;
+    return nombreEmpresa;
+  }
 
-  guardar() {
+
+  coincideEmpresa(cadenaOriginal:string, cadenaBuscada:string) {
+    if (!cadenaOriginal || !cadenaBuscada) return false;
+    const normalizar = (texto:string) =>
+      texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+
+    return normalizar(cadenaOriginal).includes(normalizar(cadenaBuscada));
+  }
+
+  async guardar() {
   if (this.form.invalid) {
     this.alertasService.mostrarAlerta(
           "Error",`Debes llenar todos los campos`,"error","danger"
@@ -193,6 +206,21 @@ export class CargaVolumenesComponent implements OnInit {
         this.form.markAllAsTouched();
         this.isLoading = false;
     return;
+  }
+
+  const nombreEmpresa = this.findNombreGasera(this.form.get('empresa')?.value);
+
+  if (!this.coincideEmpresa(this.jsonPreview.DescripcionInstalacion, nombreEmpresa)) {
+
+    const confirmado = await this.alertasService.mostrarConfirmacion(
+      "Advertencia de empresa",
+      "Al parecer el reporte no coincide con la empresa seleccionada. ¿Deseas continuar?"
+    );
+
+    if (!confirmado) {
+      this.isLoading = false;
+      return;
+    }
   }
 
   this.isLoading = true;

@@ -1,18 +1,11 @@
 <div class="card rounded-4 shadow-sm" [hidden] = "cotProv?.length === 0" >
   <div class="card-header  rounded-4 bg-primary text-white fw-semibold text-center">
-   <strong> <i class="fas fa-pallet me-1"></i>  Marca la casilla de la fila con el proveedor seleccionado para generar la
-    orden de compra </strong>
+    <strong>
+      <i class="fas fa-pallet me-1"></i>  Marca la casilla de la fila con el proveedor seleccionado para generar la orden de compra
+    </strong>
   </div>
-  <!-- <div class="d-flex justify-content-center pt-3" *ngIf="cotProv?.length === 0 && !isLoad">
-      <div class="spinner-border" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-    </div> -->
   <div class="card-body">
     <div *ngIf ="cotProv?.length > 0" class="row">
-  <!-- <div class="alert alert-warning text-center" role="alert">
-
-  </div> -->
   <div class="col-1" *ngIf="solicitudCompra?.estatus >= enEsts.OrdenCompra"></div>
   <div class="col-10">
     <div class="d-flex justify-content-center" *ngIf="!isLoad">
@@ -68,12 +61,12 @@
                 type="file"
               />
               <a
-                class="btn btn-sm btn-danger"
+                class="btn btn-sm btn-light px-4 fw-semibold"
                 *ngIf="prov?.ruta"
                 (click)="verArchivos(prov?.ruta)"
               >
-                <i class="fas fa-file-pdf"></i>
-                  Ver Cotización
+                <i class="fas fa-file-pdf text-danger me-1 fs-5"></i>
+                  VER COTIZACIÓN
               </a>
             </div>
           </td>

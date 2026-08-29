@@ -36,8 +36,6 @@ export class VisorReporteVolumenesComponent implements OnInit{
     this.aclaracionesRecepciones = this.obtenerSumatoriasPorAclaracion(this.recepciones['Complemento']);
   }
 
-
-
   public obtenerSumatoriasPorAclaracion(complementos: any[]): SumatoriaVolumenes {
     const totales: SumatoriaVolumenes = {
       sinCfdi: 0,

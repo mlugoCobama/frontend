@@ -19,14 +19,14 @@ export class BotnesAdminComponent implements OnInit{
   @Input() isLoadingVolverACotizar = false;
   @Input() isLoadingCancelar = false;
   @Input() isLoadingDevolverRevision = false;
-  
+
   @Input() status :  any = false;
-  @Input() mostrarBoton :  any;
+  @Input() mostrarBoton :  any = false;
   @Input() solicitudSelecionada :  any;
 
-  @Input() tipoCompras: any;
+  @Input() tipoCompras: number = 1;
   @Input() tiposPermitidos: any = [];
-  
+
 
   public downloading:boolean = false
 
@@ -43,48 +43,32 @@ export class BotnesAdminComponent implements OnInit{
   ){}
 
   public ngOnInit(): void {
-    
+
   }
-      
-  clickGenerarOrden() {
+
+  public clickGenerarOrden() {
       this.btnGenerarOC.emit();
   }
 
-  clickCotizar() {
+  public clickCotizar() {
       this.mostrarCotizacion.emit();
   }
 
-  clickVolverACotizar() {
+  public clickVolverACotizar() {
       this.volverCotizar.emit();
   }
 
-  clickCancelar() {
+  public clickCancelar() {
       this.cancelarSolicitud.emit();
   }
 
-  clickDevolverRevision() {
+  public clickDevolverRevision() {
       this.devolverRevision.emit();
   }
 
-  tienePermiso(permiso: string = null): boolean {
+  public tienePermiso(permiso: string = null): boolean {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
-  }
-
-  onDownload1(): void {
-    this.downloading = true;
-    // setTimeout(() => {
-      this.reportesComprasService.getReportFile(this.tipoCompras, 2, null, null)
-      .subscribe(response => {
-        this.reportesComprasService.downloadBlob(response, this.tipoCompras, 2);
-        this.downloading = false;
-      }, error => {
-        Swal.fire('Error', 'Ocurrio un error al descargar el archivo', 'error')
-        console.error('Error al descargar el archivo', error);
-        this.downloading = false;
-      });
-    // }, 2000);
-    
   }
 
 async onDownload(): Promise<void> {
@@ -174,7 +158,7 @@ async onDownload(): Promise<void> {
     `,
     customClass: {
       popup: 'text-start',
-      confirmButton: 'btn btn-sm btn-success',  
+      confirmButton: 'btn btn-sm btn-success',
       cancelButton: 'btn btn-sm btn-secondary',
     },
     focusConfirm: false,

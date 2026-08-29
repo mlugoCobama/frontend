@@ -65,7 +65,7 @@
                      (change)="toggleTodos($any($event.target).checked)"/>
             </th>
             <ng-container *ngFor="let col of columnas">
-              <th (click)="ordenarPor(col.campo)" style="cursor:pointer; white-space:nowrap; " 
+              <th (click)="ordenarPor(col.campo)" style="cursor:pointer; white-space:nowrap; "
               [ngClass]="{
                           'text-start': !col.align || col.align === 'left',
                           'text-center': col.align === 'center',
@@ -80,7 +80,7 @@
                         'z-index': 3,
                         'background': '#212529'
                                         } : {}">
-              
+
                 <span>{{ col.etiqueta }}</span>
                 <i [ngClass]="getIconoOrden(col.campo)"></i>
               </th>
@@ -124,27 +124,55 @@
                                                         'z-index': 2,
                                                         'background': '#fff'
                                                       } : {}">
-              <ng-container [ngSwitch]="col.pipe">
-                <span *ngSwitchCase="'percent'">
-                  {{ item[col.campo] | percent }}
+              <ng-container *ngIf="col.badge; else contenidoNormal">
+
+                <span
+                  class="badge"
+                  [ngClass]="getBadgeClass(col, item)"
+                >
+                  <i
+                    *ngIf="getBadgeIcon(col, item)"
+                    [ngClass]="getBadgeIcon(col, item)"
+                    class="me-1">
+                  </i>
+
+                  {{ getBadgeLabel(col, item) }}
+
                 </span>
-                <span *ngSwitchCase="'currency'">
-                  {{ item[col.campo] || 0 | currency: (col.pipeArgs || '') }}
-                </span>
-                <span *ngSwitchCase="'date'">
-                  {{ item[col.campo] | date: (col.pipeArgs || 'dd/MM/yyyy') }}
-                </span>
-                <span *ngSwitchDefault>
-                  {{ item[col.campo] }}
-                </span>
+
               </ng-container>
+
+
+              <ng-template #contenidoNormal>
+
+                <ng-container [ngSwitch]="col.pipe">
+
+                  <span *ngSwitchCase="'percent'">
+                    {{ item[col.campo] | percent }}
+                  </span>
+
+                  <span *ngSwitchCase="'currency'">
+                    {{ item[col.campo] || 0 | currency:(col.pipeArgs || '') }}
+                  </span>
+
+                  <span *ngSwitchCase="'date'">
+                    {{ item[col.campo] | date:(col.pipeArgs || 'dd/MM/yyyy') }}
+                  </span>
+
+                  <span *ngSwitchDefault>
+                    {{ item[col.campo] }}
+                  </span>
+
+                </ng-container>
+
+              </ng-template>
             </td>
             <td *ngIf="tieneAcciones"
                 class="text-center"
                 (click)="$event.stopPropagation()">
               <div class="d-flex justify-content-center gap-1">
                 <ng-container *ngFor="let accion of acciones; let iAccion = index">
-                  <button 
+                  <button
                         *ngIf="esVisible(accion, item) && tienePermiso(accion.permiso)"
                         class="btn btn-sm {{ accion.clase }}"
                         [title]="accion.tooltip || ''"
@@ -157,7 +185,7 @@
                     </i>
                 </button>
                 </ng-container>
-                
+
               </div>
             </td>
           </tr>

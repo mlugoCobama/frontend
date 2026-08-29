@@ -94,3 +94,11 @@ Se integra el nuevo módulo de Gestión de Comisiones con los siguientes apartad
 * **Visor de reporte** Se grega un card para visualizar las sumotoria de volumenes por consceptos de autoconsumo, trapasos y movimientos sin cfdi
 - Se agregan nuevos valores, como un nombre de empresa legibe y fecha de periodo reportado
 - Se integra actualizacion de registros y archivos ademas de borrado fisico
+---
+### Volumetricos
+*Fecha de liberación: 29 de Agosto, 2026*
+* **Validación de Plantilla:** Verificación automática para asegurar que la plantilla pertenezca a la empresa correspondiente.
+* **Soporte para Comercializadoras:** Incorporación del perfil y lógica para empresas comercializadoras.
+* **Gestión de Estatus:** Flujo de seguimiento con los estados: `Generado` ➔ `Enviado` ➔ `Aceptado`.
+* **Carga de Acuses:** Soporte para subir y adjuntar acuses de **Envío** y de **Aceptación** (rechazado o aceptado).
+* **Filtros Avanzados:** Consultas por **Empresa**, **Periodo** y **Tipo de Instalación**.

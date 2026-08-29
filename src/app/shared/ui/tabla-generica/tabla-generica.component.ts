@@ -25,6 +25,28 @@ export interface ColumnaTabla {
   width?: any
   left?: any
   fontHeaderSize?: 'small' | 'normal' | 'large' | null;
+  badge?: boolean;
+
+  /** Clase Bootstrap del badge */
+  badgeClass?: string;
+
+  /** Clases diferentes dependiendo del valor */
+  badgeMap?: {
+    [valor: string]: string;
+  };
+
+  /** Permite cambiar el texto mostrado */
+  badgeLabelMap?: {
+    [valor: string]: string;
+  };
+
+  /** Icono del badge */
+  badgeIcon?: string;
+
+  /** Iconos diferentes dependiendo del valor */
+  badgeIconMap?: {
+    [valor: string]: string;
+  };
 }
 
 export interface OpcionSelect {
@@ -44,7 +66,7 @@ export interface AccionTabla {
 @Component({
   selector: 'app-tabla-generica',
   templateUrl: './tabla-generica.component.html',
-  styleUrl: './tabla-generica.component.css', 
+  styleUrl: './tabla-generica.component.css',
 })
 export class TablaGenericaComponent implements OnInit, OnChanges {
 
@@ -70,7 +92,7 @@ export class TablaGenericaComponent implements OnInit, OnChanges {
   /** Placeholder del select (default: 'Seleccione uno') */
   @Input() placeholderSelect: string = 'Seleccione uno';
 
-  @Output() itemsSeleccionados = new EventEmitter<any[]>(); 
+  @Output() itemsSeleccionados = new EventEmitter<any[]>();
 
   /** Emite el valor seleccionado en el select */
   @Output() selectCambiado = new EventEmitter<any>();
@@ -218,7 +240,7 @@ esVisible(accion: AccionTabla, item: any): boolean {
   onSelectChange(): void {
     this.selectCambiado.emit(this.valorSelect);
   }
-  
+
     tienePermiso(permiso: string = null): boolean {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
@@ -234,5 +256,36 @@ esVisible(accion: AccionTabla, item: any): boolean {
     }
   });
 }
-  
+
+getBadgeClass(col: ColumnaTabla, item: any): string {
+  const valor = item[col.campo];
+
+  // Si existe configuración específica para cada valor
+  if (col.badgeMap) {
+    return col.badgeMap[valor] || 'bg-secondary';
+  }
+
+  // Badge fijo
+  return col.badgeClass || 'bg-primary';
+}
+
+getBadgeLabel(col: ColumnaTabla, item: any): any {
+  const valor = item[col.campo];
+
+  if (col.badgeLabelMap) {
+    return col.badgeLabelMap[valor] ?? valor;
+  }
+
+  return valor;
+}
+
+getBadgeIcon(col: ColumnaTabla, item: any): string {
+  const valor = item[col.campo];
+
+  if (col.badgeIconMap) {
+    return col.badgeIconMap[valor] || '';
+  }
+
+  return col.badgeIcon || '';
+}
 }

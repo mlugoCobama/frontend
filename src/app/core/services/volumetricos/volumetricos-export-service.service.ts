@@ -24,6 +24,22 @@ export class VolumetricosExportService {
     });
   }
 
+  descargarAcuse(acuseId: number, nombrePersonalizado?: string): void {
+    const url = `${environment.apiUrl}reportes/${acuseId}/descargar-acuse`;
+
+    this.http.get(url, { responseType: 'blob' }).subscribe({
+      next: (blob: Blob) => {
+        const fileName = nombrePersonalizado || `Reporte_Volumetrico_${acuseId}.pdf`;
+        this.triggerDownload(blob, fileName);
+      },
+      error: (err) => {
+        this.alerta.mostrarAlerta('error',`'Error al descargar el archivo:', ${err}`,'error', 'danger' )
+        console.error('Error al descargar el archivo Excel:', err);
+      }
+    });
+  }
+
+
     descargarJsonDesdeServidor(reporteId: number, nombrePersonalizado?: string): void {
     const url = `${environment.apiUrl}reportes/${reporteId}/descargar-reporte`;
 
@@ -76,10 +92,24 @@ export class VolumetricosExportService {
 
     const uuid = reportId || crypto.randomUUID();
     const clave = (d.ClaveInstalacion || "").trim().toUpperCase();
-    const caracter = clave.startsWith("EXO") ? 'EXO' : 'DIS';
+    const tipo = clave.substring(0, 3);
+    const caracter = this.setTipoComplemento(tipo);
 
     return `M_${uuid.toUpperCase()}_${d.RfcContribuyente || ''}_${d.RfcProveedor || ''}_${mesFormateado}_${d.ClaveInstalacion || ''}_${caracter}`;
   }
+
+  private setTipoComplemento(tipoComplemento: string): string {
+    switch (tipoComplemento) {
+        case 'EXO':
+            return 'EXO';
+        case 'PDD':
+            return 'DIS';
+        case 'CMN':
+            return 'CMN';
+        default:
+            return 'DIS';
+    }
+}
 
   /**
    * Convierte objetos JS/JSON a string XML

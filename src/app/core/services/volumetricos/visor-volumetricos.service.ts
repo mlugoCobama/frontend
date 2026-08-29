@@ -22,6 +22,10 @@ export class VisorVolumetricosService {
     return this.http.post(environment.apiUrl + 'volumetricos/volumetricos',data);
   }
 
+  public storeAcuse(data): Observable<any> {
+    return this.http.post(environment.apiUrl + 'volumetricos/acuses',data);
+  }
+
   public parse(data): Observable<any> {
     return this.http.post(environment.apiUrl + 'volumetricos/generacion',data, {observe: 'response'});
   }

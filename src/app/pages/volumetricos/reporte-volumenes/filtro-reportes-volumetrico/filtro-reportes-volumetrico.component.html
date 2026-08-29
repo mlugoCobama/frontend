@@ -1,0 +1,147 @@
+<div class="card rounded-4 shadow-sm mb-3">
+  <div class="card-body">
+
+    <div class="row g-3">
+
+
+      <!-- EMPRESA -->
+      <div class="col-md-4">
+
+        <label class="form-label fw-semibold">
+          Empresa
+        </label>
+
+        <select
+          class="form-select form-select-sm"
+          [(ngModel)]="filtros.empresa"
+          (ngModelChange)="seleccionarFiltro()">
+
+          <option [ngValue]="null">
+            Todas las empresas
+          </option>
+
+          <option
+            *ngFor="let empresa of empresas"
+            [ngValue]="empresa.name">
+
+            {{ empresa.name }}
+
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- AÑO -->
+      <div class="col-md-2">
+
+        <label class="form-label fw-semibold">
+          Año
+        </label>
+
+        <select
+          class="form-select form-select-sm"
+          [(ngModel)]="filtros.anio"
+          (ngModelChange)="seleccionarFiltro()">
+
+          <option [ngValue]="null">
+            Todos
+          </option>
+
+          <option
+            *ngFor="let anio of anios"
+            [ngValue]="anio">
+
+            {{ anio }}
+
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- MES -->
+      <div class="col-md-2">
+
+        <label class="form-label fw-semibold">
+          Mes
+        </label>
+
+        <select
+          class="form-select form-select-sm"
+          [(ngModel)]="filtros.mes"
+          (ngModelChange)="seleccionarFiltro()">
+
+          <option [ngValue]="null">
+            Todos
+          </option>
+
+          <option
+            *ngFor="let mes of meses"
+            [ngValue]="mes.valor">
+
+            {{ mes.nombre }}
+
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <!-- TIPO -->
+      <div class="col-md-2">
+
+        <label class="form-label fw-semibold">
+          Tipo de instalación
+        </label>
+
+        <select
+          class="form-select form-select-sm"
+          [(ngModel)]="filtros.tipoInstalacion"
+          (ngModelChange)="seleccionarFiltro()">
+
+          <option [ngValue]="null">
+            Todos
+          </option>
+
+          <option
+            *ngFor="let tipo of tiposInstalacion"
+            [ngValue]="tipo.valor">
+
+            {{ tipo.nombre }}
+
+          </option>
+
+        </select>
+
+      </div>
+      <div class="col-md-2">
+
+      <button
+        type="button"
+        class="btn btn-outline-secondary btn-sm mt-4"
+        (click)="limpiarFiltros()">
+
+        <i class="fas fa-eraser me-1"></i>
+
+        Limpiar filtros
+
+      </button>
+
+
+      </div>
+
+    </div>
+
+
+    <div class="d-flex justify-content-end mt-3">
+
+
+    </div>
+
+  </div>
+
+</div>

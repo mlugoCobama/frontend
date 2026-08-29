@@ -2,23 +2,25 @@
     <app-card-top
     [title]="'Reportes de controles volumétricos'"
     [hasButtons] ="true"
-    [showBtnEditar] ="(itemSeleccionado ? true : false) && tienePermiso('view btn delete reportes volumetricos')"
-    [showBtnEliminar] ="(itemSeleccionado ? true : false) && tienePermiso('view btn update reportes volumetricos')"
+    [showBtnEditar] ="(itemSeleccionado ? true : false) && tienePermiso('view btn delete reportes volumetricos') && itemSeleccionado?.estatus != 4"
+    [showBtnEliminar] ="(itemSeleccionado ? true : false) && tienePermiso('view btn update reportes volumetricos') && itemSeleccionado?.estatus != 4"
     (actualizar)="openUpdate()"
     (eliminar)="eliminarRegistro()"
-    >
+    ></app-card-top>
 
-    </app-card-top>
+  <app-filtro-reportes-volumetrico
+    [empresas]="rawEmpresas"
+    [reportes]="reportes"
+    (filtrosChange)="aplicarFiltros($event)">
+  </app-filtro-reportes-volumetrico>
 
     <app-tabla-generica
     [isLoad] = "isLoad"
-    [data]="reportes"
-    [mostrarSelect]="true"
+    [data]="reportesFiltrados"
+    [opcionesSelect] = "rawEmpresas"
     [columnas]="columnas"
     [acciones]="acciones"
-    (itemSeleccionado) = "setItemSeleccionado($event)"
-    >
-
+    (itemSeleccionado) = "setItemSeleccionado($event)">
     </app-tabla-generica>
 </ng-container>
 
@@ -41,41 +43,75 @@
 
       </app-parser-volumetricos>
   </ng-container>
+  <app-form-carga-acuse
+  *ngIf = "itemSeleccionado?.estatus == 1"
+  tipo="entrega"
+  [registro] = "itemSeleccionado"
+  (guardado)="verArchivo(itemSeleccionado, jsonPreview)" >
+  </app-form-carga-acuse>
+
+  <app-form-carga-acuse
+  *ngIf = "itemSeleccionado?.estatus == 2"
+  [tipo] = "'aceptacion'"
+  [registro] = "itemSeleccionado"
+  (guardado)="verArchivo(itemSeleccionado, jsonPreview)"  >
+  </app-form-carga-acuse>
+
+
     <div class="card rounded-4 shadow-sm">
       <div class="card-header rounded-4 bg-primary text-white fw-semibold d-flex justify-content-between">
        <span>
           Datos del reporte <ng-container *ngIf="isOpenPanelEdicion">- Antiguos</ng-container>
        </span>
-       <div class=" d-flex gap-3">
-      <button *ngIf="esExcel(itemSeleccionado?.ruta_plantilla)" type="button" class="btn btn-outline-light btn-sm fw-semibold" (click)="descargarExcel()">
-            <i class="fas fa-file-excel me-1"></i> Descarga Plantilla
-        </button>
+        <div class=" d-flex gap-3">
+            <button *ngIf="esExcel(itemSeleccionado?.ruta_plantilla)" type="button" class="btn btn-outline-light btn-sm fw-semibold" (click)="descargarExcel()">
+                <i class="fas fa-file-excel me-1"></i> Descarga Plantilla
+            </button>
 
-        <button type="button" class="btn btn-outline-light btn-sm fw-semibold" (click)="descargarJson()">
-            <i class="fas fa-download me-1"></i> Descargar {{ selectedViewer || '' }}
-        </button>
+            <button type="button" class="btn btn-outline-light btn-sm fw-semibold" (click)="descargarJson()">
+                <i class="fas fa-download me-1"></i> Descargar {{ selectedViewer || '' }}
+            </button>
 
-        <!-- <button type="button" class="btn btn-outline-light btn-sm fw-semibold" (click)="descargarXml()" *ngIf="tienePermiso('view xml options')">
-            <i class="fas fa-download me-1"></i> Descargar XML
-        </button> -->
-
-    </div>
+            <!-- <button type="button" class="btn btn-outline-light btn-sm fw-semibold" (click)="descargarXml()" *ngIf="tienePermiso('view xml options')">
+                <i class="fas fa-download me-1"></i> Descargar XML
+            </button> -->
+        </div>
       </div>
-      <div class="card-body">
-            <app-visor-reporte-volumenes
-            *ngIf="selectedViewer == 'json'"
-              [dataJson]="jsonPreview"
-              >
-            </app-visor-reporte-volumenes>
+        <div class="card-body">
+          <div class="text-center fw-semibold alert rounded-pill shadow-sm" [ngClass]="{
+                'alert-success': itemSeleccionado?.estatus_txt === 'ACEPTADO',
+                'alert-danger': itemSeleccionado?.estatus_txt === 'RECHAZADO',
+                'alert-info': itemSeleccionado?.estatus_txt === 'ENVIADO',
+                'alert-primary': itemSeleccionado?.estatus_txt === 'GENERADO'
+              }">
+            {{itemSeleccionado?.estatus_txt}}
+          </div>
+          <div class="row px-2">
+              <button
+                  *ngFor="let archivo of acuses" (click)="descargarAcuse(archivo.id, archivo.ruta)"
+                  class="alert alert-light border col-md-4 m-1 d-flex align-items-center rounded-4 shadow-sm mb-2">
+                  <i class="fas fa-file-pdf text-danger fs-4 me-2"></i>
+                  <div class="flex-grow-1">
+                      <strong>Acuse de: {{ archivo.tipo | titlecase }}</strong>
+                      <small class="d-block text-muted">
+                        Haz clic para descargar
+                      </small>
+                    </div>
+              </button>
+          </div>
+              <app-visor-reporte-volumenes
+              *ngIf="selectedViewer == 'json'"
+                [dataJson]="jsonPreview"
+                >
+              </app-visor-reporte-volumenes>
 
-            <app-visor-reporte-xml
-            *ngIf="selectedViewer == 'xml'"
-              [dataJson]="jsonPreview"
-              >
-            </app-visor-reporte-xml>
-      </div>
+              <app-visor-reporte-xml
+              *ngIf="selectedViewer == 'xml'"
+                [dataJson]="jsonPreview"
+                >
+              </app-visor-reporte-xml>
+        </div>
     </div>
-
 </ng-container>
 
 

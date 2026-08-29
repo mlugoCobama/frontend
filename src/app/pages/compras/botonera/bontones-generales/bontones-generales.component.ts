@@ -8,45 +8,43 @@ import { EstadoSolicitud } from '../../compras/estado-solicitud.enum';
 })
 export class BontonesGeneralesComponent {
 
-  
+
   public enEsts = EstadoSolicitud;
-  
-  @Input() status:any;
-  @Input() mostrarBoton:any;
+
+  @Input() status:number = 0;
+  @Input() mostrarBoton:boolean = false;
   @Input() solicitudSelecionada:any = null;
-  @Input() showBtnAdd:any;
+  @Input() showBtnAdd:boolean = false;
 
   @Output() btnDescargarOC = new EventEmitter<void>();
   @Output() regresar = new EventEmitter<void>();
   @Output() openModalNuevo = new EventEmitter<void>();
-      
-  clickDescargar() {
+
+  public clickDescargar() {
       this.btnDescargarOC.emit();
   }
 
-  clickRegresar() {
+  public clickRegresar() {
       this.regresar.emit();
   }
 
-  clickNuevo() {
+  public clickNuevo() {
       this.openModalNuevo.emit();
   }
 
-  puedeCrearSolicitud(): boolean {
+  public puedeCrearSolicitud(): boolean {
   return !this.solicitudSelecionada && this.tienePermiso('create solicitud compra');
 }
 
 public tienePermiso(permiso: string): boolean {
   const permisosRaw = localStorage.getItem('permisos');
   if (!permisosRaw) return false;
-  
+
   try {
     const permisos = JSON.parse(permisosRaw);
     const lista = permisos.map((p: any) => p.name);
-    // console.log(lista.includes(permiso))
     return lista.includes(permiso);
   } catch {
-    // console.log(false);
     return false;
   }
 }

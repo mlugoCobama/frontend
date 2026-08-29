@@ -8,6 +8,7 @@ import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-com
 import { ColumnaTabla } from 'src/app/shared/ui/tabla-generica/tabla-generica.component';
 import Swal from 'sweetalert2';
 import { ModalTagsComponent } from './modal-tags/modal-tags.component';
+import { TagTelepeaje } from 'src/app/core/models/compras/tags';
 
 @Component({
   selector: 'app-cat-tags',
@@ -20,8 +21,8 @@ export class CatTagsComponent implements OnInit{
     public isLoad :  boolean = true;
     private clientesToka = [];
     private empresas = [];
-    public data = [];
-    public sectedItem:any;
+    public data: TagTelepeaje[] = [];
+    public sectedItem:TagTelepeaje | null = null;
 
     public columnas: ColumnaTabla[] = [
       {etiqueta: 'Empresa', campo:'empresa'},
@@ -90,7 +91,7 @@ export class CatTagsComponent implements OnInit{
     }).then((result) => {
       if (result.value) {
         this.isLoad = true;
-        this.tokaService.destroy(this.sectedItem.id).subscribe(
+        this.tokaService.destroy(this.sectedItem?.id).subscribe(
         (response) => {
           if (response.status === "success") {
             this.getClientesToka();
@@ -112,7 +113,7 @@ export class CatTagsComponent implements OnInit{
     });
   }
 
-  onItemSeleccionado(item: any | null): void {
+  onItemSeleccionado(item: TagTelepeaje | null): void {
     this.sectedItem = item;
   }
 
@@ -143,7 +144,7 @@ export class CatTagsComponent implements OnInit{
     this.usuariosService.getEmpresas().subscribe(
       (response) => {
         if (response) {
-          
+
           this.empresas = response.data;
           // this.isLoading = false;
         } else {

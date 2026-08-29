@@ -25,7 +25,6 @@ export class ParserVolumetricosComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
     private usuariosService: UsuariosService,
-    private localStorage: LocalStorageServiceService,
     private alertasService: SwalComprsServiceService,
     private volumetricos: VisorVolumetricosService,
     private exportService: VolumetricosExportService,
@@ -40,12 +39,6 @@ export class ParserVolumetricosComponent implements OnInit {
     });
 
     this.getEmpresas();
-
-    // if(this.idReporte){
-    //   this.form.patchValue({
-    //     empresa: this.idReporte
-    //   });
-    // }
   }
   rawContent: string | null = null
   onFileChange(event: any) {
@@ -75,8 +68,6 @@ export class ParserVolumetricosComponent implements OnInit {
 
           return noEsAgencia && noEsIntercompaniaExcluida;
         });
-
-          this.getUsuarioActivo();
           // this.isLoading = false;
         } else {
           this.alertasService.mostrarAlerta(
@@ -91,18 +82,19 @@ export class ParserVolumetricosComponent implements OnInit {
     );
   }
 
-  public getUsuarioActivo() {
-    const currentUser = this.localStorage.getItem("currentUser");
-    const usuarioActivo = currentUser["usuarioActivo"][0];
-    const multiselect = usuarioActivo.multiselect;
-    const intercompania = usuarioActivo.intercompania;
-    const enpresa = usuarioActivo.empresa;
-    const enpresas = usuarioActivo.empresas;
-
-    this.empresas = this.rawEmpresas;
-  }
+public  findNombreGasera(intercompania:string){
+  const nombreEmpresa = this.rawEmpresas.find(item => item.intercompania === intercompania)?.name;
+  return nombreEmpresa;
+}
 
 
+coincideEmpresa(cadenaOriginal:string, cadenaBuscada:string) {
+  if (!cadenaOriginal || !cadenaBuscada) return false;
+  const normalizar = (texto:string) =>
+    texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+
+  return normalizar(cadenaOriginal).includes(normalizar(cadenaBuscada));
+}
 
   generarArchivo() {
     this.uuidReporte = null;
@@ -136,7 +128,9 @@ export class ParserVolumetricosComponent implements OnInit {
     });
 }
 
-public  guardar() {
+public async guardar() {
+
+
 if (this.form.invalid) {
     this.alertasService.mostrarAlerta("Error", `Debes llenar todos los campos`, "error","danger");
         this.form.markAllAsTouched();
@@ -144,6 +138,22 @@ if (this.form.invalid) {
     return;
 
   }
+
+  const nombreEmpresa = this.findNombreGasera(this.form.get('empresa')?.value);
+
+    if (!this.coincideEmpresa(this.jsonPreview.DescripcionInstalacion, nombreEmpresa)) {
+
+    const confirmado = await this.alertasService.mostrarConfirmacion(
+      "Advertencia de empresa",
+      "Al parecer el reporte no coincide con la empresa seleccionada. ¿Deseas continuar?"
+    );
+
+    if (!confirmado) {
+      this.isLoading = false;
+      return;
+    }
+  }
+
   this.isLoading = true;
   const formData = new FormData();
 

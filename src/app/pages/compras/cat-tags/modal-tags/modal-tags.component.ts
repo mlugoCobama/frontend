@@ -4,7 +4,8 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 // import { TokaService } from 'src/app/core/services/compras/tag.service';
 import { TagService } from 'src/app/core/services/compras/tag.service';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
-import Swal from 'sweetalert2'; 
+import Swal from 'sweetalert2';
+import { MarcaTag, TagTelepeaje } from 'src/app/core/models/compras/tags';
 
 @Component({
   selector: 'app-modal-tags',
@@ -14,19 +15,19 @@ import Swal from 'sweetalert2';
 export class ModalTagsComponent implements OnInit{
 
   public event: EventEmitter<any> = new EventEmitter();
-  public submitted = false;
-  public sending = false;
-  tagForm!: FormGroup;
-  empresas = [];
-  clientesToka = [];
-  public data:any = [];
-  tipo: any = '';
+  public submitted:boolean = false;
+  public sending:boolean = false;
+  public tagForm!: FormGroup;
+  public empresas = [];
+  public clientesToka = [];
+  public data: TagTelepeaje | null = null;
+  public tipo: 'nueva' | 'actualizar' | string = '';
 
-  customPatterns = { 
+  public customPatterns = {
     '0': { pattern: new RegExp('[0-9*]') },
   };
 
-  public marcasTag: any = [
+  public marcasTag: MarcaTag[] = [
     {marca: 1, label: 'PASE'},
     {marca: 2, label: 'IAVE'},
     {marca: 3, label: 'TeleVia'},
@@ -55,10 +56,7 @@ export class ModalTagsComponent implements OnInit{
         id: [null],
         proveedor: ['', Validators.required],
         num_tag: ['', Validators.required],
-        // numero_cuenta: ['', Validators.required],
         serie: ['', Validators.required],
-        // fecha_alta: ['', Validators.required],
-        // fecha_vencimiento: ['', Validators.required],
         estatus: ['', Validators.required],
         observaciones: [''],
         intercompania: ['', Validators.required],
@@ -69,7 +67,7 @@ export class ModalTagsComponent implements OnInit{
     return this.tagForm.controls;
   }
 
-  patchFormValues() {
+  private patchFormValues() {
   this.tagForm.patchValue({
     id: this.data?.id,
     proveedor: this.data?.proveedor,
@@ -78,7 +76,7 @@ export class ModalTagsComponent implements OnInit{
     serie: this.data?.serie,
     fecha_alta: this.data?.fecha_alta,
     fecha_vencimiento: this.data?.fecha_venciemiento,
-    estatus: +this.data?.esatus,
+    estatus: this.data?.esatus,
     observaciones: this.data?.observaciones,
     intercompania: this.data?.intercompania,
     });
@@ -126,7 +124,7 @@ export class ModalTagsComponent implements OnInit{
     );
   }
 
-  softResetForm(){
+  private softResetForm(){
     this.sending = false;
     this.tagForm.patchValue({
       id: null,
@@ -142,7 +140,7 @@ export class ModalTagsComponent implements OnInit{
     });
   }
 
-mostrarAlerta() {
+private mostrarAlerta() {
     Swal.fire({
       title: 'Tarjeta Guardada Correctamente',
       text: '¿Quieres agregar otra tarjeta?',

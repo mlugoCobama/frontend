@@ -22,6 +22,8 @@ import { CardAclaracionesComponent } from './widgets/card-aclaraciones/card-acla
 import { A11yModule } from "@angular/cdk/a11y";
 import { VisorReporteXmlComponent } from './visor-reporte-xml/visor-reporte-xml.component';
 import { TabResumenesXmlComponent } from './widgets/tab-resumenes-xml/tab-resumenes-xml.component';
+import { FiltroReportesVolumetricoComponent } from './reporte-volumenes/filtro-reportes-volumetrico/filtro-reportes-volumetrico.component';
+import { FormCargaAcuseComponent } from './reporte-volumenes/form-carga-acuse/form-carga-acuse.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +40,8 @@ import { TabResumenesXmlComponent } from './widgets/tab-resumenes-xml/tab-resume
     ParserVolumetricosComponent,
     CardAclaracionesComponent,
     VisorReporteXmlComponent,
+    FiltroReportesVolumetricoComponent,
+    FormCargaAcuseComponent,
   ],
   imports: [
     CommonModule,

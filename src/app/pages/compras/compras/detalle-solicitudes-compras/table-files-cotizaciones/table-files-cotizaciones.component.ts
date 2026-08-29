@@ -338,10 +338,10 @@ export class TableFilesCotizacionesComponent implements AfterViewInit {
   }
 
   /**
-   * Metodo para renviar correo 
+   * Metodo para renviar correo
    * @param item fila del cotProv
    */
-  public reenviarSC(item) {    
+  public reenviarSC(item) {
     item.loading = true;
     const data = {
       id: item?.id,
@@ -385,9 +385,7 @@ export class TableFilesCotizacionesComponent implements AfterViewInit {
 
   getProveedorSeleccionado(){
     const proveedorSeleccionado = this.cotProv.find(u => u.seleccionado == 1);
-    
-    // console.log(proveedorSeleccionado?.proveedores_id?.datos_pago[0]);
     return proveedorSeleccionado?.proveedores_id?.datos_pago[0];
-    
+
   }
 }

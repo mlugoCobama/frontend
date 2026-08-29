@@ -28,7 +28,7 @@ export class ComprasService {
   actualizarEstatus$ = this.actualizarEstatusSubject.asObservable();
 
   constructor(private http: HttpClient) {}
-  
+
 
 
 
@@ -61,12 +61,12 @@ export class ComprasService {
   /**
    * Almacena los datos de la solicitud de compra
    * @param data datos de la solicitud de compra y detalles de la solicitud
-   * @returns 
+   * @returns
    */
   public save(data: any): Observable<any> {
     return this.http.post(environment.apiUrl + "compras/SolicitudesCompras", data , {headers});
   }
-  
+
   public updateSolicitud(data: any): Observable<any> {
     return this.http.post(environment.apiUrl + "compras/SolicitudesCompras/actualiza-solicitud", data , {headers});
   }
@@ -90,7 +90,7 @@ export class ComprasService {
   }
 
   /**
-   * Enviar email de solicitud de cotización a proveedores 
+   * Enviar email de solicitud de cotización a proveedores
    * @param data proveedor1, proveedor2, proveedor3, idSolicitud, consideraciones
    * @returns respuesta del servidor
    */
@@ -123,7 +123,7 @@ export class ComprasService {
   triggerGenerateOrder() {
     this.generateOrderSubject.next();
   }
-  
+
   /**
    * Muestra el boton generar orden
    * @param mostrar true:muestra el boton, false: oculta el boton
