@@ -37,6 +37,7 @@ import { AddOtroFormComponent } from './comisiones-otros/forms/add-otro-form/add
 import { MediaGalleryComponent } from './ordenes-servicio/detalle-orden/media-gallery/media-gallery.component';
 import { StatusCardButtonComponent } from './ordenes-servicio/detalle-orden/status-card-button/status-card-button.component';
 import { TimeLineCitaComponent } from './ordenes-servicio/detalle-orden/time-line-cita/time-line-cita.component';
+import { EncuestaDetalleComponent } from './ordenes-servicio/detalle-orden/encuesta-detalle/encuesta-detalle.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { TimeLineCitaComponent } from './ordenes-servicio/detalle-orden/time-lin
     MediaGalleryComponent,
     StatusCardButtonComponent,
     TimeLineCitaComponent,
+    EncuestaDetalleComponent,
   ],
   imports: [
     CommonModule,

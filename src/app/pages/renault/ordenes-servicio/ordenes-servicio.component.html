@@ -74,7 +74,8 @@
           <div class="card-body  p-2">
             <div class="d-flex justify-content-between align-items-start mb-1">
               <span class="badge bg-light fw-bold font-size-11"> <strong>{{ item.agencia }}</strong> <span class="text-primary"> {{ item.folio }} </span></span>
-              <p class="m-0 badge rounded-pill" [ngClass]="'bg-'+estado.color"> <Strong> {{ item.estatus }} </Strong></p>
+
+              <p class="m-0 badge rounded-pill" [ngClass]="'bg-'+estado.color"> <i *ngIf="item.tiene_encuesta" class="fas fa-star me-1"></i> <Strong> {{ item.estatus }} </Strong></p>
             </div>
             <hr class="m-0">
 

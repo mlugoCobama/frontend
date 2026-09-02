@@ -1,0 +1,26 @@
+.thumbnail {
+  width: 200px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Estado cuando la imagen está ampliada */
+.thumbnail.zoomed {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(2.5);
+  z-index: 1000;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 999;
+}

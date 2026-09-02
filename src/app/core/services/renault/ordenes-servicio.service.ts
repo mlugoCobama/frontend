@@ -23,7 +23,13 @@ export class OrdenesServicioService {
 
   descargarPdfOrdenServicio(id: number): Observable<Blob> {
     return this.http.get(`${environment.apiUrl}renault/visor-citas/orden-servicio/${id}`, {
-      responseType: 'blob' // importante para recibir el archivo binario
+      responseType: 'blob'
+    });
+  }
+
+  descargarPdfEncuesta(id: number): Observable<Blob> {
+    return this.http.get(`${environment.apiUrl}renault/visor-citas/encuesta-satisfaccion/${id}`, {
+      responseType: 'blob'
     });
   }
 

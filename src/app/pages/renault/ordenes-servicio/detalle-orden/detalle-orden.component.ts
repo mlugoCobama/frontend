@@ -60,10 +60,7 @@ export class DetalleOrdenComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.folio = this.route.snapshot.paramMap.get("folio");
-    this.id = this.route.snapshot.paramMap.get("id");
     this.getDatosEntrada(this.cita.id);
-    // ahora puedes usar this.id para cargar datos
   }
 
   goBack() {
