@@ -6,8 +6,18 @@
             <h5 class="m-0">Folio: {{cita?.folio}}</h5>
           </div>
 
-            <div class="d-flex gap-2">
-                <button *ngIf="dataEntrada?.num_entrada" class="btn btn-outline-light btn-sm px-3 rounded-3" [disabled]="isLoading" (click)="descargarPdf(cita.id)">
+            <div class="d-flex gap-2 ">
+              <button *ngIf="dataEntrada?.encuesta" class="btn btn-outline-light btn-sm px-3 rounded-3 fw-semibold" [disabled]="isLoading12" (click)="descargarEncuestaPdf(cita.id)">
+                <ng-container *ngIf="!isLoading12; else loading">
+                    <i class="fas fa-file-pdf"></i> Descargar Encuesta
+                </ng-container>
+                <ng-template #loading>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Descargando...
+                </ng-template>
+                </button>
+
+                <button *ngIf="dataEntrada?.num_entrada" class="btn btn-outline-light btn-sm px-3 rounded-3 fw-semibold" [disabled]="isLoading" (click)="descargarPdf(cita.id)">
                 <ng-container *ngIf="!isLoading; else loading">
                     <i class="fas fa-file-pdf"></i> Descargar Orden de Reparación
                 </ng-container>
@@ -373,6 +383,10 @@
   [cita]="cita"
   >
 </app-time-line-cita>
+
+<app-encuesta-detalle
+  [encuesta]="dataEntrada?.encuesta">
+</app-encuesta-detalle>
 
 </ng-container>
 

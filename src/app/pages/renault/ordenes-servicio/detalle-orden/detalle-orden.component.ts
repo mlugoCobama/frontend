@@ -30,6 +30,7 @@ export class DetalleOrdenComponent implements OnInit {
 
   public isLoad: boolean = false;
   isLoading = false;
+  isLoading12 = false;
 
   canUploadEntrada: boolean = true;
   canUploadProceso: boolean = true;
@@ -119,6 +120,29 @@ export class DetalleOrdenComponent implements OnInit {
       },
       (error) => {
         this.isLoading = false;
+        Swal.fire("Ocurrio un error", error, "error");
+      },
+    );
+  }
+
+  descargarEncuestaPdf(id: number) {
+    this.isLoading12 = true;
+
+    this.ordenesServicio.descargarPdfEncuesta(id).subscribe(
+      (archivo: Blob) => {
+        const fileURL = URL.createObjectURL(archivo);
+        const a = document.createElement("a");
+        a.href = fileURL;
+        a.download =
+          "encuesta_de_satisfaccion" +
+          this.cita.folio +
+          ".pdf";
+        a.click();
+        URL.revokeObjectURL(fileURL);
+        this.isLoading12 = false;
+      },
+      (error) => {
+        this.isLoading12 = false;
         Swal.fire("Ocurrio un error", error, "error");
       },
     );
