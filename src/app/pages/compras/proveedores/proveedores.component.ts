@@ -131,7 +131,6 @@ export class ProveedoresComponent implements OnInit {
       (response) => {
         if (response) {
           this.data = response.data;
-
           this.ordenador = new FuncionesTablas(this.data);
           this.datosFiltrados = [...this.data];
 

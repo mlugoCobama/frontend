@@ -70,6 +70,17 @@ export class CargaVolumenesComponent implements OnInit {
     }
   }
 
+
+  public  limpiarDatos() {
+    this.form.reset({
+      archivo: null,
+      empresa: ''
+    });
+    this.jsonPreview = null;
+    // this.archivoInput.nativeElement.value = '';
+  }
+
+
   private procesarArchivo(fileName: string, content: string): void {
     const esXml = fileName.toLowerCase().endsWith('.xml') || content.trim().startsWith('<');
     if (esXml) {
@@ -175,7 +186,7 @@ export class CargaVolumenesComponent implements OnInit {
 
 
   public  findNombreGasera(intercompania:string){
-    const nombreEmpresa = this.rawEmpresas.find(item => item.intercompania === intercompania)?.name;
+    const nombreEmpresa = this.rawEmpresas.find(item => item.intercompania === +intercompania)?.name;
     return nombreEmpresa;
   }
 

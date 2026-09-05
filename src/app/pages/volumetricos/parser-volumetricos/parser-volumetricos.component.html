@@ -3,8 +3,12 @@
     [title]="'Generar Reporte de Controles Volumétricos'">
     </app-card-top>
 <div class="card  rounded-4 shadow-sm mt-4">
-  <div class="card-header  rounded-4 bg-primary text-white fw-semibold">
-    <i class="fas fa-file-excel me-1"> </i> Realice la carga de su plantilla
+  <div class="card-header  rounded-4 bg-primary text-white fw-semibold d-flex justify-content-between" >
+    <span> <i class="fas fa-file-excel me-1"> </i> Realice la carga de su plantilla </span>
+
+      <button *ngIf="jsonPreview" class="btn btn-sm btn-outline-light fw-semibold" (click)="limpiarDatos()">
+        <i class="fas fa-eraser"></i> Limpiar
+      </button>
   </div>
   <div class="card-body">
     <form [formGroup]="form" class="row g-3">
@@ -24,7 +28,7 @@
 
       <div class="col-12">
         <label for="archivo" class="form-label">Plantilla .XLSX</label>
-        <input id="archivo" type="file" class="form-control form-control-sm" (change)="onFileChange($event)" />
+        <input accept=".xlsx, .xls" #archivoInput id="archivo" type="file" class="form-control form-control-sm" (change)="onFileChange($event)" />
         <div *ngIf="form.get('archivo')?.invalid && form.get('archivo')?.touched" class="text-danger mt-1">
           El archivo es obligatorio
         </div>
@@ -75,7 +79,7 @@
 
         <button *ngIf="idReporte" type="button" class="btn btn-outline-light btn-sm fw-semibold" (click)="update()" [disabled]="isLoading">
           <ng-container *ngIf="!isLoading; else loading">
-            <i class="fas fa-save"></i> Actualizar
+            <i class="fas fa-save me-1 "></i> Actualizar
           </ng-container>
           <ng-template #loading>
             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -85,7 +89,7 @@
 
         <button type="button" class="btn btn-outline-light btn-sm fw-semibold" (click)="descargarJson()" [disabled]="isLoading">
           <ng-container *ngIf="!isLoading; else loading">
-            <i class="fas fa-download "></i> Descargar JSON
+            <i class="fas fa-download me-1 "></i> Descargar JSON
           </ng-container>
           <ng-template #loading>
             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -107,6 +111,9 @@
 
   </div>
   <div class="card-body border rounded-4">
+    <div *ngFor="let item of uuidInvalidos" class="alert alert-danger rounded-pill">
+        Se ha detectado que el UUID: <strong> {{ item }} </strong> no tiene un formato valido
+    </div>
     <div *ngIf="jsonPreview" class="mt-4">
       <!-- <h5>Contenido del archivo:</h5> -->
       <!-- <pre class="bg-light p-3 border rounded">{{ jsonPreview | json }}</pre> -->

@@ -67,6 +67,8 @@
     "highcharts": "^12.1.2",
     "highcharts-angular": "^4.0.1",
     "jquery": "^3.7.1",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.8",
     "leaflet": "^1.9.4",
     "masonry-layout": "^4.2.2",
     "metismenujs": "^1.4.0",

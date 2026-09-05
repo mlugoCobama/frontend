@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import { UsuariosService } from 'src/app/core/services/compras/usuarios.service';
@@ -16,12 +16,14 @@ export class ParserVolumetricosComponent implements OnInit {
   form!: FormGroup;
   empresas: any[] = [];
   jsonPreview: any = null;
+  uuidInvalidos = [];
   public rawEmpresas: any;
   public isLoading: boolean = false;
   public uuidReporte = null;
 
   @Input() idReporte:any =  null;
   @Output() finished = new EventEmitter<any>();
+  archivoInput!: ElementRef<HTMLInputElement>;
 
   constructor(private fb: FormBuilder,
     private usuariosService: UsuariosService,
@@ -40,15 +42,24 @@ export class ParserVolumetricosComponent implements OnInit {
 
     this.getEmpresas();
   }
-  rawContent: string | null = null
+
+  public  limpiarDatos() {
+    this.form.reset({
+      archivo: null,
+      formato: '',
+      empresa: ''
+    });
+    this.jsonPreview = null;
+    this.uuidInvalidos = []
+    // this.archivoInput.nativeElement.value = '';
+  }
+
   onFileChange(event: any) {
     this.jsonPreview = null;
     const file = event.target.files[0];
     if (file) {
       this.form.patchValue({ archivo: file });
     }
-
-
   }
 
 
@@ -83,17 +94,20 @@ export class ParserVolumetricosComponent implements OnInit {
   }
 
 public  findNombreGasera(intercompania:string){
-  const nombreEmpresa = this.rawEmpresas.find(item => item.intercompania === intercompania)?.name;
+  const nombreEmpresa = this.rawEmpresas.find(item => item.intercompania === +intercompania)?.name;
   return nombreEmpresa;
 }
 
 
 coincideEmpresa(cadenaOriginal:string, cadenaBuscada:string) {
   if (!cadenaOriginal || !cadenaBuscada) return false;
-  const normalizar = (texto:string) =>
-    texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 
-  return normalizar(cadenaOriginal).includes(normalizar(cadenaBuscada));
+  const normalizar = (texto:string) => texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+
+  const descripcion = normalizar(cadenaOriginal);
+  const empresa = normalizar(cadenaBuscada);
+  const resultado = descripcion.includes(empresa);
+  return resultado
 }
 
   generarArchivo() {
@@ -114,9 +128,9 @@ coincideEmpresa(cadenaOriginal:string, cadenaBuscada:string) {
     .subscribe({
       next: (resp) => {
        this.alertasService.mostrarAlerta( "Listo", `Archivo Generado Correctamente`,  "success",  "success");
-      //  console.log(resp)
         this.uuidReporte = resp.headers.get('X-Report-UUID')
-        this.jsonPreview = resp.body;
+        this.jsonPreview = resp.body.json;
+        this.uuidInvalidos = resp.body.uuidInvalidos ;
         this.isLoading = false;
       },
       error: (err) => {
@@ -140,8 +154,8 @@ if (this.form.invalid) {
   }
 
   const nombreEmpresa = this.findNombreGasera(this.form.get('empresa')?.value);
-
-    if (!this.coincideEmpresa(this.jsonPreview.DescripcionInstalacion, nombreEmpresa)) {
+  const descInstalacion = this.jsonPreview.DescripcionInstalacion;
+    if (!this.coincideEmpresa(descInstalacion, nombreEmpresa)) {
 
     const confirmado = await this.alertasService.mostrarConfirmacion(
       "Advertencia de empresa",
@@ -170,7 +184,7 @@ if (this.form.invalid) {
       next: (resp) => {
         if(resp.success){
           this.alertasService.mostrarAlerta("Listo",`Archivo Guardado Correctamente`,"success","success");
-        this.form.reset();
+        this.limpiarDatos()
         this.jsonPreview = null;
         this.isLoading = false;
         }else{
@@ -239,7 +253,11 @@ if (this.form.invalid) {
     this.exportService.descargarXml(this.jsonPreview, this.uuidReporte);
   }
 
-    tienePermiso(permiso: string = null): boolean {
+  descargarPdf() {
+    this.exportService.descargarReporte(this.jsonPreview, this.uuidReporte);
+  }
+
+  tienePermiso(permiso: string = null): boolean {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
   }

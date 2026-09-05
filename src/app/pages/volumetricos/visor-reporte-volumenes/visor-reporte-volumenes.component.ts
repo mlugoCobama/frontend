@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-
+import { VolumetricosExportService } from 'src/app/core/services/volumetricos/volumetricos-export-service.service';
+import { ReporteVolumetricoPdfService } from 'src/app/core/services/volumetricos/reporte-volumetrico-pdf.service';
   interface SumatoriaVolumenes {
   sinCfdi: number;
   autoconsumo: number;
@@ -23,6 +24,10 @@ export class VisorReporteVolumenesComponent implements OnInit{
   public aclaracionesEntregas:any;
   public aclaracionesRecepciones:any;
 
+  constructor(
+    private exportService: ReporteVolumetricoPdfService,
+  ){}
+
   ngOnInit(): void {
     this.getPrincipalBlock();
   }
@@ -32,8 +37,8 @@ export class VisorReporteVolumenesComponent implements OnInit{
     this.recepciones = (this.producto['ReporteDeVolumenMensual']['Recepciones']) ? this.producto['ReporteDeVolumenMensual']['Recepciones'] : null;
     this.entregas = (this.producto['ReporteDeVolumenMensual']['Entregas']) ? this.producto['ReporteDeVolumenMensual']['Entregas'] : null;
     this.existencias = (this.producto['ReporteDeVolumenMensual']['ControlDeExistencias']) ? this.producto['ReporteDeVolumenMensual']['ControlDeExistencias'] : null;
-    this.aclaracionesEntregas = this.obtenerSumatoriasPorAclaracion(this.entregas['Complemento']);
-    this.aclaracionesRecepciones = this.obtenerSumatoriasPorAclaracion(this.recepciones['Complemento']);
+    this.aclaracionesEntregas = this.obtenerSumatoriasPorAclaracion(this.entregas['Complemento'] ?? []);
+    this.aclaracionesRecepciones = this.obtenerSumatoriasPorAclaracion(this.recepciones['Complemento'] ?? []);
   }
 
   public obtenerSumatoriasPorAclaracion(complementos: any[]): SumatoriaVolumenes {
@@ -79,6 +84,8 @@ export class VisorReporteVolumenesComponent implements OnInit{
     return totales;
   }
 
-
+  descargarPdf() {
+    this.exportService.generar(this.dataJson);
+  }
   }
 

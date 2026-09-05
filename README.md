@@ -102,3 +102,9 @@ Se integra el nuevo módulo de Gestión de Comisiones con los siguientes apartad
 * **Gestión de Estatus:** Flujo de seguimiento con los estados: `Generado` ➔ `Enviado` ➔ `Aceptado`.
 * **Carga de Acuses:** Soporte para subir y adjuntar acuses de **Envío** y de **Aceptación** (rechazado o aceptado).
 * **Filtros Avanzados:** Consultas por **Empresa**, **Periodo** y **Tipo de Instalación**.
+---
+### Volumetricos
+*Fecha de liberación: 05 de Septiembre, 2026*
+* **Validación de Plantilla:** Se agrega soporte para reportes en 0 y se corrige la validacion plantillas, se integra un boton de limpieza de datos
+* **Descarga de informacion en pdf** el resultado del visor de plantillas se realiza en pdf
+* **Instalar dependecias "jspdf","jspdf-autotable"**

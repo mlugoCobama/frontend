@@ -55,6 +55,21 @@ export class VolumetricosExportService {
     });
   }
 
+  descargarReporte(data: any, nombrePersonalizado?: string): void {
+    const url = `${environment.apiUrl}reportes/imprimir-reporte-pdf`;
+
+    this.http.post(url, data, { responseType: 'blob' }).subscribe({
+      next: (blob: Blob) => {
+        const fileName = nombrePersonalizado ;
+        this.triggerDownload(blob, fileName);
+      },
+      error: (err) => {
+        this.alerta.mostrarAlerta('error',`'Error al descargar el archivo:', ${err}`,'error', 'danger' )
+        console.error('Error al descargar el archivo PDF:', err);
+      }
+    });
+  }
+
   /**
    * Descarga el objeto de reporte en formato JSON usando Blob (más eficiente para archivos grandes)
    */

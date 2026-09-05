@@ -1,9 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
-  interface SumatoriaVolumenes {
+import { VolumetricosExportService } from 'src/app/core/services/volumetricos/volumetricos-export-service.service';
+import { ReporteVolumetricoPdfService } from 'src/app/core/services/volumetricos/reporte-volumetrico-pdf.service';
+
+interface SumatoriaVolumenes {
   sinCfdi: number;
   autoconsumo: number;
   traspaso: number;
 }
+
 @Component({
   selector: 'app-visor-reporte-xml',
   templateUrl: './visor-reporte-xml.component.html',
@@ -19,8 +23,12 @@ export class VisorReporteXmlComponent implements OnInit{
   public aclaracionesEntregas:any;
   public aclaracionesRecepciones:any;
 
+
+  constructor(
+      private exportService: ReporteVolumetricoPdfService,
+    ){}
+
   ngOnInit(): void {
-    console.log(this.dataJson);
     this.getPrincipalBlock();
 
   }
@@ -35,10 +43,41 @@ export class VisorReporteXmlComponent implements OnInit{
     this.existencias = (this.producto['ReporteDeVolumenMensual']['ControlDeExistencias']) ? this.producto['ReporteDeVolumenMensual']['ControlDeExistencias']: null;
     this.existencias.VolumenExistenciasMes = this.existencias.VolumenExistenciasMes.ValorNumerico
     this.aclaracionesEntregas = this.obtenerSumatoriasPorAclaracion(this.entregas['Complemento']['Complemento_Almacenamiento']['Nacional']);
-    this.aclaracionesEntregas = this.obtenerSumatoriasPorAclaracion(this.recepciones['Complemento']['Complemento_Almacenamiento']['Nacional']);
-    // this.aclaracionesRecepciones = this.obtenerSumatoriasPorAclaracion(this.recepciones['Complemento']);
+    this.aclaracionesRecepciones = this.obtenerSumatoriasPorAclaracion(this.recepciones['Complemento']['Complemento_Almacenamiento']['Nacional']);
   }
 
+ public formatJson() {
+  const newJson = structuredClone(this.dataJson);
+  const productoClonado = newJson['Producto']?.[0];
+
+  if (productoClonado) {
+    const reporte = productoClonado['ReporteDeVolumenMensual'];
+
+    if (reporte) {
+      const rawRecepcionObj = reporte['Recepciones']?.[0] ?? reporte['Recepciones']?.[0];
+      const rawEntregaObj   = reporte['Entregas']?.[0]    ?? reporte['Entregas']?.[0];
+      delete reporte['Recepciones'];
+      delete reporte['Entregas'];
+      reporte['Recepciones'] = rawRecepcionObj ? structuredClone(rawRecepcionObj) : {};
+      reporte['Entregas']    = rawEntregaObj   ? structuredClone(rawEntregaObj)   : {};
+      if (this.recepciones) {
+        reporte['Recepciones']['Complemento'] = structuredClone(
+          this.recepciones['Complemento']['Complemento_Almacenamiento']['Nacional']
+        );
+      }
+      if (this.entregas) {
+        reporte['Entregas']['Complemento'] = structuredClone(
+          this.entregas['Complemento']['Complemento_Almacenamiento']['Nacional']
+        );
+      }
+    }
+  }
+
+  return newJson;
+}
+  descargarPdf() {
+    this.exportService.generar(this.formatJson());
+  }
 
 
   public obtenerSumatoriasPorAclaracion(complementos: any[]): SumatoriaVolumenes {

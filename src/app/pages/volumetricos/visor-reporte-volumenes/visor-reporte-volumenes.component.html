@@ -1,4 +1,14 @@
-<div class="row">
+<div class="reporte-container">
+  <div class="d-flex justify-content-end py-2">
+    <button type="button" class="btn btn-info btn-sm  fw-semibold" (click)="descargarPdf()" >
+          <ng-container>
+            <i class="fas fa-print me-1 "></i> Descargar PDF
+          </ng-container>
+        </button>
+  </div>
+
+
+  <div class="row">
     <app-header-planta
     [descripcionInstalacion] = "dataJson?.DescripcionInstalacion"
     [numPermiso] = "dataJson?.NumPermiso"
@@ -88,8 +98,8 @@
        <app-card-aclaraciones
           [title]="'Recepciones'"
           [volumenSinCfdi] = "aclaracionesRecepciones?.sinCfdi || 0"
-          [volumenTraspaso] =  "aclaracionesRecepciones?.autoconsumo  || 0"
-          [volumenAutoconsumo] = "aclaracionesRecepciones?.traspaso || 0"
+          [volumenTraspaso] =  "aclaracionesRecepciones?.traspaso   || 0"
+          [volumenAutoconsumo] = " aclaracionesRecepciones?.autoconsumo || 0"
        >
        </app-card-aclaraciones>
     </div>
@@ -97,8 +107,8 @@
        <app-card-aclaraciones
           [title]="'Entregas'"
           [volumenSinCfdi] = "aclaracionesEntregas?.sinCfdi || 0"
-          [volumenTraspaso] =  "aclaracionesEntregas?.autoconsumo || 0"
-          [volumenAutoconsumo] = "aclaracionesEntregas?.traspaso || 0"
+          [volumenTraspaso] =  "aclaracionesEntregas?.traspaso || 0"
+          [volumenAutoconsumo] = "aclaracionesEntregas?.autoconsumo || 0"
        >
        </app-card-aclaraciones>
     </div>
@@ -110,3 +120,6 @@
     [data] = "dataJson"
     ></app-tabs-resumenes>
 </div>
+
+</div>
+
