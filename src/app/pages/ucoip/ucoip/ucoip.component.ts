@@ -31,7 +31,7 @@ export class UcoipComponent implements OnInit {
   public catalogoRecursos: any;
 
   dtOptions: Config = {};
-    
+
   empresas: any[] = [];
   areas: any[] = [];
   puestos: any[] = [];
@@ -42,7 +42,7 @@ export class UcoipComponent implements OnInit {
     puesto: ''
   };
 
-  
+
 
   constructor(
     private ucoipService: UcoipService,
@@ -110,7 +110,7 @@ export class UcoipComponent implements OnInit {
         // this.getAll();
       }
     });
-    
+
   }
 
   aplicarFiltros() {

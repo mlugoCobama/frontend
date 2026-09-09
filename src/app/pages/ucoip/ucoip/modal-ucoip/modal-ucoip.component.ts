@@ -14,11 +14,11 @@ import { UcoipService } from 'src/app/core/services/ucoip/ucoip.service';
 })
 export class ModalUcoipComponent implements OnInit  {
   public tipo: string = '';
-  
+
   public data: any = [];
-    
+
   public listaDatos: any[] = [];
-  
+
   public formModalUcoip: FormGroup;
 
   public dataAreas: any;
@@ -37,9 +37,9 @@ export class ModalUcoipComponent implements OnInit  {
   public areas:any;
   public catSistemas:any;
   public catRecurso:any;
-    
+
   public event: EventEmitter<any> = new EventEmitter();
-  
+
   constructor(
     public formBuilder: FormBuilder,
     public modalRef: BsModalRef,
@@ -109,14 +109,14 @@ export class ModalUcoipComponent implements OnInit  {
         this.alertService.alertError(error, false);
       }
     );
-    
+
   }
 
   public onSelectDeptoChange(value: number) {
     this.areasDeptosService.getDeptoPuestos(value).subscribe(
       (data: any) => {
         if (data.success) {
-          this.dataPuesto = data.data;          
+          this.dataPuesto = data.data;
         } else {
           this.alertService.alertError(data.message, data.success);
         }
@@ -125,7 +125,7 @@ export class ModalUcoipComponent implements OnInit  {
         this.alertService.alertError(error, false);
       }
     );
-    
+
   }
 
   private getPermisos() {
@@ -172,6 +172,8 @@ export class ModalUcoipComponent implements OnInit  {
       }
     });
   }
+
+
 
     public cerrarModal(): void {
     this.modalRef.hide();

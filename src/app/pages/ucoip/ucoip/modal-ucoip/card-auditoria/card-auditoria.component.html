@@ -1,0 +1,104 @@
+
+<div class="card shadow-sm rounded-4">
+<div class="card-header bg-secondary-subtle d-flex justify-content-between align-items-center rounded-4">
+        <span class="fw-bold">AUDITORIA</span>
+        <div class="d-flex gap-2">
+            <!-- Botón toggle -->
+            <button
+                class="btn btn-dark btn-sm"
+                type="button"
+                (click)="toggleFormulario()">
+                <i class="fas" [ngClass]="mostrarFormulario ? 'fa-eye-slash' : 'fa-plus'"></i>
+                {{ mostrarFormulario ? 'Ocultar formulario' : 'Nueva Revision' }}
+            </button>
+        </div>
+
+    </div>
+<div class="card-body">
+
+    <div  *ngIf="cargando" class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+    </div>
+
+    <div
+      *ngIf="!cargando && auditorias.length === 0"
+      class="text-center text-muted p-5">
+
+      <i class="fa fa-history fa-2x mb-3"></i>
+
+      <p class="mb-0">
+        Este UCOIP todavía no tiene auditorías registradas.
+      </p>
+
+    </div>
+
+    <ng-container  *ngIf="!mostrarFormulario">
+        <div
+      *ngIf="!cargando && auditorias.length > 0"
+      class="table-responsive rounded-4 border">
+      <table class="table table-sm table-hover align-middle mb-0">
+        <thead>
+          <tr>
+            <th>
+              Fecha
+            </th>
+            <th>
+              Responsable
+            </th>
+            <th class="text-center">
+              Acciones
+            </th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let auditoria of auditorias">
+            <td>
+                {{ auditoria.fecha | date:'dd/MM/yyyy' }} <span class="small">{{ auditoria.fecha | date:'HH:mm' }} </span>
+            </td>
+            <td>
+              {{ auditoria.responsable?.firstname || 'N/A' }} {{ auditoria.responsable?.realname || 'N/A' }}
+            </td>
+
+            <td class="text-center">
+              <!-- <button
+                type="button"
+                class="btn btn-sm btn-outline-primary me-1"
+                (click)="verAuditoria(auditoria)"
+                title="Ver auditoría">
+
+                <i class="fa fa-eye"></i>
+
+              </button> -->
+
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-danger"
+                (click)="descargarPdf(auditoria)"
+                title="Descargar PDF">
+
+                <i class="fa fa-file-pdf"></i>
+
+              </button>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+    </ng-container>
+
+    <ng-container *ngIf="allUcoip &&  mostrarFormulario">
+            <app-auditoria-ucoip [allUcoip]="allUcoip" (guardadoExitoso) = "guardadoExitoso()"></app-auditoria-ucoip>
+    </ng-container>
+</div>
+</div>

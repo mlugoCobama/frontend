@@ -51,14 +51,21 @@
                   [ngClass]="tabActiva === 'licencias' ? 'btn-secondary' : 'btn-outline-secondary'"
                   (click)="tabActiva = 'licencias'">
                   Licenciamientos
-              </button> 
-              
+              </button>
+
               <button
                   class="btn btn-sm"
                   [ngClass]="tabActiva === 'tokens' ? 'btn-secondary' : 'btn-outline-secondary'"
                   (click)="tabActiva = 'tokens'">
                   Tokens
-              </button> 
+              </button>
+
+              <button
+                  class="btn btn-sm"
+                  [ngClass]="tabActiva === 'auditoria' ? 'btn-secondary' : 'btn-outline-secondary'"
+                  (click)="tabActiva = 'auditoria'">
+                  Auditoria
+              </button>
 
               </ng-container>
 
@@ -119,6 +126,7 @@
           </app-card-network>
       </div>
 
+      <!-- TAB LICENCIAMIENTOS -->
       <div class="col-12" *ngIf="tabActiva === 'licencias'">
             <app-card-licenciamientos
               [data]="resguardos"
@@ -127,6 +135,7 @@
 
       </div>
 
+      <!-- TAB TOKENS -->
       <div class="col-12" *ngIf="tabActiva === 'tokens'">
             <app-card-tokens
               [data]="resguardos"
@@ -135,8 +144,19 @@
 
       </div>
 
+      <div class="col-12" *ngIf="tabActiva === 'auditoria'">
+
+          <app-card-auditoria [ucoip]="ucoip"></app-card-auditoria>
+
+      </div>
   </div>
+
+
+
+
 </div>
+
+
 
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="cerrarModal()" >Cerrar</button>

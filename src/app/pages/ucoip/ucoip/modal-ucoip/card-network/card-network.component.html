@@ -4,27 +4,15 @@
         <span class="fw-bold">NETWORK</span>
         <div class="d-flex gap-2">
             <!-- Botón toggle -->
-            <button 
-                class="btn btn-dark btn-sm" 
-                type="button" 
+            <button
+                class="btn btn-dark btn-sm"
+                type="button"
                 (click)="toggleFormulario()">
                 <i class="fas" [ngClass]="mostrarFormulario ? 'fa-eye-slash' : 'fa-plus'"></i>
                 {{ mostrarFormulario ? 'Ocultar formulario' : 'Nueva Asignación' }}
             </button>
-            <button  *ngIf = "idsSeleccionados.length > 0"
-                title="Imprimir resguardo"
-                (click)="imprimirResguardo()"
-                class="btn btn-outline-dark btn-sm">
-                <ng-container *ngIf="!downloading; else spinnerDown">
-                    <i class="fas fa-print"></i>
-                    Resguardo
-                </ng-container>
-                <ng-template #spinnerDown>
-                    <i class="fas fa-spinner fa-spin"></i> Descargando...
-                </ng-template>
-            </button>
         </div>
-        
+
     </div>
 <div class="card-body">
     <form *ngIf="mostrarFormulario" [formGroup]="form">
@@ -46,7 +34,7 @@
                         Debe seleccionar un tipo.
                     </div>
                 </div>
-            </div> 
+            </div>
 
             <div class="col-sm-7">
                 <label for="valor" class="form-label">Valor</label>
@@ -59,10 +47,10 @@
                         Debes ingresar el valor del tipo seleccionado
                     </div>
                 </div>
-            
+
             </div>
 
-            
+
 
             <div class="col-sm-2">
                 <label for="restrictivo" class="form-label">Nivel R.</label>
@@ -78,7 +66,7 @@
                         {{ item.hardware.tipo_hardware.tipo }} - {{ item.hardware.marca}} - {{ item.hardware.modelo}}
                     </option>
                 </select>
-            </div> 
+            </div>
 
             <div class="col-sm-5">
                 <label for="observaciones" class="form-label">Observaciones</label>

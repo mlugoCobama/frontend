@@ -31,6 +31,8 @@ import { ModalMantenimientoComponent } from './inventario/modal-mantenimiento/mo
 import { PreventivoFormComponent } from './inventario/preventivo-form/preventivo-form.component';
 import { CorrectivoFormComponent } from './inventario/correctivo-form/correctivo-form.component';
 import { EvidenciaUploaderComponent } from './inventario/evidencia-uploader/evidencia-uploader.component';
+import { AuditoriaUcoipComponent } from './ucoip/modal-ucoip/auditoria-ucoip/auditoria-ucoip.component';
+import { CardAuditoriaComponent } from './ucoip/modal-ucoip/card-auditoria/card-auditoria.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +58,8 @@ import { EvidenciaUploaderComponent } from './inventario/evidencia-uploader/evid
     PreventivoFormComponent,
     CorrectivoFormComponent,
     EvidenciaUploaderComponent,
+    AuditoriaUcoipComponent,
+    CardAuditoriaComponent,
   ],
   imports: [
     CommonModule,
