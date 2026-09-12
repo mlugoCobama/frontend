@@ -1,0 +1,133 @@
+<!-- <div class="container py-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0 fs-5">Datos de Identificación del Cliente</h3>
+    </div>
+
+    <div class="card-body p-4"> -->
+      <form [formGroup]="clienteForm" (ngSubmit)="guardar()">
+        <div *ngFor="let item of data?.evaluacion.exitos" class="alert alert-success text-center rounded-3 fw-semibold">
+          {{item}}
+        </div>
+
+        <!-- SECCIÓN 1: DATOS PERSONALES Y FISCALES -->
+        <h5 class="text-secondary mb-3 border-bottom pb-2">Identificación Oficial</h5>
+        <div class="row g-3 mb-4">
+
+          <div class="col-md-6">
+            <label class="form-label fw-bold">RFC *</label>
+            <input type="text" class="form-control form-control-sm text-uppercase" formControlName="rfc" placeholder="ABCD123456XYZ" maxlength="13"
+              [class.is-invalid]="clienteForm.get('rfc')?.touched && clienteForm.get('rfc')?.invalid">
+            <div class="invalid-feedback" *ngIf="clienteForm.get('rfc')?.errors?.['required']">El RFC es obligatorio.</div>
+            <div class="invalid-feedback" *ngIf="clienteForm.get('rfc')?.errors?.['pattern']">El formato del RFC no es válido.</div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label fw-bold">CURP *</label>
+            <input type="text" class="form-control form-control-sm text-uppercase" formControlName="curp" placeholder="ABCD123456HDFRXX01" maxlength="18"
+              [class.is-invalid]="clienteForm.get('curp')?.touched && clienteForm.get('curp')?.invalid">
+            <div class="invalid-feedback" *ngIf="clienteForm.get('curp')?.errors?.['required']">La CURP es obligatoria.</div>
+            <div class="invalid-feedback" *ngIf="clienteForm.get('curp')?.errors?.['pattern']">El formato de la CURP no es válido.</div>
+          </div>
+
+          <div class="col-md-12">
+            <label class="form-label fw-bold">Nombre Completo *</label>
+            <input type="text" class="form-control form-control-sm" formControlName="nombreCompleto" placeholder="Nombre(s) y Apellidos"
+              [class.is-invalid]="clienteForm.get('nombreCompleto')?.touched && clienteForm.get('nombreCompleto')?.invalid">
+            <div class="invalid-feedback">Ingrese el nombre completo del cliente.</div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label fw-bold">Fecha de Nacimiento *</label>
+            <input type="date" class="form-control form-control-sm" formControlName="fechaNacimiento"
+              [class.is-invalid]="clienteForm.get('fechaNacimiento')?.touched && clienteForm.get('fechaNacimiento')?.invalid">
+            <div class="invalid-feedback">Seleccione la fecha de nacimiento.</div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label fw-bold">País de Nacimiento *</label>
+            <select class="form-select form-select-sm" formControlName="paisNacimiento"
+              [class.is-invalid]="clienteForm.get('paisNacimiento')?.touched && clienteForm.get('paisNacimiento')?.invalid">
+              <option value="">Seleccione país...</option>
+              <option *ngFor="let pais of paises" [value]="pais">{{ pais }}</option>
+            </select>
+            <div class="invalid-feedback">Seleccione el país de nacimiento.</div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label fw-bold">País de Nacionalidad *</label>
+            <select class="form-select form-select-sm" formControlName="paisNacionalidad"
+              [class.is-invalid]="clienteForm.get('paisNacionalidad')?.touched && clienteForm.get('paisNacionalidad')?.invalid">
+              <option value="">Seleccione nacionalidad...</option>
+              <option *ngFor="let pais of paises" [value]="pais">{{ pais }}</option>
+            </select>
+            <div class="invalid-feedback">Seleccione la nacionalidad.</div>
+          </div>
+
+
+
+        </div>
+
+        <!-- SECCIÓN 2: PAÍS Y ACTIVIDAD ECONÓMICA -->
+        <h5 class="text-secondary mb-3 border-bottom pb-2">Nacionalidad y Actividad Económica</h5>
+        <div class="row g-3 mb-4">
+
+          <div class="col-md-12">
+            <label class="form-label fw-bold">Actividad, Giro, Ocupación o Profesion *</label>
+            <input type="text" class="form-control form-control-sm" formControlName="actividadGiroOcupacion"
+              [class.is-invalid]="clienteForm.get('actividadGiroOcupacion')?.touched && clienteForm.get('actividadGiroOcupacion')?.invalid">
+            <div class="invalid-feedback">Ingrese la actividad, giro ocupacion o profesion</div>
+          </div>
+
+
+          <div class="col-md-12">
+            <label class="form-label fw-bold">Actividad economica *</label>
+            <select class="form-select form-select-sm" formControlName="actividadGiroRegimen"
+              [class.is-invalid]="clienteForm.get('actividadGiroRegimen')?.touched && clienteForm.get('actividadGiroRegimen')?.invalid">
+              <option value="">Seleccione Régimen / Actividad...</option>
+              <option *ngFor="let regimen of regimenesFiscales" [value]="regimen">{{ regimen }}</option>
+            </select>
+            <div class="invalid-feedback">Seleccione la actividad económica o régimen fiscal.</div>
+          </div>
+
+        </div>
+
+        <!-- SECCIÓN 3: PERSONA PÚBLICAMENTE EXPUESTA (PEP) -->
+        <div class="p-3 bg-light rounded border border-warning mb-4">
+          <label class="form-label fw-bold text-dark mb-2">
+            Persona Politicamente Expuesta (PEP) *
+          </label>
+          <div class="d-flex flex-wrap gap-4 mb-2">
+            <div class="form-check" *ngFor="let opc of opcionesPep">
+              <input class="form-check-input" type="radio" [id]="'pep_' + opc.value" formControlName="esPep" [value]="opc.value">
+              <label class="form-check-label fw-semibold" [for]="'pep_' + opc.value">
+                {{ opc.label }}
+              </label>
+            </div>
+          </div>
+
+          <small class="d-block text-muted mb-3">
+            Una PEP es quien desempeña o ha desempeñado funciones públicas reelevantes (funcionario servidor público) o sus familiares y allegados.
+          </small>
+
+          <!-- Especificación condicional si selecciona Sí -->
+          <div *ngIf="clienteForm.get('esPep')?.value !== 'NO'" class="mt-3">
+            <label class="form-label fw-bold text-danger">Mencione el Cargo o Función Desempeñada *</label>
+            <input type="text" class="form-control form-control-sm" formControlName="especifiquePep" placeholder="Ej. Diputado Federal, Secretario de Estado, etc."
+              [class.is-invalid]="clienteForm.get('especifiquePep')?.touched && clienteForm.get('especifiquePep')?.invalid">
+            <div class="invalid-feedback">Por favor especifique el cargo de la Persona Públicamente Expuesta.</div>
+          </div>
+        </div>
+
+        <!-- BOTONES DE ACCIÓN -->
+        <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+          <button type="button" class="btn btn-sm btn-secondary">Cancelar</button>
+          <button type="submit" class="btn btn-sm btn-primary" [disabled]="clienteForm.invalid">
+            Guardar Cliente
+          </button>
+        </div>
+
+      </form>
+    <!-- </div>
+  </div>
+</div> -->

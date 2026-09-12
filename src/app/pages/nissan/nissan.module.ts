@@ -27,6 +27,11 @@ import { ModalUpdateVendedorComponent } from './comisiones/vendedores/modal-upda
 import { FormTabuladorComponent } from './comisiones/tabulador/form-tabulador/form-tabulador.component';
 import { ModalAddTabuladorComponent } from './comisiones/tabulador/modal-add-tabulador/modal-add-tabulador.component';
 import { ModalUpdateTabuladorComponent } from './comisiones/tabulador/modal-update-tabulador/modal-update-tabulador.component';
+import { PldComponent } from './pld/pld.component';
+import { DatosOperacionFormComponent } from './pld/datos-operacion-form/datos-operacion-form.component';
+import { DocumentacionFormComponent } from './pld/documentacion-form/documentacion-form.component';
+import { DatosIdentificacionFormComponent } from './pld/datos-identificacion-form/datos-identificacion-form.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 
 @NgModule({
@@ -47,7 +52,11 @@ import { ModalUpdateTabuladorComponent } from './comisiones/tabulador/modal-upda
     ModalUpdateVendedorComponent,
     FormTabuladorComponent,
     ModalAddTabuladorComponent,
-    ModalUpdateTabuladorComponent
+    ModalUpdateTabuladorComponent,
+    PldComponent,
+    DatosOperacionFormComponent,
+    DocumentacionFormComponent,
+    DatosIdentificacionFormComponent
   ],
   imports: [
     CommonModule,
@@ -61,6 +70,7 @@ import { ModalUpdateTabuladorComponent } from './comisiones/tabulador/modal-upda
     NgStepperModule,
     NgxMaskDirective,
     NgxMaskPipe,
+    ImageCropperModule
   ],
   providers: [
     provideNgxMask()

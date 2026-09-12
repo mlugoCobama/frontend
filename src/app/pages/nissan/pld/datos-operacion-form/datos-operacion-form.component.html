@@ -1,0 +1,151 @@
+<!-- <div class="container py-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0 fs-5">Registro de Operación de Vehículo</h3>
+    </div>
+
+    <div class="card-body p-4"> -->
+      <form [formGroup]="ventaForm" (ngSubmit)="guardar()">
+        <!-- SECCIÓN 2: DATOS DEL VEHÍCULO -->
+        <h5 class="text-secondary mb-3 border-bottom pb-2">Datos del Vehículo</h5>
+        <div class="row g-3 mb-4">
+
+          <div class="col-md-4">
+            <label class="form-label fw-bold">Tipo de Venta *</label>
+            <select class="form-select form-select-sm" formControlName="tipoVenta"
+              [class.is-invalid]="ventaForm.get('tipoVenta')?.touched && ventaForm.get('tipoVenta')?.invalid">
+              <option value="">Seleccione...</option>
+              <option *ngFor="let tipo of tiposVenta" [value]="tipo">{{ tipo }}</option>
+            </select>
+            <div class="invalid-feedback">Seleccione un tipo de venta.</div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label fw-bold">Vehículo *</label>
+            <input type="text" class="form-control form-control-sm" formControlName="vehiculo" placeholder="Ej. Nissan Versa"
+              [class.is-invalid]="ventaForm.get('vehiculo')?.touched && ventaForm.get('vehiculo')?.invalid">
+            <div class="invalid-feedback">Este campo es requerido.</div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label fw-bold">Modelo (Año) *</label>
+            <input type="number" class="form-control form-control-sm" formControlName="modeloAnio" placeholder="YYYY"
+              [class.is-invalid]="ventaForm.get('modeloAnio')?.touched && ventaForm.get('modeloAnio')?.invalid">
+            <div class="invalid-feedback">Año inválido.</div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label fw-bold">Fecha Inicio Operación *</label>
+            <input type="date" class="form-control form-control-sm" formControlName="fechaInicioOperacion"
+              [class.is-invalid]="ventaForm.get('fechaInicioOperacion')?.touched && ventaForm.get('fechaInicioOperacion')?.invalid">
+            <div class="invalid-feedback">Ingrese la fecha de operación.</div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label fw-bold">Canal de Venta *</label>
+            <select class="form-select form-select-sm" formControlName="canalVenta"
+              [class.is-invalid]="ventaForm.get('canalVenta')?.touched && ventaForm.get('canalVenta')?.invalid">
+              <option value="">Seleccione...</option>
+              <option *ngFor="let canal of canalesVenta" [value]="canal">{{ canal }}</option>
+            </select>
+            <div class="invalid-feedback">Seleccione un canal de venta.</div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label fw-bold">Tipo de operación*</label>
+            <input type="text" class="form-control form-control-sm" formControlName="tipo" placeholder="Ej. Sedan / SUV / Pick-up"
+              [class.is-invalid]="ventaForm.get('tipo')?.touched && ventaForm.get('tipo')?.invalid">
+            <div class="invalid-feedback">El tipo de operacion es requerido.</div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label fw-bold">Catálogo *</label>
+            <input type="text" class="form-control form-control-sm" formControlName="catalogo" placeholder="Ej. CAT-2026-A"
+              [class.is-invalid]="ventaForm.get('catalogo')?.touched && ventaForm.get('catalogo')?.invalid">
+            <div class="invalid-feedback">Indique el catálogo.</div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label fw-bold">Numero de Identificacion Vehicular (NIV) *</label>
+            <input type="text" class="form-control form-control-sm text-uppercase" formControlName="vin" maxlength="17" placeholder="17 caracteres alfanuméricos"
+              [class.is-invalid]="ventaForm.get('vin')?.touched && ventaForm.get('vin')?.invalid">
+            <div class="invalid-feedback" *ngIf="ventaForm.get('vin')?.errors?.['required']">El VIN es obligatorio.</div>
+            <div class="invalid-feedback" *ngIf="ventaForm.get('vin')?.errors?.['minlength'] || ventaForm.get('vin')?.errors?.['maxlength']">El VIN debe tener exactamente 17 caracteres.</div>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label fw-bold">Color *</label>
+            <input type="text" class="form-control form-control-sm" formControlName="color"
+              [class.is-invalid]="ventaForm.get('color')?.touched && ventaForm.get('color')?.invalid">
+            <div class="invalid-feedback">Indica el color.</div>
+          </div>
+
+        </div>
+
+        <!-- SECCIÓN 3: FORM ARRAY DE ACCESORIOS -->
+        <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+          <h5 class="text-secondary mb-0">Partidas de Accesorios</h5>
+          <button type="button" class="btn btn-sm btn-outline-primary" (click)="agregarAccesorio()">
+            + Agregar Accesorio
+          </button>
+        </div>
+
+        <div formArrayName="accesorios" class="mb-4">
+          <div *ngIf="accesorios.controls.length === 0" class="alert alert-light text-center border">
+            <small class="text-muted">No se han registrado accesorios opcionales para esta venta.</small>
+          </div>
+
+          <div *ngFor="let partida of accesorios.controls; let i = index" [formGroupName]="i" class="row g-2 mb-2 align-items-center bg-light p-2 rounded border">
+
+            <div class="col-md-4">
+              <input type="text" class="form-control form-control-sm" formControlName="descripcion" placeholder="Descripción del accesorio">
+            </div>
+
+            <div class="col-md-2">
+              <input type="number" class="form-control form-control-sm" formControlName="cantidad" placeholder="Cantidad" min="1">
+            </div>
+
+            <div class="col-md-3">
+              <input type="number" class="form-control form-control-sm" formControlName="precioUnitario" placeholder="Precio Unitario ($)">
+            </div>
+
+            <div class="col-md-2">
+              <input type="number" class="form-control form-control-sm bg-white" formControlName="subtotal" placeholder="Subtotal" readonly>
+            </div>
+
+            <div class="col-md-1 text-center">
+              <button type="button" class="btn btn-sm btn-outline-danger w-100" (click)="eliminarAccesorio(i)" title="Eliminar partida">
+                ×
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- SECCIÓN 4: RESUMEN Y MONTO TOTAL -->
+        <div class="row justify-content-end mb-4">
+          <div class="col-md-4">
+            <div class="card bg-light border-primary">
+              <div class="card-body py-2 px-3">
+                <label class="form-label fw-bold text-primary mb-1">Monto Total de la Operación</label>
+                <div class="input-group">
+                  <span class="input-group-text">$</span>
+                  <input type="number" class="form-control form-control-sm fw-bold text-end" formControlName="montoTotal" readonly>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOTONES DE ACCIÓN -->
+        <div class="d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-sm btn-secondary">Cancelar</button>
+          <button type="submit" class="btn btn-sm btn-primary" [disabled]="ventaForm.invalid">
+            Guardar Operación
+          </button>
+        </div>
+
+      </form>
+    <!-- </div>
+  </div>
+</div> -->

@@ -27,4 +27,14 @@ export class AsingSistemasUcoipService {
         return this.http.get<any>(environment.apiUrl + 'ucoip/sistema-ucoip/password/'+id);
   }
 
+  print(id: number) {
+    return this.http.get(
+    environment.apiUrl + `ucoip/sistema-ucoip/responsiva/${id}`,
+      {
+        responseType: 'blob',
+        observe: 'response'
+      }
+    );
+  }
+
 }

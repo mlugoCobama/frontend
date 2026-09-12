@@ -11,6 +11,7 @@ import { ComisionesTomaUnidadesComponent } from '../renault/comisiones-toma-unid
 import { ComsionesSeguroComponent } from '../renault/comsiones-seguro/comsiones-seguro.component';
 import { ComisionesAccesoriosComponent } from '../renault/comisiones-accesorios/comisiones-accesorios.component';
 import { VisorCortesComponent } from '../renault/visor-cortes/visor-cortes.component';
+import { PldComponent } from './pld/pld.component';
 
 
 const routes: Routes = [
@@ -28,6 +29,7 @@ const routes: Routes = [
   { path: 'comisiones/cortes', component:  VisorCortesComponent},
   { path: 'vendedores', component:  VendedoresComponent},
   { path: 'tabulador', component:  TabuladorComponent},
+  { path: 'pld', component:  PldComponent},
 ];
 
 @NgModule({

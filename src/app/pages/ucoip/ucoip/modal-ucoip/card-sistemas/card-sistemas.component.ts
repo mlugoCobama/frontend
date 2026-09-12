@@ -16,6 +16,7 @@ export class CardSistemasComponent implements OnInit {
   @Input() glpi: any;
   @Input() catSistemas: any[] = [];
   @Output() actualizarAsignados = new EventEmitter<any>();
+    public downloading:boolean = false;
 
   form!: FormGroup;
 
@@ -184,4 +185,44 @@ export class CardSistemasComponent implements OnInit {
       },
     });
   }
+
+  public imprimirResponsiva() {
+      const hoy: Date = new Date();
+
+      this.downloading = true;
+
+      this.asignacion.print(this.ucoip.id).subscribe({
+        next: (response: any) => {
+
+          this.downloading = false;
+
+          const blob = new Blob(
+            [response.body],
+            { type: 'application/pdf' }
+          );
+
+          const fileName =
+            response.headers.get('X-Filename') ||
+             `Responsiva_${this.ucoip?.ucoip ?? ''}_${hoy}.pdf`;
+
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = fileName;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+        },
+
+        error: () => {
+          this.downloading = false;
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se pudo generar el PDF'
+          });
+        }
+      });
+    }
 }

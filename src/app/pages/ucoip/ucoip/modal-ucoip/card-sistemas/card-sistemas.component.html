@@ -4,27 +4,28 @@
         <span class="fw-bold">ACCESOS SISTEMAS</span>
         <div class="d-flex gap-2">
             <!-- Botón toggle -->
-            <button 
-                class="btn btn-dark btn-sm" 
-                type="button" 
+            <button
+                class="btn btn-dark btn-sm"
+                type="button"
                 (click)="toggleFormulario()">
                 <i class="fas" [ngClass]="mostrarFormulario ? 'fa-eye-slash' : 'fa-plus'"></i>
                 {{ mostrarFormulario ? 'Ocultar formulario' : 'Nueva Asignación' }}
             </button>
-            <button  *ngIf = "idsSeleccionados.length > 0"
-                title="Imprimir resguardo"
-                (click)="imprimirResguardo()"
+            <button
+                *ngIf="datos.length > 0"
+                title="Imprimir responsiva"
+                (click)="imprimirResponsiva()"
                 class="btn btn-outline-dark btn-sm">
                 <ng-container *ngIf="!downloading; else spinnerDown">
                     <i class="fas fa-print"></i>
-                    Resguardo
+                    Responsiva General
                 </ng-container>
                 <ng-template #spinnerDown>
                     <i class="fas fa-spinner fa-spin"></i> Descargando...
                 </ng-template>
             </button>
         </div>
-        
+
     </div>
 <div class="card-body">
     <form *ngIf="mostrarFormulario" [formGroup]="form">
@@ -46,7 +47,7 @@
                         Debe seleccionar un sistema.
                     </div>
                 </div>
-            </div> 
+            </div>
 
             <div class="col-sm-4">
                 <label for="usuario" class="form-label">Usuario</label>
@@ -90,7 +91,7 @@
                 </button>
             </div>
 
-            
+
         </div>
 
 
@@ -136,9 +137,9 @@
                             </td>
                             <td>{{detalle?.username}}</td>
                             <td>
-                                  <button *ngIf="!detalle.fecha_fin" 
-                                        class="btn btn-info btn-sm" 
-                                        (click)="openPass(detalle?.id)" 
+                                  <button *ngIf="!detalle.fecha_fin"
+                                        class="btn btn-info btn-sm"
+                                        (click)="openPass(detalle?.id)"
                                         [disabled]="loadingPass">
                                     <ng-container *ngIf="!loadingPass; else spinner">
                                     <i class="fas fa-unlock-alt"></i> Password
