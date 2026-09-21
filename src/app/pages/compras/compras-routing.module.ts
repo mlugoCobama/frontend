@@ -15,7 +15,7 @@ import { CatTagsComponent } from './cat-tags/cat-tags.component';
 
 const routes: Routes = [
   { path: '', component: ComprasComponent },
-  { path: 'proveedores', component: ProveedoresComponent},
+  { path: 'proveedores/:tipo', component: ProveedoresComponent},
   { path: 'almacen', component: AlmacenComponent },
   { path: 'cat-unidades-medidas', component: CatUnidadesMedidasComponent },
   { path: 'cat-unidades/:concepto', component: CatUnidadesComponent },

@@ -159,10 +159,17 @@ export const MENU: MenuItem[] = [
       },
       {
         id: 9,
-        label: "Proveedores",
-        link: "/compras/proveedores",
+        label: "Proveedores Compras",
+        link: "/compras/proveedores/compras",
         parentId: 7,
         permission: "view proveedores",
+      },
+      {
+        id: 15,
+        label: "Proveedores Corporativo",
+        link: "/compras/proveedores/corporativo",
+        parentId: 7,
+        permission: "view proveedores corporativo",
       },
       {
         id: 10,

@@ -21,15 +21,19 @@ export class ProveedoresService {
    */
   public getAll(): Observable<any> {
     return this.http.get(environment.apiUrl + 'compras/Proveedores', {headers});
-  } 
-  
+  }
+
+  public getCatalogo(tipo:string): Observable<any> {
+    return this.http.get(environment.apiUrl + 'compras/getCatProveedores/'+tipo, {headers});
+  }
+
   /**
    * recupera una colección especifica de datos de proveedores
    * @returns colección de datos {nombre, id}
    */
   public getProveedores(): Observable<any> {
     return this.http.get(environment.apiUrl + 'compras/getProveedores', {headers});
-  } 
+  }
 
   /**
    * Abre un blank con el documento seleccionado
@@ -41,7 +45,7 @@ export class ProveedoresService {
   }
 
   /**
-   * Recupera las rutas de los archivos del expediente del proveedor  
+   * Recupera las rutas de los archivos del expediente del proveedor
    * @param id id del proveedor seleccionado
    * @returns rutas delos archivos del expediente del proveedor
    */
@@ -59,7 +63,7 @@ export class ProveedoresService {
   }
 
   /**
-   * Actualiza los datos del proveedor del proveedor seleccionado 
+   * Actualiza los datos del proveedor del proveedor seleccionado
    * @param id id del proveedor a editar
    * @param data datos a actualizar (form data)
    * @returns respuesta del servidor con datos actualizados
@@ -71,7 +75,7 @@ export class ProveedoresService {
   /**
    * Borra de la tabla el registro del proveedor
    * @param id id del proveedor a marcar como borrado
-   * @returns 
+   * @returns
    */
   public destroy(id:number): Observable<any> {
     return this.http.delete(environment.apiUrl + `compras/Proveedores/${id}`, {headers});
@@ -79,7 +83,7 @@ export class ProveedoresService {
  /**
   * Envía una petición al servidor para recuperar un zip con el expediente del proveedor
   * @param id id del proveedor
-  * @returns archivo zip 
+  * @returns archivo zip
   */
   public descargarExpediente(id:number): Observable<any> {
     return this.http.get(environment.apiUrl + `compras/descargar-expediente/${id}`,{ responseType: 'blob' } );

@@ -1,5 +1,5 @@
-<div class="card border m-2">
-    <div class="card-header">
+<div class="card border rounded-4 m-2">
+    <div class="card-header rounded-4">
         <div class="d-flex  justify-content-between">
             <strong class="text-center"> Datos de pago del proveedor</strong>
 
@@ -10,7 +10,7 @@
             </div>
         </div>
 
-        
+
     </div>
     <div class="card-body m-0">
         <form [formGroup]="proveedorForm" *ngIf="datosPago.controls.length > 0; else elseBlock" (ngSubmit)="guardar()">
@@ -68,7 +68,7 @@
             </table>
         </div>
 
-        
+
 
         <!-- <button type="submit" class="btn btn-sm btn-success">
             <i class="bi bi-save"></i> Guardar

@@ -19,12 +19,17 @@ export class CatTarjetasTokaComponent implements OnInit{
     public data = [];
     public sectedItem:any;
 
+    badgedMapEstatus = {
+      'Asignada': 'rounded-pill bg-primary-subtle text-primary font-size-11 fw-semibold',
+      'No asignada': 'rounded-pill bg-info-subtle text-info font-size-11 fw-semibold',
+    }
+
     public columnas: ColumnaTabla[] = [
       {etiqueta: 'Cliente', campo:'cliente'},
-      {etiqueta: 'Tarjeta', campo:'tarjeta'},
+      {etiqueta: 'Tarjeta', campo:'tarjeta', bold: true,},
       {etiqueta: 'Cuenta',  campo:'cuenta'},
       {etiqueta: 'Nomina',  campo:'nomina'},
-      {etiqueta: 'Estatus', campo:'estatus', bold: true, textColor:"primary" }
+      {etiqueta: 'Estatus', campo:'estatus', bold: true, badge:true, badgeMap: this.badgedMapEstatus}
     ];
 
     constructor(

@@ -26,11 +26,12 @@ import {
 export class ModalAddProveedorComponent implements AfterViewInit {
   public estados: any;
 
-  public formProveedores: FormGroup;
+  // public formProveedores!: FormGroup;
   formData: FormData = new FormData();
   public modalRef?: BsModalRef;
   public submitted: boolean = false;
   public isCredit: boolean = false;
+  public tipo = '';
 
   public modalCerrado: EventEmitter<any> = new EventEmitter();
   public event: EventEmitter<any> = new EventEmitter();
@@ -49,39 +50,8 @@ export class ModalAddProveedorComponent implements AfterViewInit {
   ) {}
 
   public ngAfterViewInit(): void {
-    this.buildForm();
   }
 
-  private buildForm() {
-    return new Promise((resolve, reject) => {
-      this.formProveedores = this.formBuilder.group({
-        nombre: new FormControl(null, Validators.required),
-        contacto: new FormControl(null, [Validators.required]),
-        telefono: new FormControl(null, [
-          Validators.required,
-          Validators.pattern("^[0-9]*$"),
-        ]),
-        localidad: new FormControl("Selecciona uno", Validators.required),
-        condiciones: new FormControl("Selecciona uno", Validators.required),
-        servicios: new FormControl(null, Validators.required),
-        correo: new FormControl(null, [Validators.required, Validators.email]),
-        horario_atencion: new FormControl(null, Validators.required),
-        tiempo_entrega: new FormControl(null, Validators.required),
-        dias_credito: new FormControl(null, [Validators.pattern("^[0-9]*$")]),
-        constancia_fiscal: new FormControl(null),
-        ine: new FormControl(null),
-        comprobante_domicilio: new FormControl(null),
-        estado_cuenta: new FormControl(null),
-        acta_constitutiva: new FormControl(null),
-        poder_notarial: new FormControl(null),
-      });
-      resolve(true);
-    });
-  }
-
-  get proveedoresFormControl() {
-    return this.formProveedores.controls;
-  }
 
   public save() {
     if (!this.formDatosProveedor.isValid() || !this.formProveedorContactos.isValid() ) {
@@ -95,15 +65,13 @@ export class ModalAddProveedorComponent implements AfterViewInit {
       return;
     }
 
-    // console.log(data);
-    
+
     this.proveedoresService.save(data).subscribe(
       (response) => {
         if (response.status === "success") {
           this.event.emit(true);
           this.alertas.mostrarAlerta("Guardado", "Proveedor registrado correctamente", "success", "success");
           this.cerrarModal();
-          this.formProveedores.reset();
           this.formData = new FormData();
         } else {
           this.alertas.mostrarAlerta("Error fetching data:", response.message, "error", "danger");
@@ -154,7 +122,7 @@ export class ModalAddProveedorComponent implements AfterViewInit {
     }, 150);
   }
 
-  valoresFormatedos(): FormData {
+  valoresFormatedos(){
     const formData = new FormData();
     const proveedor = this.formDatosProveedor.getFormValues();
     const contactos = this.formProveedorContactos.guardar();
@@ -171,7 +139,7 @@ export class ModalAddProveedorComponent implements AfterViewInit {
       //  this.alertas.mostrarAlerta('Faltan los datos de pago', `Agrega por lo menos datos de pagos`, 'info', 'warning')
       //  return;
    }
-   
+   proveedor.tipo = this.tipo;
     formData.append("proveedor", JSON.stringify(proveedor));
     // formData.append("datosPago", JSON.stringify(datosPago));
     formData.append("contactos", JSON.stringify(contactos));
@@ -183,7 +151,7 @@ export class ModalAddProveedorComponent implements AfterViewInit {
           formData.append(key, file, file.name);
         }
       });
-    
+
     return formData;
   }
 

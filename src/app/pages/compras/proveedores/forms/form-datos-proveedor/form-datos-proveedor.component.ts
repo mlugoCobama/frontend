@@ -18,7 +18,7 @@ export class FormDatosProveedorComponent implements OnInit {
   @Input() estados: any;
   @Input() datos: any;
 
-  public formProveedores: FormGroup;
+  public formProveedores!: FormGroup;
   formData: FormData = new FormData();
   public submitted: boolean = false;
   public isCredit: boolean = false;

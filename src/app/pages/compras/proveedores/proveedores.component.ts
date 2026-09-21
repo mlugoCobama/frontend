@@ -12,6 +12,8 @@ import { ModalAddProveedorComponent } from "./modal-add-proveedor/modal-add-prov
 import { ModalUpdtProveedorComponent } from "./modal-updt-proveedor/modal-updt-proveedor.component";
 import { ModalShowProveedorComponent } from "./modal-show-proveedor/modal-show-proveedor.component";
 import { PermisosService } from 'src/app/core/services/permisos.service';
+import { Subscription } from "rxjs";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: "app-proveedores",
@@ -41,17 +43,27 @@ export class ProveedoresComponent implements OnInit {
   datosFiltrados: any[] = [];
   private ordenador!: FuncionesTablas<any>;
   busqueda: string = "";
+    private routeSub!: Subscription;
+      tipo:string = ''
 
   constructor(
     private proveedoresService: ProveedoresService,
     private catEstadosService: CatEstadosService,
     private modalService: BsModalService,
-    private permisosService: PermisosService
+    private permisosService: PermisosService,
+    private route: ActivatedRoute,
   ) {}
 
   public ngOnInit(): void {
-    this.getAll();
+    this.routeSub = this.route.paramMap.subscribe(params => {
+      this.tipo = params.get('tipo') ?? '';
+      this.getAll();
+    });
     this.selectLocalidad();
+  }
+
+  ngOnDestroy(): void {
+    this.routeSub.unsubscribe();
   }
 
   public openModalNuevo() {
@@ -59,6 +71,7 @@ export class ProveedoresComponent implements OnInit {
     const initialState: ModalOptions = {
       initialState: {
         estados: this.estados,
+        tipo: this.tipo,
       },
       class: "modal-lg",
     };
@@ -127,20 +140,24 @@ export class ProveedoresComponent implements OnInit {
 
   //Recupera todos los registros de los proveedores
   private getAll() {
-    this.proveedoresService.getAll().subscribe(
+    this.isLoad = true;
+    this.data = [];
+    this.datosFiltrados = [];
+    this.proveedoresService.getCatalogo(this.tipo).subscribe(
       (response) => {
-        if (response) {
+        if (response.status = 'success') {
           this.data = response.data;
           this.ordenador = new FuncionesTablas(this.data);
           this.datosFiltrados = [...this.data];
-
           this.isLoad = false;
           this.showTable = true;
         } else {
+          this.isLoad = false;
           console.log(response.message);
         }
       },
       (error) => {
+        this.isLoad = false;
         console.error("Error fetching data:", error);
       }
     );
@@ -168,20 +185,23 @@ export class ProveedoresComponent implements OnInit {
   //Actualiza el estatus del registro a 0
   public destroy() {
     this.mostrar = false;
-    this.isLoad = true;
+
     Swal.fire({
       title: "¿Estas seguro?",
       text: "Se eliminara el registro seleccionado",
       icon: "error",
       confirmButtonText: "Eliminiar",
+      cancelButtonText: "Cancelar",
       showCancelButton: true,
+      reverseButtons:true,
       customClass: {
-        confirmButton: "btn btn-danger px-4",
-        cancelButton: "btn btn-primary ms-2 px-4",
+        confirmButton: "fw-semibold btn btn-danger ms-2 px-4",
+        cancelButton: "fw-semibold btn btn-secondary ms-2 px-4",
       },
       buttonsStyling: false,
     }).then((result) => {
       if (result.value) {
+        this.isLoad = true;
         this.proveedoresService.destroy(this.proveedor.id).subscribe(
           (response) => {
             if (response.status === "success") {

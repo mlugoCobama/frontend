@@ -108,7 +108,7 @@ async siguiente(): Promise<void> {
       error: (err) => {
         this.cargando = false;
         console.error('Error al comunicarse con el servidor:', err);
-        alert('Ocurrió un error al procesar los documentos. Por favor intenta de nuevo.');
+        this.alertasService.mostrarAlerta('Error','Ocurrió un error al procesar los documentos. Por favor intenta de nuevo.', 'error', 'danger');
         return;
       }
     });
@@ -182,6 +182,5 @@ async siguiente(): Promise<void> {
 
   finalizar(): void {
     console.log('Proceso de 9 pasos completado con éxito.');
-    // Aquí invocas tu servicio o emisión de evento
   }
 }

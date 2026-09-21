@@ -4,7 +4,7 @@
       <div class="card rounded-4 shadow-sm">
         <div class="card-body border-bottom">
           <div class="d-flex align-items-center">
-            <h5 class="mb-0 card-title flex-grow-1">Proveedores</h5>
+            <h5 class="mb-0 card-title flex-grow-1">Proveedores - {{ tipo | titlecase}}</h5>
             <!-- botones de acciones  -->
             <div class="flex-shrink-0 d-flex gap-1">
               <a
@@ -41,7 +41,7 @@
       </div>
         <div class="card rounded-4 shadow-sm">
           <div class="card-body border-bottom">
-          <div class="d-flex justify-content-center" *ngIf="isLoad">
+          <div class="d-flex justify-content-center align-items-center" *ngIf="isLoad">
             <div class="spinner-border" role="status">
               <span class="visually-hidden">Loading...</span>
             </div>
@@ -52,15 +52,15 @@
             </div>
           </div>
           <div >
-            <div class="tab-page-content mt-3 table-responsive rounded-4" style="overflow-y: scroll; height: 20rem;">
+            <div *ngIf="!isLoad" class="tab-page-content mt-3 table-responsive rounded-4 border" style="overflow-y: scroll; height: 20rem;">
               <table
-              class="table table-hover table-sm table-responsive  border"
-              *ngIf="!isLoad"
+              class="table table-hover table-sm table-responsive border"
+
             >
               <thead  class="table-dark thead-sticky">
                 <tr>
                   <th (click)="ordenarPor('nombre')" style="cursor: pointer;" >Nombre <i [ngClass]="getIconoOrden('nombre')"></i></th>
-                  <th (click)="ordenarPor('rfc')" style="cursor: pointer;" >RFC <i [ngClass]="getIconoOrden('rfc')"></i></th>
+                  <th (click)="ordenarPor('rfc')" style="cursor: pointer;" class="text-center">RFC <i [ngClass]="getIconoOrden('rfc')" ></i></th>
                   <th (click)="ordenarPor('contacto')" style="cursor: pointer;" >Contacto <i [ngClass]="getIconoOrden('contacto')"></i></th>
                   <th (click)="ordenarPor('telefono')" style="cursor: pointer;" >Telefono <i [ngClass]="getIconoOrden('telefono')"></i></th>
                   <th (click)="ordenarPor('localidad')" style="cursor: pointer;" >Localidad <i [ngClass]="getIconoOrden('localidad')"></i></th>
@@ -70,22 +70,23 @@
               </thead>
                 <tbody >
                     <tr *ngFor="let item of datosFiltrados" (click)="seleccionar(item, $event)">
-                      <td >{{ item.nombre}} </td>
-                      <td >{{ item.rfc }} <i *ngIf="!item.expActualizado"class= "text-danger fas fa-info-circle " title="Es posible que la CSF este desactualizada" > </i> </td>
+                      <td class="fw-semibold">{{ item.nombre}} </td>
+                      <td  class="text-center"><span class="badge rounded-pill font-size-11 fw-semibold border" [ngClass]="{'bg-danger-subtle text-danger border-danger': !item.expActualizado, 'bg-primary-subtle text-primary border-primary': item.expActualizado}"> {{ item.rfc }}  <i *ngIf="!item.expActualizado" class="text-danger fas fa-info-circle mx-1 " title="Es posible que la CSF este desactualizada" > </i>  </span> </td>
                       <td>{{ item.contacto  | titlecase}}</td>
                       <td>{{ item.telefono }}</td>
                       <td>{{ item.localidad }}</td>
                       <td>{{ item.condiciones }} {{ item.dias_credito }} Dias</td>
                       <td class="text-center">
-                        <p class="m-0" [title]="item.documentos_faltantes_texto">
-                          <strong [ngClass]="item.estatus == 'Completo' ? 'text-success' : 'text-danger'"> {{ item.estatus }} </strong>
-                          <span *ngIf="+item.faltantes > 0" class="badge bg-danger text-ligth">
-                            <strong> {{ item.faltantes }} </strong>
-                          </span>
-                        </p>
+                          <span  [title]="item.documentos_faltantes_texto" class="badge font-size-11 rounded-pill fw-semibold border" [ngClass]="{'bg-success-subtle text-success border-success': item.estatus == 'Completo',
+                           'bg-danger-subtle text-danger border-danger': +item.faltantes > 4 || item.estatus == 'NO TIENE', 'bg-info-subtle text-info border-info': +item.faltantes <= 4 && item.estatus != 'NO TIENE'}"> {{ item.estatus }}
+                            <strong *ngIf="+item.faltantes > 0"> {{ item.faltantes }} </strong>
+                        </span>
                       </td>
-
-
+                    </tr>
+                    <tr *ngIf="datosFiltrados.length == 0">
+                      <td colspan="7" class="p-5">
+                        <span class="d-flex justify-content-center align-items-center text-muted fw-semibold"> <i class="fas fa-lightbulb me-1"></i> No hay elementos para mostrar</span>
+                      </td>
                     </tr>
                 </tbody>
             </table>
