@@ -3,7 +3,7 @@
   <strong class="text-dark">PDF</strong> o <strong class="text-dark">PNG/JPG</strong> con un peso máximo de <strong class="text-dark">5 MB</strong> por archivo.
 </p>
 
-<form [formGroup]="documentosForm" (ngSubmit)="guardarDocumentos()">
+<form [formGroup]="documentosForm">
 
   <div class="row g-3">
     <div class="col-md-6" *ngFor="let item of listaDocumentos">
@@ -13,8 +13,8 @@
           <div>
             <div class="d-flex justify-content-between align-items-center mb-1">
               <h6 class="card-title mb-0 fw-bold">{{ item.label }} <span *ngIf="documentosForm.get(item.key)?.validator">*</span></h6>
-              <span class="badge fw-semibold bg-success-subtle text-success font-size-11 rounded-pill" *ngIf="item.archivo">Cargado</span>
-              <span class="badge fw-semibold bg-secondary-subtle text-dark font-size-11  rounded-pill" *ngIf="!item.archivo">Pendiente</span>
+              <span class="badge fw-semibold bg-success-subtle text-success font-size-11 rounded-pill" *ngIf="item.archivo">CARGADO</span>
+              <span class="badge fw-semibold bg-secondary-subtle text-dark font-size-11  rounded-pill" *ngIf="!item.archivo">PENDIENTE</span>
             </div>
             <small class="text-muted d-block mb-3">{{ item.descripcion }}</small>
           </div>
@@ -32,18 +32,24 @@
             </div>
 
             <!-- Vista previa / Estado de archivo seleccionado -->
-            <div *ngIf="item.archivo" class="p-2 bg-light rounded-4 shdow-sm border d-flex align-items-center justify-content-between">
-              <div class="text-truncate me-2">
-                <small class="fw-bold d-block text-truncate">{{ item.archivo.name }}</small>
-                <small class="text-muted">{{ formatearTamano(item.archivo.size) }}</small>
+            <div *ngIf="item.archivo" class="p-2 bg-light rounded-3 shadow-sm border d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center text-truncate me-2">
+                <!-- Ícono de archivo -->
+                <i class="fas fa-file-alt text-dark-subtle fs-4 mx-2"></i>
+
+                <div class="text-truncate">
+                  <small class="fw-bold d-block text-truncate">{{ item.archivo.name }}</small>
+                  <small class="text-muted">{{ formatearTamano(item.archivo.size) }}</small>
+                </div>
               </div>
+
               <button
                 type="button"
                 class="btn btn-sm btn-outline-danger"
                 [disabled]="cargando"
                 (click)="eliminarArchivo(item, fileInput)"
                 title="Eliminar archivo">
-                Quitar
+                <i class="fas fa-trash"></i>
               </button>
             </div>
 
@@ -59,21 +65,24 @@
         </div>
       </div>
     </div>
+    <div *ngIf="cargando" class="alert alert-light rounded-4 text-center fw-semibold">
+      <i class="bx bxs-magic-wand bx-burst font-size-11 me-1"></i> Procesando...
+    </div>
   </div>
 
   <!-- Botones de Acción -->
-  <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+  <!-- <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
     <button type="button" class="btn btn-sm btn-secondary" [disabled]="cargando">Cancelar</button>
     <button type="submit" class="btn btn-sm btn-primary" [disabled]="documentosForm.invalid || cargando">
       <span *ngIf="cargando" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
       <span *ngIf="!cargando">Subir y Analizar Documentos</span>
       <span *ngIf="cargando"> Analizando con IA...</span>
     </button>
-  </div>
+  </div> -->
 </form>
 
 <!-- VISTA DE RESULTADOS DEVUELTOS POR GEMINI -->
-<div *ngIf="respuestaBackend" class="mt-4 p-3 border rounded bg-light">
+<!-- <div *ngIf="respuestaBackend" class="mt-4 p-3 border rounded bg-light">
   <h5 class="fw-bold fs-6 mb-3">
     Estado del Procesamiento:
     <span class="badge" [ngClass]="{'bg-success': respuestaBackend.status === 'success', 'bg-warning text-dark': respuestaBackend.status === 'partial_success'}">
@@ -91,7 +100,7 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 <!-- MODAL DE RECORTE DE IMAGEN -->
 <div class="modal fade show d-block bg-dark bg-opacity-50" *ngIf="mostrarCropper" tabindex="-1">
@@ -110,8 +119,8 @@
         </image-cropper>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-sm btn-secondary" (click)="cancelarRecorte()">Cancelar</button>
-        <button type="button" class="btn btn-sm btn-primary" (click)="confirmarRecorte()">Aplicar Recorte</button>
+        <button type="button" class="btn btn-sm btn-secondary fw-semibold" (click)="cancelarRecorte()">Cancelar</button>
+        <button type="button" class="btn btn-sm btn-primary  fw-semibold" (click)="confirmarRecorte()"> <i class="fas fa-crop-alt me-1"></i> Aplicar Recorte</button>
       </div>
     </div>
   </div>

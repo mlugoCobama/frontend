@@ -46,6 +46,9 @@ export class CardSistemasComponent implements OnInit {
       sistema: [null, [Validators.required]],
       usuario: ["", [Validators.required]],
       password: ["", [Validators.required]],
+      rol: ["", [Validators.required]],
+      area_aplicacion: ["", [Validators.required]],
+      motivo: [""],
       observaciones: [""],
     });
   }
@@ -191,7 +194,7 @@ export class CardSistemasComponent implements OnInit {
 
       this.downloading = true;
 
-      this.asignacion.print(this.ucoip.id).subscribe({
+      this.asignacion.print(this.ucoip.id, this.idsSeleccionados).subscribe({
         next: (response: any) => {
 
           this.downloading = false;

@@ -1,28 +1,9 @@
 <app-card-top [title]="'PLD NISSAN'" ></app-card-top>
 <div>
-  <!-- Indicador visual de pasos -->
-  <!-- <div class="mb-4">
-    <div class="d-flex justify-content-between align-items-center mb-2">
-      <span class="fw-bold">Paso {{ pasoActual }} de {{ totalPasos }}</span>
-      <span class="text-muted">{{ porcentajeProgreso }}% completado</span>
-    </div>
-    <div class="progress" style="height: 8px;">
-      <div
-        class="progress-bar bg-primary progress-bar-striped progress-bar-animated"
-        role="progressbar"
-        [style.width.%]="porcentajeProgreso"
-        [attr.aria-valuenow]="porcentajeProgreso"
-        aria-valuemin="0"
-        aria-valuemax="100">
-      </div>
-    </div>
-  </div> -->
-
-  <!-- Píldoras/Burbujas de navegación con *ngFor -->
-  <ul class="nav nav-pills nav-justified mb-4 border rounded-4 shadow-sm p-2 bg-white d-none d-md-flex">
+  <ul class="nav nav-pills nav-justified mb-4 border rounded-4 shadow-sm p-3 bg-white d-none d-md-flex  gap-1">
     <li class="nav-item" *ngFor="let paso of pasos">
       <button
-        class="nav-link btn-sm  rounded-4 shdow-sm "
+        class="nav-link btn-sm  border border-primary rounded-pill shadow-sm  fw-semibold"
         [class.active]="pasoActual === paso.numero"
         [class.disabled]="paso.numero > pasoActualMaximo"
         (click)="irAlPaso(paso.numero)">
@@ -33,82 +14,99 @@
           [class.bg-secondary]="pasoActual !== paso.numero">
           {{ paso.numero }}
         </span>
-        <small>{{ paso.titulo }}</small>
+        {{ paso.titulo }}
       </button>
     </li>
   </ul>
 
   <!-- Contenido con [ngSwitch] y *ngSwitchCase -->
-  <div class="card shadow-sm rounded-4 pb-4">
-    <div class="card-body p-4" [ngSwitch]="pasoActual">
-
-      <div *ngSwitchCase="1">
-        <h4 class="card-title mb-3">1. Datos de la Operacion</h4>
-        <app-datos-operacion-form></app-datos-operacion-form>
-      </div>
-
-      <div *ngSwitchCase="2">
-        <h4 class="card-title mb-3">2. Documentacion Requerida</h4>
-        <app-documentacion-form (datosRecuperados)="serDatosIa($event)"></app-documentacion-form>
-      </div>
-
-      <div *ngSwitchCase="3">
-        <h4 class="card-title mb-3">3. Datos de Identificacion</h4>
-        <app-datos-identificacion-form [data] = "datosIA"></app-datos-identificacion-form>
-      </div>
-
-      <div *ngSwitchCase="4">
-        <h4 class="card-title mb-3">4. Configuración de Cuenta</h4>
-        <p>Contenido o formulario del paso 4...</p>
-      </div>
-
-      <div *ngSwitchCase="5">
-        <h4 class="card-title mb-3">5. Preferencias y Notificaciones</h4>
-        <p>Contenido o formulario del paso 5...</p>
-      </div>
-
-      <div *ngSwitchCase="6">
-        <h4 class="card-title mb-3">6. Documentación</h4>
-        <p>Contenido o formulario del paso 6...</p>
-      </div>
-
-      <div *ngSwitchCase="7">
-        <h4 class="card-title mb-3">7. Métodos de Pago</h4>
-        <p>Contenido o formulario del paso 7...</p>
-      </div>
-
-      <div *ngSwitchCase="8">
-        <h4 class="card-title mb-3">8. Términos y Condiciones</h4>
-        <p>Contenido o formulario del paso 8...</p>
-      </div>
-
-      <div *ngSwitchCase="9">
-        <h4 class="card-title mb-3">9. Resumen y Confirmación</h4>
-        <p>Revisa la información antes de finalizar.</p>
-      </div>
-
-    </div>
+<div class="card shadow-sm rounded-4 pb-4">
+  <div class="card-header bg-primary text-white rounded-4 text-end">
+     <span class="fw-bold">Paso {{ pasoActual }} de {{ totalPasos }}</span>
   </div>
+  <div class="card-body p-4">
 
-  <div class="d-flex justify-content-between">
+    <!-- Paso 1 -->
+    <div [hidden]="pasoActual !== 1">
+      <h4 class="card-title mb-3">1. Datos de la Operación</h4>
+      <app-datos-operacion-form #step1Form></app-datos-operacion-form>
+    </div>
+
+    <!-- Paso 2 -->
+    <div [hidden]="pasoActual !== 2">
+      <h4 class="card-title mb-3">2. Documentación Requerida</h4>
+      <app-documentacion-form #step2Form [cargando]="cargando" (datosRecuperados)="serDatosIa($event)" (alCambiarArchivos)="resertPaso2()" > </app-documentacion-form>
+    </div>
+
+    <!-- Paso 3 -->
+    <div [hidden]="pasoActual !== 3">
+      <h4 class="card-title mb-3">3. Datos de Identificación</h4>
+      <app-datos-identificacion-form #step3Form [data]="datosIA"></app-datos-identificacion-form>
+    </div>
+
+    <!-- Paso 4 -->
+    <div [hidden]="pasoActual !== 4">
+      <h4 class="card-title mb-3">4. Relacion de negocios</h4>
+      <app-relacion-negocio #step4Form></app-relacion-negocio>
+    </div>
+
+    <!-- Paso 5 -->
+    <div [hidden]="pasoActual !== 5">
+      <h4 class="card-title mb-3">5. Domicilio y datos de contacto</h4>
+      <app-domicilio-contacto-form #step5Form></app-domicilio-contacto-form>
+    </div>
+
+    <!-- Paso 6 -->
+    <div [hidden]="pasoActual !== 6">
+      <h4 class="card-title mb-3">6. Documentación</h4>
+      <p>Contenido o formulario del paso 6...</p>
+    </div>
+
+    <!-- Paso 7 -->
+    <div [hidden]="pasoActual !== 7">
+      <h4 class="card-title mb-3">7. Métodos de Pago</h4>
+      <p>Contenido o formulario del paso 7...</p>
+    </div>
+
+    <!-- Paso 8 -->
+    <div [hidden]="pasoActual !== 8">
+      <h4 class="card-title mb-3">8. Términos y Condiciones</h4>
+      <p>Contenido o formulario del paso 8...</p>
+    </div>
+
+    <!-- Paso 9 -->
+    <div [hidden]="pasoActual !== 9">
+      <h4 class="card-title mb-3">9. Resumen y Confirmación</h4>
+      <p>Revisa la información antes de finalizar.</p>
+    </div>
+
+  </div>
+</div>
+
+  <div class="d-flex justify-content-between p-3 border rounded-4 bg-white shadow-sm">
     <button
-      class="btn btn-sm btn-outline-secondary"
-      [disabled]="pasoActual === 1"
+      class="btn btn-sm btn-outline-secondary fw-semibold"
+      [disabled]="pasoActual === 1 || cargando"
       (click)="anterior()">
+      <i class="fas fa-arrow-alt-circle-left me-1"></i>
       Anterior
     </button>
 
     <button
       *ngIf="pasoActual < totalPasos; else btnFinalizar"
-      class="btn btn-sm btn-primary"
+      [disabled]="cargando"
+      class="btn btn-sm btn-primary fw-semibold"
       (click)="siguiente()">
+      <i *ngIf="cargando && pasoActual === 2" class="bx bxs-magic-wand bx-burst font-size-11 me-1"></i>
       Siguiente
+      <i class="fas fa-arrow-alt-circle-right ms-1"></i>
     </button>
 
     <ng-template #btnFinalizar>
       <button
-        class="btn btn-sm btn-success"
+        class="btn btn-sm btn-success fw-semibold"
         (click)="finalizar()">
+        <i class="fas fa-paper-plane me-1"></i>
         Finalizar Proceso
       </button>
     </ng-template>

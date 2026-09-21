@@ -1,7 +1,9 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
+import { Observable, throwError } from 'rxjs';
 import { DocumentosServiceService, RespuestaGemini } from 'src/app/core/services/pld/documentos-service.service';
+import { tap } from 'rxjs/operators';
 
 interface DocumentoItem {
   key: string;
@@ -21,12 +23,20 @@ export class DocumentacionFormComponent implements OnInit {
   documentosForm!: FormGroup;
 
   @Output() datosRecuperados = new EventEmitter<any>();
+  @Output() alCambiarArchivos = new EventEmitter<any>();
 
   readonly maxFileSize = 5 * 1024 * 1024;
   readonly allowedTypes = ['application/pdf', 'image/png', 'image/jpeg'];
 
-  // Control del estado de carga y respuestas
-  cargando = false;
+  private _cargando = false;
+
+  @Input()
+  set cargando(value: boolean) {
+    this._cargando = value;
+    console.log('El estado actual enviado por el padre es:', value);
+  }
+
+
   respuestaBackend: RespuestaGemini | null = null;
 
   // Propiedades del modal cropper
@@ -57,11 +67,15 @@ export class DocumentacionFormComponent implements OnInit {
   private initForm(): void {
     this.documentosForm = this.fb.group({
       ineFrente: [null, [Validators.required]],
-      ineReverso: [null],
+      ineReverso: [null, [Validators.required]],
       constanciaFiscal: [null, [Validators.required]],
       comprobanteDomicilio: [null, [Validators.required]],
       curp: [null, [Validators.required]]
     });
+  }
+
+  get cargando(): boolean {
+      return this._cargando;
   }
 
   // --- Lógica del File Input y Cropper intacta ---
@@ -91,6 +105,7 @@ export class DocumentacionFormComponent implements OnInit {
         this.mostrarCropper = true;
       } else {
         this.asignarArchivo(item, file);
+        this.alCambiarArchivos.emit();
       }
     }
   }
@@ -117,6 +132,7 @@ export class DocumentacionFormComponent implements OnInit {
       }
 
       this.asignarArchivo(this.itemEnEdicion, fileRecortado);
+      this.alCambiarArchivos.emit();
     }
     this.cerrarModal();
   }
@@ -165,9 +181,8 @@ export class DocumentacionFormComponent implements OnInit {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   }
 
-  // --- ENVÍO AL BACKEND ---
-  guardarDocumentos(): void {
-    if (this.documentosForm.invalid) {
+  public generarPayload(){
+     if (this.documentosForm.invalid) {
       this.documentosForm.markAllAsTouched();
       return;
     }
@@ -176,7 +191,6 @@ export class DocumentacionFormComponent implements OnInit {
     this.respuestaBackend = null;
     const formData = new FormData();
 
-    // Construir FormData usando los nombres que espera Laravel (backendKey)
     this.listaDocumentos.forEach(item => {
       const file = this.documentosForm.get(item.key)?.value;
       if (file instanceof File) {
@@ -184,33 +198,7 @@ export class DocumentacionFormComponent implements OnInit {
       }
     });
 
-    this.documentosService.procesar(formData).subscribe({
-      next: (res) => {
-        this.cargando = false;
-        this.respuestaBackend = res;
-
-        // Limpiar errores previos visuales si todo fue correcto
-        this.listaDocumentos.forEach(doc => doc.error = null);
-
-        // Si Laravel devolvió errores en documentos específicos:
-        if (res.errors) {
-          Object.keys(res.errors).forEach(backendKey => {
-            const item = this.listaDocumentos.find(d => d.backendKey === backendKey);
-            if (item) {
-              item.error = res.errors[backendKey];
-            }
-          });
-        }
-
-        this.datosRecuperados.emit(res.data)
-
-        console.log('Datos extraídos por Gemini:', res.data);
-      },
-      error: (err) => {
-        this.cargando = false;
-        console.error('Error al comunicarse con el servidor:', err);
-        alert('Ocurrió un error al procesar los documentos. Por favor intenta de nuevo.');
-      }
-    });
+    return formData;
   }
+
 }

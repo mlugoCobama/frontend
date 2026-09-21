@@ -357,6 +357,21 @@ export const MENU: MenuItem[] = [
           },
         ]
       },
+      {
+        id: 32,
+        label: "PLD",
+        permission: "view submodulo pld nissan",
+        parentId: 30,
+        subItems: [
+         {
+            id: 7,
+            label: "Expediente",
+            link: "/nissan/pld",
+            parentId: 32,
+            permission: "view sub menu expediente pld",
+          },
+        ]
+      },
     ],
   },
   // RENAULT

@@ -32,6 +32,8 @@ import { DatosOperacionFormComponent } from './pld/datos-operacion-form/datos-op
 import { DocumentacionFormComponent } from './pld/documentacion-form/documentacion-form.component';
 import { DatosIdentificacionFormComponent } from './pld/datos-identificacion-form/datos-identificacion-form.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { RelacionNegocioComponent } from './pld/relacion-negocio/relacion-negocio.component';
+import { DomicilioContactoFormComponent } from './pld/domicilio-contacto-form/domicilio-contacto-form.component';
 
 
 @NgModule({
@@ -56,7 +58,9 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     PldComponent,
     DatosOperacionFormComponent,
     DocumentacionFormComponent,
-    DatosIdentificacionFormComponent
+    DatosIdentificacionFormComponent,
+    RelacionNegocioComponent,
+    DomicilioContactoFormComponent
   ],
   imports: [
     CommonModule,

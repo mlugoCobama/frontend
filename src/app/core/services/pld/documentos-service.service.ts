@@ -17,6 +17,6 @@ export class DocumentosServiceService {
     constructor(private http: HttpClient) {}
 
       procesar(data: FormData): Observable<RespuestaGemini> {
-      return this.http.post<RespuestaGemini>(environment.apiUrl+'documentacion-requerida/expediente/cloud', data);
+      return this.http.post<RespuestaGemini>(environment.apiUrl+'pld-autos/pld', data);
     }
 }

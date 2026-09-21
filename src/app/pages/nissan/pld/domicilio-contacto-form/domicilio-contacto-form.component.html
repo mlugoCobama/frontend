@@ -1,0 +1,97 @@
+      <form [formGroup]="registroForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+        <small class="fw-semibold text-muted">Revisa la información extraida y confirma los datos antes de continuar.</small>
+        <!-- SECCIÓN 1: IDENTIFICACIÓN -->
+        <h6 class="text-secondary border-bottom pb-1 mb-2 fw-bold" style="font-size: 0.85rem;">
+          1. Datos de Identificación
+        </h6>
+        <div class="row g-2 mb-3">
+          <div class="col-md-6">
+            <label for="rfc" class="form-label form-label-sm mb-1">RFC *</label>
+            <input type="text" id="rfc"  readonly  formControlName="rfc" class="form-control form-control-sm text-uppercase"
+                   [class.is-invalid]="registroForm.get('rfc')?.touched && registroForm.get('rfc')?.invalid" placeholder="ABCD123456XYZ">
+            <div class="invalid-feedback" style="font-size: 0.75rem;">Ingrese un RFC válido.</div>
+          </div>
+          <div class="col-md-6">
+            <label for="curp" class="form-label form-label-sm mb-1">CURP *</label>
+            <input type="text"  readonly  id="curp" formControlName="curp" class="form-control form-control-sm text-uppercase"
+                   [class.is-invalid]="registroForm.get('curp')?.touched && registroForm.get('curp')?.invalid" placeholder="ABCD123456HDFRXX01">
+            <div class="invalid-feedback" style="font-size: 0.75rem;">Ingrese una CURP válida.</div>
+          </div>
+        </div>
+
+        <!-- SECCIÓN 2: DOMICILIO -->
+        <h6 class="text-secondary border-bottom pb-1 mb-2 fw-bold" style="font-size: 0.85rem;">
+          2. Domicilio
+        </h6>
+        <div class="row g-2 mb-2">
+          <div class="col-md-6">
+            <label for="calleVia" class="form-label form-label-sm mb-1">Calle, Avenida o Vía *</label>
+            <input type="text" id="calleVia" formControlName="calleVia" class="form-control form-control-sm"
+                   [class.is-invalid]="registroForm.get('calleVia')?.touched && registroForm.get('calleVia')?.invalid">
+            <div class="invalid-feedback" style="font-size: 0.75rem;">Ingrese una Calle, Avenida o Vía</div>
+          </div>
+          <div class="col-md-3">
+            <label for="noExterior" class="form-label form-label-sm mb-1">No. Exterior *</label>
+            <input type="text" id="noExterior" formControlName="noExterior" class="form-control form-control-sm"
+                   [class.is-invalid]="registroForm.get('noExterior')?.touched && registroForm.get('noExterior')?.invalid">
+            <div class="invalid-feedback" style="font-size: 0.75rem;">Ingrese un No. Exterior</div>
+          </div>
+          <div class="col-md-3">
+            <label for="noInterior" class="form-label form-label-sm mb-1">No. Interior</label>
+            <input type="text" id="noInterior" formControlName="noInterior" class="form-control form-control-sm">
+          </div>
+        </div>
+
+        <div class="row g-2 mb-2">
+          <div class="col-md-4">
+            <label for="colonia" class="form-label form-label-sm mb-1">Colonia, Alcaldía ó Urbanización  *</label>
+            <input type="text" id="colonia" formControlName="colonia" class="form-control form-control-sm"
+                   [class.is-invalid]="registroForm.get('colonia')?.touched && registroForm.get('colonia')?.invalid">
+            <div class="invalid-feedback" style="font-size: 0.75rem;">Ingrese una Colonia</div>
+          </div>
+          <div class="col-md-4">
+            <label for="municipioDemarcacion" class="form-label form-label-sm mb-1">Municipio ó Demarcación *</label>
+            <input type="text" id="municipioDemarcacion" formControlName="municipioDemarcacion" class="form-control form-control-sm"
+                   [class.is-invalid]="registroForm.get('municipioDemarcacion')?.touched && registroForm.get('municipioDemarcacion')?.invalid">
+        <div class="invalid-feedback" style="font-size: 0.75rem;">Ingrese un Municipio ó Demarcación</div>
+        </div>
+        </div>
+
+        <div class="row g-2 mb-3">
+          <div class="col-md-4">
+            <label for="ciudadPoblacion" class="form-label form-label-sm mb-1">Ciudad / Población *</label>
+            <input type="text" id="ciudadPoblacion" formControlName="ciudadPoblacion" class="form-control form-control-sm"
+                   [class.is-invalid]="registroForm.get('ciudadPoblacion')?.touched && registroForm.get('ciudadPoblacion')?.invalid">
+          </div>
+          <div class="col-md-4">
+            <label for="pais" class="form-label form-label-sm mb-1">País *</label>
+            <input type="text" id="pais" formControlName="pais" class="form-control form-control-sm"
+                   [class.is-invalid]="registroForm.get('pais')?.touched && registroForm.get('pais')?.invalid">
+          </div>
+          <div class="col-md-4">
+            <label for="codigoPostal" class="form-label form-label-sm mb-1">Código Postal *</label>
+            <input type="text" id="codigoPostal" formControlName="codigoPostal" class="form-control form-control-sm" maxlength="5"
+                   [class.is-invalid]="registroForm.get('codigoPostal')?.touched && registroForm.get('codigoPostal')?.invalid">
+            <div class="invalid-feedback" style="font-size: 0.75rem;">5 dígitos.</div>
+          </div>
+        </div>
+
+        <!-- SECCIÓN 3: DATOS DE CONTACTO -->
+        <h6 class="text-secondary border-bottom pb-1 mb-2 fw-bold" style="font-size: 0.85rem;">
+          3. Datos de Contacto
+        </h6>
+        <div class="row g-2 mb-3">
+          <div class="col-md-6">
+            <label for="telefono" class="form-label form-label-sm mb-1">Número de Teléfono *</label>
+            <input type="tel" id="telefono" formControlName="telefono" class="form-control form-control-sm" maxlength="10"
+                   [class.is-invalid]="registroForm.get('telefono')?.touched && registroForm.get('telefono')?.invalid" placeholder="10 dígitos">
+            <div class="invalid-feedback" style="font-size: 0.75rem;">Ingrese un teléfono de 10 dígitos.</div>
+          </div>
+          <div class="col-md-6">
+            <label for="correo" class="form-label form-label-sm mb-1">Correo Electrónico *</label>
+            <input type="email" id="correo" formControlName="correo" class="form-control form-control-sm"
+                   [class.is-invalid]="registroForm.get('correo')?.touched && registroForm.get('correo')?.invalid" placeholder="ejemplo@correo.com">
+            <div class="invalid-feedback" style="font-size: 0.75rem;">Ingrese un correo válido.</div>
+          </div>
+        </div>
+      </form>

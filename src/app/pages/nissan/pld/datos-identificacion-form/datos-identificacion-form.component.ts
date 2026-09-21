@@ -9,7 +9,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class DatosIdentificacionFormComponent implements OnInit {
   clienteForm!: FormGroup;
 
-  @Input() data: any;
+  @Input() data: any = false;
 
   // Expressión regular para RFC (Persona Física / Moral)
   readonly rfcPattern = '^[A-Z&Ñ]{3,4}[0-9]{6}[A-Z0-9]{3}$';
@@ -40,7 +40,7 @@ export class DatosIdentificacionFormComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     if(this.data){
-      this.sethValues();
+      // this.sethValues(this.data.data);
     }
     console.log(this.data)
   }
@@ -72,9 +72,7 @@ export class DatosIdentificacionFormComponent implements OnInit {
     });
   }
 
-  private sethValues(){
-
-      const datos = this.data?.data;
+  public sethValues(datos:any){
       const nombre_completo  =  `${datos?.ine?.nombre ?? ''} ${datos?.ine?.apellido_paterno ?? ''} ${datos?.ine?.apellido_materno ?? ''}`
       const fecha_nacimiento = datos?.ine?.fecha_nacimiento ?? null
       const rfc =  datos?.csf?.identificacion_fiscal?.rfc ?? ''

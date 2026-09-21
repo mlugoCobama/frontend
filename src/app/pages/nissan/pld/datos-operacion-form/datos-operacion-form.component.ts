@@ -29,7 +29,7 @@ ventaForm!: FormGroup;
       tipo: ['', Validators.required],
       catalogo: ['', Validators.required],
       vin: ['', [Validators.required, Validators.minLength(17), Validators.maxLength(17)]],
-      // montoVehiculo: [0, [Validators.required, Validators.min(0)]],
+      montoVehiculo: [0, [Validators.required, Validators.min(0)]],
       color: ['', Validators.required],
       accesorios: this.fb.array([]), // FormArray para las partidas
       montoTotal: [{ value: 0, disabled: true }] // Campo de solo lectura calculado

@@ -12,7 +12,7 @@
                 {{ mostrarFormulario ? 'Ocultar formulario' : 'Nueva Asignación' }}
             </button>
             <button
-                *ngIf="datos.length > 0"
+                *ngIf="idsSeleccionados.length > 0"
                 title="Imprimir responsiva"
                 (click)="imprimirResponsiva()"
                 class="btn btn-outline-dark btn-sm">
@@ -75,6 +75,37 @@
                 </div>
             </div>
 
+
+            <div class="col-sm-6">
+                <label for="rol" class="form-label">Rol</label>
+                <input id="rol" class=" form-control form-control-sm" formControlName="rol"/>
+                <div *ngIf="f.rol.touched || submitted">
+                        <div
+                            class="text-danger form-text"
+                            *ngIf="f.rol.errors?.['required']"
+                        >
+                            Debes ingresar un rol.
+                        </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <label for="area_aplicacion" class="form-label">Area de aplicacion</label>
+                <input id="area_aplicacion" class=" form-control form-control-sm" formControlName="area_aplicacion"/>
+                <div *ngIf="f.area_aplicacion.touched || submitted">
+                        <div
+                            class="text-danger form-text"
+                            *ngIf="f.area_aplicacion.errors?.['required']"
+                        >
+                            Debes ingresar un area de aplicacion.
+                        </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12">
+                <label for="observaciones" class="form-label">Motivo</label>
+                <textarea id="observaciones" class=" form-control form-control-sm" formControlName="observaciones" rows="1">  </textarea>
+            </div>
             <div class="col-sm-10">
                 <label for="observaciones" class="form-label">Observaciones</label>
                 <textarea id="observaciones" class=" form-control form-control-sm" formControlName="observaciones" rows="1">  </textarea>
@@ -108,10 +139,11 @@
             <table class="table table-sm mb-0">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>SISTEMA</th>
                         <th>USUARIO</th>
                         <th>CONTRASEÑA</th>
-                        <th>RESPONSIVA</th>
+                        <!-- <th>RESPONSIVA</th> -->
                         <th>EST</th>
                         <th>ASIGNADO</th>
                         <th>REMOVIDO</th>
@@ -124,11 +156,11 @@
                     </tr>
                     <ng-container *ngIf="datos.length > 0">
                         <tr *ngFor="let detalle of datos">
-                            <!-- <td>
-                                <input type="checkbox" class="form-check-input"
-                                    [checked]="idsSeleccionados.includes(detalle.id)"
-                                    (change)="toggleSeleccion(detalle.id, $event)" />
-                            </td> -->
+                            <td>
+                                <input *ngIf="detalle?.activo == 1"  type="checkbox" class="form-check-input"
+                                    [checked]="idsSeleccionados.includes(detalle?.sistema?.id)"
+                                    (change)="toggleSeleccion(detalle?.sistema?.id, $event)" />
+                            </td>
 
                             <td>
                                 <span class="badge bg-primary text-white p-1 fw-bold">
@@ -138,7 +170,7 @@
                             <td>{{detalle?.username}}</td>
                             <td>
                                   <button *ngIf="!detalle.fecha_fin"
-                                        class="btn btn-info btn-sm"
+                                        class="btn badge bg-info font-size-11"
                                         (click)="openPass(detalle?.id)"
                                         [disabled]="loadingPass">
                                     <ng-container *ngIf="!loadingPass; else spinner">
@@ -150,11 +182,11 @@
                                     </ng-template>
                                 </button>
                             </td>
-                            <td>
+                            <!-- <td>
                                 <button *ngIf="!detalle.fecha_fin" class="btn btn-dark btn-sm">
                                     <i class="fas fa-file-pdf "></i> Resp.
                                 </button>
-                            </td>
+                            </td> -->
                             <td>
                                 <span [attr.title]="detalle?.activo == 1 ? 'Vigente' : 'Devuelto'">
                                     <i class="fas fa-circle"

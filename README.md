@@ -108,3 +108,8 @@ Se integra el nuevo módulo de Gestión de Comisiones con los siguientes apartad
 * **Validación de Plantilla:** Se agrega soporte para reportes en 0 y se corrige la validacion plantillas, se integra un boton de limpieza de datos
 * **Descarga de informacion en pdf** el resultado del visor de plantillas se realiza en pdf
 * **Instalar dependecias "jspdf","jspdf-autotable"**
+---
+### Ucoip- PLD
+*Fecha de liberación: 15 de Septiembre, 2026*
+* **Responsiva de sistemas:** Se agrega soporte para la impresion de responsivas de asignacion de sistemas
+* **Demo PLD:** Se integra el modulo de PLD para agencias con procesamiento de documentos
