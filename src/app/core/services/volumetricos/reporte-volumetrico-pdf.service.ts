@@ -407,7 +407,7 @@ export class ReporteVolumetricoPdfService {
         [
 
           {
-            content: 'VOLUMENES ENTREGADOS '
+            content: 'IMPORTE TOTAL RECEPCIONES'
           },
 
           {
@@ -422,7 +422,7 @@ export class ReporteVolumetricoPdfService {
           },
 
           {
-            content: 'VOLUMENES ENTREGADOS '
+            content: 'IMPORTE TOTAL ENTREGAS'
           },
 
           {

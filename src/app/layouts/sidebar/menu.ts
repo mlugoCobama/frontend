@@ -121,6 +121,29 @@ export const MENU: MenuItem[] = [
       }
     ],
   },
+  {
+    id:10,
+    label: "Proveedores",
+    icon: "bx bx-briefcase",
+    // permission: "view modulo proveedores",
+    subItems: [
+      {
+        id: 9,
+        label: "Proveedores Compras",
+        link: "/compras/proveedores/compras",
+        parentId: 10,
+        // permission: "view proveedores",
+      },
+      {
+        id: 15,
+        label: "Proveedores Corporativo",
+        link: "/compras/proveedores/corporativo",
+        parentId: 10,
+        // permission: "view proveedores corporativo",
+      },
+
+    ]
+  },
   //COMRPAS
   {
     id: 7,
@@ -157,20 +180,7 @@ export const MENU: MenuItem[] = [
           }
         ],
       },
-      {
-        id: 9,
-        label: "Proveedores Compras",
-        link: "/compras/proveedores/compras",
-        parentId: 7,
-        permission: "view proveedores",
-      },
-      {
-        id: 15,
-        label: "Proveedores Corporativo",
-        link: "/compras/proveedores/corporativo",
-        parentId: 7,
-        permission: "view proveedores corporativo",
-      },
+
       {
         id: 10,
         label: "Unidades de Medida",
@@ -250,6 +260,13 @@ export const MENU: MenuItem[] = [
         id: 11,
         label: "Utilitarios",
         link: "/compras/cat-unidades/utlitarios",
+        parentId: 7,
+        permission: "view parque vehicular",
+      },
+      {
+        id: 11,
+        label: "Ordenes de Servicio Ext",
+        link: "/parque-vehicular/ordenes-servicio",
         parentId: 7,
         permission: "view parque vehicular",
       },
@@ -533,7 +550,7 @@ export const MENU: MenuItem[] = [
   {
     id: 1,
     label: "Dashboard",
-    icon: "bx-user",
+    icon: "bx bx-line-chart",
     permission: "view modulo dashboard",
     subItems: [
       {
