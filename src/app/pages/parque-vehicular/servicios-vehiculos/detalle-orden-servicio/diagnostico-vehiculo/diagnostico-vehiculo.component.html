@@ -1,0 +1,93 @@
+  <div>
+    <div class="card-header bg-white rounded-top-4 border-bottom border-primary  py-3">
+    <h5 class="fw-bold text-dark m-0">
+      <i class="fas fa-cogs text-primary me-2"></i>Diagnostico del vehiculo
+    </h5>
+  </div>
+
+  <div class="card-body">
+    <ng-container>
+            <!-- Sección de Diagnóstico -->
+      <div class="mb-1">
+        <p >
+          <span class="fw-semibold">Diagnóstico:  </span> {{dataOrdenServicio.diagnostico}}
+        </p>
+      </div>
+
+  <!-- Sección de Trabajos -->
+  <div class="row">
+      <div class="col-12 col-md-6"  *ngIf="dataOrdenServicio.trabajos.length > 0; else noData">
+        <h6 class="fw-bold mb-3">Trabajos Necesarios</h6>
+
+        <div class="accordion" id="accordionTrabajos">
+
+          <!-- Iteración de Trabajo -->
+          <div *ngFor="let item of dataOrdenServicio.trabajos; let i = index" class="accordion-item border rounded-4 mb-3 overflow-hidden">
+
+            <!-- Encabezado del Acordeón -->
+            <h2 class="accordion-header">
+              <button
+                type="button"
+                class="accordion-button bg-white fw-bold text-dark"
+                [class.collapsed]="accordionAbierto !== i"
+                (click)="toggleAccordion(i)">
+                <i class="fas fa-toolbox me-2 text-secondary"></i>
+                <span class="text-muted me-1">Descripción del trabajo:</span> {{ item.descripcion }}
+              </button>
+            </h2>
+
+            <!-- Contenido Colapsable controlled by Angular -->
+            <div class="accordion-collapse collapse" [class.show]="accordionAbierto === i">
+              <div class="accordion-body bg-white pt-2">
+
+                <span class="fw-semibold d-block mb-2 text-secondary">Partes / Refacciones:</span>
+
+                <div class="table-responsive rounded-3 border">
+                  <table class="table table-sm table-hover align-middle mb-0">
+                    <thead class="table-light">
+                      <tr>
+                        <th scope="col">Descripción Parte</th>
+                        <th scope="col" class="text-center">Cant.</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let parte of item?.partes_trabajo">
+                        <td>{{ parte.descripcion_parte }} <span  *ngIf="parte.no_parte" class="font-monospace"> No parte:{{ parte.no_parte }}</span></td>
+                        <td class="text-center">{{ parte.cantidad }}</td>
+                      </tr>
+                      <tr *ngIf="!item?.partes_trabajo?.length">
+                        <td colspan="2" class="text-center text-muted py-2">
+                          <em>No hay refacciones registradas para este trabajo.</em>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+      <div class="col-12 col-md-6">
+          <app-media-gallery
+          title='Evidencias del diagnostico'
+          [items]="dataOrdenServicio?.evidencias"
+          categoryFilter="diagnostico"
+        ></app-media-gallery>
+      </div>
+    </div>
+    </ng-container>
+
+
+  </div>
+
+  <ng-template #noData>
+      <div class="text-center text-muted py-5 col-md-6">
+        <i class="fas fa-database fa-3x mb-3 opacity-50 text-secondary"></i>
+        <p class="m-0 fw-semibold">No hay de regsitros que mostrar</p>
+      </div>
+  </ng-template>
+

@@ -63,7 +63,7 @@ export function createTranslateLoader(http: HttpClient): any {
 @NgModule({
   declarations: [
     AppComponent,
-    HasPermissionPipe
+    HasPermissionPipe,
   ],
   exports: [
     HasPermissionPipe

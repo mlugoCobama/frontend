@@ -1,0 +1,129 @@
+<app-card-top
+[title]="'Ordenes de Servicio'"
+[hasButtons]="true"
+[showBtnNuevo]="true && !activeCita"
+(nuevo)="openModalNuevo()"
+></app-card-top>
+
+<ng-container *ngIf="!activeCita">
+  <app-filtro-cobama-service
+  #filtroOs
+  [empresas] ="empresas" [proveedores] ="proveedores" [loading]="loadingFiltro"
+  (executeFilter)="cargarOrdenes($event)"></app-filtro-cobama-service>
+
+
+<div class="card rounded-4 shadow-sm">
+    <div class="card-body ">
+      <div *ngIf="isLoad" class="row" [ngClass]="'justify-content-end'">
+          <div class="col-12 col-md-3 p-2">
+            <input type="text" class="form-control form-control-sm" placeholder="Buscar..." [(ngModel)]="busqueda" (input)="filtrarTabla()" />
+          </div>
+      </div>
+<div class="container-fluid rounded pt-1">
+
+      <div *ngIf="!isLoad" class="text-center">
+        <div class="spinner-border text-primary" role="status"></div>
+      </div>
+
+  <div *ngIf="isLoad" class="d-flex flex-row overflow-auto pb-3">
+    <!-- Columnas -->
+    <div
+      *ngFor="let estado of indicadores"
+      class="me-3 rounded flex-shrink-0"
+      style="min-width: 18rem; max-width: 20rem;"
+    >
+      <!-- Encabezados-->
+      <div
+        class="p-2 mx-1 mb-3  rounded-pill text-center text-white fw-semibold d-flex justify-content-between align-items-center shadow-sm"
+        [ngClass]="'bg-gradient bg-'+estado.color"
+      >
+        <span class="ms-1 text-start flex-grow-1">{{ estado.nombre }}</span>
+        <span class="badge bg-light text-dark mx-1">
+          <strong> {{ datosAgrupados[estado.nombre]?.length || 0 }} </strong>
+        </span>
+      </div>
+
+      <!-- Contenedor Drag & Drop -->
+      <div
+        class="p-1 rounded-4"
+        style="max-height: 58vh; overflow-y: auto;"
+      >
+        <div
+          *ngIf="datosAgrupados[estado.nombre]?.length === 0"
+          class="text-muted small text-center py-4 bg-light rounded-4"
+        >
+          <!-- <i class="fas fa-box-open d-block mb-1 fa-2x"></i> -->
+          <em class="fw-semibold">Aún no hay elementos</em>
+        </div>
+
+        <!--Card-->
+        <div
+          *ngFor="let item of datosAgrupados[estado.nombre]"
+          class="card mb-2 border rounded-4"
+          [ngClass]="'border-'+estado.color+' shadow-hover-'+estado.color"
+          role="button"
+          (click) ="setCitaSeleccionada(item)"
+
+          cdkDrag
+        >
+        <!-- <span *ngIf="item.estatus != '4' && item.estatus != '14'" title="Dias desde el ultimo cambio" class="position-absolute top-0 start-10 translate-middle badge rounded-pill" [ngClass]="getColorPorDias(item.fecha)" >{{ diferenciaEnDias(item.fecha) }}<span class="visually-hidden"></span></span> -->
+          <div class="card-body  p-2">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+              <span class="badge bg-light text-dark fw-bold border font-size-11">
+                {{ item.empresa }} <span class="text-primary ms-1">#{{ item.folio }}</span>
+              </span>
+            </div>
+          </div>
+            <hr class="m-0">
+
+            <p class="mb-1 ms-1 font-size-11"><span class="fw-semibold">Vehículo: </span>{{ item.marca }} {{item.submarca}} ({{ item.modelo }})</p>
+             <p class="mb-1 ms-1 font-size-11 d-flex justify-content-between"> <span class="fw-semibold">Placas: {{ item.placas }} </span> <span class="fw-semibold">Serie: {{ item.no_serie }} </span>  </p>
+            <p class="mb-1 ms-1 font-size-11"><strong>Falla: </strong> {{ item.falla.substring(0, 100) }} </p>
+                 <span *ngIf="item.proveedor" class="badge bg-dark text-wrap text-start align-self-start ms-1 fw-semibold  font-size-11">
+                   <i class="fas fa-user-check me-1"></i> Asignado a:  {{ item.proveedor }}
+                </span>
+            <hr class="my-1">
+            <div class="d-flex justify-content-between">
+              <div class="d-flex flex-column gap-1">
+
+      <small class="text-muted font-size-11 ms-1">
+        <i class="far fa-calendar-alt me-1"></i> {{ item.fecha_inicio | date:'d/M/yyyy, h:mm a' }}
+      </small>
+    </div>
+                <span class="small fw-semibold badge font-size-11" [ngClass]="'bg-'+estado.color"> Ver detalles <i class="fas fa-chevron-right"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+    </div>
+
+
+</div>
+
+</ng-container>
+
+<app-detalle-orden-servicio
+  *ngIf = "activeCita"
+  [cita] = "citaSeleccionada"
+  [listaProveedores] = "proveedores"
+  (setActiveCita)="setActiveCita($event)"
+  (reload)="aplicarFiltros()"
+
+>
+</app-detalle-orden-servicio>
+
+
+<!--
+<app-tabla-generica
+[data] ="data"
+[columnas] = "columnas"
+[isLoad] = "isLoad"
+
+>
+
+</app-tabla-generica> -->

@@ -1,0 +1,164 @@
+<div class="card shadow-sm rounded-4">
+    <div class="card-body  rounded-4 p-3 bg-white">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <small class="text-primary fw-bold">ORDEN DE SERVICIO</small>
+            <h5 class="m-0 fw-semibold">Folio: {{cita?.folio}}</h5>
+          </div>
+
+            <div class="d-flex gap-2 ">
+              <!-- <button *ngIf="dataEntrada?.encuesta" class="btn btn-outline-light btn-sm px-3 rounded-3 fw-semibold" [disabled]="isLoading12" (click)="descargarEncuestaPdf(cita.id)">
+                <ng-container *ngIf="!isLoading12; else loading">
+                    <i class="fas fa-file-pdf"></i> Descargar Encuesta
+                </ng-container>
+                <ng-template #loading>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Descargando...
+                </ng-template>
+                </button>
+
+                <button *ngIf="dataEntrada?.num_entrada" class="btn btn-outline-light btn-sm px-3 rounded-3 fw-semibold" [disabled]="isLoading" (click)="descargarPdf(cita.id)">
+                <ng-container *ngIf="!isLoading; else loading">
+                    <i class="fas fa-file-pdf"></i> Descargar Orden de Reparación
+                </ng-container>
+                <ng-template #loading>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Descargando...
+                </ng-template>
+                </button> -->
+
+                <button class="btn btn-dark btn-sm fw-bold px-3 rounded-3" (click)="goBack()"><i class="fas fa-arrow-left me-1"> </i> Regresar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card shadow-sm rounded-4">
+  <div class="card-header bg-white rounded-top-4 border-bottom border-primary  py-3">
+    <h5 class="fw-bold text-dark m-0">
+      <i class="fas fa-car text-primary me-2"></i> Datos del Vehículo
+    </h5>
+  </div>
+
+  <div class="card-body">
+    <div class="row g-3">
+      <!-- Columna Izquierda -->
+      <div class="col-12 col-md-6">
+
+        <div class="mb-1">
+          <small class="text-muted d-block">Empresa:</small>
+          <span class="fw-bold text-dark">{{ cita?.empresa || 'No Especificada' }}</span>
+        </div>
+
+        <div class="mb-1">
+          <small class="text-muted d-block">Folio:</small>
+          <span class="fw-bold text-dark">{{ cita?.folio || 'Sin Folio' }}</span>
+        </div>
+
+        <div class="mb-1">
+          <small class="text-muted d-block">Vehículo:</small>
+          <span class="fw-bold text-dark">
+            Eco: {{ cita?.eco || 'N/A' }} {{ cita?.marca }} {{ cita?.submarca }} ({{ cita?.modelo || 'N/A' }})
+          </span>
+        </div>
+
+        <div>
+          <small class="text-muted d-block">Estatus:</small>
+          <span  class="badge font-size-11 rounded-pill fw-semibold mt-1" [ngClass]="'bg-' + cita?.estatus_class">{{ cita?.estatus_txt || 'Sin Asignar' }}</span>
+        </div>
+      </div>
+
+      <!-- Columna Derecha -->
+      <div class="col-12 col-md-6">
+        <div class="mb-1">
+          <small class="text-muted d-block">No. Serie (VIN):</small>
+          <span class="fw-bold text-dark">{{ cita?.no_serie || 'N/A' }}</span>
+        </div>
+
+        <div class="mb-1">
+          <small class="text-muted d-block">Placas:</small>
+          <span class="fw-bold text-dark">{{ cita?.placas || 'Sin Placas' }}</span>
+        </div>
+
+        <div class="mb-1">
+          <small class="text-muted d-block">Falla:</small>
+          <span class="fw-bold text-dark">{{ cita?.falla }}</span>
+        </div>
+
+        <div>
+          <small class="text-muted d-block">Proveedor Asignado:</small>
+          <span class="badge bg-dark font-size-11 rounded-pill fw-semibold mt-1">{{ cita?.proveedor || 'Sin Asignar' }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-proveedor-selector
+*ngIf="!cita?.proveedor"
+  [proveedores]="listaProveedores"
+  [proveedorIdActual]="cita?.proveedores_id"
+  [cargando]="guardandoAsignacion"
+  (onAsignar)="asociarProveedorAVehiculo($event)">
+</app-proveedor-selector>
+
+<app-btn-autorizacion
+*ngIf="cita.estatus == 4"
+(confirm)="autorizarOrden('autorizar')"
+(deny)="autorizarOrden('rechazar')"
+[loadingConfirm]="sending"
+[loadingDeny]="sending"
+></app-btn-autorizacion>
+
+<div class="card shadow-sm rounded-4">
+  <div *ngIf="isLoading" class=" card-body text-center p-4">
+        <div class="spinner-border text-secondary" role="status"></div>
+  </div>
+
+  <app-diagnostico-vehiculo
+    *ngIf="!isLoading && cita?.proveedor"
+    [dataOrdenServicio]="dataOrdenServicio"
+  ></app-diagnostico-vehiculo>
+</div>
+<div class="row">
+<div class="col-12 col-md-4">
+          <app-media-gallery
+          title='Evidencias del proceso en taller'
+          [items]="dataOrdenServicio?.evidencias"
+          categoryFilter="proceso"
+        ></app-media-gallery>
+</div>
+<div class="col-12 col-md-4">
+          <app-media-gallery
+          title='Evidencias del terminado'
+          [items]="dataOrdenServicio?.evidencias"
+          categoryFilter="entrega"
+        ></app-media-gallery>
+</div>
+
+<div class="col-12 col-md-4">
+          <app-media-gallery
+          title='Evidencias de Entrega'
+          [items]="dataOrdenServicio?.evidencias"
+          categoryFilter="terminado"
+        ></app-media-gallery>
+</div>
+</div>
+
+<app-btn-autorizacion
+*ngIf="cita.estatus == 7"
+[showButtonDeny]="false"
+title='Finalizar orden de servicio'
+btnConfirmLabel='Finalizar'
+(confirm)="finalizar()"
+[loadingConfirm]="sending"
+[loadingDeny]="sending"
+></app-btn-autorizacion>
+
+
+<app-time-line-cita
+  *ngIf="!isLoading"
+  [catEventos]="catEventos"
+  [eventosEstado]="eventosEstado"
+  [cita]="dataOrdenServicio"
+  >
+</app-time-line-cita>

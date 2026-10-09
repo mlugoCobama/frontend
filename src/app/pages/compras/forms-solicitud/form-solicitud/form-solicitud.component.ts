@@ -21,7 +21,7 @@ export class FormSolicitudComponent implements OnInit{
   public submittedDetail: boolean = false;
   public isLoad: boolean = false;
   public showTable: boolean = false;
-  
+
   public disabled: boolean = false;
   public isAgencia: boolean = false;
 
@@ -68,9 +68,9 @@ export class FormSolicitudComponent implements OnInit{
 
   ngOnInit(): void {
     this.getEmpresas();
-    
+
     this.buildForm();
-    
+
   }
 
    /**
@@ -151,7 +151,7 @@ export class FormSolicitudComponent implements OnInit{
       this.closeModal.emit();
       return;
     }
-    
+
   }
 
     /**
@@ -206,7 +206,7 @@ export class FormSolicitudComponent implements OnInit{
     this.usuariosService.getEmpresas().subscribe(
       (response) => {
         if (response) {
-          
+
           this.empresas = response.data;
           this.getUsuarioActivo();
           this.isLoading = false;
@@ -232,12 +232,12 @@ export class FormSolicitudComponent implements OnInit{
    * { empresa, usuario_destino, c_c, motivo, orden_trabajo }
    */
   obtenerValores() {
-    return this.formSolicitudCompra.value;
+    return this.formSolicitudCompra.getRawValue();
   }
 
   /**
    * Recupera el valor de usuario solicita
-   * @returns int: id -> usuario solicita 
+   * @returns int: id -> usuario solicita
    */
   obtenerUsuarios() {
     return this.usuarioSolicita.id;
@@ -279,7 +279,7 @@ public setValues() {
   if(this.usuarioSolicita.intercompania != this.datos?.intercompania){
     this.getUsuarios(this.datos?.intercompania);
   }
-  
+
   const valores = {
     empresa: this.datos?.intercompania,
     usuario_destino: this.datos?.usuario_destino_id,

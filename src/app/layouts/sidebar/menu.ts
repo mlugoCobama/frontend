@@ -268,7 +268,7 @@ export const MENU: MenuItem[] = [
         label: "Ordenes de Servicio Ext",
         link: "/parque-vehicular/ordenes-servicio",
         parentId: 7,
-        permission: "view parque vehicular",
+        permission: "view os parque vehicular",
       },
     ],
   },

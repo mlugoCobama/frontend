@@ -40,13 +40,13 @@ export class ModalActualizarSolicitudComponent {
       private permisosService: PermisosService,
       public modalRef: BsModalRef
     ) {}
-  
+
     // public ngOnInit(): void {
-  
+
     // }
      public ngAfterViewInit(): void {
       this.getDetalles();
-      
+
      }
 
     /**
@@ -61,7 +61,7 @@ export class ModalActualizarSolicitudComponent {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
   }
-  
+
   public save() {
     this.submitted = true;
     this.isLoad = true;
@@ -116,12 +116,12 @@ export class ModalActualizarSolicitudComponent {
         idSolicitud : this.solicitudCompra.id,
       };
     }
-    
+
 
     if(!this.formSolicitudCompra.getIsAgencia()){
       data.c_c = 0;
     }
-    
+
     if (this.formSolicitudCompra.getIsAgencia()) {
       data.usuario_destino = this.formSolicitudCompra.obtenerUsuarios();
     }
@@ -163,7 +163,7 @@ export class ModalActualizarSolicitudComponent {
       }
     );
 
-    
+
   }
 
     public getDetalles() {

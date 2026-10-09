@@ -21,9 +21,9 @@ export class UnidadesService {
 
   /**
    * Recupera el catalogo de vehículos
-   * @returns colección vehículos 
+   * @returns colección vehículos
    */
-    public getVehiculos(intercompania: number, tipo:string): Observable<any> {
+    public getVehiculos(intercompania: number, tipo:string = 'reparto' ): Observable<any> {
       return this.http.get(environment.apiUrl + `compras/CatalogoUnidades/${intercompania}/${tipo}`, {headers});
     }
 
