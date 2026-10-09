@@ -45,4 +45,36 @@ export class ProveedoresVehiculosService {
 
     return this.http.get<any>(environment.apiUrl + 'parque-vehicular/vehiculos-proveedores', { params });
   }
+
+
+  descargarCotizacion(ruta: string, nombre_archivo : string = 'cotizacion.pdf') {
+    const url = `${environment.apiUrl}/parque-vehicular/${ruta}`;
+
+    this.http.get(url, { responseType: 'blob' }).subscribe({
+      next: (blob: Blob) => {
+        const urlBlob = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = urlBlob;
+        a.download = nombre_archivo;
+
+        document.body.appendChild(a);
+        a.click();
+
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(urlBlob);
+      },
+      error: (err) => {
+        console.error('Error al descargar el archivo:', err);
+      }
+    });
+  }
+
+  /**
+   * Abre un blank con el documento seleccionado
+   * @param rutaArchivo ruta al archivo del documento
+   */
+  public abrirArchivo(rutaArchivo: string){
+    const url = `${environment.apiUrl}parque-vehicular/${rutaArchivo}`;
+    window.open(url , '_blank')
+  }
 }

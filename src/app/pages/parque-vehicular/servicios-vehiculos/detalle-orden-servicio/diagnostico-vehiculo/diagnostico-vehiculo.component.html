@@ -69,6 +69,17 @@
 
           </div>
 
+          <div *ngIf="dataOrdenServicio?.cotizacion" class="alert alert-light border-danger rounded-4 d-flex justify-content-end">
+              <a
+              class="btn btn-sm btn-danger fw-semibold"
+              (click)="verArchivos(dataOrdenServicio?.ruta_cotizacion, 'Cotizacion.pdf')"
+              [disabled]="cargando">
+              <i class="fas fa-file-pdf me-1"> </i>
+              {{ cargando ? 'Descargando...' : 'Descargar Cotizacion' }}
+            </a>
+          </div>
+
+
         </div>
       </div>
       <div class="col-12 col-md-6">
