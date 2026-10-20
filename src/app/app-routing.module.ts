@@ -19,6 +19,7 @@ const routes: Routes = [
   { path: 'renault', component: LayoutComponent, loadChildren: () => import('./pages/renault/renault.module').then(m => m.RenaultModule), canActivate: [AuthGuard], data: {permission: 'view modulo renault'} },
   { path: 'volumetricos', component: LayoutComponent, loadChildren: () => import('./pages/volumetricos/volumetricos.module').then(m => m.VolumetricosModule), canActivate: [AuthGuard], data: {permission: 'view modulo volumetricos'}},
   { path: 'parque-vehicular', component: LayoutComponent, loadChildren: () => import('./pages/parque-vehicular/parque-vehicular.module').then(m => m.ParqueVehicularModule), canActivate: [AuthGuard], data: {permission: ''}  },
+  { path: 'control-asistencia', component: LayoutComponent, loadChildren: () => import('./pages/control-asistencia/control-asistencia.module').then(m => m.ControlAsistenciaModule), canActivate: [AuthGuard], data: {permission: ''}  },
   { path: '**', component: Page404Component },
 ];
 

@@ -20,5 +20,6 @@ export const environment = {
   },
   apiUrl: 'http://192.168.22.226:8080/api/',
   urlApiCodigoPostal: 'https://apicodigospostales.com/v1/',
-  withCredentials: true
+  withCredentials: true,
+  apiBiometricosUrl: 'http://192.168.22.226:8083/api/'
 };

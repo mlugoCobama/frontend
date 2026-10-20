@@ -95,13 +95,8 @@
         <button type="button" class="btn header-item d-flex align-items-center" dropdownToggle id="page-header-user-dropdown">
           {{ inciales }}
           <!-- <img class="rounded-circle header-profile-user" src="assets/images/users/user-dummy-img.jpg" alt="Header Avatar"> -->
-<<<<<<< HEAD
-          <!--div class="avatar-xs align-self-center">
-            <span class="avatar-title rounded-circle bg-primary-subtle text-primary font-size-16 
-=======
           <div class="avatar-xs align-self-center">
             <span [ngClass]="getColorClass()" class="avatar-title rounded-circle font-size-16 
->>>>>>> 0fbee755f61912274d00d8b918732522fba8cd99
             header-profile-user d-flex align-items-center justify-content-center" > {{ inciales }} </span>
           </div>
           &nbsp;
@@ -110,27 +105,18 @@
             <small class="text-muted">{{ userName.role.email}}</small>
           </div>
           <span class="d-none d-xl-inline-block ms-1">  </span>
-          <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i-->
+          <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
         </button>
         <div class="dropdown-menu dropdown-menu-end" *dropdownMenu>
           <!-- item-->
           <!--a class="dropdown-item" href="javascript: void(0);"><i class="bx bx-user font-size-16 align-middle me-1"></i>
-            {{ 'HEADER.LOGIN.PROFILE' | translate}}</a>
-<<<<<<< HEAD
-          < <a class="dropdown-item" href="javascript: void(0);" href="javascript: void(0);"><i class="bx bx-wallet font-size-16 align-middle me-1"></i>{{ 'HEADER.LOGIN.MY_WALLET' | translate}}</a> -->
-          <!--a class="dropdown-item d-block" href="javascript: void(0);"><span class="badge bg-success float-end">11</span><i class="bx bx-wrench font-size-16 align-middle me-1"></i>{{
-            'HEADER.LOGIN.SETTINGS' | translate}} </a>
-          <a class="dropdown-item" href="javascript: void(0);"><i class="bx bx-lock-open font-size-16 align-middle me-1"></i>
-            {{ 'HEADER.LOGIN.LOCK_SCREEN' | translate}}</a>
-          <div class="dropdown-divider"></div-->
-=======
+            {{ 'HEADER.LOGIN.PROFILE' | translate}}</a-->
           <!-- <a class="dropdown-item" href="javascript: void(0);" href="javascript: void(0);"><i class="bx bx-wallet font-size-16 align-middle me-1"></i>{{ 'HEADER.LOGIN.MY_WALLET' | translate}}</a> -->
           <!-- <a class="dropdown-item d-block" href="javascript: void(0);"><span class="badge bg-success float-end">11</span><i class="bx bx-wrench font-size-16 align-middle me-1"></i>{{
             'HEADER.LOGIN.SETTINGS' | translate}} </a>
           <a class="dropdown-item" href="javascript: void(0);"><i class="bx bx-lock-open font-size-16 align-middle me-1"></i>
             {{ 'HEADER.LOGIN.LOCK_SCREEN' | translate}}</a> -->
           <!-- <div class="dropdown-divider"></div> -->
->>>>>>> 0fbee755f61912274d00d8b918732522fba8cd99
           <a class="dropdown-item text-danger" href="javascript: void(0);" (click)="logout()"><i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i>
             {{ 'HEADER.LOGIN.LOGOUT' | translate}}</a>
         </div>
