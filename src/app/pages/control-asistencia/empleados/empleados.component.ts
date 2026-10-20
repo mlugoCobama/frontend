@@ -56,7 +56,7 @@ export class EmpleadosComponent implements OnInit {
 
   public concepto:any = '';
   public busqueda: string = "";
-  public modelFiltrado = modelFiltrado;
+  public modelFiltrado = ['pin','first_name','last_name','status'];
   public totalDatos: any;
   public totalDatosFiltrados: any;
   public modalRef?: BsModalRef;
@@ -77,8 +77,11 @@ export class EmpleadosComponent implements OnInit {
   ngOnInit(): void {
     this.routeSub = this.route.paramMap.subscribe(params => {
       this.concepto = params.get('concepto');
-      this.getEmpresas();
+
     });
+
+    this.setLocalUser();
+    this.getEmpresas();
   }
 
   /**
@@ -87,7 +90,7 @@ export class EmpleadosComponent implements OnInit {
   public getEmpresas() {
     this.usuariosService.getEmpresas().subscribe(
       (response) => {
-        if (response) {          
+        if (response) {
           /**Filtro para solo mostrar las empresas que tienen acceso a macrotaller */
           this.empresas = response.data;
           this.isLoading = false;
@@ -114,18 +117,18 @@ export class EmpleadosComponent implements OnInit {
   public getEmpleados(intercompania:any) {
 
     this.intercompania = intercompania;
-    
+
     this.empleadosService.getEmpleados(intercompania).subscribe(
       (response) => {
         if (response) {
-          this.data = response.data;  
+          this.data = response.data;
           this.company_id = response.company_id;
           this.device_id = response.device_id;
-               
+
           this.ordenador = new FuncionesTablas(this.data);
           this.datosFiltrados = [...this.data];
           this.contarDatos();
- 
+
           this.isLoad = false;
           this.showTable = true;
         } else {
@@ -136,7 +139,7 @@ export class EmpleadosComponent implements OnInit {
         console.error("Error fetching data:", error);
       }
     );
-  
+
   }
 
   //Recupera los datos del elemento seleccionado
@@ -144,7 +147,7 @@ export class EmpleadosComponent implements OnInit {
     this.mostrar = true;
     this.empleado = dato;
 
-    
+
     if (evento.currentTarget.classList.contains("table-primary")) {
       evento.currentTarget.classList.remove("table-primary");
       this.mostrar = false;
@@ -157,7 +160,7 @@ export class EmpleadosComponent implements OnInit {
 
   public destroy() {
 
-       
+
       Swal.fire({
         title: "¿Estas seguro?",
         text: "Se eliminara el registro seleccionado",
@@ -258,7 +261,7 @@ export class EmpleadosComponent implements OnInit {
     this.dataFinger = {
         "finger_index": 6,
         "intercompania": this.intercompania
-    }   
+    }
 
     Swal.fire({
         title: "",
@@ -307,30 +310,6 @@ export class EmpleadosComponent implements OnInit {
       });
   }
 
-  /*
-  public getUsuarioActivo() {
-    const currentUser = this.localStorage.getItem("currentUser");
-    const usuarioActivo = currentUser["usuarioActivo"][0];
-    const multiselect = usuarioActivo.multiselect;
-    const intercompania = usuarioActivo.intercompania;
-    const enpresa = usuarioActivo.empresa;
-    const enpresas = usuarioActivo.empresas;
-    this.usuarioSolicita = usuarioActivo;
-
-    if (!this.tienePermiso(this.permisos.selectParqueVehicular)) {
-      this.getCatVehiculos(intercompania);
-      this.intercompania = intercompania;
-    }
-
-    if (this.tienePermiso(this.permisos.selectParqueVehicular)) {
-        this.getCatVehiculos(intercompania);
-        this.intercompania = intercompania;
-    }
-
-    this.empresas = this.rawEmpresas;
-  }
-  */
-
   tienePermiso(permiso: string = ''): boolean {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
@@ -352,6 +331,14 @@ export class EmpleadosComponent implements OnInit {
   contarDatos() {
     this.totalDatosFiltrados = this.datosFiltrados.length;
     this.totalDatos = this.data.length;
+  }
+
+  public setLocalUser(){
+    this.usuarioSolicita = this.localStorage.getLocalUser();
+    this.intercompania = this.usuarioSolicita.intercompania;
+    if(!this.tienePermiso('select multiempresa asistencias')){
+      this.getEmpleados(this.usuarioSolicita.intercompania);
+    }
   }
 
 }

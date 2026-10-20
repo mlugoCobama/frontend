@@ -19,6 +19,7 @@ export class BiometricosComponent implements OnInit{
 
   //Variables funciones tablas
   datosFiltrados: any[] = [];
+  private modelFiltrado :any[] = ['name', 'serial_number', 'ip_address', 'mac_address','status', 'last_heartbeat']
   private ordenador!: FuncionesTablas<any>;
   busqueda: string = "";
 
@@ -40,10 +41,10 @@ export class BiometricosComponent implements OnInit{
             this.data = response.data;
 
             console.log(this.data);
-            
+
             this.ordenador = new FuncionesTablas(this.data);
             this.datosFiltrados = [...this.data];
-  
+
             this.isLoad = false;
             this.showTable = true;
           } else {
@@ -55,9 +56,14 @@ export class BiometricosComponent implements OnInit{
         }
       );
     }
-  
+
   tienePermiso(permiso: string = ''): boolean {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
+  }
+
+  filtrarTabla() {
+    this.datosFiltrados = this.ordenador.filtrar(this.busqueda, this.modelFiltrado);
+    // this.contarDatos();
   }
 }

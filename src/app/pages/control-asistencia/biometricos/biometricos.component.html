@@ -8,11 +8,11 @@
             <h5 class="mb-0 card-title flex-grow-1">Biometricos</h5>
             <!-- botones de acciones  -->
             <div class="flex-shrink-0 d-flex gap-1">
-              
+
             </div>
           </div>
         </div>
-      </div>  
+      </div>
         <div class="card rounded shadow-lg">
           <div class="card-body border-bottom">
           <div class="d-flex justify-content-center" *ngIf="isLoad">
@@ -26,7 +26,7 @@
             </div>
           </div>
           <div >
-            <div class="tab-page-content mt-3 table-responsive" style="overflow-y: scroll; height: 20rem;">
+            <div class="tab-page-content mt-3 table-responsive rounded-4 border " style="overflow-y: scroll; height: 20rem;">
               <table
               class="table table-hover table-sm table-responsive  border"
               *ngIf="!isLoad"
@@ -54,7 +54,7 @@
                     </tr>
                 </tbody>
             </table>
-            
+
             </div>
           </div>
           <p class="mt-2 text-muted">Se muestran {{ datosFiltrados?.length ?? 0 }} de {{ data?.length ?? 0 }}</p>

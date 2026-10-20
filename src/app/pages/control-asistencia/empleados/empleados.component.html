@@ -7,34 +7,34 @@
             <h5 class="mb-0 card-title flex-grow-1">
               Empleados
             </h5>
-            <div class="flex-shrink-0 d-flex gap-1">
+            <div class="flex-shrink-0 d-flex gap-2">
               <a
-                *ngIf = "mostrar  && tienePermiso(permisos.btnEliminarVehiculo)"
+                *ngIf="mostrar  && tienePermiso('view btn delete empleado')"
                 href="javascript:void(0);"
                 class="btn btn-danger btn-sm"
                 (click)="destroy()"
-                ><i class="fas fa-trash"></i> Eliminar
+                ><i class="fas fa-trash me-1"></i> Eliminar
               </a>
               <a
-                *ngIf = "mostrar && tienePermiso(permisos.btnActualizarVehiculo)"
+                *ngIf="mostrar &&  tienePermiso('view btn update empleado')"
                 href="javascript:void(0);"
                 class="btn btn-warning btn-sm"
                 (click)="openModalUpdate()"
-                ><i class="fas fa-edit"></i> Actualizar
+                ><i class="fas fa-edit me-1"></i> Actualizar
               </a>
               <a
-                *ngIf = "mostrar && tienePermiso(permisos.btnActualizarVehiculo)"
+                *ngIf="mostrar &&  tienePermiso('view btn roll empleado')"
                 href="javascript:void(0);"
                 class="btn btn-info btn-sm"
                 (click) = "registerFinger()"
-                ><i class="fa-solid fa-fingerprint"></i> Registrar huella
+                ><i class="fas fa-fingerprint me-1"></i> Registrar huella
               </a>
               <a
-                
+                *ngIf="tienePermiso('view btn add empleado')"
                 href="javascript:void(0);"
                 class="btn btn-primary btn-sm"
-                (click) = "openModalNuevo()"
-                ><i class="fas fa-plus"></i> Nuevo
+                (click)="openModalNuevo()"
+                ><i class="fas fa-plus me-1"></i> Nuevo
               </a>
 
             </div>
@@ -48,7 +48,7 @@
             <div class="col-3">
               <label for="empresa" class="form-label form-label-sm">Empresa: *</label>
               <select
-                *ngIf="tienePermiso(permisos.selectParqueVehicular); else nombreEmpresa"
+                *ngIf="tienePermiso('select multiempresa asistencias'); else nombreEmpresa"
                 class="form-select form-select-sm"
                 aria-label="Default select example"
                 id="empresa"
@@ -85,10 +85,10 @@
               <table  class="table table-hover table-sm table-bordered ">
                 <thead class="table-light border thead-sticky">
                   <tr class="text-center">
-                    <th style="cursor: pointer" (click)="ordenarPor('entidad')">Número Empleado<i [ngClass]="getIconoOrden('entidad')"></i></th>
-                    <th style="cursor: pointer" (click)="ordenarPor('eco')">Nombre<i [ngClass]="getIconoOrden('eco')"></i></th>
-                    <th style="cursor: pointer" (click)="ordenarPor('marca_vehiculo')">Apellidos<i [ngClass]="getIconoOrden('marca_vehiculo')"></i></th>
-                    <th style="cursor: pointer" (click)="ordenarPor('submarca')">Estatus<i [ngClass]="getIconoOrden('submarca')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('pin')">Número Empleado<i [ngClass]="getIconoOrden('pin')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('first_name')">Nombre<i [ngClass]="getIconoOrden('first_name')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('last_name')">Apellidos<i [ngClass]="getIconoOrden('last_name')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('status')">Estatus<i [ngClass]="getIconoOrden('status')"></i></th>
                   </tr>
                 </thead>
                 <tbody>

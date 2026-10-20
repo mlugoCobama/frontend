@@ -39,7 +39,7 @@ export const  categoriasGPS = [
   ];
 
   export const modelFiltrado = [
-    "entidad",
+      "entidad",
       "marca_vehiculo",
       "submarca",
       "modelo",

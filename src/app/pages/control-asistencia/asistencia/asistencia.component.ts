@@ -12,6 +12,7 @@ import { PermisosService } from 'src/app/core/services/permisos.service';
 import { modelFiltrado} from 'src/app/shared/constants/constantes-pv';
 import { pmsParqueVehciular } from 'src/app/shared/constants/permisos';
 import { ModalReporteComponent } from './modal-reporte/modal-reporte.component';
+import { FuncionesTablasObj } from 'src/app/core/helpers/funciones-tablas-obj';
 
 
 @Component({
@@ -29,9 +30,15 @@ export class AsistenciaComponent implements OnInit {
   public isLoad: boolean = false;
   public mostrar: boolean = false;
   public datosFiltrados: any[] = [];
-  private ordenador!: FuncionesTablas<any>;
+  private ordenador!: FuncionesTablasObj<any>;
+  public usuarioSolicita:any = [];
   busqueda: string = "";
-  modelFiltrado = modelFiltrado;
+  modelFiltrado = ['pin',
+                   'name',
+                   'punches.entrada',
+                   'punches.salida_comer',
+                   'punches.salida',
+                   'punches.tardiness_status'];
   public totalDatos: any;
   public totalDatosFiltrados: any;
   public data: any;
@@ -55,10 +62,12 @@ export class AsistenciaComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.routeSub = this.route.paramMap.subscribe(params => {
-      this.concepto = params.get('concepto');
-      this.getEmpresas();
-    });
+    // this.routeSub = this.route.paramMap.subscribe(params => {
+    //   this.concepto = params.get('concepto');
+
+    // });
+    this.setLocalUser();
+    this.getEmpresas();
   }
 
   /**
@@ -67,7 +76,7 @@ export class AsistenciaComponent implements OnInit {
   public getEmpresas() {
     this.usuariosService.getEmpresas().subscribe(
       (response) => {
-        if (response) {          
+        if (response) {
           /**Filtro para solo mostrar las empresas que tienen acceso a macrotaller */
           this.empresas = response.data;
           this.isLoading = false;
@@ -95,18 +104,22 @@ export class AsistenciaComponent implements OnInit {
    * Recupera el reporte de asistencia por empresa del dia en curso
    */
   public getReporteAsistenca(intercompania:any) {
-
+    this.isLoad = true;
     this.mostrar = true;
     this.intercompania = intercompania;
 
     this.asistenciaService.getAll(intercompania).subscribe(
       (response) => {
-        if (response) {          
+        if (response) {
           /**Filtro para solo mostrar las empresas que tienen acceso a macrotaller */
           this.data = response.data;
+
+          this.ordenador = new FuncionesTablasObj(this.data.employees);
+          this.datosFiltrados = [...this.data.employees];
+
           this.fechaConsulta = this.data.date;
-          this.fechaInicial = this.data.date;          
-          
+          this.fechaInicial = this.data.date;
+          this.isLoad = false;
           this.isLoading = false;
           this.showTable = true;
         } else {
@@ -116,6 +129,7 @@ export class AsistenciaComponent implements OnInit {
             "error",
             "danger"
           );
+          this.isLoad = false;
         }
       },
       (error) => {
@@ -125,20 +139,24 @@ export class AsistenciaComponent implements OnInit {
           "error",
           "danger"
         );
+        this.isLoad = false;
       }
     );
   }
 
   public filtrarPorFecha() {
+    this.isLoad = true;
     this.mostrar = true;
-    
     this.asistenciaService.getDate(this.intercompania, this.fechaConsulta).subscribe(
       (response) => {
-        if (response) {          
+        if (response) {
           /**Filtro para solo mostrar las empresas que tienen acceso a macrotaller */
           this.data = response.data;
+          this.ordenador = new FuncionesTablasObj(this.data.employees);
+          this.datosFiltrados = [...this.data.employees];
+
           this.fechaConsulta = this.data.date
-        
+          this.isLoad = false;
           this.isLoading = false;
           this.showTable = true;
         } else {
@@ -148,6 +166,7 @@ export class AsistenciaComponent implements OnInit {
             "error",
             "danger"
           );
+          this.isLoad = false;
         }
       },
       (error) => {
@@ -157,6 +176,7 @@ export class AsistenciaComponent implements OnInit {
           "error",
           "danger"
         );
+        this.isLoad = false;
       }
     );
   }
@@ -165,7 +185,7 @@ export class AsistenciaComponent implements OnInit {
     this.modalAbierto = true;
           const initialState: ModalOptions = {
             initialState: {
-              intercompania: this.intercompania 
+              intercompania: this.intercompania
             },
             class: "modal-sm",
           };
@@ -188,11 +208,11 @@ export class AsistenciaComponent implements OnInit {
     return this.permisosService.tienePermiso(permiso);
   }
 
-  ordenarPor(columna: keyof any) {
+  ordenarPor(columna: string) {
     this.datosFiltrados = this.ordenador.ordenar(columna);
   }
 
-  getIconoOrden(columna: keyof any): string {
+  getIconoOrden(columna: string): string {
     return this.ordenador.getIcono(columna);
   }
 
@@ -204,6 +224,15 @@ export class AsistenciaComponent implements OnInit {
   contarDatos() {
     this.totalDatosFiltrados = this.datosFiltrados.length;
     this.totalDatos = this.data.length;
+  }
+
+  public setLocalUser(){
+    this.usuarioSolicita = this.localStorage.getLocalUser();
+    this.intercompania = this.usuarioSolicita.intercompania;
+    if(!this.tienePermiso('select multiempresa asistencias')){
+      this.getReporteAsistenca(this.usuarioSolicita.intercompania);
+    }
+
   }
 
 }

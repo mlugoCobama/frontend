@@ -9,13 +9,12 @@
             </h5>
             <div class="flex-shrink-0 d-flex gap-1">
               <a
-                *ngIf = "mostrar  && tienePermiso(permisos.btnEliminarVehiculo)"
+                *ngIf="mostrar  && tienePermiso('view btn descargar reporte asistencia')"
                 href="javascript:void(0);"
                 class="btn btn-info btn-sm"
                 (click)="modalDescarga()"
-                ><i class="fa-solid fa-download"></i> Descargar Reporte</a
+                ><i class="fas fa-download"></i> Descargar Reporte</a
               >
-             
             </div>
           </div>
         </div>
@@ -27,7 +26,7 @@
             <div class="col-3">
               <label for="empresa" class="form-label form-label-sm">Empresa: *</label>
               <select
-                *ngIf="tienePermiso(permisos.selectParqueVehicular); else nombreEmpresa"
+                *ngIf="tienePermiso('select multiempresa asistencias'); else nombreEmpresa"
                 class="form-select form-select-sm"
                 aria-label="Default select example"
                 id="empresa"
@@ -54,14 +53,18 @@
             </div>
           </div>
 
-          <div class="d-flex justify-content-center"  *ngIf = "isLoad">
-            <div class="spinner-border" role="status">
-              <span class="visually-hidden">Loading...</span>
+          <ng-container *ngIf = "isLoad" >
+            <div class="d-flex justify-content-center mb-2">
+              <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
             </div>
-          </div>
+            <div class="text-muted fw-semibold text-center"> Consultando información...</div>
+          </ng-container>
+
           <div *ngIf = "!isLoad && showTable; else elseBlock">
-              
-            <div class="row g-3 mb-2 mt-2">  
+
+            <div class="row g-3 mb-2 mt-2">
               <div class="col-12 col-lg-12">
                   <!-- Primera fila -->
                   <div class="row g-2 mb-2">
@@ -92,7 +95,7 @@
                               </span>
                           </div>
                       </div>
-                  </div> 
+                  </div>
                   <div class="row g-2 mb-2">
                       <div class="col-6 col-md-3 col-xl-3  ">
                           <div class="border rounded-4 px-3 py-2 h-100">
@@ -126,7 +129,7 @@
                               </span>
                           </div>
                       </div>
-                  </div> 
+                  </div>
               </div>
             </div>
 
@@ -144,7 +147,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let item of data.employees">
+                  <tr *ngFor="let item of datosFiltrados">
                     <td>{{item.pin}}</td>
                     <td>{{item.name}}</td>
                     <td>{{item.punches.entrada}}</td>
@@ -160,7 +163,7 @@
             </div>
 
           </div>
-      
+
       </div>
 
 
