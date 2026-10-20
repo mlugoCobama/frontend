@@ -91,6 +91,7 @@ export class TopbarComponent implements OnInit {
     this.inciales =  this.userName.role.name.split(" ").slice(0,2).reduce((acumulador, palabra) => acumulador + palabra.charAt(0), '').toUpperCase();
     // recupera la inicial del nombre del usuario
     // this.inciales = this.userName.role.name.charAt(0);
+    this.inciales = this.userName.role.name
 
 
     this.cookieValue = this._cookiesService.get('lang');

@@ -1,0 +1,67 @@
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card rounded shadow-lg">
+        <div class="card-body border-bottom">
+          <div class="d-flex align-items-center">
+            <h5 class="mb-0 card-title flex-grow-1">Biometricos</h5>
+            <!-- botones de acciones  -->
+            <div class="flex-shrink-0 d-flex gap-1">
+              
+            </div>
+          </div>
+        </div>
+      </div>  
+        <div class="card rounded shadow-lg">
+          <div class="card-body border-bottom">
+          <div class="d-flex justify-content-center" *ngIf="isLoad">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+          <div *ngIf="!isLoad" class="row justify-content-end">
+            <div class="col-3">
+              <input type="text" class="form-control form-control-sm" placeholder="Buscar..." [(ngModel)]="busqueda"  (input)="filtrarTabla()"/>
+            </div>
+          </div>
+          <div >
+            <div class="tab-page-content mt-3 table-responsive" style="overflow-y: scroll; height: 20rem;">
+              <table
+              class="table table-hover table-sm table-responsive  border"
+              *ngIf="!isLoad"
+            >
+              <thead  class="table-dark thead-sticky">
+                <tr>
+                  <th>Empresa</th>
+                  <th>Número de Serie</th>
+                  <th>IP</th>
+                  <th>MAC Address</th>
+                  <th>Estatus</th>
+                  <th>Ultima Actualización</th>
+                </tr>
+              </thead>
+                <tbody >
+                    <tr *ngFor="let item of datosFiltrados">
+                      <td >{{ item.name}} </td>
+                      <td >{{ item.serial_number }}</td>
+                      <td>{{ item.ip_address }}</td>
+                      <td>{{ item.mac_address }}</td>
+                      <td [class.status-offline]="item.status?.toLowerCase() === 'offline'">
+                        {{ item.status }}
+                      </td>
+                      <td>{{ item.last_heartbeat | date:'HH:mm:ss dd/MM/yyyy' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            </div>
+          </div>
+          <p class="mt-2 text-muted">Se muestran {{ datosFiltrados?.length ?? 0 }} de {{ data?.length ?? 0 }}</p>
+        </div>
+        </div>
+        <!--div.card-body-->
+    </div>
+  </div>
+</div>
+<!-- container-fluid -->

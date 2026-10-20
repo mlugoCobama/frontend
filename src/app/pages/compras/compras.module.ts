@@ -190,6 +190,7 @@ import { ModalTagsComponent } from './cat-tags/modal-tags/modal-tags.component';
     ScrollingModule,
 
   ],
+
   providers: [
     provideNgxMask()
   ]

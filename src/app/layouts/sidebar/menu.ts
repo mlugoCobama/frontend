@@ -947,5 +947,35 @@ export const MENU: MenuItem[] = [
       },
     ],
   },
+  // Control de Asistencia
+  {
+    id: 45,
+    label: "Control de Asistencia",
+    icon: "bx bxs-gas-pump",
+    permission: "view modulo volumetricos",
+    subItems: [
+      {
+        id: 8,
+        label: "Asistencia",
+        link: "/control-asistencia/asistencia",
+        parentId: 45,
+        permission: "view sub modulo carga volumetricos",
+      },
+      {
+        id: 12,
+        label: "Empleados",
+        link: "/control-asistencia/empleados",
+        parentId: 45,
+        permission: "view sub modulo visualizar volumetricos",
+      },
+      {
+        id: 14,
+        label: "Biometricos",
+        link: "/control-asistencia/biometricos",
+        parentId: 45,
+        permission: "view submodulo generar reportes volumetricos",
+      },
+    ],
+  },
 ];
 

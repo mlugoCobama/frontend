@@ -1,0 +1,55 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">
+    {{ tipo | titlecase }} Nuevo Empleado
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="cerrarModal()"></button>
+</div>
+
+<div class="modal-body">
+    <form [formGroup]="myForm">
+
+        <div class="col-lg">
+            <label class="form-label">Número de empleado</label>
+            <input type="text" placeholder="Número de empleado" class="form-control form-control-sm"
+                formControlName="pin">
+            <div *ngIf="f['pin'].touched && f['pin'].invalid" class="form-text text-danger" >
+                <div *ngIf="f['numeroTarjeta'].errors?.['required']">El número de empleado es obligatorio</div>
+            </div>
+        </div>
+
+        <div class="col-lg mt-2">
+            <label class="form-label">Nombre </label>
+            <input type="text" placeholder="Nombre" class="form-control form-control-sm"
+                formControlName="first_name">
+            <div *ngIf="f['first_name'].touched && f['first_name'].invalid" class="form-text text-danger">
+                El nombre es obligatorio
+            </div>
+        </div>
+
+        <div class="col-lg mt-2">
+            <label class="form-label">Apellidos</label>
+            <input type="text" placeholder="Apellidos" class="form-control form-control-sm" 
+            formControlName="last_name" mask="0*">
+            <div *ngIf="f['last_name'].touched && f['last_name'].invalid" class="form-text text-danger">
+                Los apelldidos son obligatorios
+            </div>
+        </div>
+
+        
+    </form>
+</div>
+
+<div class="modal-footer">
+  <button
+   [disabled]="sending"
+    type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="cerrarModal()"
+  >
+    Cerrar
+  </button>
+  <button 
+  [disabled]="sending"
+  type="button" class="btn btn-primary btn-sm" (click)="save()">
+  <i class="fas fa-save " [ngClass]="{ 'bx-fade-right': sending }" ></i>
+    {{ sending ? 'Guardando' :'Guardar'}}
+  </button>
+</div>

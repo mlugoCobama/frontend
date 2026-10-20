@@ -85,14 +85,15 @@
         </div>
       </div>
 
-      <div class="dropdown d-none d-lg-inline-block ms-1">
+      <!--div class="dropdown d-none d-lg-inline-block ms-1">
         <button type="button" class="btn header-item noti-icon waves-effect" data-bs-toggle="fullscreen" (click)="fullscreen()">
           <i class="bx bx-fullscreen"></i>
         </button>
-      </div>
+      </div-->
 
       <div class="dropdown d-inline-block" dropdown>
         <button type="button" class="btn header-item d-flex align-items-center" dropdownToggle id="page-header-user-dropdown">
+          {{ inciales }}
           <!-- <img class="rounded-circle header-profile-user" src="assets/images/users/user-dummy-img.jpg" alt="Header Avatar"> -->
           <div class="avatar-xs align-self-center">
             <span [ngClass]="getColorClass()" class="avatar-title rounded-circle font-size-16 
@@ -109,7 +110,7 @@
         <div class="dropdown-menu dropdown-menu-end" *dropdownMenu>
           <!-- item-->
           <!--a class="dropdown-item" href="javascript: void(0);"><i class="bx bx-user font-size-16 align-middle me-1"></i>
-            {{ 'HEADER.LOGIN.PROFILE' | translate}}</a>
+            {{ 'HEADER.LOGIN.PROFILE' | translate}}</a-->
           <!-- <a class="dropdown-item" href="javascript: void(0);" href="javascript: void(0);"><i class="bx bx-wallet font-size-16 align-middle me-1"></i>{{ 'HEADER.LOGIN.MY_WALLET' | translate}}</a> -->
           <!-- <a class="dropdown-item d-block" href="javascript: void(0);"><span class="badge bg-success float-end">11</span><i class="bx bx-wrench font-size-16 align-middle me-1"></i>{{
             'HEADER.LOGIN.SETTINGS' | translate}} </a>

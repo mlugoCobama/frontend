@@ -1,0 +1,183 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card rounded-4 shadow-lg">
+        <div class="card-body border-bottom">
+          <div class="d-flex align-items-center">
+            <h5 class="mb-0 card-title flex-grow-1">
+              Reporte de Asistencia
+            </h5>
+            <div class="flex-shrink-0 d-flex gap-1">
+              <a
+                *ngIf = "mostrar  && tienePermiso(permisos.btnEliminarVehiculo)"
+                href="javascript:void(0);"
+                class="btn btn-info btn-sm"
+                (click)="modalDescarga()"
+                ><i class="fa-solid fa-download"></i> Descargar Reporte</a
+              >
+             
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card rounded shadow-lg rounded-4">
+        <div class="card-body border-bottom">
+          <div class="row justify-content-between" >
+            <div class="col-3">
+              <label for="empresa" class="form-label form-label-sm">Empresa: *</label>
+              <select
+                *ngIf="tienePermiso(permisos.selectParqueVehicular); else nombreEmpresa"
+                class="form-select form-select-sm"
+                aria-label="Default select example"
+                id="empresa"
+                name="empresa"
+                aria-label="empresa"
+                (change)="getReporteAsistenca($event.target.value)"
+
+              >
+                <option value="" selected disabled>Selecciona uno</option>
+                <option *ngIf="isLoading" value="" [disabled]="isLoading">
+                  Cargando opciones espera...
+                </option>
+                <ng-container *ngFor="let item of empresas">
+                  <option  [value]="item.intercompania" *ngIf="tienePermiso(item.permiso)">
+                    {{ item.name.toUpperCase()}}
+                  </option>
+                </ng-container>
+
+              </select>
+            </div>
+
+            <div class="col-3 pt-4" *ngIf = "!isLoad">
+              <input type="text" class="form-control form-control-sm" placeholder="Buscar..." [(ngModel)]="busqueda"  (input)="filtrarTabla()"/>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-center"  *ngIf = "isLoad">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+          <div *ngIf = "!isLoad && showTable; else elseBlock">
+              
+            <div class="row g-3 mb-2 mt-2">  
+              <div class="col-12 col-lg-12">
+                  <!-- Primera fila -->
+                  <div class="row g-2 mb-2">
+                      <div class="col-6 col-md-4 col-xl-4  ">
+                          <div class="border rounded-4 px-3 py-2 h-100">
+                              <small class="text-muted d-block fw-bold">Empresa</small>
+                              <span class="fw-semibold">
+                                  {{ data.company.name }}
+                              </span>
+                          </div>
+                      </div>
+                      <div class="col-6 col-md-4 col-xl-4 ">
+                          <div class="border rounded-4 px-3 py-2 h-100">
+                              <small class="text-muted d-block fw-bold">Fecha de Consulta</small>
+                              <input
+                                type="date"
+                                class="form-control form-control-sm"
+                                [(ngModel)]="fechaConsulta"
+                                (change)="filtrarPorFecha()"
+                                [max]="fechaInicial">
+                          </div>
+                      </div>
+                      <div class="col-6 col-md-4 col-xl-4 ">
+                          <div class="border rounded-4 px-3 py-2 h-100">
+                              <small class="text-muted d-block fw-bold">Horario</small>
+                              <span class="fw-semibold text-primary">
+                                  Entrada: 9:00 || Salida 18:00
+                              </span>
+                          </div>
+                      </div>
+                  </div> 
+                  <div class="row g-2 mb-2">
+                      <div class="col-6 col-md-3 col-xl-3  ">
+                          <div class="border rounded-4 px-3 py-2 h-100">
+                              <small class="text-muted d-block fw-bold">Total Empleados</small>
+                              <span class="fw-semibold">
+                                  {{ data.summary.total_employees }}
+                              </span>
+                          </div>
+                      </div>
+                      <div class="col-6 col-md-3 col-xl-3 ">
+                          <div class="border rounded-4 px-3 py-2 h-100">
+                              <small class="text-muted d-block fw-bold">Empleados Presentes</small>
+                              <span class="fw-semibold text-primary">
+                                  {{ data.summary.total_present }}
+                              </span>
+                          </div>
+                      </div>
+                      <div class="col-6 col-md-3 col-xl-3 ">
+                          <div class="border rounded-4 px-3 py-2 h-100">
+                              <small class="text-muted d-block fw-bold">Empleados con Retardo</small>
+                              <span class="fw-semibold text-warning">
+                                  {{ data.summary.total_tardy }}
+                              </span>
+                          </div>
+                      </div>
+                      <div class="col-6 col-md-3 col-xl-3 ">
+                          <div class="border rounded-4 px-3 py-2 h-100">
+                              <small class="text-muted d-block fw-bold">Empleados Sin Registro</small>
+                              <span class="fw-semibold text-danger">
+                                  {{ data.summary.total_absent }}
+                              </span>
+                          </div>
+                      </div>
+                  </div> 
+              </div>
+            </div>
+
+            <div class="tab-page-content mt-3 table-responsive rounded-4 border" style="overflow-y: scroll; height: 20rem; ">
+              <table  class="table table-hover table-sm table-bordered ">
+                <thead class="table-light border thead-sticky">
+                  <tr class="text-center">
+                    <th style="cursor: pointer">Número Empleado</th>
+                    <th style="cursor: pointer">Nombre</th>
+                    <th style="cursor: pointer">Entrada</th>
+                    <th style="cursor: pointer">Salida a Comer</th>
+                    <th style="cursor: pointer">Entrada a Comer</th>
+                    <th style="cursor: pointer">Salida</th>
+                    <th style="cursor: pointer">Retardo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of data.employees">
+                    <td>{{item.pin}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.punches.entrada}}</td>
+                    <td>{{item.punches.salida_comer}}</td>
+                    <td>{{item.punches.entrada_comer}}</td>
+                    <td>{{item.punches.salida}}</td>
+                    <td [class.text-danger]="item.punches.is_tardy" >
+                      {{item.punches.tardiness_status}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+      
+      </div>
+
+
+        <!--div.card-body-->
+
+    </div>
+  </div>
+</div>
+<!-- container-fluid -->
+<ng-template #nombreEmpresa>
+  <p>
+    <strong>{{ usuarioSolicita.empresa }} </strong>
+  </p>
+</ng-template>
+
+<ng-template #elseBlock>
+  <div *ngIf = "!isLoad && showTable" class="text-center text-muted p-3">
+    <Strong>Aun no hay registros que mostrar...</Strong>
+  </div>
+</ng-template>
