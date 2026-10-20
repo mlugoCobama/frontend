@@ -62,7 +62,7 @@ export class TablaPagadasComponent {
     total = Number(item.otros) + Number(item.gasolina) + Number(item.previa) + Number(item.descuentos) 
           + Number(item.traslados) +  Number(item.descuento_impulso) + Number(item.total_subsidios) 
           + Number(item.descuento_gastos) +  Number(item.cortesia) + Number(item.accesorios) + Number(item.placas);      
-          console.log(total);
+          // console.log(total);
     return total;
   }
 

@@ -1,0 +1,51 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">
+    Actualizar solicitud de compra - Macrotaller
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="cerrarModal()"></button>
+</div>
+  <div class="modal-body">
+    <div class="d-flex justify-content-center" *ngIf="isLoad">
+        <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <div [hidden]="isLoad">
+      <app-form-solicitud-macro
+      #formSolicitudMacro
+      [datos]="solicitudCompra" 
+      [submitted]="submitted"
+      (closeModal)="cerrarModal()"
+      (setData)="getData($event)"
+      (setDestino)="getDato($event)"
+      >
+      </app-form-solicitud-macro>
+      <app-select-sistema-mantenimiento
+      #formSelectsSistemaManteniemiento
+      [solicitudCompra]="solicitudCompra" 
+      [tipo] =  2
+      ></app-select-sistema-mantenimiento>
+
+      <app-form-detalle-solicitud
+      #formDetalleSolicitud
+      [autotanques]="autotanques"
+      [destino]="destino"
+      >
+      </app-form-detalle-solicitud>
+    </div>
+    
+  </div>
+<div class="modal-footer">
+  <button
+  [disabled]="sending"
+  type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="cerrarModal()">
+    Cerrar
+  </button>
+
+  <button 
+  [disabled]="sending"
+  type="button" class="btn btn-primary btn-sm" (click)="save()">
+  <i class="bx bxs-send " [ngClass]="{ 'bx-fade-right': sending }" ></i>
+    {{ sending ? 'Guardando' :'Guardar'}}
+  </button>
+</div>

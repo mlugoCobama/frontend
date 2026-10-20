@@ -44,7 +44,7 @@
           <div *ngIf = "!isLoad">
             <div class="tab-page-content mt-3 table-responsive" style="overflow-y: scroll; height: 20rem;">
               <table class="table table-hover table-sm table-bordered">
-                <thead class="table-light">
+                <thead class="table-light thead-sticky">
                   <tr>
                     <th (click)="ordenarPor('fecha_entrada')">Fecha de entrada <i [ngClass]="getIconoOrden('fecha_entrada')"></i></th>
                     <th (click)="ordenarPor('empresa')">Empresa <i [ngClass]="getIconoOrden('empresa')"></i></th>

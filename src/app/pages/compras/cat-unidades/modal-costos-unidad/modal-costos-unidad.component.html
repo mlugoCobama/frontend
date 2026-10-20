@@ -62,10 +62,20 @@
       Cerrar
     </button>
     <button
-    [disabled] = "deshabilitado"
-    type="button"
-    class="btn btn-primary btn-sm">
-      Descargar
+        class="btn btn-primary btn-sm"
+        [disabled]="descargandoExcel"
+        (click)="descargarGastos()">
+        <span
+            *ngIf="descargandoExcel"
+            class="spinner-border spinner-border-sm me-2"
+            role="status"
+            aria-hidden="true">
+        </span>
+        <i
+            *ngIf="!descargandoExcel"
+            class="fas fa-download me-2">
+        </i>
+        {{ descargandoExcel ? 'Descargando...' : 'Descargar Gastos' }}
     </button>
 </div>
 

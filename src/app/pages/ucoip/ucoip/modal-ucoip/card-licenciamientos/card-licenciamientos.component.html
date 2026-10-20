@@ -1,0 +1,144 @@
+
+<div class="card shadow-sm rounded-4">
+<div class="card-header bg-secondary-subtle d-flex justify-content-between align-items-center rounded-4">
+        <span class="fw-bold">LICENCIAMIENTOS</span>
+        <div class="d-flex gap-2">
+            <!-- Botón toggle -->
+            <button
+                class="btn btn-dark btn-sm"
+                type="button"
+                (click)="toggleFormulario()">
+                <i class="fas" [ngClass]="mostrarFormulario ? 'fa-eye-slash' : 'fa-plus'"></i>
+                {{ mostrarFormulario ? 'Ocultar formulario' : 'Nueva Asignación' }}
+            </button>
+            <!-- <button
+                *ngIf = "idsSeleccionados.length > 0"
+                title="Imprimir resguardo"
+                (click)="imprimirResguardo()"
+                class="btn btn-outline-dark btn-sm">
+                <i class="fas fa-print"></i>
+                Resguardo
+            </button> -->
+
+            <button  *ngIf = "idsSeleccionados.length > 0"
+                title="Imprimir resguardo"
+                (click)="imprimirResguardo()"
+                class="btn btn-outline-dark btn-sm">
+                <ng-container *ngIf="!downloading; else spinnerDown">
+                    <i class="fas fa-print"></i>
+                    Resguardo
+                </ng-container>
+                <ng-template #spinnerDown>
+                    <i class="fas fa-spinner fa-spin"></i> Descargando...
+                </ng-template>
+            </button>
+        </div>
+
+    </div>
+<div class="card-body">
+
+    <form *ngIf="mostrarFormulario" [formGroup]="form">
+        <div class="row">
+            <!-- Select Tipo -->
+            <div class="col-sm-5">
+                <label for="tipoSoftware" class="form-label">Tipo de Software</label>
+                <select id="tipoSoftware" class="form-select form-select-sm" formControlName="tipoSoftware">
+                    <option [ngValue]="null">Seleccione un tipo</option>
+                    <option *ngFor="let tipo of datos" [value]="tipo.id">
+                        {{ tipo.tipo }}
+                    </option>
+                </select>
+                <div *ngIf="f.tipoSoftware.touched || submitted">
+                    <div
+                        class="text-danger form-text"
+                        *ngIf="f.tipoSoftware.errors?.['required']"
+                    >
+                        Debes de seleccionar un tipo de software
+                    </div>
+                </div>
+            </div>
+
+            <!-- Select Hardware -->
+            <div class="col-sm-5">
+                <label for="software" class="form-label">Licencias de Software Disponibles</label>
+                <select id="software" class="form-select form-select-sm" formControlName="software">
+                    <option [ngValue]="null">Seleccione software</option>
+                    <option *ngFor="let hw of hardwareFiltrado" [value]="hw.id">
+                        {{ hw.version }} ({{ hw.licencia }})
+                    </option>
+                </select>
+                <div *ngIf="f.software.touched || submitted">
+                    <div
+                        class="text-danger form-text"
+                        *ngIf="f.software.errors?.['required']"
+                    >
+                        Debes de seleccionar una licencia de software
+                    </div>
+                </div>
+            </div>
+            <!-- Botón -->
+            <div class="col-sm-2 mt-4 text-end">
+                <button type="button" class="btn btn-primary btn-sm" (click)="asignar()">
+                    <ng-container *ngIf="!loading; else spinner">
+                        <i class="fas fa-check"></i> Asignar
+                    </ng-container>
+                    <ng-template #spinner>
+                        <i class="fas fa-spinner fa-spin"></i> Asignando...
+                    </ng-template>
+                </button>
+            </div>
+        </div>
+
+
+
+    </form>
+    <div class="d-flex justify-content-center" *ngIf="isLoad">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+    </div>
+    <ng-container *ngIf="!isLoad">
+        <div class="table-responsive rounded-4 border mt-2">
+            <table class="table table-sm mb-0">
+                <thead>
+                    <tr>
+                        <th>TIPO</th>
+                        <th>VERSION</th>
+                        <th>CLAVE</th>
+                        <th>ASIGNADO</th>
+                        <th>DEVUELTO</th>
+                        <th>-</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngIf="data.length == 0">
+                        <td colspan="9" class="text-muted text-center p-3 fw-bold"> Aun no tienen activos asignado</td>
+                    </tr>
+                    <ng-container *ngIf="data.length > 0">
+                        <tr *ngFor="let detalle of data">
+                            <td>
+                                <span class="badge bg-primary text-white p-1 fw-bold">
+                                    {{detalle?.licencia?.tipo_software?.tipo}}
+                                </span>
+                            </td>
+                            <td>{{detalle?.licencia?.version}}</td>
+                            <td>{{detalle?.licencia?.licencia}}</td>
+                            <td>{{(detalle?.fecha_asignacion | date:'dd/MM/yyyy') || '-'}}</td>
+                            <td>{{(detalle?.fecha_retiro | date:'dd/MM/yyyy') || '-'}}</td>
+                            <td>
+                                <button *ngIf="!detalle.fecha_retiro" class="btn btn-danger btn-sm" (click)="remover(detalle?.id)">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+        <span class="text-muted"> {{ data.length }} Activos Asignados</span>
+    </ng-container>
+
+</div>
+</div>
+
+

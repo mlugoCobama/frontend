@@ -22,7 +22,7 @@ export class TablaPreciosDetallesComponent implements OnInit {
    */
   private addProveedorColumns() {
     this.cotProv.forEach((cotizacion) => {
-      const proveedorId = cotizacion.proveedores_id[0].id;
+      const proveedorId = cotizacion.proveedores_id.id;
 
       this.detalles.forEach((detalle) => {
         const detalleCotizacion = cotizacion.detalles.find(
@@ -46,7 +46,7 @@ export class TablaPreciosDetallesComponent implements OnInit {
     this.totals = {};
     this.cotProv.forEach((cotizacion) => {
       let total = 0;
-      const proveedorId = cotizacion.proveedores_id[0].id;
+      const proveedorId = cotizacion.proveedores_id.id;
       this.detalles.forEach((detalle) => {
         const precio = parseFloat(detalle["precio_" + proveedorId]);
         if (!isNaN(precio)) {
@@ -65,7 +65,7 @@ export class TablaPreciosDetallesComponent implements OnInit {
   getTotalMasBajo(): number {
     let tmasBajo = Number.MAX_VALUE;
     for (let prov of this.cotProv) {
-      let total = this.totals["precio_" + prov.proveedores_id[0].id];
+      let total = this.totals["precio_" + prov.proveedores_id.id];
       if (total < tmasBajo) {
         tmasBajo = total;
       }

@@ -1,8 +1,11 @@
-<div *ngIf ="cotProv?.length > 0" class="row">
-  <div class="alert alert-warning text-center" role="alert">
-    Marca la casilla de la fila con el proveedor seleccionado para generar la
-    orden de compra
+<div class="card rounded-4 shadow-sm" [hidden] = "cotProv?.length === 0" >
+  <div class="card-header  rounded-4 bg-primary text-white fw-semibold text-center">
+    <strong>
+      <i class="fas fa-pallet me-1"></i>  Marca la casilla de la fila con el proveedor seleccionado para generar la orden de compra
+    </strong>
   </div>
+  <div class="card-body">
+    <div *ngIf ="cotProv?.length > 0" class="row">
   <div class="col-1" *ngIf="solicitudCompra?.estatus >= enEsts.OrdenCompra"></div>
   <div class="col-10">
     <div class="d-flex justify-content-center" *ngIf="!isLoad">
@@ -11,41 +14,40 @@
       </div>
     </div>
     <!--Tabla documentos cotizaciones-->
+    <div class="border rounded-4">
     <table
       *ngIf="isLoad"
-      class="table  table-hover table-sm table-bordered table-responsive"
+      class="table table-sm table-hover rounded-4 border"
     >
       <thead class="table-light" >
         <tr class="text-center">
-          <th *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && tienePermiso('view btn save precios')">#</th>
-          <th>Nombre proveedor</th>
-          <th>Archivo cotización</th>
-          <th *ngIf="solicitudCompra?.estatus <= 3 ">Autorizado</th>
+          <th *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && tienePermiso('view chks seleccionar cotizacion')">#</th>
+          <th>Nombre del proveedor</th>
+          <th>Archivo de cotización</th>
+          <th style="width: 6rem;" *ngIf="solicitudCompra?.estatus <= 3 && tienePermiso('view btn reenviar correo')"><small>Reenviar correo</small></th>
+          <th style="width: 3rem;" *ngIf="solicitudCompra?.estatus <= 3 ">Autorizado</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let prov of cotProv; let i = index" class="text-center">
           <td [ngClass] = "prov?.ruta ? 'bg-secondary-subtle bg-opacity-75' : '' "
-          *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && tienePermiso('view btn save precios')">
+          *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && tienePermiso('view chks seleccionar cotizacion')">
             <div class="col align-self-center">
               <input
                 *ngIf="prov?.ruta"
                 (change)="manejoCheck(prov)"
                 name="radioProveedor"
-                class="form-check-input form-radio-success "
+                class="form-check-input border border-dark"
                 type="radio"
               />
             </div>
           </td>
           <td>
-            {{ prov?.proveedores_id[0].nombre }}
-            <i
-              *ngIf="prov?.seleccionado === 1"
-              class="fas fa-check-circle"
-              style="color: green"
-            >
-              (Seleccionado)
-            </i>
+            {{ prov?.proveedores_id.nombre }}
+            <span *ngIf="prov?.seleccionado === 1"  class="badge text-bg-success font-size-11" >
+              <i class="bx bx-check-circle bx-burst"></i>
+              <strong> SELECCIONADO </strong>
+            </span>
           </td>
           <td>
             <div>
@@ -59,14 +61,31 @@
                 type="file"
               />
               <a
-                class="btn btn-sm btn-danger"
+                class="btn btn-sm btn-light px-4 fw-semibold"
                 *ngIf="prov?.ruta"
                 (click)="verArchivos(prov?.ruta)"
               >
-                <i class="fas fa-file-pdf"></i>
-
+                <i class="fas fa-file-pdf text-danger me-1 fs-5"></i>
+                  VER COTIZACIÓN
               </a>
             </div>
+          </td>
+          <td *ngIf="solicitudCompra?.estatus <= 3 && tienePermiso('view btn reenviar correo')">
+            <button
+              (click)="reenviarSC(prov)"
+              [disabled]="prov?.loading"
+              class="btn btn-sm btn-primary"
+              title="Reenviar correo de solicitud de cotización al proveedor">
+
+              <ng-container *ngIf="!prov?.loading; else loadingIcon">
+                <i class="fas fa-paper-plane"></i>
+              </ng-container>
+              <ng-template #loadingIcon>
+                <span class="spinner-border spinner-border-sm"></span>
+              </ng-template>
+            </button>
+
+
           </td>
           <td *ngIf="solicitudCompra?.estatus <= 3 && prov?.autorizado != 0;">
               <div class="text-success">
@@ -76,90 +95,92 @@
         </tr>
       </tbody>
     </table>
-    <!-- form Observaciones -->
-    <form class="row g-2" [formGroup]="formOrdenCompra">
-      <div class="col-12" *ngIf="mostrarObs">
-        <div class="col-md-12">
-          <label for="entrega" class="form-label">Se entrega en: *</label>
-          <select
-            (change)="setValuesForm()"
-            class="form-select form-select-sm"
-            aria-label="Default select example"
-            formControlName="entrega"
-          >
-            <option selected disabled value="">Selecciona uno</option>
-            <option *ngIf="isLoading" value="" [disabled]="isLoading">
-              Cargando opciones espera...
-            </option>
-            <option *ngFor="let item of empresas" [value]="item?.intercompania">
-              {{ item?.name }}
-            </option>
-          </select>
-          <div
-            *ngIf="
-              ordenCompraFormControl.entrega.touched ||
-              submitted ||
-              ordenCompraFormControl.entrega.value === 'Selecciona uno'
-            "
-          >
-            <div
-              class="text-danger form-text"
-              *ngIf="ordenCompraFormControl.entrega.errors?.['required']"
-            >
-              Debes de seleccionar una empresa.
-            </div>
-          </div>
+    </div>
 
-          <label for="observaciones" class="form-label">Observaciones: </label>
-          <textarea
-            
-            class="form-control"
-            formControlName="observaciones"
-            id="observaciones"
-            rows="3"
-          ></textarea>
-          
-          <div
-            *ngIf="ordenCompraFormControl.observaciones.touched || submitted"
-          >
-            <div
-              class="text-danger form-text"
-              *ngIf="ordenCompraFormControl.observaciones.errors?.['required']"
-            >
-              Observaciones es requerido.
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
+    <!-- form Observaciones -->
+    <app-form-datos-entrega-oc
+    #formDatosOC
+    [solicitudCompra] = "solicitudCompra"
+    [mostrarObs] = "mostrarObs"
+    [tipo] = "tipo"
+    ></app-form-datos-entrega-oc>
     <!-- form observaciones orden de compra -->
-    <div *ngIf="solicitudCompra?.estatus >= enEsts.OrdenCompra" class="row">
-      <div *ngIf="ordenCompra" class="alert alert-primary text-center" role="alert">
-          ORDEN DE COMPRA:
-          <strong>{{ ordenCompra?.folio_oc }}</strong>
-        </div>
-      <div *ngIf="ordenCompra">
-        <p>
-          <strong>Observaciones: </strong> {{ ordenCompra?.observaciones ?? ' Sin observaciones '}}
-        </p>
-        <p> <strong>Se entrega en:</strong> {{ordenCompra?.entrega.EMPRESA ?? ' '}} </p>
-        <p> <strong>Ubicada en:</strong> {{ordenCompra?.entrega.DIRECCION ?? ' '}}, {{ordenCompra?.entrega.COLONIA ?? ' '}}, {{ordenCompra?.entrega["CIUDAD/DELEG/ESTADO"] ?? ' '}}, C.P. {{ordenCompra?.entrega["C.P."] ?? ' '}}   </p>
+    <div *ngIf="solicitudCompra?.estatus >= enEsts.OrdenCompra" class="row pt-2">
+      <div *ngIf="ordenCompra" class="alert alert-primary text-center rounded-pill" role="alert">
+                  ORDEN DE COMPRA:
+                  <strong>{{ ordenCompra?.folio_oc }}</strong>
       </div>
-      <div *ngIf="ordenCompra?.tipo_pago">
-        <p> <strong>Tipo de pago: </strong>  {{ ordenCompra?.tipo_pago | uppercase }} </p>
+      <div class="col-md-6 border-end" *ngIf="ordenCompra">
+              <div>
+                <p>
+                  <strong>Observaciones: </strong> {{ ordenCompra?.observaciones ?? ' Sin observaciones '}}
+                </p>
+                <p> <strong>Se entrega en:</strong> {{ordenCompra?.entrega.EMPRESA ?? ' '}} </p>
+                <p> <strong>Ubicada en:</strong> {{ordenCompra?.entrega.DIRECCION ?? ' '}}, {{ordenCompra?.entrega.COLONIA ?? ' '}}, {{ordenCompra?.entrega["CIUDAD/DELEG/ESTADO"] ?? ' '}}, C.P. {{ordenCompra?.entrega["C.P."] ?? ' '}}   </p>
+              </div>
+              <div *ngIf="ordenCompra?.tipo_pago">
+                <p> <strong>Tipo de pago: </strong>  {{ ordenCompra?.tipo_pago | uppercase }} </p>
+              </div>
+
+              <div *ngIf="ordenCompra?.fecha_entrega">
+                <p> <strong>Fecha de entrega: {{ ordenCompra?.fecha_entrega | date:'d / M / y' }} </strong>   </p>
+              </div>
+              <div *ngIf="ordenCompra?.categoria">
+                <p> <strong>Categoría: </strong>{{ ordenCompra?.categoria }} </p>
+              </div>
       </div>
+      <div class="col-md-6" *ngIf="ordenCompra">
+              <p><strong>DATOS DE PAGO</strong></p>
+              <p><strong>Banco: </strong> {{ getProveedorSeleccionado()?.banco ? getProveedorSeleccionado().banco : 'Dato no disponible'}}</p>
+              <p><strong>No de cuenta: </strong> {{ getProveedorSeleccionado()?.no_cuenta ? getProveedorSeleccionado().no_cuenta : 'Dato no disponible'}}</p>
+              <p><strong>CLABE: </strong> {{ getProveedorSeleccionado()?.clave_interbancaria ? getProveedorSeleccionado().clave_interbancaria : 'Dato no disponible'}}</p>
+              <p><strong>Beneficiario: </strong> {{ getProveedorSeleccionado()?.beneficiario ? getProveedorSeleccionado().beneficiario : 'Dato no disponible'}}</p>
+      </div>
+
     </div>
   </div>
 
-  <div class="col-2 d-flex align-items-start">
+  <div class="col-2 d-flex align-items-end justify-content-center" *ngIf="!sending">
+    <div class="d-flex flex-column bd-highlight gap-2">
     <button
-      *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && !mostrarObs && tienePermiso('view btn save precios')"
-      type="submit"
-      class="btn btn-sm btn-success"
-      (click)="guardarPrecios()"
+      *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && !mostrarObs && tienePermiso('view btn add proveedor cotizacion')"
+      class="btn btn-sm btn-primary"
+      (click)="showPanelCotizaciones = !showPanelCotizaciones"
     >
-      Guardar Cotización
+      <i class="fas fa-user-plus "></i>
+      {{ showPanelCotizaciones ? 'Ocultar proveedor' : 'Agregar proveedor a cotización' }}
+    </button>
+
+      <button
+        *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && !mostrarObs && tienePermiso('view btn save precios')"
+        type="submit"
+        class="btn btn-sm btn-success"
+        (click)="guardarPrecios()"
+      >
+      <ng-container *ngIf="!saving; else loadingGuardando">
+        <i class="fas fa-file-upload "></i> Guardar Cotización
+      </ng-container>
+      <ng-template #loadingGuardando>
+          <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+          Guardando...
+      </ng-template>
+      </button>
+    </div>
+    <button
+      *ngIf = "!ordenCompra && proveedorSeleccionado && tienePermiso('view btn generar orden')"
+      type="submit"
+      class="btn btn-sm btn-primary"
+      (click)="generarOrden()"
+    >
+     <i class="fas fa-file-import"></i> Generar orden de compra
     </button>
   </div>
 </div>
-<hr />
+  </div>
+</div>
+
+<app-panel-cotizaciones
+  *ngIf="showPanelCotizaciones"
+  [solicitudCompra]="solicitudCompra"
+  (actualizarStatus)="actDetalle()"
+></app-panel-cotizaciones>

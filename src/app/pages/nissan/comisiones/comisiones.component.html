@@ -3,183 +3,260 @@
 
   <div class="row">
     <div class="col-xl-12">
-      <div class="card">
 
-        <div class="card-body border-bottom">
-          <div class="d-flex align-items-center">
-            <h5 class="mb-0 card-title flex-grow-1">Comisiones</h5>
-            <div class="flex-shrink-0 d-flex gap-1">
-              <!--a href="javascript:void(0);" class="btn btn-primary btn-sm" >Nuevo</a-->
+      
+      <app-card-top
+      [title] = "getVentaAuto() | titlecase"
+      ></app-card-top>
+      
+      <app-filtro
+        #formFiltro
+        (bindingSpiner)="bindingSpiner($event)"
+        (bindingData)="bindingData($event)"
+        (bindingEstado)="bindingEstado($event)"
+      ></app-filtro>
+      
+      <div class="card shadow-sm">
+
+        <div class="card-body border-bottom ">
+          <app-spiner 
+           *ngIf="isLoadig">
+          </app-spiner>
+          <div class="d-flex justify-content-between align-items-center m-2 gap-2">
+            <div class="btn-group">
+              <button
+                  class="btn btn-sm"
+                  [class.btn-primary]="vista === 'pendientes'"
+                  [class.btn-outline-primary]="vista !== 'pendientes'"
+                  (click)="vista = 'pendientes'; cambiarVista('pendientes')">
+
+                  Pendientes
+              </button>
+
+              <button
+                  class="btn btn-sm"
+                  [class.btn-success]="vista === 'realizados'"
+                  [class.btn-outline-success]="vista !== 'realizados'"
+                  (click)="vista = 'realizados'; cambiarVista('realizados')">
+
+                  Realizados
+                  
+              </button>
+          </div>
+            <div class="col-lg-3">
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                placeholder="Buscar..."
+                [ngModel]="searchText"
+                (ngModelChange)="onSearch($event)"
+              />
             </div>
           </div>
-        </div>
+          <div class="table-responsive" style="max-height: 26rem; overflow-y: auto;"
+           *ngIf="ventas.controls.length > 0 && !isLoadig; else mensaje">
+            <form [formGroup]="form">
+              <table class="table  table-hover table-sm table-bordered" >
+              <thead class="table-light thead-sticky">
+                <tr>
+                  <th *ngIf="(estado == 1 || estado == 12345) && tienePermiso(permisos.colEntregados)">Entr.</th>
+                  <ng-container *ngIf="estado > 1 && tienePermiso(permisos.colBdc)">
+                    <th >BDC.</th>
+                  </ng-container>
+                  <ng-container *ngIf="estado > 1 && tienePermiso(permisos.colVBdc)">
+                    <th class="text-nowrap"> <small>V BDC</small> </th> 
+                  </ng-container>
+                  <th>Fecha</th>
+                  <th>Factura</th>
+                  <th>Razón Social</th>
+                  <th>Inventario</th>
+                  <th>Vendedor</th>
+                  <th>Descripción</th>
+                  <th>Serie</th>
+                  <!-- Valores calculo Utilidad -->
+                  <th>Venta</th> 
+                  <th>Costos</th> 
+                  <th class="text-nowrap">Bonif. Extr.</th> 
+                  <th>Utilidad</th> 
+                  <th class="text-nowrap">T. de Venta</th> 
+                  
+                  <ng-container *ngIf="estado > 1 && tienePermiso(permisos.colFormGastos)">
+                    <th >Otros</th>
+                    <th >Cortesía</th>
+                    <th >Gasolina</th>
+                    <th >Previa</th>
+                    <th >Placas</th>
+                    <th >Descuentos</th>
+                    <th class="text-nowrap">Descuento IMPULSO</th>
+                    <th >Traslados</th>
+                    <th class="text-nowrap" > <small>Total subsidios desembolso</small></th>
+                    <th class="text-nowrap" > <small>Descuento de gastos DA adicional</small></th>
+                    <th >Accesorios</th>
+                    <!--  Resultados calculados -->
+                    <th class="text-nowrap">Total Gastos</th> 
+                    <th class="text-nowrap">Uti.D.Gastos</th> 
+                    <th  class="text-nowrap bg-dark text-white border border-dark">C.G. APV</th>
+                    <th  class="text-nowrap bg-dark text-white border border-dark">C.G. GSN/GV</th>
+                    <th  class="text-nowrap bg-dark text-white border border-dark">C.G. BDC</th>
+                    <th  class="text-nowrap bg-dark text-white border border-dark">C.G. COR.BDC</th>
+                    <th class="text-nowrap"> %. </th> 
+                    <th  class="text-nowrap">% BDC</th>
+                    <th class="text-nowrap">Comision APV</th>
+                    <th class="text-nowrap">Comision BDC</th>
+                    <th class="text-nowrap">Utilidad final</th>
+                    
+                  </ng-container>
+                  
+                 
+                    <ng-container *ngIf="estado > 2 && tienePermiso(permisos.colValidados)">
+                        <th *ngIf="estado > 2" class="text-nowrap">Valido</th>
+                    </ng-container>
+                  
+                  <ng-container *ngIf="estado > 1 && tienePermiso(permisos.colAcciones)">
+                    <th *ngIf="estado > 1"class="text-nowrap text-center">Acciones</th>
+                  </ng-container>
+                  
+                  <ng-container *ngIf="estado > 4 && tienePermiso(permisos.colPagados)" >
+                    <th class="text-nowrap text-center">Pagado</th>
+                  </ng-container>
+                  
+                  <th class="text-nowrap text-center">Estatus</th>
+                </tr>
+              </thead>
+              <tbody formArrayName="ventas">
+              <tr [class.table-primary]="filaSeleccionada === i" *ngFor="let i of filteredIndices" [formGroupName]="i">
+                <!-- <tr *ngFor="let v of ventas.controls; let i = index" [formGroupName]="i"> -->
+                <td  *ngIf="(estado == 1 || estado == 12345) && tienePermiso(permisos.colEntregados) " > 
+                    <span 
+                      class="d-flex align-items-center justify-content-center">
+                       <input formControlName="entregado"  type="checkbox" class="form-check-input" id="exampleCheck1">
+                    </span>
+                </td>
+                <ng-container *ngIf="estado > 1 && tienePermiso(permisos.colBdc)" >
+                  <td > 
+                    <span 
+                      class="d-flex align-items-center justify-content-center">
+                       <input formControlName="bdc"  type="checkbox" class="form-check-input" id="exampleCheck1">
+                    </span>
+                  </td>
+                </ng-container>
+                <ng-container *ngIf="estado > 1 && tienePermiso(permisos.colVBdc)">
+                  <td> 
+                      <span
+                      *ngIf="ventas.at(i).get('bdc')?.value" 
+                        class="d-flex align-items-center justify-content-center">
+                        <input formControlName="v_bdc"  type="checkbox" class="form-check-input" id="exampleCheck1">
+                      </span>
+                  </td>
+                </ng-container>
+              
+                  <td (click)="seleccionarFila(i)">{{ventas.at(i).get('fecha_factura')?.value}}</td>
+                  <td (click)="seleccionarFila(i)" class="text-nowrap">{{ventas.at(i).get('no_factura')?.value}} 
+                    <span class="text-danger" *ngIf="ventas.at(i).get('observacion')?.value" [title]="ventas.at(i).get('observacion')?.value"> <i class="bx bx-info-circle bx-flashing "></i></span>
+                  </td> 
+                  <td (click)="seleccionarFila(i)" class="text-nowrap">{{ventas.at(i).get('razon_social')?.value}}</td>
+                  <td (click)="seleccionarFila(i)" class="text-nowrap">{{ventas.at(i).get('clave_inventario')?.value}}</td>
+                  <td (click)="seleccionarFila(i)"class="text-nowrap">{{ventas.at(i).get('clave_vendedor')?.value }}</td>
+                  <td (click)="seleccionarFila(i)"class="text-nowrap">{{ventas.at(i).get('descripcion')?.value}}</td>
+                  <td (click)="seleccionarFila(i)">{{ventas.at(i).get('serie')?.value}}</td>
+                  <td (click)="seleccionarFila(i)">{{ventas.at(i).get('total_venta')?.value | currency}}</td>
+                  <td (click)="seleccionarFila(i)">{{ventas.at(i).get('costos')?.value | currency}}</td>
+                  <td (click)="seleccionarFila(i)">{{ventas.at(i).get('bonificaciones')?.value | currency}}</td>
+                  <td (click)="seleccionarFila(i)">{{ventas.at(i).get('utilidad_inicial')?.value | currency}}</td>
 
-        <div class="card-body border-bottom table-responsive">
-          <div class="row g-3 mb-1">
-            <div class="col-auto">
-              <label>Ver</label>
-              <select (change)="onSelectedAgencia($event.target.value)" class="form-select form-select-sm " aria-label=".form-select-sm example">
-                <option value="0"selected>Selecciona uno</option>
-                <option value="1">Pendientes por pagar</option>
-                <option value="2">Pagadas</option>
-              </select>
-            </div>
-            <div class="col-auto">
-              <label>Agencias</label>
-              <select (change)="onSelectedAgencia($event.target.value)" class="form-select form-select-sm " aria-label=".form-select-sm example">
-                <option value="0"selected>Selecciona uno</option>
-                <option value="1">Universidad</option>
-                <option value="2">Insurgentes</option>
-                <option value="3">Azcapotzalco</option>
-                <option value="3">Campestre</option>
-              </select>
-            </div>
-            <div class="col-auto">
-              <label >Fecha inicial</label>
-              <input (change)="onSelectInicio($event.target.value)" type="date" class="form-control form-control-sm" [max]="hoy">
-            </div>
-            <div class="col-auto">
-              <label>Fecha Final</label>
-              <input (change)="onSelectFin($event.target.value)" type="date" class="form-control form-control-sm" [max]="hoy">
-            </div>
-            <div *ngIf = "!isLoadig && showTable"class="col-auto">
-              <label >Vendedor</label>
-              <select class="form-select form-select-sm " aria-label=".form-select-sm example">
-                <option selected>Selecciona uno</option>
-                <option *ngFor="let item of vendedores" value="+item">{{item}}</option>
-              </select>
-            </div>
-            <div class="col-auto pt-4">
-              <button  *ngIf="ready" type="submit" class="btn btn-sm btn-info mb-3" (click)="getAll()"> <i class="fas fa-search"></i> Buscar</button>
-            </div>
-          </div>        
-
-          <div class="d-flex justify-content-center"  *ngIf = "showTable && isLoadig">
-            <div class="spinner-border" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
-          </div>
-          <div style="overflow-y: auto; height: 30rem"  *ngIf = "showTable && !isLoadig">
-            <form [formGroup]="formDatosGastos" >
-            <table *ngIf = "data.length > 0; else mensaje" class="table table-striped table-hover table-sm table-bordered"  >
-            <thead class="table-light sticky-top">
-              <tr>
-                <th>Fecha</th>
-                <th>Factura</th>
-                <th>Razón Social</th>
-                <th>Inventario</th>
-                <th>Vendedor</th>
-                <th>Descripción</th>
-                <th>Serie</th>
-                 <!-- Valores calculo Utilidad -->
-                <th>Venta</th>
-                <th>Costos</th>
-                <th class="text-nowrap">Bonificaciones Extra</th>
-                <th>Utilidad</th>
-                <!-- Valores calculo Utilidad -->
-                <th class="text-nowrap">Tipo de Venta</th>
-                <th class="text-nowrap">Porcentaje</th>
-                <th>Otros</th>
-                <th>Gasolina</th>
-                <th>Previa</th>
-                <th>Descuentos</th>
-                <th class="text-nowrap">Descuento IMPULSO</th>
-                <th>Traslados</th>
-                <th class="text-nowrap">Total subsidios desembolso</th>
-                <th class="text-nowrap">Descuento de gastos DA adicional</th>
-                <th>Cortesía</th>
-                <th>Accesorios</th>
-                <th>Placas</th>
-                <th class="text-nowrap">Total Gastos</th>
-                <th class="text-nowrap">Utilidad final</th>
-                <!-- <th class="text-nowrap">Comision BDC</th> -->
-                <th class="text-nowrap">Comision APV</th>
-                <th colspan="2"> Acciones </th>
+                  <th class="text-nowrap">{{ventas.at(i).get('tipo_venta')?.value}}</th> <!-- Este valor ya existe solo  es de referencia -->  
                 
-              </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of data; let i index">
-                    <td class="text-nowrap">{{item.fecha_factura | date:'d/MM/y'}}</td>
-                    <td>{{item.faau_nofactura}}</td>
-                    <td class="text-nowrap">{{item.faau_razonfactura}}</td> 
-                    <td class="text-nowrap">{{item.vehi_clas_clave}} {{item.vehi_anio}}-{{item.vehi_numeroinventario}}</td>
-                    
-                    <td>{{item.faau_vend_clave}}</td>
-                    <td class="text-nowrap">{{item.mode_descripcion}}</td>
-                    <td>{{ item.vehi_serie }}</td>
-                    <td>{{item.Venta | number}}</td>
-                    <td>{{item.Costo | number}}</td>
-                    <td>{{item.bonificacion | number}}</td>
-                    <td>{{item.Utilidad | number}}</td>
-                    <td>{{item.faau_form_TipoVenta}}</td>
-                    <td class="text-end">
-                      {{(findPorcentaje(item.faau_form_TipoVenta) * 100) | number:'1.1-1'}}%
-                    </td> 
-                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'otros_'+item.faau_nofactura" placeholder="Otros" [disabled]="isDisabled"></td>
-                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'gasolina_'+item.faau_nofactura" placeholder="Gasolina" [disabled]="isDisabled"></td>
-                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'previa_'+item.faau_nofactura" placeholder="Previa" [disabled]="isDisabled"></td>
-                    <td><input *ngIf="item.vehi_clas_clave != NU" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'descuentos_'+item.faau_nofactura" placeholder="Descuentos"></td>
-                    <td><input *ngIf="item.vehi_clas_clave === NU" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'descuento_impulso_'+item.faau_nofactura" placeholder="Descuentos IMPULSO"></td>
-                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'traslados_'+item.faau_nofactura" placeholder="Traslados"></td>
-                    <td><input class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'total_subsidios_'+item.faau_nofactura" placeholder="Total subsidios desembolso"></td>
-                    <td><input *ngIf="item.vehi_clas_clave != NU" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'descuento_gastos_'+item.faau_nofactura" placeholder="Descuento de gastos DA adicional"></td>
-                    <td><input *ngIf="item.vehi_clas_clave === NU" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'cortesia_'+item.faau_nofactura" placeholder="Cortesía"></td>
-                    <td><input *ngIf="item.vehi_clas_clave != NU" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'accesorios_'+item.faau_nofactura" placeholder="Accesorios"></td>
-                    <td><input *ngIf="item.vehi_clas_clave != NU" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," type="text"  [formControlName]="'placas_'+item.faau_nofactura" placeholder="Placas"></td>
-                    
-                     <td class="text-end text-danger fw-bold">
-                      {{calcularTotalGastosFila(item.faau_nofactura)  | number: '1.1-2'}}
-                    </td> 
-                    <td class="text-end text-success fw-bold">
-                      {{calcularUtilidadFinal(item) | number: '1.1-2'}}
-                    </td>
-                    <td class="text-end text-primary fw-bold">
-                      {{calcularComisionApv(item) | number: '1.1-2'}}
-                    </td>
-                    <td class="text-center">
-                      <button *ngIf="item.isNew && calcularTotalGastosFila(item.faau_nofactura) > 0 ; else elseBlock"  type="submit" class="btn btn-sm btn-success" (click)="guardarDatos(item)">
-                         <i class="fas fa-save"></i>
+                
+                
+                <ng-container *ngIf="estado > 1 && tienePermiso(permisos.colFormGastos)">
+                  <td><input class="form-control form-control-sm input-min text-end" mask="separator" thousandSeparator="," prefix="$ "  type="text" placeholder="Otros" formControlName="otros"></td><!-- Input Editable -->
+                  <td><input class="form-control form-control-sm input-min text-end" mask="separator" thousandSeparator="," prefix="$ "  type="text" placeholder="Cortesia" formControlName="cortesia"></td><!-- Input Editable -->
+                  <td><input class="form-control form-control-sm input-min text-end" mask="separator" thousandSeparator="," prefix="$ "  type="text" placeholder="Gasolina" formControlName="gasolina"></td><!-- Input Editable -->
+                  <td><input class="form-control form-control-sm input-min text-end" mask="separator" thousandSeparator="," prefix="$ "  type="text" placeholder="Previa" formControlName="previa"></td><!-- Input Editable -->
+                  <td><input class="form-control form-control-sm input-min text-end" mask="separator" thousandSeparator="," prefix="$ "  type="text" placeholder="Placas" formControlName="placas"></td><!-- Input Editable -->
+                  <td><input class="form-control form-control-sm input-min text-end" mask="separator" thousandSeparator="," prefix="$ "  type="text" placeholder="Descuentos" formControlName="descuentos"></td><!-- Input Editable -->
+                  <td><input class="form-control form-control-sm input-min text-end" mask="separator" thousandSeparator="," prefix="$ "  type="text" placeholder="Descuento impulso" formControlName="descuento_impulso"></td><!-- Input Editable -->
+                  <td><input class="form-control form-control-sm input-min text-end" mask="separator" thousandSeparator="," prefix="$ "  type="text" placeholder="Traslados" formControlName="traslados"></td><!-- Input Editable -->
+                  <td><input class="form-control form-control-sm input-min text-end" mask="separator" thousandSeparator="," prefix="$ "  type="text" placeholder="Subsidios" formControlName="subsidios"></td><!-- Input Editable -->
+                  <td><input class="form-control form-control-sm input-min text-end" mask="separator" thousandSeparator="," prefix="$ "  type="text" placeholder="Descuento DA" formControlName="descuento_da"></td><!-- Input Editable -->
+                  <td><input class="form-control form-control-sm input-min text-end" mask="separator" thousandSeparator="," prefix="$ "  type="text" placeholder="Accesorios" formControlName="accesorios"></td><!-- Input Editable -->
+                  <td class="text-nowrap fw-bold text-end">{{ ventas.at(i).get('total_gastos')?.value | currency }}</td>
+                  <td class="text-nowrap fw-bold text-end text-muted border-right border-dark">{{ ventas.at(i).get('utlidad_gastos')?.value | currency }}</td>
+                  <td><input class="form-control form-control-sm input-min text-end" mask="separator" thousandSeparator="," prefix="$ "  type="text" placeholder="ComI. Garantizada" formControlName="comision_garantizada"></td><!-- Input Editable -->
+                  <td><input class="form-control form-control-sm input-min text-end" mask="separator" thousandSeparator="," prefix="$ "  type="text" placeholder="ComI. Garantizada" formControlName="comision_garantizada_gerencia"></td><!-- Input Editable -->
+                  <td><input class="form-control form-control-sm input-min text-end" mask="separator" thousandSeparator="," prefix="$ "  type="text" placeholder="ComI. Garantizada" formControlName="comision_garantizada_bdc"></td><!-- Input Editable -->
+                  <td class="border-right border-dark"><input class="form-control form-control-sm input-min text-end" mask="separator" thousandSeparator="," prefix="$ "  type="text" placeholder="ComI. Garantizada" formControlName="comision_garantizada_cor_bdc"></td><!-- Input Editable -->
+                  <th class="text-nowrap">{{(ventas.at(i).get('comision_garantizada').value > 0 ? 0 : ventas.at(i).get('tipo_venta_porcentaje')?.value ) | percent}}</th> <!-- Este valor ya existe solo es de referencia -->
+                  <td><input class="form-control form-control-sm input-min text-end" mask="separator" thousandSeparator="," type="text" placeholder="% BDC" formControlName="porcentaje_bdc" suffix="%"></td><!-- Input Editable -->
+                  <!--  Resultados calculados -->  
+                  <td class="text-nowrap fw-bold text-end text-primary">{{ ventas.at(i).get('comision_apv')?.value | currency }}</td>
+                  <td class="text-nowrap fw-bold text-end text-muted">{{ ventas.at(i).get('comision_bdc')?.value | currency }}</td>
+                  <td class="text-nowrap fw-bold text-end text-muted">{{ ventas.at(i).get('utilidad_final')?.value | currency }}</td>
+                   
+                </ng-container>
+                
+                <td *ngIf="estado > 2 && tienePermiso(permisos.colValidados)"> 
+                    <span class="d-flex align-items-center justify-content-center">
+                       <input formControlName="validado"  type="checkbox" class="form-check-input" id="exampleCheck1">
+                    </span>
+                </td>
+                <td *ngIf="estado > 1 && tienePermiso(permisos.colAcciones)"> 
+                    <span class="d-flex justify-content-betwen align-items-center gap-2">
+                      <button *ngIf="estado > 1 && (+ventas.at(i).get('estatus')?.value) > 1" class="btn btn-sm btn-warning"
+                          [disabled]="devolviendo[i]" (click)="devolver(ventas.at(i).get('id_venta')?.value, i)">
+                          <span *ngIf="!devolviendo[i]"> Devolver</span>
+                          <span *ngIf="devolviendo[i]" class="spinner-border spinner-border-sm" role="status"aria-hidden="true"></span>
                       </button>
-                      <ng-template #elseBlock>
-                         <div class="btn btn-sm btn-secondary">
-                        <i class="fas fa-ban"></i>
-                      </div>
-                        <!-- <button  type="submit" class="btn btn-sm btn-warning" (click)="guardarDatos(item)">
-                         <i class="fas fa-save"></i>
-                      </button> -->
-                      </ng-template>
-                    </td>
-                    <td class="text-center">
-                      <button *ngIf="!item.isNew; else deshabilitado" type="submit" class="btn btn-sm btn-primary" (click)="guardarDatos(item)">
-                         <i class="fas fa-file-invoice-dollar"></i>
+                      <!-- <button *ngIf="estado == 3 &&  (+ventas.at(i).get('estatus')?.value) == 3" class="btn btn-sm btn-info"> Adjuntos </button>  -->
+                     <button *ngIf="estado == 4"  class="btn btn-sm btn-success"
+                          [disabled]="pagando[i]"  (click)="guardarPagado(ventas.at(i).get('id_venta')?.value, i)">
+                          <span *ngIf="!pagando[i]"> Pagar</span>
+                          <span *ngIf="pagando[i]" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                       </button>
-                      <ng-template #deshabilitado>
-                      <div class="btn btn-sm btn-secondary">
-                        <i class="fas fa-ban"></i>
-                      </div>
-                      </ng-template>
-                    </td>
-                  </tr>
-            </tbody>
-          </table>
-          </form>  
-        </div><!--div.card-body-->
-        <!-- <app-tabla-pagadas
-          *ngIf = "showTable && !isLoadig"
-          [showTable] = "showTable"
-          [isLoadig] = "isLoadig"
-          [data] = "data"
-          [porcentajes] = "porcentajes"
-          ></app-tabla-pagadas> -->
+                    </span>
+                </td>
+                <ng-container  *ngIf="estado >= 4 &&  tienePermiso(permisos.colPagados)" >
+                  <td>
+                    <span *ngIf="ventas.at(i).get('pagado')?.value == 1" class="text-success fw-bold text-center"> Pagado </span>
+                  </td>
+                </ng-container>
+                <td>
+                  <span class="text-primary fw-bold text-center text-nowrap"> {{ventas.at(i).get('estatusTexto')?.value}} </span>
+                </td>
+                </tr>
+              </tbody>
+            </table>
+            </form>
+             
           </div>
+
+          <span class="text-muted text-nowrap mt-4">
+            Se muestran {{ filteredIndices.length }} de {{ ventas.controls.length }}
+          </span>
+        </div>
     </div>
+
+    <app-botonera
+     *ngIf="estado > 0 && vista === 'pendientes'"
+      [estado] = "estado"
+      [guardandoE] = "guardandoE"
+      [guardandoV] = "guardandoV"
+      [guardandoG] = "guardandoG"
+      [guardandoBdc] = "guardandoBdc"
+      [guardandovBdc] = "guardandovBdc"
+      (saveEntregados)="guardarEntregados()"
+      (saveValidados)="guardarValidados()"
+      (saveGastos)="guardarGastos()"
+      (saveValidadosBdc)="guardarValidadosBDC()"
+      (saveBdc)="guardarBDC()"
+    ></app-botonera>
+
     </div>
   </div>
 
 </div> <!-- container-fluid -->
 <ng-template #mensaje>
-  <div class="text-center text-muted pt-5">
+  <div class="text-center text-muted">
     <Strong>No se encontraron registros para mostrar...</Strong>
     <p>Intenta filtrar por un periodo distinto<br>ó<br>Revisa en el apartado de comisiones pagadas</p>
   </div>

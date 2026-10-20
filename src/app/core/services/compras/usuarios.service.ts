@@ -23,7 +23,7 @@ export class UsuariosService {
   public getEmpresas(): Observable<any> {
     return this.http.get(environment.apiUrl + "compras/Usuarios", {headers});
   }
-  
+
   /**
    * Recupera un colección de usuarios por num intercompaia
    * @param intercompania num intercompania de la empresa
@@ -44,5 +44,14 @@ export class UsuariosService {
     return this.http.get(
       environment.apiUrl + `compras/getUserByEmail/${correo}`, {headers}
     );
+  }
+
+  public filtrarEmpresasGseras(rawData:any, intercompaniasExcluidas:number[]){
+    return rawData.filter((objeto: any) => {
+          const noEsAgencia = objeto.isAgencia === false; // o simplemente !objeto.isAgencia
+          const noEsIntercompaniaExcluida = !intercompaniasExcluidas.includes(objeto.intercompania);
+
+          return noEsAgencia && noEsIntercompaniaExcluida;
+    });
   }
 }

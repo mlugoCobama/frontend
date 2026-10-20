@@ -32,6 +32,7 @@ import { FormSolicitudMacroComponent } from './forms-solicitud/form-solicitud-ma
 import { FormDetalleSolicitudComponent } from './forms-solicitud/form-detalle-solicitud/form-detalle-solicitud.component';
 import { FormSolicitudComponent } from './forms-solicitud/form-solicitud/form-solicitud.component';
 import { FormActualizarDetalleComponent } from './forms-solicitud/form-actualizar-detalle/form-actualizar-detalle.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import { TablaDetallesSolicitudComponent } from './compras/detalle-solicitudes-compras/tabla-detalles-solicitud/tabla-detalles-solicitud.component';
@@ -52,7 +53,44 @@ import { TimelineSolicitudComponent } from './timeline-solicitud/timeline-solici
 import { FormDatosPolizaComponent } from './cat-unidades/form-datos-poliza/form-datos-poliza.component';
 import { BtnAtorizarAPagoComponent } from './compras/detalle-solicitudes-compras/btn-atorizar-a-pago/btn-atorizar-a-pago.component';
 import { PanelEntregasComponent } from './compras/detalle-solicitudes-compras/panel-entregas/panel-entregas.component';
-
+import { ModalSeguimientoComponent } from './compras/modal-seguimiento/modal-seguimiento.component';
+import { ModalHistorialComentariosComponent } from './cat-unidades/modal-historial-comentarios/modal-historial-comentarios.component';
+import { ModalHistorialPolizasComponent } from './cat-unidades/modal-historial-polizas/modal-historial-polizas.component';
+import { FormProveedorContactosComponent } from './proveedores/forms/form-proveedor-contactos/form-proveedor-contactos.component';
+import { FormDatosProveedorComponent } from './proveedores/forms/form-datos-proveedor/form-datos-proveedor.component';
+import { FormExpedienteProveedorComponent } from './proveedores/forms/form-expediente-proveedor/form-expediente-proveedor.component';
+import { ModalPreviewOrdenCompraComponent } from './compras/modal-preview-orden-compra/modal-preview-orden-compra.component';
+import { PdfPreviewComponent } from './compras/modal-preview-orden-compra/pdf-preview/pdf-preview.component';
+import { TableDetallesSolicitudSegComponent } from './compras/modal-seguimiento/table-detalles-solicitud-seg/table-detalles-solicitud-seg.component';
+import { ComprasKanbanComponent } from './compras/compras-kanban/compras-kanban.component';
+import { BtnFinalizarCompraComponent } from './compras/detalle-solicitudes-compras/btn-finalizar-compra/btn-finalizar-compra.component';
+import { FormDatosEntregaOcComponent } from './compras/detalle-solicitudes-compras/form-datos-entrega-oc/form-datos-entrega-oc.component';
+import { ReportesComprasComponent } from './reportes-compras/reportes-compras.component';
+import { ReporteGastoMensualComponent } from './reportes-compras/reporte-gasto-mensual/reporte-gasto-mensual.component';
+import { FormFiltroMensualComponent } from './reportes-compras/widgets/form-filtro-mensual/form-filtro-mensual.component';
+import { TableTotalConcentradoMensualComponent } from './reportes-compras/widgets/table-total-concentrado-mensual/table-total-concentrado-mensual.component';
+import { TableTotalDetalleComponent } from './reportes-compras/widgets/table-total-detalle/table-total-detalle.component';
+import { ModalDetalleComponent } from './reportes-compras/widgets/modal-detalle/modal-detalle.component';
+import { CardSpinerComponent } from './reportes-compras/widgets/card-spiner/card-spiner.component';
+import { ModalCambioProveedorComponent } from './compras/detalle-solicitudes-compras/btns-autorizacion/modal-cambio-proveedor/modal-cambio-proveedor.component';
+import { TableFormExistenciasComponent } from './compras/detalle-solicitudes-compras/panel-entregas/table-form-existencias/table-form-existencias.component';
+import { TableCardexMovimientosComponent } from './compras/detalle-solicitudes-compras/panel-entregas/table-cardex-movimientos/table-cardex-movimientos.component';
+import { FormDatosPagoComponent } from './proveedores/forms/form-datos-pago/form-datos-pago.component';
+import { ModalActualizarSolicitudComponent } from './compras/modal-actualizar-solicitud/modal-actualizar-solicitud.component';
+import { ModalActualizarSolicitudMacroComponent } from './compras-macro/modal-actualizar-solicitud-macro/modal-actualizar-solicitud-macro.component';
+import { TablaRecargaTokaComponent } from './cat-unidades/tabla-recarga-toka/tabla-recarga-toka.component';
+import { AlmacenComponent } from './almacen/almacen.component';
+import { PanelGenerarResguardoComponent } from './compras/detalle-solicitudes-compras/panel-generar-resguardo/panel-generar-resguardo.component';
+import { InventariadoComponent } from './compras/detalle-solicitudes-compras/panel-entregas/inventariado/inventariado.component';
+import { ConfirmacionComponent } from './compras/detalle-solicitudes-compras/panel-entregas/confirmacion/confirmacion.component';
+import { FormSalidaInventarioComponent } from './almacen/form-salida-inventario/form-salida-inventario.component';
+import { ModalSalidaInventarioComponent } from './almacen/modal-salida-inventario/modal-salida-inventario.component';
+import { CatTarjetasTokaComponent } from './cat-tarjetas-toka/cat-tarjetas-toka.component';
+import { ModalTarjetasTokaComponent } from './cat-tarjetas-toka/modal-tarjetas-toka/modal-tarjetas-toka.component';
+import { DispersionesComponent } from './dispersiones/dispersiones.component';
+import { TablaDispersionesComponent } from './dispersiones/tabla-dispersiones/tabla-dispersiones.component';
+import { CatTagsComponent } from './cat-tags/cat-tags.component';
+import { ModalTagsComponent } from './cat-tags/modal-tags/modal-tags.component';
 @NgModule({
   declarations: [
     ComprasComponent,
@@ -98,6 +136,45 @@ import { PanelEntregasComponent } from './compras/detalle-solicitudes-compras/pa
     FormDatosPolizaComponent,
     BtnAtorizarAPagoComponent,
     PanelEntregasComponent,
+    ModalSeguimientoComponent,
+    ModalHistorialComentariosComponent,
+    ModalHistorialPolizasComponent,
+    FormProveedorContactosComponent,
+    FormDatosProveedorComponent,
+    FormExpedienteProveedorComponent,
+    ModalPreviewOrdenCompraComponent,
+    PdfPreviewComponent,
+    TableDetallesSolicitudSegComponent,
+    ComprasKanbanComponent,
+    BtnFinalizarCompraComponent,
+    FormDatosEntregaOcComponent,
+    ReportesComprasComponent,
+    ReporteGastoMensualComponent,
+    FormFiltroMensualComponent,
+    TableTotalConcentradoMensualComponent,
+    TableTotalDetalleComponent,
+    ModalDetalleComponent,
+    CardSpinerComponent,
+    ModalCambioProveedorComponent,
+    TableFormExistenciasComponent,
+    TableCardexMovimientosComponent,
+    FormDatosPagoComponent,
+    ModalActualizarSolicitudComponent,
+    ModalActualizarSolicitudMacroComponent,
+    TablaRecargaTokaComponent,
+    AlmacenComponent,
+    PanelGenerarResguardoComponent,
+    InventariadoComponent,
+    ConfirmacionComponent,
+    FormSalidaInventarioComponent,
+    ModalSalidaInventarioComponent,
+    CatTarjetasTokaComponent,
+    ModalTarjetasTokaComponent,
+    DispersionesComponent,
+    TablaDispersionesComponent,
+    CatTagsComponent,
+    ModalTagsComponent,
+
   ],
   imports: [
     CommonModule,
@@ -109,7 +186,9 @@ import { PanelEntregasComponent } from './compras/detalle-solicitudes-compras/pa
     ReactiveFormsModule,
     TabsModule.forRoot(),
     NgxMaskDirective,
-    NgxMaskPipe
+    NgxMaskPipe,
+    ScrollingModule,
+
   ],
 
   providers: [

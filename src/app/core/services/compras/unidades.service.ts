@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { environment } from "src/environments/environment";
 import { Observable } from "rxjs";
+import { data } from 'jquery';
 
 const token = localStorage.getItem('token');
 
@@ -20,10 +21,10 @@ export class UnidadesService {
 
   /**
    * Recupera el catalogo de vehículos
-   * @returns colección vehículos 
+   * @returns colección vehículos
    */
-    public getVehiculos(intercompania: number): Observable<any> {
-      return this.http.get(environment.apiUrl + `compras/CatalogoUnidades/${intercompania}`, {headers});
+    public getVehiculos(intercompania: number, tipo:string = 'reparto' ): Observable<any> {
+      return this.http.get(environment.apiUrl + `compras/CatalogoUnidades/${intercompania}/${tipo}`, {headers});
     }
 
     public save(data: any): Observable<any> {
@@ -41,6 +42,40 @@ export class UnidadesService {
     public getGastosVehiculo(id: number): Observable<any> {
       return this.http.get(environment.apiUrl + `compras/recuperar-gastos-vehiculo/${id}`, {headers});
     }
+
+    public getComentarios(id: number): Observable<any> {
+      return this.http.get(environment.apiUrl + `compras/recuperar-comentarios-vehiculo/${id}`, {headers});
+    }
+
+    public getPolizas(id: number): Observable<any> {
+      return this.http.get(environment.apiUrl + `compras/recuperar-polizas-vehiculo/${id}`, {headers});
+    }
+
+    public autorizarVehiculo(data: any): Observable<any> {
+      return this.http.post(environment.apiUrl + `compras/autorizar-alta-vehiculo`, data, {headers});
+    }
+
+    public solicitarToka(data: any): Observable<any> {
+      return this.http.post(environment.apiUrl + `compras/CatalogoUnidades/SolicitaToka`, data, {headers});
+    }
+
+    public dispersarToka(data: any): Observable<any> {
+      return this.http.post(environment.apiUrl + `compras/CatalogoUnidades/DispersaToka`, data, {headers});
+    }
+
+    public getParqueConToka(id:any): Observable<any> {
+      return this.http.get(environment.apiUrl + `compras/CatalogoUnidades/ParqueVehicularToka/${id}`, {headers});
+    }
+
+    descargarGastosUnidad(idVehiculo: number) {
+    return this.http.get(
+      `${environment.apiUrl}compras/descargar-gastos-vehiculo/${idVehiculo}`,
+      {
+        responseType: 'blob',
+        // observe: 'response'
+      }
+    );
+  }
 
 
 

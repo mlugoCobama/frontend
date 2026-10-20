@@ -1,0 +1,160 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">{{tipo | titlecase}} Licencia de Software</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="cerrarModal()"
+    ></button>
+  </div>
+  <div class="modal-body">
+
+    <form [formGroup]="formSoftware">
+                <div class="modal-body">
+                    <div class="row g-2">
+                        <div class="col-sm-12 col-md-12">
+                            <div class="form-group">
+                            <label class="form-label requerido">Empresa *</label>
+                            <div>
+                                <select
+                                    class="form-select form-select-sm ng-dirty !ng-invalid"
+                                    formControlName="empresa"
+                                    [style]="{ width: '100%' }"
+                                >
+                                    <option value="">Selecciona una opción</option>
+                                    <option *ngFor="let item of empresas" value="{{item.id}}">{{item.nombre}}</option>
+                                </select>
+                            </div>
+                            <!-- <div class="text-danger">
+                                <div *ngIf="formSoftware.controls['cat_hardware_id'].errors?.required">
+                                {{ this.mensajeCampoRequerido }}
+                                </div>
+                            </div> -->
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Software</label>
+                            <select
+                                class="form-select form-select-sm"
+                                formControlName="cat_software_id">
+                                <option [ngValue]="null">
+                                    Seleccione...
+                                </option>
+                                <option  [value] = "item.id" *ngFor="let item of tipos">
+                                    {{item.tipo}}
+
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Versión</label>
+                            <input
+                                type="text"
+                                class="form-control form-control-sm"
+                                formControlName="version">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Licencia / key</label>
+                            <input
+                                type="text"
+                                class="form-control form-control-sm"
+                                formControlName="licencia">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Cuenta vinculada</label>
+                            <input
+                                type="text"
+                                class="form-control form-control-sm"
+                                formControlName="cuenta">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Contraseña</label>
+                            <div class="input-group">
+                                <input
+                                    [type]="mostrarPassword ? 'text' : 'password'"
+                                    class="form-control form-control-sm"
+                                    formControlName="pass_cuenta">
+                                <button
+                                    type="button"
+                                    class="btn btn-outline-secondary btn-sm"
+                                    (click)="mostrarPassword = !mostrarPassword"
+                                    title="{{ mostrarPassword ? 'Ocultar contraseña' : 'Mostrar contraseña' }}">
+                                    <i class="far" [ngClass]="mostrarPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Fecha de adquisición</label>
+                            <input
+                                type="date"
+                                class="form-control form-control-sm"
+                                formControlName="fecha_adquisicion">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Tipo</label>
+                            <select
+                                class="form-select form-select-sm"
+                                formControlName="tipo_licencia">
+                                <option [ngValue]="null">
+                                    Seleccione...
+                                </option>
+                                <option value="1">Suscripción</option>
+                                <option value="2">Perpetua</option>
+                                <option value="3">Por Volumen</option>
+                                <option value="4">Libre</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Estatus</label>
+                            <select
+                                class="form-select form-select-sm"
+                                formControlName="estatus">
+                                <option [ngValue]="null">
+                                    Seleccione...
+                                </option>
+                                <option value="1">Disponible</option>
+                                <option value="2">Asignado</option>
+                                <option value="3">Obsoleto</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">
+                                Observaciones
+                            </label>
+
+                            <textarea
+                                rows="3"
+                                class="form-control form-control-sm"
+                                formControlName="observaciones">
+                            </textarea>
+                        </div>
+
+                    </div>
+
+                </div>
+            </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      data-bs-dismiss="modal"
+      (click)="cerrarModal()"
+    >
+      Cerrar
+    </button>
+    <button type="button" class="btn btn-primary btn-sm" (click)="save()">
+      <i class="fas fa-save"></i>
+        Guardar
+    </button>
+  </div>

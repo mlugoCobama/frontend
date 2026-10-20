@@ -1,0 +1,22 @@
+<form [formGroup]="formulario">
+    <div class="row">
+  <!-- Nombre -->
+  <div class="col-md-6">
+    <label for="nombre" class="form-label">Nombre</label>
+    <input id="nombre" type="text" class="form-control form-control-sm" formControlName="nombre" placeholder="Nombre">
+    <div *ngIf="f['nombre'].touched && f['nombre'].invalid" class="text-danger">
+      <small>El nombre es obligatorio</small>
+    </div>
+  </div>
+
+  <!-- Porcentaje -->
+  <div class="col-md-6">
+    <label for="porcentaje" class="form-label">Porcentaje</label>
+    <input mask="0*" suffix=" %" id="porcentaje" type="text" class="form-control form-control-sm" formControlName="porcentaje" placeholder="Porcentaje"> 
+    <div *ngIf="f['porcentaje'].touched && f['porcentaje'].invalid" class="text-danger">
+      <small>La porcentaje es obligatorio</small>
+    </div>
+  </div>
+  </div>
+</form>
+

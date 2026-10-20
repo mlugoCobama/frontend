@@ -1,0 +1,103 @@
+<div class="card rounded-4 shadow-lg border m-0">
+  <div class="card-header rounded-4 bg-primary text-white text-center">
+    <strong> <i class="fas fa-clipboard-list  me-1"></i> Detalles de solicitud </strong>
+  </div>
+
+  <div class="card-body">
+<div class="d-flex justify-content-center" *ngIf="isLoad">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  <!-- Inicia tabla detalle solicitud + precios cotizaciones -->
+  <div class="table-responsive border rounded-4">
+    <table
+    class="table table-sm table-responsive m-0"
+    id="tableCompraInsumos"
+    *ngIf="!isLoad"
+  >
+    <thead class="table-light">
+      <tr>
+        <th>Cant.</th>
+        <th>U.Medida</th>
+        <th>Descripción</th>
+        <th>Observaciones</th>
+        <th *ngIf = "solicitudCompra.multiUnidad" >AT</th>
+        <!-- <th>-</th> -->
+        <th *ngFor="let prov of cotProv" class="text-center" >
+          <strong> {{ prov.proveedores_id.nombre }} </strong> <i [ngClass]="{'bg-success text-white': totals['precio_' + prov.proveedores_id.id] === totalMasBajo}"></i>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- datos de la tabla detalle -->
+      <tr *ngFor="let row of detalles; let i = index">
+        <td class="text-center"> {{row.cantidad}} </td>
+        <td>{{ row.unidadMedida.nombre }} ({{ row.unidadMedida.abreviatura }})</td>
+        <td>{{row.descripcion}}</td>
+        <td>{{ row.observaciones }}</td>
+        <td *ngIf = "solicitudCompra.multiUnidad" >
+            <span
+            class="small fw-semibold"
+             data-bs-toggle="tooltip" data-bs-placement="top" (click)="copiarTexto(row?.DetalleAutotanque?.DatosVehiculo?.eco || '')" [attr.title]="row?.DetalleAutotanque?.DatosVehiculo?.no_serie || ''">
+              {{ row?.DetalleAutotanque?.DatosVehiculo?.eco || '' }}
+              {{ row?.DetalleAutotanque?.DatosVehiculo?.marca || '' }}
+              {{ row?.DetalleAutotanque?.DatosVehiculo?.submarca || '' }}
+              ({{ row?.DetalleAutotanque?.DatosVehiculo?.modelo || '' }})-
+              {{ row?.DetalleAutotanque?.DatosVehiculo?.no_serie || '' }}
+            </span>
+        </td>
+        <!-- <td class="text-center">
+          <a
+            *ngIf="row.img_referencia; else elseBlock"
+            href="javascript:void(0);"
+            class="btn btn-info btn-sm"
+            (click)="verReferencia(row.img_referencia)"
+          >
+            <i class="fas fa-eye"></i
+          ></a>
+        </td> -->
+        <td *ngFor="let prov of cotProv; let rowIndex  = index">
+          <!-- <td *ngFor="let prov of row.detalles"> -->
+          <div *ngIf = "row.confirmado === 1" class="text-end">
+            <strong> {{ (prov.detallesMap[row.id] || 0) | currency }} </strong>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot *ngIf="mostrarTotal">
+      <tr >
+        <td [attr.colspan]="solicitudCompra.multiUnidad ? 5 : 4" class="text-end">
+          <Strong> SUB-TOTAL (sin iva) </Strong>
+        </td>
+        <td
+          *ngFor="let prov of cotProv"
+          [ngClass]="{'bg-success text-white': totals['precio_' + prov.proveedores_id.id] === totalMasBajo}"
+          class="text-end"
+        >
+          <strong>
+            {{ totals["precio_" + prov.proveedores_id.id] | currency }}
+          </strong>
+        </td>
+      </tr>
+      <tr >
+        <td [attr.colspan]="solicitudCompra.multiUnidad ? 5 : 4" class="text-end">
+          <Strong>TOTAL</Strong>
+        </td>
+        <td
+          *ngFor="let prov of cotProv"
+          [ngClass]="{'bg-primary text-white': totals['precio_' + prov.proveedores_id.id] === totalMasBajo}"
+          class="text-end"
+        >
+          <strong>
+            {{ totals["precio_" + prov.proveedores_id.id] * 1.16 | currency }}
+          </strong>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+  <!-- form para actualizar o quitar detalles -->
+
+  <ng-template #elseBlock ><i class="fas far fa-eye-slash"></i></ng-template>
+  </div>
+</div>

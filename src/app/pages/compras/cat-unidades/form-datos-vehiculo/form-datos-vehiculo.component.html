@@ -6,18 +6,18 @@
                 name="nro_economico" aria-label="nro_economico" placeholder="Numero economico" />
             <div *ngIf="datosVehiculoFormControl.nro_economico.touched || submitted">
                 <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.nro_economico.errors?.['required']">
-                    Debes de ingresar el numero economico de vehiculo.
+                    Debes de ingresar el numero económico de vehículo.
                 </div>
             </div>
         </div>
 
-        <div class="col-md-6">
-            <label for="nro_economico" class="form-label"> ID CRE: *</label>
-            <input type="text" class="form-control form-control-sm" formControlName="nro_economico" id="nro_economico"
-                name="nro_economico" aria-label="nro_economico" placeholder="# ID CRE" />
-            <div *ngIf="datosVehiculoFormControl.nro_economico.touched || submitted">
-                <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.nro_economico.errors?.['required']">
-                    Debes de ingresar el numero economico de vehiculo.
+        <div class="col-md-6" *ngIf = "tipo != 'utlitarios'">
+            <label for="id_cre" class="form-label"> ID CRE: </label>
+            <input type="text" class="form-control form-control-sm" formControlName="id_cre" id="id_cre"
+                name="id_cre" aria-label="id_cre" placeholder="# ID CRE" />
+            <div *ngIf="datosVehiculoFormControl.id_cre.touched || submitted">
+                <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.id_cre.errors?.['required']">
+                    Debes de ingresar el ID CRE de vehículo.
                 </div>
             </div>
         </div>
@@ -28,7 +28,7 @@
                 aria-label="marca" placeholder="Marca" />
             <div *ngIf="datosVehiculoFormControl.marca.touched || submitted">
                 <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.marca.errors?.['required']">
-                    Debes de ingresar una marca de vehiculo.
+                    Debes de ingresar una marca de vehículo.
                 </div>
             </div>
         </div>
@@ -39,7 +39,7 @@
                 id="submarca" name="submarca" aria-label="submarca" />
             <div *ngIf="datosVehiculoFormControl.submarca.touched || submitted">
                 <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.submarca.errors?.['required']">
-                    Debes de ingresar una submarca de vehiculo.
+                    Debes de ingresar una submarca de vehículo.
                 </div>
             </div>
         </div>
@@ -50,18 +50,18 @@
                 name="modelo" aria-label="modelo" placeholder="Modelo" />
             <div *ngIf="datosVehiculoFormControl.modelo.touched || submitted">
                 <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.modelo.errors?.['required']">
-                    Debes de ingresar un modelo de vehiculo.
+                    Debes de ingresar un modelo de vehículo.
                 </div>
                 <div class="text-danger form-text"
                     *ngIf="datosVehiculoFormControl.modelo.errors?.['min'] || datosVehiculoFormControl.modelo.errors?.['max']">
-                    Debes de ingresar un modelo de vehiculo valido.
+                    Debes de ingresar un modelo de vehículo valido.
                 </div>
             </div>
         </div>
 
         <div class="col-md-6">
             <label for="no_serie" class="form-label">No. Serie: *</label>
-            <input type="text" class="form-control form-control-sm" mask="AAA AAAAA A A A AAAAAA"
+            <input type="text" class="form-control form-control-sm"
                 formControlName="no_serie" id="no_serie" name="no_serie" aria-label="no_serie"
                 placeholder="Numero de serie" />
             <div *ngIf="datosVehiculoFormControl.no_serie.touched || submitted">
@@ -69,7 +69,10 @@
                     Debes de ingresar un numero de serie.
                 </div>
                 <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.no_serie.errors?.['minlength']">
-                    Debes de ingresar un numero de serie valido (17 caracteres).
+                    Debes de ingresar un numero de serie valido (5 caracteres min).
+                </div>
+                <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.no_serie.errors?.['maxlength']">
+                    Debes de ingresar un numero de serie valido (18 caracteres min).
                 </div>
             </div>
         </div>
@@ -85,15 +88,14 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-6" *ngIf = "tipo != 'utlitarios'">
             <label for="tipo_vehiculo" class="form-label">Uso Vehículo: *</label>
             <select class="form-select form-select-sm" formControlName="tipo_vehiculo" id="tipo_vehiculo"
-                name="tipo_vehiculo" aria-label="tipo_vehiculo">
+                name="tipo_vehiculo" aria-label="tipo_vehiculo"
+                (change)="selectChange()"
+                >
                 <option value="">Selecciona uno</option>
-                <option value="reparto">Reparto</option>
-                <option value="utilitario">Utilitario</option>
-                <option value="auto tanque">Auto Tanque</option>
-                <option value="portable">Portable</option>
+                <option *ngFor="let item of usosVehiculos" [value]="item.id"> {{item.descripcion}}</option>
             </select>
             <div *ngIf="datosVehiculoFormControl.tipo_vehiculo.touched || submitted">
                 <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.tipo_vehiculo.errors?.['required']">
@@ -105,12 +107,11 @@
         <div class="col-md-6">
             <label for="tipo_combustible" class="form-label">Tipo combustible: *</label>
             <select class="form-select form-select-sm" formControlName="tipo_combustible" id="tipo_combustible"
-                name="tipo_combustible" aria-label="tipo_combustible">
+                name="tipo_combustible" aria-label="tipo_combustible"
+                (change)="selectChange()"
+                >
                 <option value="">Selecciona uno</option>
-                <option value="gasolina">Gasolina</option>
-                <option value="diesel">Diésel</option>
-                <option value="gas_natural">Gas Naural</option>
-                <option value="gas_lp">Gas LP</option>
+                <option  *ngFor="let item of tiposCombustible" [value]="item.id"> {{item.descripcion}}</option>
             </select>
             <div *ngIf="datosVehiculoFormControl.tipo_combustible.touched || submitted">
                 <div class="text-danger form-text"
@@ -119,17 +120,14 @@
                 </div>
             </div>
         </div>
+        
 
         <div class="col-md-6">
             <label for="estatus" class="form-label">Estatus: *</label>
             <select class="form-select form-select-sm" formControlName="estatus" id="estatus" name="estatus"
                 aria-label="estatus">
                 <option value="">Selecciona uno</option>
-                <option value="1">Activa</option>
-                <option value="0">Fuera de circulación</option>
-                <option value="2">En Taller</option>
-                <option value="3">Vendida</option>
-                <option value="4">No identificada</option>
+                <option *ngFor=" let item of etatusVehiculo" [value]="item.numero"> {{item.descripcion}}</option>
             </select>
             <div *ngIf="datosVehiculoFormControl.estatus.touched || submitted">
                 <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.estatus.errors?.['required']">
@@ -137,6 +135,116 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-6">
+            <label for="tipo_combustible" class="form-label">Capacidad Tanque de Combustible:*</label>
+            <input placeholder="Capacidad Tanque de Combustible" type="text" class="form-control form-control-sm" formControlName="tanque_combustible"
+                id="tanque_combustible" name="tanque_combustible" aria-label="tanque_combustible" 
+                mask="separator.2" thousandSeparator="," decimalMarker="."  suffix=" L"
+                />
+            <div *ngIf="datosVehiculoFormControl.tanque_combustible.touched || submitted">
+                <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.tanque_combustible.errors?.['required']">
+                    Debes de ingresar la capacidad del tanque de combustible del vehículo.
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <label for="rendimiento" class="form-label">Rend. X Litro: *</label>
+            <input placeholder="Rendimiento por litro" type="text" class="form-control form-control-sm" formControlName="rendimiento"
+                id="rendimiento" name="rendimiento" aria-label="rendimiento"
+                mask="separator.2" thousandSeparator="," decimalMarker="."  suffix=" km/L" />
+            <div *ngIf="datosVehiculoFormControl.rendimiento.touched || submitted">
+                <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.rendimiento.errors?.['required']">
+                    Debes de ingresar el rendimiento por litro de combustible.
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6"  *ngIf = "tipo != 'utlitarios'">
+            <label for="categoria" class="form-label">Categoría: *</label>
+            <select class="form-select form-select-sm" formControlName="categoria" id="categoria" name="categoria"
+                aria-label="categoria">
+                <option value="">Selecciona uno</option>
+                <option *ngFor=" let item of categorias" [value]="item.id">{{item.abreviatura}} - {{item.descripcion}}</option>
+            </select>
+            <div *ngIf="datosVehiculoFormControl.categoria.touched || submitted">
+                <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.categoria.errors?.['required']">
+                    Debes de seleccionar una categoría
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <label for="gps" class="form-label">GPS: *</label>
+            <select class="form-select form-select-sm" formControlName="gps" id="gps" name="gps"
+                aria-label="gps">
+                <option value="">Selecciona uno</option>
+                <option *ngFor=" let item of categoriasGPS" [value]="item.id">{{item.descripcion}}</option>
+            </select>
+            <div *ngIf="datosVehiculoFormControl.gps.touched || submitted">
+                <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.gps.errors?.['required']">
+                    Debes de seleccionar un estado de GPS
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <label for="num_tarjeta_toka" class="form-label">Num. Tarjeta Toka: </label>
+            <!-- <input type="text" class="form-control form-control-sm" formControlName="num_tarjeta_toka" mask="0000-0000-0000-0000" id="num_tarjeta_toka" name="num_tarjeta_toka"
+                aria-label="num_tarjeta_toka" placeholder="Numero de tarjeta Toka (0000-0000-0000-0000)" /> -->
+            <select class="form-select form-select-sm" formControlName="num_tarjeta_toka" id="num_tarjeta_toka" name="num_tarjeta_toka"
+                aria-label="num_tarjeta_toka">
+                <option value="" disabled selected>Selecciona uno</option>
+                <option *ngFor=" let item of tarjetasDisponibles" [disabled]="item.estatus == 1" [value]="item.id">{{item.tarjeta}}</option>
+            </select>
+            <div *ngIf="datosVehiculoFormControl.num_tarjeta_toka.touched || submitted">
+                <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.num_tarjeta_toka.errors?.['required']">
+                    Debes de ingresar un numero de tarjeta Toka.
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <label for="limite_toka" class="form-label">Limite Autorizado Toka: </label>
+            <input type="text" class="form-control form-control-sm" formControlName="limite_toka" id="limite_toka" name="limite_toka"
+                aria-label="limite_toka" placeholder="Limite Autorizado Toka" 
+                mask="separator.2" thousandSeparator="," decimalMarker="."  prefix="$ "/>
+            <div *ngIf="datosVehiculoFormControl.limite_toka.touched || submitted">
+                <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.limite_toka.errors?.['required']">
+                    Debes de ingresar un limite de tarjeta Toka.
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <label for="num_tag" class="form-label">Num. TAG: </label>
+            <!-- <input type="text" class="form-control form-control-sm" formControlName="num_tag" id="num_tag" name="num_tag"
+                aria-label="num_tag" placeholder="Numero de TAG" /> -->
+            <select class="form-select form-select-sm" formControlName="num_tag" id="num_tag" name="num_tag"
+                aria-label="num_tag">
+                <option value="" disabled selected>Selecciona uno</option>
+                <option *ngFor=" let item of tagsDisponibles" [disabled]="item.estatus == 1" [value]="item.id">{{ (item.proveedor ?? '') +' - '+ item.num_tag }}</option>
+            </select>
+            <div *ngIf="datosVehiculoFormControl.num_tag.touched || submitted">
+                <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.num_tag.errors?.['required']">
+                    Debes de ingresar un numero de TAG de vehiculo.
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <label for="limite" class="form-label">Limite Autorizado Tag: </label>
+            <input type="text" class="form-control form-control-sm" formControlName="limite" id="limite" name="limite"
+                aria-label="limite" placeholder="Limite Autorizado"
+                mask="separator.2" thousandSeparator="," decimalMarker="."  prefix="$ " />
+            <div *ngIf="datosVehiculoFormControl.limite.touched || submitted">
+                <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.limite.errors?.['required']">
+                    Debes de ingresar un limite de vehiculo.
+                </div>
+            </div>
+        </div>
+
+
+
         <div class="col-md-12">
             <label for="observacion" class="form-label">Agregar observaciones: </label>
             <textarea class="form-control" 
@@ -146,6 +254,11 @@
             aria-label="observacion"
             rows="3"
             ></textarea>
+             <div *ngIf="datosVehiculoFormControl.observacion.touched || submitted">
+                <div class="text-danger form-text" *ngIf="datosVehiculoFormControl.observacion.errors?.['required']">
+                    Debes de agregar una observación
+                </div>
+            </div>
         </div>
     </div>
 </form>

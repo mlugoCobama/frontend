@@ -1,0 +1,160 @@
+
+<div class="card shadow-sm rounded-4">
+<div class="card-header bg-secondary-subtle d-flex justify-content-between align-items-center rounded-4">
+        <span class="fw-bold">NETWORK</span>
+        <div class="d-flex gap-2">
+            <!-- Botón toggle -->
+            <button
+                class="btn btn-dark btn-sm"
+                type="button"
+                (click)="toggleFormulario()">
+                <i class="fas" [ngClass]="mostrarFormulario ? 'fa-eye-slash' : 'fa-plus'"></i>
+                {{ mostrarFormulario ? 'Ocultar formulario' : 'Nueva Asignación' }}
+            </button>
+        </div>
+
+    </div>
+<div class="card-body">
+    <form *ngIf="mostrarFormulario" [formGroup]="form">
+        <div class="row">
+            <!-- Select Tipo -->
+            <div class="col-sm-3">
+                <label for="tipo" class="form-label">Tipo</label>
+                <select id="tipo" class="form-select form-select-sm" formControlName="tipo">
+                    <option [ngValue]="null">Seleccione un tipo</option>
+                    <option *ngFor="let tipo of catRecursosRed" [value]="tipo.id">
+                        {{ tipo.nombre }}
+                    </option>
+                </select>
+                <div *ngIf="f.tipo.touched || submitted">
+                    <div
+                        class="text-danger form-text"
+                        *ngIf="f.tipo.errors?.['required']"
+                    >
+                        Debe seleccionar un tipo.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-7">
+                <label for="valor" class="form-label">Valor</label>
+                <input id="valor" class=" form-control form-control-sm" formControlName="valor"/>
+                <div *ngIf="f.valor.touched || submitted">
+                    <div
+                        class="text-danger form-text"
+                        *ngIf="f.valor.errors?.['required']"
+                    >
+                        Debes ingresar el valor del tipo seleccionado
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <div class="col-sm-2">
+                <label for="restrictivo" class="form-label">Nivel R.</label>
+                <input id="restrictivo" class=" form-control form-control-sm" formControlName="restrictivo"/>
+            </div>
+
+            <div class="col-sm-5">
+                <label for="hardware" class="form-label">Dispositivo</label>
+                <select id="hardware" class="form-select form-select-sm" formControlName="hardware">
+                    <option selected [ngValue]="null">Seleccione un tipo</option>
+                    <option [ngValue]="null">Sin Especificar</option>
+                    <option *ngFor="let item of data" [value]="item.hardware.id">
+                        {{ item.hardware.tipo_hardware.tipo }} - {{ item.hardware.marca}} - {{ item.hardware.modelo}}
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-sm-5">
+                <label for="observaciones" class="form-label">Observaciones</label>
+                <textarea id="observaciones" class=" form-control form-control-sm" formControlName="observaciones" rows="1">  </textarea>
+            </div>
+
+            <div class="col-sm-2 mt-4 text-end">
+                <button type="button" class="btn btn-primary btn-sm" (click)="asignar()">
+                    <ng-container *ngIf="!loading; else spinner">
+                        <i class="fas fa-check"></i> Asignar
+                    </ng-container>
+                    <ng-template #spinner>
+                        <i class="fas fa-spinner fa-spin"></i> Asignando...
+                    </ng-template>
+                </button>
+            </div>
+        </div>
+
+
+
+    </form>
+
+    <div class="d-flex justify-content-center" *ngIf="isLoad">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+    </div>
+    <ng-container *ngIf="!isLoad">
+        <div class="table-responsive rounded-4 border mt-2">
+            <table class="table table-sm mb-0">
+                <thead>
+                    <tr>
+                        <th>TIPO</th>
+                        <th>VALOR</th>
+                        <th>N.R</th>
+                        <th>EST.</th>
+                        <th>ASIGNADO</th>
+                        <th>REMOVIDO</th>
+                        <th>-</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngIf="datos.length == 0">
+                        <td colspan="9" class="text-muted text-center p-3 fw-bold"> Aun no tiene elementos asignado</td>
+                    </tr>
+                    <ng-container *ngIf="datos.length > 0">
+                        <tr *ngFor="let detalle of datos">
+                            <!-- <td>
+                                <input type="checkbox" class="form-check-input"
+                                    [checked]="idsSeleccionados.includes(detalle.id)"
+                                    (change)="toggleSeleccion(detalle.id, $event)" />
+                            </td> -->
+
+                            <td>
+                                <span class="badge bg-primary text-white p-1 fw-bold">
+                                    {{detalle?.recurso_red?.nombre}}
+                                </span>
+                            </td>
+                            <td>{{detalle?.valor}}</td>
+                            <td>
+                                {{detalle?.nivel_restrictivo ?? 'N/E'}}
+                            </td>
+                            <td>
+                                <span [attr.title]="!detalle?.fecha_retiro ? 'Vigente' : 'Devuelto'">
+                                    <i class="fas fa-circle"
+                                        [ngClass]="{'text-success': !detalle?.fecha_retiro, 'text-danger': detalle?.fecha_retiro}">
+                                    </i>
+                                </span>
+                            </td>
+                            <td>{{(detalle?.fecha_asignacion | date:'dd/MM/yyyy') || '-'}}</td>
+                            <td>{{(detalle?.fecha_retiro | date:'dd/MM/yyyy') || '-'}}</td>
+                            <td>
+                                <button *ngIf="!detalle.fecha_retiro" class="btn btn-danger btn-sm" (click)="remover(detalle?.id)">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+    </ng-container>
+
+    <span class="text-muted"> {{ datos.length }}  Asignados</span>
+</div>
+</div>
+
+
+
+
+

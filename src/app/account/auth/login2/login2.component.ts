@@ -51,7 +51,7 @@ export class Login2Component implements OnInit {
    */
   onSubmit() {
     this.submitted = true;
-
+    
     const email = this.f['email'].value; // Get the username from the form
     const password = this.f['password'].value; // Get the password from the form
 
@@ -59,4 +59,10 @@ export class Login2Component implements OnInit {
     this.store.dispatch(login({ email: email, password: password }));
   }
 
+  loading = false;
+  showPassword = false;
+
+  togglePassword(): void {
+    this.showPassword = !this.showPassword;
+  }
 }

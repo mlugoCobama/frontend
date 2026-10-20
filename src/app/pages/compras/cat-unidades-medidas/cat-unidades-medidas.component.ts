@@ -173,7 +173,7 @@ export class CatUnidadesMedidasComponent implements OnInit{
         this.catUnidadesMedidasService.destroy(this.unidad.id).subscribe(
           (response) => {
             if (response.status === "success") {
-              console.log(response.message);
+              // console.log(response.message);
               this.getAll();
               Swal.fire({
                 title: "Borrado!",

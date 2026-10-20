@@ -1,0 +1,28 @@
+<div class="modal-header">
+  <h5 class="modal-title">
+    {{ data ? 'Editar Servicio' : 'Agregar Servicio' }}
+  </h5>
+  <button type="button" class="btn-close" (click)="cerrarModal()"></button>
+</div>
+
+<div class="modal-body">
+  <app-form-servicio-empresa #formAsignacion ></app-form-servicio-empresa>
+
+</div>
+
+<div class="modal-footer">
+
+   <button class="btn btn-secondary btn-sm" (click)="cerrarModal()">
+    Cancelar
+  </button>
+
+  <button class="btn btn-warning btn-sm"
+          [disabled]="loading"
+          (click)="guardar()">
+
+    <span *ngIf="!loading">Guardar</span>
+    <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
+
+  </button>
+
+</div>

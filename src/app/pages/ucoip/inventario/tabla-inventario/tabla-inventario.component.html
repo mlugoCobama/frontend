@@ -1,0 +1,89 @@
+<div class="row">
+
+  <div class="col-md-4  mb-3">
+    <select class="form-select form-select-sm"
+            [(ngModel)]="filtros.empresa"
+            (change)="aplicarFiltros()">
+      <option value="">Todas las empresas</option>
+      <option *ngFor="let empresa of empresas" [value]="empresa">
+        {{ empresa }}
+      </option>
+    </select>
+  </div>
+
+  <div class="col-md-4  mb-3">
+    <select class="form-select form-select-sm"
+            [(ngModel)]="filtros.tipo"
+            (change)="aplicarFiltros()">
+      <option value="">Todos los tipos</option>
+      <option *ngFor="let tipo of tipos" [value]="tipo">
+        {{ tipo }}
+      </option>
+    </select>
+  </div>
+
+  <div class="col-md-4  mb-3">
+    <select class="form-select form-select-sm"
+            [(ngModel)]="filtros.estado"
+            (change)="aplicarFiltros()">
+      <option value="">Todos los estados</option>
+      <option value="Disponible">Disponible</option>
+      <option value="Asignado">Asignado</option>
+      <option value="Obsoleto">Obsoleto</option>
+    </select>
+  </div>
+
+</div>
+
+<div class="table-responsive ">
+              <table  datatable [dtOptions]="dtOptions" class="table table-sm border" *ngIf="!isLoad">
+                <thead >
+                  <tr class="text-center">
+                    <th scope="col" class="text-center">Tipo</th>
+                    <th scope="col" class="text-center">Estado</th>
+                    <th scope="col">Marca</th>
+                    <th scope="col">Modelo</th>
+                    <th scope="col">Núm. de Serie</th>
+                    <th scope="col" class="text-center">Estado Físico</th>
+                    <th scope="col" class="text-center">Empresa</th>
+                    <th scope="col" class="text-center">Usuario Actual</th>
+                    <th scope="col" class="text-center">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of dataInventario"
+                    [ngClass]="{'table-primary': selectedId === item.id}"
+                    (click)="selectRow(item)"
+                   (dblclick)="openEdit(item)">
+                   <td class="text-center"><span class="badge text-bg-dark bg-gradient  fw-bold font-size-11 position-relative">{{ item.tipo.tipo }}
+                      <span  class="position-absolute top-0 start-100 translate-middle p-1   rounded-circle"  
+                      [ngClass] = "'bg-' + EstadoRecursoConfig[item.estado].color">
+                        <span class="visually-hidden">New alerts</span>
+                      </span>
+                    </span></td>
+                    <td class="text-center "> 
+                     <span [ngClass]="'fw-bold badge text-bg-' + EstadoRecursoConfig[item.estado].color + ' font-size-11'">
+                      {{ EstadoRecursoConfig[item.estado].label | uppercase }}
+                     </span>
+                     
+                    </td>
+                    <td >{{ item.marca }}</td>
+                    <td class="text-nowrap">{{ item.modelo }}</td>
+                    <td>{{ item.no_serie }}</td>
+                    <td class="text-center "> 
+                      <span [ngClass]="'fw-bold badge bg-' + item.color_est_fisico + '-subtle text-'+ item.color_est_fisico +' font-size-11 rounded-pill'">
+                        {{ item.lbl_est_fisico | uppercase }}
+                      </span>
+                    </td>
+                    <td class="text-nowrap">{{ item.empresa }}</td>
+                    <td class="fw-bold text-nowrap">{{ item.usuario_actual }}</td>
+                    
+                    <td class="text-center">
+                      <button (click)="showModalMantenimiento(item)" *ngIf="item.tipo.mantenible == 1" title="Documentar mantenimiento" class="btn btn-sm btn-primary rounded-circle">
+                        <i class="fas fa-tools"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>

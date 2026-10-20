@@ -9,6 +9,7 @@ import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-com
 import { CatUnidadesMedidasService } from 'src/app/core/services/compras/unidadesMedidas/cat-unidades-medidas.service';
 import { CotizacionesService } from 'src/app/core/services/compras/cotizaciones/cotizaciones.service';
 import Swal from 'sweetalert2';
+import { PermisosService } from 'src/app/core/services/permisos.service';
 
 @Component({
   selector: 'app-tabla-detalles-solicitud',
@@ -25,11 +26,11 @@ export class TablaDetallesSolicitudComponent implements OnInit {
   public cotizacion: any;
 
   public enEsts = EstadoSolicitud;
-  
+
   public mostrarTotal = false;
-  public formDisabled: boolean = false; 
-  public isLoad: boolean = true; 
-  public sending: boolean = false; 
+  public formDisabled: boolean = false;
+  public isLoad: boolean = true;
+  public sending: boolean = false;
   public modoLectura:boolean = false;
 
   @Output() openModal = new EventEmitter<string>();
@@ -43,7 +44,8 @@ export class TablaDetallesSolicitudComponent implements OnInit {
     private detallesService: DetallesSolicitudService,
     private alertasService: SwalComprsServiceService,
     private catUnidadesMedidasService: CatUnidadesMedidasService,
-    private cotizacionesService: CotizacionesService
+    private cotizacionesService: CotizacionesService,
+    public permisosService: PermisosService
 
   ) {}
 
@@ -52,19 +54,19 @@ export class TablaDetallesSolicitudComponent implements OnInit {
     this.getUnidades();
     this.buildForm();
   }
-   
+
   /**
    * Recupera los detalles de la solicitud
    */
   public getDetalles() {
     this.isLoad = true;
-    this.compras.getOne(this.solicitudCompra.id).subscribe(
+    this.compras.getOne(this.solicitudCompra?.id).subscribe(
       (response) => {
         if (response) {
           this.datos = response.data;
           this.cargarDatos();
           this.toggleModoLectura();
-          this.getProveedoresCotizacion()
+          this.getProveedoresCotizacion();
           this.isLoad = false;
         } else {
           this.alertasService.mostrarAlerta("Error!",response.message, "error", "danger" );
@@ -104,15 +106,17 @@ export class TablaDetallesSolicitudComponent implements OnInit {
       detalles: this.formBuilder.array([])
     });
   }
+
   /** Atajo para acceder al FormArray */
   get detalles(): FormArray {
     return this.formulario.get('detalles') as FormArray;
   }
 
-  /** 
-   * Crea un FormGroup a partir de un objeto (o vacío si no se pasa algun valor) 
+  /**
+   * Crea un FormGroup a partir de un objeto (o vacío si no se pasa algun valor)
   */
   private crearDetalle(dato?: any): FormGroup {
+    const unidad = `${dato?.DetalleAutotanque?.DatosVehiculo?.eco} ${dato?.DetalleAutotanque?.DatosVehiculo?.marca } ${dato?.DetalleAutotanque?.DatosVehiculo?.submarca } (${dato?.DetalleAutotanque?.DatosVehiculo?.modelo }) - ${dato?.DetalleAutotanque?.DatosVehiculo?.no_serie}`
     return this.formBuilder.group({
       id: [dato?.id ?? null],
       cantidad: [dato?.cantidad  ?? 1,Validators.required],
@@ -121,9 +125,10 @@ export class TablaDetallesSolicitudComponent implements OnInit {
       unidadMedida: [dato?.unidadMedida?.id ?? null, Validators.required],
       img_referencia: [dato?.img_referencia ?? null],
       solicitudes_compra_id: [dato?.solicitudes_compra_id ?? null],
-      autotanque: [dato?.DetalleAutotanque?.DatosVehiculo?.eco ?? null],
+      autotanque: [ unidad  ?? ''],
       no_serie: [dato?.DetalleAutotanque?.DatosVehiculo?.no_serie ?? null],
-      confirmado: [dato?.confirmado ?? 0]
+      confirmado: [dato?.confirmado ?? 0],
+      recuperable: [dato?.recuperable ?? 0]
     });
   }
 
@@ -146,7 +151,7 @@ export class TablaDetallesSolicitudComponent implements OnInit {
 
   /**
    * Formatea de los datos del form array y genera un array de datos
-   * Normalizamos confirmado a 1/0 antes de enviar al backend 
+   * Normalizamos confirmado a 1/0 antes de enviar al backend
    * @returns array datos formateados para la bd
    */
   getValuesform(): void {
@@ -218,7 +223,7 @@ export class TablaDetallesSolicitudComponent implements OnInit {
       }
     this.sending =  false;
     }
-  
+
     validarTamaño(datos) {
     const contador = datos.reduce((acc, detalle) => acc + detalle.confirmado, 0);
     return contador !== 0;
@@ -251,7 +256,7 @@ toggleModoLectura() {
    * Recupera proveedores-cotizacion
    */
   public getProveedoresCotizacion() {
-    this.cotizacionesService.getOne(this.solicitudCompra.id).subscribe(
+    this.cotizacionesService.getOne(this.solicitudCompra?.id).subscribe(
       (response) => {
         if (response) {
           this.cotProv = response.data;
@@ -277,6 +282,17 @@ toggleModoLectura() {
       });
   }
 
+  sumarDetalle(dataSource) {
+  return dataSource.reduce((acumulador, objeto) => {
+    return acumulador + (((objeto['importe_unitario'] ?? 0) * (objeto['detalle_solicitud']['cantidad'] ?? 0)) || 0);
+    }, 0);
+  }
+
+
+  tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
+  }
 
 
 }

@@ -64,7 +64,7 @@ export class ModalModulosComponent implements OnInit {
         descripcion: this.formModalModulo.controls['descripcion'].value,
       };
   
-      console.log(datos);
+      // console.log(datos);
       
 
       this.modulosService.crearModulo(datos).subscribe((resp) => {

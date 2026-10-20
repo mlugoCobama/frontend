@@ -1,34 +1,41 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-xl-12">
-      <div class="card">
+      <div class="card rounded-4 shadow-sm m-0">
         <div class="card-body border-bottom">
-          <div class="d-flex align-items-center">
+          <div class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center">
             <h5 class="mb-0 card-title flex-grow-1">Solicitudes de Compra</h5>
-            <div class="flex-shrink-0 d-flex gap-1">
+            <div class="flex-shrink-0 d-flex gap-1 mt-2 mt-lg-0">
 
-              <app-botnes-admin
-              [status] = "status"
-              [mostrarBoton] = "mostrarBoton"
-              [solicitudSelecionada] = "solicitudSelecionada"
-              (btnGenerarOC)="btnGenerarOC()"
-              (mostrarCotizacion)="mostrarCotizacion()"
-              (cancelarSolicitud)="cancelarSolicitud()"
-              ></app-botnes-admin>
+              <button *ngIf="!solicitudSelecionada" class="btn btn-sm btn-outline-primary" type="button"
+                (click)="alternarVista()">
+                <i class="fas" [ngClass]="vistaKanban ? 'fa-table' : 'fa-th-large'"></i>
+                {{ vistaKanban ? 'Ver como tabla' : 'Ver como kanban' }}
+              </button>
 
-              <app-bontones-generales
-              [status] = "status"
-              [mostrarBoton] = "mostrarBoton"
-              [solicitudSelecionada] = "solicitudSelecionada"
-              (btnDescargarOC)="btnDescargarOC()"
-              (regresar)="regresar()"
-              (openModalNuevo)="openModalNuevo()"
-              ></app-bontones-generales>
-              
+              <app-botnes-admin [status]="status" [mostrarBoton]="mostrarBoton"
+                [solicitudSelecionada]="solicitudSelecionada" [tipoCompras]="tipoCompras"
+                [tiposPermitidos]="['1','3']"
+                (devolverRevision)="enviarRevisionSolicitud()"
+                (btnGenerarOC)="btnGenerarOC()" 
+                (mostrarCotizacion)="mostrarCotizacion()"
+                (volverCotizar)="volverAcotizar()"
+                (cancelarSolicitud)="cancelarSolicitud()"
+                [isLoadingGenerarOrden] = "isLoadingGenerarOrden"
+                [isLoadingVolverACotizar] = "isLoadingVolverACotizar"
+                [isLoadingCancelar] = "isLoadingCancelar"
+                [isLoadingDevolverRevision] = "isLoadingDevolverRevision"
+                ></app-botnes-admin>
+
+              <app-bontones-generales [status]="status" [mostrarBoton]="mostrarBoton"
+                [showBtnAdd] = "tienePermiso('show btn compras generales')"
+                [solicitudSelecionada]="solicitudSelecionada" (btnDescargarOC)="btnDescargarOC()"
+                (regresar)="regresar()" (openModalNuevo)="openModalNuevo()"></app-bontones-generales>
             </div>
           </div>
         </div>
-
+      </div>
+      <div [hidden] ="solicitudSelecionada" class="card rounded-4 shadow-lg mt-3">
         <div *ngIf="!solicitudSelecionada" class="card-body border-bottom">
           <div class="d-flex justify-content-center" *ngIf="isLoad">
             <div class="spinner-border" role="status">
@@ -37,31 +44,30 @@
           </div>
           <div>
             <div *ngIf="!isLoad" class="row" [ngClass]="'justify-content-between'">
-          
+
               <div class="col-3">
-                <label *ngIf="usuarioSolicita?.multiselect === true" for="empresa" class="form-label form-label-sm">Empresa: *</label>
-                <select *ngIf="usuarioSolicita?.multiselect === true && !modifica" class="form-select form-select-sm"
+                <label *ngIf="tienePermiso('view select emp users compras')" for="empresa"
+                  class="form-label form-label-sm">Empresa: *</label>
+                <select *ngIf="tienePermiso('view select emp simple compras')" class="form-select form-select-sm"
                   aria-label="Default select example" id="empresa" name="empresa" aria-label="empresa"
                   (change)="getAll($event.target.value)">
                   <option value="" selected disabled>Selecciona uno</option>
                   <option *ngIf="isLoading" value="" [disabled]="isLoading">
                     Cargando opciones espera...
                   </option>
-                  <option *ngFor="let item of empresas" [value]="item.intercompania">
+                  <option *ngFor="let item of rawEmpresas" [value]="item.intercompania" [hidden]="!tienePermiso(item.permiso)">
                     {{ item.name.toUpperCase() }}
                   </option>
                 </select>
-              
-                <select *ngIf="usuarioSolicita?.multiselect === true && modifica" class="form-select form-select-sm"
+
+                <select *ngIf="tienePermiso('view select emp quick compras')" class="form-select form-select-sm"
                   aria-label="Default select example" id="empresa" name="empresa" aria-label="empresa"
-                  [(ngModel)]="busqueda2"
-                  (change)="filtrarTabla2()"
-                  >
+                  [(ngModel)]="busqueda2" (change)="filtrarTabla2()">
                   <option value="" selected>Todas</option>
                   <option *ngIf="isLoading" value="" [disabled]="isLoading">
                     Cargando opciones espera...
                   </option>
-                  <option *ngFor="let item of rawEmpresas" [value]="item.name">
+                  <option *ngFor="let item of rawEmpresas" [value]="item.name" [hidden]="!tienePermiso(item.permiso)">
                     {{ item.name.toUpperCase() }}
                   </option>
                 </select>
@@ -71,14 +77,17 @@
                   (input)="filtrarTabla()" />
               </div>
             </div>
-            <div class="table-responsive">
-              <div class="tab-page-content mt-3 table-responsive" style="overflow-y: auto; height: 20rem">
+            <div *ngIf="!vistaKanban" class="table-responsive">
+              <div class="tab-page-content mt-3 table-responsive rounded-4" style="overflow-y: auto; height: 20rem">
                 <table *ngIf="!isLoad && datosFiltrados.length > 0; else elseBlock"
                   class="table table-striped table-hover table-sm table-bordered">
-                  <thead class="table-light" [ngClass]="modalAbierto === false ? 'sticky-top' : '' ">
+                  <thead class="table-light thead-sticky">
                     <tr>
                       <th (click)="ordenarPor('folio')" style="cursor: pointer">
                         Folio <i [ngClass]="getIconoOrden('folio')"></i>
+                      </th>
+                      <th (click)="ordenarPor('folio_oc')" style="cursor: pointer">
+                        Folio OC <i [ngClass]="getIconoOrden('folio_oc')"></i>
                       </th>
                       <th (click)="ordenarPor('empresa')" style="cursor: pointer">
                         Empresa <i [ngClass]="getIconoOrden('empresa')"></i>
@@ -95,6 +104,14 @@
                         Fecha Solicitud
                         <i [ngClass]="getIconoOrden('fecha')"></i>
                       </th>
+                      <th (click)="ordenarPor('proveedor')" style="cursor: pointer">
+                        Proveedor
+                        <i [ngClass]="getIconoOrden('proveedor')"></i>
+                      </th>
+                      <th (click)="ordenarPor('total_orden')" style="cursor: pointer">
+                        Total
+                        <i [ngClass]="getIconoOrden('total_orden')"></i>
+                      </th>
                       <th (click)="ordenarPor('estado')" class="text-center" style="cursor: pointer">
                         Estatus <i [ngClass]="getIconoOrden('estado')"></i>
                       </th>
@@ -102,12 +119,17 @@
                   </thead>
                   <tbody>
                     <tr *ngFor="let item of datosFiltrados" (dblclick)="openDetallesSolicitud(item, $event)">
-                      <td>{{ item.folio }}</td>
+                      <td class="d-flex justify-content-between">{{ item.folio }} <i class="fas fa-info-circle"
+                          style="cursor: pointer" (click)="openModalSeguimiento(item)"></i> </td>
+                      <td> <strong style="cursor: pointer" (click)="openModalOC(item)" *ngIf="tienePermiso('view btn descargar orden')"> {{ item.folio_oc }} </strong>
+                      </td>
                       <td>{{ item.empresa || "CAS" }}</td>
                       <td>{{ item.usuario_solicita }}</td>
                       <td *ngIf="item.c_c === 0">{{ item.usuario_destino }}</td>
                       <td *ngIf="item.c_c > 0">{{ item.centro_costo }}</td>
-                      <td>{{ item.fecha | date : "dd/MM/yyyy h:mm a" }}</td>
+                      <td>{{ item.fecha }}</td>
+                      <td>{{ item.proveedor }}</td>
+                      <td> <strong> {{ item.total_orden | currency }} </strong></td>
                       <td>
                         <div class="text-center">
                           <span [ngClass]="'badge rounded-pill font-size-11 ' + item.claseEstado">
@@ -121,15 +143,22 @@
               </div>
             </div>
           </div>
+          <div *ngIf="vistaKanban && !isLoad" class="mt-3">
+            <app-compras-kanban *ngIf="datosFiltrados.length > 0; else elseBlock"
+              (btnModalSeguimiento)="openModalSeguimiento($event)" (btnModalOC)="openModalOC($event)"
+              (btnOpenDetalleSolicitud)="openDetallesSolicitud($event)" [datos]="datosFiltrados"></app-compras-kanban>
+          </div>
+
         </div>
-        <app-detalle-solicitudes-compras
-          [solicitudCompra]="solicitudCompra"
-          [status]="status"
-          *ngIf="solicitudSelecionada"
-          (udtStatus)="updateStatus($event)"
-          [modifica]="modifica"
-        ></app-detalle-solicitudes-compras>
+
       </div>
+      <div class="mt-3">
+        <app-detalle-solicitudes-compras
+      [solicitudCompra]="solicitudCompra" [status]="status"
+        *ngIf="solicitudSelecionada" (udtStatus)="updateStatus($event)"
+        [modifica]="modifica"></app-detalle-solicitudes-compras>
+      </div>
+      
     </div>
   </div>
 </div>

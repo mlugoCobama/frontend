@@ -1,0 +1,19 @@
+<app-card-top
+[title]             =   "'Tarjetas Toka'"
+[hasButtons]        =   "true"
+[hasButtons]        =   "true"
+[showBtnNuevo]      =   "true"
+[showBtnEditar]     =   "sectedItem"
+[showBtnEliminar]   =   "sectedItem"
+  (nuevo) = "openModalNuevo()";
+  (actualizar) = "openModalActualizar()";
+  (eliminar) = "elminarRegistro()";
+></app-card-top>
+
+<app-tabla-generica
+[data] ="data"
+[columnas] = "columnas"
+[isLoad] = "isLoad"
+(itemSeleccionado)="onItemSeleccionado($event)">
+
+</app-tabla-generica>

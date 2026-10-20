@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 
@@ -94,11 +94,24 @@ export class OrdenesCompraService {
    * @param id solicitud_compra_id
    * @returns pdf en binario
    */
-  public pdfOrdenCompra(id: number): Observable<Blob> {
+  pdfOrdenCompra(id: number): Observable<HttpResponse<Blob>> {
+  return this.http.get(environment.apiUrl + `compras/consulta-datos-pdf/${id}`, {
+    responseType: "blob",
+    observe: "response" 
+  });
+}
+
+
+
+   /**
+   * Obtiene la URL para previsualizar el PDF en un iframe.
+   */
+  getPreviewUrl(ordenId : any) {
     return this.http.get(
-      environment.apiUrl + `compras/consulta-datos-pdf/${id}`,
+      environment.apiUrl + `compras/preview-orden-compra-pdf/${ordenId}`,
       { 
         responseType: "blob",
+        observe: "response" 
        }
     );
   }
@@ -162,10 +175,21 @@ export class OrdenesCompraService {
     );
   }
 
-    downloadXML(file:string) {
+  downloadXML(file:string) {
     return this.http.get(
       environment.apiUrl + `compras/download-xml/${file}`, {
       responseType: 'blob'
     });
+  }
+
+  public finalizarCompra(id: any){
+    return this.http.get(environment.apiUrl + `compras/marcar-como-finalizada/${id}`, {headers} );
+  }
+
+  public cambiarProveedorSeleccionado(data: any): Observable<any> {
+    return this.http.post(
+      environment.apiUrl + "compras/cambiar-proveedor-seleccionado",
+      data , {headers} 
+    );
   }
 }

@@ -47,5 +47,9 @@ export class AuthfakeauthenticationService {
         localStorage.removeItem('module');
         localStorage.removeItem('permisos');
         this.currentUserSubject.next(null);
+        setTimeout(() => {
+            window.location.reload();
+            // location.reload();
+        }, 1000);
     }
 }

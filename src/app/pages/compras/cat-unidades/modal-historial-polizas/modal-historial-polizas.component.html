@@ -1,0 +1,59 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel"> Historial de pólizas de seguro </h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="cerrarModal()"
+    ></button>
+</div>
+
+<div class="modal-body">
+
+<div class="d-flex justify-content-between">
+    <div class="col-md-6"> 
+        <p><strong> Nro. Económico:</strong> {{unidad.eco}}</p>
+        <p><strong>Vehiculo: </strong> {{ unidad.marca_vehiculo+' '+unidad.submarca+' (' +unidad.modelo+')' }}</p>
+    </div>
+    <div class="col-md-6">
+         <p><strong> ID CRE:</strong> {{unidad.id_cre}}</p>
+         <p><strong> Nro. de serie:</strong> {{unidad.no_serie}}</p>
+    </div>
+</div>
+<div class="d-flex justify-content-center" *ngIf="isLoad">
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+<div *ngIf="!isLoad && showTable" class="list-group"  style="max-height: 30rem; overflow-y: auto;">
+    <a *ngFor=" let item of comentarios; let i = index"
+        class="list-group-item list-group-item-action flex-column align-items-start" [ngClass]=" i == 0 ? 'border border-primary': 'border-top-0 border-secondary'" >
+        <!-- <div class="d-flex w-100 justify-content-end">
+            <strong> <small>Agregado el: {{ item.fecha }}</small> </strong>
+        </div> -->
+        <p class="mb-1"> <strong>Aseguradora: </strong> {{ item.aseguradora }}</p>
+        <p class="mb-1"> <strong>No. de Póliza: </strong> {{ item.flotilla }} <strong>&nbsp; Inciso: </strong> {{ item.inciso_foltilla }}</p>
+        <p class="mb-1"> <strong>Ramo:</strong> {{ item.ramo }} <strong>Subramo:</strong>  {{ item.sub_ramo }} </p>
+        <p class="mb-1"> <strong>Cobertura: </strong> {{ item.cobertura }} <strong>&nbsp;Prima Total: </strong> {{ (+item.prima_total || 0) | currency }}</p>
+        
+        <p class="mb-1"> <strong>Vigencia: </strong> {{ item.inicio_vigencia }} <strong>&nbsp; - &nbsp; </strong>  {{ item.fin_vigencia }}  </p>
+        <p><strong>Fecha de emisión: {{ item.fecha_renovacion || '-' }} </strong></p>
+    </a>
+
+    <p *ngIf="comentarios.length == 0" class="text-muted text-center"><strong>Aun no hay pólizas asignadas...</strong></p>
+</div>
+</div>
+
+
+<div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      data-bs-dismiss="modal"
+      (click)="cerrarModal()"
+    >
+      Cerrar
+    </button>
+</div>

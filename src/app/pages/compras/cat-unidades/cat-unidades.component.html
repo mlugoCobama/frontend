@@ -1,56 +1,91 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-xl-12">
-      <div class="card">
+      <div class="card rounded-4 shadow-lg">
         <div class="card-body border-bottom">
           <div class="d-flex align-items-center">
             <h5 class="mb-0 card-title flex-grow-1">
-              Parque vehicular
+              Parque vehicular - {{concepto | titlecase}}
             </h5>
             <div class="flex-shrink-0 d-flex gap-1">
+
+              <!-- intercambiador de vistas -->
+            <div *ngIf = "intercompania && tienePermiso(permisos.btnSwitchViews) && concepto != 'utlitarios'" class="btn-group btn-group-sm">
+              <a [class.active]="panelActivo == 1" class="btn btn-outline-dark btn-sm"
+                (click)="cambiarPanel(1)">
+                <i class="fas fa-home"></i> Vehiculos
+              </a>
+              <a [class.active]="panelActivo == 2" class="btn btn-outline-success btn-sm"
+                (click)="cambiarPanel(2)">
+                <i class="fas fa-credit-card"></i> Recarga Toka
+              </a>
+            </div>
+
+            <ng-container *ngIf="panelActivo == 1">
               <a
-                *ngIf = "mostrar"
+                *ngIf = "mostrar && unidad?.activo == 2 && tienePermiso(permisos.btnAutorizarVehiculo)"
+                href="javascript:void(0);"
+                class="btn btn-success btn-sm"
+                (click)="openAutorizar()"
+                ><i class="bx bx-check "></i> Autorizar</a
+              >
+              <a
+                *ngIf = "mostrar && tienePermiso(permisos.btnHistorialPolizas)"
+                href="javascript:void(0);"
+                class="btn btn-dark btn-sm"
+                (click) = "openModalHistorialPolizas()"
+                ><i class="bx bx-check-shield"></i>Historial de pólizas de seguro</a
+              >
+              <a
+                *ngIf = "mostrar && tienePermiso(permisos.btnHistorialCrios)"
+                href="javascript:void(0);"
+                class="btn btn-primary btn-sm"
+                (click) = "openModalHistorial()"
+                ><i class="bx bx-comment-dots"></i> Historial de comentarios</a
+              >
+              <a
+                *ngIf = "mostrar && tienePermiso(permisos.btnHistorialGastos) "
                 href="javascript:void(0);"
                 class="btn btn-info btn-sm"
                 (click) = "openModalInfo()"
                 ><i class="fas fa-donate"></i> Gastos vehículo</a
               >
               <a
-                [disabled] = "true"
-                *ngIf = "mostrar"
+                *ngIf = "mostrar  && tienePermiso(permisos.btnEliminarVehiculo)"
                 href="javascript:void(0);"
                 class="btn btn-danger btn-sm"
                 (click)="destroy()"
                 ><i class="fas fa-trash"></i> Eliminar</a
               >
               <a
-                *ngIf = "mostrar"
+                *ngIf = "mostrar && tienePermiso(permisos.btnActualizarVehiculo)"
                 href="javascript:void(0);"
                 class="btn btn-warning btn-sm"
                 (click)="openModalUpdate()"
                 ><i class="fas fa-edit"></i> Actualizar</a
               >
               <a
-                *ngIf = "!mostrar && intercompania != undefined"
+                *ngIf = "intercompania != undefined && tienePermiso(permisos.btnAddVehiculo)"
                 href="javascript:void(0);"
                 class="btn btn-primary btn-sm"
                 (click) = "openModalNuevo()"
                 ><i class="fas fa-plus"></i> Nuevo</a
               >
-              
+            </ng-container>
+
+
             </div>
           </div>
         </div>
+      </div>
 
+      <div class="card rounded shadow-lg rounded-4">
         <div class="card-body border-bottom">
-
-          
-
           <div class="row justify-content-between" >
             <div class="col-3">
               <label for="empresa" class="form-label form-label-sm">Empresa: *</label>
               <select
-                *ngIf="usuarioSolicita.intercompania === 333; else nombreEmpresa"
+                *ngIf="tienePermiso(permisos.selectParqueVehicular); else nombreEmpresa"
                 class="form-select form-select-sm"
                 aria-label="Default select example"
                 id="empresa"
@@ -63,46 +98,55 @@
                 <option *ngIf="isLoading" value="" [disabled]="isLoading">
                   Cargando opciones espera...
                 </option>
-                <option *ngFor="let item of empresas" [value]="item.intercompania">
-                  {{ item.name.toUpperCase() }}
-                </option>
+                <ng-container *ngFor="let item of empresas">
+                  <option  [value]="item.intercompania" *ngIf="tienePermiso(item.permiso)">
+                    {{ item.name.toUpperCase()}}
+                  </option>
+                </ng-container>
+
               </select>
             </div>
 
-            <div class="col-3 pt-4" *ngIf = "!isLoad">
+            <div class="col-3 pt-4" *ngIf = "!isLoad && panelActivo == 1">
               <input type="text" class="form-control form-control-sm" placeholder="Buscar..." [(ngModel)]="busqueda"  (input)="filtrarTabla()"/>
             </div>
           </div>
 
+
+         <ng-container *ngIf ="panelActivo == 1">
           <div class="d-flex justify-content-center"  *ngIf = "isLoad">
             <div class="spinner-border" role="status">
               <span class="visually-hidden">Loading...</span>
             </div>
           </div>
-          
-          <div *ngIf = "!isLoad && showTable">
-            <div class="tab-page-content mt-3 table-responsive" style="overflow-y: scroll; height: 20rem;">
-              <table  class="table table-hover table-sm table-bordered">
-                <thead class="table-light" [ngClass] = "modalAbierto === false ? 'sticky-top' : '' ">
+          <div *ngIf = "!isLoad && showTable && !isLoad && datosFiltrados.length > 0 ; else elseBlock">
+            <div class="tab-page-content mt-3 table-responsive rounded-4 border" style="overflow-y: scroll; height: 20rem; ">
+              <table  class="table table-hover table-sm table-bordered ">
+                <thead class="table-light border thead-sticky">
                   <tr class="text-center">
-                    <th (click)="ordenarPor('entidad')">Gasera<i [ngClass]="getIconoOrden('entidad')"></i></th>
-                    <th (click)="ordenarPor('eco')">Nro. Eco.<i [ngClass]="getIconoOrden('eco')"></i></th>
-                    <th (click)="ordenarPor('marca_vehiculo')">Marca Vehiculo<i [ngClass]="getIconoOrden('marca_vehiculo')"></i></th>
-                    <th (click)="ordenarPor('submarca')">Sub Marca <i [ngClass]="getIconoOrden('submarca')"></i></th>
-                    <th (click)="ordenarPor('modelo')">Modelo <i [ngClass]="getIconoOrden('modelo')"></i></th>
-                    <th (click)="ordenarPor('no_serie')">No. Serie <i [ngClass]="getIconoOrden('no_serie')"></i></th>
-                    <th (click)="ordenarPor('placas')">Placas <i [ngClass]="getIconoOrden('placas')"></i></th>
-                    <th (click)="ordenarPor('marca_tanque')">Marca Tanque <i [ngClass]="getIconoOrden('marca_tanque')"></i></th>
-                    <th (click)="ordenarPor('anio_fabricacion')">Fabricación <i [ngClass]="getIconoOrden('anio_fabricacion')"></i></th>
-                    <th (click)="ordenarPor('capacidad')">Capacidad <i [ngClass]="getIconoOrden('capacidad')"></i></th>
-                    <th (click)="ordenarPor('tipo_medidor')">Serie <i [ngClass]="getIconoOrden('tipo_medidor')"></i></th>
-                    <th (click)="ordenarPor('serie')">Tipo Medidor <i [ngClass]="getIconoOrden('serie')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('entidad')">Empresa<i [ngClass]="getIconoOrden('entidad')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('eco')">Nro. Eco.<i [ngClass]="getIconoOrden('eco')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('marca_vehiculo')">Marca Vehiculo<i [ngClass]="getIconoOrden('marca_vehiculo')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('submarca')">Sub Marca <i [ngClass]="getIconoOrden('submarca')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('modelo')">Modelo <i [ngClass]="getIconoOrden('modelo')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('no_serie')">No. Serie <i [ngClass]="getIconoOrden('no_serie')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('placas')">Placas <i [ngClass]="getIconoOrden('placas')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('marca_tanque')">Marca Tanque <i [ngClass]="getIconoOrden('marca_tanque')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('anio_fabricacion')">Fabricación <i [ngClass]="getIconoOrden('anio_fabricacion')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('capacidad')">Capacidad <i [ngClass]="getIconoOrden('capacidad')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('tipo_medidor')">Serie <i [ngClass]="getIconoOrden('tipo_medidor')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('serie')">Tipo Medidor <i [ngClass]="getIconoOrden('serie')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('categoria')" class="text-center">Cat.<i [ngClass]="getIconoOrden('categoria')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('gps')" class="text-center">GPS.<i [ngClass]="getIconoOrden('gps')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('estatus')">Estatus <i [ngClass]="getIconoOrden('estatus')"></i></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let item of datosFiltrados" (click)="seleccionar(item, $event)">
                     <td class="text-center"><span  style="font-size:0.7rem;" [ngClass]="item.clase">{{ item.entidad }}</span></td>
-                    <td>{{item.eco}}</td>
+                    <td class="text-center" >
+                       <strong [ngClass] = "item.estatus == 1 ? 'text-primary' : '' " > {{item.eco}} </strong> <i *ngIf="item.activo == 2" class="text-danger fas fa-exclamation-circle" title="Pendiente de autorización"> </i>
+                    </td>
                     <td>{{item.marca_vehiculo}}</td>
                     <td>{{item.submarca}}</td>
                     <td>{{item.modelo}}</td>
@@ -113,15 +157,70 @@
                     <td>{{item.capacidad ?? '0'}} L</td>
                     <td>{{item.serie ?? 'No aplica'}}</td>
                     <td>{{item.tipo_medidor ?? 'No aplica'}}</td>
+
+                    <td class="text-center" [ngStyle]="{'color': (+item.categoria === 1 || +item.categoria === 2) ? '#012e46' : 'inherit'}" >
+                      <strong [title]="categorias[+(item?.categoria ?? '4') - 1].descripcion">
+                        {{ categorias[+(item?.categoria ?? '4') - 1].abreviatura }}
+                      </strong>
+                    </td>
+                    <td class="text-center">
+                      <i [title]="categoriasGPS[+(item?.gps ?? 3) - 1].descripcion" [ngClass]="categoriasGPS[+(item?.gps ?? 3) - 1].estilo"></i>
+                    </td>
+                    <td class="text-center">
+                      <span
+                          [ngStyle]="{
+                            'width': '0.8rem',
+                            'height': '0.8rem',
+                            'border-radius': '50%',
+                            'display': 'inline-block',
+                            'background-color': item.color_estatus
+                          }"
+                        [title]="item.status_dsc"
+                        ></span>
+                    </td>
                   </tr>
                 </tbody>
-              </table> 
+              </table>
             </div>
+
+
+
+
           </div>
           <p *ngIf = "!isLoad && showTable" class="text-muted pt-3"> Se muestran {{ totalDatosFiltrados }} de {{ totalDatos }} </p>
+        <div *ngIf = "!isLoad && showTable" class="d-flex justify-content-around border bg-light rounded-pill p-2 gap-3 mt-4">
+          <div class="d-flex align-items-center " *ngFor="let estado of estatusColores">
+            <span class="rounded-circle d-inline-block me-1 "
+                  [style.background-color]="estado.color"
+                  style="width: 10px; height: 10px;"></span>
+            <span class="fw-semibold small" >{{ estado.dsc | uppercase }}</span>
+          </div>
         </div>
-        <!--div.card-body-->
+        </ng-container>
+
+
+        <ng-container  *ngIf ="panelActivo == 2">
+              <app-tabla-recarga-toka
+              [intercompania] = "intercompania"
+              [tipo] = "'toka'"
+              />
+        </ng-container>
+
+        <ng-container *ngIf ="panelActivo == 3">
+              <app-tabla-recarga-toka
+              [tipo] = "'tag'"
+              [intercompania] = "intercompania"
+              [vehiculos]="datosFiltrados"  />
+        </ng-container>
+        </div>
       </div>
+
+
+
+
+
+        <!--div.card-body-->
+
     </div>
   </div>
 </div>
@@ -130,4 +229,10 @@
   <p>
     <strong>{{ usuarioSolicita.empresa }} </strong>
   </p>
+</ng-template>
+
+<ng-template #elseBlock>
+  <div *ngIf = "!isLoad && showTable" class="text-center text-muted p-3">
+    <Strong>Aun no hay vehículos que mostrar...</Strong>
+  </div>
 </ng-template>

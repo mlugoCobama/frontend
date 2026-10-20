@@ -4,7 +4,8 @@ import {  FormBuilder, FormControl, FormGroup,  Validators  } from "@angular/for
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
 import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 import { ComprasMacroService } from 'src/app/core/services/compras/compras-macro.service';
-
+import { obtenerErroresFormulario } from 'src/app/core/helpers/errores-forrmulario';
+import { PermisosService } from 'src/app/core/services/permisos.service';
 
 @Component({
   selector: 'app-form-solicitud-macro',
@@ -30,6 +31,7 @@ export class FormSolicitudMacroComponent implements OnInit{
     idVehiculo: null,
     };
 
+  @Input() datos: any;
   @Input() submitted: boolean = false;
   @Output() closeModal = new EventEmitter<void>();
   @Output() setData = new EventEmitter<any>();
@@ -56,6 +58,7 @@ export class FormSolicitudMacroComponent implements OnInit{
     private usuariosService: UsuariosService,
     private alertasService: SwalComprsServiceService,
     private comprasMacro: ComprasMacroService,
+    private permisosService: PermisosService,
    ){};
 
    ngOnInit(): void {
@@ -75,10 +78,38 @@ export class FormSolicitudMacroComponent implements OnInit{
         folio_requisicion: new FormControl(null, Validators.required),
         formato_orden_trabajo: new FormControl(null, Validators.required),
         cotizacion: new FormControl(null),
+        requiere_anticipo: new FormControl(null, Validators.required)
       });
       resolve(true);
     });
   }
+
+  public setValues() {
+    this.formSolicitudCompra.get('formato_orden_trabajo')?.clearValidators();
+    this.formSolicitudCompra.get('formato_orden_trabajo')?.updateValueAndValidity();
+
+
+  if(this.usuarioSolicita.intercompania != this.datos?.intercompania){
+    this.getAutotanques(this.datos?.intercompania);
+  }
+  const valores = {
+    empresa: this.datos?.intercompania,
+    usuario_destino: this.datos?.usuario_destino_id,
+    c_c: this.datos?.c_c,
+    motivo: this.datos?.motivo,
+    orden_trabajo: this.datos?.orden_trabajo,
+    folio_requisicion: this.datos?.folio_requisicion,
+    formato_orden_trabajo: this.datos?.formato_orden_trabajo,
+    requiere_anticipo: this.datos?.requiere_anticipo == 1 ? "true" : "false"
+  };
+  this.formSolicitudCompra.patchValue(valores);
+  
+  this.setDato(this.datos?.usuario_destino_id);
+  this.formSolicitudCompra.get('usuario_destino')?.disable();
+  this.formSolicitudCompra.get('empresa')?.disable();
+  this.formSolicitudCompra.get('formato_orden_trabajo')?.disable();
+  this.formSolicitudCompra.get('cotizacion')?.disable();
+}
 
   public get solicitudCompraFormControl() {
     return this.formSolicitudCompra.controls;
@@ -249,5 +280,19 @@ public autotanquesFormatted(datos) {
     label: `ECO: ${item.id} ${item.marca_vehiculo} ${item.submarca}(${item.modelo}) PLACAS: ${item.placas}`
   }));
 }
+
+mostrarErroresFormulario() {
+  const errores = obtenerErroresFormulario(this.formSolicitudCompra);
+
+  if (errores.length > 0) {
+    return errores[0]; // o mostrar todos
+  }
+}
+
+tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
+  }
+
 
 }

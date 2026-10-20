@@ -20,15 +20,15 @@ export class CatSistemasAutoService {
    * Recupera los registros de catalogo_sistemas_auto
    * @returns colección de sistemas de autos
    */
-  public getAll(): Observable<any> {
-    return this.http.get(environment.apiUrl + 'compras/CatalogoSistemasAuto', {headers});
+  public getAll(tipo: any): Observable<any> {
+    return this.http.get(environment.apiUrl + `compras/CatalogoSistemasAuto/${tipo}`, {headers});
   } 
 
    /**
    * Recupera los registros de tipos de mantenimiento
    * @returns tipos de mantenimiento
    */
-  public getTiposMantenimiento(): Observable<any> {
-    return this.http.get(environment.apiUrl + 'compras/CatalogoTiposMantenimiento', {headers});
+  public getTiposMantenimiento(tipo : any): Observable<any> {
+    return this.http.get(environment.apiUrl +  `compras/CatalogoTiposMantenimiento/${tipo}`, {headers});
   } 
 }

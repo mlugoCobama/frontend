@@ -5,6 +5,7 @@ import {
   FormGroup,
   Validators,
 } from "@angular/forms";
+import { obtenerErroresFormulario } from 'src/app/core/helpers/errores-forrmulario';
 
 @Component({
   selector: 'app-form-datos-tanque',
@@ -14,6 +15,7 @@ import {
 export class FormDatosTanqueComponent implements OnInit {
   
   @Input() datos: any = [];
+  @Input() openFormTanque: any;
   public formDatosTanques: FormGroup;
   public submitted:boolean =  false;
 
@@ -25,7 +27,7 @@ export class FormDatosTanqueComponent implements OnInit {
     this.buildForm();
   }
 
-    private buildForm() {
+  private buildForm() {
     return new Promise((resolve, reject) => {
       this.formDatosTanques = this.formBuilder.group({
         id: new FormControl( null),
@@ -46,6 +48,24 @@ export class FormDatosTanqueComponent implements OnInit {
       resolve(true);
     });
   }
+
+  public actualizarValidadoresTanque(): void {
+  const campos = ['marca_tanque', 'anio_fabricacion', 'serie', 'capacidad', 'tipo_medidor'];
+
+  campos.forEach(campo => {
+    const control = this.formDatosTanques.get(campo);
+    if (control) {
+      if (this.openFormTanque) {
+        control.setValidators([Validators.required]);
+      } else {
+        control.clearValidators();
+      }
+      control.updateValueAndValidity();
+    }
+  });
+}
+
+
 
   get datosTanqueFormControl() {
     return this.formDatosTanques.controls;
@@ -79,6 +99,7 @@ export class FormDatosTanqueComponent implements OnInit {
    * @returns boolean:  true ->valido, false ->no valido
    */
   esValido() {
+    this.formDatosTanques.markAllAsTouched();
     return this.formDatosTanques.valid;
   }
 
@@ -91,4 +112,11 @@ export class FormDatosTanqueComponent implements OnInit {
     this.formDatosTanques.reset();
   }
 
+  mostrarErroresFormulario() {
+    const errores = obtenerErroresFormulario(this.formDatosTanques);
+  
+    if (errores.length > 0) {
+      return errores[0]; // o mostrar todos
+    }
+  }
 }

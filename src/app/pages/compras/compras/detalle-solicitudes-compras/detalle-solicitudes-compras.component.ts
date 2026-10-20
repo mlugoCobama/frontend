@@ -1,16 +1,32 @@
-import { Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, ViewChild} from '@angular/core';
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { ComprasService } from 'src/app/core/services/compras/compras.service';
 import { EstadoSolicitud } from '../estado-solicitud.enum';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
+import { TableDetallesSolicitudComponent } from './table-detalles-solicitud/table-detalles-solicitud.component';
+import { ModalActualizarSolicitudComponent } from '../modal-actualizar-solicitud/modal-actualizar-solicitud.component';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-detalle-solicitudes-compras',
   templateUrl: './detalle-solicitudes-compras.component.html',
-  styleUrl: './detalle-solicitudes-compras.component.css'
+  styleUrl: './detalle-solicitudes-compras.component.css',
+  animations: [
+    trigger('fadeInOut', [
+      transition(':enter', [ // cuando aparece
+        style({ opacity: 0, transform: 'translateY(20px)' }),
+        animate('680ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
+      ]),
+      transition(':leave', [ // cuando desaparece
+        animate('680ms ease-in', style({ opacity: 0, transform: 'translateY(20px)' }))
+      ])
+    ])
+  ]
+
 })
 export class DetalleSolicitudesComprasComponent implements OnInit{
-
+@ViewChild("tableDetalles", { static: false })
+  tableDetalles!: TableDetallesSolicitudComponent;
  @Input() solicitudCompra:any;
  @Input() status:any;
  @Input() modifica:any;
@@ -60,6 +76,7 @@ public setDataCotizacion(data:any) {
  */ 
 public setDataOrdenCompra(data:any) {
   this.ordenCompra = data;
+  this.tableDetalles.getProveedoresCotizacion();
 }
 /**
  * Asigna un valor a MostrarTotal
@@ -87,4 +104,21 @@ public updateStatus() {
     }
   )
 }  
+
+openModalUpdateSolicitud(){
+  const initialState: ModalOptions = {
+      initialState: {
+        solicitudCompra: this.solicitudCompra
+      },
+      class: "modal-lg",
+    };
+    this.modalRef = this.modalService.show(ModalActualizarSolicitudComponent, initialState);
+    this.modalRef.content.closeBtnName = "Close";
+    this.modalRef.content.event.subscribe(() => {
+      // this.isLoad = true;
+      // this.getAll(this.usuarioSolicita.intercompania);
+    });
+
+}
+
 }

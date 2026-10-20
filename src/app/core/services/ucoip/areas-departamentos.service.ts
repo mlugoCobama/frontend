@@ -12,7 +12,7 @@ export class AreasDepartamentosService {
 
 
   public getAreas(): Observable<any> {
-    return this.http.get(environment.apiUrl + 'ucoip/areas');
+    return this.http.get(environment.apiUrl + 'ucoip/catalogos');
   }
 
   public getAreasDeptos(areaId: number): Observable<any> {

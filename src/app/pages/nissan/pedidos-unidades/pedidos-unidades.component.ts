@@ -40,7 +40,7 @@ export class PedidosUnidadesComponent implements OnInit {
     if (this.formPedidoUnidades.invalid) {
       return;
     }
-    console.log(this.formPedidoUnidades.value);
+    // console.log(this.formPedidoUnidades.value);
     this.modalRef.hide();
     this.submitted = false;
   }
@@ -80,15 +80,15 @@ export class PedidosUnidadesComponent implements OnInit {
   }
 
 public changeAutoActual(event) {
-  console.log(event.target.value);
+  // console.log(event.target.value);
   if (event.target.value == 'true') {
-    console.log('verdadero');
+    // console.log('verdadero');
 
     this.formPedidoUnidades.get('tipo_unidad').enable();
     this.formPedidoUnidades.get('anio_modelo').enable();
     this.formPedidoUnidades.get('color').enable();
   } else {
-    console.log('falso');
+    // console.log('falso');
     this.formPedidoUnidades.get('tipo_unidad').disable();
     this.formPedidoUnidades.get('anio_modelo').disable();
     this.formPedidoUnidades.get('color').disable();

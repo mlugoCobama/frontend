@@ -1,6 +1,7 @@
 import { MenuItem } from './menu.model';
 
 export const MENU: MenuItem[] = [
+  // UCOIP
   {
     id: 1,
     label: "UCoIP",
@@ -17,9 +18,39 @@ export const MENU: MenuItem[] = [
       {
         id: 2,
         label: "Inventario",
-        link: "/ucoip/inventario",
+
         parentId: 1,
         permission: "view inventario",
+        subItems: [
+            {
+              id: 2,
+              label: "Inv. Hardware",
+              link: "/ucoip/inventario",
+              parentId: 1,
+              permission: "view inventario hardware",
+            },
+            {
+              id: 2,
+              label: "Inv. Infra.",
+              link: "/ucoip/inventario-infraestructura",
+              parentId: 1,
+              permission: "view inventario infraestructura",
+            },
+            {
+              id: 3,
+              label: "Licencias de software",
+              link: "/ucoip/software",
+              parentId: 1,
+              permission: "view inventario software",
+            },
+            {
+              id: 3,
+              label: "Tokens",
+              link: "/ucoip/tokens",
+              parentId: 1,
+              permission: "view inventario tokens",
+            },
+          ]
       },
       {
         id: 3,
@@ -36,6 +67,13 @@ export const MENU: MenuItem[] = [
             permission: "view permisos",
           },
           {
+            id: 37,
+            label: "Asignacion Permisos",
+            link: "/ucoip/asignacion/permisos",
+            parentId: 34,
+            permission: "view permisos",
+          },
+          {
             id: 36,
             label: "Modulos",
             link: "/ucoip/configuracion/modulos",
@@ -44,12 +82,73 @@ export const MENU: MenuItem[] = [
           },
         ],
       },
+      {
+       id: 3,
+        label: "Servicios",
+        // link: "/ucoip/gestion-servicios/dashboard",
+        parentId: 1,
+        permission: "view modulo servicios",
+        subItems: [
+          {
+            id: 36,
+            label: "Pago de servicios",
+            link: "/ucoip/servicios",
+            parentId: 34,
+            // permission: "view modulos",
+          },
+          {
+            id: 36,
+            label: "Gestión de servicios",
+            link: "/ucoip/servicios/asignacion-servicios",
+            parentId: 34,
+            // permission: "view modulos",
+          },
+          {
+            id: 35,
+            label: "Catalgo de servicios",
+            link: "/ucoip/servicios/cat-servicios",
+            parentId: 34,
+            // permission: "view permisos",
+          },
+          {
+            id: 36,
+            label: "Proveedores de servicios",
+            link: "/ucoip/configuracion/modulos",
+            parentId: 34,
+            // permission: "view modulos",
+          },
+        ],
+      }
     ],
   },
   {
+    id:10,
+    label: "Proveedores",
+    icon: "bx bx-briefcase",
+    // permission: "view modulo proveedores",
+    subItems: [
+      {
+        id: 9,
+        label: "Proveedores Compras",
+        link: "/compras/proveedores/compras",
+        parentId: 10,
+        // permission: "view proveedores",
+      },
+      {
+        id: 15,
+        label: "Proveedores Corporativo",
+        link: "/compras/proveedores/corporativo",
+        parentId: 10,
+        // permission: "view proveedores corporativo",
+      },
+
+    ]
+  },
+  //COMRPAS
+  {
     id: 7,
     label: "Compras",
-    icon: "bx-tone",
+    icon: "bx bx-shopping-bag",
     permission: "view modulo compras",
     subItems: [
       {
@@ -67,12 +166,21 @@ export const MENU: MenuItem[] = [
         permission: "view compras macro taller",
       },
       {
-        id: 9,
-        label: "Proveedores",
-        link: "/compras/proveedores",
+        id: 11,
+        label: "Reportes de compras",
         parentId: 7,
-        permission: "view proveedores",
+        permission: "view reportes compras",
+        subItems: [
+          {
+            id: 111,
+            label: "Gasto Mensual",
+            permission: "view reportes gasto mensual",
+            link: "/compras/reporte-gasto-mensual",
+            parentId: 11,
+          }
+        ],
       },
+
       {
         id: 10,
         label: "Unidades de Medida",
@@ -80,8 +188,38 @@ export const MENU: MenuItem[] = [
         parentId: 7,
         permission: "view unidades de medida",
       },
+      {
+        id: 11,
+        label: "Almacén",
+        link: "/compras/almacen",
+        parentId: 7,
+        permission: "view almacen compras",
+      },
+      {
+        id: 12,
+        label: "Tarjetas Toka",
+        link: "/compras/cat-tarjetas-toka",
+        parentId: 7,
+        permission: "view tarjetas toka",
+      },
+      {
+        id: 12,
+        label: "Tags",
+        link: "/compras/cat-tags",
+        parentId: 7,
+        permission: "view tarjetas toka",
+      },
+      {
+        id: 14,
+        label: "Dispersiones Diésel",
+        link: "/compras/dispersiones",
+        parentId: 7,
+        permission: "view dispersion diesel",
+      },
+
     ],
   },
+  // MACRO TALLER
   {
     id: 7,
     label: "Macro Taller",
@@ -89,28 +227,52 @@ export const MENU: MenuItem[] = [
     permission: "view modulo macro taller",
     subItems: [
       {
-        id: 11,
-        label: "Parque Vehicular",
-        link: "/compras/cat-unidades",
-        parentId: 7,
-        permission: "view parque vehicular",
-      },
-      {
         id: 8,
         label: "Técnicos",
         link: "/macro/tecnicos",
         parentId: 7,
-        permission: "view tecnicos",
+        permission: "view macro tecnicos",
       },
       {
         id: 12,
         label: "Almacén",
         link: "/macro/almacen",
         parentId: 7,
-        permission: "view almacen",
+        permission: "view macro almacen",
       },
     ],
   },
+  // PARQUE VEHICULAR
+  {
+     id: 7,
+    label: "Parque Vehicular",
+    icon: "bx bxs-truck",
+    permission: "view parque vehicular",
+    subItems: [
+      {
+        id: 11,
+        label: "Autotanques y portátiles",
+        link: "/compras/cat-unidades/reparto",
+        parentId: 7,
+        permission: "view parque vehicular",
+      },
+      {
+        id: 11,
+        label: "Utilitarios",
+        link: "/compras/cat-unidades/utlitarios",
+        parentId: 7,
+        permission: "view parque vehicular",
+      },
+      {
+        id: 11,
+        label: "Ordenes de Servicio Ext",
+        link: "/parque-vehicular/ordenes-servicio",
+        parentId: 7,
+        permission: "view os parque vehicular",
+      },
+    ],
+  },
+  // NISSAN
   {
     id: 30,
     label: "Nissan",
@@ -134,12 +296,109 @@ export const MENU: MenuItem[] = [
       {
         id: 32,
         label: "Comisiones",
-        link: "/nissan/comisiones",
+        permission: "view modulo nissan",
         parentId: 30,
-        permission: "view comisiones",
+        subItems: [
+         {
+            id: 7,
+            label: "Concentrado",
+            link: "/nissan/comisiones/concentrado",
+            parentId: 32,
+            permission: "view submodulo comisiones concentrado nissan",
+          },
+          {
+            id: 7,
+            label: "Cortes",
+            link: "/nissan/comisiones/cortes",
+            parentId: 32,
+            permission: "view submodulo comisiones concentrado nissan",
+          },
+          {
+            id: 8,
+            label: "Nuevos",
+            link: "/nissan/comisiones/nuevos",
+            parentId: 32,
+            permission: "view submodulo comisiones nuevos nissan",
+          },
+          {
+            id: 9,
+            label: "Seminuevos",
+            link: "/nissan/comisiones/seminuevos",
+            parentId: 32,
+            permission: "view submodulo comisiones seminuevos nissan",
+          },
+          {
+            id: 9,
+            label: "Flotillas",
+            link: "/nissan/comisiones/flotillas",
+            parentId: 32,
+            permission: "view submodulo comisiones flotillas nissan",
+          },
+
+          {
+            id: 10,
+            label: "Financiamiento",
+            link: "/nissan/comisiones/financiamiento",
+            parentId: 32,
+            permission: "view submodulo comisiones nrf nissan",
+          },
+          {
+            id: 11,
+            label: "Toma de Unidad",
+            link: "/nissan/comisiones/toma-unidades",
+            parentId: 32,
+            permission: "view submodulo comisiones toma unidad nissan",
+          },
+
+           {
+            id: 12,
+            label: "Seguros",
+            link: "/nissan/comisiones/seguros",
+            parentId: 32,
+            permission: "view submodulo comisiones seguro nissan",
+          },
+          {
+            id: 12,
+            label: "Accesorios",
+            link: "/nissan/comisiones/accesorios",
+            parentId: 32,
+            permission: "view submodulo comisiones accesorios nissan",
+          },
+
+          {
+            id: 9,
+            label: "Tabulador",
+            link: "/nissan/tabulador",
+            parentId: 30,
+            permission: "view submoduloe tabuladores",
+          },
+          {
+            id: 10,
+            label: "Vendedores",
+            link: "/nissan/vendedores",
+            parentId: 30,
+            permission: "view submodulo vendedores",
+          },
+        ]
+      },
+      {
+        id: 32,
+        label: "PLD",
+        permission: "view submodulo pld nissan",
+        parentId: 30,
+        subItems: [
+         {
+            id: 7,
+            label: "Expediente",
+            link: "/nissan/pld",
+            parentId: 32,
+            permission: "view sub menu expediente pld",
+          },
+        ]
       },
     ],
   },
+  // RENAULT
   {
     id: 30,
     label: "Renault",
@@ -190,12 +449,108 @@ export const MENU: MenuItem[] = [
         permission: "view sabana control",
         parentId: 30,
       },
+      {
+        id: 32,
+        label: "Comisiones",
+        permission: "view modulo renault",
+        parentId: 30,
+        subItems: [
+           {
+            id: 7,
+            label: "Concentrado",
+            link: "/renault/comisiones/concentrado",
+            parentId: 32,
+            permission: "view submodulo comisiones concentrado renault",
+          },
+                    {
+            id: 7,
+            label: "Cortes",
+            link: "/renault/comisiones/cortes",
+            parentId: 32,
+            permission: "view submodulo comisiones concentrado renault",
+          },
+          {
+            id: 8,
+            label: "Nuevos",
+            link: "/renault/comisiones/nuevos",
+            parentId: 32,
+            permission: "view submodulo comisiones nuevos renault",
+          },
+          {
+            id: 9,
+            label: "Seminuevos",
+            link: "/renault/comisiones/seminuevos",
+            parentId: 32,
+            permission: "view submodulo comisiones seminuevos renault",
+          },
+          {
+            id: 9,
+            label: "Flotillas",
+            link: "/renault/comisiones/flotillas",
+            parentId: 32,
+            permission: "view submodulo comisiones flotillas renault",
+          },
+
+          {
+            id: 10,
+            label: "Financiamiento",
+            link: "/renault/comisiones/nrfinance",
+            parentId: 32,
+            permission: "view submodulo comisiones nrf renault",
+          },
+          {
+            id: 11,
+            label: "Toma de Unidad",
+            link: "/renault/comisiones/toma-unidades",
+            parentId: 32,
+            permission: "view submodulo comisiones toma unidad renault",
+          },
+
+           {
+            id: 12,
+            label: "Seguros",
+            link: "/renault/comisiones/seguros",
+            parentId: 32,
+            permission: "view submodulo comisiones seguro renault",
+          },
+          {
+            id: 12,
+            label: "Accesorios",
+            link: "/renault/comisiones/accesorios",
+            parentId: 32,
+            permission: "view submodulo comisiones accesorios renault",
+          },
+
+          {
+            id: 14,
+            label: "Tabulador",
+            link: "/renault/tabulador",
+            parentId: 32,
+            permission: "view submoduloe tabuladores renault",
+          },
+          {
+            id: 15,
+            label: "Vendedores",
+            link: "/renault/vendedores",
+            parentId: 32,
+            permission: "view submodulo vendedores renault",
+          },
+
+        ]
+      },
+      {
+        id: 32,
+        label: "Ordenes de Servicio",
+        link: "/renault/ordenes-servicio",
+        permission: "view submodulo ordenes de servicio",
+        parentId: 30,
+      },
     ],
   },
   {
     id: 1,
     label: "Dashboard",
-    icon: "bx-user",
+    icon: "bx bx-line-chart",
     permission: "view modulo dashboard",
     subItems: [
       {
@@ -559,6 +914,36 @@ export const MENU: MenuItem[] = [
             permission: "view ventas porcesos",
           },
         ],
+      },
+    ],
+  },
+  // Volumetricos
+  {
+    id: 45,
+    label: "Volumetricos",
+    icon: "bx bxs-gas-pump",
+    permission: "view modulo volumetricos",
+    subItems: [
+      {
+        id: 8,
+        label: "Validar JSON",
+        link: "/volumetricos/carga-reporte",
+        parentId: 45,
+        permission: "view sub modulo carga volumetricos",
+      },
+      {
+        id: 12,
+        label: "Visualiza reportes",
+        link: "/volumetricos/",
+        parentId: 45,
+        permission: "view sub modulo visualizar volumetricos",
+      },
+      {
+        id: 14,
+        label: "Generar JSON",
+        link: "/volumetricos/genera-reporte",
+        parentId: 45,
+        permission: "view submodulo generar reportes volumetricos",
       },
     ],
   },

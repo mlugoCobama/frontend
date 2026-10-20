@@ -1,0 +1,31 @@
+<div class="card rounded mb-3">
+  <div class="card-body">
+    <table class="table table-sm">
+      <thead class="table-light">
+        <tr>
+          <th>Cantidad</th>
+          <th>Tipo</th>
+          <th>Fecha</th>
+          <th>Usuario</th>
+          <th>Observaciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of movimientos">
+          <td>{{ row.cantidad }}</td>
+          <td [ngClass]="{'text-success': row.tipo==='entrada', 'text-danger': row.tipo==='salida'}">
+            <i
+            class="bx "
+               [ngClass]="{ 'bxs-up-arrow': row.tipo==='entrada', 'bxs-down-arrow': row.tipo==='salida'}"
+               aria-hidden="true">
+            </i>
+            &nbsp; <strong> {{ row.tipo | uppercase }} </strong>
+          </td>
+          <td>{{ row.fecha }}</td>
+          <td>{{ row.usuario }}</td>
+          <td>{{ row.observaciones }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

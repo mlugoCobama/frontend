@@ -1,0 +1,11 @@
+.thead-sticky th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.tfoot-sticky tr{
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+}

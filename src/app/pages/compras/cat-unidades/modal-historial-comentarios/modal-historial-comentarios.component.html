@@ -1,0 +1,58 @@
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel"> Historial de comentarios </h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="modal"
+      aria-label="Close"
+      id="close-modal"
+      (click)="cerrarModal()"
+    ></button>
+</div>
+
+<div class="modal-body">
+
+
+<div class="d-flex justify-content-between">
+    <div class="col-md-6"> 
+        <p><strong> Nro. Económico:</strong> {{unidad.eco}}</p>
+        <p><strong>Vehiculo: </strong> {{ unidad.marca_vehiculo+' '+unidad.submarca+' (' +unidad.modelo+')' }}</p>
+    </div>
+    <div class="col-md-6">
+         <p><strong> ID CRE:</strong> {{unidad.id_cre}}</p>
+         <p><strong> Nro. de serie:</strong> {{unidad.no_serie}}</p>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center" *ngIf="isLoad">
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<div *ngIf="!isLoad && showTable" class="list-group" style="max-height: 30rem; overflow-y: auto;">
+    <a *ngFor=" let item of comentarios; let i = index"
+        class="list-group-item list-group-item-action flex-column align-items-start" [ngClass]=" i == 0 ? 'border border-primary': 'border-top-0 border-secondary'">
+        <div class="d-flex w-100 justify-content-end">
+            <strong> <small>Agregado el: {{ item.fecha }}</small> </strong>
+        </div>
+        <p class="mb-1">{{ item.observacion }}</p>
+        <strong> <small>{{ item.usuario }}</small> </strong> 
+    </a>
+
+    <p *ngIf="comentarios.length == 0" class="text-muted text-center"><strong>Aun no hay comentarios...</strong></p>
+</div>
+</div>
+
+
+<div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-secondary btn-sm"
+      data-bs-dismiss="modal"
+      (click)="cerrarModal()"
+    >
+      Cerrar
+    </button>
+</div>
+

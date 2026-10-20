@@ -7,6 +7,8 @@ import { LocalStorageServiceService } from "src/app/core/services/local-storage-
 import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
 
 import catCentrosCostos from "src/environments/cat_centros_costos.json";
+import { obtenerErroresFormulario } from 'src/app/core/helpers/errores-forrmulario';
+import { PermisosService } from 'src/app/core/services/permisos.service';
 
 @Component({
   selector: 'app-form-solicitud',
@@ -19,7 +21,7 @@ export class FormSolicitudComponent implements OnInit{
   public submittedDetail: boolean = false;
   public isLoad: boolean = false;
   public showTable: boolean = false;
-  
+
   public disabled: boolean = false;
   public isAgencia: boolean = false;
 
@@ -45,7 +47,13 @@ export class FormSolicitudComponent implements OnInit{
     7102, 7075, 7074, 7072, 7071, 7064, 7063, 7062, 7061, 7051, 712, 710, 706,
   ];
 
-  
+  public tiposCompras = [
+    {tipoCompra: 'Compras Generales Gaseras', claveNum : 1 },
+    {tipoCompra: 'Compras Infraestructura / Soporte / TI ', claveNum : 3},
+    {tipoCompra: 'Compras Generales Autos', claveNum : 4},
+  ];
+
+  @Input() datos: any;
   @Input() submitted: boolean = false;
   @Output() closeModal = new EventEmitter<void>();
 
@@ -54,14 +62,15 @@ export class FormSolicitudComponent implements OnInit{
     private localStorage: LocalStorageServiceService,
     private usuariosService: UsuariosService,
     private alertasService: SwalComprsServiceService,
+    private permisosService: PermisosService,
 
   ){}
 
   ngOnInit(): void {
     this.getEmpresas();
-    
+
     this.buildForm();
-    
+
   }
 
    /**
@@ -74,6 +83,8 @@ export class FormSolicitudComponent implements OnInit{
         usuario_destino: new FormControl(""),
         c_c: new FormControl(0),
         motivo: new FormControl(null, Validators.required),
+        requiere_anticipo: new FormControl(null, Validators.required),
+        // tipo: new FormControl(""),
       });
       resolve(true);
     });
@@ -140,7 +151,7 @@ export class FormSolicitudComponent implements OnInit{
       this.closeModal.emit();
       return;
     }
-    
+
   }
 
     /**
@@ -152,7 +163,7 @@ export class FormSolicitudComponent implements OnInit{
     this.isLoad = false;
     this.disabled = false;
     this.isAgencia = this.interAgencias.some((num) => num === Number(intercompania));
-    if (intercompania != "" && this.isAgencia === false) {
+    if (intercompania != "" && (this.isAgencia === false || this.tienePermiso('view form tipo mantenimiento')) ) {
       this.usuariosService.getUsuariosEmpresas(intercompania).subscribe(
         (response) => {
           if (response) {
@@ -195,7 +206,7 @@ export class FormSolicitudComponent implements OnInit{
     this.usuariosService.getEmpresas().subscribe(
       (response) => {
         if (response) {
-          
+
           this.empresas = response.data;
           this.getUsuarioActivo();
           this.isLoading = false;
@@ -221,12 +232,12 @@ export class FormSolicitudComponent implements OnInit{
    * { empresa, usuario_destino, c_c, motivo, orden_trabajo }
    */
   obtenerValores() {
-    return this.formSolicitudCompra.value;
+    return this.formSolicitudCompra.getRawValue();
   }
 
   /**
    * Recupera el valor de usuario solicita
-   * @returns int: id -> usuario solicita 
+   * @returns int: id -> usuario solicita
    */
   obtenerUsuarios() {
     return this.usuarioSolicita.id;
@@ -255,4 +266,37 @@ export class FormSolicitudComponent implements OnInit{
   getIsAgencia(){
     return this.isAgencia;
   }
+
+  mostrarErroresFormulario() {
+  const errores = obtenerErroresFormulario(this.formSolicitudCompra);
+
+  if (errores.length > 0) {
+    return errores[0]; // o mostrar todos
+  }
+}
+
+public setValues() {
+  if(this.usuarioSolicita.intercompania != this.datos?.intercompania){
+    this.getUsuarios(this.datos?.intercompania);
+  }
+
+  const valores = {
+    empresa: this.datos?.intercompania,
+    usuario_destino: this.datos?.usuario_destino_id,
+    c_c: this.datos?.c_c,
+    motivo: this.datos?.motivo,
+    requiere_anticipo: this.datos?.requiere_anticipo == 1 ? "true" : "false"
+  };
+
+  this.formSolicitudCompra.patchValue(valores);
+
+  this.formSolicitudCompra.get('usuario_destino')?.disable();
+  this.formSolicitudCompra.get('empresa')?.disable();
+}
+
+tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
+  }
+
 }

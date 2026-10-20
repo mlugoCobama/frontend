@@ -1,0 +1,50 @@
+.thumbnail {
+  width: 200px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Estado cuando la imagen está ampliada */
+.thumbnail.zoomed {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(2.5);
+  z-index: 1000;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 999;
+}
+
+/* Flechas: ocupan solo la franja central, no toda la altura */
+.carousel-control-prev,
+.carousel-control-next {
+  width: 56px;            /* área clicable pequeña */
+  top: 50%;
+  bottom: auto;
+  height: 56px;
+  transform: translateY(-50%);
+  opacity: 1;
+  z-index: 10;
+}
+
+/* Deja libre la barra de controles del video (parte inferior) */
+.carousel-inner video {
+  position: relative;
+  z-index: 5;
+}
+
+/* Si el video es alto, las flechas suben para no tapar la barra inferior */
+.carousel-control-prev,
+.carousel-control-next {
+  margin-top: -30px;
+}

@@ -23,6 +23,7 @@ export class BtnAutorizacionGerenciaComponent {
   @Input() tipoAutorizacion: any;
   @Input() solicitudCompra: any;
   @Output() actualizarStatus = new EventEmitter<void>();
+  public working: boolean = false;
 
   constructor(
     public comprasService: ComprasService,
@@ -64,6 +65,7 @@ export class BtnAutorizacionGerenciaComponent {
   }
 
   public autorizarSolicitud(gerencia) {
+    this.working = true;
     const data = { campo: gerencia, value: 1 };
     this.comprasService.edit(this.solicitudCompra.id, data).subscribe(
       (response) => {
@@ -74,8 +76,10 @@ export class BtnAutorizacionGerenciaComponent {
             "success",
             "success"
           );
+          this.working = false;
           this.actualizarStatus.emit();
         } else {
+          this.working = false;
           this.alertasService.mostrarAlerta(
             "Error!",
             "Hubo un error",
@@ -85,6 +89,7 @@ export class BtnAutorizacionGerenciaComponent {
         }
       },
       (error) => {
+        this.working = false;
         this.alertasService.mostrarAlerta(
           "Error!",
           `Error fetching data: ${error}`,
@@ -96,6 +101,7 @@ export class BtnAutorizacionGerenciaComponent {
   }
 
   public autorizarCotizacion(gerencia) {
+    this.working = true;
     const data = { campo: gerencia, value: 1 };
     this.comprasService.edit(this.solicitudCompra.id, data).subscribe(
       (response) => {
@@ -106,9 +112,11 @@ export class BtnAutorizacionGerenciaComponent {
             "success",
             "success"
           );
+          this.working = false;
           this.enviarSolicitud();
           this.actualizarStatus.emit();
         } else {
+          this.working = false;
           this.alertasService.mostrarAlerta(
             "Error!",
             "Hubo un error",
@@ -118,6 +126,7 @@ export class BtnAutorizacionGerenciaComponent {
         }
       },
       (error) => {
+        this.working = false;
         this.alertasService.mostrarAlerta(
           "Error!",
           `Error fetching data: ${error}`,
@@ -269,6 +278,7 @@ export class BtnAutorizacionGerenciaComponent {
           ...datos,
           observacion: result.value,
         };
+        this.working = true;
         this.comprasMacro.edit(id, payload).subscribe(
           (response) => {
             if ((response.status = "success")) {
@@ -279,6 +289,7 @@ export class BtnAutorizacionGerenciaComponent {
                 "success",
                 "success"
               );
+              this.working = false;
             }
           },
           (error) => {
@@ -288,9 +299,38 @@ export class BtnAutorizacionGerenciaComponent {
               "success",
               "success"
             );
+            this.working = false;
           }
         );
       }
     });
   }
+
+  validarEmpresaUsuario() {
+    const tipoUsuarioStr = localStorage.getItem("currentUser");
+    if (!tipoUsuarioStr) return false;
+
+    const tipoUsuario = JSON.parse(tipoUsuarioStr);
+    const empresasUsuario = tipoUsuario.usuarioActivo[0]?.empresas || [];
+    const intercompaniaUsuario = tipoUsuario.usuarioActivo[0]?.intercompania;
+    const idUsuario = tipoUsuario.usuarioActivo[0]?.id;
+
+    const intercompaniaCompra = Number(this.solicitudCompra.intercompania);
+    const estaDentro = empresasUsuario.includes(intercompaniaCompra);
+    
+    if (empresasUsuario.length > 0 && estaDentro) { 
+      return true;
+    }
+
+    if (empresasUsuario.length === 0 && intercompaniaUsuario == intercompaniaCompra ) {
+      return true;
+    }
+
+    if (empresasUsuario.length === 0 && intercompaniaUsuario === 333 && idUsuario === 2395 ) {
+      return true;
+    }
+
+    return false;
+  }
+
 }

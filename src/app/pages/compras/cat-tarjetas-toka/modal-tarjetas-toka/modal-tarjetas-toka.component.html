@@ -1,0 +1,76 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">
+    {{ tipo | titlecase }} Tarjeta Toka
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="cerrarModal()"></button>
+</div>
+
+<div class="modal-body">
+    <form [formGroup]="myForm" class="row">
+        <div class="col-lg-12">
+            <label class="form-label">Empresa</label>
+            <select class="form-select form-select-sm" formControlName="empresa">
+                <option value="">Seleccione una empresa</option>
+                <option *ngFor="let cli of clientesToka" [value]="cli.id">
+                    {{ cli.nombre_empresa }}
+                </option>
+            </select>
+            <div *ngIf="f['empresa'].touched && f['empresa'].invalid" class="form-text text-danger">
+                La empresa es obligatoria
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <label class="form-label">Número de tarjeta</label>
+            <input type="text" placeholder="Número de tarjeta" class="form-control form-control-sm"
+                formControlName="numeroTarjeta"
+                mask="0000 0000 0000 0000" [patterns]="customPatterns">
+            <div *ngIf="f['numeroTarjeta'].touched && f['numeroTarjeta'].invalid" class="form-text text-danger" >
+                <div *ngIf="f['numeroTarjeta'].errors?.['required']">El número de tarjeta es obligatorio</div>
+                <div *ngIf="f['numeroTarjeta'].errors?.['pattern']">Debe contener 16 dígitos</div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <label class="form-label">Proxy Number</label>
+            <input type="text" placeholder="Proxy Number" class="form-control form-control-sm"
+                formControlName="proxyNumber">
+            <div *ngIf="f['proxyNumber'].touched && f['proxyNumber'].invalid" class="form-text text-danger">
+                El proxy number es obligatorio
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <label class="form-label">Cuenta</label>
+            <input type="text" placeholder="Cuenta" class="form-control form-control-sm" 
+            formControlName="cuenta" mask="0*">
+            <div *ngIf="f['cuenta'].touched && f['cuenta'].invalid" class="form-text text-danger">
+                La cuenta es obligatoria
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <label class="form-label">Nómina</label>
+            <input type="text" placeholder="Nómina" class="form-control form-control-sm" 
+            formControlName="nomina" mask="0*">
+            <div *ngIf="f['nomina'].touched && f['nomina'].invalid" class="form-text text-danger">
+                La nómina es obligatoria
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+  <button
+   [disabled]="sending"
+    type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="cerrarModal()"
+  >
+    Cerrar
+  </button>
+  <button 
+  [disabled]="sending"
+  type="button" class="btn btn-primary btn-sm" (click)="save()">
+  <i class="fas fa-save " [ngClass]="{ 'bx-fade-right': sending }" ></i>
+    {{ sending ? 'Guardando' :'Guardar'}}
+  </button>
+</div>

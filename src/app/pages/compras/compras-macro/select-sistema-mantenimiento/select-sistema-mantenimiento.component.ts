@@ -20,6 +20,7 @@ import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-com
 export class SelectSistemaMantenimientoComponent implements OnInit{
 
   @Input() solicitudCompra:  any;
+  @Input() tipo:  number ;
 
   public isLoad: boolean = false;
   public submitted: boolean = false;
@@ -40,7 +41,7 @@ export class SelectSistemaMantenimientoComponent implements OnInit{
   ngOnInit(): void {
     this.buildForm();
     this.getAll();
-    this.getTiposMantenimiento();
+    // this.getTiposMantenimiento();
     this.selectChange();
   }
 
@@ -67,11 +68,15 @@ export class SelectSistemaMantenimientoComponent implements OnInit{
   // Recupera todos los regsitros de la bse de datos 
   private getAll() {
     this.isLoad = true;
-    this.CatSistemasAuto.getAll().subscribe(
+    this.CatSistemasAuto.getAll(this.tipo).subscribe(
       (response) => {
         if (response) {
           this.sistemas = response.data;
+          this.tiposMantenimiento = response.data2;
           this.isLoad = false;
+          if(this.tipo == 1){
+            this.formSistemaMantenimiento.patchValue({ tipoMantenimiento: '7'});
+          }
         } else {
           console.log(response.message);
           this.isLoad = false;
@@ -86,7 +91,7 @@ export class SelectSistemaMantenimientoComponent implements OnInit{
 
   private getTiposMantenimiento() {
     this.isLoad = true;
-    this.CatSistemasAuto.getTiposMantenimiento().subscribe(
+    this.CatSistemasAuto.getTiposMantenimiento(this.tipo).subscribe(
       (response) => {
         if (response) {
           this.tiposMantenimiento = response.data;
@@ -127,6 +132,22 @@ export class SelectSistemaMantenimientoComponent implements OnInit{
       this.submitted = true;
       return bandera;
     }
+  }
+
+  public setTextosDescriptivos(){
+    const datos = [
+      { tipo : 2, texto: 'Sistema del vehículo: ', complemeto: ' un sistema', keyword:'Sistema', mantenimiento:'Tipo de mantenimiento', visible: true},
+      { tipo : 3, texto: 'Area de Infraestructuras / Soporte / TI: ', complemeto: ' un area', keyword:'Area', mantenimiento:'Tipo de mantenimiento', visible: true},
+      { tipo : 1, texto: 'Categorias:', complemeto: ' una categoria', keyword:'categoria', mantenimiento:'Compra', visible: false },
+    ];
+
+    const resultado = datos.find(d => d.tipo === this.tipo);
+    return resultado;
+
+  }
+  public habilitarCampos() {
+    this.formSistemaMantenimiento.get('sistema')?.enable();
+    this.formSistemaMantenimiento.get('tipoMantenimiento')?.enable();
   }
 
 }

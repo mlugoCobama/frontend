@@ -23,13 +23,9 @@ export const environment = {
     scrollCollapse: true,
     scrollY: '200px'
   },
-  //* Produccion 
-  // apiUrl: 'http://192.168.22.226:8080/api/',
-  //* Semiproduccion 
-  //apiUrl: 'http://192.168.22.226:8080/api/',
-  // apiUrl: 'http://backend.test/api/',
-  //* Pruebas 
-  apiUrl: 'http://localhost:8000/api/',
+  // apiUrl: 'http://192.168.22.226:8081/api/',
+  // apiUrl: 'http://localhost:8000/api/',
+  apiUrl: 'http://backend.test/api/',
   urlApiCodigoPostal: 'https://apicodigospostales.com/v1/'
 };
 

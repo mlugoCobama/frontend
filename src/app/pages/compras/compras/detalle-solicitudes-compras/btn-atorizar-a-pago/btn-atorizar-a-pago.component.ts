@@ -2,6 +2,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import Swal from 'sweetalert2';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import { OrdenesCompraService } from 'src/app/core/services/compras/ordenesCompra/ordenes-compra.service';
+import { PermisosService } from "src/app/core/services/permisos.service";
+
 @Component({
   selector: 'app-btn-atorizar-a-pago',
   templateUrl: './btn-atorizar-a-pago.component.html',
@@ -14,7 +16,8 @@ export class BtnAtorizarAPagoComponent {
 
   constructor(
     private alertasService: SwalComprsServiceService,
-    private ordenesComprasService : OrdenesCompraService
+    private ordenesComprasService : OrdenesCompraService,
+    private permisosService : PermisosService
   ){}
 
     public solicitarPago() {
@@ -30,13 +33,14 @@ export class BtnAtorizarAPagoComponent {
         inputAttributes: {
           autocapitalize: 'off'
         },
+        reverseButtons: true,
         icon: 'info',
-        confirmButtonText: 'Sí, autorizar a pago',
         showCancelButton: true,
         cancelButtonText: 'No',
+        confirmButtonText: 'Sí, autorizar a pago',
         customClass: {
-          confirmButton: 'btn btn-success px-4',
           cancelButton: 'btn btn-primary ms-2 px-4',
+          confirmButton: 'btn btn-success ms-2 px-4 ',
         },
         buttonsStyling: false,
         preConfirm: (razon) => {
@@ -54,7 +58,8 @@ export class BtnAtorizarAPagoComponent {
             id: this.ordenCompra.id,
             modo_pago : result.value
           };
-    
+     
+          // console.log(payload);
           this.ordenesComprasService.autorizarPagoOrdenCompra(payload).subscribe(
             (response) => {
               // this.isLoad = false;
@@ -89,4 +94,9 @@ export class BtnAtorizarAPagoComponent {
         }
       });
     }
+    
+    tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
+  }
 }

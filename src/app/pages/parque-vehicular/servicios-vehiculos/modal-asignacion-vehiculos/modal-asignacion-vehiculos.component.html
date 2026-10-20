@@ -1,0 +1,130 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">Asignar vehiculo a proveeedor</h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+    (click)="cerrarModal()"></button>
+</div>
+
+<div class="modal-body">
+<form [formGroup]="form" novalidate>
+        <div class="row g-3">
+
+          <!-- Select: Empresa (Obligatorio) -->
+          <div class="col-md-6">
+            <label for="empresaId" class="form-label form-label-sm fw-bold">
+              Empresa <span class="text-danger">*</span>
+            </label>
+            <select
+              id="empresaId"
+              formControlName="empresaId"
+              class="form-select form-select-sm"
+              [class.is-invalid]="isInvalid('empresaId')"
+            >
+              <option value="">
+                {{ loadingEmpresas ? 'Cargando empresas...' : 'Seleccione una empresa' }}
+              </option>
+              <option *ngFor="let emp of empresas" [value]="emp.intercompania">
+                {{ emp.name }}
+              </option>
+            </select>
+            <div class="invalid-feedback small">
+              La empresa es requerida.
+            </div>
+          </div>
+
+          <!-- Select: Vehículos (Dependiente y Obligatorio) -->
+          <div class="col-md-6">
+            <label for="vehiculoId" class="form-label form-label-sm fw-bold">
+              Vehículo <span class="text-danger">*</span>
+            </label>
+            <select
+              id="vehiculoId"
+              formControlName="vehiculoId"
+              class="form-select form-select-sm"
+              [class.is-invalid]="isInvalid('vehiculoId')"
+            >
+              <option [value]="" selected disabled>
+                <ng-container *ngIf="loadingVehiculos; else placeholderVehiculo">
+                  Cargando vehículos...
+                </ng-container>
+                <ng-template #placeholderVehiculo>
+                  {{ form.get('empresaId')?.value ? 'Seleccione un vehículo' : 'Primero seleccione una empresa' }}
+                    <!-- Seleccione un vehículo -->
+                </ng-template>
+              </option>
+              <option *ngFor="let veh of vehiculos" [value]="veh.id">
+                {{ veh.marca_vehiculo }} {{ veh.submarca }} ({{ veh.modelo }})-<span class="small">{{ veh.no_serie }}</span>
+              </option>
+            </select>
+            <div class="invalid-feedback small">
+              El vehículo es requerido.
+            </div>
+          </div>
+
+
+          <!-- Textarea: Observaciones (Opcional) -->
+           <div class="col-12">
+            <label for="descripcion_falla" class="form-label form-label-sm fw-bold">
+              Descripcionde la falla:
+            </label>
+            <textarea
+              [class.is-invalid]="isInvalid('descripcion_falla')"
+              id="descripcion_falla"
+              formControlName="descripcion_falla"
+              class="form-control form-control-sm"
+              rows="3"
+              placeholder="Describe la falla que presenta la unidad..."
+            ></textarea>
+            <div class="invalid-feedback small">
+              Debes de describir la falla que presenta la unidad.
+            </div>
+          </div>
+
+          <div class="col-12">
+            <label for="observaciones" class="form-label form-label-sm fw-bold">
+              Observaciones / Comentarios
+            </label>
+            <textarea
+              id="observaciones"
+              formControlName="observaciones"
+              class="form-control form-control-sm"
+              rows="3"
+              placeholder="Ingrese comentarios adicionales (opcional)..."
+            ></textarea>
+          </div>
+
+        </div>
+
+        <!-- Botones de Acción -->
+        <!-- <div class="d-flex justify-content-end gap-2 mt-3 pt-2 border-top">
+          <button type="reset" class="btn btn-outline-secondary btn-sm">
+            Limpiar
+          </button>
+          <button type="submit" class="btn btn-primary btn-sm px-3">
+            Guardar
+          </button>
+        </div> -->
+      </form>
+
+</div>
+
+<div class="modal-footer">
+  <button [disabled]="deshabilitado" type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"
+    (click)="cerrarModal()">
+    <i class="fas fa-times me-1"></i>
+    Cerrar
+  </button>
+  <button
+  (click)="guardar()"
+  [disabled]="deshabilitado || cargando"
+  type="button"
+  class="btn btn-primary btn-sm">
+  <span
+    *ngIf="cargando"
+    class="spinner-border spinner-border-sm me-1"
+    role="status"
+    aria-hidden="true">
+  </span>
+  <i *ngIf="!cargando" class="fas fa-save me-1"></i>
+  {{ cargando ? 'Guardando...' : 'Guardar' }}
+</button>
+</div>

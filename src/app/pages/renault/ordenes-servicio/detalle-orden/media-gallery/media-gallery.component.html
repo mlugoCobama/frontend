@@ -1,0 +1,158 @@
+<div class="card shadow-sm rounded-4">
+  <!-- HEADER -->
+  <div class="card-header bg-light rounded-top-4 d-flex justify-content-between align-items-center py-3">
+    <h5 class="fw-bold text-dark m-0">
+      <i [class]="iconClass + ' text-warning me-2'"></i> {{ title }}
+    </h5>
+
+    <!-- Botón de Carga Dinámico -->
+    <div *ngIf="showUploadButton">
+      <input
+        type="file"
+        #fileInput
+        class="d-none"
+        accept="image/*,video/*"
+        multiple
+        (change)="onFileChange($event)"
+      >
+      <button
+        type="button"
+        class="btn btn-warning btn-sm text-dark fw-bold rounded-3 shadow-sm"
+        (click)="fileInput.click()">
+        <i class="fas fa-paperclip me-1"></i> {{ uploadButtonText }}
+      </button>
+    </div>
+  </div>
+
+  <div class="card-body">
+
+    <!-- SECCIÓN: ARCHIVOS SELECCIONADOS EN COLA / PREVISUALIZACIÓN -->
+    <div *ngIf="stagedFiles.length > 0" class="mb-4 p-3 bg-light rounded-4 border border-warning border-opacity-50 shadow-sm">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="fw-bold text-dark m-0 d-flex align-items-center">
+          <i class="fas fa-images text-warning me-2"></i> Archivos Seleccionados
+          <span class="badge bg-warning text-dark ms-2 rounded-pill">{{ stagedFiles.length }}</span>
+        </h6>
+        <div>
+          <button type="button" class="btn btn-outline-secondary btn-sm rounded-3 me-2" (click)="clearStagedFiles()">
+            <i class="fas fa-times me-1"></i> Cancelar
+          </button>
+          <button type="button" class="btn btn-warning btn-sm text-dark fw-bold rounded-3 shadow-sm" (click)="confirmUpload()">
+            <i class="fas fa-upload me-1"></i> Guardar Evidencias
+          </button>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-lg-4 col-md-6" *ngFor="let staged of stagedFiles; let i = index">
+          <div class="card rounded-4 border-0 shadow-sm h-100 position-relative overflow-hidden">
+
+            <!-- Botón Retirar / Eliminar del Preview -->
+            <button
+              type="button"
+              class="btn btn-danger btn-sm rounded-circle position-absolute top-0 end-0 m-2 shadow z-1"
+              style="width: 32px; height: 32px; padding: 0;"
+              title="Retirar de la lista"
+              (click)="removeStagedFile(i)">
+              <i class="fas fa-trash"></i>
+            </button>
+
+            <!-- Previsualización Imagen -->
+            <img
+              *ngIf="staged.media_type === 'image'"
+              [src]="staged.previewUrl"
+              class="card-img-top "
+              alt="Previsualización"
+              style="height: 180px;"
+            >
+
+            <!-- Previsualización Video -->
+            <video
+              *ngIf="staged.media_type === 'video'"
+              class="card-img-top "
+              controls
+              style="height: 180px;"
+            >
+              <source [src]="staged.previewUrl">
+            </video>
+
+            <!-- Campo Comentario / Descripción -->
+            <div class="card-body p-2 bg-white">
+              <label class="form-label small fw-bold text-muted mb-1">
+                <i class="fas fa-comment-alt me-1"></i> Comentario / Anotación:
+              </label>
+              <textarea
+                class="form-control form-control-sm rounded-3 resize-none"
+                rows="2"
+                placeholder="Escribe un comentario..."
+                [(ngModel)]="staged.descripcion">
+              </textarea>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN: GALERÍA DE ARCHIVOS EXISTENTES -->
+    <ng-container *ngIf="filteredItems.length > 0; else noData">
+      <div class="row">
+        <div class="col-lg-4 col-md-6 mb-3" *ngFor="let item of filteredItems">
+          <div class="card rounded-4 h-100 shadow-sm border-0 position-relative overflow-hidden">
+
+            <!-- Botón opcional para borrar ítem ya guardado -->
+            <button
+              *ngIf="allowDeleteExisting"
+              type="button"
+              class="btn btn-danger btn-sm rounded-circle position-absolute top-0 end-0 m-2 shadow z-1"
+              style="width: 28px; height: 28px; padding: 0;"
+              title="Eliminar evidencia"
+              (click)="onDeleteExisting(item)">
+              <i class="fas fa-trash-alt fa-xs"></i>
+            </button>
+
+            <!-- IMAGEN -->
+            <img
+              *ngIf="item.media_type === 'image'"
+              [src]="item.imagen"
+              class="card-img-top rounded-top-4 border-bottom"
+              loading="lazy"
+              decoding="async"
+              alt="Testigo visual"
+              style="height: 220px;"
+            >
+
+            <!-- VIDEO -->
+            <video
+              *ngIf="item.media_type === 'video'"
+              class="card-img-top rounded-top-4 border-bottom "
+              controls
+              preload="metadata"
+              style="height: 220px;"
+            >
+              <source [src]="item.imagen" type="video/mp4">
+              Tu navegador no soporta videos.
+            </video>
+
+            <div class="card-body p-3">
+              <p class="card-text small m-0">
+                <span class="fw-semibold text-secondary">Descripción: </span>
+                {{ item.descripcion || 'Sin anotaciones' }}
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- MENSAJE VACÍO -->
+    <ng-template #noData>
+      <div *ngIf="stagedFiles.length === 0" class="text-center text-muted py-4">
+        <i class="fas fa-folder-open fa-2x mb-2 opacity-50 text-warning"></i>
+        <p class="m-0 fw-semibold">No hay evidencias o testigos registrados en esta categoría.</p>
+      </div>
+    </ng-template>
+
+  </div>
+</div>

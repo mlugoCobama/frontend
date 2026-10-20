@@ -1,0 +1,181 @@
+<div class="card shadow">
+    <div class="card-body">
+          <form>
+    <div class="row g-2 align-items-end">
+      <!-- Campo Empresa -->
+      <div class="col-sm-6">
+        <label for="empresa" class="form-label">Empresa</label>
+        <select id="empresa" class="form-select form-select-sm">
+          <option selected>Selecciona empresa...</option>
+          <option value="1">Empresa A</option>
+          <option value="2">Empresa B</option>
+          <option value="3">Empresa C</option>
+        </select>
+      </div>
+
+      <!-- Campo Año -->
+      <div class="col-sm-3">
+        <label for="anio" class="form-label">Año</label>
+        <select id="anio" class="form-select form-select-sm">
+          <option selected>Selecciona año...</option>
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
+          <option value="2026">2026</option>
+        </select>
+      </div>
+
+      <!-- Botones alineados a la derecha -->
+      <div class="col-sm-3 text-end">
+        <button type="button" class="btn btn-sm btn-primary me-2">
+          Buscar
+        </button>
+        <button type="button" class="btn btn-sm btn-success">
+          Descargar Excel
+        </button>
+      </div>
+    </div>
+  </form>
+    </div>
+</div>
+<div class="row">
+<div class="col-lg-3">
+    <div class="card shadow">
+        <div class="card-body d-flex justify-content-between aling-items-center">
+            <div>
+                <div class="card-title text-success">{{pagados?.total || 0 | currency}}</div>
+                <div class="text-mutted">Pagado 2026</div>
+                <div class="text-success"> {{ pagados?.cantidad || 0 }}</div>    
+            </div>
+            <div class="avatar-sm ms-auto">
+                <div  class="avatar-title bg-light rounded-circle text-primary font-size-20"><i
+                 class="bx bxs-book-bookmark"></i></div>
+            </div>
+            
+        </div>
+        
+    </div>
+</div>
+<div class="col-lg-3">
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="card-title text-primary">{{penidentes?.total || 0 | currency}}</div>
+            <div class="text-mutted">Por vencer 2026</div>
+            <div class="text-primary fw-bold"> {{penidentes?.cantidad || 0 }}</div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-3">
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="card-title text-danger">{{vencidos?.total || 0 | currency}}</div>
+        <div class="text-mutted">Vencidos Sin pagar 2026</div>
+        <div class="text-danger  fw-bold"> {{vencidos?.cantidad || 0 }} pagos</div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-3">
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="card-title">{{cantServicio}}</div>
+        <div class="text-mutted">Servicios contratados 2026</div>
+        <div class="fw-bold"> {{cantServicio}}</div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="card shadow">
+    <div class="card-body">
+        <div class="table-responsive" style="max-height:30rem; overflow-y:auto;">
+             <table class="table table-sm" >
+        <thead class="table-dark text-center thead-sticky">
+            <tr>
+                <th>Servicio / Plan</th>
+                <th>ENE</th>
+                <th>FEB</th>
+                <th>MAR</th>
+                <th>ABR</th>
+                <th>MAY</th>
+                <th>JUN</th>
+                <th>JUL</th>
+                <th>AGO</th>
+                <th>SEP</th>
+                <th>OCT</th>
+                <th>NOV</th>
+                <th>DIC</th>
+            </tr>
+            
+        </thead>
+        <tbody class="">
+            <tr *ngFor="let item of dataTransformada">
+
+            <!-- Servicio -->
+            <td>
+                <ng-container 
+                *ngTemplateOutlet="informationCard; 
+                    context: { 
+                    servicio: item.servicio, 
+                    condiciones: item.tipo, 
+                    categoria: item.proveedor, 
+                    periodicidad: '-' 
+                    }">
+                </ng-container>
+            </td>
+
+            <!-- Meses -->
+            <td *ngFor="let mes of item.meses">
+                <ng-container 
+                *ngTemplateOutlet="statusCard; 
+                    context: { 
+                    icon: mes.icon, 
+                    color: mes.color, 
+                    label: mes.label, 
+                    amount: mes.amount 
+                    }">
+                </ng-container>
+            </td>
+
+            </tr>
+        </tbody>
+        <tfoot class="table-light tfoot-sticky text-center"> 
+            <tr>
+                <th>Total del mes</th>
+                <th *ngFor="let total of totalesMes">
+                {{ total ? (total | currency) : '-' }}
+                </th>
+            </tr>
+        </tfoot>
+        </table>
+        </div>
+       
+    </div>
+</div>
+
+<ng-template #statusCard let-icon="icon" let-color="color" let-label="label" let-amount="amount">
+  <div class="d-flex flex-column align-items-center justify-content-center bg-{{color}}-subtle rounded">
+    <!-- Fila 1: Ícono + Texto -->
+    <div>
+      <i class="mdi {{icon}} h4 text-{{color}} align-middle mb-0 me-3"></i>
+      <span class="text-{{color}} fw-bold">{{label}}</span>
+    </div>
+    <!-- Fila 2: Número -->
+    <div class="text-{{color}} fw-bold">
+      {{amount | currency}}
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #informationCard let-servicio="servicio" let-condiciones="condiciones" let-categoria="categoria" let-periodicidad="periodicidad">
+  <div class="d-flex flex-column align-items-center justify-content-center ">
+    <!-- Fila 1: Ícono + Texto -->
+    <div class="fw-bold">
+      {{servicio}} <small class="text-muted"> {{condiciones}} </small>
+    </div>
+    <!-- Fila 2: Número -->
+    <div >
+      <small> {{categoria}} </small> <small class="text-muted"> - {{periodicidad}} </small>
+    </div>
+  </div>
+</ng-template>
+

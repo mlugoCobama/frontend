@@ -14,6 +14,10 @@ import { UnidadesService } from 'src/app/core/services/compras/unidades.service'
 })
 export class ModalAddAutotanqueComponent implements AfterViewInit{
 
+  public openFormTanque: boolean = false;
+  public mostrarFormulario: boolean = true;
+  public tipo:any = '';
+
   constructor(
     public bsModalRef: BsModalRef,
     private alertasService : SwalComprsServiceService,
@@ -34,9 +38,11 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
     public deshabilitado: boolean = false;
 
     public event: EventEmitter<any> = new EventEmitter();
+    public modalCerrado: EventEmitter<any> = new EventEmitter();
 
     public cerrarModal(): void {
     this.bsModalRef.hide();
+    setTimeout(() => { this.modalCerrado.emit() }, 150);
     }
 
   setTitle(){
@@ -46,9 +52,15 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
 
   public guardar(){
     this.deshabilitado = true;
-    if(!this.formDatosTanque.esValido() || !this.formDatosVehiculo.esValido() || !this.formDatosPoliza.esValido()){
+    if(
+       !this.formDatosVehiculo.esValido()
+      || (this.openFormTanque  &&  !this.formDatosTanque.esValido())
+      || (this.mostrarFormulario &&  !this.formDatosPoliza.esValido())
+    ){
       this.alertasService.mostrarAlerta("Llena le formualrio correctamente",
-                                        "Falta información importante, ingresala para continuar",
+                                         `Falta información importante, ingresala para continuar: ${this.formDatosVehiculo.mostrarErroresFormulario() 
+                                          || this.formDatosTanque.mostrarErroresFormulario() 
+                                          || this.formDatosPoliza.mostrarErroresFormulario() || 'Campos en rojo'}`,
                                         "warning", 
                                         "warning");
       // this.event.emit(false);
@@ -61,7 +73,7 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
               (response) => {
                 if (response.status === "success") {
                   
-                  this.alertasService.mostrarAlerta("Guardado", "Unidad registrada correctamente", "success", "success");
+                  this.alertasService.mostrarAlerta("Guardado", "Unidad registrada correctamente, en cuanto auditoria revise y autorice la unidad la veras reflejada en tu parque vehicular", "success", "success");
                   this.event.emit(true);
                   this.cerrarModal();
                   this.formDatosTanque.resetearFormulario();
@@ -69,7 +81,7 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
 
                   
                 } else {
-                  this.alertasService.mostrarAlerta("Error", response.message, "error", "danger");
+                  this.alertasService.mostrarAlerta("Error", `${response.message }. ${response.error ?? ''}`, "error", "danger");
                   this.deshabilitado = false;
                 }
               },
@@ -86,9 +98,29 @@ export class ModalAddAutotanqueComponent implements AfterViewInit{
       intercompania: this.intercompania,
       datosVehiculo: this.formDatosVehiculo.obtenerValores(),
       datosTanque: this.formDatosTanque.obtenerValores(),
+      hasDatosSeguro : this.mostrarFormulario,
       datosPoliza: this.formDatosPoliza.obtenerValores(),
     }
     
     return datos;
+  }
+
+  public mostrarFormTanque(){
+
+   const tipoCombustible =  this.formDatosVehiculo.datosVehiculoFormControl.tipo_combustible.value
+   const tipoVehiculo = this.formDatosVehiculo.datosVehiculoFormControl.tipo_vehiculo.value
+
+   if(tipoVehiculo == '3' || tipoVehiculo == '1' 
+    || tipoCombustible == '3' || tipoCombustible == '4'){
+      this.openFormTanque = true;
+      this.formDatosTanque.actualizarValidadoresTanque();
+    }else{
+      this.openFormTanque = false;
+      this.formDatosTanque.actualizarValidadoresTanque();
+    }
+  }
+
+  public onCheckboxChange(){
+    this.formDatosPoliza.actualizarValidadoresPoliza();
   }
 }

@@ -1,0 +1,90 @@
+.step-indicator {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.step-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e9ecef;
+  border: 2px solid #dee2e6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #6c757d;
+  transition: all 0.3s ease;
+}
+
+.step-circle.active {
+  background-color: #c3002f;
+  border-color: #c3002f;
+  color: white;
+  transform: scale(1.1);
+}
+
+.step-circle.completed {
+  background-color: #508f40;
+  border-color: #508f40;
+  color: white;
+}
+
+.step-label {
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin-top: 0.5rem;
+}
+
+.step-indicator.active .step-label {
+  color: #c3002f;
+  font-weight: 600;
+}
+
+.step-indicator.completed .step-label {
+  color: #508f40;
+}
+
+.step-content {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #c3002f;
+  box-shadow: 0 0 0 0.2rem rgba(195, 0, 47, 0.25);
+}
+
+.form-check-input:checked {
+  background-color: #c3002f;
+  border-color: #c3002f;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .step-circle {
+    width: 30px;
+    height: 30px;
+    font-size: 0.875rem;
+  }
+  
+  .step-label {
+    font-size: 0.65rem;
+  }
+}

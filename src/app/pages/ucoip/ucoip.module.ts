@@ -10,13 +10,56 @@ import { InventarioComponent } from './inventario/inventario.component';
 import { ModalInventarioComponent } from './inventario/modal-inventario/modal-inventario.component';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PermisosComponent } from './permisos/permisos.component';
+import { TablaInventarioComponent } from './inventario/tabla-inventario/tabla-inventario.component';
+import { ListResguardosComponent } from './ucoip/modal-ucoip/list-resguardos/list-resguardos.component';
+import { ModalUcoipComponent } from './ucoip/modal-ucoip/modal-ucoip.component';
+import { AccordionModule } from 'ngx-bootstrap/accordion';
+import { CardInfoUcoipComponent } from './ucoip/modal-ucoip/card-info-ucoip/card-info-ucoip.component';
+import { CardNetworkComponent } from './ucoip/modal-ucoip/card-network/card-network.component';
+import { CardSistemasComponent } from './ucoip/modal-ucoip/card-sistemas/card-sistemas.component';
+import { CardLicenciamientosComponent } from './ucoip/modal-ucoip/card-licenciamientos/card-licenciamientos.component';
+import { SoftwareComponent } from './software/software.component';
+import { TokensAgenciasComponent } from './tokens-agencias/tokens-agencias.component';
+import { UIModule } from 'src/app/shared/ui/ui.module';
+import { ModalSoftwareComponent } from './software/modal-software/modal-software.component';
+import { ModalTokenAgenciaComponent } from './tokens-agencias/modal-token-agencia/modal-token-agencia.component';
+import { CardTokensComponent } from './ucoip/modal-ucoip/card-tokens/card-tokens.component';
+import { HistorialEquipoComponent } from './inventario/historial-equipo/historial-equipo.component';
+import { InventarioInfraComponent } from './inventario-infra/inventario-infra.component';
+import { ModalMantenimientoComponent } from './inventario/modal-mantenimiento/modal-mantenimiento.component';
+import { PreventivoFormComponent } from './inventario/preventivo-form/preventivo-form.component';
+import { CorrectivoFormComponent } from './inventario/correctivo-form/correctivo-form.component';
+import { EvidenciaUploaderComponent } from './inventario/evidencia-uploader/evidencia-uploader.component';
+import { AuditoriaUcoipComponent } from './ucoip/modal-ucoip/auditoria-ucoip/auditoria-ucoip.component';
+import { CardAuditoriaComponent } from './ucoip/modal-ucoip/card-auditoria/card-auditoria.component';
 
 @NgModule({
   declarations: [
     UcoipComponent,
     InventarioComponent,
     ModalInventarioComponent,
-    
+    PermisosComponent,
+    TablaInventarioComponent,
+    ListResguardosComponent,
+    ModalUcoipComponent,
+    CardInfoUcoipComponent,
+    CardNetworkComponent,
+    CardSistemasComponent,
+    CardLicenciamientosComponent,
+    SoftwareComponent,
+    TokensAgenciasComponent,
+    ModalSoftwareComponent,
+    ModalTokenAgenciaComponent,
+    CardTokensComponent,
+    HistorialEquipoComponent,
+    InventarioInfraComponent,
+    ModalMantenimientoComponent,
+    PreventivoFormComponent,
+    CorrectivoFormComponent,
+    EvidenciaUploaderComponent,
+    AuditoriaUcoipComponent,
+    CardAuditoriaComponent,
   ],
   imports: [
     CommonModule,
@@ -24,8 +67,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ConfiguracionModule,
     DataTablesModule,
     ModalModule.forRoot(),
+    AccordionModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
+    UIModule
   ]
 })
 export class UcoipModule { }

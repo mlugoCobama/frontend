@@ -40,4 +40,18 @@ export class PermisosService {
       console.error('Error en la petición:', error);
       return throwError(() => new Error('Ocurrió un error al procesar la solicitud.'));
     }
+
+    buscarPermisos(correo: string): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}all-permisos`, { correo });
+  }
+
+  // Guardar o actualizar permisos
+  guardarPermisos(usuarioId: number, permisos: number[]): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}permisos/guardar`, {
+      usuario_id: usuarioId,
+      permisos
+    });
+  }
+
+
 }

@@ -1,7 +1,8 @@
 import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 import { OrdenesCompraService } from 'src/app/core/services/compras/ordenesCompra/ordenes-compra.service';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
-
+import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
+import { ModalCambioProveedorComponent } from './modal-cambio-proveedor/modal-cambio-proveedor.component';
 import Swal from 'sweetalert2';
 import { PermisosService } from 'src/app/core/services/permisos.service';
 
@@ -19,8 +20,11 @@ export class BtnsAutorizacionComponent implements OnInit {
 
   public ordenCompra: any;
   public isLoad: boolean = false;
+  public modalRef?: BsModalRef;
+  public working: boolean = false;
 
   constructor(
+    private modalService: BsModalService,
     public ordenesComprasService: OrdenesCompraService,
     private alertasService:SwalComprsServiceService,
     private permisosService: PermisosService,
@@ -83,10 +87,11 @@ export class BtnsAutorizacionComponent implements OnInit {
       showCancelButton: true,
       cancelButtonText: 'No',
       customClass: {
-        confirmButton: 'btn btn-danger px-4',
+        confirmButton: 'btn btn-danger ms-2 px-4',
         cancelButton: 'btn btn-primary ms-2 px-4',
       },
       buttonsStyling: false,
+      reverseButtons: true,
       preConfirm: (razon) => {
         if (!razon || razon.trim() === '') {
           Swal.showValidationMessage('Debes ingresar una razón válida');
@@ -102,7 +107,7 @@ export class BtnsAutorizacionComponent implements OnInit {
           id: this.solicitudCompra.id,
           razonCancelacion: result.value
         };
-  
+        this.working = true;
         this.ordenesComprasService.destroy(payload).subscribe(
           (response) => {
             this.isLoad = false;
@@ -115,7 +120,9 @@ export class BtnsAutorizacionComponent implements OnInit {
                 'success',
                 'success'
               );
+               this.working = false;
             } else {
+               this.working = false;
               this.alertasService.mostrarAlerta(
                 'Error!',
                 'Ocurrió un error inesperado',
@@ -125,6 +132,7 @@ export class BtnsAutorizacionComponent implements OnInit {
             }
           },
           (error) => {
+             this.working = false;
             this.isLoad = false;
             this.alertasService.mostrarAlerta(
               'Error!',
@@ -150,44 +158,34 @@ export class BtnsAutorizacionComponent implements OnInit {
     };
     Swal.fire({
       title: "Ya casi!!",
-      text: "Deseas enviar la solicitud de surtido al proveedor?",
+      text: "Deseas autorizar la solicitud?",
       icon: "info",
       showDenyButton: true,
-      confirmButtonText: " SI, Enviar... ",
-      denyButtonText: `NO, Solo autorizar`,
+      confirmButtonText: " SI",
+      denyButtonText: `NO`,
       customClass: {
-        confirmButton: "btn btn-success px-4",
-        denyButton: "btn btn-info ms-2 px-4",
+        confirmButton: "btn btn-success ms-2 px-4",
+        denyButton: "btn btn-danger ms-2 px-4",
       },
       buttonsStyling: false,
+      reverseButtons: true,
     }).then((result) => {
       if (result.isConfirmed) {
-        this.ordenesComprasService.enviarSolicitudSurtido(data).subscribe(
-          (response) => {
-            if (response.status === "success") {
-              this.alertasService.mostrarAlerta("Enviada!!", "La orden de compra ha sido autorizada y enviada al proveedor.","success","success");
-              this.actualizarStatus.emit();
-              this.getOrdenCompra();
-            } else {
-              this.alertasService.mostrarAlerta("Error!", response.message,"error","danger");
-            }
-          },
-          (error) => {
-            this.alertasService.mostrarAlerta("Error!",`Error fetching data: ${error}`, "error", "danger");
-          }
-        );
-      } else if (result.isDenied) {
+        this.working = true;
         this.ordenesComprasService.autorizarOrdenCompra(data).subscribe(
           (response) => {
             if (response.status === "success") {
               this.alertasService.mostrarAlerta("Orden autorizada", "La orden sera marcada como autorizada","success","success");
               this.actualizarStatus.emit();
               this.getOrdenCompra();
+              this.working = false;
             } else {
+              this.working = false;
               this.alertasService.mostrarAlerta("Error!", response.message,"error","danger");
             }
           },
           (error) => {
+            this.working = false;
             this.alertasService.mostrarAlerta("Error!",`Error fetching data: ${error}`, "error", "danger");
           }
         );
@@ -219,4 +217,28 @@ export class BtnsAutorizacionComponent implements OnInit {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
   }
+
+  /**
+     * Manejo de componentes
+     */
+    public openModalNuevo() {
+      // this.modalAbierto = true;
+      const initialState: ModalOptions = {
+        initialState: {
+          solicitudCompra : this.solicitudCompra
+          //Datos que envió al componente
+        },
+        class: "modal-lg",
+      };
+      this.modalRef = this.modalService.show(ModalCambioProveedorComponent, initialState);
+      this.modalRef.content.closeBtnName = "Close";
+      this.modalRef.content.event.subscribe(() => {
+        //  this.isLoad = true;
+        this.actualizarStatus.emit();
+        this.getOrdenCompra();
+      });
+      this.modalRef.content.modalCerrado.subscribe(() => {
+      //   // this.modalAbierto = false;
+      });
+    }
 }

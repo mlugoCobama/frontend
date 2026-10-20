@@ -1,0 +1,68 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">
+    Descargar Reporte
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="cerrarModal()"></button>
+</div>
+
+<div class="modal-body">
+    <form [formGroup]="myForm">
+
+        <div class="col-lg">
+            <label class="form-label">Quicena</label>
+            <select class="form-select form-select-sm" aria-label="Default select example" formControlName="quincena" id="quincena">
+                <option value="" selected >Selecciona uno</option>
+                <option value="Q1" >Primer Quincena</option>
+                <option value="Q2" >Segunda Quincena</option>
+                <option value="Q3" >Mes completo</option>
+            </select>
+            <div *ngIf="f['quincena'].touched && f['quincena'].invalid" class="form-text text-danger" >
+                La Quicena es obligatoria
+            </div>
+        </div>
+
+        <div class="col-lg mt-2">
+            <label class="form-label">Mes </label> 
+
+            <select class="form-select form-select-sm" aria-label="Default select example" formControlName="mes" id="mes">
+                <option value="" selected>Selecciona un mes</option>
+                <option value="{{ mes.mes }}" *ngFor="let mes of meses">
+                {{ mes.nombre }}
+                </option>
+            </select>
+            <div *ngIf="f['mes'].touched && f['mes'].invalid" class="form-text text-danger">
+                El Mes es obligatorio
+            </div>
+        </div>
+
+        <div class="col-lg mt-2">
+            <label class="form-label">Periodo</label>
+            
+            <select class="form-select form-select-sm" aria-label="Default select example" formControlName="anio" id="anio">
+                <option value="" selected>Selecciona un mes</option>
+                <option value="{{ anio }}" *ngFor="let anio of opcionesAnios">
+                {{ anio }}
+                </option>
+            </select>
+
+
+            <div *ngIf="f['anio'].touched && f['anio'].invalid" class="form-text text-danger">
+                Los apelldidos son obligatorios
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button
+        [disabled]="sending"
+        type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="cerrarModal()">
+        Cerrar
+    </button>
+    <button 
+        [disabled]="sending"
+        type="button" class="btn btn-primary btn-sm" (click)="download()">
+            Descargar
+    </button>
+</div>

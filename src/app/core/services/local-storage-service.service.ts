@@ -34,4 +34,21 @@ export class LocalStorageServiceService {
   clear(): void {
     localStorage.clear();
   }
+
+  getLocalUser(){
+    const u:any = this.getItem('currentUser');
+    return {
+      id: u.role.id,
+      nombreCompleto: u.role.name,
+      nombre: u['usuarioActivo'][0].puesto ?? 'N/D',
+      apellidos: u['usuarioActivo'][0].puesto ?? 'N/D',
+      email: u.role.email,
+      intercompania: u.role.intercompania,
+      isAgencia: u['usuarioActivo'][0].isAgencia ?? false,
+      empresa: u['usuarioActivo'][0].empresa ?? 'N/D',
+      puesto: u['usuarioActivo'][0].puesto ?? 'N/D',
+      multiselect: u['usuarioActivo'][0].multiselect ?? false, 
+      empresas: u['usuarioActivo'][0].empresas,
+    }
+  }
 }

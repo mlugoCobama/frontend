@@ -1,0 +1,84 @@
+<!-- form.component.html -->
+<form [formGroup]="form">
+    <div class="row">
+        <!-- Select Concepto -->
+        <div class="col-lg-4 mb-3">
+        <label for="concepto" class="form-label form-label-sm">Concepto</label>
+        <select id="concepto" formControlName="concepto" class="form-select form-select-sm">
+            <option value="" selected disabled>Selecciona una opción</option>
+            <option *ngFor="let c of conceptos" [value]="c.id">{{ c.nombre }}</option>
+        </select>
+        <div *ngIf="f['concepto'].invalid && (f['concepto'].dirty || f['concepto'].touched)" class="text-danger small">
+            El concepto es obligatorio.
+        </div>
+        </div>
+
+        <!-- Input Importe -->
+        <div class="col-lg-4 mb-3">
+        <label for="importe" class="form-label form-label-sm">Importe</label>
+        <input id="importe" type="text" formControlName="importe" mask="separator.2" thousandSeparator="," prefix="$ "
+            class="form-control form-control-sm" />
+        <div *ngIf="f['importe'].invalid && (f['importe'].dirty || f['importe'].touched)" class="text-danger small">
+            El importe es obligatorio.
+        </div>
+        </div>
+
+        <!-- Select Tipo -->
+        <div class="col-lg-4 mb-3">
+        <label for="tipo" class="form-label form-label-sm">Tipo</label>
+        <select id="tipo" formControlName="tipo" class="form-select form-select-sm">
+            <option value="" selected disabled>Selecciona una opción</option>
+            <option value="1">Comisión</option>
+            <option value="2">Descuento</option>
+        </select>
+        <div *ngIf="f['tipo'].invalid && (f['tipo'].dirty || f['tipo'].touched)" class="text-danger small">
+            El tipo es obligatorio.
+        </div>
+        </div>
+
+        <!-- Textarea Observaciones -->
+        <div class="mb-3">
+        <label for="observaciones" class="form-label form-label-sm">Observaciones</label>
+        <textarea id="observaciones" formControlName="observaciones" class="form-control form-control-sm"
+            rows="3"></textarea>
+        </div>
+
+    </div>
+    
+
+
+    <div class="d-flex justify-content-end aling-items-center"> 
+        <button (click)="agregarRegistro()"class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Agregar</button>
+    </div>
+
+    <div class="mt-4">
+    <table class="table table-sm table-bordered">
+      <thead class="table-light">
+        <tr>
+          <th>Concepto</th>
+          <th>Observaciones</th>
+          <th>Importe</th>
+          <th class="text-center">-</th>
+        </tr>
+      </thead>
+      <tbody>
+            <tr *ngFor="let r of registros; let i = index">
+            <td>{{ r.concepto }}</td>
+            <td>{{ r.observaciones }}</td>
+            <td class="fw-bold text-end">{{ r.importe | currency }}</td>
+            <td class="text-center">
+                <button type="button" class="btn btn-sm btn-danger" (click)="quitarRegistro(i)">
+                <i class="fas fa-trash"></i> 
+                </button>
+            </td>
+            </tr>
+        </tbody>
+      <tfoot>
+        <td class="text-end fw-bold" colspan="2">Total</td>
+        <td class="text-end fw-bold">{{getTotal('importe') | currency}}</td>
+        <td class="text-center">MXN</td>
+      </tfoot>
+    </table>
+  </div>
+
+</form>

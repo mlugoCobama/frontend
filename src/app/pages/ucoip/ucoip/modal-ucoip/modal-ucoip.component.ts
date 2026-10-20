@@ -5,7 +5,8 @@ import { Permisos } from 'src/app/core/models/ucoip/permisos';
 import { AlertErrorService } from 'src/app/core/services/alert-error.service';
 import { AreasDepartamentosService } from 'src/app/core/services/ucoip/areas-departamentos.service';
 import { PermisosService } from 'src/app/core/services/ucoip/permisos.service';
-
+import { ResguardosService } from 'src/app/core/services/ucoip/resguardos.service';
+import { UcoipService } from 'src/app/core/services/ucoip/ucoip.service';
 @Component({
   selector: 'app-modal-ucoip',
   templateUrl: './modal-ucoip.component.html',
@@ -13,11 +14,11 @@ import { PermisosService } from 'src/app/core/services/ucoip/permisos.service';
 })
 export class ModalUcoipComponent implements OnInit  {
   public tipo: string = '';
-  
+
   public data: any = [];
-    
+
   public listaDatos: any[] = [];
-  
+
   public formModalUcoip: FormGroup;
 
   public dataAreas: any;
@@ -29,16 +30,25 @@ export class ModalUcoipComponent implements OnInit  {
   public dataPermisos: Permisos[];
 
   public isLoad: boolean = true;
-    
+
+  tabActiva: string = 'general';
+
+  public catalogo:any;
+  public areas:any;
+  public catSistemas:any;
+  public catRecurso:any;
+
   public event: EventEmitter<any> = new EventEmitter();
-  
+
   constructor(
     public formBuilder: FormBuilder,
     public modalRef: BsModalRef,
     public modalService: BsModalService,
     public alertService: AlertErrorService,
     private areasDeptosService: AreasDepartamentosService,
-    private permisosService: PermisosService
+    private permisosService: PermisosService,
+    private resguardosService: ResguardosService,
+    private ucoipService: UcoipService,
   ) {}
 
   public ngOnInit(): void {
@@ -46,10 +56,10 @@ export class ModalUcoipComponent implements OnInit  {
     this.tipo = this.listaDatos[0].tipo;
     this.data = this.listaDatos[0].data;
     this.getPermisos();
+    this.getDataUcoip()
+    this.getResguardos();
     this.buildFormModal();
-
-    console.log(this.dataPermisos);
-    
+    // console.log(this.dataPermisos);
   }
 
   private buildFormModal() {
@@ -99,14 +109,14 @@ export class ModalUcoipComponent implements OnInit  {
         this.alertService.alertError(error, false);
       }
     );
-    
+
   }
 
   public onSelectDeptoChange(value: number) {
     this.areasDeptosService.getDeptoPuestos(value).subscribe(
       (data: any) => {
         if (data.success) {
-          this.dataPuesto = data.data;          
+          this.dataPuesto = data.data;
         } else {
           this.alertService.alertError(data.message, data.success);
         }
@@ -115,7 +125,7 @@ export class ModalUcoipComponent implements OnInit  {
         this.alertService.alertError(error, false);
       }
     );
-    
+
   }
 
   private getPermisos() {
@@ -132,5 +142,40 @@ export class ModalUcoipComponent implements OnInit  {
     });
   }
 
-  
+  public resguardos = [];
+  private getResguardos() {
+    this.resguardos = [];
+    this.resguardosService.getUcoipResguardos(this.data.id).subscribe({
+      next: async (resp) => {
+        if (resp.success) {
+          this.resguardos = resp.data;
+          this.isLoad = false;
+        }
+      },
+      error: (err) => {
+        console.error('Error cargando módulos', err);
+      }
+    });
+  }
+
+  public ucoip:any;
+  public getDataUcoip(){
+    this.ucoipService.getOne(this.data.id).subscribe({
+      next: async (resp) => {
+        if (resp.status == "success") {
+          this.ucoip = resp.data;
+          this.isLoad = false;
+        }
+      },
+      error: (err) => {
+        console.error('Error cargando módulos', err);
+      }
+    });
+  }
+
+
+
+    public cerrarModal(): void {
+    this.modalRef.hide();
+  }
 }

@@ -1,0 +1,28 @@
+.zoom-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* PRIMARY */
+.shadow-hover-primary:hover {
+  box-shadow: 0 8px 20px rgba(var(--bs-primary-rgb), 0.45);
+}
+
+/* SUCCESS */
+.shadow-hover-success:hover {
+  box-shadow: 0 8px 20px rgba(var(--bs-success-rgb), 0.45);
+}
+
+/* WARNING */
+.shadow-hover-warning:hover {
+  box-shadow: 0 8px 20px rgba(var(--bs-warning-rgb), 0.45);
+}
+
+/* INFO */
+.shadow-hover-info:hover {
+  box-shadow: 0 8px 20px rgba(var(--bs-info-rgb), 0.45);
+}
+
+/* DARK */
+.shadow-hover-dark:hover {
+  box-shadow: 0 8px 20px rgba(var(--bs-dark-rgb), 0.45);
+}

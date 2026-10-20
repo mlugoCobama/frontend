@@ -103,5 +103,8 @@
     },
     {
         "Id":"35", "Clave":"VTAS", "Descripcion": "SERVICIO UNIDAD"
+    },
+    {
+        "Id":"333", "Clave":"GRAL", "Descripcion": "GENERAL"
     }
 ]

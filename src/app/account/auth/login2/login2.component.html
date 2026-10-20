@@ -97,8 +97,8 @@
                                     <div class="mb-3">
                                         <label for="userpassword">Contraseña</label>
                                         <div class="input-group auth-pass-inputgroup">
-                                            <input type="password" class="form-control" formControlName="password" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" placeholder="Contraseña" aria-label="Password" aria-describedby="password-addon">
-                                            <button class="btn btn-light " type="button" id="password-addon"><i class="mdi mdi-eye-outline"></i></button>
+                                            <input [type]="showPassword ? 'text' : 'password'" class="form-control" formControlName="password" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" placeholder="Contraseña" aria-label="Password" aria-describedby="password-addon">
+                                            <button class="btn btn-light " type="button" id="password-addon" (click)="togglePassword()"><i class="mdi" [ngClass]="showPassword ? 'mdi-eye-off-outline' : 'mdi-eye-outline'"></i></button>
                                             @if(submitted && f.password.errors){
                                             <div class="invalid-feedback">
                                                 @if(f.password.errors.required){
@@ -112,10 +112,16 @@
                                         <button
                                           class="btn btn-primary btn-block"
                                           type="submit"
-                                          [disabled]="loginForm.invalid"
+                                          [disabled]="loginForm.invalid || loading">
 
-                                        >
-                                        Iniciar Sesion
+                                            <span
+                                                *ngIf="loading"
+                                                class="spinner-border spinner-border-sm me-2"
+                                                role="status"
+                                                aria-hidden="true">
+                                            </span>
+
+                                            {{ loading ? 'Iniciando sesión...' : 'Iniciar Sesión' }}
                                       </button>
                                     </div>
 

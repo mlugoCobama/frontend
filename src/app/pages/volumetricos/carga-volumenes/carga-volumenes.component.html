@@ -1,0 +1,60 @@
+<!-- form.component.html -->
+ <app-card-top
+    [title]="'Carga de Reportes de controles volumétricos'">
+    </app-card-top>
+<div class="card  rounded-4 shadow-sm mt-4">
+  <div class="card-header  rounded-4 bg-primary text-white fw-semibold d-flex justify-content-between">
+    <span>  <i class="fas fa-file-code me-1"> </i> Formulario de carga de reportes de controles volumetricos </span>
+
+    <button *ngIf="jsonPreview" class="btn btn-sm btn-outline-light fw-semibold" (click)="limpiarDatos()">
+        <i class="fas fa-eraser"></i> Limpiar
+      </button>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="form" class="row g-3">
+
+      <!-- Input File -->
+      <div class="col-12">
+        <label for="archivo" class="form-label">Archivo (JSON ó XML)</label>
+        <input id="archivo"  accept=".json, .xml, application/json, text/xml, application/xml" type="file" class="form-control form-control-sm" (change)="onFileChange($event)" />
+        <div *ngIf="form.get('archivo')?.invalid && form.get('archivo')?.touched" class="text-danger mt-1">
+          El archivo es obligatorio
+        </div>
+      </div>
+
+      <!-- Select Empresa -->
+      <div class="col-12">
+        <label for="empresa" class="form-label">Empresa</label>
+        <select id="empresa" class="form-select form-select-sm" formControlName="empresa">
+          <option value="">Seleccione una empresa</option>
+          <option *ngFor="let emp of empresas" [value]="emp.intercompania">{{ emp.name }}</option>
+        </select>
+        <div *ngIf="form.get('empresa')?.invalid && form.get('empresa')?.touched" class="text-danger mt-1">
+          La empresa es obligatoria
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div class="col-12 d-flex justify-content-end mt-3">
+        <button type="button" class="btn btn-success btn-sm" (click)="guardar()" [disabled]="isLoading">
+          <ng-container *ngIf="!isLoading; else loading">
+            <i class="fas fa-save"></i> Guardar
+          </ng-container>
+          <ng-template #loading>
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Guardando...
+          </ng-template>
+        </button>
+      </div>
+    </form>
+
+    <!-- Previsualización JSON -->
+    <div *ngIf="jsonPreview" class="mt-4">
+      <h5>Contenido del archivo: {{selectedViewer}} </h5>
+      <!-- <pre class="bg-light p-3 border rounded">{{ jsonPreview | json }}</pre> -->
+      <app-visor-reporte-volumenes *ngIf ="selectedViewer == 'json'" [dataJson]="jsonPreview"></app-visor-reporte-volumenes>
+      <app-visor-reporte-xml *ngIf ="selectedViewer == 'xml'" [dataJson]="jsonPreview"></app-visor-reporte-xml>
+    </div>
+
+  </div>
+</div>

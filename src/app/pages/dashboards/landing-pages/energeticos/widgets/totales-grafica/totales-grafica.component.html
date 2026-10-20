@@ -1,12 +1,12 @@
-<div class="card">
+<div class="card rounded-4 shadow-sm">
     <div class="card-body">
         <div class="clearfix">
             <div class="float-end">
-                
+
             </div>
             <h4 class="card-title mb-4">{{title | titlecase }}</h4>
         </div>
-        
+
         <div class="row">
             <div class="col-lg-4">
                 <div class="text-muted">
@@ -16,17 +16,17 @@
                             <h4>{{ money }} {{ totalMes[concepto] | number }}</h4>
                         </ng-container>
                         <ng-template #elseTemplate1>
-                            <h4 class="text-danger">{{ money }} {{ totalMes[concepto] | number }}</h4> 
+                            <h4 class="text-danger">{{ money }} {{ totalMes[concepto] | number }}</h4>
                         </ng-template>
-                        
+
                         <div>
                             <ng-container *ngIf="diferencia > 0; else elseTemplate">
-                                <span class="badge badge-soft-success font-size-12 me-1"> + {{ diferencia | number }}</span> 
+                                <span class="badge badge-soft-success font-size-12 me-1"> + {{ diferencia | number }}</span>
                             </ng-container>
                             <ng-template #elseTemplate>
-                                <span class="badge badge-soft-danger font-size-12 me-1"> {{ diferencia | number }}</span> 
+                                <span class="badge badge-soft-danger font-size-12 me-1"> {{ diferencia | number }}</span>
                             </ng-template>
-                            
+
                         </div>
                     </div>
 

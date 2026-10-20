@@ -15,6 +15,7 @@ export interface Inventario {
     estado: number;
     tipo?: CatHardware,
     cat_hardware_id?: number
+    usuario_actual?: string
 }
 
 export interface ResponseInvetario {

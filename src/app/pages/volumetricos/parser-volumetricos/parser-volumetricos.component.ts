@@ -1,0 +1,266 @@
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
+import { UsuariosService } from 'src/app/core/services/compras/usuarios.service';
+import { LocalStorageServiceService } from 'src/app/core/services/local-storage-service.service';
+import { VisorVolumetricosService } from 'src/app/core/services/volumetricos/visor-volumetricos.service';
+import { VolumetricosExportService } from 'src/app/core/services/volumetricos/volumetricos-export-service.service';
+import { PermisosService } from 'src/app/core/services/permisos.service';
+
+@Component({
+  selector: 'app-parser-volumetricos',
+  templateUrl: './parser-volumetricos.component.html',
+  styleUrl: './parser-volumetricos.component.css'
+})
+export class ParserVolumetricosComponent implements OnInit {
+  form!: FormGroup;
+  empresas: any[] = [];
+  jsonPreview: any = null;
+  uuidInvalidos = [];
+  public rawEmpresas: any;
+  public isLoading: boolean = false;
+  public uuidReporte = null;
+
+  @Input() idReporte:any =  null;
+  @Output() finished = new EventEmitter<any>();
+  archivoInput!: ElementRef<HTMLInputElement>;
+
+  constructor(private fb: FormBuilder,
+    private usuariosService: UsuariosService,
+    private alertasService: SwalComprsServiceService,
+    private volumetricos: VisorVolumetricosService,
+    private exportService: VolumetricosExportService,
+    private permisosService: PermisosService
+  ) {}
+
+  ngOnInit(): void {
+    this.form = this.fb.group({
+      archivo: [null, Validators.required],
+      formato: [''],
+      empresa: ['', Validators.required],
+    });
+
+    this.getEmpresas();
+  }
+
+  public  limpiarDatos() {
+    this.form.reset({
+      archivo: null,
+      formato: '',
+      empresa: ''
+    });
+    this.jsonPreview = null;
+    this.uuidInvalidos = []
+    // this.archivoInput.nativeElement.value = '';
+  }
+
+  onFileChange(event: any) {
+    this.jsonPreview = null;
+    const file = event.target.files[0];
+    if (file) {
+      this.form.patchValue({ archivo: file });
+    }
+  }
+
+
+  /**
+   * Recupera el catalogo de empresas (Select empresa)
+   */
+  public getEmpresas() {
+    this.usuariosService.getEmpresas().subscribe(
+      (response) => {
+        if (response) {
+          const rawData = response.data;
+
+          const intercompaniasExcluidas = [200, 119, 201, 700, 333, 119, 200 ];
+          this.rawEmpresas = rawData.filter((objeto: any) => {
+          const noEsAgencia = objeto.isAgencia === false; // o simplemente !objeto.isAgencia
+          const noEsIntercompaniaExcluida = !intercompaniasExcluidas.includes(objeto.intercompania);
+
+          return noEsAgencia && noEsIntercompaniaExcluida;
+        });
+          // this.isLoading = false;
+        } else {
+          this.alertasService.mostrarAlerta(
+            "Error", response.message, "error", "danger" );
+        }
+      },
+      (error) => {
+        this.alertasService.mostrarAlerta(
+          "Error", `Error fetching data: ${error}`, "error", "danger"
+        );
+      }
+    );
+  }
+
+public  findNombreGasera(intercompania:string){
+  const nombreEmpresa = this.rawEmpresas.find(item => item.intercompania === +intercompania)?.name;
+  return nombreEmpresa;
+}
+
+
+coincideEmpresa(cadenaOriginal:string, cadenaBuscada:string) {
+  if (!cadenaOriginal || !cadenaBuscada) return false;
+
+  const normalizar = (texto:string) => texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+
+  const descripcion = normalizar(cadenaOriginal);
+  const empresa = normalizar(cadenaBuscada);
+  const resultado = descripcion.includes(empresa);
+  return resultado
+}
+
+  generarArchivo() {
+    this.uuidReporte = null;
+  if (this.form.invalid) {
+    this.alertasService.mostrarAlerta( "Error", `Debes llenar todos los campos`, "error", "danger");
+        this.form.markAllAsTouched();
+        this.isLoading = false;
+    return;
+  }
+  this.isLoading = true;
+  const formData = new FormData();
+
+  formData.append('file',this.form.get('archivo')?.value);
+
+
+  this.volumetricos.parse(formData)
+    .subscribe({
+      next: (resp) => {
+       this.alertasService.mostrarAlerta( "Listo", `Archivo Generado Correctamente`,  "success",  "success");
+        this.uuidReporte = resp.headers.get('X-Report-UUID')
+        this.jsonPreview = resp.body.json;
+        this.uuidInvalidos = resp.body.uuidInvalidos ;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.alertasService.mostrarAlerta(
+            "Error", err, "error", "danger" );
+        console.log(err);
+        this.isLoading = false;
+      }
+    });
+}
+
+public async guardar() {
+
+
+if (this.form.invalid) {
+    this.alertasService.mostrarAlerta("Error", `Debes llenar todos los campos`, "error","danger");
+        this.form.markAllAsTouched();
+        this.isLoading = false;
+    return;
+
+  }
+
+  const nombreEmpresa = this.findNombreGasera(this.form.get('empresa')?.value);
+  const descInstalacion = this.jsonPreview.DescripcionInstalacion;
+    if (!this.coincideEmpresa(descInstalacion, nombreEmpresa)) {
+
+    const confirmado = await this.alertasService.mostrarConfirmacion(
+      "Advertencia de empresa",
+      "Al parecer el reporte no coincide con la empresa seleccionada. ¿Deseas continuar?"
+    );
+
+    if (!confirmado) {
+      this.isLoading = false;
+      return;
+    }
+  }
+
+  this.isLoading = true;
+  const formData = new FormData();
+
+  formData.append('archivo',this.form.get('archivo')?.value);
+  formData.append('empresa',this.form.get('empresa')?.value);
+  formData.append('formato',this.form.get('formato')?.value);
+  formData.append('tipo', this.jsonPreview.ClaveInstalacion);
+  formData.append('descripcion', this.jsonPreview.DescripcionInstalacion);
+  formData.append('fecha_reporte', this.jsonPreview.FechaYHoraReporteMes);
+  formData.append('uuid_plantilla', this.uuidReporte ?? '')
+
+  this.volumetricos.store(formData)
+    .subscribe({
+      next: (resp) => {
+        if(resp.success){
+          this.alertasService.mostrarAlerta("Listo",`Archivo Guardado Correctamente`,"success","success");
+        this.limpiarDatos()
+        this.jsonPreview = null;
+        this.isLoading = false;
+        }else{
+           this.alertasService.mostrarAlerta( "Error", `Ocrrio un error al guardar los datos`,  "error",  "danger");
+          this.isLoading = false;
+        }
+
+      },
+      error: (err) => {
+        console.log(err);
+        this.isLoading = false;
+      }
+    });
+}
+
+public  update() {
+if (this.form.invalid) {
+    this.alertasService.mostrarAlerta("Error",`Debes llenar todos los campos`,"error","danger");
+        this.form.markAllAsTouched();
+        this.isLoading = false;
+    return;
+
+  }
+  this.isLoading = true;
+  const formData = new FormData();
+
+  formData.append('archivo',this.form.get('archivo')?.value);
+  formData.append('empresa',this.form.get('empresa')?.value);
+  formData.append('formato',this.form.get('formato')?.value);
+  formData.append('tipo', this.jsonPreview.ClaveInstalacion);
+  formData.append('descripcion', this.jsonPreview.DescripcionInstalacion);
+  formData.append('fecha_reporte', this.jsonPreview.FechaYHoraReporteMes);
+  formData.append('uuid_plantilla', this.uuidReporte ?? '');
+  formData.append('_method', 'PUT');
+
+  this.volumetricos.update( this.idReporte ,formData)
+    .subscribe({
+      next: (resp) => {
+        if(resp.success){
+            this.alertasService.mostrarAlerta("Listo", `Archivo Guardado Correctamente`,"success","success");
+          this.form.reset();
+          this.jsonPreview = resp;
+          this.isLoading = false;
+          this.finished.emit();
+        }else{
+           this.alertasService.mostrarAlerta("Error",`Ocurrio un error al guardar los datos`,"error","danger"
+        );
+          this.form.reset();
+          this.isLoading = false;
+        }
+
+      },
+      error: (err) => {
+        console.log(err);
+        this.isLoading = false;
+      }
+    });
+}
+
+
+  descargarJson() {
+    this.exportService.descargarJson(this.jsonPreview, this.uuidReporte);
+  }
+
+  descargarXml() {
+    this.exportService.descargarXml(this.jsonPreview, this.uuidReporte);
+  }
+
+  descargarPdf() {
+    this.exportService.descargarReporte(this.jsonPreview, this.uuidReporte);
+  }
+
+  tienePermiso(permiso: string = null): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
+  }
+}
+
+

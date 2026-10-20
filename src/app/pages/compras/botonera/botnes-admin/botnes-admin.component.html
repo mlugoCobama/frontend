@@ -1,24 +1,83 @@
 <div class="flex-shrink-0 d-flex gap-1">
     <a 
     (click) = "clickGenerarOrden()"
+    
     *ngIf="status === enEsts.EnCotizacion && mostrarBoton && tienePermiso('view btn generar orden')"
-    href="javascript:void(0);" class="btn btn-primary btn-sm">
+    href="javascript:void(0);" class="btn btn-primary btn-sm" [disabled]="isLoadingGenerarOrden">
         <i class="fas fa-file-import"></i>
-         Generar Orden de Compra
+        <i *ngIf="!isLoadingGenerarOrden" class="fas fa-file-import"></i>
+        <i *ngIf="isLoadingGenerarOrden" class="fas fa-spinner fa-spin"></i>
+            Generar Orden de Compra
     </a>
+    
+    <a 
+    (click) = "clickVolverACotizar()"
+    *ngIf="(status === enEsts.OrdenCompra || status === enEsts.EnSurtido) && tienePermiso('view btn recotizar')"
+    href="javascript:void(0);" class="btn btn-info btn-sm">
+        <i *ngIf="!isLoadingVolverACotizar" class="fas fa-undo-alt"></i>
+        <i *ngIf="isLoadingVolverACotizar" class="fas fa-spinner fa-spin"></i>
+        Volver a Cotizar
+    </a>
+    
     <a 
     (click) = "clickCotizar()"
     *ngIf="status === enEsts.Solicitado && !comprasService.mostrarCotizacionSource.value && tienePermiso('view btn cotizar')"
     href="javascript:void(0);" class="btn btn-info btn-sm">
-        <i class="fas fa-receipt"></i>
+        <i class="fas fa-receipt "></i>
          Cotizar
     </a>
+
     <a 
     (click) = "clickCancelar()"
-    *ngIf="status >= enEsts.Solicitado && status < enEsts.Autorizado && !comprasService.mostrarCotizacionSource.value && status != enEsts.Cancelado && tienePermiso('view btn cancelar')"
-    href="javascript:void(0);" class="btn btn-danger btn-sm">
-        <i class="fas fa-ban"></i>
+    *ngIf="status >= enEsts.Solicitado && status < enEsts.EnSurtido && !comprasService.mostrarCotizacionSource.value && status != enEsts.Cancelado && tienePermiso('view btn cancelar')"
+    href="javascript:void(0);" class="btn btn-danger btn-sm" [disabled]="isLoadingGenerarOrden">
+        <i *ngIf="!isLoadingCancelar" class="fas fa-ban"></i>
+        <i *ngIf="isLoadingCancelar" class="fas fa-spinner fa-spin"></i>
         Cancelar Solicitud
     </a>
+
+    <a 
+    (click) = "clickCancelar()"
+    *ngIf="status == enEsts.EspAutPlanta && tienePermiso('view btn cancelar admins')"
+    href="javascript:void(0);" class="btn btn-danger btn-sm">
+        <i *ngIf="!isLoadingCancelar" class="fas fa-ban"></i>
+        <i *ngIf="isLoadingCancelar" class="fas fa-spinner fa-spin"></i>
+        Cancelar Solicitud
+    </a>
+
+    <a 
+    (click) = "clickDevolverRevision()"
+    *ngIf="solicitudSelecionada && status <= enEsts.Solicitado && tienePermiso('view btn devolver para revision')"
+    href="javascript:void(0);" class="btn btn-outline-danger btn-sm">
+        <i *ngIf="!isLoadingDevolverRevision" class="fas fa-ban"></i>
+        <i *ngIf="isLoadingDevolverRevision" class="fas fa-spinner fa-spin"></i>
+         Devolver para revisión
+    </a>
+
+    <a
+    *ngIf="!solicitudSelecionada && tienePermiso('view btn descargar solicitudes')"
+    href="javascript:void(0);"
+    class="btn btn-outline-success btn-sm"
+    [disabled]="downloading"
+    (click)="onDownload()"
+    >
+    <ng-container *ngIf="!downloading; else loadingConcentrado">
+        <i class="fas fa-file-excel"></i> Descargar Solicitudes
+    </ng-container>
+    <ng-template #loadingConcentrado>
+        <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+        Descargando...
+    </ng-template>
+    </a>
+
+    <!-- <button (click)="btnDescargarConcentrado()" [disabled]="isDownloadingConcentrado" class="btn btn-success btn-sm">
+    <ng-container *ngIf="!isDownloadingConcentrado; else loadingConcentrado">
+        <i class="fas fa-file-excel"></i> Descargar Concentrado
+    </ng-container>
+    <ng-template #loadingConcentrado>
+        <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+        Descargando...
+    </ng-template>
+    </button> -->
 </div>
   

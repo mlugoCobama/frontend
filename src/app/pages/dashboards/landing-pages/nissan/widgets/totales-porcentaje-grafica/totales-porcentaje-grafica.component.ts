@@ -144,7 +144,7 @@ public options = {
       });
       this.serie = serie;
       this.labels = this.conceptos;
-      console.log(serie);
+      // console.log(serie);
     }
 
     public getSumaConcepto(){

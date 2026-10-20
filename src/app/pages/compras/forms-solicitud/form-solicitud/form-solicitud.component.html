@@ -3,12 +3,12 @@
       <label for="empresa" class="form-label form-label-sm">Empresa: *</label>
       
       <select
-      *ngIf = "usuarioSolicita?.multiselect === true; else nombreEmpresa"
+      *ngIf = "tienePermiso('view select emp users compras'); else nombreEmpresa"
         class="form-select form-select-sm" aria-label="Default select example" formControlName="empresa" id="empresa"
         name="empresa" aria-label="empresa" (change)="getUsuarios($event.target.value)">
         <option value="" selected disabled>Selecciona uno</option>
         <option *ngIf = "isLoading" value="" [disabled] = "isLoading"> Cargando opciones espera...</option>
-        <option  *ngFor="let item of empresas" [value]="item.intercompania">
+        <option  *ngFor="let item of empresas" [value]="item.intercompania" [hidden]="!tienePermiso(item.permiso)" >
           {{ item.name.toUpperCase() }}
         </option>
       </select>
@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <div class="col-md" *ngIf ="!isAgencia">
+    <div class="col-md" *ngIf ="!isAgencia || tienePermiso('view form tipo mantenimiento')">
       <label for="usuario_destino" class="form-label">Usuarios: *</label>
       <select class="form-select form-select-sm" aria-label="Default select example" formControlName="usuario_destino" id="usuario_destino" 
       name="usuario_destino" aria-label="usuario_destino">
@@ -37,7 +37,7 @@
       </div>
     </div>
 
-    <div *ngIf="isAgencia" class="col-md">
+    <div *ngIf="isAgencia && !tienePermiso('view form tipo mantenimiento')" class="col-md">
       <label  class="form-label">Centro de costos *: </label>
       <select class="form-select form-select-sm" type="text" formControlName="c_c"  
        id="c_c" name="c_c" aria-label="c_c">
@@ -65,6 +65,43 @@
         </div>
       </div>
     </div>
+    <div class="form-group col-md-6">
+      <div class="d-flex align-items-center mt-2">
+        <label class="mb-0 me-2">Requiere anticipo*:</label>
+    
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" formControlName="requiere_anticipo" id="inlineRadio1" value="true">
+          <label class="form-check-label" for="inlineRadio1">Si</label>
+        </div>
+    
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" formControlName="requiere_anticipo" id="inlineRadio2" value="false">
+          <label class="form-check-label" for="inlineRadio2">No</label>
+        </div>
+      </div>
+      <div *ngIf="solicitudCompraFormControl.requiere_anticipo.touched || submitted">
+        <small class="text-danger form-text" *ngIf="solicitudCompraFormControl.requiere_anticipo.errors?.['required']">
+          Debes indicar si requiere anticipo.
+        </small>
+      </div>
+    </div>
+    <!-- <div class="col-md">
+      <label for="empresa" class="form-label form-label-sm">Tipo de compra: *</label>
+      
+      <select
+        class="form-select form-select-sm" aria-label="Default select example" formControlName="tipo" id="tipo"
+        name="tipo" aria-label="tipo">
+        <option value="" selected disabled>Selecciona uno</option>
+        <option  *ngFor="let item of tiposCompras" [value]="item.claveNum">
+          {{ item.tipoCompra }}
+        </option>
+      </select>
+      <div *ngIf="solicitudCompraFormControl.tipo.touched || submitted || solicitudCompraFormControl.tipo.value === 'Selecciona uno'">
+        <div class="text-danger form-text" *ngIf="solicitudCompraFormControl.tipo.errors?.['required']">
+          Debes de seleccionar un tipo.
+        </div>
+      </div>
+    </div> -->
     <!-- fin primer from -->
   </form>
   <ng-template #nombreEmpresa>

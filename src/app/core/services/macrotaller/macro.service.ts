@@ -60,6 +60,10 @@ export class MacroService {
       return this.http.get(environment.apiUrl + `macrotaller/almacen/${idSolicitud}`, {headers});
   }
 
+  public getDetalleEntradaCompras(idSolicitud: number): Observable<any> {
+      return this.http.get(environment.apiUrl + `compras/AcuseEntrega/${idSolicitud}`, {headers});
+  }
+
   /**
    * Recupera detalles en almacen que tienen existencia
    * @param idSolicitud id de solicitud o de autotanque 

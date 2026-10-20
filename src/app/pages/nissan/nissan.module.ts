@@ -15,6 +15,25 @@ import { ComprasSeminuevosComponent } from './compras-seminuevos/compras-seminue
 import { ComisionesComponent } from './comisiones/comisiones.component';
 import { TablaCapturaComponent } from './comisiones/tabla-captura/tabla-captura.component';
 import { TablaPagadasComponent } from './comisiones/tabla-pagadas/tabla-pagadas.component';
+import { VendedoresComponent } from './comisiones/vendedores/vendedores.component';
+import { TabuladorComponent } from './comisiones/tabulador/tabulador.component';
+import { FiltroComponent } from './comisiones/filtro/filtro.component';
+import { BotoneraComponent } from './comisiones/botonera/botonera.component';
+import { SpinerComponent } from './comisiones/spiner/spiner.component';
+// import { CardTopComponent } from './comisiones/card-top/card-top.component';
+import { ModalAddVendedorComponent } from './comisiones/vendedores/modal-add-vendedor/modal-add-vendedor.component';
+import { FormVendedoresComponent } from './comisiones/vendedores/form-vendedores/form-vendedores.component';
+import { ModalUpdateVendedorComponent } from './comisiones/vendedores/modal-update-vendedor/modal-update-vendedor.component';
+import { FormTabuladorComponent } from './comisiones/tabulador/form-tabulador/form-tabulador.component';
+import { ModalAddTabuladorComponent } from './comisiones/tabulador/modal-add-tabulador/modal-add-tabulador.component';
+import { ModalUpdateTabuladorComponent } from './comisiones/tabulador/modal-update-tabulador/modal-update-tabulador.component';
+import { PldComponent } from './pld/pld.component';
+import { DatosOperacionFormComponent } from './pld/datos-operacion-form/datos-operacion-form.component';
+import { DocumentacionFormComponent } from './pld/documentacion-form/documentacion-form.component';
+import { DatosIdentificacionFormComponent } from './pld/datos-identificacion-form/datos-identificacion-form.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { RelacionNegocioComponent } from './pld/relacion-negocio/relacion-negocio.component';
+import { DomicilioContactoFormComponent } from './pld/domicilio-contacto-form/domicilio-contacto-form.component';
 
 
 @NgModule({
@@ -23,7 +42,25 @@ import { TablaPagadasComponent } from './comisiones/tabla-pagadas/tabla-pagadas.
     ComprasSeminuevosComponent,
     ComisionesComponent,
     TablaCapturaComponent,
-    TablaPagadasComponent
+    TablaPagadasComponent,
+    VendedoresComponent,
+    TabuladorComponent,
+    FiltroComponent,
+    BotoneraComponent,
+    SpinerComponent,
+    // CardTopComponent,
+    ModalAddVendedorComponent,
+    FormVendedoresComponent,
+    ModalUpdateVendedorComponent,
+    FormTabuladorComponent,
+    ModalAddTabuladorComponent,
+    ModalUpdateTabuladorComponent,
+    PldComponent,
+    DatosOperacionFormComponent,
+    DocumentacionFormComponent,
+    DatosIdentificacionFormComponent,
+    RelacionNegocioComponent,
+    DomicilioContactoFormComponent
   ],
   imports: [
     CommonModule,
@@ -37,6 +74,7 @@ import { TablaPagadasComponent } from './comisiones/tabla-pagadas/tabla-pagadas.
     NgStepperModule,
     NgxMaskDirective,
     NgxMaskPipe,
+    ImageCropperModule
   ],
   providers: [
     provideNgxMask()

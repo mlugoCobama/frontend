@@ -90,9 +90,16 @@ export class DetalleReanultComponent implements OnInit {
 
             this.nombreMes = this.meses[periodo[1]-1]["nombre"];
             this.mesSeleccionado = periodo[1];
+            this.anioSeleccionado = periodo[2];
 
           } else {
             this.alertService.alertError(data.message, data.success);
+            this.energerticosGaseras.actualizarData();
+            const mes = this.dataEnergeticos['mes'].find((registro) => registro.id != "Total");
+            const periodo =  mes.fecha.split("-")
+            this.nombreMes = this.meses[periodo[1]-1]["nombre"];
+            this.mesSeleccionado = periodo[1];
+            this.anioSeleccionado = periodo[2];
           }
         },
         (error) => {

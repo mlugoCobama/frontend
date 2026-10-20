@@ -72,7 +72,7 @@ export class TecnicosComponent implements OnInit{
   public seleccionar(dato: any, evento: any) {
     this.mostrar = true;
     this.dato = dato;
-    console.log(dato)
+    // console.log(dato)
 
     if (evento.currentTarget.classList.contains("table-primary")) {
       evento.currentTarget.classList.remove("table-primary");
@@ -140,7 +140,7 @@ export class TecnicosComponent implements OnInit{
           /**Filtro para solo mostrar las empresas que tienen acceso a macrotaller */
           this.empresas = rawData.filter(objeto => objeto.isAgencia === false);
           // this.isLoading = false;
-          console.log(this.empresas);
+          // console.log(this.empresas);
         } else {
           // this.alertasService.mostrarAlerta("Error", response.message, "error" , "danger" );
         }
@@ -177,7 +177,7 @@ export class TecnicosComponent implements OnInit{
           this.tecnicos.destroy(this.dato.id).subscribe(
             (response) => {
               if (response.status === "success") {
-                console.log(response.message);
+                // console.log(response.message);
                 this.getAll();
                 Swal.fire({
                   title: "Borrado!",

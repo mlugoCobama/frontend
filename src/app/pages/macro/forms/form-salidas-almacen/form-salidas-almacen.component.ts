@@ -167,7 +167,7 @@ export class FormSalidasAlmacenComponent implements OnInit{
    */
   obtenerValores() {
     const value = this.formSalida.value;
-    console.log(value);
+    // console.log(value);
     return value;
   }
   /**

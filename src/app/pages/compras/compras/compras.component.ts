@@ -1,7 +1,8 @@
 import { Component, OnInit, NgModule, OnDestroy } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { ModalComprasComponent } from "./modal-compras/modal-compras.component";
-
+import { ModalSeguimientoComponent } from "./modal-seguimiento/modal-seguimiento.component";
+import { ModalPreviewOrdenCompraComponent } from "./modal-preview-orden-compra/modal-preview-orden-compra.component";
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { Config } from "datatables.net";
 import Swal from "sweetalert2";
@@ -15,13 +16,20 @@ import { SwalComprsServiceService } from "src/app/core/services/compras/swal-com
 import { UsuariosService } from "src/app/core/services/compras/usuarios.service";
 
 import { LocalStorageServiceService } from "src/app/core/services/local-storage-service.service";
+import { CotizacionesService } from "src/app/core/services/compras/cotizaciones/cotizaciones.service";
 
 @Component({
   selector: "app-compras",
   templateUrl: "./compras.component.html",
   styleUrls: ["./compras.component.css"],
 })
+
+
+
 export class ComprasComponent implements OnInit {
+  vistaKanban: boolean = false;
+  public tipoCompras = 1;
+
   public dtOptions: Config = {};
 
   public modalRef?: BsModalRef;
@@ -38,6 +46,15 @@ export class ComprasComponent implements OnInit {
   public empresas: any = [];
   public rawEmpresas: any = [];
   public usuarioSolicita: any;
+
+
+  isLoadingGenerarOrden = false;
+  isLoadingCotizar = false;
+  isLoadingVolverACotizar = false;
+  isLoadingCancelar = false;
+  isLoadingDevolverRevision = false;
+
+  private readonly STORAGE_KEY_VISTA = 'vistaComprasKanban';
 
   /**
    * Objeto que envió al componente detallesSolicitudCompra
@@ -59,13 +76,19 @@ export class ComprasComponent implements OnInit {
     public comprasService: ComprasService,
     private modalService: BsModalService,
     private localStorage: LocalStorageServiceService,
-    private usuariosService: UsuariosService
+    private usuariosService: UsuariosService,
+    private cotizacionesService: CotizacionesService,
   ) {}
 
   public ngOnInit(): void {
     this.comprasService.mostrarBoton$.subscribe((mostrar) => {
       this.mostrarBoton = mostrar;
     });
+
+    const vistaGuardada = this.localStorage.getItem(this.STORAGE_KEY_VISTA);
+    if (vistaGuardada !== null && vistaGuardada !== undefined) {
+      this.vistaKanban = JSON.parse(String (vistaGuardada));
+    }
 
     this.getEmpresas();
     
@@ -81,8 +104,9 @@ export class ComprasComponent implements OnInit {
       (response) => {
         if (response) {
           this.rawEmpresas = response.data;
-          this.getUsuarioActivo();
-          console.log(response.data)
+          if(this.rawEmpresas){
+            this.getUsuarioActivo();
+          }
           // this.isLoading = false;
         } else {
           this.alertasService.mostrarAlerta(
@@ -100,6 +124,60 @@ export class ComprasComponent implements OnInit {
       }
     );
   }
+
+  public volverAcotizar() {
+  Swal.fire({
+    title: 'Confirmación',
+    text: '¿Seguro que deseas volver a cotizar esta solicitud?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, continuar',
+    cancelButtonText: 'Cancelar',
+    reverseButtons: true,
+    allowOutsideClick: false,
+    buttonsStyling: false,
+    customClass: {
+      confirmButton: 'btn btn-sm btn-primary m-1',
+      cancelButton: 'btn btn-sm btn-secondary m-1'
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.isLoadingVolverACotizar = true;
+      let folio = '';
+
+      Swal.fire({
+        title: 'Procesando...',
+        text: 'Por favor espera',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+
+      this.cotizacionesService.volverCotizar(this.solicitudCompra.id).subscribe(
+        (response) => {
+          this.isLoadingVolverACotizar = false;
+          Swal.close(); // cerrar el loading
+
+          if (response) {
+            this.alertasService.mostrarAlerta("Listo!", response.message, "success", "success");
+            folio = this.solicitudCompra.folio;
+            this.regresar();
+            this.busqueda = folio;
+          } else {
+            this.alertasService.mostrarAlerta("Error!", response.message, "error", "danger");
+            console.log(response.message);
+          }
+        },
+        (error) => {
+          this.isLoadingVolverACotizar = false;
+          Swal.close();
+          this.alertasService.mostrarAlerta("Error!", error, "error", "danger");
+        }
+      );
+    }
+  });
+}
 
   //Recupera todos los registros de solicitudes de compras
   private getAll(intercompania) {
@@ -146,9 +224,10 @@ export class ComprasComponent implements OnInit {
   }
 
   filtrarEmpresas(data, empRel) {
-    this.empresas = data.filter((empresa) =>
-      empRel.includes(empresa.intercompania)
-    );
+    this.empresas = data
+    // data.filter((empresa) =>
+    //   empRel.includes(empresa.intercompania)
+    // );
   }
 
   /**
@@ -173,19 +252,12 @@ export class ComprasComponent implements OnInit {
     });
   }
   // Funcion para llenar la vista con el detalle component
-  public openDetallesSolicitud(dato: any, evento: any) {
+  public openDetallesSolicitud(dato: any, evento: any =  null)  {
     this.solicitudSelecionada = true;
-    if (evento.currentTarget.classList.contains("table-primary")) {
-      evento.currentTarget.classList.remove("table-primary");
-      this.solicitudSelecionada = false;
-    } else {
-      const filas = document.querySelectorAll("tbody tr");
-      filas.forEach((fila) => fila.classList.remove("table-primary"));
-      evento.currentTarget.classList.add("table-primary");
       this.solicitudSelecionada = true;
       this.solicitudCompra = dato; // Objeto que se envía al detalleSolicitudCompra
       this.status = this.solicitudCompra.estatus;
-    }
+    // }
   }
 
   /**
@@ -197,6 +269,7 @@ export class ComprasComponent implements OnInit {
     this.solicitudSelecionada = false;
     this.status = null;
     this.mostrarBoton = false;
+    // this.vistaKanban = false;
     this.getAll(this.usuarioSolicita.intercompania);
   }
   //Muestra u oculta el panel de cotizaciones
@@ -206,60 +279,6 @@ export class ComprasComponent implements OnInit {
   }
 
   // Cancela la solicitud desde un botón en la botonera
-  public cancelarSolicitud1() {
-    this.isLoad = true;
-    Swal.fire({
-      title: "¿Estas seguro?",
-      text: "La solicitud será marcada como cancelada",
-      input: 'text',
-    inputAttributes: {
-      autocapitalize: 'off'
-    },
-
-
-      icon: "error",
-      confirmButtonText: " SI ",
-      showCancelButton: true,
-      cancelButtonText: " NO ",
-      customClass: {
-        confirmButton: "btn btn-danger px-4",
-        cancelButton: "btn btn-primary ms-2 px-4",
-      },
-      buttonsStyling: false,
-    }).then((result) => {
-      if (result.value) {
-        this.comprasService.destroy(this.solicitudCompra.id).subscribe(
-          (response) => {
-            if (response.status === "success") {
-              this.regresar();
-              this.alertasService.mostrarAlerta(
-                "Cancelada!",
-                "La solicitud ha sido cancelada.",
-                "success",
-                "success"
-              );
-            } else {
-              this.alertasService.mostrarAlerta(
-                "Error!",
-                "Ocurrió un error inesperado",
-                "error",
-                "error"
-              );
-            }
-          },
-          (error) => {
-            this.alertasService.mostrarAlerta(
-              "Error!",
-              error,
-              "error",
-              "error"
-            );
-          }
-        );
-      }
-      this.isLoad = false;
-    });
-  }
   public cancelarSolicitud() {
   Swal.fire({
     title: '¿Estás seguro?',
@@ -273,10 +292,11 @@ export class ComprasComponent implements OnInit {
     showCancelButton: true,
     cancelButtonText: 'No',
     customClass: {
-      confirmButton: 'btn btn-danger px-4',
+      confirmButton: 'btn btn-danger ms-2 px-4',
       cancelButton: 'btn btn-primary ms-2 px-4',
     },
     buttonsStyling: false,
+    reverseButtons:true,
     preConfirm: (razon) => {
       if (!razon || razon.trim() === '') {
         Swal.showValidationMessage('Debes ingresar una razón válida');
@@ -333,34 +353,26 @@ export class ComprasComponent implements OnInit {
   }
 
   //Botón que descarga la orden de compra
-  btnDescargarOC() {
-    this.ordenesComprasService
-      .pdfOrdenCompra(this.solicitudCompra.id)
-      .subscribe(
-        (response) => {
-          if (response) {
-            const blob = new Blob([response], { type: "application/pdf" });
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = "orden_compra.pdf";
-            link.click();
-            window.URL.revokeObjectURL(url);
-            // this.alertasService.mostrarAlerta("Descargando", "Revisa el apartado de descargas en tu explorar de archivos", "success","success");
-          } else {
-            this.alertasService.mostrarAlerta(
-              "Error!",
-              "La orden de compra no existe",
-              "error",
-              "danger"
-            );
-          }
-        },
-        (error) => {
-          this.alertasService.mostrarAlerta("Error!", error, "error", "danger");
-        }
-      );
-  }
+ btnDescargarOC() {
+  this.ordenesComprasService.pdfOrdenCompra(this.solicitudCompra.id).subscribe(
+    (response) => {
+      const blob = new Blob([response.body!], { type: "application/pdf" });
+      const fileName = response.headers.get('X-Filename') || 'orden_compra.pdf';
+
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName;
+      link.click();
+      window.URL.revokeObjectURL(url);
+    },
+    (error) => {
+      this.alertasService.mostrarAlerta("Error!", error, "error", "danger");
+    }
+  );
+}
+
+
 
   updateStatus(status: any) {
     this.status = status;
@@ -375,31 +387,149 @@ export class ComprasComponent implements OnInit {
     return this.ordenador.getIcono(columna);
   }
 
+  public modelBusqueda = [  "folio", "usuario_destino",  "fecha",
+                            "usuario_solicita", "empresa", "estado",
+                          "centro_costo", "proveedor",  "total_orden",
+                          "folio_oc", "modo_pago",  "pagado"];
   filtrarTabla() {
     this.busqueda2 = "";
-    this.datosFiltrados = this.ordenador.filtrar(this.busqueda, [
-      "folio",
-      "usuario_destino",
-      "motivo",
-      "fecha",
-      "usuario_solicita",
-      "empresa",
-      "estado",
-      "centro_costo",
-    ]);
+    this.datosFiltrados = this.ordenador.filtrar(this.busqueda, this.modelBusqueda);
   }
 
   filtrarTabla2() {
     this.busqueda = "";
-    this.datosFiltrados = this.ordenador.filtrar(this.busqueda2, [
-      "folio",
-      "usuario_destino",
-      "motivo",
-      "fecha",
-      "usuario_solicita",
-      "empresa",
-      "estado",
-      "centro_costo",
-    ]);
+    this.datosFiltrados = this.ordenador.filtrar(this.busqueda2, this.modelBusqueda);
+  }
+
+  openModalSeguimiento(item){
+   this.modalAbierto = true;
+    const initialState: ModalOptions = {
+      initialState: {
+        solicitudCompra: item
+      },
+      class: "modal-lg",
+    };
+    this.modalRef = this.modalService.show(ModalSeguimientoComponent, initialState);
+    this.modalRef.content.closeBtnName = "Close";
+    this.modalRef.content.event.subscribe(() => {
+      // this.isLoad = true;
+      // this.getAll(this.usuarioSolicita.intercompania);
+    });
+    this.modalRef.content.modalCerrado.subscribe(() => {
+      this.modalAbierto = false;
+    });
+  }
+
+  public openModalOC(item) {
+    if(item.folio_oc != "-"){
+      this.modalAbierto = true;
+    const initialState: ModalOptions = {
+      initialState: {
+        solicitudCompra : item
+      },
+      class: "modal-lg",
+    };
+    this.modalRef = this.modalService.show(ModalPreviewOrdenCompraComponent, initialState);
+    this.modalRef.content.closeBtnName = "Close";
+    this.modalRef.content.event.subscribe(() => {
+      // this.isLoad = true;
+      // this.getAll(this.usuarioSolicita.intercompania);
+    });
+    this.modalRef.content.modalCerrado.subscribe(() => {
+      this.modalAbierto = false;
+    });
+    }
+    
+  }
+
+  public alternarVista(): void {
+    this.vistaKanban = !this.vistaKanban;
+
+    this.localStorage.setItem(
+      this.STORAGE_KEY_VISTA,
+      JSON.stringify(this.vistaKanban)
+    );
+  }
+
+  public tienePermiso(permiso: string): boolean {
+  const permisosRaw = localStorage.getItem('permisos');
+  if (!permisosRaw) return false;
+  
+  try {
+    const permisos = JSON.parse(permisosRaw);
+    const lista = permisos.map((p: any) => p.name);
+    return lista.includes(permiso);
+  } catch {
+    return false;
+  }
+}
+
+enviarRevisionSolicitud() {
+    Swal.fire({
+      title: 'Aviso',
+      text: 'Esta solicitud volverá al estado anterior, ingresa tus observaciones para volverla correcta',
+      input: 'textarea',
+      inputPlaceholder: 'Escribe tus observaciones aquí...',
+      inputAttributes: {
+        'aria-label': 'Escribe tus observaciones aquí'
+      },
+      reverseButtons: true,
+      showCancelButton: true,
+      confirmButtonText: 'Enviar',
+      cancelButtonText: 'Cancelar',
+      allowOutsideClick: false, 
+      buttonsStyling: false,
+      customClass: {
+        confirmButton: 'btn btn-sm btn-primary m-1',
+        cancelButton: 'btn btn-sm btn-secondary m-1'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const payload = {
+          id: this.solicitudCompra.id,
+          motivo: result.value
+        };
+
+        Swal.fire({
+          title: 'Enviando...',
+          text: 'Por favor espera',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+
+        this.comprasService.devolverSolictud(payload).subscribe(
+        (response) => {
+          this.isLoad = false;
+          if (response.status === 'success') {
+            this.regresar();
+            this.alertasService.mostrarAlerta(
+              'Listo!',
+              'La solicitud ha sido devuelta para su revision.',
+              'success',
+              'success'
+            );
+          } else {
+            this.alertasService.mostrarAlerta(
+              'Error!',
+              `Ocurrió un error inesperado :${response.message || ''}` ,
+              'error',
+              'danger'
+            );
+          }
+        },
+        (error) => {
+          this.isLoad = false;
+          this.alertasService.mostrarAlerta(
+            'Error!',
+            error,
+            'error',
+            'danger'
+          );
+        }
+      );
+      }
+    });
   }
 }

@@ -1,0 +1,40 @@
+
+
+  <form [formGroup]="relacionForm">
+
+    <div class="row">
+<!-- Opción 1: No se reconoce -->
+      <div class="col-12 mb-2">
+          <span class="text-muted fw-semibold "> Marca si se reconoce relacionde negocios con el cliente</span>
+      </div>
+
+      <div class="col-md-4 col-12">
+        <div class="form-check border rounded-3 p-2 bg-light mb-2">
+          <input
+            class="form-check-input ms-1"
+            type="radio"
+            id="noReconoce"
+            value="no_reconoce"
+            formControlName="opcionRelacion">
+          <label class="form-check-label user-select-none ms-1" for="noReconoce">
+            No se reconoce
+          </label>
+        </div>
+
+      <!-- Opción 2: Sí se reconoce -->
+      <div class="form-check border rounded-3 p-2 bg-light mb-2">
+        <input
+          class="form-check-input ms-1"
+          type="radio"
+          id="siReconoce"
+          value="si_reconoce"
+          formControlName="opcionRelacion">
+        <label class="form-check-label user-select-none ms-1" for="siReconoce">
+          Sí se reconoce
+        </label>
+      </div>
+
+      </div>
+
+    </div>
+  </form>

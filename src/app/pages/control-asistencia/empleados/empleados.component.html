@@ -1,0 +1,135 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card rounded-4 shadow-lg">
+        <div class="card-body border-bottom">
+          <div class="d-flex align-items-center">
+            <h5 class="mb-0 card-title flex-grow-1">
+              Empleados
+            </h5>
+            <div class="flex-shrink-0 d-flex gap-1">
+              <a
+                *ngIf = "mostrar  && tienePermiso(permisos.btnEliminarVehiculo)"
+                href="javascript:void(0);"
+                class="btn btn-danger btn-sm"
+                (click)="destroy()"
+                ><i class="fas fa-trash"></i> Eliminar
+              </a>
+              <a
+                *ngIf = "mostrar && tienePermiso(permisos.btnActualizarVehiculo)"
+                href="javascript:void(0);"
+                class="btn btn-warning btn-sm"
+                (click)="openModalUpdate()"
+                ><i class="fas fa-edit"></i> Actualizar
+              </a>
+              <a
+                *ngIf = "mostrar && tienePermiso(permisos.btnActualizarVehiculo)"
+                href="javascript:void(0);"
+                class="btn btn-info btn-sm"
+                (click) = "registerFinger()"
+                ><i class="fa-solid fa-fingerprint"></i> Registrar huella
+              </a>
+              <a
+                
+                href="javascript:void(0);"
+                class="btn btn-primary btn-sm"
+                (click) = "openModalNuevo()"
+                ><i class="fas fa-plus"></i> Nuevo
+              </a>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card rounded shadow-lg rounded-4">
+        <div class="card-body border-bottom">
+          <div class="row justify-content-between" >
+            <div class="col-3">
+              <label for="empresa" class="form-label form-label-sm">Empresa: *</label>
+              <select
+                *ngIf="tienePermiso(permisos.selectParqueVehicular); else nombreEmpresa"
+                class="form-select form-select-sm"
+                aria-label="Default select example"
+                id="empresa"
+                name="empresa"
+                aria-label="empresa"
+                (change)="getEmpleados($event.target.value)"
+
+              >
+                <option value="" selected disabled>Selecciona uno</option>
+                <option *ngIf="isLoading" value="" [disabled]="isLoading">
+                  Cargando opciones espera...
+                </option>
+                <ng-container *ngFor="let item of empresas">
+                  <option  [value]="item.intercompania" *ngIf="tienePermiso(item.permiso)">
+                    {{ item.name.toUpperCase()}}
+                  </option>
+                </ng-container>
+
+              </select>
+            </div>
+
+            <div class="col-3 pt-4" *ngIf = "!isLoad">
+              <input type="text" class="form-control form-control-sm" placeholder="Buscar..." [(ngModel)]="busqueda"  (input)="filtrarTabla()"/>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-center"  *ngIf = "isLoad">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+          <div *ngIf = "!isLoad && showTable && datosFiltrados.length > 0 ; else elseBlock">
+            <div class="tab-page-content mt-3 table-responsive rounded-4 border" style="overflow-y: scroll; height: 20rem; ">
+              <table  class="table table-hover table-sm table-bordered ">
+                <thead class="table-light border thead-sticky">
+                  <tr class="text-center">
+                    <th style="cursor: pointer" (click)="ordenarPor('entidad')">Número Empleado<i [ngClass]="getIconoOrden('entidad')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('eco')">Nombre<i [ngClass]="getIconoOrden('eco')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('marca_vehiculo')">Apellidos<i [ngClass]="getIconoOrden('marca_vehiculo')"></i></th>
+                    <th style="cursor: pointer" (click)="ordenarPor('submarca')">Estatus<i [ngClass]="getIconoOrden('submarca')"></i></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of datosFiltrados" (click)="seleccionar(item, $event)">
+                    <td>{{item.pin}}</td>
+                    <td>{{item.first_name}}</td>
+                    <td>{{item.last_name}}</td>
+                    <td>{{item.status}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+          <p *ngIf = "!isLoad && showTable" class="text-muted pt-3"> Se muestran {{ totalDatosFiltrados }} de {{ totalDatos }} </p>
+        <div *ngIf = "!isLoad && showTable" class="d-flex justify-content-around border bg-light rounded-pill p-2 gap-3 mt-4">
+          <div class="d-flex align-items-center " *ngFor="let estado of estatusColores">
+            <span class="rounded-circle d-inline-block me-1 "
+                  [style.background-color]="estado.color"
+                  style="width: 10px; height: 10px;"></span>
+            <span class="fw-semibold small" >{{ estado.dsc | uppercase }}</span>
+          </div>
+        </div>
+
+      </div>
+
+
+        <!--div.card-body-->
+
+    </div>
+  </div>
+</div>
+<!-- container-fluid -->
+<ng-template #nombreEmpresa>
+  <p>
+    <strong>{{ usuarioSolicita.empresa }} </strong>
+  </p>
+</ng-template>
+
+<ng-template #elseBlock>
+  <div *ngIf = "!isLoad && showTable" class="text-center text-muted p-3">
+    <Strong>Aun no hay empleados que mostrar...</Strong>
+  </div>
+</ng-template>

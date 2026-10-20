@@ -26,4 +26,24 @@ export class SwalComprsServiceService {
         },
       });
     }
+
+
+    // Añades este método a tu servicio
+    async mostrarConfirmacion(titulo: string, mensaje: string): Promise<boolean> {
+      const result = await Swal.fire({
+        title: titulo,
+        text: mensaje,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Continuar',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true,
+        customClass: {
+          confirmButton: `btn btn-success px-4 fw-semibold`,
+          cancelButton: "btn btn-danger ms-2 px-4 fw-semibold",
+        },
+      });
+
+      return result.isConfirmed; // Devuelve true si aceptó, false si canceló
+    }
 }

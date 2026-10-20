@@ -1,0 +1,40 @@
+<div class="card shadow-sm border-0 rounded-4">
+  <div class="card-body p-3">
+    <label for="selectProveedor" class="form-label fw-semibold small text-muted mb-2">
+      <i class="fas fa-user-plus me-1 text-primary"></i> Asignar Proveedor
+    </label>
+
+    <div class="input-group">
+      <select
+        id="selectProveedor"
+        class="form-select form-select-sm"
+        [(ngModel)]="proveedorSeleccionadoId"
+        [disabled]="cargando || proveedores.length === 0">
+
+        <option [ngValue]="null" disabled selected>
+          {{ proveedores.length === 0 ? 'Cargando proveedores...' : '-- Seleccione un proveedor --' }}
+        </option>
+
+        <option *ngFor="let prov of proveedores" [value]="prov.id">
+          {{ prov.nombre }}
+        </option>
+      </select>
+
+      <button
+        type="button"
+        class="btn btn-primary btn-sm px-3 fw-semibold d-flex align-items-center gap-1"
+        [disabled]="!proveedorSeleccionadoId || cargando"
+        (click)="asignarProveedor()">
+
+        <span *ngIf="cargando" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        <i *ngIf="!cargando" class="fas fa-check"></i>
+        <span>Asignar</span>
+      </button>
+    </div>
+
+    <!-- Mensaje ligero si no hay proveedores -->
+    <div *ngIf="proveedores.length === 0 && !cargando" class="form-text text-warning small mt-1">
+      <i class="fas fa-exclamation-triangle me-1"></i> No hay proveedores disponibles.
+    </div>
+  </div>
+</div>
