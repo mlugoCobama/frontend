@@ -15,7 +15,7 @@ export class FinanciamientoService {
 
   getDataVenta(factura:any) {
     return this.http.get(environment.apiUrl+'renault/financiamiento/datos-venta/'+factura);
-  }  
+  }
 
   public getLibroVentas(estado:any ,agencia: any, fecha_inicio:any, fecha_fin:any, vendedor:any): Observable<any> {
     return this.http.get<any>(environment.apiUrl + `renault/financiamiento/${estado}/${agencia}/${fecha_inicio}/${fecha_fin}/${vendedor}`);
@@ -28,7 +28,7 @@ export class FinanciamientoService {
   avanzarEstado(id: number) {
     return this.http.get(`${environment.apiUrl}renault/financiamiento/avanzarEstatus/${id}`);
   }
- 
+
 
   create(data: FormData) {
     return this.http.post(environment.apiUrl+'renault/financiamiento', data);
@@ -44,8 +44,15 @@ export class FinanciamientoService {
 
    obtenerArchivo(id: number): Observable<Blob> {
     return this.http.get(`${environment.apiUrl}renault/financiamiento/archivo/${id}`, {
-      responseType: 'blob' 
+      responseType: 'blob'
     });
+  }
+
+  extractPdfData(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('pdf', file, file.name);
+
+    return this.http.post<any>(environment.apiUrl+'renault/financiamiento/procesar-pdf-desembolso', formData);
   }
 
 

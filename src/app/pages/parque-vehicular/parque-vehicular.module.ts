@@ -33,8 +33,7 @@ import { TimeLineCitaComponent } from './servicios-vehiculos/detalle-orden-servi
     MediaGalleryComponent,
     DiagnosticoVehiculoComponent,
     BtnAutorizacionComponent,
-    TimeLineCitaComponent
-
+    TimeLineCitaComponent,
   ],
   imports: [
     CommonModule,

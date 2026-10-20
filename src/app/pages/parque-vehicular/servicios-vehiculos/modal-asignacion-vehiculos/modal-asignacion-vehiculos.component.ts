@@ -22,6 +22,8 @@ export class ModalAsignacionVehiculosComponent implements OnInit, OnDestroy {
   empresas: any[] = [];
   vehiculos: any[] = [];
   proveedores: any[] = [];
+  sistemas: any[] = [];
+  tiposMantenimiento: any[] = [];
 
   loadingEmpresas = false;
   loadingVehiculos = false;
@@ -63,9 +65,10 @@ export class ModalAsignacionVehiculosComponent implements OnInit, OnDestroy {
     this.form = this.fb.group({
       empresaId: ['', Validators.required],
       vehiculoId: [{ value: '', disabled: true }, Validators.required],
-      // proveedorId: ['', Validators.required],
-      descripcion_falla: ['', Validators.required], // Campo opcional
-      observaciones: [''] // Campo opcional
+      sistema: ['', Validators.required],
+      tipoMantenimiento:['', Validators.required],
+      descripcion_falla: ['', Validators.required],
+      observaciones: ['']
     });
   }
 
@@ -181,7 +184,7 @@ export class ModalAsignacionVehiculosComponent implements OnInit, OnDestroy {
           this.alertasService.mostrarAlerta('Listo',  response.message, 'success', 'success')
           this.cerrarModal();
           this.cargando = false;
-          this.event.emit();
+          this.event.emit(true);
         } else {
           this.cargando = false;
           this.alertasService.mostrarAlerta(

@@ -1,0 +1,111 @@
+<div class="row">
+  <div class="col-6">
+    <div class="mb-1">
+          <div class="text-muted mb-1">
+            <i class="fas fa-file-invoice me-1"></i>No. Factura
+          </div>
+          <div class="fw-semibold">
+            {{ data.no_factura  || 'Sin Factura'}}
+          </div>
+    </div>
+    <div class="mb-1">
+          <div class="text-muted mb-1">
+            <i class="far fa-calendar-alt me-1"></i>Fecha Factura
+          </div>
+          <div class="fw-semibold">
+            {{ data.fecha_factura  || 'Sin Factura'}}
+          </div>
+    </div>
+    <!-- <div class="mb-1">
+          <div class="text-muted mb-1">
+            <i class="fas fa-building me-1"></i>Razon Social
+          </div>
+          <div class="fw-semibold">
+            {{ data.descripcion  || 'Sin Factura'}}
+          </div>
+    </div> -->
+    <div class="mb-1">
+          <div class="text-muted mb-1">
+            <i class="fas fa-car  me-1"></i>Descripción
+          </div>
+          <div class="fw-semibold">
+            {{ data.descripcion  || 'Sin Factura'}}
+          </div>
+      </div>
+
+  </div>
+  <div class="col-6">
+        <div class="mb-1">
+          <div class="text-muted mb-1">
+            <i class="fas fa-barcode me-1"></i>No. Inventario
+          </div>
+          <div class="fw-semibold">
+            {{ data.clave_inventario  || 'Sin Factura'}}
+          </div>
+    </div>
+    <div class="mb-1">
+          <div class="text-muted mb-1">
+            <i class="fas fa-hashtag me-1"></i>No. Serie
+          </div>
+          <div class="fw-semibold">
+            {{ data.serie  || 'Sin Factura'}}
+          </div>
+    </div>
+    <div class="mb-1">
+          <div class="text-muted mb-1">
+            <i class="fas fa-user me-1"></i>Cliente o Razón social
+          </div>
+          <div class="fw-semibold">
+            {{ data.razon_social  || 'Sin Factura'}}
+          </div>
+    </div>
+    <!-- <div class="mb-1">
+          <div class="text-muted mb-1">
+            <i class="fas fa-building me-1"></i>Descripción
+          </div>
+          <div class="fw-semibold">
+            {{ data.serie  || 'Sin Factura'}}
+          </div>
+    </div> -->
+  </div>
+  <div class="col-md-3 text-center ">
+    <div class="mb-1 border border-secondary rounded-4 py-2">
+          <div class="text-muted mb-1">
+          Venta
+          </div>
+          <div class="fw-semibold text-success">
+            + {{ data.total_venta || 0 | currency}}
+          </div>
+    </div>
+  </div>
+    <div class="col-md-3 text-center">
+    <div class="mb-1 border border-secondary rounded-4 py-2">
+          <div class="text-muted mb-1">
+          Costos
+          </div>
+          <div class="fw-semibold text-danger">
+            - {{ data.costos || 0 | currency }}
+          </div>
+    </div>
+  </div>
+  <div class="col-md-3 text-center">
+    <div class="mb-1 border border-secondary rounded-4 py-2">
+          <div class="text-muted mb-1">
+          Bonificaciones
+          </div>
+          <div class="fw-semibold text-success">
+           + {{ data.bonificaciones || 0 | currency }}
+          </div>
+    </div>
+  </div>
+    <div class="col-md-3 text-center">
+    <div class="mb-1 border border-secondary rounded-4 py-2">
+          <div class="text-muted mb-1">
+          Utilidad
+          </div>
+          <div class="fw-semibold text-primary">
+             = {{ data.utilidad_inicial || 0 | currency }}
+          </div>
+    </div>
+  </div>
+</div>

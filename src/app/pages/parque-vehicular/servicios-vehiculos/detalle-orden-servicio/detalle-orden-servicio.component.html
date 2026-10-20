@@ -33,7 +33,7 @@
     </div>
 </div>
 <div class="card shadow-sm rounded-4">
-  <div class="card-header bg-white rounded-top-4 border-bottom border-primary  py-3">
+  <div class="card-header bg-white rounded-top-4 border-bottom border-primary">
     <h5 class="fw-bold text-dark m-0">
       <i class="fas fa-car text-primary me-2"></i> Datos del Vehículo
     </h5>
@@ -57,7 +57,7 @@
         <div class="mb-1">
           <small class="text-muted d-block">Vehículo:</small>
           <span class="fw-bold text-dark">
-            Eco: {{ cita?.eco || 'N/A' }} {{ cita?.marca }} {{ cita?.submarca }} ({{ cita?.modelo || 'N/A' }})
+            Eco: {{ cita?.eco || 'N/A' }} {{ cita?.marca }} {{ cita?.submarca }} ({{ cita?.modelo || 'N/A' }}) <span class="small">{{ cita?.no_serie || 'N/A' }} {{ cita?.placas || 'Sin Placas' }}</span>
           </span>
         </div>
 
@@ -70,18 +70,18 @@
       <!-- Columna Derecha -->
       <div class="col-12 col-md-6">
         <div class="mb-1">
-          <small class="text-muted d-block">No. Serie (VIN):</small>
+          <small class="text-muted d-block">Sistema: </small>
           <span class="fw-bold text-dark">{{ cita?.no_serie || 'N/A' }}</span>
         </div>
 
         <div class="mb-1">
-          <small class="text-muted d-block">Placas:</small>
-          <span class="fw-bold text-dark">{{ cita?.placas || 'Sin Placas' }}</span>
+          <small class="text-muted d-block">Tipo mantenimiento: </small>
+          <span class="fw-bold text-dark">Preventivo</span>
         </div>
 
-        <div class="mb-1">
-          <small class="text-muted d-block">Falla:</small>
-          <span class="fw-bold text-dark">{{ cita?.falla }}</span>
+        <div class="mb-1 alert alert-danger rounded-4 p-2">
+          <small class="d-block">Falla:</small>
+          <span class="fw-bold">{{ cita?.falla }}</span>
         </div>
 
         <div>
@@ -120,14 +120,14 @@
   ></app-diagnostico-vehiculo>
 </div>
 <div *ngIf="!isLoading && cita?.proveedor" class="row">
-<div class="col-12 col-md-4">
+<div *ngIf="cita.estatus > 4" class="col-12 col-md-4">
           <app-media-gallery
           title='Evidencias del proceso en taller'
           [items]="dataOrdenServicio?.evidencias"
           categoryFilter="proceso"
         ></app-media-gallery>
 </div>
-<div class="col-12 col-md-4">
+<div *ngIf="cita.estatus > 5" class="col-12 col-md-4">
           <app-media-gallery
           title='Evidencias del terminado'
           [items]="dataOrdenServicio?.evidencias"
@@ -135,7 +135,7 @@
         ></app-media-gallery>
 </div>
 
-<div class="col-12 col-md-4">
+<div *ngIf="cita.estatus > 6" class="col-12 col-md-4">
           <app-media-gallery
           title='Evidencias de Entrega'
           [items]="dataOrdenServicio?.evidencias"

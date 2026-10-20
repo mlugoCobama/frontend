@@ -14,12 +14,12 @@ export class ComisionesService {
      * Recupera datos de las ventas junto con los gastos para el calculo de comisiones
      * @param fecha_inicio limite inferior de la búsqueda
      * @param fecha_fin limite final de la búsqueda
-     * @returns datos 
+     * @returns datos
      */
     public getAll(fecha_inicio:any, fecha_fin:any): Observable<ResponseComision> {
       return this.http.get<ResponseComision>(environment.apiUrl + `nissan/comisiones/${fecha_inicio}/${fecha_fin}`);
     }
-    
+
     /**
      * Petición de consulta de datos mediante filtro
      * @param estado estatus de busqueda (1-5)
@@ -69,7 +69,7 @@ export class ComisionesService {
 
     /**
      * Recupera los porcentajes de los punto de ventas
-     * @returns datos 
+     * @returns datos
      */
     public getPorentajes(): Observable<any> {
       return this.http.get<any>(environment.apiUrl + `nissan/porcentajes`);
@@ -78,7 +78,7 @@ export class ComisionesService {
    /**
     * Guarda los gastos capturados en el form (estatus:2)
     * @param data gastos capturados
-    * @returns 
+    * @returns
     */
     public save(data: any): Observable<any> {
     return this.http.post(environment.apiUrl + "nissan/comisiones", data);
@@ -92,12 +92,16 @@ export class ComisionesService {
      */
     emitirEvento() {
         this.$emitter.emit();
-    }   
+    }
+
+    public getDatosVenta(idVenta:any): Observable<any>{
+      return this.http.get(environment.apiUrl + "nissan/datos-venta/" + idVenta);
+    }
 
     descargarLibroVentas(estado:any ,agencia: any, tipoVenta: any, fecha_inicio:any, fecha_fin:any, vendedor:any) : Observable<HttpResponse<Blob>> {
     return this.http.get(`${environment.apiUrl}autos/descarga-libro-ventas/${estado}/${agencia}/${tipoVenta}/${fecha_inicio}/${fecha_fin}/${vendedor}`, {
       responseType: 'blob',
-      observe: 'response' 
+      observe: 'response'
     });
   }
 

@@ -60,11 +60,48 @@
             </div>
           </div>
 
+          <div class="col">
+            <label for="sistema" class="form-label"> Sistema del vehiculo</label>
+            <select
+              [class.is-invalid]="isInvalid('sistema')"
+              class="form-select form-select-sm"
+              formControlName="sistema"
+              name="sistema"
+              id="sistema"
+            >
+              <option value="" selected>Seleccione un sistema</option>
+              <option *ngFor="let sistema of sistemas" [value]="sistema.id">
+                {{ sistema.sistema }}
+              </option>
+            </select>
+            <div class="invalid-feedback small">
+              Debes selccionar un sistema.
+            </div>
+          </div>
+
+          <div class="col">
+            <label for="tipoMantenimiento" class="form-label">Tipo mantenimiento </label>
+            <select
+            [class.is-invalid]="isInvalid('tipoMantenimiento')"
+              class="form-select form-select-sm"
+              formControlName="tipoMantenimiento"
+              name="tipoMantenimiento"
+              id="tipoMantenimiento"
+            >
+              <option value="" selected>Seleccione un tipo de mantenimiento</option>
+              <option *ngFor="let tipo of tiposMantenimiento" [value]="tipo.id">
+                {{ tipo.nombre }}
+              </option>
+            </select>
+            <div class="invalid-feedback small">
+              Debes selccionar un tipo de mantenimiento
+            </div>
+          </div>
 
           <!-- Textarea: Observaciones (Opcional) -->
            <div class="col-12">
             <label for="descripcion_falla" class="form-label form-label-sm fw-bold">
-              Descripcionde la falla:
+              Descripcion de la falla:
             </label>
             <textarea
               [class.is-invalid]="isInvalid('descripcion_falla')"
@@ -78,7 +115,6 @@
               Debes de describir la falla que presenta la unidad.
             </div>
           </div>
-
           <div class="col-12">
             <label for="observaciones" class="form-label form-label-sm fw-bold">
               Observaciones / Comentarios

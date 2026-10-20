@@ -9,6 +9,8 @@ import { FiltroComponent } from "./filtro/filtro.component";
 import { firstValueFrom } from 'rxjs';
 import { ActivatedRoute } from "@angular/router";
 import { permisosComisonsionesVentasNuevos } from "src/app/shared/constants/permisos";
+import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
+import { ModalDetalleVentaAutoComponent } from "./modal-detalle-venta-auto/modal-detalle-venta-auto.component";
 
 
 
@@ -27,6 +29,7 @@ export class ComisionesComponent implements AfterViewInit {
   public isLoadig: boolean = false;
   public estado: any = 0;
   public permisos = permisosComisonsionesVentasNuevos;
+    public modalRef?: BsModalRef;
 
   public modelCamposGastos = ['otros','gasolina','previa','descuentos','descuento_impulso',
                               'traslados','subsidios','descuento_da','cortesia','accesorios','placas',
@@ -46,7 +49,7 @@ export class ComisionesComponent implements AfterViewInit {
   filteredIndices: number[] = [];
 
   public vista: 'pendientes' | 'realizados' = 'pendientes';
-  
+
   @ViewChild('formFiltro', { static: false }) formFiltro!:  FiltroComponent;
 
   constructor(
@@ -54,7 +57,8 @@ export class ComisionesComponent implements AfterViewInit {
     private swal: SwalComprsServiceService,
     public fb: FormBuilder,
     private permisosService: PermisosService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private modalService: BsModalService,
   ) {}
 
   ngAfterViewInit(): void {
@@ -104,7 +108,7 @@ export class ComisionesComponent implements AfterViewInit {
  /**
   * Genera una fila (formulario) dentro del form array
   * @param row registro de venta
-  * @returns 
+  * @returns
   */
   crearVenta(row: any): FormGroup {
     const fg = this.fb.group({
@@ -119,6 +123,8 @@ export class ComisionesComponent implements AfterViewInit {
       razon_social: [{ value: row.razon_social, disabled: true }],
       clave_producto: [{ value: row.clave_producto, disabled: true }],
       clave_inventario: [{ value: row.clave_inventario, disabled: true }],
+      id_vendedor: [{ value: row.id_vendedor, disabled: true }],
+      agencia: [{ value: row.agencia, disabled: true }],
       clave_vendedor: [{ value: row.clave_vendedor, disabled: true }],
       descripcion: [{ value: row.descripcion, disabled: true }],
       serie: [{ value: row.serie, disabled: true }],
@@ -206,7 +212,7 @@ export class ComisionesComponent implements AfterViewInit {
   /**
    * Reglas por tipo de venta y por estado (deshabilitado de campos)
    * @param fg fila-formulario
-   * @returns 
+   * @returns
    */
   aplicarReglasTipoVenta(fg: FormGroup) {
     const tipo = fg.get('clave_producto')?.value;
@@ -222,7 +228,7 @@ export class ComisionesComponent implements AfterViewInit {
     };
 
     const campos = this.modelCamposGastos;
-    
+
     if (Number(estatus) > 2) {
       campos.forEach(c => {
         fg.get(c)?.disable({ emitEvent: false });
@@ -264,9 +270,9 @@ export class ComisionesComponent implements AfterViewInit {
     const comGarantizadaBdc = Number(fg.get('comision_garantizada_bdc')?.value);
     const utilidadAC = utilidadInicial - totalGastos;
     const comision =  comGarantizada > 0 ? comGarantizada : (utilidadAC > 0 ?  utilidadAC * porcentaje : 0);
-    const comisionBDC = comGarantizadaBdc > 0 ? comGarantizadaBdc : ( utilidadAC > 0 ? utilidadAC * porcentajeBdc : 0); 
+    const comisionBDC = comGarantizadaBdc > 0 ? comGarantizadaBdc : ( utilidadAC > 0 ? utilidadAC * porcentajeBdc : 0);
     const utilidadFinal = utilidadAC - comision - comisionBDC;
-  
+
 
     fg.patchValue({
       utlidad_gastos: utilidadAC,
@@ -298,7 +304,7 @@ export class ComisionesComponent implements AfterViewInit {
       cortesia: g.cortesia ?? 0,
       accesorios: g.accesorios ?? 0,
       placas: g.placas ?? 0,
-      porcentaje_bdc: g.porcentaje_bdc ?? 0, 
+      porcentaje_bdc: g.porcentaje_bdc ?? 0,
       comision_garantizada: g.comision_garantizada ?? 0
     }, { emitEvent: true });
   }
@@ -348,7 +354,7 @@ export class ComisionesComponent implements AfterViewInit {
         comision_garantizada_gerencia: v.comision_garantizada_gerencia,
         comision_garantizada_cor_bdc: v.comision_garantizada_cor_bdc
       }));
-      
+
       this.comisionesService.save(payload).subscribe((response) => {
         if (response.status === "success") {
             this.swal.mostrarAlerta(
@@ -548,7 +554,7 @@ export class ComisionesComponent implements AfterViewInit {
           return;
       });
   }
-  
+
   /** Guarda la partida que se desea pagar */
   guardarPagado(idVenta:any, indice:any ){
      Swal.fire({
@@ -611,7 +617,6 @@ resetFilter() {
     .map((ctrl, i) => ({ ctrl, i }))
     .filter(({ ctrl }) => {
       if (!q) return true;
-      // Busca en los campos que necesites
       const campos = [
         ctrl.get('no_factura')?.value,
         ctrl.get('razon_social')?.value,
@@ -631,6 +636,8 @@ filaSeleccionada: number | null = null;
 
   seleccionarFila(id: number): void {
     this.filaSeleccionada = id;
+    // console.log(this.ventas.at(id).getRawValue());
+
   }
 
   marcarLike(campo: string) {
@@ -652,5 +659,26 @@ cambiarVista(vista: 'pendientes' | 'realizados') {
     this.bindingData(this.datos)
     // this.cargarVentas();
 }
+
+  public openModalActualizar() {
+    // this.modalAbierto =  true;
+    const initialState: ModalOptions = {
+      initialState: {
+        dataVenta: this.ventas.at(this.filaSeleccionada!).getRawValue(),
+        // vendedores: this.vendedores,
+        // empresaActiva : this.getEmpresaActiva()
+      },
+      class: "modal-lg",
+    };
+    this.modalRef = this.modalService.show(
+      ModalDetalleVentaAutoComponent,
+      initialState,
+    );
+    this.modalRef.content.closeBtnName = "Close";
+    // this.modalRef.content.event.subscribe(() => {
+      // this.buscarDatos(this.getFiltro());
+    // });
+  }
+
 
 }

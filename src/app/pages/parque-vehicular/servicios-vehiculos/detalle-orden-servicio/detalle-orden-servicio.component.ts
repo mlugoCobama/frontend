@@ -106,8 +106,12 @@ asociarProveedorAVehiculo(proveedorId: number): void {
     this.ordenServicio.getOne(this.cita?.id).subscribe(
           (response) => {
             if (response.status = 'success') {
-              console.log(response.data)
               this.dataOrdenServicio = response.data?.proveedor_asignado;
+
+              this.cita.proveedor = !this.cita.proveedor
+                                    ? response.data?.proveedor_asignado?.proveedor?.nombre :
+                                    this.cita.proveedor;
+
               this.cargarEventosCita();
               this.isLoading = false;
             } else {

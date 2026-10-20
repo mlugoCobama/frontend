@@ -34,6 +34,13 @@ import { DatosIdentificacionFormComponent } from './pld/datos-identificacion-for
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { RelacionNegocioComponent } from './pld/relacion-negocio/relacion-negocio.component';
 import { DomicilioContactoFormComponent } from './pld/domicilio-contacto-form/domicilio-contacto-form.component';
+import { ModalDetalleVentaAutoComponent } from './comisiones/modal-detalle-venta-auto/modal-detalle-venta-auto.component';
+import { CardInfoVentaComponent } from './comisiones/modal-detalle-venta-auto/card-info-venta/card-info-venta.component';
+import { FormSeguroComponent } from './comisiones/modal-detalle-venta-auto/form-seguro/form-seguro.component';
+import { FormFacturaAccesorioComponent } from './comisiones/modal-detalle-venta-auto/form-factura-accesorio/form-factura-accesorio.component';
+import { FormFinanciamientoComponent } from './comisiones/modal-detalle-venta-auto/form-financiamiento/form-financiamiento.component';
+import { AcordionFacturasAccesoriosComponent } from './comisiones/modal-detalle-venta-auto/widgets/acordion-facturas-accesorios/acordion-facturas-accesorios.component';
+import { CardDetalleFinanciamientoComponent } from './comisiones/modal-detalle-venta-auto/widgets/card-detalle-financiamiento/card-detalle-financiamiento.component';
 
 
 @NgModule({
@@ -60,7 +67,14 @@ import { DomicilioContactoFormComponent } from './pld/domicilio-contacto-form/do
     DocumentacionFormComponent,
     DatosIdentificacionFormComponent,
     RelacionNegocioComponent,
-    DomicilioContactoFormComponent
+    DomicilioContactoFormComponent,
+    ModalDetalleVentaAutoComponent,
+    CardInfoVentaComponent,
+    FormSeguroComponent,
+    FormFacturaAccesorioComponent,
+    FormFinanciamientoComponent,
+    AcordionFacturasAccesoriosComponent,
+    CardDetalleFinanciamientoComponent
   ],
   imports: [
     CommonModule,

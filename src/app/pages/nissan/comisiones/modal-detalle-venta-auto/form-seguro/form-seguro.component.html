@@ -1,0 +1,148 @@
+<form [formGroup]="form" class="needs-validation" novalidate>
+  <div class="row g-2">
+    <!-- Folio -->
+    <div class="col-md-4 col-sm-6">
+      <label for="folio" class="form-label form-label-sm mb-1">Folio</label>
+      <input
+        type="text"
+        id="folio"
+        formControlName="folio"
+        class="form-control form-control-sm"
+        [ngClass]="{'is-invalid': form.get('folio')?.touched && form.get('folio')?.invalid}"
+        placeholder="Ingrese folio">
+      <div class="invalid-feedback" *ngIf="form.get('folio')?.hasError('required')">
+        El folio es obligatorio.
+      </div>
+    </div>
+
+    <!-- Póliza -->
+    <div class="col-md-4 col-sm-6">
+      <label for="poliza" class="form-label form-label-sm mb-1">Póliza</label>
+      <input
+        type="text"
+        id="poliza"
+        formControlName="poliza"
+        class="form-control form-control-sm"
+        [ngClass]="{'is-invalid': form.get('poliza')?.touched && form.get('poliza')?.invalid}"
+        placeholder="Ingrese póliza">
+      <div class="invalid-feedback" *ngIf="form.get('poliza')?.hasError('required')">
+        La póliza es obligatoria.
+      </div>
+    </div>
+
+    <!-- Aseguradora -->
+    <div class="col-md-4 col-sm-6">
+      <label for="aseguradora" class="form-label form-label-sm mb-1">Aseguradora</label>
+      <select
+        id="aseguradora"
+        formControlName="aseguradora"
+        class="form-select form-select-sm"
+        [ngClass]="{'is-invalid': form.get('aseguradora')?.touched && form.get('aseguradora')?.invalid}">
+        <option value="">Seleccione...</option>
+        <option *ngFor="let aseg of aseguradoras" [value]="aseg.value || aseg">
+          {{ aseg.label || aseg }}
+        </option>
+      </select>
+      <div class="invalid-feedback" *ngIf="form.get('aseguradora')?.hasError('required')">
+        Seleccione una aseguradora.
+      </div>
+    </div>
+
+    <!-- Fecha de emisión -->
+    <div class="col-md-4 col-sm-6">
+      <label for="fecha_emision" class="form-label form-label-sm mb-1">Fecha de emisión</label>
+      <input
+        type="date"
+        id="fecha_emision"
+        formControlName="fecha_emision"
+        class="form-control form-control-sm"
+        [ngClass]="{'is-invalid': form.get('fecha_emision')?.touched && form.get('fecha_emision')?.invalid}">
+      <div class="invalid-feedback" *ngIf="form.get('fecha_emision')?.hasError('required')">
+        La fecha es obligatoria.
+      </div>
+    </div>
+
+    <!-- Forma de pago -->
+    <div class="col-md-4 col-sm-6">
+      <label for="forma_pago" class="form-label form-label-sm mb-1">Forma de pago</label>
+      <select
+        id="forma_pago"
+        formControlName="forma_pago"
+        class="form-select form-select-sm"
+        [ngClass]="{'is-invalid': form.get('forma_pago')?.touched && form.get('forma_pago')?.invalid}">
+        <option value="">Seleccione...</option>
+        <option value="Contado">Contado</option>
+        <option value="Mensual">Mensual</option>
+        <option value="Trimestral">Trimestral</option>
+        <option value="Semestral">Semestral</option>
+        <option value="Anual">Anual</option>
+      </select>
+      <div class="invalid-feedback" *ngIf="form.get('forma_pago')?.hasError('required')">
+        Seleccione la forma de pago.
+      </div>
+    </div>
+
+    <!-- Prima Neta -->
+    <div class="col-md-4 col-sm-6">
+      <label for="prima_neta" class="form-label form-label-sm mb-1">Prima Neta</label>
+      <input
+        type="number"
+        id="prima_neta"
+        formControlName="prima_neta"
+        class="form-control form-control-sm"
+        [ngClass]="{'is-invalid': form.get('prima_neta')?.touched && form.get('prima_neta')?.invalid}"
+        placeholder="0.00">
+      <div class="invalid-feedback" *ngIf="form.get('prima_neta')?.hasError('required')">
+        La prima neta es obligatoria.
+      </div>
+    </div>
+
+    <!-- Calcular Comisión Enc. Seguro (Checkbox + Campo Calculado) -->
+    <div class="col-md-6 col-sm-12">
+      <label class="form-label form-label-sm mb-1 d-block">Calcular Comisión Enc. Seguro</label>
+      <div class="input-group input-group-sm">
+        <div class="input-group-text">
+          <input
+            type="checkbox"
+            formControlName="calcular_encargado_seg"
+            class="form-check-input mt-0"
+            aria-label="Calcular comisión encargado seguro">
+        </div>
+        <input
+          type="text"
+          formControlName="com_encargado_seg"
+          class="form-control form-control-sm"
+          placeholder="Comisión calculada">
+      </div>
+    </div>
+
+    <!-- Archivo de seguro -->
+    <div class="col-md-6 col-sm-12">
+      <label for="archivo" class="form-label form-label-sm mb-1">Archivo de seguro</label>
+      <input
+        type="file"
+        id="archivo"
+        (change)="onFileChange($event)"
+        class="form-control form-control-sm"
+        [ngClass]="{'is-invalid': form.get('archivo')?.touched && form.get('archivo')?.invalid}">
+      <div class="invalid-feedback" *ngIf="form.get('archivo')?.hasError('required')">
+        El archivo de seguro es obligatorio.
+      </div>
+    </div>
+
+    <!-- Observaciones -->
+    <div class="col-12">
+      <label for="observaciones" class="form-label form-label-sm mb-1">Observaciones</label>
+      <textarea
+        id="observaciones"
+        formControlName="observaciones"
+        rows="2"
+        class="form-control form-control-sm"
+        placeholder="Observaciones adicionales..."></textarea>
+    </div>
+
+  </div>
+  <div class="d-flex justify-content-end align-items-center mt-2">
+    <button class="btn btn-sm btn-dark fw-semibold rounded-4" (click)="saveSeguro()"> <i class="fas fa-save me-1"></i> Guardar</button>
+  </div>
+</form>

@@ -1,13 +1,13 @@
-  <div class="card shadow-sm" *ngIf="estado > 0">
+  <div class="card shadow-sm rounded-4 " *ngIf="estado > 0">
     <div class="card-body">
         <div class="d-flex justify-content-end align-items-end gap-2">
               <button
                 *ngIf="(estado == 1 || estado == 12345) && tienePermiso(permisos.btnEntregados)"
-                class="btn btn-sm btn-primary"
+                class="btn btn-sm fw-semibold btn-primary"
                 [disabled]="guardandoE"
                 (click)="guardarEntregados()"
               >
-                <span *ngIf="!guardandoE">Guardar entregados</span>
+                <span *ngIf="!guardandoE"> <i class="fas fa-car me-1"></i> Guardar entregados</span>
 
                 <span
                   *ngIf="guardandoE"
@@ -15,14 +15,15 @@
                   role="status"
                   aria-hidden="true"
                 ></span>
+
               </button>
               <button
                 *ngIf="(estado == 2 || estado == 12345) && tienePermiso(permisos.btnGastos)"
-                class="btn btn-sm btn-info"
+                class="btn btn-sm fw-semibold btn-info"
                 [disabled]="guardandoG"
                 (click)="guardarGastos()"
               >
-                <span *ngIf="!guardandoG">Guardar Gastos</span>
+                <span *ngIf="!guardandoG">  <i class="fas fa-money-bill-wave-alt me-1"></i> Guardar Gastos</span>
 
                 <span
                   *ngIf="guardandoG"
@@ -34,11 +35,11 @@
 
               <button
                 *ngIf="(estado == 2 || estado == 12345) && tienePermiso(permisos.btnGastos)"
-                class="btn btn-sm btn-dark"
+                class="btn btn-sm fw-semibold btn-dark"
                 [disabled]="guardandoBdc"
                 (click)="guardarBDC()"
               >
-                <span *ngIf="!guardandoBdc">Marcar BDC</span>
+                <span *ngIf="!guardandoBdc"> <i class="fas fa-headset  me-1"></i> Marcar BDC</span>
 
                 <span
                   *ngIf="guardandoBdc"
@@ -50,11 +51,11 @@
 
               <button
                 *ngIf="(estado == 2 || estado == 12345) && tienePermiso(permisos.btnGastos)"
-                class="btn btn-sm btn-warning"
+                class="btn btn-sm fw-semibold btn-warning"
                 [disabled]="guardandovBdc"
                 (click)="guardarValidadosBDC()"
               >
-                <span *ngIf="!guardandovBdc">Validar BDC</span>
+                <span *ngIf="!guardandovBdc"> <i class="fas fa-headset  me-1"></i>  Validar BDC</span>
 
                 <span
                   *ngIf="guardandovBdc"
@@ -62,14 +63,14 @@
                   role="status"
                   aria-hidden="true"
                 ></span>
-              </button> 
+              </button>
               <button
                 *ngIf="(estado == 3 || estado == 12345) && tienePermiso(permisos.btnValidados)"
-                class="btn btn-sm btn-success"
+                class="btn btn-sm fw-semibold btn-success"
                 [disabled]="guardandoV"
                 (click)="guardarValidados()"
               >
-                <span *ngIf="!guardandoV">Guardar Validados</span>
+                <span *ngIf="!guardandoV"> <i class="fas fa-check-double me-1"></i>  Guardar Validados</span>
 
                 <span
                   *ngIf="guardandoV"
@@ -78,7 +79,7 @@
                   aria-hidden="true"
                 ></span>
               </button>
-              <!-- <button *ngIf="estado == 4 || estado == 12345 " (click)="guardarEntregados()" class="btn btn-sm btn-success">Guardar Pagados</button> -->
-        </div> 
+              <!-- <button *ngIf="estado == 4 || estado == 12345 " (click)="guardarEntregados()" class="btn btn-sm fw-semibold btn-success">Guardar Pagados</button> -->
+        </div>
     </div>
 </div>

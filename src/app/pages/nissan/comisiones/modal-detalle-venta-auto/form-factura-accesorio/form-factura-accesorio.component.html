@@ -1,0 +1,74 @@
+<form [formGroup]="form" class="needs-validation" novalidate>
+  <div class="row g-2 align-items-end">
+
+    <!-- No. Factura y Botón Asignar -->
+    <div class="col-md-12 col-sm-12 mb-3" >
+      <label for="no_factura" class="form-label form-label-sm mb-1">No. Factura</label>
+      <div class="input-group input-group-sm">
+        <input
+          type="text"
+          id="no_factura"
+          formControlName="no_factura"
+          class="form-control form-control-sm"
+          [ngClass]="{'is-invalid': form.get('no_factura')?.touched && form.get('no_factura')?.invalid}"
+          placeholder="Ingrese número de factura">
+        <button
+          type="button"
+          class="btn btn-outline-primary btn-sm fw-semibold"
+          [disabled]="loading"
+          (click)="asignarFactura()">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+           <i *ngIf="!loading" class="fas fa-plus me-1"></i> Agregar
+        </button>
+        <div class="invalid-feedback" *ngIf="form.get('no_factura')?.hasError('required')">
+          El número de factura es obligatorio.
+        </div>
+      </div>
+    </div>
+
+    <!-- Descripción / Unidad (Campo informativo precargado) -->
+    <!-- <div class="col-md-6 col-sm-12">
+      <label for="descripcion" class="form-label form-label-sm mb-1">Descripción / Unidad</label>
+      <input
+        type="text"
+        id="descripcion"
+        formControlName="descripcion"
+        class="form-control form-control-sm"
+        placeholder="Se llenará automáticamente">
+    </div> -->
+
+    <!-- Razón Social / Cliente -->
+    <!-- <div class="col-md-6 col-sm-12">
+      <label for="razon_social" class="form-label form-label-sm mb-1">Razón Social</label>
+      <input
+        type="text"
+        id="razon_social"
+        formControlName="razon_social"
+        class="form-control form-control-sm"
+        placeholder="Se llenará automáticamente">
+    </div> -->
+
+    <!-- Monto -->
+    <!-- <div class="col-md-6 col-sm-12">
+      <label for="monto" class="form-label form-label-sm mb-1">Monto</label>
+      <input
+        type="number"
+        id="monto"
+        formControlName="monto"
+        class="form-control form-control-sm"
+        placeholder="0.00">
+    </div> -->
+
+    <!-- Observaciones -->
+    <!-- <div class="col-12">
+      <label for="observaciones" class="form-label form-label-sm mb-1">Observaciones</label>
+      <textarea
+        id="observaciones"
+        formControlName="observaciones"
+        rows="2"
+        class="form-control form-control-sm"
+        placeholder="Observaciones adicionales..."></textarea>
+    </div> -->
+
+  </div>
+</form>

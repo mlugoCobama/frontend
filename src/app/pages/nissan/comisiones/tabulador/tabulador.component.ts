@@ -26,6 +26,17 @@ export class TabuladorComponent {
 
   public tabulador: any;
 
+
+  tabs = [
+  { id: 'tab1', nombre: 'TIPO DE VENTA' },
+  { id: 'tab2', nombre: 'MODELO DE VEHICULO'},
+  { id: 'tab3', nombre: 'GASTOS PREDEFINIDOS'},
+  { id: 'tab4', nombre: 'COMISIONES GARANTIZADAS'},
+];
+
+// Pestaña seleccionada por defecto
+tabActual: string = 'tab1';
+
   constructor(
     private tabuladorService: TabuladorService,
     private modalService: BsModalService,
@@ -35,6 +46,14 @@ export class TabuladorComponent {
   ngOnInit(): void {
     this.getAll();
   }
+
+
+// Método para cambiar de pestaña y limpiar selecciones si es necesario
+seleccionarTab(idTab: string) {
+  this.tabActual = idTab;
+  // Opcional: limpiar selecciones al cambiar de tab
+  this.itemSeleccionado = false;
+}
 
   /** recupera todos los registros de los tabuladores */
   private getAll() {

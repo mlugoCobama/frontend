@@ -20,7 +20,7 @@ export class SeguroModalComponent implements OnInit, AfterViewInit {
   public loading = false;
   public empresaActiva:any= '';
 
-  
+
   constructor(
     public bsModalRef: BsModalRef,
     public alertas: SwalComprsServiceService,
@@ -48,14 +48,14 @@ export class SeguroModalComponent implements OnInit, AfterViewInit {
     const valores = this.formFinanciamiento.getItems();
       if (valores.length === 0) {
         this.loading = false;
-        this.alertas.mostrarAlerta('Aviso', 'Agrega al menos una toma de unidad', 'warning', 'warning');
+        this.alertas.mostrarAlerta('Aviso', 'Agrega al menos un seguro', 'warning', 'warning');
       return;
     }
-    const items = valores;
+
       const agenciaValues = this.formSelectAgencia.getValues();
       const formData = new FormData();
 
-      items.forEach((item, i) => {
+      valores.forEach((item, i) => {
         const payload = { ...item.formData, ...agenciaValues };
 
         Object.keys(payload).forEach(key => {

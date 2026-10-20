@@ -1,0 +1,41 @@
+<div class="col-md-12 col-sm-12 mb-3">
+  <label for="pdfFile" class="form-label form-label-sm mb-1">Solicitud de desembolso</label>
+  <div class="input-group input-group-sm">
+    <!-- Input de archivo -->
+    <input
+      type="file"
+      class="form-control form-control-sm"
+      id="pdfFile"
+      accept=".pdf"
+      (change)="onFileSelected($event)">
+
+    <!-- Botón Procesar -->
+    <button
+      type="button"
+      class="btn btn-outline-primary btn-sm fw-semibold"
+      [disabled]="isLoading"
+      (click)="onSubmit()">
+      <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+      <i *ngIf="!isLoading" class="fas fa-magic me-1"></i>Procesar
+    </button>
+
+    <!-- Botón Guardar (Aparece solo cuando hay datos extraídos) -->
+    <button
+      *ngIf="extractedData"
+      type="button"
+      class="btn btn-outline-dark btn-sm fw-semibold"
+      (click)="guardarFinanciamiento()">
+      <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+      <i *ngIf="!isSaving" class="fas fa-save me-1"></i>Guardar
+    </button>
+
+    <!-- Mensaje de validación -->
+    <div class="invalid-feedback" *ngIf="!this.selectedFile">
+      Carga una solicitud de desembolso para continuar.
+    </div>
+  </div>
+</div>
+
+
+
+

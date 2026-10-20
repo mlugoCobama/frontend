@@ -1,8 +1,8 @@
-<div class="card shadow-sm">
+<div class="card rounded-4 shadow-sm">
     <div class="card-body p-3">
-      <form [formGroup]="formulario"> 
+      <form [formGroup]="formulario">
         <div class="row g-2 mb-1">
-          
+
             <div class="col-auto" *ngIf="tienePermiso('view multiselect comisiones agencias'); else nombreEmpresa">
               <label>Agencias</label>
               <select class="form-select form-select-sm " aria-label=".form-select-sm example" formControlName="agencia">
@@ -50,7 +50,7 @@
                 <option *ngFor="let v of vendedores" [value]="v.value">{{ v.label }}</option>
               </select>
               <div *ngIf="form.vendedor.invalid && form.vendedor.touched" class="error">
-                <small> Selecciona un vendedor </small> 
+                <small> Selecciona un vendedor </small>
               </div>
 
 
@@ -86,7 +86,7 @@
               <a
                 *ngIf="data.length > 0"
                 href="javascript:void(0);"
-                class="btn btn-outline-success btn-sm mt-4"
+                class="btn btn-outline-success btn-sm mt-4 fw-semibold"
                 [disabled]="downloading"
                 (click)="descargarConcentrado()"
                 >
@@ -99,7 +99,7 @@
                 </ng-template>
               </a>
           </div>
-          
+
 
             </div>
           </form>
@@ -112,8 +112,8 @@
                 <option value="2">Renault</option>
               </select>
             </div> -->
-            
-            
+
+
     </div>
 </div>
 <ng-template #nombreEmpresa>
@@ -121,6 +121,6 @@
     <label>Empresa: </label>
     <p class="border rounded py-1 px-2"> <strong>{{getEmpresaUsuario().nombreEmpresa}} </strong></p>
   </div>
-  
+
 </ng-template>
 

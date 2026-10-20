@@ -1,0 +1,77 @@
+    <!-- Tabla con los accesorios agregados -->
+<div *ngIf="venta.accesorios && venta.accesorios.length > 0; else sinFacturas">
+
+  <div class="accordion" id="acordeonFacturas">
+    <div class="accordion-item mb-3 border rounded-4 overflow-hidden" *ngFor="let factura of venta.accesorios; let fIndex = index">
+
+      <h2 class="accordion-header" id="heading-{{fIndex}}">
+        <!-- Usamos un método de Angular para alternar en lugar de data-bs-toggle -->
+        <button class="accordion-button border border-secondary py-2 px-3 rounded-4"
+                type="button"
+                [class.collapsed]="factura.collapsed !== false"
+                (click)="factura.collapsed = !factura.collapsed">
+
+          <div class="d-flex justify-content-between align-items-center w-100 me-3">
+            <div>
+              <span class="fw-bold text-primary"> <i class="fas fa-file-invoice me-1"></i> #{{ factura.folioFactura ?? factura.no_factura }}</span>
+              <span class="text-muted ms-3 fw-semibold">Fecha: {{ factura.fecha ?? factura.fecha_factura | date:'dd/MM/yyyy'}}</span>
+            </div>
+            <div class="d-flex align-items-center">
+              <span class="badge bg-secondary me-2 font-size-11">Total: ${{ factura.totalFactura ?? (+factura.sub_total_factura + +factura.iva) | number:'1.2-2' }}</span>
+              <button class="btn btn-sm btn-outline-danger py-0 px-1" *ngIf="!factura.com_datos_venta_id" (click)="$event.stopPropagation(); eliminarAccesorio(fIndex)" title="Eliminar factura">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+
+        </button>
+      </h2>
+
+      <!-- Controlamos la visibilidad usando ngClass o style display/collapse de Bootstrap de forma visual -->
+      <div id="collapse-{{fIndex}}"
+           class="accordion-collapse collapse"
+           [class.show]="factura.collapsed === false">
+
+        <div class="accordion-body rounded-bottom-4">
+          <div class="d-flex justify-content-between mb-2">
+            <span class="fw-semibold">No. Pedido: {{factura.no_pedido ?? ''}} </span>
+            <span class="fw-semibold">Razon Social: {{factura.razon_social ?? ''}}</span>
+          </div>
+
+          <div class="rounded-4 border" *ngIf="factura.detalles && factura.detalles.length > 0;">
+            <table class="table small table-sm mb-0">
+              <thead>
+                <tr>
+                  <th class="ps-3">Accesorio / Descripción</th>
+                  <th>Cant.</th>
+                  <th>Precio Unit.</th>
+                  <th class="text-end pe-3">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of factura.detalles">
+                  <td class="ps-3">{{ item.concepto }}</td>
+                  <td>{{ item.cantidad }}</td>
+                  <td>${{ +item.importe | number:'1.2-2' }}</td>
+                  <td class="text-end pe-3">${{ (+item.cantidad * +item.precio_lista) - +item.descuento | number:'1.2-2' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+  <div class="text-end">
+    <h6 class="fw-bold text-primary badge bg-primary-subtle fs-6"> Total: {{ totalGeneralFacturas | currency }}</h6>
+  </div>
+
+</div>
+
+<ng-template #sinFacturas>
+  <div class="rounded-4 border bg-light text-center py-3">
+    <p class="text-muted small fst-italic mb-0">No hay facturas de accesorios registradas para esta venta.</p>
+  </div>
+</ng-template>

@@ -1,0 +1,166 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">
+    Detalle de venta
+  </h5>
+  <button type="button" class="btn-close" (click)="cerrarModal()"></button>
+</div>
+
+<div class="modal-body">
+  <app-card-info-venta [data]="dataVenta">
+  </app-card-info-venta>
+    <hr class="my-4">
+
+  <div *ngIf="cargando" class="text-center py-5 my-4">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Cargando...</span>
+  </div>
+  <p class="text-muted mt-2 fw-semibold">Cargando información...</p>
+</div>
+
+  <ng-container *ngIf="!cargando">
+      <div class="mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="fw-bold mb-0">Financiamiento</h6>
+          <div class="d-flex gap-2">
+            <button *ngIf="!venta.financiamiento" class="btn btn-sm btn-outline-primary fw-semibold rounded-4" (click)="toggleFormFinanciamiento()">
+                <i class="me-1 fas " [ngClass]="{'fa-plus' : !mostrarFormFinanciamiento, 'fa-eye-slash' : mostrarFormFinanciamiento}"></i> {{mostrarFormFinanciamiento ? 'Ocultar Form' :'Asignar Fianiciamiento'}}
+            </button>
+          </div>
+          <!-- Se oculta si ya existe un financiamiento asignado -->
+
+        </div>
+
+            <!-- Si ya está asignado, se muestra una tarjeta resumen -->
+    <div *ngIf="venta.financiamiento" class="card border p-3 rounded-4 shadow-sm mb-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <strong>{{ venta.tipo_venta }} - Contrato: {{ venta.financiamiento.no_contrato }}</strong>
+          <span class="text-muted ms-2 fw-semibold">{{ venta.financiamiento.fecha_desembolso | date: 'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="d-flex align-items-center gap-1">
+          <!-- Botón para ocultar/mostrar detalle -->
+          <button
+            type="button"
+            class="btn btn-sm btn-outline-secondary"
+            (click)="toggleDetalleFinanciamiento()"
+            [title]="mostrarDetalleFinanciamiento ? 'Ocultar detalle' : 'Ver detalle'">
+            <i class="fas" [ngClass]="mostrarDetalleFinanciamiento ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+          </button>
+
+          <!-- Botón editar -->
+          <!-- <button
+            type="button"
+            class="btn btn-sm btn-outline-primary"
+            (click)="editarFinanciamiento()"
+            title="Editar">
+            <i class="fas fa-edit"></i>
+          </button> -->
+          <button class="btn btn-sm btn-outline-info" (click)="verArchivoFinaciamiento(venta.financiamiento.id)"><i class="far fa-file-pdf "></i></button>
+
+          <!-- Botón eliminar -->
+          <!-- <button
+            type="button"
+            class="btn btn-sm btn-outline-danger"
+            (click)="eliminarFinanciamiento()"
+            title="Eliminar">
+            <i class="fas fa-trash"></i>
+          </button> -->
+        </div>
+      </div>
+      <small class="text-muted fw-semibold">Monto financiado: {{ (venta.financiamiento.monto_financiar || 0) | currency }} <span class="text-success"> COMISIÓN APV: {{  +venta.financiamiento.comision_asesor_pesos | currency }}</span></small>
+    </div>
+
+    <app-form-financiamiento
+      *ngIf="mostrarFormFinanciamiento"
+      [dataVenta]="venta"
+      (setFinanciamiento)="setFinanciamiento($event)"
+      (refresh)="getExpedienteVenta()">
+    </app-form-financiamiento>
+
+    <!-- El detalle solo se renderiza si la variable es true -->
+    <app-card-detalle-financiamiento
+      *ngIf="venta.financiamiento && mostrarDetalleFinanciamiento"
+      [data]="venta.financiamiento"
+      [dataVenta]="venta">
+    </app-card-detalle-financiamiento>
+
+
+      </div>
+
+      <!-- 3. Sección de Seguro (Único) -->
+      <div class="mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="fw-bold mb-0">Seguro Vehicular</h6>
+          <button *ngIf="!venta.seguro" class="btn btn-sm btn-outline-primary fw-semibold rounded-4" (click)="toggleFormSeguro()">
+
+            <i class="me-1 fas " [ngClass]="{'fa-plus' : !mostrarFormSeguro, 'fa-eye-slash' : mostrarFormSeguro}"></i> {{mostrarFormSeguro ? 'Ocultar Form' :'Asignar seguro'}}
+          </button>
+        </div>
+
+        <app-form-seguro
+        *ngIf="!venta.seguro && mostrarFormSeguro;"
+        [data]="dataVenta"
+        (refresh)="getExpedienteVenta()"
+        ></app-form-seguro>
+
+        <!-- Tarjeta resumen si ya está asignado -->
+        <div *ngIf="venta.seguro" class="card border shadow-sm  p-3 rounded-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{{ venta.seguro.aseguradora }}</strong> - Póliza: {{ venta.seguro.poliza }} - Folio: {{venta.seguro.folio}}
+              <br><small class="fw-semibold"> <span class="text-muted">Prima neta: {{ venta.seguro.prima_neta | currency  }}  </span><span class="text-success"> COMISIÓN APV:{{  +venta.seguro.comision_apv_pesos | currency }}</span></small>
+            </div>
+            <div class="d-flex align-items-center gap-1">
+              <button class="btn btn-sm btn-outline-info" (click)="verArchivoSeguro(venta.seguro.id)"><i class="far fa-file-pdf "></i></button>
+              <!-- <button class="btn btn-sm btn-secondary" (click)="editarSeguro()"><i class="fas fa-edit"></i></button> -->
+              <!-- <button class="btn btn-sm  btn-outline-danger" (click)="eliminarSeguro()"> <i class="fas fa-trash"></i></button> -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Sección de Accesorios (Múltiples / Tabla) -->
+      <div class="mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="fw-bold mb-0">Accesorios ({{ venta.accesorios?.length || 0 }})</h6>
+          <!-- Este botón despliega el formulario o abre un mini-modal para sumar accesorios -->
+          <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-outline-primary fw-semibold rounded-4" (click)="toggleFormAccesorio()">
+                <i class="fas " [ngClass]="{'fa-plus' : !mostrarFormAccesorio, 'fa-eye-slash' : mostrarFormAccesorio}"></i> {{mostrarFormAccesorio ? 'Ocultar Form' :'Agregar accesorio'}}
+              </button>
+              <button *ngIf="mostrarFormAccesorio" class="btn btn-sm btn-outline-dark fw-semibold rounded-4" (click)="relacionarAccesorios()">
+                <i class="fas fa-save"></i> Guardar
+              </button>
+          </div>
+
+        </div>
+
+        <app-form-factura-accesorio
+        *ngIf="mostrarFormAccesorio"
+        (addFactura)="addfactura($event)"
+        ></app-form-factura-accesorio>
+        <app-acordion-facturas-accesorios
+          [venta] = "venta"
+          (deleteAccesorio)="eliminarAccesorio($event)"
+        ></app-acordion-facturas-accesorios>
+    </div>
+  </ng-container>
+  <!-- 2. Sección de Financiamiento (Único) -->
+
+
+  <ng-template #sinFinanciamiento>
+    <div class="rounded-4 border bg-light text-center py-3">
+       <p class="text-muted small fst-italic mb-0">No hay un seguro ligado a esta venta.</p>
+    </div>
+  </ng-template>
+
+    <ng-template #sinSeguro>
+    <div class="rounded-4 border bg-light text-center py-3">
+       <p class="text-muted small fst-italic mb-0">No hay un seguro ligado a esta venta.</p>
+    </div>
+  </ng-template>
+
+<div class="modal-footer">
+  <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+  <button type="button" class="btn btn-success">Finalizar venta</button> -->
+</div>

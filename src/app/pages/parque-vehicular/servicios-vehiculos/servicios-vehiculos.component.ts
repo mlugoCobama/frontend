@@ -8,6 +8,7 @@ import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-com
 import { ProveedoresService } from 'src/app/core/services/compras/proveedores/proveedores.service';
 import { FiltroComponent } from './filtro/filtro.component';
 import { FuncionesTablas } from 'src/app/core/helpers/funciones-tablas';
+import { CatSistemasAutoService } from 'src/app/core/services/macrotaller/cat-sistemas-auto.service';
 
 @Component({
   selector: 'app-servicios-vehiculos',
@@ -23,6 +24,8 @@ export class ServiciosVehiculosComponent implements OnInit{
   empresas: any[] = [];
   vehiculos: any[] = [];
   proveedores: any[] = [];
+  sistemas: any[] = [];
+  tiposMantenimiento :any[] = [];
 
   loadingEmpresas:boolean = false;
   loadingVehiculos:boolean = false;
@@ -72,6 +75,7 @@ export class ServiciosVehiculosComponent implements OnInit{
       public usuariosService: UsuariosService,
       private alertasService: SwalComprsServiceService,
       public proveedoresService: ProveedoresService,
+      private CatSistemasAuto: CatSistemasAutoService,
     ) {}
 
     ngOnInit(): void {
@@ -88,6 +92,8 @@ export class ServiciosVehiculosComponent implements OnInit{
         initialState: {
           // intercompania: this.intercompania,
         empresas: this.empresas,
+        sistemas: this.sistemas,
+        tiposMantenimiento: this.tiposMantenimiento,
           // tipo: this.concepto
         },
         class: "modal-lg",
@@ -98,7 +104,8 @@ export class ServiciosVehiculosComponent implements OnInit{
       );
       this.modalRef.content.closeBtnName = "Close";
       this.modalRef.content.event.subscribe(() => {
-        this.getAll();
+        // this.getAll();
+        this.aplicarFiltros();
       });
     }
 
@@ -144,7 +151,7 @@ export class ServiciosVehiculosComponent implements OnInit{
       (response) => {
         if (response) {
           const rawData = response.data;
-          this.empresas = this.usuariosService.filtrarEmpresasGseras(rawData, [200, 119, 201, 700, 333, 119, 2000 ]);
+          this.empresas = this.usuariosService.filtrarEmpresasGseras(rawData, [200, 119, 201, 700, 333, 119, 2000, 0 ]);
           this.loadingEmpresas = false;
         } else {
           this.loadingEmpresas = false;
@@ -180,6 +187,23 @@ export class ServiciosVehiculosComponent implements OnInit{
       (error) => {
         this.loadingProveedores = false;
         this.alertasService.mostrarAlerta("Error!", error, "error", "danger");
+      }
+    );
+
+    this.CatSistemasAuto.getAll(2).subscribe(
+      (response) => {
+        if (response) {
+          this.sistemas = response.data;
+          this.tiposMantenimiento = response.data2;
+          // this.isLoad = false;
+        } else {
+          console.log(response.message);
+          // this.isLoad = false;
+        }
+      },
+      (error) => {
+        console.error("Error fetching data:", error);
+        // this.isLoad = false;
       }
     );
   }

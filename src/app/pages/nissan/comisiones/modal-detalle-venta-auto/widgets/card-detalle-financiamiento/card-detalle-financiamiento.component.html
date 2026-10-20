@@ -1,0 +1,101 @@
+  <div class="card shadow-sm rounded-4">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-start mb-2">
+        <div>
+          <span class="badge bg-dark-subtle text-dark rounded-pill mb-1 font-size-11 fw-semibold">Factura: {{ data.numero_factura }}</span>
+          <h5 class="card-title mb-0 fw-bold">Contrato #{{ data.no_contrato }}</h5>
+        </div>
+        <span class="badge bg-primary-subtle text-primary rounded-pill  border border-success-subtle font-size-11 fw-semibold "> Monto Financiado: {{+data.monto_financiar || 0 | currency}}</span>
+      </div>
+
+      <!-- <p class="text-muted small mb-2">{{ data.agencia }}</p> -->
+
+      <ul class="list-group list-group-flush small mb-2">
+        <li class="list-group-item px-0 py-1 d-flex justify-content-between">
+          <div>
+          <span class="text-muted">Cliente: </span>
+          <strong class="text-end">{{data.cliente || dataVenta?.razon_social || '' }}</strong>
+          </div>
+          <div>
+            <span class="text-muted">Fecha desembolso: </span>
+          <strong class="text-end">{{data.fecha_desembolso | date:'dd/MM/yyyy'}}</strong>
+          </div>
+        </li>
+        <li class="list-group-item px-0 py-1 d-flex justify-content-between">
+          <div>
+            <span class="text-muted">Unidad: </span>
+            <strong class="text-end">{{data.unidad || dataVenta?.descripcion || ''  }}</strong>
+          </div>
+          <div>
+            <span class="text-muted">Serie: </span>
+            <strong class="text-end">{{data.serie  || dataVenta?.serie || '' }}</strong>
+          </div>
+        </li>
+      </ul>
+
+      <div class="table-responsive mb-2 rounded-4 border">
+        <table class="table small table-sm table-hover align-middle border">
+          <thead class="table-dark">
+            <tr>
+              <th>Concepto</th>
+              <th class="text-end">Monto / Comisión</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Kit de Seguridad</td>
+              <td class="text-end fw-semibold">{{ data.kit_seguridad | currency:'USD':'symbol':'1.2-2' }}</td>
+            </tr>
+            <tr>
+              <td>Sat Finder</td>
+              <td class="text-end fw-semibold">{{ data.sat_finder | currency:'USD':'symbol':'1.2-2' }}</td>
+            </tr>
+            <tr>
+              <td>Garantía Extendida</td>
+              <td class="text-end fw-semibold">{{ data.garantia_extendida | currency:'USD':'symbol':'1.2-2' }}</td>
+            </tr>
+            <tr>
+              <td>Seguro VF3</td>
+              <td class="text-end fw-semibold">{{ data.seguro_vf3 | currency:'USD':'symbol':'1.2-2' }}</td>
+            </tr>
+            <tr>
+              <td>Accesorios adicionales</td>
+              <td class="text-end fw-semibold">{{ data.accesorios_adicionales | currency:'USD':'symbol':'1.2-2' }}</td>
+            </tr>
+            <tr>
+              <td>Incentivo Dealer</td>
+              <td class="text-end  fw-semibold">{{ data.incentivo_dealer | currency:'USD':'symbol':'1.2-2' }}</td>
+            </tr>
+            <tr>
+              <td>Comision APV</td>
+              <td class="text-end text-success  fw-semibold"> +{{ (+data.incentivo_dealer * 0.70) | currency:'USD':'symbol':'1.2-2' }}</td>
+            </tr>
+            <tr>
+              <td>Comision Mantenimiento</td>
+              <td class="text-end text-success  fw-semibold"> +{{ (+data.comision_mantenimiento) | currency:'USD':'symbol':'1.2-2' }}</td>
+            </tr>
+            <tr>
+              <td>Comision Garantía Extendida</td>
+              <td class="text-end text-success  fw-semibold"> +{{ (+data.comision_garantia_extendida || data.comision_garantia_ext || 0) | currency:'USD':'symbol':'1.2-2' }}</td>
+            </tr>
+            <tr>
+              <td>Comisión UDI</td>
+              <td class="text-end text-success  fw-semibold">+{{ data.comision_udi | currency:'USD':'symbol':'1.2-2' }}</td>
+            </tr>
+            <tr>
+              <td>Comisión VF3</td>
+              <td class="text-end text-success  fw-semibold">+{{ data.comision_vf3 | currency:'USD':'symbol':'1.2-2' }}</td>
+            </tr>
+            <tr>
+              <td>Total de subsidios por desembolso</td>
+              <td class="text-end text-success  fw-semibold">+{{ data.sub_x_des | currency:'USD':'symbol':'1.2-2' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-warning-subtle p-2 rounded-4 border border-warning text-dark small mb-0">
+        <strong>Observaciones:</strong> {{data.observaciones}}
+      </div>
+    </div>
+  </div>
