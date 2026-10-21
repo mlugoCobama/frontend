@@ -1,4 +1,4 @@
-<div class="card rounded-4 shadow-sm">
+<!-- <div class="card rounded-4 shadow-sm">
   <div class="card-body">
     <div class="d-flex justify-content-end align-items-center gap-2">
       <div
@@ -10,56 +10,75 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
-<app-card-top
-    [title] = "'Tabulador por tipo de venta'"
-    [hasButtons] = "true"
-    [showBtnNuevo] = "!itemSeleccionado"
-    [showBtnEditar] = "itemSeleccionado"
-    [showBtnEliminar] = "itemSeleccionado"
-    (nuevo) = "openModalNuevo()"
-    (actualizar) = "openModalEditar()"
-    (eliminar) = "confirmarDelete()"
-></app-card-top>
+<ng-container *ngIf="tabActual == 'tab1'" >
+  <app-card-top
+      [title] = "'Tabulador por tipo de venta'"
+      [hasButtons] = "true"
+      [showBtnNuevo] = "!itemSeleccionado"
+      [showBtnEditar] = "itemSeleccionado"
+      [showBtnEliminar] = "itemSeleccionado"
+      (nuevo) = "openModalNuevo()"
+      (actualizar) = "openModalEditar()"
+      (eliminar) = "confirmarDelete()"
+  ></app-card-top>
 
-<div  class="card shadow-sm rounded-4">
-    <div class="card-body">
+  <div class="card shadow-sm rounded-4">
+      <div class="card-body">
 
-    <app-spiner *ngIf="isLoad"></app-spiner>
+      <app-spiner *ngIf="isLoad"></app-spiner>
 
-    <div *ngIf="!isLoad" class="row justify-content-end mb-2">
-        <div class="col-3">
-          <input type="text" class="form-control form-control-sm" placeholder="Buscar..." [(ngModel)]="busqueda"  (input)="filtrarTabla()"/>
-        </div>
-    </div>
+      <div *ngIf="!isLoad" class="row justify-content-end mb-2">
+          <div class="col-3">
+            <input type="text" class="form-control form-control-sm" placeholder="Buscar..." [(ngModel)]="busqueda"  (input)="filtrarTabla()"/>
+          </div>
+      </div>
 
-    <div *ngIf="!isLoad" class="table-responsive rounded-4  border" style="max-height:28rem; overflow-y:auto;">
-      <table class="table table-sm ">
-        <thead class="table-light thead-sticky">
-          <tr>
-            <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'nombre', etiqueta:'Nombre'}"></ng-container>
-            <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'porcentaje', etiqueta:'Clave'}"></ng-container>
-          </tr>
-        </thead>
-        <tbody class="table-bordered">
-          <tr (click) ="seleccionar(item, $event)" *ngFor = "let item of datosFiltrados">
-            <td>{{item.nombre}}</td>
-            <td>{{item.porcentaje | percent}}</td>
-          </tr>
-        </tbody>
+      <div *ngIf="!isLoad" class="table-responsive rounded-4  border" style="max-height:28rem; overflow-y:auto;">
+        <table class="table table-sm ">
+          <thead class="table-light thead-sticky">
+            <tr>
+              <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'nombre', etiqueta:'Nombre'}"></ng-container>
+              <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'porcentaje', etiqueta:'Clave'}"></ng-container>
+            </tr>
+          </thead>
+          <tbody class="table-bordered">
+            <tr (click) ="seleccionar(item, $event)" *ngFor = "let item of datosFiltrados">
+              <td>{{item.nombre}}</td>
+              <td>{{item.porcentaje | percent}}</td>
+            </tr>
+          </tbody>
 
-      </table>
+        </table>
 
-    </div>
-        <caption *ngIf="!isLoad" class="text-nowrap">Mostrando {{datosFiltrados.length}} de {{data.length}}</caption>
-    </div>
-</div>
+      </div>
+          <caption *ngIf="!isLoad" class="text-nowrap">Mostrando {{datosFiltrados.length}} de {{data.length}}</caption>
+      </div>
+  </div>
 
-<ng-template #thOrdenable let-campo="campo" let-etiqueta="etiqueta">
-  <th (click)="ordenarPor(campo)">
-    <span>{{ etiqueta }}</span>
-    <i [ngClass]="getIconoOrden(campo)"></i>
-  </th>
-</ng-template>
+  <ng-template #thOrdenable let-campo="campo" let-etiqueta="etiqueta">
+    <th (click)="ordenarPor(campo)">
+      <span>{{ etiqueta }}</span>
+      <i [ngClass]="getIconoOrden(campo)"></i>
+    </th>
+  </ng-template>
+</ng-container>
+
+<!-- <ng-container *ngIf="tabActual == 'tab2'" >
+  <app-card-top
+      [title] = "'Tabulador por modelo de vehiculo'"
+  ></app-card-top>
+</ng-container>
+<ng-container *ngIf="tabActual == 'tab3'" >
+  <app-card-top
+      [title] = "'Tabulador de Gastos Predefinidos'"
+  ></app-card-top>
+</ng-container>
+<ng-container *ngIf="tabActual == 'tab4'" >
+  <app-card-top
+      [title] = "'Tabulador de Comisiones Garantizadas'"
+  ></app-card-top>
+</ng-container> -->
+
 

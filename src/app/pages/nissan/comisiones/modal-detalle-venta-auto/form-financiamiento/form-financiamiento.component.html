@@ -21,7 +21,7 @@
 
     <!-- Botón Guardar (Aparece solo cuando hay datos extraídos) -->
     <button
-      *ngIf="extractedData"
+      *ngIf="extractedData && (extractedData.serie == dataVenta.serie)"
       type="button"
       class="btn btn-outline-dark btn-sm fw-semibold"
       (click)="guardarFinanciamiento()">

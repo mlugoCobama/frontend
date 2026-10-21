@@ -125,21 +125,21 @@ export const MENU: MenuItem[] = [
     id:10,
     label: "Proveedores",
     icon: "bx bx-briefcase",
-    // permission: "view modulo proveedores",
+    permission: "view modulo proveedores",
     subItems: [
       {
         id: 9,
         label: "Proveedores Compras",
         link: "/compras/proveedores/compras",
         parentId: 10,
-        // permission: "view proveedores",
+        permission: "view proveedores",
       },
       {
         id: 15,
         label: "Proveedores Corporativo",
         link: "/compras/proveedores/corporativo",
         parentId: 10,
-        // permission: "view proveedores corporativo",
+        permission: "view proveedores corporativo",
       },
 
     ]

@@ -20,7 +20,7 @@ export class FiltroComponent implements OnInit{
   public realizados:any = [];
 
   public hoy = new Date().toISOString().split("T")[0];
-  
+
   formulario!: FormGroup;
 
   public estado: any = 0;
@@ -38,7 +38,7 @@ export class FiltroComponent implements OnInit{
     { value:"3", name:"Renault Vallejo", permiso: "view select agencias rv"},
     { value:"4", name:"Renault Pachuca", permiso: "view select agencias rp"},
   ];
-  
+
   agencias:any = []
 
    @Output() bindingSpiner = new EventEmitter<boolean>();
@@ -73,7 +73,7 @@ export class FiltroComponent implements OnInit{
       tipoVenta: ['', Validators.required],
       fechaInicial: [haceDosSemanas, Validators.required],
       fechaFinal: [this.hoy, Validators.required],
-      vendedor: ['', Validators.required],
+      vendedor: ['todos', Validators.required],
       estatus: ['', Validators.required],
       },
       { validators: this.fechaValidator }
@@ -185,7 +185,7 @@ tienePermiso(permiso: string = null): boolean {
   } else {
     resultado = this.rawAgencias;
   }
-  
+
   const todas = this.rawAgencias.find(a => a.value === "todos");
   return [todas, ...resultado.filter(a => a.value !== "todos")];
 }

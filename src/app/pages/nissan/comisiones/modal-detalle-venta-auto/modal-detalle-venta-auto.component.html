@@ -27,7 +27,6 @@
             </button>
           </div>
           <!-- Se oculta si ya existe un financiamiento asignado -->
-
         </div>
 
             <!-- Si ya está asignado, se muestra una tarjeta resumen -->
@@ -46,29 +45,12 @@
             [title]="mostrarDetalleFinanciamiento ? 'Ocultar detalle' : 'Ver detalle'">
             <i class="fas" [ngClass]="mostrarDetalleFinanciamiento ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
           </button>
-
-          <!-- Botón editar -->
-          <!-- <button
-            type="button"
-            class="btn btn-sm btn-outline-primary"
-            (click)="editarFinanciamiento()"
-            title="Editar">
-            <i class="fas fa-edit"></i>
-          </button> -->
           <button class="btn btn-sm btn-outline-info" (click)="verArchivoFinaciamiento(venta.financiamiento.id)"><i class="far fa-file-pdf "></i></button>
-
-          <!-- Botón eliminar -->
-          <!-- <button
-            type="button"
-            class="btn btn-sm btn-outline-danger"
-            (click)="eliminarFinanciamiento()"
-            title="Eliminar">
-            <i class="fas fa-trash"></i>
-          </button> -->
         </div>
       </div>
       <small class="text-muted fw-semibold">Monto financiado: {{ (venta.financiamiento.monto_financiar || 0) | currency }} <span class="text-success"> COMISIÓN APV: {{  +venta.financiamiento.comision_asesor_pesos | currency }}</span></small>
     </div>
+
 
     <app-form-financiamiento
       *ngIf="mostrarFormFinanciamiento"
@@ -76,6 +58,11 @@
       (setFinanciamiento)="setFinanciamiento($event)"
       (refresh)="getExpedienteVenta()">
     </app-form-financiamiento>
+
+    <div *ngIf="(venta?.financiamiento?.serie !=  venta?.serie) && venta?.financiamiento?.serie" class="alert alert-danger rounded-4 border-danger small fw-semibold">
+      <i class="fas fa-exclamation-triangle me-1"></i>
+      Parece que el documento no coincide con los datos de esta venta, carga el correcto para continuar.
+    </div>
 
     <!-- El detalle solo se renderiza si la variable es true -->
     <app-card-detalle-financiamiento
@@ -161,6 +148,4 @@
   </ng-template>
 
 <div class="modal-footer">
-  <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-  <button type="button" class="btn btn-success">Finalizar venta</button> -->
 </div>
