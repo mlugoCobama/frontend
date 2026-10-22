@@ -18,6 +18,7 @@ export interface ColumnaTabla {
   align?: string;
   textColor?: 'success' | 'primary' | 'danger' | 'warning' |null;
   bold?: boolean;
+  truncateText?: boolean;
   textNoWrap?: boolean;
   borderEnd? : boolean;
   borderStart? : boolean;

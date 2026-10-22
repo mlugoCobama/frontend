@@ -5,8 +5,8 @@
     </div>
 </div>
 <form [formGroup]="form">
-    
-<div class="table-responsive" style="overflow-y: auto; max-height:32rem">
+
+<div class="table-responsive rounded-4 border" style="overflow-y: auto; max-height:32rem">
   <table *ngIf="filasFiltradas.length > 0; else noDataMensaje" class="table table-sm table-bordered">
     <thead class="table-dark thead-sticky">
       <tr>
@@ -42,7 +42,7 @@
           <th class="text-center col-input-number"><small>Credito Casa</small></th>
           <th class="col-input-number">INFONAVIT</th>
         </ng-container>
-        
+
 
         <th (click)="ordenar('monto_dispersar')" style="cursor:pointer" class="text-center col-input-number">
           <small>Monto a dispersar</small><span *ngIf="columnaOrden === 'monto_dispersar'">{{direccionOrden === 'asc' ? '↑' : '↓'}}</span>
@@ -51,7 +51,7 @@
                 <th class="col-input-number">Nómina</th>
                 <th>Observaciones</th>
         </ng-container>
-    
+
         <th><small>Unidades vendidas</small></th>
       </tr>
     </thead>
@@ -82,7 +82,7 @@
         <td class="text-end clickable" [ngClass] = "{'fw-bold text-primary' : filas.at(i).value.pend_accesorios}"
             (click)="onCellClick($event, filas.at(i).value, 'accesorios')">{{filas.at(i).value.accesorios | currency}}
         </td>
- 
+
         <td class="text-end clickable" [ngClass] = "{'fw-bold text-primary' : filas.at(i).value.pend_seguros}"
             (click)="onCellClick($event, filas.at(i).value, 'seguros')">{{filas.at(i).value.seguros | currency}}
         </td>
@@ -94,8 +94,8 @@
         </td>
         <td class="text-end clickable">
           <div class="d-flex justify-content-between gap-1">
-              <span (click)="onCellClick($event, filas.at(i).value, 'otros')"> {{filas.at(i).value.otros | currency}} </span>   <button *ngIf="tienePermiso(permisos.btnAddOtros)" class="btn btn-sm btn-warning fw-bold" (click)="openModalOtro(filas.at(i).value)"><i class="fas fa-plus"></i></button> 
-          </div> 
+              <span (click)="onCellClick($event, filas.at(i).value, 'otros')"> {{filas.at(i).value.otros | currency}} </span>   <button *ngIf="tienePermiso(permisos.btnAddOtros)" class="btn btn-sm btn-warning fw-bold" (click)="openModalOtro(filas.at(i).value)"><i class="fas fa-plus"></i></button>
+          </div>
         </td>
 
         <!-- <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="otros"></td> -->
@@ -112,14 +112,14 @@
           <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="prestaciones"></td>
           <td class="text-end clickable">
             <div class="d-flex justify-content-between gap-1">
-              <span (click)="onCellClick($event, filas.at(i).value, 'otros_descuentos')"> {{filas.at(i).value.otros_descuentos | currency}} </span>   
-              <button  *ngIf="tienePermiso(permisos.btnAddOtros)" class="btn btn-sm btn-warning fw-bold" (click)="openModalOtro(filas.at(i).value)"><i class="fas fa-plus"></i></button> 
+              <span (click)="onCellClick($event, filas.at(i).value, 'otros_descuentos')"> {{filas.at(i).value.otros_descuentos | currency}} </span>
+              <button  *ngIf="tienePermiso(permisos.btnAddOtros)" class="btn btn-sm btn-warning fw-bold" (click)="openModalOtro(filas.at(i).value)"><i class="fas fa-plus"></i></button>
             </div>
           </td>
           <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="desc_c_casa"></td>
           <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="infonavit"></td>
         </ng-container>
-  
+
         <td class="text-end fw-bold">
           {{filas.at(i).get('monto_dispersar')?.value | currency}}
         </td>
@@ -127,7 +127,7 @@
           <td><input type="text" class="form-control form-control-sm text-end" mask="separator" thousandSeparator="," prefix="$ "  formControlName="nomina"></td>
           <td><input type="text" class="form-control form-control-sm"  formControlName="observaciones"></td>
         </ng-container>
-        
+
 
 
         <td class="text-center clickable fw-bold">
@@ -137,7 +137,7 @@
       </tr>
     </tbody>
   </table>
-    
+
 </div>
 
 

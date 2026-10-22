@@ -222,7 +222,7 @@ export class ComisionesComponent implements AfterViewInit {
       NU: ['otros','gasolina','previa','descuentos','descuento_impulso',
       'traslados','subsidios','cortesia', 'porcentaje_bdc', 'comision_garantizada',
       'comision_garantizada_gerencia', 'comision_garantizada_bdc','comision_garantizada_cor_bdc' ],
-      SEMI: ['otros','gasolina','previa','descuentos','descuento_impulso',
+      US: ['otros','gasolina','previa','descuentos','descuento_impulso',
       'traslados','subsidios','descuento_da','accesorios','placas', 'porcentaje_bdc', 'comision_garantizada',
       'comision_garantizada_gerencia', 'comision_garantizada_bdc','comision_garantizada_cor_bdc'],
     };

@@ -159,7 +159,10 @@
                     {{ item[col.campo] | date:(col.pipeArgs || 'dd/MM/yyyy') }}
                   </span>
 
-                  <span *ngSwitchDefault>
+                  <span *ngSwitchDefault
+                  [ngClass]="{'text-truncate' : col.truncateText}"
+                  [ngStyle]="col.truncateText ? {'max-width': '20rem', 'display': 'inline-block'} : {}"
+                  >
                     {{ item[col.campo] }}
                   </span>
 

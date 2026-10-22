@@ -208,11 +208,11 @@
                           <span *ngIf="devolviendo[i]" class="spinner-border spinner-border-sm" role="status"aria-hidden="true"></span>
                       </button>
                       <!-- <button *ngIf="estado == 3 &&  (+ventas.at(i).get('estatus')?.value) == 3" class="btn btn-sm btn-info"> Adjuntos </button>  -->
-                     <button *ngIf="estado == 4"  class="btn btn-sm btn-success"
+                     <!-- <button *ngIf="estado == 4"  class="btn btn-sm btn-success"
                           [disabled]="pagando[i]"  (click)="guardarPagado(ventas.at(i).get('id_venta')?.value, i)">
                           <span *ngIf="!pagando[i]"> Pagar</span>
                           <span *ngIf="pagando[i]" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                      </button>
+                      </button> -->
                     </span>
                 </td>
                 <ng-container  *ngIf="estado >= 4 &&  tienePermiso(permisos.colPagados)" >
@@ -221,7 +221,16 @@
                   </td>
                 </ng-container>
                 <td>
-                  <span class="text-primary fw-bold text-center text-nowrap badge bg-primary-subtle rounded-pill font-size-11"> {{ventas.at(i).get('estatusTexto')?.value}} </span>
+                  <span class="fw-bold text-center text-nowrap badge rounded-pill font-size-11  text-primary bg-primary-subtle"
+                  [ngClass]="{
+                    'text-primary bg-primary-subtle': ventas.at(i).get('estatusTexto')?.value == 'ENTRADA',
+                    'text-warning bg-warning-subtle': ventas.at(i).get('estatusTexto')?.value == 'GASTOS',
+                    'text-info bg-info-subtle': ventas.at(i).get('estatusTexto')?.value == 'VALIDACIÓN',
+                    'text-success bg-success-subtle': ventas.at(i).get('estatusTexto')?.value == 'VALIDADO',
+                    'text-secondary bg-secondary-subtle': ventas.at(i).get('estatusTexto')?.value == 'EN ESPERA',
+                    'text-dark bg-dark-subtle': ventas.at(i).get('estatusTexto')?.value == 'PAGADO',
+                  }"
+                  > {{ventas.at(i).get('estatusTexto')?.value}} </span>
                 </td>
                 </tr>
               </tbody>
@@ -238,12 +247,12 @@
 
     <app-botonera
      *ngIf="estado > 0 && vista === 'pendientes'"
-      [estado] = "estado"
-      [guardandoE] = "guardandoE"
-      [guardandoV] = "guardandoV"
-      [guardandoG] = "guardandoG"
-      [guardandoBdc] = "guardandoBdc"
-      [guardandovBdc] = "guardandovBdc"
+      [estado]="estado"
+      [guardandoE]="guardandoE"
+      [guardandoV]="guardandoV"
+      [guardandoG]="guardandoG"
+      [guardandoBdc]="guardandoBdc"
+      [guardandovBdc]="guardandovBdc"
       (saveEntregados)="guardarEntregados()"
       (saveValidados)="guardarValidados()"
       (saveGastos)="guardarGastos()"

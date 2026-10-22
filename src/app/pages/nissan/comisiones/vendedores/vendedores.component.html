@@ -11,7 +11,7 @@
 
 
 
-<div  class="card shadow-sm">
+<div  class="card rounded-4 shadow-sm">
     <div class="card-body">
 
     <app-spiner *ngIf="isLoad"></app-spiner>
@@ -26,7 +26,7 @@
                   </ng-container>
                 </select>
               </ng-container>
-              
+
       </div>
 
         <div class="col-3">
@@ -34,7 +34,7 @@
         </div>
     </div>
 
-    <div *ngIf="!isLoad" class="table-responsive" style="max-height:28rem; overflow-y:auto;">
+    <div *ngIf="!isLoad" class="table-responsive rounded-4 border" style="max-height:28rem; overflow-y:auto;">
       <table *ngIf="datosFiltrados.length > 0; else noDataMensaje" class="table table-sm ">
         <thead class="table-light thead-sticky">
           <tr>
@@ -45,7 +45,7 @@
             <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'agencia_nombre', etiqueta:'Agencia'}"></ng-container>
             <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'departamento', etiqueta:'Departamento'}"></ng-container>
             <ng-container *ngTemplateOutlet="thOrdenable; context:{campo:'procentaje_apv', etiqueta:'%'}"></ng-container>
-            
+
           </tr>
         </thead>
         <tbody class="table-bordered">
@@ -59,9 +59,9 @@
             <td>{{item.procentaje_apv | percent}}</td>
           </tr>
         </tbody>
-        
+
       </table>
-      
+
     </div >
         <caption *ngIf="!isLoad" class="text-nowrap">Mostrando {{datosFiltrados.length}} de {{data.length}}</caption>
     </div>

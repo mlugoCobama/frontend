@@ -1,4 +1,4 @@
-<app-card-top 
+<app-card-top
 [title] = "'Concentrado de comisiones'"
 ></app-card-top>
 <app-filtro-comsiones-generico
@@ -66,9 +66,9 @@
         colorClass="text-primary">
         </app-kpi-card-generico>
     </div>
-    
+
 </div>
-<div class="card shadow">
+<div class="card rounded-4 shadow-sm">
     <div class="card-body">
             <app-tabla-concentrado-comisiones
             #tablaConcentradoComisiones
@@ -84,7 +84,7 @@
 </div>
 
 
-<div *ngIf="data.length > 0" class="card">
+<div *ngIf="data.length > 0" class="card rounded-4 shadow-sm">
     <div class="card-body">
         <div class="d-flex justify-content-end align-items-center">
             <button  *ngIf="tienePermiso(permisos.btnGuardarCorte)" (click)="generarCorte()" class="btn btn-sm btn-primary">

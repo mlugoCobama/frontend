@@ -21,7 +21,7 @@ export const configTablaFinanciamiemto : ColumnaTabla[] = [
     { campo: "comision_garantia_extendida",     etiqueta: "Com. Garantía Ext.",     pipe: "currency",   align:'right'},
     { campo: "comision_udi",                    etiqueta: "Comision de UDI",        pipe: "currency",   align:'right', borderEnd: true, borderStart: true},
     { campo: "comision_vf3",                    etiqueta: "Comision VF3",           pipe: "currency",   align:'right'},
-    { campo: "observaciones",                   etiqueta: "Observaciones" ,         borderEnd: true, borderStart: true},
+    { campo: "observaciones",                   etiqueta: "Observaciones" ,         borderEnd: true, borderStart: true, truncateText: true},
     { campo: "sub_x_des",                       etiqueta: "T.Subsidios X Desem.",   pipe: "currency",   align:'right'},
     { campo: "estatusTexto",                    etiqueta: "Estatus",                textColor:'primary',align:'center', bold: true, textNoWrap:true  },
   ];
