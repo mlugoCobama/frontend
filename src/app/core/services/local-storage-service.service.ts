@@ -20,7 +20,7 @@ export class LocalStorageServiceService {
     try {
       const value = localStorage.getItem(key);
       return value ? JSON.parse(value) : null;
-      
+
     } catch (error) {
       console.error('Error reading from local storage', error);
       return null;
@@ -38,17 +38,17 @@ export class LocalStorageServiceService {
   getLocalUser(){
     const u:any = this.getItem('currentUser');
     return {
-      id: u.role.id,
-      nombreCompleto: u.role.name,
-      nombre: u['usuarioActivo'][0].puesto ?? 'N/D',
-      apellidos: u['usuarioActivo'][0].puesto ?? 'N/D',
-      email: u.role.email,
-      intercompania: u.role.intercompania,
-      isAgencia: u['usuarioActivo'][0].isAgencia ?? false,
-      empresa: u['usuarioActivo'][0].empresa ?? 'N/D',
-      puesto: u['usuarioActivo'][0].puesto ?? 'N/D',
-      multiselect: u['usuarioActivo'][0].multiselect ?? false, 
-      empresas: u['usuarioActivo'][0].empresas,
+      id: u?.role?.id,
+      nombreCompleto: u?.role?.name,
+      nombre: u['usuarioActivo'][0]?.firstname ?? 'N/D',
+      apellidos: u['usuarioActivo'][0]?.realname ?? 'N/D',
+      email: u.role?.email,
+      intercompania: u.role?.intercompania,
+      isAgencia: u['usuarioActivo'][0]?.isAgencia ?? false,
+      empresa: u['usuarioActivo'][0]?.empresa ?? 'N/D',
+      puesto: u['usuarioActivo'][0]?.puesto ?? 'N/D',
+      multiselect: u['usuarioActivo'][0]?.multiselect ?? false,
+      empresas: u['usuarioActivo'][0]?.empresas,
     }
   }
 }

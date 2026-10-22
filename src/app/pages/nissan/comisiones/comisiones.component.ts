@@ -22,6 +22,7 @@ import { ModalDetalleVentaAutoComponent } from "./modal-detalle-venta-auto/modal
 export class ComisionesComponent implements AfterViewInit {
   finding: boolean = false;
   public datos: any = [];
+  public reglas: any = [];
 
   public vendedores: any;
 
@@ -29,7 +30,7 @@ export class ComisionesComponent implements AfterViewInit {
   public isLoadig: boolean = false;
   public estado: any = 0;
   public permisos = permisosComisonsionesVentasNuevos;
-    public modalRef?: BsModalRef;
+  public modalRef?: BsModalRef;
 
   public modelCamposGastos = ['otros','gasolina','previa','descuentos','descuento_impulso',
                               'traslados','subsidios','descuento_da','cortesia','accesorios','placas',
@@ -89,6 +90,10 @@ export class ComisionesComponent implements AfterViewInit {
   /**Puente para manejar el estado */
   bindingEstado(value:any) {
     this.estado = value;
+  }
+
+  bindingReglas(value:any) {
+    this.reglas = value;
   }
 
   /**Puente para manejar la carga de datos nuevos */
@@ -165,12 +170,17 @@ export class ComisionesComponent implements AfterViewInit {
       estatusTexto: [row.estatusTexto ?? ''],
     });
 
-    this.calcularResultados(fg);
-    this.inicializarReglasTipoVenta(fg);
-
     if (row.gastos) {
       this.patchGastosBackend(fg, row.gastos);
     }
+
+    // if(!row.gastos){
+      this.inicializarReglasTipoVenta(fg);
+    // }
+
+
+
+    this.calcularResultados(fg);
 
     if (row.entregado) {
       fg.get('entregado')?.disable({ emitEvent: false });
@@ -217,22 +227,16 @@ export class ComisionesComponent implements AfterViewInit {
   aplicarReglasTipoVenta(fg: FormGroup) {
     const tipo = fg.get('clave_producto')?.value;
     const estatus = fg.get('estatus')?.value;
+    const descripcion = fg.get('descripcion')?.value || '';
 
-    const reglas: Record<string, string[]> = {
-      NU: ['otros','gasolina','previa','descuentos','descuento_impulso',
-      'traslados','subsidios','cortesia', 'porcentaje_bdc', 'comision_garantizada',
-      'comision_garantizada_gerencia', 'comision_garantizada_bdc','comision_garantizada_cor_bdc' ],
-      US: ['otros','gasolina','previa','descuentos','descuento_impulso',
-      'traslados','subsidios','descuento_da','accesorios','placas', 'porcentaje_bdc', 'comision_garantizada',
-      'comision_garantizada_gerencia', 'comision_garantizada_bdc','comision_garantizada_cor_bdc'],
-    };
+    const reglas = this.reglas;
 
     const campos = this.modelCamposGastos;
 
     if (Number(estatus) > 2) {
       campos.forEach(c => {
         fg.get(c)?.disable({ emitEvent: false });
-        fg.get(c)?.setValue(0, { emitEvent: false });
+        // fg.get(c)?.setValue(0, { emitEvent: false });
       });
       return;
     }
@@ -242,9 +246,31 @@ export class ComisionesComponent implements AfterViewInit {
       fg.get(c)?.setValue(0, { emitEvent: false });
     });
 
-    reglas[tipo]?.forEach(c => {
+    reglas[tipo].campos_habilitados?.forEach((c :any)=> {
       fg.get(c)?.enable({ emitEvent: false });
     });
+
+    if (Number(estatus) === 2 && reglas[tipo] && reglas[tipo].valores_gastos) {
+      fg.patchValue(reglas[tipo].valores_gastos);
+    }
+
+    if (Number(estatus) === 2 && reglas[tipo] && reglas[tipo].valores_gastos) {
+      if (reglas[tipo].promocion && reglas[tipo].promocion.filtro_descripcion) {
+        const textoBuscar = reglas[tipo].promocion.filtro_descripcion.toUpperCase();
+        const descripcionUpper = descripcion.toUpperCase();
+
+        const cumplePromocion = descripcionUpper.includes(textoBuscar);
+
+        const controlPorcentaje = fg.get('tipo_venta_porcentaje');
+
+        if (cumplePromocion && controlPorcentaje) {
+          controlPorcentaje.setValue(reglas[tipo].promocion.porcentaje);
+          controlPorcentaje.updateValueAndValidity();
+        }
+      }
+    }
+
+
   }
 
   /**

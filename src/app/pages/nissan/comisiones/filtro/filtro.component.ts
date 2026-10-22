@@ -17,6 +17,8 @@ export class FiltroComponent implements OnInit{
 
   public data:any = [];
 
+  public reglas:any = [];
+
   public realizados:any = [];
 
   public hoy = new Date().toISOString().split("T")[0];
@@ -44,6 +46,7 @@ export class FiltroComponent implements OnInit{
    @Output() bindingSpiner = new EventEmitter<boolean>();
    @Output() bindingData = new EventEmitter<any>();
    @Output() bindingEstado = new EventEmitter<any>();
+   @Output() bindingReglas = new EventEmitter<any>();
 
   constructor(
     private fb: FormBuilder,
@@ -153,11 +156,13 @@ asignarEstado() {
           this.bindingSpiner.emit(false);
           this.bindingData.emit(this.data);
           this.bindingEstado.emit(+estado);
+          this.bindingReglas.emit(response.reglas)
         }else{
           this.alertas.mostrarAlerta('Error', 'Algo salio mal en la búsqueda', 'info', 'info');
           this.finding = false;
           this.bindingSpiner.emit(false);
           this.bindingEstado.emit(0);
+          this.bindingReglas.emit({});
           return;
         }
       },(error) => {
@@ -165,6 +170,7 @@ asignarEstado() {
           this.finding = false;
           this.bindingEstado.emit(0);
           this.bindingSpiner.emit(false);
+          this.bindingReglas.emit({});
           return;
       })
   }

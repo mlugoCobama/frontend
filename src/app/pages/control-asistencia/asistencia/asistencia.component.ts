@@ -232,7 +232,6 @@ export class AsistenciaComponent implements OnInit {
     if(!this.tienePermiso('select multiempresa asistencias')){
       this.getReporteAsistenca(this.usuarioSolicita.intercompania);
     }
-
   }
 
 }

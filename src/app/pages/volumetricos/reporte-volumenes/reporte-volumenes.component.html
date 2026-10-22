@@ -101,8 +101,8 @@
           </div>
               <app-visor-reporte-volumenes
               *ngIf="selectedViewer == 'json'"
-                [dataJson]="jsonPreview?.json"
-                >
+                [dataJson]="jsonPreview?.json ?? jsonPreview"
+              >
               </app-visor-reporte-volumenes>
 
               <app-visor-reporte-xml
