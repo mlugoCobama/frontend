@@ -1,0 +1,18 @@
+  <app-card-top
+      [title] = "'Tabulador de gsatos Predefinidos'"
+      [hasButtons]="true"
+      [showBtnNuevo]="!sectedItem"
+      [showBtnEditar]="sectedItem"
+      [showBtnEliminar]="sectedItem"
+      (nuevo)="openModalNuevo()"
+      (actualizar)="openModalActualizar()"
+      (eliminar)="elminarRegistro()"
+  ></app-card-top>
+
+<app-tabla-generica
+[data] ="data"
+[columnas] = "columnas"
+[isLoad] = "isLoad"
+(itemSeleccionado)="onItemSeleccionado($event)">
+
+</app-tabla-generica>

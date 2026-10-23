@@ -1,0 +1,74 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">
+    {{ tipo | titlecase }} Gasto Preddefinindo
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="cerrarModal()"></button>
+</div>
+
+<div class="modal-body">
+    <form [formGroup]="myForm" class="row">
+        <div class="col-lg-12">
+            <label class="form-label">Agencia</label>
+            <select class="form-select form-select-sm" formControlName="agencia">
+                <option value="">Seleccione una empresa</option>
+                <option *ngFor="let agencia of agencias" [value]="agencia.value">
+                    {{ agencia.name }}
+                </option>
+            </select>
+            <div *ngIf="f['agencia'].touched && f['agencia'].invalid" class="form-text text-danger">
+                La agencia es obligatoria
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <label class="form-label">Tipo Vehiculo</label>
+            <select class="form-select form-select-sm" formControlName="tipo_vehiculo">
+                <option value="">Seleccione un tipo</option>
+                <option *ngFor="let tipo of tiposVehiculos" [value]="tipo.value">
+                    {{ tipo.name }}
+                </option>
+            </select>
+            <div *ngIf="f['tipo_vehiculo'].touched && f['tipo_vehiculo'].invalid" class="form-text text-danger">
+                El tipo es obligatorio
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <label class="form-label">Gasto</label>
+            <select class="form-select form-select-sm" formControlName="clave_gasto">
+                <option value="">Seleccione una  categoria</option>
+                <option *ngFor="let gasto of catGastos" [value]="gasto">
+                    {{ gasto | titlecase}}
+                </option>
+            </select>
+            <div *ngIf="f['clave_gasto'].touched && f['clave_gasto'].invalid" class="form-text text-danger">
+                Debes seleccionar un gasto
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <label class="form-label">Importe</label>
+            <input type="text" placeholder="importe" class="form-control form-control-sm"
+            formControlName="importe" mask="separator" prefix="$ " thousandSeparator=",">
+            <div *ngIf="f['importe'].touched && f['importe'].invalid" class="form-text text-danger">
+                El importe es obligatorio
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+  <button
+   [disabled]="sending"
+    type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="cerrarModal()"
+  >
+    Cerrar
+  </button>
+  <button
+  [disabled]="sending"
+  type="button" class="btn btn-primary btn-sm" (click)="save()">
+  <i class="fas fa-save " [ngClass]="{ 'bx-fade-right': sending }" ></i>
+    {{ sending ? 'Guardando' :'Guardar'}}
+  </button>
+</div>
+

@@ -41,6 +41,8 @@ import { FormFacturaAccesorioComponent } from './comisiones/modal-detalle-venta-
 import { FormFinanciamientoComponent } from './comisiones/modal-detalle-venta-auto/form-financiamiento/form-financiamiento.component';
 import { AcordionFacturasAccesoriosComponent } from './comisiones/modal-detalle-venta-auto/widgets/acordion-facturas-accesorios/acordion-facturas-accesorios.component';
 import { CardDetalleFinanciamientoComponent } from './comisiones/modal-detalle-venta-auto/widgets/card-detalle-financiamiento/card-detalle-financiamiento.component';
+import { TabGastosPredefinidosComponent } from './comisiones/tabulador/tab-gastos-predefinidos/tab-gastos-predefinidos.component';
+import { ModalGastosPredefinidosComponent } from './comisiones/tabulador/tab-gastos-predefinidos/modal-gastos-predefinidos/modal-gastos-predefinidos.component';
 
 
 @NgModule({
@@ -74,7 +76,9 @@ import { CardDetalleFinanciamientoComponent } from './comisiones/modal-detalle-v
     FormFacturaAccesorioComponent,
     FormFinanciamientoComponent,
     AcordionFacturasAccesoriosComponent,
-    CardDetalleFinanciamientoComponent
+    CardDetalleFinanciamientoComponent,
+    TabGastosPredefinidosComponent,
+    ModalGastosPredefinidosComponent,
   ],
   imports: [
     CommonModule,

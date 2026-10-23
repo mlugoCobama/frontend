@@ -13,7 +13,7 @@ import { PermisosService } from 'src/app/core/services/permisos.service';
 export interface ColumnaTabla {
   campo: string;
   etiqueta: string;
-  pipe?: 'percent' | 'currency' | 'date' | null;
+  pipe?: 'percent' | 'currency' | 'date' | 'titlecase' |  null;
   pipeArgs?: 'left' | 'center' | 'right' | null;
   align?: string;
   textColor?: 'success' | 'primary' | 'danger' | 'warning' |null;

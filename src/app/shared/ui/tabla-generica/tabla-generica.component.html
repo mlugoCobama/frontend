@@ -151,6 +151,10 @@
                     {{ item[col.campo] | percent }}
                   </span>
 
+                  <span *ngSwitchCase="'titlecase'">
+                    {{ item[col.campo] | titlecase }}
+                  </span>
+
                   <span *ngSwitchCase="'currency'">
                     {{ item[col.campo] || 0 | currency:(col.pipeArgs || '') }}
                   </span>

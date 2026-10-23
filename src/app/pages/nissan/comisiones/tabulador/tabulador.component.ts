@@ -7,6 +7,8 @@ import Swal from 'sweetalert2';
 
 import { ModalAddTabuladorComponent } from './modal-add-tabulador/modal-add-tabulador.component';
 import { ModalUpdateTabuladorComponent } from './modal-update-tabulador/modal-update-tabulador.component';
+import { Permisos } from 'src/app/core/models/ucoip/permisos';
+import { PermisosService } from 'src/app/core/services/permisos.service';
 
 @Component({
   selector: "app-tabulador",
@@ -28,10 +30,8 @@ export class TabuladorComponent {
 
 
   tabs = [
-  { id: 'tab1', nombre: 'TIPO DE VENTA' },
-  { id: 'tab2', nombre: 'MODELO DE VEHICULO'},
-  { id: 'tab3', nombre: 'GASTOS PREDEFINIDOS'},
-  { id: 'tab4', nombre: 'COMISIONES GARANTIZADAS'},
+  { id: 'tab1', nombre: 'TIPO DE VENTA', permiso: 'view tab tipo venta' },
+  { id: 'tab3', nombre: 'GASTOS PREDEFINIDOS', permiso: 'view tab gastos predefinidos' },
 ];
 
 // Pestaña seleccionada por defecto
@@ -41,6 +41,7 @@ tabActual: string = 'tab1';
     private tabuladorService: TabuladorService,
     private modalService: BsModalService,
     private alertas: SwalComprsServiceService,
+    private permisosService: PermisosService
   ) {}
 
   ngOnInit(): void {
@@ -184,5 +185,10 @@ seleccionarTab(idTab: string) {
         console.log("Eliminación confirmada");
       }
     });
+  }
+
+  tienePermiso(permiso: string = ''): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
   }
 }
