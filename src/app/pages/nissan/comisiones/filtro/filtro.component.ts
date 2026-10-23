@@ -153,10 +153,11 @@ asignarEstado() {
           this.realizados = response.realizados;
           this.finding = false;
           const estado = response.estado
+          this.bindingReglas.emit(response.reglas)
           this.bindingSpiner.emit(false);
           this.bindingData.emit(this.data);
           this.bindingEstado.emit(+estado);
-          this.bindingReglas.emit(response.reglas)
+
         }else{
           this.alertas.mostrarAlerta('Error', 'Algo salio mal en la búsqueda', 'info', 'info');
           this.finding = false;
