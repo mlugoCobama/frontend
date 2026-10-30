@@ -6,6 +6,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms"
 import { PanelEntregasComponent } from "../panel-entregas/panel-entregas.component";
 import { FormComplementoComponent } from "../datos-facturas/form-complemento/form-complemento.component";
 import { ValidadorCFDI } from "src/app/core/helpers/cfdi-validador";
+import { PermisosService } from "src/app/core/services/permisos.service";
 
 @Component({
   selector: "app-form-files-facturas",
@@ -21,7 +22,7 @@ export class FormFilesFacturasComponent implements OnInit {
   @Input() solicitudCompra: any;
   @Output() actualizarStatus = new EventEmitter<void>();
   @Output() setDataOrdenCompra = new EventEmitter<void>();
-  
+
   loadingArchivos = false;
   loadingComPago = false;
   loadingComplementos = false;
@@ -58,13 +59,14 @@ export class FormFilesFacturasComponent implements OnInit {
   constructor(
     public formBuilder: FormBuilder,
     private ordenesComprasService: OrdenesCompraService,
-    private alertasService: SwalComprsServiceService
+    private alertasService: SwalComprsServiceService,
+    private permisosService : PermisosService
   ) {}
 
   ngOnInit(): void {
     this.buildForm();
     this.getOrdenCompra();
-    
+
   }
 
   inicializarTabs() {
@@ -91,7 +93,7 @@ export class FormFilesFacturasComponent implements OnInit {
  * Fija el tab seleccionado en el ultimo tab valido o el primero
  */
 setFirstTab(){
-  
+
   const firstEnabledTab = this.modelTabs.find(tab => !this.validarDocumento(tab.tipoDocumento));
   this.selectedTab = firstEnabledTab ? firstEnabledTab.tabName : this.modelTabs[0].tabName;
 }
@@ -104,12 +106,12 @@ setFirstTab(){
 validarDocumento(tipoDocumento: string){
   let hasDocumento = false;
   let entregaParcial =  this.validarTotales( this.factura.sumaTotal, this.solicitudCompra.total_orden );
-  if(tipoDocumento != 'PAGO' && !entregaParcial){ 
+  if(tipoDocumento != 'PAGO' && !entregaParcial){
     hasDocumento = this.factura.comprobantes?.some(c => c.tComprobanteDesc === tipoDocumento);
   }
   // console.log('entregaParcial',entregaParcial);
   // console.log('Has Documento',hasDocumento);
-  return hasDocumento;  
+  return hasDocumento;
 }
 
 /**
@@ -123,7 +125,7 @@ getFacturaReferencia(){
 }
 
   /**
-   * Emite la orden de compra al componente padre 
+   * Emite la orden de compra al componente padre
    * @param data datos de la orden de compra
    */
   setOrdenCompra(data: any) {
@@ -144,15 +146,15 @@ getFacturaReferencia(){
   }
 
   /**
-   * Recupera la orden de compra actual en base a la solicitud de compra 
-   */  
+   * Recupera la orden de compra actual en base a la solicitud de compra
+   */
   private getOrdenCompra() {
     this.ordenesComprasService.getOne(this.solicitudCompra.id).subscribe(
       (response) => {
         if (response) {
           this.ordenCompra = response.data;
           this.setOrdenCompra(this.ordenCompra);
-          
+
           this.isLoad = false;
 
           if (this.ordenCompra.documentos.length > 0) {
@@ -204,7 +206,7 @@ getFacturaReferencia(){
 
   /**
    * Guarda los archivos de las facturas  PDF  y XML
-   * @returns 
+   * @returns
    */
   public guardarArchivos() {
     this.submitted = true;
@@ -244,7 +246,7 @@ getFacturaReferencia(){
       (error) => {
         this.alertasService.mostrarAlerta('error',` "Error:" ${error}`, 'error', 'danger');
         this.loadingArchivos = false;
-        
+
       }
     );
   }
@@ -252,7 +254,7 @@ getFacturaReferencia(){
   /**
    * Guarda los archivos de comprobante de pago
    * ->PDF
-   * @returns 
+   * @returns
    */
   public guardarComPago() {
     this.loadingComPago = true;
@@ -266,7 +268,7 @@ getFacturaReferencia(){
       this.formData.append('tipo_documento', 'comprobante_pago');
       this.formData.append("orden_compra_id", this.ordenCompra.id);
       this.formData.append("idFactura", idDocOC);
-      
+
       this.ordenesComprasService.saveFacturaDocs(this.formData).subscribe(
         (response) => {
           if (response) {
@@ -325,7 +327,7 @@ getFacturaReferencia(){
   }
 
   /**
-   * Lee el XML 
+   * Lee el XML
    * Lee los xmls de la orden de compra
    * Calcula la suma de los xml recuperados
    * Verifica cual es el método de pago
@@ -422,7 +424,7 @@ getFacturaReferencia(){
   /**
    *  Valida que el archivo que se suba sea un cfdi
    * y recupera el tipo de comprobante
-  */ 
+  */
   validarXML(file: File) {
     if (file) {
         ValidadorCFDI.esCFDI(file).then((esValido) => {
@@ -438,7 +440,7 @@ getFacturaReferencia(){
       }
   }
 
-public actualizadorEstatus(){ 
+public actualizadorEstatus(){
   this.actualizarStatus.emit();
   this.ordenCompra = [];
   this.getOrdenCompra();
@@ -486,7 +488,7 @@ public save(){
     // formData.append("_method", "PUT");
     formData.append("orden_compra_id", this.ordenCompra.id);
     return formData;
-  } 
+  }
 
   validarTotales(impTotalXML, impTotalOC) {
   // Redondear a un decimal
@@ -505,5 +507,9 @@ public save(){
   }
 
 
+    tienePermiso(permiso: string = ''): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
+  }
 
 }

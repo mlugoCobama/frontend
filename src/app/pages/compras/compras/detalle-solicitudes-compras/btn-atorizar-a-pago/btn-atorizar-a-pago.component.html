@@ -1,7 +1,9 @@
 <!-- <div class="row"> -->
-<div  *ngIf="tienePermiso('view btn save precios') "class="card border rounded-4 shadow-lg" >
-        <div class="card-header rounded-4 bg-text-primary text-center">
-               <strong> Da click en el siguiente botón para autorizar a pago la orden de compra (Debes de elegir como forma de pago crédito o contado) </strong>
+<div
+*ngIf="tienePermiso('view btn autoriza a pago')
+"class="card border rounded-4 shadow-lg" >
+        <div class="card-header rounded-4 bg-primary text-white text-center">
+               <strong> Da click en el siguiente botón para autorizar a pago la orden de compra</strong>
         </div>
         <div class="card-body ">
                 <div class="d-flex justify-content-center">

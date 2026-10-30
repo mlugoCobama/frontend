@@ -15,10 +15,10 @@ export class TableTotalDetalleComponent implements OnInit {
   @Input() params: any;
   @Input() nameEmpresa: any = '';
   @Input() intercompania: any = '';
-  @Input() isDownloadingDetalle;
+  @Input() isDownloadingDetalle:any;
   @Input() modalAbierto: boolean = false;
 
-  
+
   datosFiltrados: any[] = [];
   selectedItem: any = null;
   busqueda: string = '';

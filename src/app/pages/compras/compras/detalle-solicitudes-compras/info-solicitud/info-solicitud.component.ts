@@ -24,8 +24,6 @@ export class InfoSolicitudComponent implements OnInit{
   ){}
 
   ngOnInit(): void {
-    console.log(this.solicitudCompra)
-    console.log(this.cotizacion)
     this.comprasService.actualizarEstatus$.subscribe(valor => this.solicitudCompra.estatus = valor);
   }
 

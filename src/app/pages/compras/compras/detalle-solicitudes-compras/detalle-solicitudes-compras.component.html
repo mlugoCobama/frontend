@@ -4,10 +4,10 @@
       @fadeInOut
       (openEdicionSolicitud) = "openModalUpdateSolicitud()"
       [solicitudCompra]="solicitudCompra"
-      [mostrarTotal]="mostrarTotal"  
-      [cotizacion]="cotizacion"     
+      [mostrarTotal]="mostrarTotal"
+      [cotizacion]="cotizacion"
       ></app-info-solicitud>
-  
+
       <app-select-sistema-mantenimiento
       @fadeInOut
       [solicitudCompra]="solicitudCompra"
@@ -25,7 +25,7 @@
       (openModal)="openModal(content, $event)"
       (showTotal) = "setMostrarTotal($event)"
       (setDataCotizacion)="setDataCotizacion($event)"
-      (actualizarStatus)="updateStatus()"       
+      (actualizarStatus)="updateStatus()"
       ></app-table-detalles-solicitud>
 
       <app-tabla-detalles-solicitud
@@ -42,46 +42,53 @@
       *ngIf = "solicitudCompra.estatus >= enEsts.OrdenCompra"
       [solicitudCompra]="solicitudCompra"
       (setDataOrdenCompra)="setDataOrdenCompra($event)"
-      (actualizarStatus)="updateStatus()" 
+      (actualizarStatus)="updateStatus()"
       ></app-form-files-facturas>
   <!-- Fin vista final  -->
-  
+
   <!-- Inicia paneles temporales -->
       <app-panel-cotizaciones
       @fadeInOut
       *ngIf="mostrarCotizacionFlag && solicitudCompra.estatus === enEsts.Solicitado"
       [solicitudCompra]="solicitudCompra"
       (actualizarStatus)="updateStatus()"
-      (showTotal)="showTotal()"         
+      (showTotal)="showTotal()"
       ></app-panel-cotizaciones>
-  
+
       <app-btns-autorizacion
       @fadeInOut
       *ngIf= "solicitudCompra.estatus === enEsts.OrdenCompra "
-      [solicitudCompra]="solicitudCompra" 
+      [solicitudCompra]="solicitudCompra"
       (setDataOrdenCompra)="setDataOrdenCompra($event)"
-      (actualizarStatus)="updateStatus()"   
+      (actualizarStatus)="updateStatus()"
       ></app-btns-autorizacion>
-  
+
       <app-btn-autorizacion-gerencia
       @fadeInOut
       *ngIf="solicitudCompra.estatus === enEsts.EspAutPlanta"
       (actualizarStatus)="updateStatus()"
-      [solicitudCompra]="solicitudCompra" 
+      [solicitudCompra]="solicitudCompra"
       ></app-btn-autorizacion-gerencia>
-      
+
       <app-btn-autorizacion-gerencia
       @fadeInOut
       *ngIf="solicitudCompra.estatus === enEsts.EnCotizacion"
       (actualizarStatus)="updateStatus()"
-      [solicitudCompra]="solicitudCompra" 
+      [solicitudCompra]="solicitudCompra"
       ></app-btn-autorizacion-gerencia>
+
+      <app-btn-atorizar-a-pago
+        *ngIf="solicitudCompra.estatus == enEsts.AutorizadoAPago"
+        [ordenCompra]="ordenCompra"
+        (volver)="updateStatus()"
+      ></app-btn-atorizar-a-pago>
+
   <!-- Inicia paneles temporales -->
       <app-timeline-solicitud
       @fadeInOut
-      [solicitudCompra]="solicitudCompra" 
+      [solicitudCompra]="solicitudCompra"
       ></app-timeline-solicitud>
-  
+
   </div>
 
 <ng-template #content let-modal>

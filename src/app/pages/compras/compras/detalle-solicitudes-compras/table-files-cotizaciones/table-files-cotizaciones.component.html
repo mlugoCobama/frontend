@@ -14,13 +14,10 @@
       </div>
     </div>
     <!--Tabla documentos cotizaciones-->
-    <div class="border rounded-4">
-    <table
-      *ngIf="isLoad"
-      class="table table-sm table-hover rounded-4 border"
-    >
+    <div class="table-responsive border rounded-4">
+    <table *ngIf="isLoad" class="table table-sm table-hover  text-center">
       <thead class="table-light" >
-        <tr class="text-center">
+        <tr>
           <th *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && tienePermiso('view chks seleccionar cotizacion')">#</th>
           <th>Nombre del proveedor</th>
           <th>Archivo de cotización</th>
@@ -29,7 +26,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let prov of cotProv; let i = index" class="text-center">
+        <tr *ngFor="let prov of cotProv; let i = index">
           <td [ngClass] = "prov?.ruta ? 'bg-secondary-subtle bg-opacity-75' : '' "
           *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && tienePermiso('view chks seleccionar cotizacion')">
             <div class="col align-self-center">

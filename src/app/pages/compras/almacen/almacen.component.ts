@@ -13,13 +13,14 @@ import { ModalSalidaInventarioComponent } from './modal-salida-inventario/modal-
 export class AlmacenComponent implements OnInit{
 
   constructor(
-    private almacenService: AlmacenService, 
+    private almacenService: AlmacenService,
     private alertasService:SwalComprsServiceService,
     private modalService: BsModalService, ){
 
   }
 
   public data:any = [];
+  public entradasPendientes:any = [];
   public salidas:any = [];
   public tecnicos = [];
   public isLoad:boolean = false;
@@ -28,7 +29,7 @@ export class AlmacenComponent implements OnInit{
   public configTabla: ColumnaTabla[] = [
     { campo: "empresa", etiqueta: "Empresa", textNoWrap: true},
     // { campo: "folio",     etiqueta: "Folio", bold: true, textNoWrap: true},
-    
+
     { campo: "usuario_destino", etiqueta: "U. Destino", textNoWrap: true },
     { campo: "fecha", etiqueta: "Fecha", pipe:'date'},
     { campo: "categoria", etiqueta: "Categoria"},
@@ -47,11 +48,20 @@ export class AlmacenComponent implements OnInit{
     { campo: "usuario_recibe", etiqueta: "Usuario Recibe"},
   ];
 
+  public configTablaEntradas: ColumnaTabla[] = [
+    { campo: "fecha", etiqueta: "Fecha", pipe:'date'},
+    { campo: "texto_movimiento", etiqueta: "Movimiento", textColor: 'primary', bold: true},
+    { campo: "cantidad", etiqueta: "Cant."},
+    { campo: "descripcion", etiqueta: "Descripcion"},
+    { campo: "usuario_entrega", etiqueta: "Usuario Entrega"},
+    { campo: "usuario_recibe", etiqueta: "Usuario Recibe"},
+  ];
+
   ngOnInit(): void {
     this.getData();
     this.getTecnicos();
   }
-  
+
 
   private getData() {
     this.isLoad = true;
@@ -72,6 +82,26 @@ export class AlmacenComponent implements OnInit{
           this.isLoad = false;
         }
     );
+
+    this.almacenService.getEntradasPendientes(1).subscribe(
+      (response) => {
+        if (response) {
+          this.entradasPendientes = response.data;
+          console.log(this.entradasPendientes)
+          this.isLoad = false;
+        } else {
+          this.alertasService.mostrarAlerta(
+          "Error",response.message,
+          "error","danger");
+          this.isLoad = false;
+          }
+        },
+        (error) => {
+          this.alertasService.mostrarAlerta("Error",`Error fetching data: ${error}`,"error","danger");
+          this.isLoad = false;
+        }
+    );
+
   }
 
   private getSalidas() {
@@ -149,7 +179,7 @@ export class AlmacenComponent implements OnInit{
         this.panel = nombre;
         this.getSalidas();
         break;
-    
+
       default:
         this.panel = 'existencias';
         break;

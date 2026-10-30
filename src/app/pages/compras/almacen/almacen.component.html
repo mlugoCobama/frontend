@@ -3,38 +3,47 @@
         <div class="card-body border-bottom p-3">
           <div class="d-flex align-items-center">
             <h5 class="mb-0 card-title flex-grow-1">Almacen - {{ panel | titlecase}}</h5>
-            <div class="flex-shrink-0 d-flex gap-1">
+            <div class="flex-shrink-0 d-flex gap-2">
                 <div class="btn-group" role="group" aria-label="Paneles">
-                    <button type="button" class="btn btn-sm btn-outline-primary" (click)="setPanel('existencias')">
+                  <button type="button" class="btn btn-sm btn-outline-info fw-semibold" (click)="setPanel('entradas')">
+                        Entradas Pendientes
+                    </button>
+
+                    <button type="button" class="btn btn-sm btn-outline-primary fw-semibold" (click)="setPanel('existencias')">
                         Existencias
                     </button>
                     <!-- <button type="button" class="btn btn-sm btn-outline-success" (click)="setPanel('entradas')">
                         Entradas
                     </button> -->
-                    <button type="button" class="btn btn-sm btn-outline-danger" (click)="setPanel('salidas')">
+                    <button type="button" class="btn btn-sm btn-outline-danger fw-semibold" (click)="setPanel('salidas')">
                         Salidas
                     </button>
                 </div>
-                <button (click)="openModalSsalida()" class="btn btn-sm btn-primary"> <i class="fas fa-plus"></i> Nueva Salida </button>
+                <button (click)="openModalSsalida()" class="btn btn-sm btn-info"> <i class="fas fa-plus"></i> Nueva Entrada </button>
+                <button (click)="openModalSsalida()" class="btn btn-sm btn-danger"> <i class="fas fa-minus"></i> Nueva Salida </button>
             </div>
           </div>
         </div>
       </div>
 
 <div class="mt-3">
+  <div *ngIf="panel === 'salidas'">
+        <app-tabla-generica
+        [data]="data"
+        [isLoad] = "isLoad"
+        [columnas] = "configTabla"
+        ></app-tabla-generica>
+  </div>
   <div *ngIf="panel === 'existencias'">
         <app-tabla-generica
-        [data]="data" 
+        [data]="data"
         [isLoad] = "isLoad"
         [columnas] = "configTabla"
         ></app-tabla-generica>
   </div>
   <div *ngIf="panel === 'entradas'">
-    <p>Aquí va el contenido de entradas.</p>
-  </div>
-  <div *ngIf="panel === 'salidas'">
     <app-tabla-generica
-        [data]="salidas" 
+        [data]="salidas"
         [isLoad] = "isLoad"
         [columnas] = "configTablaSalidas"
         ></app-tabla-generica>

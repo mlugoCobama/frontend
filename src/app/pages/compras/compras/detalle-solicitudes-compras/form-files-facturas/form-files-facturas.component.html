@@ -65,7 +65,7 @@
                     </div>
                   </form>
                   <div class="d-flex aling-items-center justify-content-end">
-                    <button *ngIf="!validarDocumento('INGRESO') && solicitudCompra.estatus < enEsts.Finalizada" type="submit" (click)="guardarArchivos()" class="btn btn-primary btn-sm" [disabled]="loadingArchivos">
+                    <button *ngIf="!validarDocumento('INGRESO') && solicitudCompra.estatus < enEsts.Finalizada && tienePermiso('view btn upload facturas')" type="submit" (click)="guardarArchivos()" class="btn btn-primary btn-sm" [disabled]="loadingArchivos">
                       <i *ngIf="!loadingArchivos" class="fas fa-file-upload"></i>
                         <span *ngIf="loadingArchivos" class="spinner-border spinner-border-sm"></span>
                       Guardar Factura
@@ -85,7 +85,7 @@
                     </div>
                   </form>
                   <div class="d-flex aling-items-center justify-content-end">
-                    <button *ngIf="!validarDocumento('COMPROBANTE PAGO') && solicitudCompra.estatus < enEsts.Finalizada"
+                    <button *ngIf="!validarDocumento('COMPROBANTE PAGO') && solicitudCompra.estatus < enEsts.Finalizada && tienePermiso('view btn upload comprobante pago')"
                       type="submit" (click)="guardarComPago()" class="btn btn-success btn-sm"
                       [disabled]="loadingComPago">
                       <i *ngIf="!loadingComPago" class="fas fa-file-upload"></i>

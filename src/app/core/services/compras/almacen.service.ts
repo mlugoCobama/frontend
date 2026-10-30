@@ -23,6 +23,10 @@ export class AlmacenService {
     return this.http.get(environment.apiUrl + `compras/AlmacenCompras`, {headers});
   }
 
+  public getEntradasPendientes(tipo:number): Observable<any> {
+    return this.http.get(environment.apiUrl + `compras/AlmacenCompras/${tipo}`, {headers});
+  }
+
   /**
    * Recupera los técnicos de ti
    * @returns
@@ -36,12 +40,12 @@ export class AlmacenService {
    * @returns
    */
   public getExistencias(): Observable<any> {
-    
+
     return this.http.get(environment.apiUrl + `compras/getExsitencias/3`, {headers});
   }
 
   public getMovimientos(): Observable<any> {
-    
+
     return this.http.get(environment.apiUrl + `compras/getMovimientos`, {headers});
   }
 

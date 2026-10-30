@@ -170,15 +170,12 @@ export class ComisionesComponent implements AfterViewInit {
       estatusTexto: [row.estatusTexto ?? ''],
     });
 
-    if (row.gastos) {
+
+    this.inicializarReglasTipoVenta(fg);
+
+    if (row.gastos.id) {
       this.patchGastosBackend(fg, row.gastos);
     }
-
-    // if(!row.gastos){
-      this.inicializarReglasTipoVenta(fg);
-    // }
-
-
 
     this.calcularResultados(fg);
 
@@ -215,16 +212,15 @@ export class ComisionesComponent implements AfterViewInit {
   }
 
   /** Inicializa las reglas de tipo de venta (deshabilitado de campos) */
-  inicializarReglasTipoVenta(fg: FormGroup) {
-    this.aplicarReglasTipoVenta(fg);
+  inicializarReglasTipoVenta(fg: FormGroup, conservarValores = false) {
+    this.aplicarReglasTipoVenta(fg, conservarValores);
   }
-
   /**
    * Reglas por tipo de venta y por estado (deshabilitado de campos)
    * @param fg fila-formulario
    * @returns
    */
-  aplicarReglasTipoVenta(fg: FormGroup) {
+  aplicarReglasTipoVenta(fg: FormGroup, conservarValores = false) {
     const tipo = fg.get('clave_producto')?.value;
     const estatus = fg.get('estatus')?.value;
     const descripcion = fg.get('descripcion')?.value || '';
@@ -250,9 +246,13 @@ export class ComisionesComponent implements AfterViewInit {
       fg.get(c)?.enable({ emitEvent: false });
     });
 
-    if (Number(estatus) === 2 && reglas[tipo] && reglas[tipo].valores_gastos) {
-      fg.patchValue(reglas[tipo].valores_gastos);
-    }
+    // if (Number(estatus) === 2 && reglas[tipo] && reglas[tipo].valores_gastos) {
+    //   fg.patchValue(reglas[tipo].valores_gastos);
+    // }
+
+  if (!conservarValores && Number(estatus) === 2 && reglas[tipo]?.valores_gastos) {
+    fg.patchValue(reglas[tipo].valores_gastos, { emitEvent: false });
+  }
 
     if (Number(estatus) === 2 && reglas[tipo] && reglas[tipo].valores_gastos) {
       if (reglas[tipo].promocion && reglas[tipo].promocion.filtro_descripcion) {
@@ -277,28 +277,24 @@ export class ComisionesComponent implements AfterViewInit {
    * Calculo de comisión, gastos, utilidad final
    * @param fg fila formulario
    */
-  calcularResultados(fg: FormGroup) {
+calcularResultados(fg: FormGroup) {
   const camposGastos = this.modelCamposGastos;
 
-  fg.valueChanges.subscribe(() => {
-
+  const calcular = () => {
     const totalGastos = camposGastos.reduce((total, campo) => {
-      const valor = fg.get(campo)?.value;
-      const numero = Number(valor);
+      const numero = Number(fg.get(campo)?.value);
       return total + (isNaN(numero) ? 0 : numero);
     }, 0);
 
     const porcentajeBdc = (Number(fg.get('porcentaje_bdc')?.value) / 100) || 0;
-    const comisionGuardada = Number(fg.get('comision_apv')?.value)
     const utilidadInicial = Number(fg.get('utilidad_inicial')?.value) || 0;
-    const porcentaje = (Number(fg.get('tipo_venta_porcentaje')?.value) - porcentajeBdc)  || 0;
-    const comGarantizada =  Number(fg.get('comision_garantizada')?.value);
+    const porcentaje = (Number(fg.get('tipo_venta_porcentaje')?.value) - porcentajeBdc) || 0;
+    const comGarantizada = Number(fg.get('comision_garantizada')?.value);
     const comGarantizadaBdc = Number(fg.get('comision_garantizada_bdc')?.value);
     const utilidadAC = utilidadInicial - totalGastos;
-    const comision =  comGarantizada > 0 ? comGarantizada : (utilidadAC > 0 ?  utilidadAC * porcentaje : 0);
-    const comisionBDC = comGarantizadaBdc > 0 ? comGarantizadaBdc : ( utilidadAC > 0 ? utilidadAC * porcentajeBdc : 0);
+    const comision = comGarantizada > 0 ? comGarantizada : (utilidadAC > 0 ? utilidadAC * porcentaje : 0);
+    const comisionBDC = comGarantizadaBdc > 0 ? comGarantizadaBdc : (utilidadAC > 0 ? utilidadAC * porcentajeBdc : 0);
     const utilidadFinal = utilidadAC - comision - comisionBDC;
-
 
     fg.patchValue({
       utlidad_gastos: utilidadAC,
@@ -307,7 +303,10 @@ export class ComisionesComponent implements AfterViewInit {
       comision_apv: comision,
       comision_bdc: comisionBDC
     }, { emitEvent: false });
-  });
+  };
+
+  calcular();
+  fg.valueChanges.subscribe(calcular);
 }
 
 

@@ -103,7 +103,13 @@ export class VolumetricosExportService {
     if (!d) return 'reporte_volumetrico';
 
     const fecha = d.FechaYHoraReporteMes ? new Date(d.FechaYHoraReporteMes) : new Date();
-    const mesFormateado = `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, '0')}-31`;
+    const ultimoDiaMes = new Date(fecha.getFullYear(), fecha.getMonth() + 1, 0).getDate();
+
+    const anio = fecha.getFullYear();
+    const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+    const dia = String(ultimoDiaMes).padStart(2, '0');
+
+    const mesFormateado = `${anio}-${mes}-${dia}`;
 
     const uuid = reportId || crypto.randomUUID();
     const clave = (d.ClaveInstalacion || "").trim().toUpperCase();

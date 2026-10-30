@@ -13,6 +13,7 @@ export class BtnAtorizarAPagoComponent {
 
   @Input() ordenCompra: any;
   @Output() actualizarStatus1 = new EventEmitter<void>();
+  @Output() volver = new EventEmitter<void>();
 
   constructor(
     private alertasService: SwalComprsServiceService,
@@ -20,82 +21,67 @@ export class BtnAtorizarAPagoComponent {
     private permisosService : PermisosService
   ){}
 
-    public solicitarPago() {
-      Swal.fire({
-        title: '¿Deseas solicitar el pago de la Orden de Compra?',
-        text: 'Asigna la modalidad de pago previamente acordada con el proveedor seleccionado:',
-        input: 'select',
-        inputOptions: {
-          1: '---CONTADO---',
-          2: '---CREDITO---',
-        },
-        inputPlaceholder: 'Selecciona una opción',
-        inputAttributes: {
-          autocapitalize: 'off'
-        },
-        reverseButtons: true,
-        icon: 'info',
-        showCancelButton: true,
-        cancelButtonText: 'No',
-        confirmButtonText: 'Sí, autorizar a pago',
-        customClass: {
-          cancelButton: 'btn btn-primary ms-2 px-4',
-          confirmButton: 'btn btn-success ms-2 px-4 ',
-        },
-        buttonsStyling: false,
-        preConfirm: (razon) => {
-          if (!razon || razon.trim() === '') {
-            Swal.showValidationMessage('Debes de seleccionar una forma de pago para continuar');
-            return false;
-          }
-          return razon;
-        }
-      }).then((result) => {
-        if (result.isConfirmed && result.value) {
-          // this.isLoad = true;
-    
-          const payload = {
-            id: this.ordenCompra.id,
-            modo_pago : result.value
-          };
-     
-          // console.log(payload);
-          this.ordenesComprasService.autorizarPagoOrdenCompra(payload).subscribe(
-            (response) => {
-              // this.isLoad = false;
-              if (response.status === 'success') {
-               this.actualizarStatus1.emit();
-      
-                this.alertasService.mostrarAlerta(
-                  'Listo!',
-                  response.message,
-                  'success',
-                  'success'
-                );
-              } else {
-                this.alertasService.mostrarAlerta(
-                  'Error!',
-                  'Ocurrió un error inesperado',
-                  'error',
-                  'danger'
-                );
-              }
-            },
-            (error) => {
-              // this.isLoad = false;
+public solicitarPago() {
+    Swal.fire({
+      title: '¿Deseas solicitar el pago de la Orden de Compra?',
+      text: 'Se autorizará la orden de compra seleccionada.',
+      icon: 'info',
+      showCancelButton: true,
+      reverseButtons: true,
+      cancelButtonText: 'No',
+      confirmButtonText: 'Sí, autorizar a pago',
+      customClass: {
+        cancelButton: 'btn btn-primary ms-2 px-4',
+        confirmButton: 'btn btn-success ms-2 px-4',
+      },
+      buttonsStyling: false
+    }).then((result) => {
+      // Validamos únicamente si el usuario hizo clic en el botón de confirmación ("Sí")
+      if (result.isConfirmed) {
+        // this.isLoad = true;
+
+        const payload = {
+          id: this.ordenCompra.id,
+        };
+
+        // console.log(payload);
+        this.ordenesComprasService.autorizarPagoOrdenCompra(payload).subscribe(
+          (response) => {
+            // this.isLoad = false;
+            if (response.status === 'success') {
+              this.actualizarStatus1.emit();
+              this.volver.emit();
+
+              this.alertasService.mostrarAlerta(
+                'Listo!',
+                response.message,
+                'success',
+                'success'
+              );
+            } else {
               this.alertasService.mostrarAlerta(
                 'Error!',
-                error,
+                'Ocurrió un error inesperado',
                 'error',
                 'danger'
               );
             }
-          );
-        }
-      });
-    }
-    
-    tienePermiso(permiso: string = null): boolean {
+          },
+          (error) => {
+            // this.isLoad = false;
+            this.alertasService.mostrarAlerta(
+              'Error!',
+              error,
+              'error',
+              'danger'
+            );
+          }
+        );
+      }
+    });
+  }
+
+  tienePermiso(permiso: string = ''): boolean {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
   }

@@ -3,7 +3,7 @@
    <strong> <i class="fas fa-file-invoice-dollar me-1"></i> Datos de facturación</strong>
   </div>
   <div class="card-body">
-    <div >
+
     <div class="row" *ngIf="ordenCompra?.documentos[0]">
       <!-- <h5>Datos de facturación</h5> -->
       <div class="col-6 text-start">
@@ -30,104 +30,70 @@
         </p>
 
       </div>
-      <div class="table-responsive rounded-4 border overflow-hidden">
-        <table
-        class="text-center table table-sm table-borderless mb-0"
-      >
-        <thead class="table-light y78rounded-4">
-          <tr>
-            <th>FECHA</th>
-            <th>T.COMP.</th>
-            <th>SERIE</th>
-            <th>FOLIO</th>
-            <th>F.PAGO</th>
-            <th>SUB TOTAL</th>
-            <th>IMPUESTOS</th>
-            <th>TOTAL</th>
-            <th>MONEDA</th>
-            <th>FAC.</th>
-            <!-- <th>COMPR.</th>
-            <th *ngIf = "factura.metodoPago?.metodoPago === 'PPD'">COMPL.</th> -->
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let comprobante of factura.comprobantes; index as i">
-            <td>{{ comprobante.fecha | date:'dd/MM/yyyy HH:mm:ss'}}</td>
-            <td>{{ comprobante.tComprobanteDesc }}</td>
-            <td>{{ comprobante.serie }}</td>
-            <td>{{ comprobante.folio }}</td>
-            <td>{{ comprobante.formaPago }}</td>
-            <td>$ {{ comprobante.subTotal | number }}</td>
-            <td>$ {{ +comprobante.total - +comprobante.subTotal| number}}</td>
-            <td>$ {{ comprobante.total | number }}</td>
-            <td>{{ comprobante.moneda }}</td>
-            <!-- <td >
-              <div class="d-flex justify-content-center gap-2">
-                <a *ngIf="ordenCompra.documentos[i].ruta_pdf_factura; else noArchivo"  class="btn btn-sm btn-danger" (click)="verArchivos(ordenCompra.documentos[i].ruta_pdf_factura )">
-                  <i class="fas fa-file-pdf"></i>
-                </a>
-                <a *ngIf="ordenCompra.documentos[i].ruta_pdf_factura; else noArchivo"  class="btn btn-sm btn-primary" (click)="descargarXML(ordenCompra.documentos[i].ruta_xml_factura, 'factura', comprobante.folio)">
-                  <i class="fas fa-file-code"></i>
-                </a>
-              </div>
-            </td>
-            <td>
-              <a *ngIf="ordenCompra.documentos[i].comprobante_pago; else noArchivo" class="btn btn-sm btn-success" (click)="descargarXML(ordenCompra.documentos[i].comprobante_pago, 'comprobante', comprobante.folio)">
-                <i class="fas fa-file "></i>
-              </a>
-            </td>
-            <td *ngIf = "factura.metodoPago?.metodoPago === 'PPD'">
-              <div class="d-flex justify-content-center gap-2">
-                <a *ngIf="ordenCompra.documentos[i].complemento_pago_pdf; else noComplemento" class="btn btn-sm btn-info" (click)="verArchivos(ordenCompra.documentos[i].complemento_pago_pdf)">
-                  <i class="fas fa-file-pdf"></i>
-                </a>
-                <a *ngIf="ordenCompra.documentos[i].complemento_pago_xml; else noComplemento"  class="btn btn-sm btn-primary" (click)="descargarXML(ordenCompra.documentos[i].complemento_pago_xml, 'complemento', comprobante.folio)">
-                  <i class="fas fa-file-code"></i>
-                </a>
-              </div>
-            </td> -->
-            <td>
-              <div class="d-flex justify-content-center gap-2">
-                <a *ngIf="comprobante.representacion_impresa" class="btn btn-sm btn-info" (click)="verArchivos(comprobante.representacion_impresa)">
-                  <i class="fas fa-file"></i>
-                </a>
-                <a *ngIf="comprobante.xml"  class="btn btn-sm btn-primary" (click)="descargarXML(comprobante.xml, comprobante.tComprobanteDesc, comprobante.folio)">
-                  <i class="fas fa-file-code"></i>
-                </a>
-              </div>
-            </td>
-            <!-- <td *ngIf = "factura.metodoPago?.metodoPago === 'PPD' && i === 0">
-              <div class="d-flex justify-content-center gap-2">
-                <a (click)="openModalAddFile(comprobante.idRuta)" class="btn btn-sm btn-secondary"><i class="fas fa-upload"></i></a>
-              </div>
-            </td> -->
-            <ng-template #noArchivo>
-
-              <span class="badge badge-pill fs-4 badge-soft-secondary"><i class="fas fa-ban"></i></span>
-            </ng-template>
-            <ng-template #noComplemento>
-              <a (click)="openModalAddFile(comprobante.idRuta)" class="btn btn-sm btn-secondary"><i class="fas fa-upload"></i></a>
-              <!-- <span class="badge badge-pill fs-4 badge-soft-secondary"><i class="fas fa-ban"></i></span> -->
-            </ng-template>
-          </tr>
-        </tbody>
-        <tfoot>
-          <td colspan="5" class="text-end"><strong> Totales: </strong></td>
-          <td>
-            <strong>$ {{ factura.sumaSubTotal | number }}</strong>
-          </td>
-          <td>
-            <strong>$ {{ factura.sumaTotal - factura.sumaSubTotal | number }} </strong>
-          </td>
-          <td>
-            <strong>$ {{ factura.sumaTotal | number }} </strong>
-          </td>
-        </tfoot>
-      </table>
-      </div>
-      <br />
-      <hr />
     </div>
+
+    <div class="table-responsive rounded-4 border">
+        <table class="table table-sm text-center">
+          <thead class="table-light">
+            <tr>
+              <th>FECHA</th>
+              <th>T.COMP.</th>
+              <th>SERIE</th>
+              <th>FOLIO</th>
+              <th>F.PAGO</th>
+              <th>SUB TOTAL</th>
+              <th>IMPUESTOS</th>
+              <th>TOTAL</th>
+              <th>MONEDA</th>
+              <th>FAC.</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let comprobante of factura.comprobantes; index as i">
+              <td>{{ comprobante.fecha | date:'dd/MM/yyyy HH:mm:ss'}}</td>
+              <td>{{ comprobante.tComprobanteDesc }}</td>
+              <td>{{ comprobante.serie }}</td>
+              <td>{{ comprobante.folio }}</td>
+              <td>{{ comprobante.formaPago }}</td>
+              <td>$ {{ comprobante.subTotal | number }}</td>
+              <td>$ {{ +comprobante.total - +comprobante.subTotal| number}}</td>
+              <td>$ {{ comprobante.total | number }}</td>
+              <td>{{ comprobante.moneda }}</td>
+              <td>
+                <div class="d-flex justify-content-center gap-2">
+                  <a *ngIf="comprobante.representacion_impresa" class="btn btn-sm btn-info" (click)="verArchivos(comprobante.representacion_impresa)">
+                    <i class="fas fa-file"></i>
+                  </a>
+                  <a *ngIf="comprobante.xml"  class="btn btn-sm btn-primary" (click)="descargarXML(comprobante.xml, comprobante.tComprobanteDesc, comprobante.folio)">
+                    <i class="fas fa-file-code"></i>
+                  </a>
+                </div>
+              </td>
+              <ng-template #noArchivo>
+
+                <span class="badge badge-pill fs-4 badge-soft-secondary"><i class="fas fa-ban"></i></span>
+              </ng-template>
+              <ng-template #noComplemento>
+                <a (click)="openModalAddFile(comprobante.idRuta)" class="btn btn-sm btn-secondary"><i class="fas fa-upload"></i></a>
+              </ng-template>
+            </tr>
+          </tbody>
+          <tfoot>
+            <td colspan="5" class="text-end"><strong> Totales: </strong></td>
+            <td>
+              <strong>$ {{ factura.sumaSubTotal | number }}</strong>
+            </td>
+            <td>
+              <strong>$ {{ factura.sumaTotal - factura.sumaSubTotal | number }} </strong>
+            </td>
+            <td>
+              <strong>$ {{ factura.sumaTotal | number }} </strong>
+            </td>
+          </tfoot>
+        </table>
+      </div>
+    <div>
+
 </div>
   </div>
 </div>

@@ -30,26 +30,26 @@ export class ComprasKanbanComponent implements OnInit, OnChanges {
   @Output() btnModalSeguimiento = new EventEmitter<void>();
   @Output() btnModalOC = new EventEmitter<void>();
   @Output() btnOpenDetalleSolicitud = new EventEmitter<void>();
-      
+
   isLoad = true;
   @Input() datos: SolicitudCompra[] = [];
   datosAgrupados: { [key: string]: SolicitudCompra[] } = {};
 
   estados = [
-  { id: 1, nombre: 'En espera de autorización', color: 'bg-gradient bg-info', permiso: 'view column esp auto'},
-  { id: 2, nombre: 'Solicitado', color: 'bg-gradient bg-info', permiso: 'view column solicitado'},
-  { id: 3, nombre: 'En cotización', color: 'bg-gradient bg-warning', permiso: 'view column en cotizacion'},
-  { id: 5, nombre: 'Orden de compra', color: 'bg-gradient bg-warning', permiso: 'view column orden compra'},
+  { id: 1, nombre: 'En espera de autorización', color: 'bg-gradient bg-info', permiso: 'view column esp auto'},             //VISIBLE
+  { id: 2, nombre: 'Solicitado', color: 'bg-gradient bg-info', permiso: 'view column solicitado'},                          //VISIBLE
+  { id: 3, nombre: 'En cotización', color: 'bg-gradient bg-warning', permiso: 'view column en cotizacion'},                 //VISIBLE
+  { id: 5, nombre: 'Orden de compra', color: 'bg-gradient bg-warning', permiso: 'view column orden compra'},                //VISIBLE
   { id: 6, nombre: 'Autorizado', color: 'bg-gradient bg-success', permiso: 'view column autorizado'},
-  { id: 7, nombre: 'Autorizado a pago', color: 'bg-gradient bg-primary', permiso: 'view column autorizado a pago'},
-  { id: 8, nombre: 'En surtido', color: 'bg-gradient bg-primary', permiso: 'view column en surtido'},
+  { id: 8, nombre: 'En surtido', color: 'bg-gradient bg-primary', permiso: 'view column en surtido'},                       //VISIBLE
+  { id: 7, nombre: 'Esp. Autorización a pago', color: 'bg-gradient bg-primary', permiso: 'view column autorizado a pago'},  //VISIBLE
   { id: 10, nombre: 'Por facturar', color: 'bg-gradient bg-primary', permiso: 'view column facturado'},
-  { id: 11, nombre: 'Pago Solicitado', color: 'bg-gradient bg-warning', permiso: 'view column solicitado a pago'},
+  { id: 11, nombre: 'Pago Solicitado', color: 'bg-gradient bg-warning', permiso: 'view column solicitado a pago'},          //VISIBLE
   { id: 12, nombre: 'Pagada', color: 'bg-gradient bg-success', permiso: 'view column pagada'},
-  { id: 13, nombre: 'Cargar complemento', color: 'bg-gradient bg-secondary', permiso: 'view column cargar complemento'},
+  { id: 13, nombre: 'Cargar complemento', color: 'bg-gradient bg-secondary', permiso: 'view column cargar complemento'},    //VISIBLE
   { id: 9, nombre: 'Entregada Parcialmente', color: 'bg-gradient bg-secondary', permiso: 'view column entregado'},
-  { id: 14, nombre: 'Finalizada', color: 'bg-gradient bg-dark', permiso: 'view column finalizada'},
-  { id: 4, nombre: 'Cancelado', color: 'bg-gradient bg-danger', permiso: 'view column cancelado'},
+  { id: 14, nombre: 'Finalizada', color: 'bg-gradient bg-dark', permiso: 'view column finalizada'},                         //VISIBLE
+  { id: 4, nombre: 'Cancelado', color: 'bg-gradient bg-danger', permiso: 'view column cancelado'},                          //VISIBLE
 ];
 
 agrupaciones = {
@@ -58,7 +58,7 @@ agrupaciones = {
   'En cotización': ['EN COTIZACIÓN'],
   'Orden de compra': ['ORDEN DE COMPRA'],
   'Autorizado' : ['AUTORIZADA'],
-  'Autorizado a pago' : ['AUTO. A PAGO'],
+  'Esp. Autorización a pago' : ['AUTO. A PAGO'],
   'En surtido': ['EN SURTIDO'],
   'Entregada Parcialmente': ['ENTREGADO PARCIALMENTE'],
   'Por facturar': ['POR FACTURAR'],
@@ -133,46 +133,14 @@ agrupaciones = {
     return resultado;
   }
 
-  tienePermiso(permiso: string = null): boolean {
+  tienePermiso(permiso: string = ''): boolean {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
   }
 
-  
-//  diferenciaEnDias(fechaStr: string): number {
-//   // fechaStr espera formato "dd/mm/aaaa"
-//   const partes = fechaStr.split("/"); // ["dd", "mm", "aaaa"]
 
-//   // Parsear a números
-//   const dia = parseInt(partes[0], 10);
-//   const mes = parseInt(partes[1], 10) - 1; // los meses en JS van 0–11
-//   const anio = parseInt(partes[2], 10);
-
-//   const fechaEspecifica = new Date(anio, mes, dia);
-//   const hoy = new Date();
-
-//   const unDiaEnMs = 1000 * 60 * 60 * 24;
-
-//   const diferenciaMs = hoy.getTime() - fechaEspecifica.getTime();
-
-//   return Math.round(diferenciaMs / unDiaEnMs);
-// }
-
-// getColorPorDias(fechaStr: string): string {
-//   const dias = this.diferenciaEnDias(fechaStr);
-
-//   if (dias <= 2) {
-//     return '';
-//   } else if (dias >= 3 && dias <= 6) {
-//     return "bg-warning";
-//   } else if (dias >= 7) {
-//     return "bg-danger";
-//   } else {
-//     return "bg-dark"; // sin clase
-//   }
-// }
-trackBySolicitud(index: number, item: any) {
-    return item.id;
-}
+  trackBySolicitud(index: number, item: any) {
+      return item.id;
+  }
 
 }
