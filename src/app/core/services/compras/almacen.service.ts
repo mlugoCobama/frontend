@@ -3,11 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from "src/environments/environment";
 
-const token = localStorage.getItem('token');
-
-const headers = new HttpHeaders({
-  'Authorization': `Bearer ${token}`
-});
 
 @Injectable({
   providedIn: 'root'
@@ -20,11 +15,11 @@ export class AlmacenService {
    * @returns
    */
   public getAll(): Observable<any> {
-    return this.http.get(environment.apiUrl + `compras/AlmacenCompras`, {headers});
+    return this.http.get(environment.apiUrl + `compras/AlmacenCompras`);
   }
 
   public getEntradasPendientes(tipo:number): Observable<any> {
-    return this.http.get(environment.apiUrl + `compras/AlmacenCompras/${tipo}`, {headers});
+    return this.http.get(environment.apiUrl + `compras/AlmacenCompras/${tipo}`);
   }
 
   /**
@@ -32,7 +27,7 @@ export class AlmacenService {
    * @returns
    */
   public getTecnicosTi(): Observable<any> {
-    return this.http.get(environment.apiUrl + `compras/getTecnicos`, {headers});
+    return this.http.get(environment.apiUrl + `compras/getTecnicos`);
   }
 
   /**
@@ -41,15 +36,15 @@ export class AlmacenService {
    */
   public getExistencias(): Observable<any> {
 
-    return this.http.get(environment.apiUrl + `compras/getExsitencias/3`, {headers});
+    return this.http.get(environment.apiUrl + `compras/getExsitencias/3`);
   }
 
   public getMovimientos(): Observable<any> {
 
-    return this.http.get(environment.apiUrl + `compras/getMovimientos`, {headers});
+    return this.http.get(environment.apiUrl + `compras/getMovimientos`);
   }
 
   public storeMovimientos(data:any): Observable<any> {
-    return this.http.post(environment.apiUrl + `compras/AlmacenCompras`, data,{headers});
+    return this.http.post(environment.apiUrl + `compras/AlmacenCompras`, data);
   }
 }

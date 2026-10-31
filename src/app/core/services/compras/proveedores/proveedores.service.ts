@@ -3,11 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
-const token = localStorage.getItem('token');
-
-const headers = new HttpHeaders({
-  'Authorization': `Bearer ${token}`
-});
 
 @Injectable({
   providedIn: 'root'
@@ -20,11 +15,11 @@ export class ProveedoresService {
    * @returns colección de datos de proveedores
    */
   public getAll(): Observable<any> {
-    return this.http.get(environment.apiUrl + 'compras/Proveedores', {headers});
+    return this.http.get(environment.apiUrl + 'compras/Proveedores');
   }
 
   public getCatalogo(tipo:string): Observable<any> {
-    return this.http.get(environment.apiUrl + 'compras/getCatProveedores/'+tipo, {headers});
+    return this.http.get(environment.apiUrl + 'compras/getCatProveedores/'+tipo);
   }
 
   /**
@@ -32,7 +27,7 @@ export class ProveedoresService {
    * @returns colección de datos {nombre, id}
    */
   public getProveedores(): Observable<any> {
-    return this.http.get(environment.apiUrl + 'compras/getProveedores', {headers});
+    return this.http.get(environment.apiUrl + 'compras/getProveedores');
   }
 
   /**
@@ -40,7 +35,7 @@ export class ProveedoresService {
    * @param rutaArchivo ruta al archivo del documento
    */
   public abrirArchivo(rutaArchivo: string){
-    const url =  ('http://cobamaservices.homelinux.org/api/' + `compras/${rutaArchivo}`);
+    const url =  (environment.apiArchivos + `compras/${rutaArchivo}`);
      window.open(url , '_blank')
   }
 
@@ -50,7 +45,7 @@ export class ProveedoresService {
    * @returns rutas delos archivos del expediente del proveedor
    */
   public getExp(id:number): Observable<any> {
-    return this.http.get(environment.apiUrl + `compras/Proveedores/${id}`, {headers});
+    return this.http.get(environment.apiUrl + `compras/Proveedores/${id}`);
   }
 
   /**
@@ -59,7 +54,7 @@ export class ProveedoresService {
    * @returns respuesta del servidor "success"
    */
   public save(data:any): Observable<any> {
-    return this.http.post(environment.apiUrl + 'compras/Proveedores', data, {headers});
+    return this.http.post(environment.apiUrl + 'compras/Proveedores', data);
   }
 
   /**
@@ -69,7 +64,7 @@ export class ProveedoresService {
    * @returns respuesta del servidor con datos actualizados
    */
   public edit(id:number, data:any): Observable<any> {
-    return this.http.post(environment.apiUrl + `compras/Proveedores/${id}`, data, {headers});
+    return this.http.post(environment.apiUrl + `compras/Proveedores/${id}`, data);
   }
 
   /**
@@ -78,7 +73,7 @@ export class ProveedoresService {
    * @returns
    */
   public destroy(id:number): Observable<any> {
-    return this.http.delete(environment.apiUrl + `compras/Proveedores/${id}`, {headers});
+    return this.http.delete(environment.apiUrl + `compras/Proveedores/${id}`);
   }
  /**
   * Envía una petición al servidor para recuperar un zip con el expediente del proveedor

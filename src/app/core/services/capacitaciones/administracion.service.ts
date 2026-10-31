@@ -3,11 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
-const token = localStorage.getItem('token');
-
-const headers = new HttpHeaders({
-  'Authorization': `Bearer ${token}`
-});
 
 @Injectable({
   providedIn: "root",
@@ -20,29 +15,29 @@ export class AdministracionService {
    * @returns catalogo de modulos
    */
   public getAll(): Observable<any> {
-    return this.http.get<any>(environment.apiUrl + "capacitaciones/adminstracion", {headers});
+    return this.http.get<any>(environment.apiUrl + "capacitaciones/adminstracion");
   }
 
   public getAllModulos(): Observable<any> {
-    return this.http.get<any>(environment.apiUrl + "capacitaciones/modulos", {headers});
+    return this.http.get<any>(environment.apiUrl + "capacitaciones/modulos");
   }
 
   public getFunciones(nModulo, nSubmodulo): Observable<any> {
     return this.http.get<any>(
       environment.apiUrl +
-        `capacitaciones/getFunciones/${nModulo}/${nSubmodulo}`, {headers}
+        `capacitaciones/getFunciones/${nModulo}/${nSubmodulo}`
     );
   }
 
   public getPuestos(): Observable<any> {
-    return this.http.get<any>(environment.apiUrl + "capacitaciones/puestos" , {headers});
+    return this.http.get<any>(environment.apiUrl + "capacitaciones/puestos" );
   }
 
   /**
    * Recupera el catalogo de empresas
    */
   public getEmpresas(): Observable<any> {
-    return this.http.get(environment.apiUrl + "compras/Usuarios", {headers});
+    return this.http.get(environment.apiUrl + "compras/Usuarios");
   }
 
   /**
@@ -50,15 +45,15 @@ export class AdministracionService {
    */
   public getUsuariosEmpresas(intercompania: number): Observable<any> {
     return this.http.get(
-      environment.apiUrl + `compras/Usuarios/${intercompania}`, {headers}
+      environment.apiUrl + `compras/Usuarios/${intercompania}`
     );
   }
 
   public save(data:any): Observable<any> {
-      return this.http.post<any>(environment.apiUrl + 'capacitaciones/adminstracion', data, {headers});
+      return this.http.post<any>(environment.apiUrl + 'capacitaciones/adminstracion', data);
   }
 
   public destroy( id : number): Observable<any> {
-      return this.http.delete(environment.apiUrl + `capacitaciones/adminstracion/${id}`, {headers});
+      return this.http.delete(environment.apiUrl + `capacitaciones/adminstracion/${id}`);
     }
 }

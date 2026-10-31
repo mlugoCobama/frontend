@@ -35,7 +35,7 @@ export class TableFilesCotizacionesComponent implements AfterViewInit {
   @Output() actualizarDetalles = new EventEmitter<void>();
   @Output() actualizarStatus = new EventEmitter<void>();
 
-  public formOrdenCompra: FormGroup;
+  public formOrdenCompra!: FormGroup;
 
   text: string = "";
   longitudMaxima: number = 150;
@@ -52,6 +52,7 @@ export class TableFilesCotizacionesComponent implements AfterViewInit {
 
   public proveedorSeleccionado: any;
   public datosPago:any;
+  public showUploadDoc:boolean = false;
 
   constructor(
     private proveedoresService: ProveedoresService,
@@ -111,6 +112,7 @@ export class TableFilesCotizacionesComponent implements AfterViewInit {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.cotizacionesService.setSelectedFile(proveedorId, input.files[0]);
+      this.selectedFiles[proveedorId] = input.files[0];
     }
   }
 
@@ -384,8 +386,48 @@ export class TableFilesCotizacionesComponent implements AfterViewInit {
   }
 
   getProveedorSeleccionado(){
-    const proveedorSeleccionado = this.cotProv.find(u => u.seleccionado == 1);
+    const proveedorSeleccionado = this.cotProv.find((u:any) => u.seleccionado == 1);
     return proveedorSeleccionado?.proveedores_id?.datos_pago[0];
 
+  }
+
+  quitarCotizacion(prov: any) {
+      prov.ruta =  null;
+      prov.showUploadDoc = true;
+  }
+
+  public updateFileCotizacion(prov:any){
+      prov.isLoading = true;
+        if(!this.selectedFiles[prov.id]){
+          this.alertasService.mostrarAlerta('Error', 'No cargaste ningun archivo', 'error', 'danger');
+          prov.isLoading = false;
+          return;
+        }
+
+      const formData = new FormData();
+      formData.append(`files[${prov.id}]`, this.selectedFiles[prov.id]);
+
+      this.cotizacionesService.subirCotizacionDestiempo(formData).subscribe(
+        (response) => {
+          if (response.status === "success") {
+            this.alertasService.mostrarAlerta(
+              "Guardado", "Se actualizo correctamente el archivo", "success", "success"
+            );
+            prov.isLoading = false;
+            this.actualizarDetalles.emit();
+          } else {
+            prov.isLoading = false;
+            this.alertasService.mostrarAlerta(
+              "Error", response.message, "warning", "warning"
+            );
+          }
+        },
+        (error) => {
+          prov.isLoading = false;
+          this.alertasService.mostrarAlerta(
+            "Error guardando los datos:", error, "error", "danger"
+          );
+        },
+      );
   }
 }

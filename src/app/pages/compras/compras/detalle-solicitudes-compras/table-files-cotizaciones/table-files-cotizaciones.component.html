@@ -40,14 +40,14 @@
             </div>
           </td>
           <td>
-            {{ prov?.proveedores_id.nombre }}
-            <span *ngIf="prov?.seleccionado === 1"  class="badge text-bg-success font-size-11" >
-              <i class="bx bx-check-circle bx-burst"></i>
-              <strong> SELECCIONADO </strong>
+            <span class="fw-semibold">{{ prov?.proveedores_id.nombre }}</span>
+            <span *ngIf="prov?.seleccionado === 1"  class="ms-2 badge text-bg-success font-size-11 fw-bold"  >
+              <i class="bx bx-check-circle bx-burst me-1"></i>
+              SELECCIONADO
             </span>
           </td>
           <td>
-            <div>
+            <div class="d-flex gap-1">
               <input
                 *ngIf="!prov?.ruta"
                 accept="application/pdf"
@@ -57,22 +57,40 @@
                 name="prov?.id"
                 type="file"
               />
-              <a
-                class="btn btn-sm btn-light px-4 fw-semibold"
-                *ngIf="prov?.ruta"
-                (click)="verArchivos(prov?.ruta)"
-              >
-                <i class="fas fa-file-pdf text-danger me-1 fs-5"></i>
-                  VER COTIZACIÓN
-              </a>
 
-            </div>
-          </td>
+              <div class="d-flex align-items-center justify-content-center gap-2" *ngIf="prov?.ruta">
+                <a
+                  class="btn btn-sm btn-danger px-3 fw-semibold rounded-4"
+                  (click)="verArchivos(prov?.ruta)"
+                >
+                  <i class="fas fa-file-pdf me-1 fs-6"></i>
+                  VER COTIZACIÓN
+                </a>
+
+                <button
+                  *ngIf="prov?.ruta && tienePermiso('btn update cotizaciones')"
+                  class="btn btn-sm btn-outline-danger"
+                  (click)="quitarCotizacion(prov)"
+                  title="Quitar cotización actual y subir otra"
+                >
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+              <button
+                  *ngIf="!prov?.ruta && prov?.showUploadDoc && tienePermiso('btn update cotizaciones')"
+                  class="btn btn-sm btn-primary"
+                  (click)="updateFileCotizacion(prov)"
+                  title="Quitar cotización actual y subir otra"
+                >
+                <i class="fas" [ngClass]="prov?.isLoading ? 'fa-spinner fa-spin' : 'fa-paper-plane'"></i>
+              </button>
+          </div>
+        </td>
           <td *ngIf="solicitudCompra?.estatus <= 3 && tienePermiso('view btn reenviar correo')">
             <button
               (click)="reenviarSC(prov)"
               [disabled]="prov?.loading"
-              class="btn btn-sm btn-primary"
+              class="btn btn-sm btn-outline-primary"
               title="Reenviar correo de solicitud de cotización al proveedor">
 
               <ng-container *ngIf="!prov?.loading; else loadingIcon">
@@ -152,7 +170,7 @@
       <button
         *ngIf="solicitudCompra?.estatus === enEsts.EnCotizacion && !mostrarObs && tienePermiso('view btn save precios')"
         type="submit"
-        class="btn btn-sm btn-success"
+        class="btn btn-sm btn-success rounded-4"
         (click)="guardarPrecios()"
       >
       <ng-container *ngIf="!saving; else loadingGuardando">

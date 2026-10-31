@@ -154,8 +154,12 @@
                     <td>{{item.punches.salida_comer}}</td>
                     <td>{{item.punches.entrada_comer}}</td>
                     <td>{{item.punches.salida}}</td>
-                    <td [class.text-danger]="item.punches.is_tardy" >
-                      {{item.punches.tardiness_status}}
+                    <td [class.text-danger]="item.punches.is_tardy" class="text-center">
+                      <span class="badge fw-semibold font-size-11 rounded-pill border"
+                      [ngClass]="{'bg-danger-subtle text-danger' : item.punches.is_tardy, 'bg-primary-subtle text-primary': !item.punches.is_tardy}">
+                       <i class="me-1 fas" [ngClass]="{'fa-clock' : item.punches.is_tardy, 'fa-check': !item.punches.is_tardy}"></i>
+                        {{item.punches.tardiness_status}}
+                      </span>
                     </td>
                   </tr>
                 </tbody>

@@ -5,11 +5,6 @@ import { environment } from "src/environments/environment";
 import { BehaviorSubject } from "rxjs";
 import { Subject } from "rxjs";
 
-const token = localStorage.getItem('token');
-
-const headers = new HttpHeaders({
-  'Authorization': `Bearer ${token}`
-});
 
 @Injectable({
   providedIn: "root",
@@ -37,7 +32,7 @@ export class ComprasService {
    * @returns colección con las ordenes de compra
    */
   public getAll(intercompania, id): Observable<any> {
-    return this.http.get(environment.apiUrl + `compras/Solicitudes/${intercompania}/${id}`, {headers});
+    return this.http.get(environment.apiUrl + `compras/Solicitudes/${intercompania}/${id}`);
   }
   // public getAll(): Observable<any> {
   //   return this.http.get(environment.apiUrl + "compras/SolicitudesCompras");
@@ -48,14 +43,14 @@ export class ComprasService {
    * @returns detalles de la solicitud de compra
    */
   public getOne(id: number): Observable<any> {
-    return this.http.get(environment.apiUrl + `compras/SolicitudesCompras/${id}`, {headers});
+    return this.http.get(environment.apiUrl + `compras/SolicitudesCompras/${id}`);
   }
   /**
    * Recupera los datos de la solicitud de compra seleccionado
    * @returns datos de la solicitud de compra
    */
   public getSolicitudCompra(id: number): Observable<any> {
-    return this.http.get(environment.apiUrl + `compras/SolicitudCompra/${id}`, {headers});
+    return this.http.get(environment.apiUrl + `compras/SolicitudCompra/${id}`);
   }
 
   /**
@@ -64,15 +59,15 @@ export class ComprasService {
    * @returns
    */
   public save(data: any): Observable<any> {
-    return this.http.post(environment.apiUrl + "compras/SolicitudesCompras", data , {headers});
+    return this.http.post(environment.apiUrl + "compras/SolicitudesCompras", data );
   }
 
   public updateSolicitud(data: any): Observable<any> {
-    return this.http.post(environment.apiUrl + "compras/SolicitudesCompras/actualiza-solicitud", data , {headers});
+    return this.http.post(environment.apiUrl + "compras/SolicitudesCompras/actualiza-solicitud", data );
   }
 
   public edit(id: number, data: any): Observable<any> {
-    return this.http.put(environment.apiUrl + `compras/SolicitudesCompras/${id}`, data, {headers}) ;
+    return this.http.put(environment.apiUrl + `compras/SolicitudesCompras/${id}`, data) ;
   }
 
   /**
@@ -81,12 +76,12 @@ export class ComprasService {
    * @returns solicitud con estatus cancelada
    */
   public destroy(data: any): Observable<any> {
-    // return this.http.delete(environment.apiUrl + `compras/SolicitudesCompras/${id}`, {headers});
-    return this.http.post(environment.apiUrl + `compras/cancelar-solicitud`, data ,{headers});
+    // return this.http.delete(environment.apiUrl + `compras/SolicitudesCompras/${id}`);
+    return this.http.post(environment.apiUrl + `compras/cancelar-solicitud`, data );
   }
 
   public devolverSolictud(data: any): Observable<any> {
-    return this.http.post(environment.apiUrl + `compras/devolver-solicitud-revision`, data ,{headers});
+    return this.http.post(environment.apiUrl + `compras/devolver-solicitud-revision`, data );
   }
 
   /**
@@ -95,11 +90,11 @@ export class ComprasService {
    * @returns respuesta del servidor
    */
   public sendMail(data: any): Observable<any> {
-    return this.http.post(environment.apiUrl + "compras/enviar-solicitud-cotizacion", data, {headers});
+    return this.http.post(environment.apiUrl + "compras/enviar-solicitud-cotizacion", data);
   }
 
    public getSeguimientoSolicitud(id: number): Observable<any> {
-    return this.http.get(environment.apiUrl + `compras/get-seguimiento-solicitud/${id}`, {headers});
+    return this.http.get(environment.apiUrl + `compras/get-seguimiento-solicitud/${id}`);
   }
 
   /**

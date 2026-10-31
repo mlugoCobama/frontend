@@ -4,11 +4,6 @@ import { environment } from "src/environments/environment";
 import { Observable } from "rxjs";
 import { BehaviorSubject } from 'rxjs';
 
-const token = localStorage.getItem('token');
-
-const headers = new HttpHeaders({
-  'Authorization': `Bearer ${token}`
-});
 
 
 @Injectable({
@@ -22,7 +17,7 @@ export class ComprasMacroService {
    * @returns colección con las ordenes de compra
    */
   public getAll(intercompania: number, id: number): Observable<any> {
-    return this.http.get(environment.apiUrl + `compras/Solicitudes/Macro/${intercompania}/${id}`, {headers});
+    return this.http.get(environment.apiUrl + `compras/Solicitudes/Macro/${intercompania}/${id}`);
   }
 
   /**
@@ -30,24 +25,24 @@ export class ComprasMacroService {
    * @returns dat auto-tanques
    */
   public getAutotanques(intercompania: number): Observable<any> {
-    return this.http.get(environment.apiUrl + `compras/recuperar-autotanques/${intercompania}`, {headers});
+    return this.http.get(environment.apiUrl + `compras/recuperar-autotanques/${intercompania}`);
   }
 
   /**
    * Almacena los datos de la solicitud de compra
    * @param data datos de la solicitud de compra y detalles de la solicitud
-   * @returns 
+   * @returns
    */
   public save(data: any): Observable<any> {
-    return this.http.post(environment.apiUrl + "compras/SolicitudesMacro", data, {headers});
+    return this.http.post(environment.apiUrl + "compras/SolicitudesMacro", data);
   }
 
   public edit(id: number, data: any): Observable<any> {
-    return this.http.put(environment.apiUrl + `compras/SolicitudesMacro/${id}`, data, {headers});
+    return this.http.put(environment.apiUrl + `compras/SolicitudesMacro/${id}`, data);
   }
 
   public updateSolicitud(data: any): Observable<any> {
-    return this.http.post(environment.apiUrl + "compras/SolicitudesCompras/Macro/actualiza-solicitud", data , {headers});
+    return this.http.post(environment.apiUrl + "compras/SolicitudesCompras/Macro/actualiza-solicitud", data );
   }
 
   private formDataSubject = new BehaviorSubject<any>(null);

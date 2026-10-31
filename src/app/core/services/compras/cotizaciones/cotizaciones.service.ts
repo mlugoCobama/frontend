@@ -4,11 +4,6 @@ import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { FormGroup } from "@angular/forms";
 
-const token = localStorage.getItem('token');
-
-const headers = new HttpHeaders({
-  'Authorization': `Bearer ${token}`
-});
 
 @Injectable({
   providedIn: "root",
@@ -24,7 +19,7 @@ export class CotizacionesService {
    * @returns registros cotización-proveedor
    */
   public getOne(id: number): Observable<any> {
-    return this.http.get(environment.apiUrl + `compras/Cotizaciones/${id}`, {headers});
+    return this.http.get(environment.apiUrl + `compras/Cotizaciones/${id}`);
   }
 
   /**
@@ -33,11 +28,15 @@ export class CotizacionesService {
    * @returns registros cotización-proveedor
    */
   public solicitarAutorizacion(id: number): Observable<any> {
-    return this.http.get(environment.apiUrl + `compras/solicitar-autorizacion/${id}`, {headers});
+    return this.http.get(environment.apiUrl + `compras/solicitar-autorizacion/${id}`);
   }
 
     public volverCotizar(id: number): Observable<any> {
-    return this.http.get(environment.apiUrl + `compras/Cotizaciones/volver-a-cotizar/${id}`, {headers});
+    return this.http.get(environment.apiUrl + `compras/Cotizaciones/volver-a-cotizar/${id}`);
+  }
+
+  public  subirCotizacionDestiempo(data:FormData): Observable<any> {
+    return this.http.post(environment.apiUrl + "compras/Cotizaciones/subir-doc-cotizacion-destiempo", data);
   }
 
   /**
@@ -46,11 +45,11 @@ export class CotizacionesService {
    * @returns
    */
   public save(data: any): Observable<any> {
-    return this.http.post(environment.apiUrl + "compras/Cotizaciones", data, {headers});
+    return this.http.post(environment.apiUrl + "compras/Cotizaciones", data);
   }
 
   public reenviarCorreo(data:any): Observable<any> {
-    return this.http.post(environment.apiUrl + "compras/reenviar-solicitud-cotizacion", data, {headers});
+    return this.http.post(environment.apiUrl + "compras/reenviar-solicitud-cotizacion", data);
   }
 
   /**

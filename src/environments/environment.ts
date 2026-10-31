@@ -26,6 +26,7 @@ export const environment = {
   // apiUrl: 'http://192.168.22.226:8080/api/',
   // apiUrl: 'http://localhost:8000/api/',
   apiUrl: 'http://backend.test/api/',
+  apiArchivos: 'http://cobamaservices.homelinux.org/api/',
   urlApiCodigoPostal: 'https://apicodigospostales.com/v1/',
   apiBiometricosUrl: 'http://192.168.22.226:8083/api/'
 };

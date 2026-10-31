@@ -3,11 +3,6 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 
-const token = localStorage.getItem('token');
-
-const headers = new HttpHeaders({
-  'Authorization': `Bearer ${token}`
-});
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +16,7 @@ export class UsuariosService {
  * @returns coleccion empresas {nombre, intercompania}
  */
   public getEmpresas(): Observable<any> {
-    return this.http.get(environment.apiUrl + "compras/Usuarios", {headers});
+    return this.http.get(environment.apiUrl + "compras/Usuarios");
   }
 
   /**
@@ -31,7 +26,7 @@ export class UsuariosService {
    */
   public getUsuariosEmpresas(intercompania: number): Observable<any> {
     return this.http.get(
-      environment.apiUrl + `compras/Usuarios/${intercompania}`, {headers}
+      environment.apiUrl + `compras/Usuarios/${intercompania}`
     );
   }
 
@@ -42,7 +37,7 @@ export class UsuariosService {
    */
   public getUserById(correo: string): Observable<any> {
     return this.http.get(
-      environment.apiUrl + `compras/getUserByEmail/${correo}`, {headers}
+      environment.apiUrl + `compras/getUserByEmail/${correo}`
     );
   }
 

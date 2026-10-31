@@ -3,11 +3,6 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from "@angul
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 
-const token = localStorage.getItem('token');
-
-const headers = new HttpHeaders({
-  'Authorization': `Bearer ${token}`
-});
 
 @Injectable({
   providedIn: "root",
@@ -19,7 +14,7 @@ export class OrdenesCompraService {
    * @returns coleccion de ordenes de compras
    */
   public getAll(): Observable<any> {
-    return this.http.get(environment.apiUrl + "compras/OrdenesCompras" , {headers} );
+    return this.http.get(environment.apiUrl + "compras/OrdenesCompras"  );
   }
 
   /**
@@ -28,7 +23,7 @@ export class OrdenesCompraService {
    * @returns datos de una orden de orden especifica
    */
   public getOne(id: number): Observable<any> {
-    return this.http.get(environment.apiUrl + `compras/OrdenesCompras/${id}`, {headers} );
+    return this.http.get(environment.apiUrl + `compras/OrdenesCompras/${id}` );
   }
 
   /**
@@ -37,7 +32,7 @@ export class OrdenesCompraService {
    * @returns respuesta del servidor
    */
   public save(data: any): Observable<any> {
-    return this.http.post(environment.apiUrl + "compras/OrdenesCompras", data, {headers} );
+    return this.http.post(environment.apiUrl + "compras/OrdenesCompras", data );
   }
   /**
    * Alamacena (Actualiza) los comprobantes de pago
@@ -48,7 +43,7 @@ export class OrdenesCompraService {
    */
   public saveDocs1(id: number, data: any): Observable<any> {
     return this.http.post(
-      environment.apiUrl + `compras/DocumentosOrdenesCompras/${id}`,data, {headers} );
+      environment.apiUrl + `compras/DocumentosOrdenesCompras/${id}`,data );
   }
 
   /**
@@ -57,7 +52,7 @@ export class OrdenesCompraService {
    * @returns
    */
   public saveDocs(data: any): Observable<any> {
-    return this.http.post(environment.apiUrl + `compras/DocumentosOrdenesCompras`, data, {headers} );
+    return this.http.post(environment.apiUrl + `compras/DocumentosOrdenesCompras`, data );
   }
 
   /**
@@ -66,15 +61,15 @@ export class OrdenesCompraService {
    * @returns
    */
   public saveFacturaDocs(data: any): Observable<any> {
-    return this.http.post(environment.apiUrl + `compras/save-files-factura`, data , {headers} );
+    return this.http.post(environment.apiUrl + `compras/save-files-factura`, data  );
   }
   /**
    * Actualiza la tupla de documentos orden compra
-   * @param data archivo de comporbante de pago 
+   * @param data archivo de comporbante de pago
    * @returns
    */
   public edit(id: number, data: any): Observable<any> {
-    return this.http.put(environment.apiUrl + `compras/OrdenesCompras/${id}`, data, {headers} );
+    return this.http.put(environment.apiUrl + `compras/OrdenesCompras/${id}`, data );
   }
 
   /**
@@ -83,9 +78,9 @@ export class OrdenesCompraService {
    * @returns
    */
   public destroy(data: any): Observable<any> {
-    return this.http.post(environment.apiUrl + `compras/rechazar-orden-compra`, data , {headers} );
+    return this.http.post(environment.apiUrl + `compras/rechazar-orden-compra`, data  );
     // return this.http.delete(
-    //   environment.apiUrl + `compras/OrdenesCompras/${id}`, {headers} 
+    //   environment.apiUrl + `compras/OrdenesCompras/${id}`
     // );
   }
 
@@ -97,7 +92,7 @@ export class OrdenesCompraService {
   pdfOrdenCompra(id: number): Observable<HttpResponse<Blob>> {
   return this.http.get(environment.apiUrl + `compras/consulta-datos-pdf/${id}`, {
     responseType: "blob",
-    observe: "response" 
+    observe: "response"
   });
 }
 
@@ -109,9 +104,9 @@ export class OrdenesCompraService {
   getPreviewUrl(ordenId : any) {
     return this.http.get(
       environment.apiUrl + `compras/preview-orden-compra-pdf/${ordenId}`,
-      { 
+      {
         responseType: "blob",
-        observe: "response" 
+        observe: "response"
        }
     );
   }
@@ -125,7 +120,7 @@ export class OrdenesCompraService {
   public enviarSolicitudSurtido(data: any): Observable<any> {
     return this.http.post(
       environment.apiUrl + "compras/enviar-solicitud-surtido",
-      data , {headers} 
+      data
     );
   }
 
@@ -137,14 +132,14 @@ export class OrdenesCompraService {
   public autorizarOrdenCompra(data: any): Observable<any> {
     return this.http.post(
       environment.apiUrl + "compras/autorizar-orden-compra",
-      data , {headers} 
+      data
     );
   }
 
   public autorizarPagoOrdenCompra(data: any): Observable<any> {
     return this.http.post(
       environment.apiUrl + "compras/autorizar-apago-orden-compra",
-      data , {headers} 
+      data
     );
   }
 
@@ -160,7 +155,7 @@ export class OrdenesCompraService {
   }
 
   public getDataXMLs(id: number): Observable<any> {
-    return this.http.get(environment.apiUrl + `compras/get-data-xml/${id}`, {headers} );
+    return this.http.get(environment.apiUrl + `compras/get-data-xml/${id}` );
   }
 
   /**
@@ -183,13 +178,13 @@ export class OrdenesCompraService {
   }
 
   public finalizarCompra(id: any){
-    return this.http.get(environment.apiUrl + `compras/marcar-como-finalizada/${id}`, {headers} );
+    return this.http.get(environment.apiUrl + `compras/marcar-como-finalizada/${id}` );
   }
 
   public cambiarProveedorSeleccionado(data: any): Observable<any> {
     return this.http.post(
       environment.apiUrl + "compras/cambiar-proveedor-seleccionado",
-      data , {headers} 
+      data
     );
   }
 }
