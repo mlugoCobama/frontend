@@ -17,7 +17,7 @@
                 [solicitudSelecionada]="solicitudSelecionada" [tipoCompras]="tipoCompras"
                 [tiposPermitidos]="['1','3']"
                 (devolverRevision)="enviarRevisionSolicitud()"
-                (btnGenerarOC)="btnGenerarOC()" 
+                (btnGenerarOC)="btnGenerarOC()"
                 (mostrarCotizacion)="mostrarCotizacion()"
                 (volverCotizar)="volverAcotizar()"
                 (cancelarSolicitud)="cancelarSolicitud()"
@@ -45,6 +45,9 @@
           <div>
             <div *ngIf="!isLoad" class="row" [ngClass]="'justify-content-between'">
 
+              <app-filtro-compras
+              *ngIf="tienePermiso('view filtro avanzado compras')"
+              [empresas]="rawEmpresas" [data]="data" (filtrosChange)="aplicarFiltros($event)"></app-filtro-compras>
               <div class="col-3">
                 <label *ngIf="tienePermiso('view select emp users compras')" for="empresa"
                   class="form-label form-label-sm">Empresa: *</label>
@@ -158,7 +161,7 @@
         *ngIf="solicitudSelecionada" (udtStatus)="updateStatus($event)"
         [modifica]="modifica"></app-detalle-solicitudes-compras>
       </div>
-      
+
     </div>
   </div>
 </div>

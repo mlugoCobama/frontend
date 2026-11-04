@@ -59,7 +59,7 @@ export class ComprasComponent implements OnInit {
   /**
    * Objeto que envió al componente detallesSolicitudCompra
    */
-  public solicitudCompra: any; 
+  public solicitudCompra: any;
   public status: any = false;
   public data: any;
   public enEsts = EstadoSolicitud;
@@ -91,7 +91,7 @@ export class ComprasComponent implements OnInit {
     }
 
     this.getEmpresas();
-    
+
   }
 
   ngOnDestroy(): void {}
@@ -439,7 +439,7 @@ export class ComprasComponent implements OnInit {
       this.modalAbierto = false;
     });
     }
-    
+
   }
 
   public alternarVista(): void {
@@ -454,7 +454,7 @@ export class ComprasComponent implements OnInit {
   public tienePermiso(permiso: string): boolean {
   const permisosRaw = localStorage.getItem('permisos');
   if (!permisosRaw) return false;
-  
+
   try {
     const permisos = JSON.parse(permisosRaw);
     const lista = permisos.map((p: any) => p.name);
@@ -477,7 +477,7 @@ enviarRevisionSolicitud() {
       showCancelButton: true,
       confirmButtonText: 'Enviar',
       cancelButtonText: 'Cancelar',
-      allowOutsideClick: false, 
+      allowOutsideClick: false,
       buttonsStyling: false,
       customClass: {
         confirmButton: 'btn btn-sm btn-primary m-1',
@@ -531,5 +531,39 @@ enviarRevisionSolicitud() {
       );
       }
     });
+  }
+
+  aplicarFiltros(filtros: any) {
+    this.datosFiltrados = this.data.filter((reporte:any) => {
+      const coincideEmpresa = !filtros.empresa || reporte.empresa === filtros.empresa;
+      const coincideProveedor = !filtros.proveedor || reporte.proveedor === filtros.proveedor;
+      const coincideAnio = !filtros.anio || this.obtenerAnio(reporte.fecha) ===  filtros.anio;
+      const coincideMes = !filtros.mes || this.obtenerMes(reporte.fecha) === filtros.mes;
+      return ( coincideEmpresa && coincideProveedor && coincideAnio && coincideMes);
+    });
+  }
+
+  public obtenerAnio(fecha: any) {
+    const fechaF = this.parsearFecha(fecha);
+    return fechaF ? fechaF.getFullYear() : null;
+  }
+
+  public obtenerMes(fecha: any) {
+    const fechaF = this.parsearFecha(fecha);
+    return fechaF ? fechaF.getMonth() + 1 : null;
+  }
+
+  private parsearFecha(fechaStr: any): Date | null {
+    if (!fechaStr) return null;
+    if (fechaStr instanceof Date) return fechaStr;
+    const partes = fechaStr.match(/^(\d{2})\/(\d{2})\/(\d{4})(?:\s(\d{2}):(\d{2}))?/);
+
+    if (!partes) {
+      const fallback = new Date(fechaStr);
+      return isNaN(fallback.getTime()) ? null : fallback;
+    }
+    const [, dia, mes, anio, hora = '00', minuto = '00'] = partes;
+
+    return new Date(`${anio}-${mes}-${dia}T${hora}:${minuto}:00`);
   }
 }
