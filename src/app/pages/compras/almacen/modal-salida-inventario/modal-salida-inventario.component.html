@@ -8,9 +8,11 @@
 
     <app-form-salida-inventario
     #formSalidaInventario
-    [tecnicos] = "tecnicos"
-    [materiales] = "data"
-    [isLoad] = "isLoad"
+    [tecnicos]="tecnicos"
+    [empresas]="empresas"
+    [materiales]="data"
+    [isLoad]="isLoad"
+    (findExistencias)="getExistencias($event)"
     >
     </app-form-salida-inventario>
 

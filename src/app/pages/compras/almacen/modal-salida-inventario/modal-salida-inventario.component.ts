@@ -13,6 +13,7 @@ export class ModalSalidaInventarioComponent implements AfterViewInit {
   public event: EventEmitter<any> = new EventEmitter();
 
   public tecnicos: any = [];
+  public empresas: any = [];
   public data: any = [];
   public isLoad : any = false;
 
@@ -29,16 +30,16 @@ export class ModalSalidaInventarioComponent implements AfterViewInit {
   ) {}
 
   ngAfterViewInit(): void {
-    this.getExistencias();
+    // this.getExistencias();
   }
 
   ngOnDestroy() {
 
   }
 
-  private getExistencias() {
+  public getExistencias(intercompaia:any) {
     this.isLoad = true;
-    this.almacenService.getExistencias().subscribe(
+    this.almacenService.getExistencias(intercompaia).subscribe(
       (response) => {
         if (response) {
           this.data = response.data;

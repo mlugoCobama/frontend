@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
 import { AlmacenService } from 'src/app/core/services/compras/almacen.service';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import { ColumnaTabla } from 'src/app/shared/ui/tabla-generica/tabla-generica.component';
 import { ModalSalidaInventarioComponent } from './modal-salida-inventario/modal-salida-inventario.component';
+import { UsuariosService } from 'src/app/core/services/compras/usuarios.service';
+import { SalidaDetalleModalComponent } from './salida-detalle-modal/salida-detalle-modal.component';
 
 @Component({
   selector: 'app-almacen',
@@ -12,17 +14,19 @@ import { ModalSalidaInventarioComponent } from './modal-salida-inventario/modal-
 })
 export class AlmacenComponent implements OnInit{
 
+  private administracion =  inject(UsuariosService);
+
   constructor(
     private almacenService: AlmacenService,
     private alertasService:SwalComprsServiceService,
     private modalService: BsModalService, ){
-
   }
 
   public data:any = [];
   public entradasPendientes:any = [];
   public salidas:any = [];
   public tecnicos = [];
+  public empresas = [];
   public isLoad:boolean = false;
   public modalRef?: BsModalRef;
 
@@ -40,12 +44,16 @@ export class AlmacenComponent implements OnInit{
   ];
 
   public configTablaSalidas: ColumnaTabla[] = [
+    { campo: "folio", etiqueta: "Folio", bold: true, align:'center'},
     { campo: "fecha", etiqueta: "Fecha", pipe:'date'},
-    { campo: "texto_movimiento", etiqueta: "Movimiento", textColor: 'primary', bold: true},
-    { campo: "cantidad", etiqueta: "Cant."},
-    { campo: "descripcion", etiqueta: "Descripcion"},
     { campo: "usuario_entrega", etiqueta: "Usuario Entrega"},
     { campo: "usuario_recibe", etiqueta: "Usuario Recibe"},
+
+
+    // { campo: "texto_movimiento", etiqueta: "Movimiento", textColor: 'primary', bold: true},
+    // { campo: "cantidad", etiqueta: "Cant."},
+    // { campo: "descripcion", etiqueta: "Descripcion"},
+
   ];
 
   public configTablaEntradas: ColumnaTabla[] = [
@@ -60,6 +68,7 @@ export class AlmacenComponent implements OnInit{
   ngOnInit(): void {
     this.getData();
     this.getTecnicos();
+    this.getEmpresas();
   }
 
 
@@ -83,24 +92,23 @@ export class AlmacenComponent implements OnInit{
         }
     );
 
-    this.almacenService.getEntradasPendientes(1).subscribe(
-      (response) => {
-        if (response) {
-          this.entradasPendientes = response.data;
-          console.log(this.entradasPendientes)
-          this.isLoad = false;
-        } else {
-          this.alertasService.mostrarAlerta(
-          "Error",response.message,
-          "error","danger");
-          this.isLoad = false;
-          }
-        },
-        (error) => {
-          this.alertasService.mostrarAlerta("Error",`Error fetching data: ${error}`,"error","danger");
-          this.isLoad = false;
-        }
-    );
+    // this.almacenService.getEntradasPendientes(1).subscribe(
+    //   (response) => {
+    //     if (response) {
+    //       this.entradasPendientes = response.data;
+    //       this.isLoad = false;
+    //     } else {
+    //       this.alertasService.mostrarAlerta(
+    //       "Error",response.message,
+    //       "error","danger");
+    //       this.isLoad = false;
+    //       }
+    //     },
+    //     (error) => {
+    //       this.alertasService.mostrarAlerta("Error",`Error fetching data: ${error}`,"error","danger");
+    //       this.isLoad = false;
+    //     }
+    // );
 
   }
 
@@ -110,6 +118,7 @@ export class AlmacenComponent implements OnInit{
       (response) => {
         if (response) {
           this.salidas = response.data;
+          console.log(this.salidas)
           this.isLoad = false;
         } else {
           this.alertasService.mostrarAlerta(
@@ -152,7 +161,8 @@ export class AlmacenComponent implements OnInit{
 
       const initialState: ModalOptions = {
         initialState: {
-          tecnicos: this.tecnicos
+          tecnicos: this.tecnicos,
+          empresas : this.empresas
         },
         class: "modal-lg",
       };
@@ -163,6 +173,38 @@ export class AlmacenComponent implements OnInit{
         this.setPanel('existencias')
       });
     }
+
+    openModalDetalle(data:any){
+      console.log(data)
+      const initialState: ModalOptions = {
+        initialState: {
+          data: data
+        },
+        class: "modal-lg",
+      };
+      this.modalRef = this.modalService.show(SalidaDetalleModalComponent, initialState);
+      this.modalRef.content.closeBtnName = "Close";
+      this.modalRef.content.event.subscribe(() => {
+        // this.isLoad = true;
+      });
+    }
+
+  public getEmpresas() {
+      this.administracion.getEmpresas().subscribe(
+        (response) => {
+          if (response) {
+            // console.log(response.data)
+            this.empresas = response.data;
+            console.log(this.empresas)
+          } else {
+            console.log(response.message);
+          }
+        },
+        (error) => {
+          console.error("Error fetching data:", error);
+        }
+      );
+  }
 
     panel: string = 'existencias'; // Panel inicial
 

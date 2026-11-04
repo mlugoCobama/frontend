@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 
@@ -10,8 +10,12 @@ import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-com
 export class FormSalidaInventarioComponent implements OnInit {
 
   @Input() tecnicos: any[] = [];
+  @Input() empresas: any[] = [];
   @Input() materiales: any[] = []; // Existencias del almacén
   @Input() isLoad: boolean = false;
+
+  @Output() findExistencias =  new EventEmitter();
+
   submitted = false;
 
   formulario!: FormGroup;
@@ -28,6 +32,7 @@ export class FormSalidaInventarioComponent implements OnInit {
 
     this.formulario = this.fb.group({
       tecnico: ['', Validators.required],
+      empresa: ['', Validators.required],
       // motivo: ['', Validators.required]
     });
 
@@ -120,4 +125,10 @@ validarCantidad(item: any): void {
     item.cantidad = 1;
   }
 }
+
+ cambioSelectEmpresa(value:any){
+  const valor = value.target.value;
+  this.materialesSeleccionados = [];
+  this.findExistencias.emit(valor);
+ }
 }

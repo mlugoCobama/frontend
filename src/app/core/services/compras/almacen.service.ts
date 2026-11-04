@@ -34,9 +34,9 @@ export class AlmacenService {
    * Recupera los técnicos de ti
    * @returns
    */
-  public getExistencias(): Observable<any> {
+  public getExistencias(empresa:any): Observable<any> {
 
-    return this.http.get(environment.apiUrl + `compras/getExsitencias/3`);
+    return this.http.get(environment.apiUrl + `compras/getExsitencias/3/${empresa}`);
   }
 
   public getMovimientos(): Observable<any> {

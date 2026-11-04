@@ -91,6 +91,8 @@ import { DispersionesComponent } from './dispersiones/dispersiones.component';
 import { TablaDispersionesComponent } from './dispersiones/tabla-dispersiones/tabla-dispersiones.component';
 import { CatTagsComponent } from './cat-tags/cat-tags.component';
 import { ModalTagsComponent } from './cat-tags/modal-tags/modal-tags.component';
+import { SalidaDetalleModalComponent } from './almacen/salida-detalle-modal/salida-detalle-modal.component';
+import { FiltroComprasComponent } from './compras/filtro-compras/filtro-compras.component';
 @NgModule({
   declarations: [
     ComprasComponent,
@@ -174,6 +176,8 @@ import { ModalTagsComponent } from './cat-tags/modal-tags/modal-tags.component';
     TablaDispersionesComponent,
     CatTagsComponent,
     ModalTagsComponent,
+    SalidaDetalleModalComponent,
+    FiltroComprasComponent,
 
   ],
   imports: [

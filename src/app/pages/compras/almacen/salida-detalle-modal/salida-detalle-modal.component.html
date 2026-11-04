@@ -1,0 +1,82 @@
+<!-- Header -->
+      <div class="modal-header">
+        <div class="d-flex align-items-center gap-2">
+          <h5 class="modal-title fw-bold mb-0" id="modalDetalleSalidaLabel">
+            Detalle de Salida
+          </h5>
+          <span class="badge bg-dark rounded-pill fs-6" *ngIf="data?.folio">{{ data?.folio }}</span>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="cerrarModal()"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body p-4" *ngIf="data; else noData">
+
+        <!-- Encabezado / Metadata de la Entrega -->
+        <div class="card bg-light rounded-4 border-0 mb-4">
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-sm-6 col-md-4">
+                <small class="text-muted d-block fw-semibold text-uppercase">Fecha y Hora</small>
+                <span class="fw-medium text-dark">{{ data.fecha | date:'dd/MM/yyyy' }}</span>
+              </div>
+              <div class="col-sm-6 col-md-4">
+                <small class="text-muted d-block fw-semibold text-uppercase">Entrega</small>
+                <span class="fw-medium text-dark">{{ data.usuario_entrega }}</span>
+              </div>
+              <div class="col-sm-6 col-md-4">
+                <small class="text-muted d-block fw-semibold text-uppercase">Recibe / Resguardante</small>
+                <span class="fw-medium text-dark">{{ data.usuario_recibe }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabla de Ítems / Detalles -->
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="fw-bold mb-0 text-secondary">Artículos / Items Dispersados</h6>
+        </div>
+
+        <div class="table-responsive  border rounded-4">
+          <table class="table table-sm table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th scope="col" class="text-center" style="width: 80px;">Cant.</th>
+                <th scope="col" style="width: 110px;">U.M.</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Asignado a / Observaciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of data.detalles">
+                <td class="text-center fw-bold">{{ item.cant }}</td>
+                <td>
+                  <span class="badge bg-outline-dark text-dark border font-size-11">{{ item.unidadMedida }}</span>
+                </td>
+                <td class="fw-semibold text-dark">{{ item.descripcion }}</td>
+                <td class="text-muted small">
+                  {{ item.observaciones || 'Sin observaciones' }}
+                </td>
+              </tr>
+              <tr *ngIf="!data.detalles || data.detalles.length === 0">
+                <td colspan="4" class="text-center py-3 text-muted">
+                  No hay ítems registrados en esta salida.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- Template para Estado Vacio -->
+      <ng-template #noData>
+        <div class="modal-body text-center py-5 text-muted">
+          <p class="mb-0">Cargando información del movimiento...</p>
+        </div>
+      </ng-template>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-secondary fw-semibold" data-bs-dismiss="modal" (click)="cerrarModal()"> Cerrar</button>
+      </div>
