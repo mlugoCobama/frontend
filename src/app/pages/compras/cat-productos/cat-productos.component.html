@@ -1,0 +1,83 @@
+<app-card-top
+[title]="'Catalogo de productos'"
+[hasButtons]="true"
+[showBtnNuevo]="tienePermiso('view btn new producto cp')"
+(nuevo)="openModalNuevo()"
+(eliminar)="eliminarProducto()"
+(actualizar)="openModalActualizar()"
+[showBtnEditar]="itemSeleccionado && tienePermiso('view btn edit producto cp')"
+[showBtnEliminar]="itemSeleccionado  && tienePermiso('view btn delete producto cp')"
+></app-card-top>
+
+<div class="card rounded-4 shadow-sm mb-3">
+  <div class="card-body">
+      <div class="row g-3 align-items-center">
+        <!-- Sistema -->
+        <div class="col-md-3">
+          <label class="form-label small fw-semibold text-secondary mb-1">CATEGORÍAS</label>
+          <select [(ngModel)]="sistemaSeleccionado" (ngModelChange)="selectCategoriasChange($event)" class="form-select form-select-sm">
+            <option [ngValue]="null" disabled selected>Selecciona sistema...</option>
+            <option *ngFor="let item of data" [ngValue]="item">{{ item.sistema }}</option>
+          </select>
+        </div>
+
+        <!-- Subcategoría -->
+        <div class="col-md-3">
+          <label class="form-label small fw-semibold text-secondary mb-1">SUBCATEGORÍA</label>
+          <select [(ngModel)]="subCategoriaSeleccionada" (ngModelChange)="selectSubcategoriasChange($event)" class="form-select form-select-sm">
+            <option [ngValue]="null" disabled selected>Selecciona subcategoría...</option>
+            <option *ngFor="let item of subCategorias" [ngValue]="item">{{ item.nombre }}</option>
+          </select>
+        </div>
+
+        <!-- Selección múltiple de hasta 3 Proveedores -->
+        <div class="col-md-4">
+          <label class="form-label small fw-semibold text-secondary mb-1">
+            PROVEEDORES (Máx. {{ maxProveedores }})
+          </label>
+          <app-proveedores-multiselect
+            [opciones]="proveedoresDisponibles"
+            [max]="maxProveedores"
+            [(seleccionados)]="proveedoresSeleccionados"
+            (limiteAlcanzado)="onLimiteProveedores($event)"
+            >
+          </app-proveedores-multiselect>
+        </div>
+
+        <!-- Botón Buscar -->
+        <div class="col-md-2 d-flex align-items-end">
+          <button  class="mt-3 btn btn-sm btn-primary fw-semibold px-3 rounded-4" [disabled]="isLoad" (click)="buscarProductos()"><i class="fas" [ngClass]="isLoad ? 'fa-spinner fa-spin me-1' : 'fa-search-dollar me-1'"></i>Buscar</button>
+        </div>
+      </div>
+  </div>
+</div>
+
+<!-- Formulario Reactivo con Tabla Matricial Simplificada -->
+<app-form-precios
+  *ngIf="productosMatriz.length > 0 && proveedoresMatriz.length > 0; else noData"
+  [productos]="productosMatriz"
+  [proveedores]="proveedoresMatriz"
+  [preciosExistentes]="preciosExistentes"
+  [guardando]="saving"
+  [showBtnSave]="tienePermiso('view btn up cat precios')"
+  (guardar)="onGuardarPrecios($event)"
+  (itemSeleccionado)="setItemSeleccionado($event)">
+</app-form-precios>
+
+<ng-template #noData>
+  <div class="card rounded-4 border shadow-sm">
+    <div class="card-body m-4">
+
+      <div class="d-flex flex-column justify-content-center align-items-center" *ngIf="isLoad" style="min-height: 150px;">
+        <div class="spinner-border mb-2" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <div>
+          <span class="fw-semibold">Buscando catálogo</span>
+        </div>
+      </div>
+
+      <h5 *ngIf="!isLoad" class="fw-semibold text-center m-4"> No se ha cargado ningun catalogo por mostrar</h5>
+    </div>
+  </div>
+</ng-template>

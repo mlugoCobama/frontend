@@ -182,6 +182,14 @@ export const MENU: MenuItem[] = [
       },
 
       {
+        id: 8,
+        label: "Catalogo Productos",
+        link: "/compras/cat-productos",
+        parentId: 7,
+        permission: "view catalogo productos compras",
+      },
+
+      {
         id: 10,
         label: "Unidades de Medida",
         link: "/compras/cat-unidades-medidas",

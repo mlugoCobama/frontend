@@ -11,6 +11,7 @@ import { AuthGuard } from 'src/app/core/guards/auth.guard';
 import { CatTarjetasTokaComponent } from './cat-tarjetas-toka/cat-tarjetas-toka.component';
 import { DispersionesComponent } from './dispersiones/dispersiones.component';
 import { CatTagsComponent } from './cat-tags/cat-tags.component';
+import { CatProductosComponent } from './cat-productos/cat-productos.component';
 // import { DetallesSolicitudCompraComponent } from './detalles-solicitud-compra/detalles-solicitud-compra.component';
 
 const routes: Routes = [
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'cat-tarjetas-toka', component: CatTarjetasTokaComponent },
   { path: 'cat-tags', component: CatTagsComponent },
   { path: 'dispersiones', component: DispersionesComponent},
+  { path: 'cat-productos', component: CatProductosComponent},
   { path: 'reporte-gasto-mensual', component: ReporteGastoMensualComponent}
   // { path: 'detalles-solicitud-compra', component: DetallesSolicitudCompraComponent},
 ];

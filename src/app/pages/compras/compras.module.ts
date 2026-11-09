@@ -93,6 +93,10 @@ import { CatTagsComponent } from './cat-tags/cat-tags.component';
 import { ModalTagsComponent } from './cat-tags/modal-tags/modal-tags.component';
 import { SalidaDetalleModalComponent } from './almacen/salida-detalle-modal/salida-detalle-modal.component';
 import { FiltroComprasComponent } from './compras/filtro-compras/filtro-compras.component';
+import { CatProductosComponent } from './cat-productos/cat-productos.component';
+import { ProveedoresMultiselectComponent } from './cat-productos/proveedores-multiselect/proveedores-multiselect.component';
+import { FormPreciosComponent } from './cat-productos/form-precios/form-precios.component';
+import { ModalProductosComponent } from './cat-productos/modal-productos/modal-productos.component';
 @NgModule({
   declarations: [
     ComprasComponent,
@@ -178,6 +182,10 @@ import { FiltroComprasComponent } from './compras/filtro-compras/filtro-compras.
     ModalTagsComponent,
     SalidaDetalleModalComponent,
     FiltroComprasComponent,
+    CatProductosComponent,
+    ProveedoresMultiselectComponent,
+    FormPreciosComponent,
+    ModalProductosComponent,
 
   ],
   imports: [

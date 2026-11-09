@@ -1,0 +1,143 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">
+    {{tipo | titlecase}} productos
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="cerrarModal()"></button>
+</div>
+
+<div class="modal-body">
+
+  <!-- Formulario de Captura Individual -->
+    <form [formGroup]="itemForm" (ngSubmit)="agregarItem()">
+      <div class="row g-3">
+
+        <!-- Categoría / Sistema -->
+        <div class="col-md-6">
+          <label class="form-label small fw-semibold">Categoría</label>
+          <select formControlName="categoria" class="form-select form-select-sm">
+            <option [ngValue]="null" disabled selected>Selecciona sistema...</option>
+            <option *ngFor="let item of catCategorias" [ngValue]="item">{{ item.sistema }}</option>
+          </select>
+        </div>
+
+        <!-- Subcategoría -->
+        <div class="col-md-6">
+          <label class="form-label small fw-semibold">Subcategoría</label>
+          <select formControlName="subcategoria" class="form-select form-select-sm">
+            <option [ngValue]="null" disabled selected>Selecciona subcategoría...</option>
+            <option *ngFor="let item of subCategorias" [ngValue]="item">{{ item.nombre }}</option>
+          </select>
+        </div>
+
+        <!-- Clave Interna -->
+        <div class="col-md-4">
+          <label class="form-label small fw-semibold">Clave Interna</label>
+          <input type="text" class="form-control form-control-sm" formControlName="clave_interna" placeholder="PROD-001">
+        </div>
+
+        <!-- Cantidad Default -->
+        <div class="col-md-4">
+          <label class="form-label small fw-semibold">Cant. Default</label>
+          <input type="number" min="1" class="form-control form-control-sm" formControlName="cant_default">
+        </div>
+
+        <!-- Unidad de Medida -->
+        <div class="col-md-4">
+          <label class="form-label small fw-semibold">Unidad de Medida</label>
+          <select formControlName="cat_unidad_medida" class="form-select form-select-sm">
+            <option [ngValue]="null" disabled selected>Selecciona una unidad de medida...</option>
+            <option *ngFor="let item of unidadesMedida" [ngValue]="item">{{ item.nombre }}</option>
+          </select>
+        </div>
+
+        <!-- Descripción Planta -->
+        <div class="col-md-6">
+          <label class="form-label small fw-semibold">Descripción Planta</label>
+          <textarea type="text" class="form-control form-control-sm" formControlName="descripcion_planta" placeholder="Descripción técnica interna"></textarea>
+        </div>
+
+        <!-- Descripción General -->
+        <div class="col-md-6">
+          <label class="form-label small fw-semibold">Descripción</label>
+          <textarea type="text" class="form-control form-control-sm" formControlName="descripcion" placeholder="Descripción comercial"></textarea>
+        </div>
+
+        <!-- Observaciones -->
+        <div class="col-md-12">
+          <label class="form-label small fw-semibold">Observaciones</label>
+          <textarea type="text" class="form-control form-control-sm" formControlName="observaciones" placeholder="Notas adicionales"></textarea>
+        </div>
+
+        <!-- Botón Agregar -->
+        <div *ngIf="tipo != 'actualiza'" class="col-12 d-flex justify-content-end mt-3">
+          <button type="submit" class="btn btn-info btn-sm px-4 rounded-4" [disabled]="itemForm.invalid">
+            <i class="fas fa-plus me-1"></i> Agregar a la Tabla
+          </button>
+        </div>
+
+      </div>
+    </form>
+  </div>
+
+<!-- Tabla a Enviar -->
+<div class="card rounded-4" *ngIf="itemsFormArray.length > 0">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h6 class="fw-bold text-secondary mb-0">Artículos Agregados ({{ itemsFormArray.length }})</h6>
+    </div>
+
+    <form [formGroup]="mainForm">
+      <div class="table-responsive border rounded-4">
+        <table class="table table-sm align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th scope="col">Clave</th>
+              <th scope="col">Categoría / Sub</th>
+              <th scope="col">Unidad / Cant</th>
+              <th scope="col">Descripción Planta</th>
+              <th scope="col" class="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody formArrayName="items">
+            <tr *ngFor="let ctrl of itemsFormArray.controls; let i = index" [formGroupName]="i">
+              <td class="fw-semibold text-secondary small">{{ ctrl.get('clave_interna')?.value }}</td>
+              <td class="small">{{ ctrl.get('categoria')?.value }} / {{ ctrl.get('subcategoria')?.value }}</td>
+              <td class="small">
+                <span class="badge bg-light text-dark border">{{ ctrl.get('cat_unidad_medida')?.value }}</span>
+                ({{ ctrl.get('cant_default')?.value }})
+              </td>
+              <td class="small text-truncate" style="max-width: 200px;" [title]="ctrl.get('descripcion_planta')?.value">
+                {{ ctrl.get('descripcion_planta')?.value }}
+              </td>
+              <td class="text-center">
+                <button type="button" class="btn btn-outline-danger btn-sm border-0" (click)="removerItem(i)" title="Eliminar de la lista">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-footer">
+<button
+    type="button" class="btn rounded-4 btn-secondary btn-sm px-2" data-bs-dismiss="modal" (click)="cerrarModal()"
+  >
+    Cerrar
+  </button>
+  <button *ngIf="tipo !== 'actualiza';else btActualizar"  [disabled]="saving" type="button" class="btn rounded-4 btn-primary btn-sm px-2" (click)="guardar()">
+  <i class="bx bxs-send " [ngClass]="{ 'bx-fade-right': saving }" ></i>
+    {{ saving ? 'Guardando' :'Guardar'}}
+  </button>
+  <ng-template #btActualizar>
+    <button type="button" class="btn rounded-4 btn-primary btn-sm px-2" [disabled]="saving" (click)="actualizar()">
+      <i class="bx bxs-send " [ngClass]="{ 'bx-fade-right': saving }" ></i>
+        {{ saving ? 'Actualizando' :'Actualizar'}}
+    </button>
+  </ng-template>
+</div>
+
+

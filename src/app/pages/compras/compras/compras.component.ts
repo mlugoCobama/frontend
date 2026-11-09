@@ -223,7 +223,7 @@ export class ComprasComponent implements OnInit {
     this.getAll(this.usuarioSolicita?.intercompania);
   }
 
-  filtrarEmpresas(data, empRel) {
+  filtrarEmpresas(data:any, empRel:any) {
     this.empresas = data
     // data.filter((empresa) =>
     //   empRel.includes(empresa.intercompania)
@@ -401,7 +401,7 @@ export class ComprasComponent implements OnInit {
     this.datosFiltrados = this.ordenador.filtrar(this.busqueda2, this.modelBusqueda);
   }
 
-  openModalSeguimiento(item){
+  openModalSeguimiento(item:any){
    this.modalAbierto = true;
     const initialState: ModalOptions = {
       initialState: {
@@ -420,7 +420,7 @@ export class ComprasComponent implements OnInit {
     });
   }
 
-  public openModalOC(item) {
+  public openModalOC(item:any) {
     if(item.folio_oc != "-"){
       this.modalAbierto = true;
     const initialState: ModalOptions = {

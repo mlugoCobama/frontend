@@ -78,6 +78,7 @@
       ></app-btn-autorizacion-gerencia>
 
       <app-btn-atorizar-a-pago
+      @fadeInOut
         *ngIf="solicitudCompra.estatus == enEsts.AutorizadoAPago"
         [ordenCompra]="ordenCompra"
         (volver)="updateStatus()"

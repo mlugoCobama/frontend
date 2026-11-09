@@ -1,0 +1,72 @@
+<div class="card rounded-4 shadow-sm">
+  <div class="card-header rounded-top-4 fw-bold">
+    <div class="d-flex justify-content-between align-items-center">
+      <span><i class="fas fa-clipboard-list"></i> Catálogo de productos / Precios</span>
+      <button
+      *ngIf="showBtnSave"
+        type="button"
+        class="btn btn-primary btn-sm px-4 rounded-4 fw-semibold"
+        [disabled]="guardando"
+        (click)="onGuardar()">
+        <i class="fas" [ngClass]="guardando ? 'fa-spinner fa-spin me-1' : 'fa-save me-1'"></i>
+        Guardar catálogo de precios
+      </button>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <form [formGroup]="form" (ngSubmit)="onGuardar()">
+      <div class="table-responsive border rounded-4 mb-3">
+        <table class="table table-sm align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th scope="col" style="width: 12%;">CLAVE</th>
+              <th scope="col" style="width: 8%;">UNIDAD</th>
+              <th scope="col" style="width: 34%;">DESCRIPCIÓN</th>
+              <th
+                scope="col"
+                *ngFor="let prov of proveedores"
+                class="border-start bg-light-subtle text-center"
+                style="width: 15%;">
+                <div class="fw-bold text-truncate" style="max-width: 180px;" [title]="prov.nombre">
+                  {{ prov.nombre }}
+                </div>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody formArrayName="productosArray">
+            <tr (dblclick)="seleccionar(productos[i], $event)" *ngFor="let prodGroup of productosFormArray.controls; let i = index" [formGroupName]="i">
+              <td class="fw-semibold text-secondary">{{ productos[i]?.clave_interna }}</td>
+              <td>
+                <span class="badge bg-primary-subtle text-primary fw-semibold font-size-11 rounded-pill">
+                  {{ productos[i]?.unidad_medida?.nombre }}
+                </span>
+              </td>
+              <td class="text-truncate" style="max-width: 250px;" [title]="productos[i]?.descripcion_planta">
+                {{ productos[i]?.descripcion_planta }}
+              </td>
+
+              <td
+                *ngFor="let prov of proveedores; let p = index"
+                class="border-start"
+                formArrayName="preciosProveedores">
+                <ng-container [formGroupName]="p">
+                  <div class="input-group input-group-sm">
+                    <span class="input-group-text rounded-start-3">$</span>
+                    <input
+                      mask="separator.4"
+                      class="form-control text-end rounded-end-3"
+                      [class.is-invalid]="esInvalido(i, p)"
+                      placeholder="Precio"
+                      formControlName="precio">
+                  </div>
+                </ng-container>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </form>
+  </div>
+</div>
