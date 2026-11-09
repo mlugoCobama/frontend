@@ -23,10 +23,10 @@ export class CatProductosComponent implements OnInit {
   public productosCategorias: any = [];
   public sistemaSeleccionado: any = null;
   public subCategoriaSeleccionada: any = null;
-    unidadesMedida: any = [];
+  public unidadesMedida: any = [];
   public maxProveedores = 3;
-  dropdownOpen: boolean = false;
-    public modalRef?: BsModalRef;
+  public dropdownOpen: boolean = false;
+  public modalRef?: BsModalRef;
 
   proveedoresDisponibles: any[] = [];
   proveedoresSeleccionados: any[] = [];
@@ -48,13 +48,27 @@ export class CatProductosComponent implements OnInit {
     this.getUnidades()
   }
 
-  public getCatalogoProductos() {
+  public getCatalogoProductos(callback?: () => void) {
     this.catProductosService.getCatalogoProductos().subscribe(
       (response: any) => {
         if (response) {
           this.data = response.data;
-
           this.isLoad = false;
+          if (this.sistemaSeleccionado && this.subCategoriaSeleccionada) {
+            const sistemaActualizado = this.data.find((s: any) => s.id === this.sistemaSeleccionado.id);
+            if (sistemaActualizado) {
+              this.sistemaSeleccionado = sistemaActualizado;
+              this.subCategorias = sistemaActualizado.sub_categorias || [];
+
+              const subActualizada = this.subCategorias.find((sub: any) => sub.id === this.subCategoriaSeleccionada.id);
+              if (subActualizada) {
+                this.subCategoriaSeleccionada = subActualizada;
+                this.productosCategorias = subActualizada.productos_activos || [];
+              }
+            }
+          }
+
+          if (callback) callback();
         } else {
           this.isLoad = false;
           console.log(response.message);
@@ -189,7 +203,11 @@ onLimiteProveedores(max: number): void {
     this.modalRef = this.modalService.show(ModalProductosComponent, initialState);
     this.modalRef.content.closeBtnName = "Close";
     this.modalRef.content.event.subscribe(() => {
-      this.getCatalogoProductos();
+      this.getCatalogoProductos(() => {
+        if (this.productosMatriz.length > 0) {
+          this.buscarProductos();
+        }
+      });
     });
   }
 
@@ -207,7 +225,11 @@ onLimiteProveedores(max: number): void {
     this.modalRef = this.modalService.show(ModalProductosComponent, initialState);
     this.modalRef.content.closeBtnName = "Close";
     this.modalRef.content.event.subscribe(() => {
-      this.getCatalogoProductos();
+      this.getCatalogoProductos(() => {
+        if (this.productosMatriz.length > 0) {
+          this.buscarProductos();
+        }
+      });
     });
   }
 

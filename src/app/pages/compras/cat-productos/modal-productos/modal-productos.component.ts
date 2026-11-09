@@ -130,7 +130,7 @@ export class ModalProductosComponent {
 
   public saving: boolean = false;
   guardar(): void {
-    if (this.mainForm.invalid || this.itemsFormArray.length === 0) return;
+    if (this.itemsFormArray.length === 0) return;
 
     this.saving = true;
     const payload = this.mainForm.value;
@@ -193,7 +193,7 @@ export class ModalProductosComponent {
 
     this.agregarItem();
 
-    if (this.mainForm.invalid || this.itemsFormArray.length === 0) return;
+    if (this.itemsFormArray.length === 0) return;
 
     this.saving = true;
     const payload = this.mainForm.value;

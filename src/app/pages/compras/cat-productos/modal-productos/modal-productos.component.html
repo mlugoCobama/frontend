@@ -11,65 +11,83 @@
     <form [formGroup]="itemForm" (ngSubmit)="agregarItem()">
       <div class="row g-3">
 
-        <!-- Categoría / Sistema -->
+       <!-- Categoría / Sistema -->
         <div class="col-md-6">
           <label class="form-label small fw-semibold">Categoría</label>
-          <select formControlName="categoria" class="form-select form-select-sm">
+          <select formControlName="categoria" class="form-select form-select-sm"
+                  [ngClass]="{'is-invalid': itemForm.get('categoria')?.invalid && itemForm.get('categoria')?.touched}">
             <option [ngValue]="null" disabled selected>Selecciona sistema...</option>
             <option *ngFor="let item of catCategorias" [ngValue]="item">{{ item.sistema }}</option>
           </select>
+          <div class="invalid-feedback">Selecciona una categoría válida.</div>
         </div>
 
         <!-- Subcategoría -->
         <div class="col-md-6">
           <label class="form-label small fw-semibold">Subcategoría</label>
-          <select formControlName="subcategoria" class="form-select form-select-sm">
+          <select formControlName="subcategoria" class="form-select form-select-sm"
+                  [ngClass]="{'is-invalid': itemForm.get('subcategoria')?.invalid && itemForm.get('subcategoria')?.touched}">
             <option [ngValue]="null" disabled selected>Selecciona subcategoría...</option>
             <option *ngFor="let item of subCategorias" [ngValue]="item">{{ item.nombre }}</option>
           </select>
+          <div class="invalid-feedback">Selecciona una subcategoría.</div>
         </div>
 
         <!-- Clave Interna -->
         <div class="col-md-4">
           <label class="form-label small fw-semibold">Clave Interna</label>
-          <input type="text" class="form-control form-control-sm" formControlName="clave_interna" placeholder="PROD-001">
+          <input type="text" class="form-control form-control-sm" formControlName="clave_interna" placeholder="PROD-001"
+                [ngClass]="{'is-invalid': itemForm.get('clave_interna')?.invalid && itemForm.get('clave_interna')?.touched}">
+          <div class="invalid-feedback">La clave interna es obligatoria.</div>
         </div>
 
         <!-- Cantidad Default -->
         <div class="col-md-4">
           <label class="form-label small fw-semibold">Cant. Default</label>
-          <input type="number" min="1" class="form-control form-control-sm" formControlName="cant_default">
+          <input type="number" min="1" class="form-control form-control-sm" formControlName="cant_default"
+                [ngClass]="{'is-invalid': itemForm.get('cant_default')?.invalid && itemForm.get('cant_default')?.touched}">
+          <div class="invalid-feedback">Ingresa una cantidad válida (mínimo 1).</div>
         </div>
 
         <!-- Unidad de Medida -->
         <div class="col-md-4">
           <label class="form-label small fw-semibold">Unidad de Medida</label>
-          <select formControlName="cat_unidad_medida" class="form-select form-select-sm">
+          <select formControlName="cat_unidad_medida" class="form-select form-select-sm"
+                  [ngClass]="{'is-invalid': itemForm.get('cat_unidad_medida')?.invalid && itemForm.get('cat_unidad_medida')?.touched}">
             <option [ngValue]="null" disabled selected>Selecciona una unidad de medida...</option>
             <option *ngFor="let item of unidadesMedida" [ngValue]="item">{{ item.nombre }}</option>
           </select>
+          <div class="invalid-feedback">Selecciona una unidad de medida.</div>
         </div>
 
         <!-- Descripción Planta -->
         <div class="col-md-6">
           <label class="form-label small fw-semibold">Descripción Planta</label>
-          <textarea type="text" class="form-control form-control-sm" formControlName="descripcion_planta" placeholder="Descripción técnica interna"></textarea>
+          <textarea class="form-control form-control-sm" formControlName="descripcion_planta" placeholder="Descripción técnica interna"
+                    [ngClass]="{'is-invalid': itemForm.get('descripcion_planta')?.invalid && itemForm.get('descripcion_planta')?.touched}"></textarea>
+          <div class="invalid-feedback">Este campo es obligatorio.</div>
         </div>
 
         <!-- Descripción General -->
         <div class="col-md-6">
           <label class="form-label small fw-semibold">Descripción</label>
-          <textarea type="text" class="form-control form-control-sm" formControlName="descripcion" placeholder="Descripción comercial"></textarea>
+          <textarea class="form-control form-control-sm" formControlName="descripcion" placeholder="Descripción comercial"
+                    [ngClass]="{'is-invalid': itemForm.get('descripcion')?.invalid && itemForm.get('descripcion')?.touched}"></textarea>
+          <div class="invalid-feedback">Este campo es obligatorio.</div>
         </div>
 
-        <!-- Observaciones -->
+        <!-- Observaciones (Opcional, sin validación requerida si no lo deseas) -->
         <div class="col-md-12">
           <label class="form-label small fw-semibold">Observaciones</label>
-          <textarea type="text" class="form-control form-control-sm" formControlName="observaciones" placeholder="Notas adicionales"></textarea>
+          <textarea class="form-control form-control-sm" formControlName="observaciones" placeholder="Notas adicionales"></textarea>
         </div>
 
         <!-- Botón Agregar -->
         <div *ngIf="tipo != 'actualiza'" class="col-12 d-flex justify-content-end mt-3">
+          <div *ngIf="itemForm.invalid && itemForm.touched" class="text-danger small mb-2">
+            <i class="fas fa-exclamation-circle me-1"></i> Por favor completa todos los campos obligatorios para continuar.
+          </div>
+
           <button type="submit" class="btn btn-info btn-sm px-4 rounded-4" [disabled]="itemForm.invalid">
             <i class="fas fa-plus me-1"></i> Agregar a la Tabla
           </button>
