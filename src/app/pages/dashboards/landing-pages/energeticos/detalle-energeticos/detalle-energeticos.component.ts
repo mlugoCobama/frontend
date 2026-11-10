@@ -1,5 +1,5 @@
 import { DatePipe } from "@angular/common";
-import { Component, OnInit } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ResponseEnergeticosGaseras } from "src/app/core/models/dashboard/energeticos-gaseras";
 import { AlertErrorService } from "src/app/core/services/alert-error.service";
@@ -14,7 +14,7 @@ import { SortDatos } from "src/app/core/helpers/sort-datos";
   styleUrls: ["./detalle-energeticos.component.css"],
 })
 export class DetalleEnergeticosComponent implements OnInit {
-  public concepto: string;
+  public concepto: string = '';
 
   public titulo: any;
 
@@ -36,6 +36,7 @@ export class DetalleEnergeticosComponent implements OnInit {
 
   public tipo:any = "energeticos";
 
+  @Output() setNewData = new EventEmitter();
   constructor(
     private route: ActivatedRoute,
     private localStorage: LocalStorageServiceService,
@@ -62,8 +63,8 @@ export class DetalleEnergeticosComponent implements OnInit {
   }
 
   public filtrarInfo() {
-    this.energerticosGaseras
-      .getAnual(
+    this.setNewData.emit(this.divisionSeleccionada);
+    this.energerticosGaseras.getAnual(
         1,
         Number(this.mesSeleccionado)+1,
         this.anioSeleccionado,
@@ -75,7 +76,7 @@ export class DetalleEnergeticosComponent implements OnInit {
             this.localStorage.removeItem("DataEnergeticos");
 
             SortDatos.ordenarDatos(data, this.concepto);
-            
+
             this.localStorage.setItem("DataEnergeticos", data.data);
             this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
             this.energerticosGaseras.actualizarData();
@@ -114,11 +115,11 @@ export class DetalleEnergeticosComponent implements OnInit {
     this.divisionSeleccionada = value;
     this.filtrarInfo();
   }
-  
+
 
   //Deshabilita meses superiores o iguales al mes actual
   public filtrarMeses(mes: string):boolean{
-    return Number(this.anioSeleccionado) === this.anioActual && Number(mes) > this.mesActual;   
+    return Number(this.anioSeleccionado) === this.anioActual && Number(mes) > this.mesActual;
   }
 
 

@@ -18,7 +18,7 @@ export class ChartHhistoricaComponent implements OnInit, OnDestroy {
   private dataEnergeticos: any;
 
   private actualizarDatosSubscripcion: Subscription;
-  
+
   public  isOpen1: boolean = true;
   public  dataAnual: any = [];
   public  dataAnualAnt: any = [];
@@ -228,13 +228,14 @@ export class ChartHhistoricaComponent implements OnInit, OnDestroy {
     const capitalCaseText =
       String(texto).charAt(0).toUpperCase() + String(texto).slice(1);
     let textoFormateado = capitalCaseText.replace("_", " ");
+    textoFormateado = textoFormateado == 'Ventas' ? 'Ventas Pesos' : textoFormateado;
     return textoFormateado;
   }
 
   /**
    * Genera la serie en base a los datos del año dado
    * @param datos Data anual del año a recuperar
-   * @returns array [[datetime, dato]...] o array [ ] 
+   * @returns array [[datetime, dato]...] o array [ ]
    */
   private generarSerie(datos:any){
     let data: any = [];

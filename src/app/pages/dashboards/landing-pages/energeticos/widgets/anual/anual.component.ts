@@ -71,7 +71,7 @@ export class AnualComponent implements OnInit, OnDestroy{
 
       // Valida que existan do series para realizar la comparación
       const validPoints = points.filter(p => typeof p.y === 'number') as typeof points;
-      
+
       if (validPoints.length >= 2) {
         tooltip += `<br/><b>Diferencia periodos:</b><br/>`;
         for (let i = 0; i < validPoints.length - 1; i++) {
@@ -163,7 +163,7 @@ export class AnualComponent implements OnInit, OnDestroy{
     this.updateFlag = true;
   }
 
-  
+
   public setTitle(){
 
     switch (this.dataEnergeticos.totalAnio[0].estacion) {
@@ -187,13 +187,14 @@ export class AnualComponent implements OnInit, OnDestroy{
   public formatearTexto(texto){
     const capitalCaseText= String(texto).charAt(0).toUpperCase() + String(texto).slice(1);
     let textoFormateado = capitalCaseText.replace("_", " ")
+    textoFormateado = textoFormateado == 'Ventas' ? 'Ventas Pesos' : textoFormateado;
     return textoFormateado;
   }
 
   /**
    * Genera la serie en base a los datos del año dado
    * @param datos Data anual del año a recuperar
-   * @returns array [[datetime, dato]...] o array [ ] 
+   * @returns array [[datetime, dato]...] o array [ ]
    */
 //   private generarSerie(datos: any[], nombreVariable: string) {
 //   let data: number[] = [];
@@ -284,7 +285,7 @@ private serieAnioAnt2() {
     }else{
       seriePrediccion = prediccion;
     }
-    
+
     serie = {
       name: `Tendencia ${data.name}`,
       type: "line",
@@ -293,7 +294,7 @@ private serieAnioAnt2() {
       color: "#f39c12",
       marker: {
         enabled: false,
-        
+
       },
       dataLabels: {
             enabled: false
@@ -312,7 +313,7 @@ private serieAnioAnt2() {
     const sumX2 = x.reduce((acc, xi) => acc + xi * xi, 0);
 
     const m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
-    
+
     const b = (sumY - m * sumX) / n;
 
     const predicciones: number[] = [];

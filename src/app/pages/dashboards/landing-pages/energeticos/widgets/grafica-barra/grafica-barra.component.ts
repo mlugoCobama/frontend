@@ -137,7 +137,7 @@ export class GraficaBarraComponent implements OnInit, OnDestroy {
     if (this.dataEnergeticos.mes.length > 1) {
       this.generarSerie();
       /**
-       * Se asignan los valores creando una copia de chartOptions 
+       * Se asignan los valores creando una copia de chartOptions
        * Y se asignan los valores nuevos
        */
       this.chartOptions = {
@@ -147,7 +147,7 @@ export class GraficaBarraComponent implements OnInit, OnDestroy {
           categories: this.labels,
         },
         series: [this.dataMensual],
-        
+
       };
     } else {
       this.chartOptions = {
@@ -175,6 +175,7 @@ export class GraficaBarraComponent implements OnInit, OnDestroy {
     this.dataEnergeticos = this.localStorage.getItem("DataEnergeticos");
     if (this.dataEnergeticos.mes.length > 1) {
       this.generarSerie();
+      this.chartOptions.title.text = 'Datos del mes: '+this.formatearTexto(this.concepto);
       this.chartOptions.series = this.dataMensual;
       this.chartOptions.xAxis["categories"] = this.labels;
       // const tamanioGrafica = 150 + ((this.dataEnergeticos.mes.length - 1) * 28);
@@ -191,9 +192,9 @@ export class GraficaBarraComponent implements OnInit, OnDestroy {
     this.updateFlag = true;
   }
 
-  /** 
+  /**
    * Genera las series y la etiquetas de la gráfica
-   */ 
+   */
   private generarSerie() {
     let data: any = [];
     for (let i = 0; i < this.dataEnergeticos.mes.length; i++) {
@@ -202,7 +203,7 @@ export class GraficaBarraComponent implements OnInit, OnDestroy {
         const entidad = this.dataEnergeticos.mes[i]["entidad"];
         data.push({ valor: element, entidad: entidad });
       }
-      
+
     }
     //Ordena los datos de mayor a menor
     data.sort((a, b) => b.valor - a.valor);
@@ -216,10 +217,18 @@ export class GraficaBarraComponent implements OnInit, OnDestroy {
       type: "bar",
       zones:[
         {value: 0,
-         color: '#FF2929' 
+         color: '#FF2929'
         },
       ]
     };
+  }
+
+  public formatearTexto(texto) {
+    const capitalCaseText =
+      String(texto).charAt(0).toUpperCase() + String(texto).slice(1);
+    let textoFormateado = capitalCaseText.replace("_", " ");
+    textoFormateado = textoFormateado == 'Ventas' ? 'Ventas Pesos' : textoFormateado;
+    return textoFormateado;
   }
 
   /**

@@ -40,7 +40,7 @@ export class EnergeticosComponent implements OnInit {
   public meses = dataMeses;
 
   public actState: boolean = false;
-  
+
 
   constructor(
     public alertService: AlertErrorService,
@@ -55,7 +55,7 @@ export class EnergeticosComponent implements OnInit {
 
   public nombreMes: any;
   public anioActual: any;
-  public fecha:any = new Date();   
+  public fecha:any = new Date();
 
   // Recupera los datos en base a la fecha actual
   private getDataAnual() {
@@ -70,13 +70,13 @@ export class EnergeticosComponent implements OnInit {
 
   /**
    * Recupera los datos a consultar y los coloca en el local storage
-   * Si hay datos para el mes almacena en el local storage 
+   * Si hay datos para el mes almacena en el local storage
    * Si no hay datos busca de nuevo y resta un mes
-   * @param mes 
-   * @param anio 
+   * @param mes
+   * @param anio
    */
-  consultarDatos(mes, anio){
-    this.energerticosGaseras.getAnual(1, mes, anio, "all").subscribe(
+  consultarDatos(mes, anio, division = "all"){
+    this.energerticosGaseras.getAnual(1, mes, anio, division).subscribe(
       (data: ResponseEnergeticosGaseras) => {
         if (data.success) {
           this.dataMesActual = data.data["mes"];

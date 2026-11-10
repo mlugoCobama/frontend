@@ -25,8 +25,8 @@
     <div class="col-xl-12">
         <div class="row" @fadeSlideInOut>
             <div class="col-sm-4">
-                <app-totales 
-                    [dataMes]="dataMesActual" 
+                <app-totales
+                    [dataMes]="dataMesActual"
                     [dataMesAnterior]="dataMesAnterior"
                     tipo = "gasolinerias-detalle"
                     color = "#5CB338"
@@ -36,10 +36,10 @@
                 ></app-totales>
             </div>
             <div class="col-sm-4">
-                <app-totales 
-                    [dataMes]="dataMesActual" 
+                <app-totales
+                    [dataMes]="dataMesActual"
                     [dataMesAnterior]="dataMesAnterior"
-                    tipo = "gasolinerias-detalle" 
+                    tipo = "gasolinerias-detalle"
                     color = "#5CB338"
                     concepto="venta_litros"
                     [totalAnio]="dataTotalAnio"
@@ -47,9 +47,9 @@
                 ></app-totales>
             </div>
             <div class="col-sm-4">
-                <app-totales 
-                    [dataMes]="dataMesActual" 
-                    [dataMesAnterior]="dataMesAnterior" 
+                <app-totales
+                    [dataMes]="dataMesActual"
+                    [dataMesAnterior]="dataMesAnterior"
                     tipo = "gasolinerias-detalle"
                     color = "#5CB338"
                     concepto="gasto"
@@ -64,9 +64,9 @@
 
 <div class="row" *ngIf="!isLoad" @fadeSlideInOut>
     <div class="col-xl-6">
-        <app-totales-grafica 
-            [dataMes]="dataMesActual" 
-            [dataMesAnterior]="dataMesAnterior" 
+        <app-totales-grafica
+            [dataMes]="dataMesActual"
+            [dataMesAnterior]="dataMesAnterior"
             tipo = "gasolinerias-detalle"
             color = "#5CB338"
             concepto="uno"
@@ -75,9 +75,9 @@
         ></app-totales-grafica>
     </div>
     <div class="col-xl-6">
-        <app-totales-grafica 
-            [dataMes]="dataMesActual" 
-            [dataMesAnterior]="dataMesAnterior" 
+        <app-totales-grafica
+            [dataMes]="dataMesActual"
+            [dataMesAnterior]="dataMesAnterior"
             tipo = "gasolinerias-detalle"
             color = "#5CB338"
             concepto="utilidad_bruta"
@@ -87,10 +87,10 @@
     </div>
 </div>
 <div class="row" *ngIf="!isLoad" @fadeSlideInOut>
-    <div class="col-xl-6">
-        <app-totales-grafica 
-            [dataMes]="dataMesActual" 
-            [dataMesAnterior]="dataMesAnterior" 
+    <div class="col-xl-12">
+        <app-totales-grafica
+            [dataMes]="dataMesActual"
+            [dataMesAnterior]="dataMesAnterior"
             tipo = "gasolinerias-detalle"
             color = "#5CB338"
             concepto="ubo"
@@ -98,15 +98,15 @@
             [totalAnioAnt]="dataTotalAnioAnt"
         ></app-totales-grafica>
     </div>
-    <div class="col-xl-6">
-        <app-totales-grafica 
-            [dataMes]="dataMesActual" 
-            [dataMesAnterior]="dataMesAnterior" 
+    <!-- <div class="col-xl-6">
+        <app-totales-grafica
+            [dataMes]="dataMesActual"
+            [dataMesAnterior]="dataMesAnterior"
             tipo = "gasolinerias-detalle"
             color = "#5CB338"
             concepto="personal"
             [totalAnio]="dataTotalAnio"
             [totalAnioAnt]="dataTotalAnioAnt"
         ></app-totales-grafica>
-    </div>
+    </div> -->
 </div>
