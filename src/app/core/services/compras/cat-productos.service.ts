@@ -14,8 +14,17 @@ export class CatProductosService {
    * Obtiene el listado completo del catálogo de productos.
    * @returns Observable con la lista de productos.
    */
-  public getCatalogoProductos(): Observable<any> {
-    return this.http.get(environment.apiUrl + `compras/CatalogoProductos`);
+  public getCatalogoProductos(tipo:any = 1): Observable<any> {
+    const payload = {tipo : tipo}
+    return this.http.post(environment.apiUrl + `compras/CatalogoProductos/tipo/${tipo}'`, payload);
+  }
+
+  /**
+   * Obtiene el listado de productos de una categoria
+   * @returns Observable con la lista de productos.
+   */
+  public getProductosCategoria(id:number): Observable<any> {
+    return this.http.get(environment.apiUrl + `compras/CatalogoProductos/${id}`);
   }
 
   /**
@@ -63,6 +72,15 @@ export class CatProductosService {
    */
   public borrarProducto(id:any): Observable<any> {
     return this.http.delete(environment.apiUrl + `compras/CatalogoProductos/${id}`);
+  }
+
+  /**
+   * Abre un blank con el documento seleccionado
+   * @param rutaArchivo ruta al archivo del documento
+   */
+  public abrirArchivo(rutaArchivo: string){
+    const url =  (environment.apiArchivos + `compras/${rutaArchivo}`);
+     window.open(url , '_blank')
   }
 
 

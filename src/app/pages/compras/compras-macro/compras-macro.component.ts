@@ -37,21 +37,42 @@ export class ComprasMacroComponent implements OnInit{
     public status:any;
     public enEsts = EstadoSolicitud;
 
+
     // varibles funciones tablas
     datosFiltrados:any[] = [];
     private ordenador!: FuncionesTablas<any>;
-    busqueda:string = '';
-    busqueda2: string = "";
     public usuarioSolicita:any = [];
     public empresas:any = [];
-    
+
     isLoadingGenerarOrden = false;
     isLoadingCotizar = false;
     isLoadingVolverACotizar = false;
     isLoadingCancelar = false;
     isLoadingDevolverRevision = false;
 
-  constructor( 
+
+    public anio = new Date().getFullYear();
+    public mes = (new Date().getMonth())+1;
+    public intercompania:any = null;
+    public empresa:any = null;
+
+      public modelBusqueda = [
+      "folio",
+      "usuario_destino",
+      // "motivo",
+      "fecha",
+      "usuario_solicita",
+      "empresa",
+      "estado",
+      "centro_costo",
+      "proveedor",
+      "total_orden",
+      "folio_oc",
+      "modo_pago",
+      "pagado"
+    ];
+
+  constructor(
       public ordenesComprasService: OrdenesCompraService,
       public alertasService: SwalComprsServiceService,
       private modalService  : BsModalService,
@@ -73,7 +94,7 @@ export class ComprasMacroComponent implements OnInit{
     if (vistaGuardada !== null && vistaGuardada !== undefined) {
       this.vistaKanban = JSON.parse(String (vistaGuardada));
     }
-    
+
     this.getEmpresas();
     this.getUsuarioActivo();
     // this.getAll(this.usuarioSolicita.intercompania);
@@ -81,37 +102,12 @@ export class ComprasMacroComponent implements OnInit{
   }
 
     public getUsuarioActivo() {
-    const usuarioActivo = this.localStorage.getItem("currentUser");
-     this.usuariosService.getUserById(usuarioActivo["role"]["email"]).subscribe(
-      (response) => {
-        if (response.status === "success") {
-          this.usuarioSolicita = response.data[0];
-          // if(this.usuarioSolicita.empresas !=  null){
-          //   this.filtrarEmpresas( this.empresas ,this.usuarioSolicita.empresas);
-          // }
-          this.getAll(this.usuarioSolicita?.intercompania);
-          // this.formSolicitudCompra.patchValue({empresa :  this.usuarioSolicita.intercompania});
-          // console.log(this.usuarioSolicita);
+    this.usuarioSolicita = this.localStorage.getLocalUser();
 
-        } else {
-          this.alertasService.mostrarAlerta(
-            response.message,
-            "Intente iniciar sesión nuevamente",
-            "warning",
-            "warning"
-          );
-          return;
-        }
-      },
-      (error) => {
-        console.error("Error fetching data:", error);
-      }
+    this.empresa = this.usuarioSolicita.empresa;
+    this.intercompania = this.usuarioSolicita?.intercompania;
+    this.getAll(this.usuarioSolicita?.intercompania, this.anio, this.mes
     );
-
-    // return {
-    //   intercompania: usuarioActivo["role"]["intercompania"],
-    //   idUser: usuarioActivo["role"]["id"],
-    // };
   }
 
   filtrarEmpresas(data, empRel){
@@ -127,7 +123,7 @@ export class ComprasMacroComponent implements OnInit{
     this.usuariosService.getEmpresas().subscribe(
       (response) => {
         if (response) {
-          
+
           this.empresas = response.data;
           // this.isLoading = false;
         } else {
@@ -160,7 +156,7 @@ export class ComprasMacroComponent implements OnInit{
     this.modalRef.content.closeBtnName = "Close";
     this.modalRef.content.event.subscribe(() => {
       this.isLoad = true;
-      this.getAll(this.usuarioSolicita.intercompania);
+      this.getAll(this.usuarioSolicita.intercompania, this.anio, this.mes);
     });
     this.modalRef.content.modalCerrado.subscribe(() => {
         this.modalAbierto = false;
@@ -172,13 +168,13 @@ export class ComprasMacroComponent implements OnInit{
     this.solicitudSelecionada = false;
     this.status = null;
     this.mostrarBoton = false;
-    this.getAll(this.usuarioSolicita.intercompania);
+    this.getAll(this.intercompania, this.anio, this.mes);
   }
 
-    private getAll(intercomania) {
+    private getAll(intercomania:any, anio:any, mes:any) {
       this.isLoad = true;
       // const user = this.getUsuarioActivo();
-      this.comprasMacro.getAll(intercomania, this.usuarioSolicita.id).subscribe(
+      this.comprasMacro.getAll(intercomania, this.usuarioSolicita.id, anio, mes).subscribe(
         (response) => {
           if (response) {
             this.data = response.data;
@@ -219,7 +215,7 @@ export class ComprasMacroComponent implements OnInit{
       this.comprasService.cambiarEstadoCotizacion(true);
       this.status = this.solicitudCompra.estatus;
     }
-  
+
     // Cancela la solicitud desde un botón en la botonera
     public cancelarSolicitud() {
       Swal.fire({
@@ -248,12 +244,12 @@ export class ComprasMacroComponent implements OnInit{
       }).then((result) => {
         if (result.isConfirmed && result.value) {
           this.isLoad = true;
-    
+
           const payload = {
             id: this.solicitudCompra.id,
             razonCancelacion: result.value
           };
-    
+
           this.comprasService.destroy(payload).subscribe(
             (response) => {
               this.isLoad = false;
@@ -287,12 +283,12 @@ export class ComprasMacroComponent implements OnInit{
         }
       });
     }
-  
+
     //Botón que genera la orden  de compra
     btnGenerarOC() {
       this.comprasService.triggerGenerateOrder();
     }
-  
+
     //Botón que descarga la orden de compra
     btnDescargarOC() {
   this.ordenesComprasService.pdfOrdenCompra(this.solicitudCompra.id).subscribe(
@@ -313,45 +309,10 @@ export class ComprasMacroComponent implements OnInit{
     }
   );
 }
-  
+
     updateStatus(status: any) {
       this.status = status;
     }
-
-    //Funciones de la tabla
-  ordenarPor(columna: keyof any){
-    this.datosFiltrados = this.ordenador.ordenar(columna);
-  }
-
-  getIconoOrden(columna:keyof any):string{
-    return this.ordenador.getIcono(columna)
-  }
-
-  public modelBusqueda = [
-      "folio",
-      "usuario_destino",
-      // "motivo",
-      "fecha",
-      "usuario_solicita",
-      "empresa",
-      "estado",
-      "centro_costo",
-      "proveedor",
-      "total_orden",
-      "folio_oc",
-      "modo_pago",
-      "pagado"
-    ];
-
-  filtrarTabla(){
-    this.busqueda2 = "";
-    this.datosFiltrados = this.ordenador.filtrar(this.busqueda, this.modelBusqueda);
-  }  
-
-  filtrarTabla2() {
-    this.busqueda = "";
-    this.datosFiltrados = this.ordenador.filtrar(this.busqueda2, this.modelBusqueda);
-  }
 
     openModalSeguimiento(item){
      this.modalAbierto = true;
@@ -365,7 +326,7 @@ export class ComprasMacroComponent implements OnInit{
       this.modalRef.content.closeBtnName = "Close";
       this.modalRef.content.event.subscribe(() => {
         this.isLoad = true;
-        this.getAll(this.usuarioSolicita.intercompania);
+        this.getAll(this.usuarioSolicita.intercompania, this.anio, this.mes);
       });
       this.modalRef.content.modalCerrado.subscribe(() => {
         this.modalAbierto = false;
@@ -391,7 +352,7 @@ export class ComprasMacroComponent implements OnInit{
           this.modalAbierto = false;
         });
         }
-        
+
       }
 
       public alternarVista(): void {
@@ -406,7 +367,7 @@ export class ComprasMacroComponent implements OnInit{
   public tienePermiso(permiso: string): boolean {
   const permisosRaw = localStorage.getItem('permisos');
   if (!permisosRaw) return false;
-  
+
   try {
     const permisos = JSON.parse(permisosRaw);
     const lista = permisos.map((p: any) => p.name);
@@ -429,7 +390,7 @@ enviarRevisionSolicitud() {
       showCancelButton: true,
       confirmButtonText: 'Enviar',
       cancelButtonText: 'Cancelar',
-      allowOutsideClick: false, 
+      allowOutsideClick: false,
       buttonsStyling: false,
       customClass: {
         confirmButton: 'btn btn-sm btn-primary m-1',
@@ -523,7 +484,6 @@ enviarRevisionSolicitud() {
             this.alertasService.mostrarAlerta("Listo!", response.message, "success", "success");
             folio = this.solicitudCompra.folio;
             this.regresar();
-            this.busqueda = folio;
           } else {
             this.alertasService.mostrarAlerta("Error!", response.message, "error", "danger");
             console.log(response.message);
@@ -538,4 +498,36 @@ enviarRevisionSolicitud() {
     }
   });
 }
+
+
+
+  aplicarFiltros(filtros: any) {
+    const intercomBuscado = this.findIntercompania(filtros.empresa);
+    if(this.anio != filtros.anio || this.mes != filtros.mes || this.intercompania != intercomBuscado){
+      const empresa = this.tienePermiso('view select emp users macro') ? intercomBuscado : this.usuarioSolicita.intercompania;
+      this.getAll(empresa, filtros.anio, filtros.mes);
+
+      this.anio = filtros.anio;
+      this.mes  = filtros.mes;
+      this.intercompania = intercomBuscado
+      this.empresa = filtros.empresa;
+    }
+
+    if(this.tienePermiso('view select emp quick compras')){
+      this.datosFiltrados = this.data.filter((reporte:any) => {
+        const coincideProveedor = !filtros.proveedor || reporte.proveedor === filtros.proveedor;
+        return ( coincideProveedor);
+      });
+    }
+  }
+
+  recargar(filtros: any){
+    const empresa = filtros.empresa == '' ? this.usuarioSolicita.intercompania : this.findIntercompania(filtros.empresa);
+    this.getAll(empresa, filtros.anio, filtros.mes);
+  }
+
+  findIntercompania(valor:any){
+    return this.empresas.find((empresa:any) => empresa.name == valor)?.intercompania
+    ?? (valor == null ? null : this.usuarioSolicita.intercomania)
+  }
 }

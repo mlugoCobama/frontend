@@ -97,6 +97,11 @@ import { CatProductosComponent } from './cat-productos/cat-productos.component';
 import { ProveedoresMultiselectComponent } from './cat-productos/proveedores-multiselect/proveedores-multiselect.component';
 import { FormPreciosComponent } from './cat-productos/form-precios/form-precios.component';
 import { ModalProductosComponent } from './cat-productos/modal-productos/modal-productos.component';
+import { CdkTableModule } from '@angular/cdk/table';
+import { TablaExistenciasComponent } from './almacen/tabla-existencias/tabla-existencias.component';
+import { ModalMovimientosAlmacenComponent } from './almacen/tabla-existencias/modal-movimientos-almacen/modal-movimientos-almacen.component';
+import { TableroComprasComponent } from './compras/tablero-compras/tablero-compras.component';
+import { TableroComprasMacroComponent } from './compras-macro/tablero-compras-macro/tablero-compras-macro.component';
 @NgModule({
   declarations: [
     ComprasComponent,
@@ -186,6 +191,10 @@ import { ModalProductosComponent } from './cat-productos/modal-productos/modal-p
     ProveedoresMultiselectComponent,
     FormPreciosComponent,
     ModalProductosComponent,
+    TablaExistenciasComponent,
+    ModalMovimientosAlmacenComponent,
+    TableroComprasComponent,
+    TableroComprasMacroComponent,
 
   ],
   imports: [
@@ -200,8 +209,8 @@ import { ModalProductosComponent } from './cat-productos/modal-productos/modal-p
     NgxMaskDirective,
     NgxMaskPipe,
     ScrollingModule,
-
-  ],
+    CdkTableModule
+],
 
   providers: [
     provideNgxMask()

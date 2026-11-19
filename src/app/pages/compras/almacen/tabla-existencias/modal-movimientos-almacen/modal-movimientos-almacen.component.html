@@ -1,0 +1,70 @@
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">
+    Movimientos
+  </h5>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal" (click)="cerrarModal()"></button>
+</div>
+<div class="modal-body">
+  <div class="d-flex flex-column align-items-center justify-content-center" *ngIf="movimientos.length == 0">
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+    <div class="text-center fw-semibold mt-2">
+        Obteniendo movimientos
+    </div>
+</div>
+  <div class="table-responsive rounded-4 border" *ngIf="movimientos.length > 0">
+            <table class="table table-sm table-hover align-middle mb-0 text-center">
+                <thead class="table-light text-uppercase fs-7 text-muted">
+                    <tr>
+                        <th class=" ">Clave Interna</th>
+                        <th class=" ">Fecha</th>
+                        <!-- <th class="">Descripción / Planta</th> -->
+                        <th class="">Empresa / Almacén</th>
+                        <th class=" ">Cantidad</th>
+                        <th class=" ">Unidad de Medida</th>
+                        <th class=" ">Movimientos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let movimiento of movimientos">
+                        <td class="fw-semibold font-monospace text-nowrap">
+                            {{ movimiento.clave_interna }}
+                        </td>
+                        <td>{{ movimiento.fecha | date:'dd/MM/yyyy HH:mm' }} </td>
+                        <!-- <td>
+                            <div class="fw-bold text-dark">{{ movimiento.almacen_producto.producto?.descripcion_planta }}</div>
+                            <small class="text-muted text-truncate d-block" style="max-width: 300px;">
+                                {{ movimiento.almacen_producto.producto?.descripcion_proveedor }}
+                            </small>
+                        </td> -->
+                        <td class="">
+                            <span class="badge bg-light text-dark border px-2 py-1">
+                                {{ movimiento.empresa }}
+                            </span>
+                        </td>
+                        <td class="fw-semibold">{{ movimiento.cantidad }} </td>
+                        <td class="">
+                            <span class="badge bg-info-subtle text-info px-2 py-1 font-size-11 fw-semibold">
+                                {{ movimiento.unidad_medida }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge bg-danger-subtle text-danger fw-semibold font-size-11 rounded-pill" *ngIf="movimiento.tipo == 's'; else entrada"><i  class="fas fa-caret-down me-1"></i>Salida</span>
+
+                            <ng-template #entrada>
+                             <span class="badge bg-success-subtle text-success fw-semibold font-size-11 rounded-pill"><i class="fas fa-caret-up me-1"></i>Entrada</span>
+                            </ng-template>
+                          </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+</div>
+<div class="modal-footer">
+  <button
+    type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="cerrarModal()"
+  >
+    Cerrar
+  </button>
+</div>

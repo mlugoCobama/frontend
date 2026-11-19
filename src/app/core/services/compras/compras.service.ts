@@ -31,8 +31,14 @@ export class ComprasService {
    * Recupera todas las solicitudes compra
    * @returns colección con las ordenes de compra
    */
-  public getAll(intercompania, id): Observable<any> {
-    return this.http.get(environment.apiUrl + `compras/Solicitudes/${intercompania}/${id}`);
+  public getAll(intercompania:any, id:any, mes:any, anio:any ): Observable<any> {
+    const payload = {
+      intercompania :intercompania,
+      id:id,
+      anio: anio,
+      mes:mes
+    }
+    return this.http.post(environment.apiUrl + `compras/Solicitudes/${intercompania}/${id}`, payload );
   }
   // public getAll(): Observable<any> {
   //   return this.http.get(environment.apiUrl + "compras/SolicitudesCompras");

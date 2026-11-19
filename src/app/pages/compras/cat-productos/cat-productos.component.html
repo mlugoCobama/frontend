@@ -13,7 +13,16 @@
   <div class="card-body">
       <div class="row g-3 align-items-center">
         <!-- Sistema -->
-        <div class="col-md-3">
+        <div class="col-md-2">
+          <label class="form-label small fw-semibold text-secondary mb-1">Tipo</label>
+          <select [(ngModel)]="tipoSeleccionado" (ngModelChange)="selectTipoChange($event)" class="form-select form-select-sm">
+            <option [ngValue]="null" disabled selected>Selecciona tipo...</option>
+            <option *ngFor="let item of tipos" [ngValue]="item.tipo">{{ item.nombre }}</option>
+          </select>
+        </div>
+
+        <!-- Sistema -->
+        <div class="col-md-2">
           <label class="form-label small fw-semibold text-secondary mb-1">CATEGORÍAS</label>
           <select [(ngModel)]="sistemaSeleccionado" (ngModelChange)="selectCategoriasChange($event)" class="form-select form-select-sm">
             <option [ngValue]="null" disabled selected>Selecciona sistema...</option>
@@ -31,7 +40,7 @@
         </div>
 
         <!-- Selección múltiple de hasta 3 Proveedores -->
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label class="form-label small fw-semibold text-secondary mb-1">
             PROVEEDORES (Máx. {{ maxProveedores }})
           </label>
@@ -59,6 +68,7 @@
   [proveedores]="proveedoresMatriz"
   [preciosExistentes]="preciosExistentes"
   [guardando]="saving"
+  [catPreciosFile]="catPorveedoresFile"
   [showBtnSave]="tienePermiso('view btn up cat precios')"
   (guardar)="onGuardarPrecios($event)"
   (itemSeleccionado)="setItemSeleccionado($event)">

@@ -1,19 +1,15 @@
 import { Component, Input, OnInit, EventEmitter, ViewChild, AfterViewInit } from "@angular/core";
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
-
 //services
 import { ComprasService } from "src/app/core/services/compras/compras.service";
 import { SwalComprsServiceService } from "src/app/core/services/compras/swal-comprs-service.service";
-
 import { FormDetalleSolicitudComponent } from "../../forms-solicitud/form-detalle-solicitud/form-detalle-solicitud.component";
 import { FormSolicitudComponent } from "../../forms-solicitud/form-solicitud/form-solicitud.component";
 import { SelectSistemaMantenimientoComponent } from "../../compras-macro/select-sistema-mantenimiento/select-sistema-mantenimiento.component";
-
 import { PermisosService } from 'src/app/core/services/permisos.service';
-
-
-
 import catCentrosCostos from "src/environments/cat_centros_costos.json";
+import { CatProductosService } from "src/app/core/services/compras/cat-productos.service";
+
 @Component({
   selector: "app-modal-compras",
   templateUrl: "./modal-compras.component.html",
@@ -21,7 +17,7 @@ import catCentrosCostos from "src/environments/cat_centros_costos.json";
 })
 export class ModalComprasComponent implements AfterViewInit
  {
-  
+
   public isLoading: boolean = true;
   public submittedDetail: boolean = false;
   public isLoad: boolean = false;
@@ -46,14 +42,15 @@ export class ModalComprasComponent implements AfterViewInit
     private alertasService: SwalComprsServiceService,
     private comprasService: ComprasService,
     private permisosService: PermisosService,
-    public modalRef: BsModalRef
+    public modalRef: BsModalRef,
+    public catProductosService: CatProductosService
   ) {}
 
   // public ngOnInit(): void {
 
   // }
    public ngAfterViewInit(): void {
-    
+
    }
 
   /**
@@ -114,17 +111,17 @@ export class ModalComprasComponent implements AfterViewInit
         isAgencia: this.formSolicitudCompra.getIsAgencia(),
       };
     }
-    
+
 
     if(!this.formSolicitudCompra.getIsAgencia()){
       data.c_c = 0;
     }
-    
+
     if (this.formSolicitudCompra.getIsAgencia() && !this.tienePermiso('view form tipo mantenimiento')) {
       data.usuario_destino = this.formSolicitudCompra.obtenerUsuarios();
     }
 
-  
+
     const formDataToSend = new FormData();
     formDataToSend.append("data", JSON.stringify(data));
 
@@ -164,7 +161,7 @@ export class ModalComprasComponent implements AfterViewInit
       }
     );
 
-    
+
   }
 
   /**
@@ -175,8 +172,39 @@ export class ModalComprasComponent implements AfterViewInit
     setTimeout(() => { this.modalCerrado.emit() }, 150);
   }
 
-  tienePermiso(permiso: string = null): boolean {
+  tienePermiso(permiso: string = ''): boolean {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
+  }
+
+  public productosCategoria = [];
+  public useCatalogo = false;
+
+  public findCatalogo(value:any) {
+    if(value.sistema == ""){
+      this.productosCategoria = [];
+      return;
+    }
+
+    if(value.useCatalogo){
+          this.catProductosService.getProductosCategoria(value.sistema).subscribe(
+      (response) => {
+        if (response.status === "success") {
+          this.productosCategoria = response.data;
+        } else {
+          console.log(`Error al  buscar los datos ${response.message || 'No especificado'}`)
+          return;
+        }
+      },
+      (error) => {
+         console.log(`Error: ${error || 'No especificado'}`)
+        return;
+      }
+    );
+
+    }
+
+    this.useCatalogo = value.useCatalogo;
+
   }
 }

@@ -1,189 +1,194 @@
-  <h5 class="mt-2 mb-0 card-title flex-grow-1">Detalle de la Solicitud</h5>
-  <form [formGroup]="formDetalleSolicitud" enctype="multipart/form-data">
-    <div class="row align-items-center">
-      <div class="col-sm-2 my-1">
-        <label class="sr-only" for="inlineFormInputName">cantidad</label>
-        <input
-          min="1"
-          type="number" formControlName="cantidad" id="cantidad" name="cantidad"
-          aria-label="cantidad" class="form-control form-control-sm" size="4" placeholder="Cantidad *"/>
-        <div
-          *ngIf="detalleSolicitudFormControl.cantidad.touched || submittedDetail">
-          <div class="text-danger form-text" *ngIf="detalleSolicitudFormControl.cantidad.errors?.['required']">
-            Cantidad es requerido.
-          </div>
+<h5 class="mt-2 mb-0 card-title flex-grow-1 border-bottom">Detalle de la Solicitud</h5>
+<form [formGroup]="formDetalleSolicitud" (ngSubmit)="addDetalle()" enctype="multipart/form-data">
+  <div class="row align-items-end">
+
+    <!-- Cantidad -->
+    <div class="col-sm-2 my-1">
+      <label class="form-label small mb-1" for="cantidad">Cantidad *</label>
+      <input
+        min="1"
+        type="number"
+        formControlName="cantidad"
+        id="cantidad"
+        class="form-control form-control-sm"
+        placeholder="Ej. 1"
+      />
+      <div *ngIf="detalleSolicitudFormControl.cantidad.touched || submittedDetail">
+        <div class="text-danger form-text" *ngIf="detalleSolicitudFormControl.cantidad.errors?.['required']">
+          Cantidad es requerida.
         </div>
       </div>
+    </div>
+
+    <!-- Subcategorías / Catálogo dinámico -->
+    <ng-container *ngIf="!useCatalogo; else catalogo">
+      <!-- Unidad de medida -->
       <div class="col-sm-2 my-1">
-        <select class="form-select form-select-sm" type="text" formControlName="cat_unidades_medida_id" #selectElement 
-        (change)="onChange(selectElement)" id="cat_unidades_medida_id" name="cat_unidades_medida_id" aria-label="cat_unidades_medida_id">
-          <option value="" selected disabled>Selecciona una unidad *</option>
-          <option *ngFor="let item of unidades" value="{{ item.id }}">
+        <label class="form-label small mb-1" for="cat_unidades_medida_id">Unidad *</label>
+        <select
+          class="form-select form-select-sm"
+          formControlName="cat_unidades_medida_id"
+          #selectElement
+          (change)="onChange(selectElement)"
+          id="cat_unidades_medida_id"
+        >
+          <option value="" selected disabled>Selecciona...</option>
+          <option *ngFor="let item of unidades" [value]="item.id">
             {{ item.nombre }} ({{ item.abreviatura }})
           </option>
         </select>
-        <div
-          *ngIf="detalleSolicitudFormControl.cat_unidades_medida_id.touched || submittedDetail">
-          <div
-            class="text-danger form-text" *ngIf="detalleSolicitudFormControl.cat_unidades_medida_id.errors?.['required']">
-            Unidad es requerido.
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-4 my-1">
-        <input type="text" formControlName="descripcion" id="descripcion" name="descripcion" aria-label="descripcion" 
-        title="Ingresa la descripción de lo que solicitas"
-        class="form-control form-control-sm" placeholder="Descripción *"/>
-        <div
-          *ngIf="detalleSolicitudFormControl.descripcion.touched || submittedDetail">
-          <div
-            class="text-danger form-text" *ngIf="detalleSolicitudFormControl.descripcion.errors?.['required']">
-            Descripción es requerido.
-          </div>
-          <div class="text-danger form-text" *ngIf="detalleSolicitudFormControl.descripcion.errors?.['maxLength']">
-            El texto excede la longitud maxima (100).
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-4 my-1">
-        <input title="Ingresa observaciones como notas técnicas o condiciones especiales" type="text" formControlName="observaciones" id="observaciones" name="observaciones" aria-label="observaciones" 
-        class="form-control form-control-sm"  placeholder="Observaciones"/>
-        <div
-          *ngIf="detalleSolicitudFormControl.observaciones.touched || submittedDetail">
-          <div
-            class="text-danger form-text"
-            *ngIf="detalleSolicitudFormControl.observaciones.errors?.['required']">
-            Observaciones es requerido.
-          </div>
-          <div
-            class="text-danger form-text"
-            *ngIf="detalleSolicitudFormControl.observaciones.errors?.['maxLength']">
-            El texto excede la longitud maxima (45).
+        <div *ngIf="detalleSolicitudFormControl.cat_unidades_medida_id.touched || submittedDetail">
+          <div class="text-danger form-text" *ngIf="detalleSolicitudFormControl.cat_unidades_medida_id.errors?.['required']">
+            Unidad requerida.
           </div>
         </div>
       </div>
 
-      <div class="col-sm my-1">
-        <label for="img_referencia" class="form-label">Referencia fotografica: </label>
+      <!-- Descripción -->
+      <div class="col-sm-4 my-1">
+        <label class="form-label small mb-1" for="descripcion">Descripción *</label>
         <input
-        title="Imagen de referencia para identificar el producto (no cotizaciones)."
-         type="file" accept=".jpg, .png" id="img_referencia" name="img_referencia" aria-label="img_referencia" class="form-control form-control-sm" 
-        (change)="onFileChange($event, 'img_referencia')" formControlName="img_referencia"/>
-        <div
-          *ngIf=" detalleSolicitudFormControl.img_referencia.touched || submittedDetail">
-          <div class="text-danger form-text" *ngIf="detalleSolicitudFormControl.img_referencia.errors?.['required']">
-            Imagen de referencia es requerido.
+          type="text"
+          formControlName="descripcion"
+          id="descripcion"
+          class="form-control form-control-sm"
+          placeholder="Descripción del insumo"
+        />
+        <div *ngIf="detalleSolicitudFormControl.descripcion.touched || submittedDetail">
+          <div class="text-danger form-text" *ngIf="detalleSolicitudFormControl.descripcion.errors?.['required']">
+            Descripción requerida.
+          </div>
+          <div class="text-danger form-text" *ngIf="detalleSolicitudFormControl.descripcion.errors?.['maxlength']">
+            Máximo 100 caracteres.
           </div>
         </div>
       </div>
-      <div class="col-sm-2 my-1">
-      <label for="recuperar_costo" class="form-label">Recupera costo</label>
-      <select 
-      title="¿El costo del insumo sera recuperado por el cliente?"
-        class="form-select form-select-sm" 
-        id="recuperar_costo" 
-        name="recuperar_costo" 
-        aria-label="recuperar_costo"
-        formControlName="recuperar_costo">
+    </ng-container>
+
+    <!-- Template Catálogo -->
+    <ng-template #catalogo>
+      <div class="col-sm-3 my-1">
+        <label class="form-label small mb-1">Subcategoría *</label>
+        <select (change)="selectCategoria($event.target.value); selectProd.value = ''" class="form-select form-select-sm">
+          <option [value]="''" selected disabled>Selecciona subcategoría</option>
+          <option *ngFor="let item of subCategorias.sub_categorias" [value]="item.id">
+            {{ item.nombre }}
+          </option>
+        </select>
+      </div>
+
+      <div class="col-sm-3 my-1">
+        <label class="form-label small mb-1">Producto *</label>
+        <select #selectProd (change)="selectProducto($event.target.value)" class="form-select form-select-sm">
+          <option [value]="''" selected disabled>Selecciona producto</option>
+          <option *ngFor="let item of productos" [value]="item.id">
+            {{ item.unidad_medida.nombre }} - {{ item.descripcion_planta }} - {{ item.clave_interna }}
+          </option>
+        </select>
+      </div>
+    </ng-template>
+
+    <!-- Observaciones -->
+    <div class="col-sm-4 my-1">
+      <label class="form-label small mb-1" for="observaciones">Observaciones</label>
+      <input
+        type="text"
+        formControlName="observaciones"
+        id="observaciones"
+        class="form-control form-control-sm"
+        placeholder="Notas técnicas"
+      />
+      <div *ngIf="detalleSolicitudFormControl.observaciones.touched || submittedDetail">
+        <div class="text-danger form-text" *ngIf="detalleSolicitudFormControl.observaciones.errors?.['maxlength']">
+          Máximo 45 caracteres.
+        </div>
+      </div>
+    </div>
+
+    <!-- Referencia Fotográfica -->
+    <div class="col-sm my-1">
+      <label for="img_referencia" class="form-label small mb-1">Ref. Fotográfica</label>
+      <input
+        type="file"
+        accept=".jpg, .png"
+        id="img_referencia"
+        class="form-control form-control-sm"
+        (change)="onFileChange($event, 'img_referencia')"
+        formControlName="img_referencia"
+      />
+    </div>
+
+    <!-- Recuperar Costo -->
+    <div class="col-sm-2 my-1">
+      <label for="recuperar_costo" class="form-label small mb-1">Recupera costo</label>
+      <select
+        class="form-select form-select-sm"
+        id="recuperar_costo"
+        formControlName="recuperar_costo"
+      >
         <option value="" selected disabled>Selecciona</option>
         <option value="1">Sí</option>
         <option value="0">No</option>
       </select>
-      <div
-          *ngIf=" detalleSolicitudFormControl.recuperar_costo.touched || submittedDetail">
-          <div class="text-danger form-text" *ngIf="detalleSolicitudFormControl.recuperar_costo.errors?.['required']">
-            Especifica si el costo sera recuperado.
-          </div>
-        </div>
     </div>
 
-
-      <div *ngIf = "+destino === 602" class="col-sm my-1">
-        <label for="vehiculo" class="form-label"> Autotanque *: </label>
-        <select class="form-select form-select-sm" aria-label="Default select example" formControlName="vehiculo" id="vehiculo" 
-      name="vehiculo" aria-label="vehiculo">
+    <!-- Autotanque (Condicional) -->
+    <div *ngIf="+destino === 602" class="col-sm my-1">
+      <label for="vehiculo" class="form-label small mb-1">Autotanque *</label>
+      <select class="form-select form-select-sm" formControlName="vehiculo" id="vehiculo">
         <option value="" selected disabled>Selecciona uno</option>
-        <!-- <option *ngIf = "!isLoad" value="" [disabled] = "!isLoad"> Cargando opciones espera...</option> -->
-        <option [disabled] = "disabled" *ngFor="let item of autotanques" [value]="item.id ">
-          ECO: {{ item.eco }} {{ item.marca_vehiculo }} {{item.submarca}}({{ item.modelo}}) PLACAS: {{ item.placas }}
+        <option [disabled]="disabled" *ngFor="let item of autotanques" [value]="item.id">
+          ECO: {{ item.eco }} {{ item.marca_vehiculo }} {{ item.submarca }} ({{ item.modelo }}) PLACAS: {{ item.placas }}
         </option>
       </select>
-      <div *ngIf="detalleSolicitudFormControl.vehiculo.touched || submittedDetail">
-        <div class="text-danger form-text" *ngIf="detalleSolicitudFormControl.vehiculo.errors?.['required']">
-          Autotanque es requerido.
-        </div>
-      </div>
-
-
-
-
-      <!-- <div *ngIf="detalleSolicitudFormControl.vehiculo.touched || submittedDetail">
-        <div
-          class="text-danger form-text">
-          Autotanques es requerido.
-        </div>
-      </div> -->
-      </div>
-
-      <!-- <div *ngIf="isAgencia" class="col-sm-3 my-1">
-        <label  class="form-label">Centro de costos: </label>
-        <select class="form-select form-select-sm" type="text" formControlName="cat_areas"  
-         id="cat_areas" name="cat_areas" aria-label="cat_areas">
-          <option value="" selected disabled>Selecciona uno</option>
-          <option *ngFor="let centro of centrosCostos" value="{{ centro.Clave }}">
-            {{ centro.Descripcion }}
-          </option>
-        </select>
-      </div> -->
-      <div class="col-auto mt-4">
-        <button type="submit" class="btn btn-primary btn-sm float-end" (click)="addDetalle()"
-        >
-        <i class="fas fa-plus"></i>
-          Agregar
-        </button>
-      </div>
     </div>
-  </form>
-  <br />
-  <div class="table-responsive">
-    <table
-    [hidden] = "tableData.length == 0"
-    class="table table-striped table-hover table-sm table-bordered"
-    id="tableCompraInsumos"
-  >
+
+    <!-- Botón Agregar -->
+    <div class="col-auto mt-4">
+      <button type="submit" class="btn btn-outline-primary btn-sm float-end fw-semibold">
+        <i class="fas fa-plus"></i> Agregar
+      </button>
+    </div>
+  </div>
+</form>
+
+<br />
+
+<!-- Tabla de Detalles -->
+<div class="table-responsive rounded-4 border">
+  <table [hidden]="tableData.length == 0" class="table table-striped table-hover table-sm table-bordered" id="tableCompraInsumos">
     <thead class="table-light">
       <tr>
         <th class="text-center">Cant.</th>
         <th>U. Medida</th>
         <th>Descripción</th>
         <th>Observaciones</th>
-        <th *ngIf = "+destino === 602">Autotanque</th>
-        <th>Img. Ref</th>
-        <th lass="text-center" title="¿El costo del insumo sera recuperado por el cliente?">Rec</th>
-        <th class="text-center" *ngIf="tableData.length > 0" >-</th>  
-        <!-- <th *ngIf="isAgencia">C. Costos</th> -->
+        <th *ngIf="+destino === 602">Autotanque</th>
+        <th class="text-center">Img. Ref</th>
+        <th class="text-center" title="¿El costo del insumo será recuperado por el cliente?">Rec.</th>
+        <th class="text-center" *ngIf="tableData.length > 0">-</th>
       </tr>
     </thead>
     <tbody>
-      <!-- datos de la tabla detalle -->
       <tr *ngFor="let row of tableData; let i = index">
-        <td class="text-center">{{ row.cantidad }}</td>
-        <td>{{ row.cat_unidades_medida_id1 }}</td>
+        <td class="text-center fw-semibold">{{ row.cantidad }}</td>
+        <td><span class="badge bg-light text-dark font-size-11">{{ row.cat_unidades_medida_id1 }}</span></td>
         <td>{{ row.descripcion }}</td>
         <td>{{ row.observaciones }}</td>
-        <td *ngIf = "+destino === 602"> ECO: {{ row.label }}</td>
-        <td class="text-center"><img *ngIf="row.img_referencia1;else elseBlock" src="{{ row.img_referencia1 }}" alt="Sin imagen de referencia" width="100"/></td>
-        <!-- <td *ngIf="isAgencia">{{row.cat_areas}}</td> -->
+        <td *ngIf="+destino === 602">ECO: {{ row.label }}</td>
         <td class="text-center">
-          <strong> {{ row.recuperar_costo == 1 ? 'Sí' : 'No' }} </strong>
+          <img *ngIf="row.img_referencia1; else elseBlock" [src]="row.img_referencia1" alt="Ref" width="60" class="img-thumbnail"/>
+        </td>
+        <td class="text-center fw-semibold">
+          {{ row.recuperar_costo == 1 ? 'Sí' : 'No' }}
         </td>
         <td class="text-center">
-          <button type="button" class="btn btn-danger btn-sm" (click)="removeDetalle(i)">
+          <button type="button" class="btn btn-outline-danger btn-sm" (click)="removeDetalle(i)">
             <i class="fas fa-minus-circle"></i>
           </button>
         </td>
       </tr>
     </tbody>
   </table>
-  </div>
-<ng-template #elseBlock ><i class="fas far fa-eye-slash"></i> Sin imagen</ng-template>
+</div>
+<ng-template #elseBlock><span class="small text-muted"><i class="fas fa-eye-slash"></i> Sin imagen</span></ng-template>

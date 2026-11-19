@@ -1,7 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { PermisosService } from 'src/app/core/services/permisos.service';
 
 export interface FiltrosCompras {
-  empresa: number | null;
+  intercompania: any | null;
+  empresa: any | null;
   proveedor: number | null;
   anio: number | null;
   mes: number | null;
@@ -14,16 +16,29 @@ export interface FiltrosCompras {
 })
 export class FiltroComprasComponent implements OnInit {
 
-
   @Input() empresas: any[] = [];
+  @Input() empresaSeleccionada = '';
+  @Input() intercompaniaSeleccionada:any = null;
+
+  @Input() viewOptionAll = false;
+  @Input() viewSelectEmpresas = false;
+  @Input() viewSelectProveedores = false;
 
   proveedores:any[] = [];
 
   @Input() data: any[] = [];
 
   @Output() filtrosChange = new EventEmitter<FiltrosCompras>();
+  @Output() reload = new EventEmitter<FiltrosCompras>();
+
+
+  @Input() empresaActual:any = '';
+  @Input() anioActual:any;
+  @Input() mesActual:any;
+
 
   filtros: FiltrosCompras = {
+    intercompania:null,
     empresa: null,
     proveedor:null,
     anio: null,
@@ -47,75 +62,67 @@ export class FiltroComprasComponent implements OnInit {
     { valor: 12, nombre: 'Diciembre' }
   ];
 
-  tiposInstalacion = [
-    {
-      valor: 'PDD',
-      nombre: 'Distribución'
-    },
+      private permisosService = inject(PermisosService);
 
-    {
-      valor: 'EXO',
-      nombre: 'Expendio'
-    },
-    {
-      valor: 'CMN',
-      nombre: 'Comercialización'
-    },
-    {
-      valor: 'TDA',
-      nombre: 'Almacenamiento'
-    },
-  ];
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['data'] && this.data) {
+      this.proveedores = [...new Set(this.data.filter((x:any) => x.proveedor != '-').map((x:any) => x.proveedor))].sort();
+    }
 
-
-  ngOnChanges() {
-
-    this.generarAnios();
-
+    if(changes['empresaSeleccionada'] && this.empresaSeleccionada){
+      this.filtros.empresa = this.empresaSeleccionada;
+    }
   }
 
   ngOnInit(): void {
-    this.proveedores = [...new Set(this.data.filter((x:any) => x.proveedor != '-').map((x:any) => x.proveedor))].sort();
+    this.generarAnios();
+    this.filtros = {
+      intercompania: this.intercompaniaSeleccionada,
+      empresa: this.empresaSeleccionada,
+      proveedor:null,
+      anio: this.anioActual,
+      mes: this.mesActual,
+    };
   }
 
 
   private generarAnios() {
-    const anios = this.data
-      .map(item => this.obtenerAnio(item.fecha))
-      .filter((anio): anio is number => anio !== null);
+
+    const anioActual: number = new Date().getFullYear();
+    const anioInicio: number = 2025
+
+
+    const anios: number[] = [];
+    for (let i = anioInicio; i <= anioActual; i++) {
+        anios.push(i);
+    }
 
     this.anios = [...new Set(anios)].sort((a, b) => b - a);
   }
 
-
-  private obtenerAnio(periodo: string): number | null {
-    if (!periodo) {
-      return null;
-    }
-
-    const match = String(periodo).match(/\d{4}/);
-    return match ? Number(match[0]) : null;
+  seleccionarFiltro() {
+    this.filtrosChange.emit({...this.filtros});
   }
 
-
-  seleccionarFiltro() {
-
-    // console.log(this.filtros)
-    this.filtrosChange.emit({...this.filtros});
+  recargar(){
+    this.reload.emit({...this.filtros});
   }
 
 
   limpiarFiltros() {
-
     this.filtros = {
+      intercompania:null,
       empresa: null,
       proveedor:null,
       anio: null,
       mes: null,
     };
-
     this.seleccionarFiltro();
+  }
 
+  tienePermiso(permiso: string = ''): boolean {
+    if (!permiso) return true;
+    return this.permisosService.tienePermiso(permiso);
   }
 
 }

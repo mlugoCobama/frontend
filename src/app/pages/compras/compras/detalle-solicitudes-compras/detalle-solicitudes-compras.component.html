@@ -8,12 +8,16 @@
       [cotizacion]="cotizacion"
       ></app-info-solicitud>
 
-      <app-select-sistema-mantenimiento
-      @fadeInOut
-      [solicitudCompra]="solicitudCompra"
-      [tipo]= 3
-      *ngIf ="solicitudCompra.tipo === 3 && solicitudCompra.auto_gg === 1 && solicitudCompra.auto_admin === 1"
-      ></app-select-sistema-mantenimiento>
+      <div class="card rounded-4 shadow-sm"  *ngIf ="solicitudCompra.tipo === 3 && solicitudCompra.auto_gg === 1 && solicitudCompra.auto_admin === 1">
+        <div class="card-body">
+          <app-select-sistema-mantenimiento
+            @fadeInOut
+            [solicitudCompra]="solicitudCompra"
+            [tipo]= 3
+          ></app-select-sistema-mantenimiento>
+        </div>
+      </div>
+
 
       <app-table-detalles-solicitud
       @fadeInOut

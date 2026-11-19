@@ -2,6 +2,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, inject } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { PrecioProveedor, PreciosPayload, Producto, Proveedor } from './catalogo.models';
+import { CatProductosService } from 'src/app/core/services/compras/cat-productos.service';
 
 
 @Component({
@@ -11,17 +12,19 @@ import { PrecioProveedor, PreciosPayload, Producto, Proveedor } from './catalogo
 })
 export class FormPreciosComponent implements OnChanges {
   private fb = inject(FormBuilder);
+  private catProductosService = inject(CatProductosService);
 
   @Input() productos: Producto[] = [];
   @Input() proveedores: Proveedor[] = [];
+  @Input() catPreciosFile: any[] = [];
   @Input() preciosExistentes: PrecioProveedor[] = [];
   @Input() guardando = false;
   @Input() showBtnSave = false;
 
-  @Output() guardar = new EventEmitter<PreciosPayload>();
+  @Output() guardar = new EventEmitter<any>();
   @Output() itemSeleccionado = new EventEmitter<any | null>();
 
-
+  archivosProveedores: { [proveedorId: number]: File } = {};
 
   form: FormGroup = this.fb.group({
     productosArray: this.fb.array([]),
@@ -52,7 +55,10 @@ export class FormPreciosComponent implements OnChanges {
       this.form.markAllAsTouched();
       return;
     }
-    this.guardar.emit(this.form.getRawValue() as PreciosPayload);
+    this.guardar.emit({
+      formValues: this.form.getRawValue(),
+      archivosProveedores: this.archivosProveedores
+    });
   }
 
   private construirMatriz(): void {
@@ -79,6 +85,7 @@ export class FormPreciosComponent implements OnChanges {
         this.fb.group({
           producto_id: [prod.id, Validators.required],
           preciosProveedores: precios,
+          archivo: [null]
         }),
       );
     });
@@ -99,6 +106,29 @@ export class FormPreciosComponent implements OnChanges {
       fila.classList.add('table-primary');
       this.itemSeleccionado.emit(dato);
     }
+  }
+
+  onFileProveedorSelected(event: any, proveedorId: number): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.archivosProveedores[proveedorId] = file;
+    } else {
+      delete this.archivosProveedores[proveedorId];
+    }
+  }
+
+  /**
+   * abre los archivos en una pestaña nueva
+   * @param ruta ruta del archivo
+   */
+  verArchivos(ruta: any) {
+    if (!ruta) return;
+    this.catProductosService.abrirArchivo(ruta);
+  }
+
+  findFileProve(idProv:any){
+    const resultado = this.catPreciosFile.find((cpf: any) => cpf.id === idProv)?.catalogo_precios;
+    return resultado;
   }
 }
 

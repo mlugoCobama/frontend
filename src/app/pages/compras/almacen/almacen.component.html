@@ -26,6 +26,50 @@
         </div>
       </div>
 
+      <div class="card rounded-4 shadow-sm">
+        <div class="card-body">
+          <form class="row g-3 align-items-end mb-3">
+            <div class="col-md-2">
+              <label for="selectTipo" class="form-label fw-semibold text-secondary small">
+                Filtrar por Tipo
+              </label>
+              <select
+                id="selectTipo"
+                name="tipoId"
+                class="form-select form-select-sm rounded-3"
+                [(ngModel)]="tiposSalidaSeleccionada"
+                (change)="onEmpresaChange()">
+                <option *ngIf="" [ngValue]="''">Todas los tipos</option>
+                <ng-container *ngFor="let tipo of tiposSalida">
+                  <option *ngIf="tienePermiso(tipo.permiso)"  [ngValue]="tipo.tipo">
+                    {{ tipo.nombre }}
+                  </option>
+                </ng-container>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="selectEmpresa" class="form-label fw-semibold text-secondary small">
+                Filtrar por Empresa
+              </label>
+              <select
+                id="selectEmpresa"
+                name="empresaId"
+                class="form-select form-select-sm rounded-3"
+                [(ngModel)]="empresaSeleccionada"
+                (change)="onEmpresaChange()">
+                <option [ngValue]="''">Todas las empresas</option>
+                <ng-container *ngFor="let emp of empresas">
+                    <option *ngIf="tienePermiso(emp.permiso)"  [ngValue]="emp.intercompania">
+                    {{ emp.name }}
+                </option>
+                </ng-container>
+
+              </select>
+            </div>
+          </form>
+        </div>
+      </div>
+
 <div class="mt-3">
   <div *ngIf="panel === 'salidas'">
         <app-tabla-generica
@@ -36,11 +80,21 @@
         ></app-tabla-generica>
   </div>
   <div *ngIf="panel === 'existencias'">
-        <app-tabla-generica
-        [data]="data"
+        <app-tabla-existencias
+        [existencias]="existencias"
+        [modelFiltrado]="modelFiltrado"
+        [ordenador]="ordenador"
         [isLoad]="isLoad"
-        [columnas]="configTabla"
-        ></app-tabla-generica>
+
+        (filaSeleccionada)="openModalMovimientos($event)">
+    </app-tabla-existencias>
+
+
+
+
+
+
+
   </div>
   <div *ngIf="panel === 'entradas'">
     <app-tabla-generica

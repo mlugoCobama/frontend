@@ -1,5 +1,4 @@
-import { Component, OnInit, NgModule, OnDestroy } from "@angular/core";
-import { environment } from "src/environments/environment";
+import { Component, OnInit } from "@angular/core";
 import { ModalComprasComponent } from "./modal-compras/modal-compras.component";
 import { ModalSeguimientoComponent } from "./modal-seguimiento/modal-seguimiento.component";
 import { ModalPreviewOrdenCompraComponent } from "./modal-preview-orden-compra/modal-preview-orden-compra.component";
@@ -24,8 +23,6 @@ import { CotizacionesService } from "src/app/core/services/compras/cotizaciones/
   styleUrls: ["./compras.component.css"],
 })
 
-
-
 export class ComprasComponent implements OnInit {
   vistaKanban: boolean = false;
   public tipoCompras = 1;
@@ -47,6 +44,12 @@ export class ComprasComponent implements OnInit {
   public rawEmpresas: any = [];
   public usuarioSolicita: any;
 
+ public anio = new Date().getFullYear();
+ public mes = (new Date().getMonth())+1;
+ public intercompania:any = null;
+ public empresa:any = null;
+
+
 
   isLoadingGenerarOrden = false;
   isLoadingCotizar = false;
@@ -55,6 +58,11 @@ export class ComprasComponent implements OnInit {
   isLoadingDevolverRevision = false;
 
   private readonly STORAGE_KEY_VISTA = 'vistaComprasKanban';
+
+    public modelBusqueda = [  "folio", "usuario_destino",  "fecha",
+                            "usuario_solicita", "empresa", "estado",
+                          "centro_costo", "proveedor",  "total_orden",
+                          "folio_oc", "modo_pago",  "pagado"];
 
   /**
    * Objeto que envió al componente detallesSolicitudCompra
@@ -180,10 +188,10 @@ export class ComprasComponent implements OnInit {
 }
 
   //Recupera todos los registros de solicitudes de compras
-  private getAll(intercompania) {
+  private getAll(intercompania:any, mes:any, anio:any) {
     this.isLoad = true;
     this.comprasService
-      .getAll(intercompania, this.usuarioSolicita?.id)
+      .getAll(intercompania, this.usuarioSolicita?.id, mes, anio)
       .subscribe(
         (response) => {
           if (response) {
@@ -192,7 +200,7 @@ export class ComprasComponent implements OnInit {
               response.tipo == "compras" || response.tipo == "RT"
                 ? true
                 : false;
-            this.ordenador = new FuncionesTablas(this.data);
+            // this.ordenador = new FuncionesTablas(this.data);
             this.datosFiltrados = [...this.data];
 
             this.isLoad = false;
@@ -215,19 +223,13 @@ export class ComprasComponent implements OnInit {
   }
 
   public getUsuarioActivo() {
-    const usuarioActivo = this.localStorage.getItem("currentUser");
-    this.usuarioSolicita = usuarioActivo["usuarioActivo"][0];
+    this.usuarioSolicita = this.localStorage.getLocalUser();
     if (this.usuarioSolicita?.empresas != null) {
-      this.filtrarEmpresas(this.rawEmpresas, this.usuarioSolicita?.empresas);
+      this.empresas = this.rawEmpresas;
     }
-    this.getAll(this.usuarioSolicita?.intercompania);
-  }
 
-  filtrarEmpresas(data:any, empRel:any) {
-    this.empresas = data
-    // data.filter((empresa) =>
-    //   empRel.includes(empresa.intercompania)
-    // );
+    this.empresa = this.usuarioSolicita.empresa
+    this.getAll(this.usuarioSolicita?.intercompania, this.mes, this.anio);
   }
 
   /**
@@ -245,7 +247,7 @@ export class ComprasComponent implements OnInit {
     this.modalRef.content.closeBtnName = "Close";
     this.modalRef.content.event.subscribe(() => {
       this.isLoad = true;
-      this.getAll(this.usuarioSolicita.intercompania);
+      this.getAll(this.usuarioSolicita.intercompania, this.mes, this.anio);
     });
     this.modalRef.content.modalCerrado.subscribe(() => {
       this.modalAbierto = false;
@@ -253,7 +255,7 @@ export class ComprasComponent implements OnInit {
   }
   // Funcion para llenar la vista con el detalle component
   public openDetallesSolicitud(dato: any, evento: any =  null)  {
-    this.solicitudSelecionada = true;
+      this.solicitudSelecionada = true;
       this.solicitudSelecionada = true;
       this.solicitudCompra = dato; // Objeto que se envía al detalleSolicitudCompra
       this.status = this.solicitudCompra.estatus;
@@ -270,7 +272,7 @@ export class ComprasComponent implements OnInit {
     this.status = null;
     this.mostrarBoton = false;
     // this.vistaKanban = false;
-    this.getAll(this.usuarioSolicita.intercompania);
+    this.getAll(this.intercompania, this.mes, this.anio);
   }
   //Muestra u oculta el panel de cotizaciones
   mostrarCotizacion() {
@@ -378,28 +380,6 @@ export class ComprasComponent implements OnInit {
     this.status = status;
   }
 
-  //Funciones de la tabla
-  ordenarPor(columna: keyof any) {
-    this.datosFiltrados = this.ordenador.ordenar(columna);
-  }
-
-  getIconoOrden(columna: keyof any): string {
-    return this.ordenador.getIcono(columna);
-  }
-
-  public modelBusqueda = [  "folio", "usuario_destino",  "fecha",
-                            "usuario_solicita", "empresa", "estado",
-                          "centro_costo", "proveedor",  "total_orden",
-                          "folio_oc", "modo_pago",  "pagado"];
-  filtrarTabla() {
-    this.busqueda2 = "";
-    this.datosFiltrados = this.ordenador.filtrar(this.busqueda, this.modelBusqueda);
-  }
-
-  filtrarTabla2() {
-    this.busqueda = "";
-    this.datosFiltrados = this.ordenador.filtrar(this.busqueda2, this.modelBusqueda);
-  }
 
   openModalSeguimiento(item:any){
    this.modalAbierto = true;
@@ -534,36 +514,32 @@ enviarRevisionSolicitud() {
   }
 
   aplicarFiltros(filtros: any) {
-    this.datosFiltrados = this.data.filter((reporte:any) => {
-      const coincideEmpresa = !filtros.empresa || reporte.empresa === filtros.empresa;
-      const coincideProveedor = !filtros.proveedor || reporte.proveedor === filtros.proveedor;
-      const coincideAnio = !filtros.anio || this.obtenerAnio(reporte.fecha) ===  filtros.anio;
-      const coincideMes = !filtros.mes || this.obtenerMes(reporte.fecha) === filtros.mes;
-      return ( coincideEmpresa && coincideProveedor && coincideAnio && coincideMes);
-    });
-  }
+    const intercomBuscado = this.findIntercompania(filtros.empresa);
+    if(this.anio != filtros.anio || this.mes != filtros.mes || this.intercompania != intercomBuscado){
+      const empresa = this.tienePermiso('view select emp users compras') ? intercomBuscado : this.usuarioSolicita.intercompania;
+      this.getAll(empresa, filtros.mes, filtros.anio);
 
-  public obtenerAnio(fecha: any) {
-    const fechaF = this.parsearFecha(fecha);
-    return fechaF ? fechaF.getFullYear() : null;
-  }
-
-  public obtenerMes(fecha: any) {
-    const fechaF = this.parsearFecha(fecha);
-    return fechaF ? fechaF.getMonth() + 1 : null;
-  }
-
-  private parsearFecha(fechaStr: any): Date | null {
-    if (!fechaStr) return null;
-    if (fechaStr instanceof Date) return fechaStr;
-    const partes = fechaStr.match(/^(\d{2})\/(\d{2})\/(\d{4})(?:\s(\d{2}):(\d{2}))?/);
-
-    if (!partes) {
-      const fallback = new Date(fechaStr);
-      return isNaN(fallback.getTime()) ? null : fallback;
+      this.anio = filtros.anio;
+      this.mes  = filtros.mes;
+      this.intercompania = intercomBuscado
+      this.empresa = filtros.empresa;
     }
-    const [, dia, mes, anio, hora = '00', minuto = '00'] = partes;
 
-    return new Date(`${anio}-${mes}-${dia}T${hora}:${minuto}:00`);
+    if(this.tienePermiso('view select emp quick compras')){
+      this.datosFiltrados = this.data.filter((reporte:any) => {
+        const coincideProveedor = !filtros.proveedor || reporte.proveedor === filtros.proveedor;
+        return (coincideProveedor);
+      });
+    }
+  }
+
+  recargar(filtros: any){
+    const empresa = filtros.empresa == '' ? this.usuarioSolicita.intercompania : this.findIntercompania(filtros.empresa);
+    this.getAll(empresa, filtros.mes, filtros.anio);
+  }
+
+  findIntercompania(valor:any){
+    return this.rawEmpresas.find((empresa:any) => empresa.name == valor)?.intercompania
+    ?? (valor == null ? null : this.usuarioSolicita.intercomania)
   }
 }

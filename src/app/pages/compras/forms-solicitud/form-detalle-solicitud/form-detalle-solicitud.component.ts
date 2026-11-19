@@ -1,34 +1,56 @@
-import { Component, OnInit, Input } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-   AbstractControl, ValidationErrors, ValidatorFn
-} from "@angular/forms";
-
+import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { CatUnidadesMedidasService } from "src/app/core/services/compras/unidadesMedidas/cat-unidades-medidas.service";
 import {  obtenerPrimerError } from 'src/app/core/helpers/errores-forrmulario';
 import Swal from 'sweetalert2';
+
+interface UnidadMedida {
+  id: number;
+  nombre: string;
+  abreviatura: string;
+}
+
+interface Producto {
+  id: number;
+  com_cat_unidad_medida_id: number;
+  descripcion_planta: number;
+  descripcion_proveedor: string;
+  unidad_medida: UnidadMedida;
+  [key: string]: any;
+}
+
+interface Autotanque {
+  id: number | string;
+  eco: string;
+  [key: string]: any;
+}
+
 @Component({
   selector: 'app-form-detalle-solicitud',
   templateUrl: './form-detalle-solicitud.component.html',
   styleUrl: './form-detalle-solicitud.component.css'
 })
 
-export class FormDetalleSolicitudComponent implements OnInit{
-  
-  public formDetalleSolicitud: FormGroup;
+export class FormDetalleSolicitudComponent implements OnInit, OnChanges {
+
+  public formDetalleSolicitud!: FormGroup;
   public submittedDetail: boolean = false;
-  public unidades: any;
-  public unidad: any;
+  public unidades: UnidadMedida[] = [];
+  public unidad: string = '';
   public tableData: Array<any> = [];
 
-  
   public formData = new FormData();
 
-  @Input() autotanques = [];
-  @Input() destino = null;
+  @Input() productosCategoria: any[] = [];
+  @Input() autotanques: Autotanque[] = [];
+  @Input() destino: number | string | null = null;
+  @Input() subCategorias: any = [];
+  @Input() useCatalogo:boolean = false;
+
+  subcategoriaSeleccionada: any = '';
+  productoSeleccionado: any = '';
+
+  public productos: Producto[] = [];
 
   constructor(
     public formBuilder: FormBuilder,
@@ -39,220 +61,205 @@ export class FormDetalleSolicitudComponent implements OnInit{
     this.getUnidades();
     this.buildForm();
   }
-  
-  private buildForm() {
-    return new Promise((resolve, reject) => {
-      this.formDetalleSolicitud = this.formBuilder.group({
-        cantidad: new FormControl(null, Validators.required),
-        cat_unidades_medida_id: new FormControl("", Validators.required),
-        descripcion: new FormControl(null, [Validators.required]),
-        observaciones: new FormControl(null, []),
-        img_referencia: new FormControl(null),
-        recuperar_costo: new FormControl("", [Validators.required]),
-        cat_areas: new FormControl(""),
-        vehiculo: new FormControl("")
-      });
-       this.setVehiculoValidator(this.destino);
 
-      resolve(true);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['destino'] && this.formDetalleSolicitud) {
+      this.setVehiculoValidator(this.destino);
+    }
+  }
+
+  private buildForm(): void {
+    this.formDetalleSolicitud = this.formBuilder.group({
+      id_producto: [null],
+      cantidad: [null, [Validators.required, Validators.min(1)]],
+      descripcion: [null, [Validators.required]],
+      cat_unidades_medida_id: ["", Validators.required],
+      observaciones: [null, []],
+      img_referencia: [null],
+      recuperar_costo: ["", [Validators.required]],
+      cat_areas: [""],
+      vehiculo: [""]
     });
+
+    this.setVehiculoValidator(this.destino);
   }
 
-  public setVehiculoValidator(destino) {
-  const vehiculoControl = this.formDetalleSolicitud.get('vehiculo');
-  if (destino == 602) {
-    vehiculoControl?.setValidators([Validators.required]);
-  } else {
-    vehiculoControl?.clearValidators();
+  public setVehiculoValidator(destino: any) {
+    const vehiculoControl = this.formDetalleSolicitud.get('vehiculo');
+    if (+destino === 602) {
+      vehiculoControl?.setValidators([Validators.required]);
+    } else {
+      vehiculoControl?.clearValidators();
+    }
+    vehiculoControl?.updateValueAndValidity();
   }
-
-  vehiculoControl?.updateValueAndValidity();
-}
-
 
   get detalleSolicitudFormControl() {
     return this.formDetalleSolicitud.controls;
   }
 
-    /**
-   * método que obtiene el texto del select unidad
-   * @param selectElement eventos del select
+  /**
+   * Método que obtiene el texto del select unidad
    */
   public onChange(selectElement: any) {
-    const selectedText =
-      selectElement.options[selectElement.selectedIndex].text;
-    this.unidad = selectedText;
+    const selectedText = selectElement.options[selectElement.selectedIndex]?.text;
+    this.unidad = selectedText || '';
   }
 
   /**
    * Función que captura el archivo en el input
-   * @param event evento capturado del input
-   * @param fieldName nombre del campo
    */
   onFileChange(event: any, fieldName: string) {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
-      this.formData.append(fieldName, file);
+      this.formData.set(fieldName, file)
     }
   }
 
-    /**
-   *  Agrega los detalles a el array detalle para después mostrarlo en la tabla
+  /**
+   * Agrega los detalles al array para después mostrarlo en la tabla
    */
   public addDetalle() {
+    this.submittedDetail = true;
+
     if (this.formDetalleSolicitud.invalid) {
-      this.submittedDetail = true;
       this.mostrarErroresFormulario();
       return;
     }
 
     const valores = this.formDetalleSolicitud.value;
-    let dato = null;
+    let dato: Autotanque | undefined = undefined;
 
-    if(+this.destino === 602 && !valores.vehiculo){
-      this.mostrarErroresFormulario();
-       this.submittedDetail = true;
-       return;
-    }
-
-    if(+this.destino === 602){
+    if (+this.destino! === 602) {
       dato = this.autotanques.find(objeto => +objeto.id === +valores.vehiculo);
     }
-    
+
+    let imgUrl = null;
+    if (this.formData.has("img_referencia")) {
+      const fileBlob = this.formData.get("img_referencia") as Blob;
+      imgUrl = URL.createObjectURL(fileBlob);
+    }
 
     const newDetalle = {
-      ...this.formDetalleSolicitud.value,
+      ...valores,
       cat_unidades_medida_id1: this.unidad,
-      img_referencia1: valores.img_referencia,
+      img_referencia1: imgUrl,
+      img_referencia: this.formData.get("img_referencia") as File || null,
       label: dato?.eco ?? null,
       confirmado: 1,
-      
-      // cat_areas: (this.centrosCostos[this.formSolicitudCompra.value.c_c-1].Clave)
     };
 
-    if (this.formData.has("img_referencia")) {
-      newDetalle.img_referencia1 = URL.createObjectURL(
-        this.formData.get("img_referencia") as Blob
-      );
-    }
-
-    if (this.formData.has("img_referencia")) {
-      newDetalle.img_referencia = this.formData.get("img_referencia") as File;
-    }
-
     this.tableData.push(newDetalle);
-
-    // console.log(this.tableData)
-    // this.formDetalleSolicitud.reset();
     this.resetFormDetalle();
-
     this.formData.delete("img_referencia");
-
     this.submittedDetail = false;
   }
 
-  private resetFormDetalle(){
-      this.formDetalleSolicitud.reset();
-      this.detalleSolicitudFormControl.recuperar_costo.reset("");
-      this.detalleSolicitudFormControl.cat_unidades_medida_id.reset("");
+  private resetFormDetalle() {
+    this.formDetalleSolicitud.reset({
+      id_producto: null,
+      cantidad: null,
+      cat_unidades_medida_id: "",
+      descripcion: null,
+      observaciones: null,
+      img_referencia: null,
+      recuperar_costo: "",
+      cat_areas: "",
+      vehiculo: ""
+    });
+    this.setVehiculoValidator(this.destino);
   }
-  
+
   /**
-   * elimina el detalle del array detalles
+   * Elimina el detalle del array tableData
    */
   public removeDetalle(index: number) {
     this.tableData.splice(index, 1);
   }
 
   /**
-   * Recupera el catalogo de unidades
+   * Recupera el catálogo de unidades
    */
   private getUnidades() {
-    this.catUnidadesMedidasService.getAll().subscribe(
-      (response) => {
+    this.catUnidadesMedidasService.getAll().subscribe({
+      next: (response: any) => {
         if (response) {
           this.unidades = response.data;
         } else {
-          console.log(response.message);
+          console.warn(response.message);
         }
       },
-      (error) => {
-        console.error("Error fetching data:", error);
+      error: (error) => {
+        console.error("Error fetching units:", error);
       }
-    );
+    });
   }
-  
-  /**
-   * Recupera los datos almacenado en table data
-   * @returns array: tableData
-   */
-  public getDetalles(){
+
+  public getDetalles() {
     return this.tableData;
   }
 
-  /**
-   * Valida el form que agrega el detalle 
-   * @returns boolean:true or false
-   */
   esValido() {
     return this.formDetalleSolicitud.valid;
   }
 
-  /**
-   * Limpia el array de tableData
-   */
   limpiarArray() {
     this.formData = new FormData();
     this.tableData = [];
   }
 
-  /**
-   * Valida si tiene detalles 
-   * @returns boolean:true or false
-   */
-  hasDatos(){
-    if(this.tableData.length === 0){
-      return false
-    }
-      return true
+  hasDatos() {
+    return this.tableData.length > 0;
   }
 
   mostrarErroresFormulario() {
-  const primerError = obtenerPrimerError(this.formDetalleSolicitud);
+    const primerError = obtenerPrimerError(this.formDetalleSolicitud);
+    if (primerError) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Falta información importante',
+        text: primerError,
+      });
+    }
+  }
 
-  if (primerError) {
-    // return primerError;
-     Swal.fire({
-       icon: 'error',
-       title: 'Falta información importante',
-     text: primerError,
+  public loadDetallesFromDB(detalles: any[]) {
+    this.tableData = detalles.map(detalle => {
+      return {
+        ...detalle,
+        cat_unidades_medida_id: detalle?.unidadMedida?.id,
+        cat_unidades_medida_id1: `${detalle?.unidadMedida?.nombre} (${detalle?.unidadMedida?.abreviatura})`,
+        img_referencia1: null,
+        label: detalle?.DetalleAutotanque?.DatosVehiculo?.eco ?? null,
+        vehiculo: detalle?.DetalleAutotanque?.com_datos_vehiculo_id ?? null,
+        confirmado: 1
+      };
     });
   }
-}
 
-public loadDetallesFromDB(detalles: any[]) {
-  this.tableData = detalles.map(detalle => {
-    let dato = null;
+  selectCategoria(value: any) {
+    const categoriaId = +value;
+    const categoriaEncontrada = this.subCategorias?.sub_categorias?.find(
+      (item: any) => item.id === categoriaId
+    );
+    this.productos = categoriaEncontrada?.productos_activos || [];
+    this.productoSeleccionado = '';
+  }
 
-    if (+this.destino === 602) {
-      dato = this.autotanques.find(objeto => +objeto.id === +detalle.vehiculo);
+  selectProducto(value: any) {
+    const productoId = +value;
+    const producto = this.productos.find((item: any) => item.id === productoId);
+
+    if (producto) {
+      this.formDetalleSolicitud.patchValue({
+        id_producto: producto.id,
+        cat_unidades_medida_id: producto.com_cat_unidad_medida_id,
+        descripcion: producto.descripcion_proveedor,
+      });
+
+      if (producto.unidad_medida) {
+        this.unidad = `${producto.unidad_medida.nombre} (${producto.unidad_medida.abreviatura})`;
+      }
     }
-
-    return {
-      ...detalle,
-      cat_unidades_medida_id: detalle?.unidadMedida.id,
-      cat_unidades_medida_id1: `${detalle?.unidadMedida.nombre} (${ detalle?.unidadMedida?.abreviatura})`,
-      img_referencia1: 
-      // detalle.img_referencia ? URL.createObjectURL(detalle.img_referencia) : 
-      null,
-      label: detalle?.DetalleAutotanque?.DatosVehiculo.eco ?? null,
-      vehiculo: detalle?.DetalleAutotanque?.com_datos_vehiculo_id ?? null,
-      confirmado: 1
-    };
-  });
-  // console.log(this.tableData);
-  // console.log(this.destino)
-}
-
-
+  }
 }

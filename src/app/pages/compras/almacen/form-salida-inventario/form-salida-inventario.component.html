@@ -1,25 +1,31 @@
 <form [formGroup]="formulario" class="row">
 <div class="card shadow-sm border">
   <div class="card-body">
+
+
     <div class="col-lg-12 mb-1">
-      <label for="tecnico" class="form-label">Asignado a:</label>
-      <select id="tecnico" formControlName="tecnico" class="form-select form-select-sm">
-        <option value="" selected disabled>Selecciona una opción</option>
-        <option *ngFor="let t of tecnicos" [value]="t.id">
-        {{ t.firstname }} {{ t.realname }} - {{t.puesto}}
-        </option>
+      <label for="tipoSalida" class="form-label">Tipo Salida: </label>
+      <select id="tipoSalida" formControlName="tipoSalida" class="form-select form-select-sm" (change)="cambioSelectTipo($event)">
+        <option [value]="''" selected disabled>Selecciona una opción</option>
+        <ng-container *ngFor="let t of tiposSalida">
+          <option *ngIf="tienePermiso(t.permiso)" [value]="t.tipo">
+            {{ t.nombre }}
+          </option>
+        </ng-container>
+
       </select>
-          <div *ngIf="solicitudCompraFormControl.tecnico.touched || submitted">
+          <div *ngIf="solicitudCompraFormControl.empresa.touched || submitted">
         <div
-          class="text-danger form-text" *ngIf="solicitudCompraFormControl.tecnico.errors?.['required']">
-          Tecnico es requerido
+          class="text-danger form-text" *ngIf="solicitudCompraFormControl.empresa.errors?.['required']">
+          Empresa es requerido
         </div>
       </div>
     </div>
-        <div class="col-lg-12 mb-1">
+
+    <div class="col-lg-12 mb-1">
       <label for="empresa" class="form-label">Empresa: </label>
       <select id="empresa" formControlName="empresa" class="form-select form-select-sm" (change)="cambioSelectEmpresa($event)">
-        <option value="" selected disabled>Selecciona una opción</option>
+        <option [value]="''" selected disabled>Selecciona una opción</option>
         <option *ngFor="let e of empresas" [value]="e.intercompania">
         {{ e.name }}
         </option>
@@ -28,6 +34,22 @@
         <div
           class="text-danger form-text" *ngIf="solicitudCompraFormControl.empresa.errors?.['required']">
           Empresa es requerido
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-12 mb-1">
+      <label for="tecnico" class="form-label">Asignado a:</label>
+      <select id="tecnico" formControlName="tecnico" class="form-select form-select-sm">
+        <option [value]="''" selected disabled>Selecciona una opción</option>
+        <option *ngFor="let t of usuarios" [value]="t.id">
+        {{ t.firstname }} {{ t.realname }} - {{t.puesto}}
+        </option>
+      </select>
+          <div *ngIf="solicitudCompraFormControl.tecnico.touched || submitted">
+        <div
+          class="text-danger form-text" *ngIf="solicitudCompraFormControl.tecnico.errors?.['required']">
+          Especifica a quien se le entrega el isnumo
         </div>
       </div>
     </div>
@@ -62,12 +84,12 @@
 
                 <thead class="thead-light thead-sticky">
                     <tr>
-                        <!-- <th>Emp</th> -->
+                        <th>Clave</th>
                         <th>Descripción</th>
                         <th>Categoría</th>
                         <th>Stock</th>
                         <th>Unidad</th>
-                        <th>Observaciones</th>
+                        <!-- <th>Observaciones</th> -->
                         <th>Acción</th>
                     </tr>
                 </thead>
@@ -76,14 +98,15 @@
                   <ng-container *ngIf="materialesFiltrados.length > 0">
                     <tr *ngFor="let item of materialesFiltrados">
 
-                        <!-- <td>{{ item.empresa }}</td> -->
-                        <td><strong>{{ item.descripcion }}</strong></td>
-                        <td>{{ item.categoria }}</td>
-                        <td class="text-center">{{ item.existencia }}</td>
-                        <td>{{ item.unidad }}</td>
-                        <td>{{ item.observaciones || '-' }}</td>
+                        <td class="text-center  font-monospace">{{ item.clave_interna }}</td>
+                        <td> <span class="small fw-semibold">{{ item.descripcion_planta }} </span></td>
+                        <td><span class="badge badge-light text-dark border-dark">{{ item.subcategoria }}</span></td>
+                        <td class="text-center fw-bold ">{{ item.stock }}</td>
+                        <td>{{ item.unidad_medida }}</td>
+                        <!-- <td>{{ item.observaciones || '-' }}</td> -->
                         <td class="text-nowrap text-center">
                             <button
+                                [disabled]="+item.stock == 0"
                                 class="btn btn-primary btn-sm"
                                 (click)="agregarMaterial(item)">
                                 <i class="fas fa-plus"></i>
@@ -118,7 +141,7 @@
             <table class="table table-hover table-striped table-sm">
                 <thead class="thead-light thead-sticky">
                     <tr>
-                        <!-- <th>Emp</th> -->
+                        <th>Clave</th>
                         <th>Descripción</th>
                         <th>Stock</th>
                         <th>Unidad</th>
@@ -128,11 +151,11 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of materialesSeleccionados">
-                        <!-- <td>{{ item.empresa }}</td> -->
-                        <td><strong>{{ item.descripcion }}</strong>
-                        </td>
-                        <td>{{ item.existencia }}</td>
-                        <td>{{ item.unidad }}</td>
+                        <td class="text-center font-monospace">{{ item.clave_interna }}</td>
+                        <td> <span class="small fw-semibold">{{ item.descripcion_planta }} </span></td>
+
+                        <td class="text-center fw-bold ">{{ item.stock }}</td>
+                        <td>{{ item.unidad_medida }}</td>
                         <td>
                           <div class="d-flex justify-content-around m-0">
                             <div class=" ">
@@ -141,7 +164,7 @@
                             <input
                               type="number"
                               min="1"
-                              [max]="item.existencia"
+                              [max]="item.stock"
                               class="form-control form-control-sm text-center p-0"
                               [(ngModel)]="item.cantidad"
                               [ngModelOptions]="{standalone: true}"

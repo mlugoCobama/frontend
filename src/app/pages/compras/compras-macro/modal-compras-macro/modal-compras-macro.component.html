@@ -15,15 +15,18 @@
     </app-form-solicitud-macro>
     <app-select-sistema-mantenimiento
     #formSelectsSistemaManteniemiento
-    [tipo] =  2
+    [tipo]="2"
+    (categoriaChange)="findCatalogo($event)"
     ></app-select-sistema-mantenimiento>
 
     <app-form-detalle-solicitud
     #formDetalleSolicitud
     [autotanques]="autotanques"
     [destino]="destino"
-    >
-    </app-form-detalle-solicitud>
+    [useCatalogo]="useCatalogo"
+    [subCategorias]="productosCategoria"
+    ></app-form-detalle-solicitud>
+
   </div>
 <div class="modal-footer">
   <button
@@ -32,7 +35,7 @@
     Cerrar
   </button>
 
-  <button 
+  <button
   [disabled]="sending"
   type="button" class="btn btn-primary btn-sm" (click)="save()">
   <i class="bx bxs-send " [ngClass]="{ 'bx-fade-right': sending }" ></i>

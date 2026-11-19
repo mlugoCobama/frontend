@@ -14,7 +14,7 @@ import { PermisosService } from 'src/app/core/services/permisos.service';
 })
 export class FormSolicitudMacroComponent implements OnInit{
 
-  public formSolicitudCompra: FormGroup;
+  public formSolicitudCompra!: FormGroup;
   public formData = new FormData();
 
     public usuarioSolicita: any = {
@@ -45,14 +45,14 @@ export class FormSolicitudMacroComponent implements OnInit{
 
   public isLoad: boolean = false;
   public disabled: boolean = false;
-  
+
   public interAgencias = [
     7102, 7075, 7074, 7072, 7071, 7064, 7063, 7062, 7061, 7051, 712, 710, 706,
   ];
 
   public isAgencia: boolean = false;
 
-  constructor( 
+  constructor(
     public formBuilder: FormBuilder,
     private localStorage: LocalStorageServiceService,
     private usuariosService: UsuariosService,
@@ -103,7 +103,7 @@ export class FormSolicitudMacroComponent implements OnInit{
     requiere_anticipo: this.datos?.requiere_anticipo == 1 ? "true" : "false"
   };
   this.formSolicitudCompra.patchValue(valores);
-  
+
   this.setDato(this.datos?.usuario_destino_id);
   this.formSolicitudCompra.get('usuario_destino')?.disable();
   this.formSolicitudCompra.get('empresa')?.disable();
@@ -123,8 +123,8 @@ export class FormSolicitudMacroComponent implements OnInit{
         if (response) {
           const rawData = response.data
           /**Filtro para solo mostrar las empresas que tienen acceso a macrotaller */
-          this.empresas = rawData.filter(objeto => objeto.isAgencia === false);
-          
+          this.empresas = rawData.filter((objeto:any) => objeto.isAgencia === false);
+
           this.isLoading = false;
         } else {
           console.log(response.message);
@@ -183,12 +183,12 @@ export class FormSolicitudMacroComponent implements OnInit{
       this.formData.delete(fieldName);
     }
   }
-  
+
   /**
    * Recupera los usuarios que pertenecen a las empresas (Select usuario)
    * @param intercompania num de intercompania: int
    */
-  getAutotanques(intercompania){
+  getAutotanques(intercompania:any){
     this.autotanques = [];
     this.isLoad = false;
     this.disabled = false;
@@ -219,9 +219,8 @@ export class FormSolicitudMacroComponent implements OnInit{
     );
   }
 
-  filtrarEmpresas(data, empRel){
-    this.empresas = data.filter(empresa =>
-                empRel.includes(empresa.intercompania)
+  filtrarEmpresas(data:any, empRel:any){
+    this.empresas = data.filter((empresa:any) => empRel.includes(empresa.intercompania)
   );
   }
 
@@ -236,12 +235,12 @@ export class FormSolicitudMacroComponent implements OnInit{
   }
 
   obtenerArchivos() {
-    
+
     return this.formData;
   }
   /**
    * Recupera el valor de usuario solicita
-   * @returns int: id -> usuario solicita 
+   * @returns int: id -> usuario solicita
    */
   obtenerUsuarios() {
     return this.usuarioSolicita.id;
@@ -270,7 +269,7 @@ export class FormSolicitudMacroComponent implements OnInit{
 
 public datosSelect: any;
 /**
- * Formatea los datos apra llenar el ngselect   
+ * Formatea los datos apra llenar el ngselect
  * @param datos array : debe contener
  * id o no_economico, marca_vehiculo, submarca, modelo, placas
  */
@@ -289,7 +288,7 @@ mostrarErroresFormulario() {
   }
 }
 
-tienePermiso(permiso: string = null): boolean {
+tienePermiso(permiso: string = ''): boolean {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
   }

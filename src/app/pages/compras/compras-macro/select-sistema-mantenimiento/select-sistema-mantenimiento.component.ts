@@ -1,6 +1,7 @@
-import { Component , OnInit, Input} from '@angular/core';
+import { Component , OnInit, Input, Output, EventEmitter} from '@angular/core';
 
 import {
+  EmailValidator,
   FormBuilder,
   FormControl,
   FormGroup,
@@ -20,28 +21,27 @@ import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-com
 export class SelectSistemaMantenimientoComponent implements OnInit{
 
   @Input() solicitudCompra:  any;
-  @Input() tipo:  number ;
+  @Input() tipo!:  number ;
+
+  @Output() categoriaChange =  new EventEmitter()
 
   public isLoad: boolean = false;
   public submitted: boolean = false;
 
   sistemas = [];
   tiposMantenimiento = [];
-  
-  formSistemaMantenimiento: FormGroup;
+
+  formSistemaMantenimiento!: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
     private CatSistemasAuto: CatSistemasAutoService,
     private ComprasMacro: ComprasMacroService,
-    private alerta:  SwalComprsServiceService
-
   ) {}
 
   ngOnInit(): void {
     this.buildForm();
     this.getAll();
-    // this.getTiposMantenimiento();
     this.selectChange();
   }
 
@@ -65,7 +65,7 @@ export class SelectSistemaMantenimientoComponent implements OnInit{
       return this.formSistemaMantenimiento.controls;
     }
 
-  // Recupera todos los regsitros de la bse de datos 
+  // Recupera todos los regsitros de la bse de datos
   private getAll() {
     this.isLoad = true;
     this.CatSistemasAuto.getAll(this.tipo).subscribe(
@@ -89,27 +89,16 @@ export class SelectSistemaMantenimientoComponent implements OnInit{
     );
   }
 
-  private getTiposMantenimiento() {
-    this.isLoad = true;
-    this.CatSistemasAuto.getTiposMantenimiento(this.tipo).subscribe(
-      (response) => {
-        if (response) {
-          this.tiposMantenimiento = response.data;
-          this.isLoad = false;
-        } else {
-          console.log(response.message);
-          this.isLoad = false;
-        }
-      },
-      (error) => {
-        console.error("Error fetching data:", error);
-        this.isLoad = false;
-      }
-    );
-  }
-
   selectChange() {
-    this.ComprasMacro.actualizarFormData(this.obtenerValores());
+    const valores = this.obtenerValores();
+    this.ComprasMacro.actualizarFormData(valores);
+
+    const catSeleccionada: any = this.sistemas.find((item: any) => item.id === +valores.sistema);
+
+    this.categoriaChange.emit({
+      ...valores,
+      useCatalogo: catSeleccionada ? catSeleccionada.useCatalogo == 1 : false
+    });
   }
 
     /**
@@ -124,14 +113,9 @@ export class SelectSistemaMantenimientoComponent implements OnInit{
    * Verifica que el fomulario sea valido
    * @returns boolean:  true ->valido, false ->no valido
    */
-  esValido() {
-    let bandera = this.formSistemaMantenimiento.valid;
-    if(bandera === true){
-      return bandera;
-    }else{
-      this.submitted = true;
-      return bandera;
-    }
+  esValido(): boolean {
+  this.submitted = !this.formSistemaMantenimiento.valid;
+    return this.formSistemaMantenimiento.valid;
   }
 
   public setTextosDescriptivos(){

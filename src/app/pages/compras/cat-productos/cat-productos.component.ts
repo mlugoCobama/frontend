@@ -22,6 +22,7 @@ export class CatProductosComponent implements OnInit {
   public subCategorias: any = [];
   public productosCategorias: any = [];
   public sistemaSeleccionado: any = null;
+  public tipoSeleccionado: any = '1';
   public subCategoriaSeleccionada: any = null;
   public unidadesMedida: any = [];
   public maxProveedores = 3;
@@ -34,6 +35,26 @@ export class CatProductosComponent implements OnInit {
   productosMatriz: Producto[] = [];
   proveedoresMatriz: Proveedor[] = [];
   preciosExistentes: PrecioProveedor[] = [];
+  catPorveedoresFile:any = [];
+
+
+    public tipos = [
+    {
+      tipo: '1',
+      nombre: "Compras Generales",
+      permiso: "view option select cg tipo cat-productos",
+    },
+    {
+      tipo: '2',
+      nombre: "Compras Macrotaller",
+      permiso: "view option select mt tipo cat-productos",
+    },
+    {
+      tipo: '3',
+      nombre: "Recursos Tecnologicos",
+      permiso: "view option select mt tipo cat-productos",
+    },
+  ];
 
   private catProductosService = inject(CatProductosService);
   private proveedoresService = inject(ProveedoresService);
@@ -43,13 +64,13 @@ export class CatProductosComponent implements OnInit {
   private permisosService = inject(PermisosService);
 
   ngOnInit(): void {
-    this.getCatalogoProductos();
+    this.getCatalogoProductos(this.tipoSeleccionado);
     this.getProveedores();
     this.getUnidades()
   }
 
-  public getCatalogoProductos(callback?: () => void) {
-    this.catProductosService.getCatalogoProductos().subscribe(
+  public getCatalogoProductos( tipo:any ,callback?: () => void ) {
+    this.catProductosService.getCatalogoProductos(tipo).subscribe(
       (response: any) => {
         if (response) {
           this.data = response.data;
@@ -108,6 +129,17 @@ export class CatProductosComponent implements OnInit {
     this.preciosExistentes = [];
   }
 
+  selectTipoChange(event: any): void {
+    this.data = []
+    this.subCategorias = [];
+    this.tipoSeleccionado = event;
+    this.proveedoresSeleccionados = [];
+    this.subCategoriaSeleccionada = null;
+    this.productosCategorias = [];
+    this.limpiarMatriz();
+    this.getCatalogoProductos(this.tipoSeleccionado)
+  }
+
   selectCategoriasChange(event: any): void {
     this.subCategorias = event?.sub_categorias || [];
     this.sistemaSeleccionado = event;
@@ -157,6 +189,7 @@ buscarProductos(): void {
 
   const productos = [...this.productosCategorias];
   const proveedores = [...this.proveedoresSeleccionados];
+  this.catPorveedoresFile = [];
 
   this.isLoad = true;
   this.catProductosService
@@ -164,18 +197,33 @@ buscarProductos(): void {
     .pipe(finalize(() => (this.isLoad = false)))
     .subscribe({
       next: (res: any) => {
-        this.preciosExistentes = res.data ?? [];
+        this.preciosExistentes = res.data.precio ?? [];
         this.productosMatriz = productos;
         this.proveedoresMatriz = proveedores;
+        this.catPorveedoresFile = res.data.proveedores;
+        console.log(this.catPorveedoresFile);
       },
       error: (err) => this.alertasService.mostrarAlerta('Error!', err, 'error', 'danger'),
     });
 }
 
-onGuardarPrecios(payload: PreciosPayload): void {
+onGuardarPrecios(payload: { formValues: any, archivosProveedores: { [key: number]: File } }): void {
   this.saving = true;
+
+  console.log(payload)
+  const formData:any = new FormData();
+
+  formData.append('precios_data', JSON.stringify(payload.formValues));
+
+  Object.keys(payload.archivosProveedores).forEach((proveedorId) => {
+    const file = payload.archivosProveedores[Number(proveedorId)];
+    if (file) {
+      formData.append(`archivos_proveedores[${proveedorId}]`, file);
+    }
+  });
+
   this.catProductosService
-    .saveCatalogoPrecios(payload)
+    .saveCatalogoPrecios(formData)
     .pipe(finalize(() => (this.saving = false)))
     .subscribe({
       next: () => this.buscarProductos(),
@@ -294,5 +342,7 @@ onLimiteProveedores(max: number): void {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
   }
+
+
 
 }

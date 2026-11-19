@@ -39,9 +39,8 @@ export class AlmacenService {
     return this.http.get(environment.apiUrl + `compras/getExsitencias/3/${empresa}`);
   }
 
-  public getMovimientos(): Observable<any> {
-
-    return this.http.get(environment.apiUrl + `compras/getMovimientos`);
+  public getMovimientos(payload:any): Observable<any> {
+    return this.http.post(environment.apiUrl + `compras/getMovimientos`, payload);
   }
 
   public storeMovimientos(data:any): Observable<any> {

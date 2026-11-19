@@ -8,12 +8,17 @@
       (openEdicionSolicitud) = "openModalUpdateSolicitud()"
       ></app-info-solicitud>
 
-      <app-select-sistema-mantenimiento
-      @fadeInOut
-      [solicitudCompra]="solicitudCompra"
-      [tipo]= 2
-      *ngIf ="solicitudCompra.tipo === 2 && solicitudCompra.auto_gg === 1 && solicitudCompra.auto_admin === 1"
-      ></app-select-sistema-mantenimiento>
+      <div class="card shadow-sm rounded-4"  *ngIf ="solicitudCompra.tipo === 2 && solicitudCompra.auto_gg === 1 && solicitudCompra.auto_admin === 1">
+        <div class="card-body">
+          <app-select-sistema-mantenimiento
+            @fadeInOut
+            [solicitudCompra]="solicitudCompra"
+            [tipo]= 2
+
+            ></app-select-sistema-mantenimiento>
+        </div>
+      </div>
+
 
       <app-table-detalles-solicitud
       @fadeInOut

@@ -11,8 +11,8 @@ export class TableFormExistenciasComponent implements OnInit {
 
   entradaForm: FormGroup;
   @Input() detalles: any = [];
-  @Input() isLoad: boolean; 
-  @Input() requiereInventario: boolean; 
+  @Input() isLoad: boolean = false;
+  @Input() requiereInventario: boolean = false;
   @Input() submittDetail: boolean = false;
 
   @Input() entregaCompleta :boolean = true;
@@ -45,29 +45,30 @@ export class TableFormExistenciasComponent implements OnInit {
 
       const detalleGroup = this.fb.group({
         id: [detalle.id],
+        producto_id : [detalle.com_productos_id],
         cantidad: [detalle.cantidad],
         cantidadA: [detalle?.almacen_compras?.existencia ?? 0],
         unidadMedida: [detalle.unidad_medida],
         descripcion: [detalle.descripcion],
         observaciones: [detalle.observaciones],
         DetalleAutotanque: [detalle.DetalleAutotanque],
-        
+
         // Campos editables
         confirmado: [detalle.confirmado === 1],
         recibidos: [
         recibidoMax,
         [  Validators.required,  Validators.min(0.01),  Validators.max(recibidoMax)]],
-        
+
         comentario: ['', []],
         requiereInventario: [false, []]
-        
+
       });
       if (recibidoMax === 0) {
-      detalleGroup.get('confirmado')?.disable(); 
+      detalleGroup.get('confirmado')?.disable();
       detalleGroup.get('recibidos')?.disable();
       detalleGroup.get('comentario')?.disable();
     }
-    
+
 
 
       this.detallesArray.push(detalleGroup);
@@ -88,15 +89,15 @@ export class TableFormExistenciasComponent implements OnInit {
   // Método para obtener todos los valores del formulario
   public getEntradas() {
       const formValues = this.entradaForm.value;
-      
+
       // Procesar solo los elementos confirmados
       const elementosConfirmados = formValues.detallesArray
         .filter((detalle: any) => detalle.confirmado)
         .map((detalle: any, originalIndex: number) => ({
           ...detalle,
-          originalIndex 
+          originalIndex
         }));
-      
+
       return elementosConfirmados;
   }
 
@@ -118,7 +119,7 @@ export class TableFormExistenciasComponent implements OnInit {
 
   mostrarErroresFormulario() {
     const errores = obtenerPrimerError(this.entradaForm);
-  
+
     if (errores.length > 0) {
       return errores[0]; // o mostrar todos
     }
@@ -134,5 +135,5 @@ export class TableFormExistenciasComponent implements OnInit {
     })
     .map(control => control.getRawValue());
 }
-  
+
 }

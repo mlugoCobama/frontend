@@ -25,7 +25,7 @@ export class FormSolicitudComponent implements OnInit{
   public disabled: boolean = false;
   public isAgencia: boolean = false;
 
-  public formSolicitudCompra: FormGroup;
+  public formSolicitudCompra!: FormGroup;
   public centrosCostos = catCentrosCostos;
   public usuarios:any = [];
   public empresas:any = [];
@@ -96,45 +96,11 @@ export class FormSolicitudComponent implements OnInit{
     return this.formSolicitudCompra.controls;
   }
 
-    /**
-   * Recupera el usuario activo en el local storage
-   */
-  // public getUsuarioActivo() {
-  //   const usuarioActivo = this.localStorage.getItem("currentUser");
-
-  //   this.usuariosService.getUserById(usuarioActivo["role"]["email"]).subscribe(
-  //     (response) => {
-  //       if (response.status === "success") {
-  //         this.usuarioSolicita = response.data[0];
-  //         if(this.usuarioSolicita.empresas !=  null){
-  //           this.filtrarEmpresas( this.empresas ,this.usuarioSolicita.empresas);
-  //         }
-  //         this.getUsuarios(this.usuarioSolicita.intercompania);
-  //         this.formSolicitudCompra.patchValue({empresa :  this.usuarioSolicita.intercompania});
-  //         // console.log(this.usuarioSolicita);
-
-  //       } else {
-  //         this.alertasService.mostrarAlerta(
-  //           response.message,
-  //           "Intente iniciar sesión nuevamente",
-  //           "warning",
-  //           "warning"
-  //         );
-
-  //         // this.cerrarModal();
-  //         this.closeModal.emit();
-  //         return;
-  //       }
-  //     },
-  //     (error) => {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   );
-  // }
 
   public getUsuarioActivo() {
-    const usuarioActivo = this.localStorage.getItem("currentUser");
-    this.usuarioSolicita = usuarioActivo["usuarioActivo"][0];
+
+    const usuarioActivo = this.localStorage.getLocalUser();
+    this.usuarioSolicita = usuarioActivo;
     if(this.usuarioSolicita){
       if (this.usuarioSolicita.empresas != null) {
       this.filtrarEmpresas(this.empresas, this.usuarioSolicita.empresas);
@@ -154,7 +120,7 @@ export class FormSolicitudComponent implements OnInit{
 
   }
 
-    /**
+  /**
    * Recupera los usuarios que pertenecen a las empresas (Select usuario)
    * @param intercompania num de intercompania
    */
@@ -294,7 +260,7 @@ public setValues() {
   this.formSolicitudCompra.get('empresa')?.disable();
 }
 
-tienePermiso(permiso: string = null): boolean {
+tienePermiso(permiso: string = ''): boolean {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
   }

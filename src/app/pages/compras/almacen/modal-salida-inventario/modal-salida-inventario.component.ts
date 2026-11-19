@@ -3,6 +3,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { AlmacenService } from 'src/app/core/services/compras/almacen.service';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
 import { FormSalidaInventarioComponent } from '../form-salida-inventario/form-salida-inventario.component';
+import { AlmacenProductosService } from 'src/app/core/services/compras/almacen-productos.service';
 
 @Component({
   selector: 'app-modal-salida-inventario',
@@ -25,6 +26,7 @@ export class ModalSalidaInventarioComponent implements AfterViewInit {
   constructor(
     public modalRef: BsModalRef,
     private almacenService: AlmacenService,
+    private almacenProducto: AlmacenProductosService,
     private alertasService: SwalComprsServiceService
 
   ) {}
@@ -37,9 +39,9 @@ export class ModalSalidaInventarioComponent implements AfterViewInit {
 
   }
 
-  public getExistencias(intercompaia:any) {
+  public getExistencias(data:any) {
     this.isLoad = true;
-    this.almacenService.getExistencias(intercompaia).subscribe(
+    this.almacenProducto.getExistenciaFiltro(data).subscribe(
       (response) => {
         if (response) {
           this.data = response.data;
@@ -66,7 +68,7 @@ export class ModalSalidaInventarioComponent implements AfterViewInit {
   public guardarDatos(){
     const values = this.formSalidaInventario.onSubmit();
     if(values){
-      this.almacenService.storeMovimientos(values).subscribe(
+      this.almacenProducto.store(values).subscribe(
         (response) => {
           if (response) {
             this.alertasService.mostrarAlerta("Listo","Movimientos realizados correctamente","success","success");

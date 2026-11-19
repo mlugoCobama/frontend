@@ -3,7 +3,7 @@
     <label for="empresa" class="form-label form-label-sm">Empresa: *</label>
 
     <select
-      *ngIf="tienePermiso('view select emp users compras') === true; else nombreEmpresa"
+      *ngIf="tienePermiso('view select emp users macro') === true; else nombreEmpresa"
       class="form-select form-select-sm"
       aria-label="Default select example"
       formControlName="empresa"
@@ -16,7 +16,7 @@
       <option *ngIf="isLoading" value="" [disabled]="isLoading">
         Cargando opciones espera...
       </option>
-      
+
       <option *ngFor="let item of empresas" [value]="item.intercompania" [hidden]="!tienePermiso(item.permiso)">
         {{ item.name.toUpperCase() }}
       </option>
@@ -39,7 +39,7 @@
 
   <div class="col-md-6" *ngIf ="!isAgencia">
       <label for="usuario_destino" class="form-label">Autotanques: *</label>
-      <select class="form-select form-select-sm" aria-label="Default select example" formControlName="usuario_destino" id="usuario_destino" 
+      <select class="form-select form-select-sm" aria-label="Default select example" formControlName="usuario_destino" id="usuario_destino"
       name="usuario_destino" aria-label="usuario_destino" (change)="setDato($event.target.value)">
         <option value="" selected disabled>Selecciona uno</option>
         <option *ngIf = "!isLoad" value="" [disabled] = "!isLoad"> Cargando opciones espera...</option>
@@ -111,12 +111,12 @@
   <div class="form-group col-md-6">
     <label >Formato de orden de trabajo: <small> *</small>  </label>
     <input
-      data-toggle="tooltip" 
+      data-toggle="tooltip"
       title="Cotización en formato PDF."
       (change)="onFileChange($event, 'orden_trabajo')"
       accept="application/pdf"
       type="file"
-      name="formato_orden_trabajo" 
+      name="formato_orden_trabajo"
       formControlName="formato_orden_trabajo"
       class="form-control form-control-sm"
       placeholder="# orden de trabajo"
@@ -133,12 +133,12 @@
   <div class="form-group  col-md-6">
     <label >Cotización: <small> (Opcional) </small>  </label>
     <input
-      data-toggle="tooltip" 
+      data-toggle="tooltip"
       title="Cotización en formato PDF."
       (change)="onFileChange($event, 'cotizacion')"
       accept="application/pdf"
       type="file"
-      name="cotizacion" 
+      name="cotizacion"
       formControlName="cotizacion"
       class="form-control form-control-sm"
       placeholder="# orden de trabajo"
@@ -156,12 +156,12 @@
   <div class="form-group col-md-6 pt-4">
       <div class="d-flex align-items-center m-2">
         <label class="mb-0 me-2">Requiere anticipo*:</label>
-    
+
         <div class="form-check form-check-inline">
           <input class="form-check-input" type="radio" formControlName="requiere_anticipo" id="inlineRadio1" value="true">
           <label class="form-check-label" for="inlineRadio1">Si</label>
         </div>
-    
+
         <div class="form-check form-check-inline">
           <input class="form-check-input" type="radio" formControlName="requiere_anticipo" id="inlineRadio2" value="false">
           <label class="form-check-label" for="inlineRadio2">No</label>

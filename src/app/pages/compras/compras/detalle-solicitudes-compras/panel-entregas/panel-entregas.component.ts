@@ -25,7 +25,7 @@ export class PanelEntregasComponent implements OnInit, AfterViewInit {
   @Input() solicitudCompra: any;
   @Output() actualizarStatus1 = new EventEmitter<void>();
 
-  acuseForm: FormGroup;
+  acuseForm!: FormGroup;
   acusesGuardados: any[] = [];
   public detalles:any = [];
   public entregaCompleta: boolean = false;
@@ -37,7 +37,7 @@ export class PanelEntregasComponent implements OnInit, AfterViewInit {
     private acuseRecibido: AcuseRecibidoService,
     private alertasService: SwalComprsServiceService,
     private proveedoresService: ProveedoresService,
-    private permisosService : PermisosService, 
+    private permisosService : PermisosService,
     private macro: MacroService,
   ) {}
 
@@ -46,13 +46,13 @@ export class PanelEntregasComponent implements OnInit, AfterViewInit {
     this.cargarAcuses();
     this.buscarDetalles(this.solicitudCompra?.id);
 
-    console.log(this.solicitudCompra)
+    // console.log(this.solicitudCompra)
 
   }
 
   ngAfterViewInit(): void {
-      
-    
+
+
   }
 
   /**
@@ -73,7 +73,7 @@ export class PanelEntregasComponent implements OnInit, AfterViewInit {
   /**
    * Guarda los datos de entrega
    * cantidad de entradas y acuse de entrega
-   * @returns 
+   * @returns
    */
   guardar(): void {
     this.submitted = true;
@@ -216,7 +216,7 @@ export class PanelEntregasComponent implements OnInit, AfterViewInit {
   }
 
   mostrarBtnSolicitud() {
-     return this.ordenCompra?.surtido_solicitado === 0 ? true : false; 
+     return this.ordenCompra?.surtido_solicitado === 0 ? true : false;
   }
 
   /**
@@ -227,7 +227,7 @@ export class PanelEntregasComponent implements OnInit, AfterViewInit {
     this.proveedoresService.abrirArchivo(prov);
   }
 
-  tienePermiso(permiso: string = null): boolean {
+  tienePermiso(permiso: string = ''): boolean {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
   }
@@ -237,10 +237,10 @@ export class PanelEntregasComponent implements OnInit, AfterViewInit {
 
 
   /**
-   * Busca los detalles de uns solicitud de compra 
-   * @param idSolicitud 
+   * Busca los detalles de uns solicitud de compra
+   * @param idSolicitud
    */
-  public buscarDetalles(idSolicitud){
+  public buscarDetalles(idSolicitud:any){
     this.detalles = [];
     this.isLoad = true;
     this.macro.getDetalleEntradaCompras(idSolicitud).subscribe((response)=>{
@@ -271,7 +271,7 @@ export class PanelEntregasComponent implements OnInit, AfterViewInit {
 
     // Paso 1 → generar inventariables
     if(this.currentStep===1){
-        
+
         // saltar directo a confirmación
         if(!this.requiereInventario){
             this.resumen={

@@ -5,6 +5,7 @@ import { FormDetalleSolicitudComponent } from '../../forms-solicitud/form-detall
 import { FormSolicitudMacroComponent } from '../../forms-solicitud/form-solicitud-macro/form-solicitud-macro.component';
 import { SelectSistemaMantenimientoComponent } from '../select-sistema-mantenimiento/select-sistema-mantenimiento.component';
 import { SwalComprsServiceService } from 'src/app/core/services/compras/swal-comprs-service.service';
+import { CatProductosService } from 'src/app/core/services/compras/cat-productos.service';
 
 
 @Component({
@@ -31,7 +32,8 @@ export class ModalComprasMacroComponent implements AfterViewInit {
   constructor(
     public modalRef: BsModalRef,
     public alertasService : SwalComprsServiceService,
-    public comprasMacro : ComprasMacroService
+    public comprasMacro : ComprasMacroService,
+    public catProductosService: CatProductosService
   ){}
 
 
@@ -120,7 +122,7 @@ export class ModalComprasMacroComponent implements AfterViewInit {
 
     formDataToSend.append('file_cotizacion', archivosCotizacion)
     formDataToSend.append('file_orden', archivosOrden)
-    
+
     this.comprasMacro.save(formDataToSend).subscribe(
       (response) => {
         if (response.status === "success") {
@@ -161,5 +163,36 @@ export class ModalComprasMacroComponent implements AfterViewInit {
     this.destino = dato;
     this.tableData.limpiarArray();
     this.tableData.setVehiculoValidator(dato);
+  }
+
+  public productosCategoria = [];
+  public useCatalogo = false;
+
+  public findCatalogo(value:any) {
+    if(value.sistema == ""){
+      this.productosCategoria = [];
+      return;
+    }
+
+    if(value.useCatalogo){
+          this.catProductosService.getProductosCategoria(value.sistema).subscribe(
+      (response) => {
+        if (response.status === "success") {
+          this.productosCategoria = response.data;
+        } else {
+          console.log(`Error al  buscar los datos ${response.message || 'No especificado'}`)
+          return;
+        }
+      },
+      (error) => {
+         console.log(`Error: ${error || 'No especificado'}`)
+        return;
+      }
+    );
+
+    }
+
+    this.useCatalogo = value.useCatalogo;
+
   }
 }

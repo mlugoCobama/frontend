@@ -1,0 +1,92 @@
+<div class="card rounded-4 shadow-sm">
+  <div class="card-body"  *ngIf="isLoad">
+      <div class="d-flex justify-content-center" >
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+  </div>
+
+
+  <ng-container *ngIf="!isLoad">
+      <!-- Cabecera y Buscador -->
+  <div class="card-header rounded-top-4 bg-white py-2 d-flex flex-wrap justify-content-between align-items-center gap-2">
+    <div class="d-flex align-items-center gap-2">
+      <h6 class="mb-0 fw-bold">Productos en alamcen</h6>
+      <span class="badge bg-secondary-subtle text-secondary border">
+        {{ existenciasFiltrados.length }} registros
+      </span>
+    </div>
+    <div class="d-flex justify-content-end mt-1 gap-2">
+        <!-- Filtro por subcategoría -->
+        <!-- <select
+                    class="form-select form-select-sm"
+                    style="width: auto;"
+                    [(ngModel)]="filtroSubcategoria">
+                    <option value="">Todas las subcategorías</option>
+                    <option *ngFor="let sub of subcategorias" [value]="sub">{{ sub }}</option>
+                  </select> -->
+
+        <!-- Buscador rápido -->
+        <input type="search" class="form-control form-control-sm" placeholder="Buscar clave o descripción..."
+          style="width: 240px;" [(ngModel)]="busqueda"  (input)="filtrarTabla()">
+      </div>
+  </div>
+      <div class="card-body">
+      <!-- Tabla compacta (table-sm) -->
+      <div class="table-responsive rounded-4 border" style="overflow-y: auto; height: 30rem">
+        <table class="table table-sm table-hover align-middle mb-0">
+          <thead class="table-light text-muted thead-sticky">
+            <tr>
+              <th scope="col" class="ps-3" (click)="ordenarPor('clave_interna')" >Clave <i [ngClass]="getIconoOrden('clave_interna')"></i></th>
+              <th scope="col" class="text-center" (click)="ordenarPor('subcategoria')" >Subcategoría <i [ngClass]="getIconoOrden('subcategoria')"></i></th>
+              <th scope="col" (click)="ordenarPor('descripcion_planta')" >Descripción <i [ngClass]="getIconoOrden('descripcion_planta')"></i></th>
+              <!-- <th scope="col">Descripción</th> -->
+
+              <!-- <th scope="col" class="text-end">Mínimo</th> -->
+              <th scope="col" class="text-end" (click)="ordenarPor('stock')" >Stock<i [ngClass]="getIconoOrden('stock')"></i></th>
+              <th scope="col" class="text-center" (click)="ordenarPor('unidad_medida')" >Unidad <i [ngClass]="getIconoOrden('unidad_medida')"></i></th>
+              <th scope="col" class="text-center pe-3" (click)="ordenarPor('alertaMinimo')" >Estado <i [ngClass]="getIconoOrden('alertaMinimo')"></i></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr  (dblclick)="seleccionar(item, $event)" *ngFor="let item of existenciasFiltrados; trackBy: trackByProductoId"
+              [class.table-danger]="item.alertaMinimo">
+              <td class="ps-3 fw-semibold font-monospace text-nowrap">
+                {{ item.clave_interna }}
+              </td>
+              <td class="text-nowrap" class="text-center">
+                <span class="badge bg-light text-dark border fw-semibold">
+                  {{ item.subcategoria }}
+                </span>
+              </td>
+              <td class="fw-medium">{{ item.descripcion_planta }} </td>
+              <!-- <td class="text-muted">{{ item.descripcion_proveedor }}</td> -->
+              <!-- <td class="text-end text-muted">{{ item.minimo }}</td> -->
+              <td class="text-end fw-bold">{{ item.stock }}</td>
+              <td class="text-center text-nowrap">{{ item.unidad_medida }}</td>
+              <td class="text-center pe-3 text-nowrap">
+                <span *ngIf="item.alertaMinimo || item.stock <= item.minimo; else estadoDisponible"
+                  class="badge bg-danger-subtle text-danger border border-danger-subtle fw-semibold font-size-11">
+                  Stock bajo
+                </span>
+                <ng-template #estadoDisponible>
+                  <span class="badge bg-success-subtle text-success border border-success-subtle fw-semibold  font-size-11">
+                    Disponible
+                  </span>
+                </ng-template>
+              </td>
+            </tr>
+            <tr *ngIf="existenciasFiltrados.length === 0">
+              <td colspan="8" class="text-center py-4 text-muted">
+                No se encontraron productos con los filtros actuales.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </ng-container>
+
+</div>
