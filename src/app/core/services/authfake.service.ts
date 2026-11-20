@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { User } from 'src/app/store/Authentication/auth.models';
 
 import { environment } from '../../../environments/environment';
+import { PermisosService } from './permisos.service';
 
 import { ToastrService } from 'ngx-toastr';
 
@@ -12,8 +13,9 @@ import { ToastrService } from 'ngx-toastr';
 export class AuthfakeauthenticationService {
     private currentUserSubject: BehaviorSubject<User>;
     public currentUser: Observable<User>;
+    public permisos:any;
 
-    constructor(private http: HttpClient,public toastr:ToastrService) {
+    constructor(private http: HttpClient,public toastr:ToastrService, public permisosService: PermisosService) {
       this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
       this.currentUser = this.currentUserSubject.asObservable();
     }
@@ -30,6 +32,7 @@ export class AuthfakeauthenticationService {
                   // store user details and jwt token in local storage to keep user logged in between page refreshes
                     localStorage.setItem('currentUser', JSON.stringify(user));
                     localStorage.setItem('permisos', JSON.stringify(user.permisos));
+                    this.permisosService.mapearPermisos();
                     this.currentUserSubject.next(user);
                 } else {
                   this.toastr.error(user.error);

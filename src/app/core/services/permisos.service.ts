@@ -45,7 +45,7 @@ export class PermisosService {
   /**
   * Mapeado Inicial de permisos
   */
-  private mapearPermisos(): void {
+  public mapearPermisos(): void {
     const permisosRaw = JSON.parse(localStorage.getItem('permisos') || '[]');
     this.permisos = permisosRaw.map((p: any) => p.name);
   }
