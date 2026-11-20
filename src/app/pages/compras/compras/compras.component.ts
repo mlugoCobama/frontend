@@ -45,7 +45,7 @@ export class ComprasComponent implements OnInit {
   public usuarioSolicita: any;
 
  public anio = new Date().getFullYear();
- public mes = (new Date().getMonth())+1;
+ public mes = null;
  public intercompania:any = null;
  public empresa:any = '';
 

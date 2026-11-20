@@ -61,9 +61,9 @@
           class="form-select form-select-sm"
           [(ngModel)]="filtros.mes"
           (ngModelChange)="seleccionarFiltro()">
-          <!-- <option [ngValue]="null">
+          <option [ngValue]="null">
             Todos
-          </option> -->
+          </option>
           <option
             *ngFor="let mes of meses"
             [ngValue]="mes.valor">
