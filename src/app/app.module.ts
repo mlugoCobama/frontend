@@ -54,11 +54,62 @@ import { DataTablesModule } from "angular-datatables";
 
 import { HighchartsChartModule } from 'highcharts-angular';
 import { HasPermissionPipe } from './pipes/has-permission.pipe';
-
+import { AuthfakeauthenticationService } from './core/services/authfake.service';
+import { PermisosService } from './core/services/permisos.service';
+import { firstValueFrom, of } from 'rxjs';
+import { AuthenticationService } from './core/services/auth.service';
+import { APP_INITIALIZER } from '@angular/core';
 
 export function createTranslateLoader(http: HttpClient): any {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }
+
+
+export function inicializarAplicacion(
+  authenticationService: AuthenticationService,
+  authFakeService: AuthfakeauthenticationService,
+  permisosService: PermisosService
+) {
+  return async () => {
+
+    let autenticado = false;
+
+    if (environment.defaultauth === 'firebase') {
+
+      autenticado = !!authenticationService.currentUser();
+
+    } else {
+
+      autenticado = !!(
+        authFakeService.currentUserValue ||
+        localStorage.getItem('currentUser')
+      );
+
+    }
+
+    // Si no existe una sesión, limpiar permisos.
+    if (!autenticado) {
+      permisosService.limpiarPermisos();
+      return;
+    }
+
+    // Si existe sesión, consultar permisos actuales.
+    try {
+
+      await firstValueFrom(
+        permisosService.cargarPermisos()
+      );
+
+    } catch (error) {
+
+      console.error('Error al cargar permisos:', error);
+
+      permisosService.limpiarPermisos();
+
+    }
+  };
+}
+
 
 @NgModule({
   declarations: [
@@ -109,6 +160,19 @@ export function createTranslateLoader(http: HttpClient): any {
   ],
   bootstrap: [AppComponent],
   providers: [
+    {
+      /**
+       * Si el usuario esta logueado y recrga la pagina refresca sus permisos
+       */
+      provide: APP_INITIALIZER,
+      useFactory: inicializarAplicacion,
+      deps: [
+        AuthenticationService,
+        AuthfakeauthenticationService,
+        PermisosService
+      ],
+      multi: true
+    },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: FakeBackendInterceptor, multi: true },
