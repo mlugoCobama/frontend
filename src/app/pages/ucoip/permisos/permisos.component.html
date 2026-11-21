@@ -44,7 +44,7 @@
      <div class="d-flex justify-content-center aling-items-center">
         <div class="btn-group gap-1" role="group" *ngIf="permisos.length > 0">
       <button type="button"
-              class="btn btn-sm"
+              class="btn btn-sm fw-semibold rounded-pill px-2"
               [ngClass]="i === activeTab ? 'btn-primary' : 'btn-outline-primary'"
               *ngFor="let modulo of permisos; let i = index"
               (click)="activeTab = i">
@@ -62,27 +62,67 @@
            [class.show]="i === activeTab"
            [class.active]="i === activeTab">
 
-        <div class="card mb-3">
-          <div class="card-header">
-            <i class="fas fa-toolbox"></i>
-            <strong>{{ modulo.nombre }} - {{ usuarioConsultado }}</strong>
+        <div class="card mb-3 rounded-4">
+          <div class="card-header bg-light rounded-top-4 border">
+            <div class=" d-flex flex-wrap align-items-center justify-content-between gap-2">
+              <div class="d-flex align-items-center gap-2">
+                <i class="fas fa-toolbox text-primary"></i>
+                <strong>{{ modulo.nombre }}</strong>
+                <span class="text-muted small" *ngIf="usuarioConsultado">— {{ usuarioConsultado }}</span>
+              </div>
+
+              <!-- Filtro local del tab seleccionado -->
+              <div class="input-group input-group-sm" style="max-width: 280px;">
+                <span class="input-group-text bg-white">
+                  <i class="bx bx-filter-alt"></i>
+                </span>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Filtrar en {{ modulo.nombre }}..."
+                  [(ngModel)]="filtroPermiso"
+                  [name]="'filtro_' + i">
+                <button
+                  *ngIf="filtroPermiso"
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  (click)="limpiarFiltro()"
+                  title="Limpiar filtro">
+                  <i class="bx bx-x"></i>
+                </button>
+              </div>
           </div>
-          <div class="card-body">
-            <div class="form-check form-switch py-1 border-bottom"
-                 *ngFor="let permiso of modulo.permisos; trackBy: trackByPermiso">
-              <input class="form-check-input ms-1"
+          <div class="mt-2 mx-0 mb-0 p-2 rounded-pill bg-body-tertiary border-bottom d-flex justify-content-between small text-muted">
+                <span>
+                  Mostrando <strong>{{ permisosFiltrados(modulo).length }}</strong> de
+                  <strong>{{ modulo.permisos?.length || 0 }}</strong> permisos
+                </span>
+                <span *ngIf="filtroPermiso">Filtro activo: "{{ filtroPermiso }}"</span>
+              </div>
+        </div>
+        <div class="card-body">
+            <div class="form-check form-switch px-2 py-1 m-0 d-flex align-items-center justify-content-between"
+                 *ngFor="let permiso of permisosFiltrados(modulo); trackBy: trackByPermiso">
+                 <div class="d-flex align-items-center gap-2">
+                  <input class="form-check-input mx-1"
                      type="checkbox"
                      [(ngModel)]="permiso.activo"
                      [ngClass]="permiso.activo ? 'bg-success border-success' : ''"
                      [name]="'permiso_' + permiso.id">
-              <label class="form-check-label">
-                {{ permiso.descripcion | titlecase }}
-                <small class="text-muted"><em>-{{ permiso.nombre }}</em></small>
-              </label>
+                    <label class="form-check-label mb-0">
+                      <span class="fw-medium me-1">{{ permiso.descripcion | titlecase }}</span>
+                      <span class="text-muted small">{{ permiso.nombre }}</span>
+                    </label>
+
+                 </div>
+
+                    <span
+                    class="badge rounded-pill"
+                    [ngClass]="permiso.activo ? 'text-bg-success' : 'text-bg-light border text-muted'">
+                    {{ permiso.activo ? 'Activo' : 'Inactivo' }}
+                  </span>
             </div>
           </div>
-        </div>
-
       </div>
     </div>
 

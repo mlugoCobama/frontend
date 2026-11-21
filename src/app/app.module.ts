@@ -75,11 +75,8 @@ export function inicializarAplicacion(
     let autenticado = false;
 
     if (environment.defaultauth === 'firebase') {
-
       autenticado = !!authenticationService.currentUser();
-
     } else {
-
       autenticado = !!(
         authFakeService.currentUserValue ||
         localStorage.getItem('currentUser')
@@ -89,6 +86,7 @@ export function inicializarAplicacion(
 
     // Si no existe una sesión, limpiar permisos.
     if (!autenticado) {
+      console.log('No hay usuario autenticado')
       permisosService.limpiarPermisos();
       return;
     }
@@ -103,7 +101,6 @@ export function inicializarAplicacion(
     } catch (error) {
 
       console.error('Error al cargar permisos:', error);
-
       permisosService.limpiarPermisos();
 
     }

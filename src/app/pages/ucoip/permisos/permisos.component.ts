@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { PermisosService } from 'src/app/core/services/ucoip/permisos.service';
 
@@ -16,19 +15,32 @@ export class PermisosComponent {
   loading: boolean = false;
 
   activeTab: number = 0;
-
+  filtroPermiso: string = '';
 
   constructor(private permisosService: PermisosService) {}
 
   buscarPermisos() {
+    if (!this.correo.trim()) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Correo requerido',
+        text: 'Ingresa un correo electrónico para buscar los permisos.'
+      });
+      return;
+    }
+
     this.loading = true;
-    this.permisosService.buscarPermisos(this.correo).subscribe({
+    this.filtroPermiso = '';
+
+    this.permisosService.buscarPermisos(this.correo.trim()).subscribe({
       next: (response) => {
-        this.permisos = response.data.permisos;
-        this.usuarioConsultado = response.data.usuario
-        this.idUsuario = response.data.intranet !== 'No filtrado' && response.data.intranet !== 'No encontrado'
-          ? response.data.intranet
-          : null;
+        this.permisos = response.data.permisos ?? [];
+        this.usuarioConsultado = response.data.usuario ?? '';
+        this.activeTab = 0;
+        this.idUsuario =
+          response.data.intranet !== 'No filtrado' && response.data.intranet !== 'No encontrado'
+            ? response.data.intranet
+            : null;
         this.loading = false;
       },
       error: () => {
@@ -42,9 +54,33 @@ export class PermisosComponent {
     });
   }
 
+  seleccionarTab(index: number) {
+    this.activeTab = index;
+    this.filtroPermiso = '';
+  }
+
+  limpiarFiltro() {
+    this.filtroPermiso = '';
+  }
+
+  permisosFiltrados(modulo: any): any[] {
+    const lista = modulo?.permisos ?? [];
+    const termino = this.normalizarTexto(this.filtroPermiso);
+
+    if (!termino) {
+      return lista;
+    }
+
+    return lista.filter((permiso: any) => {
+      const descripcion = this.normalizarTexto(permiso.descripcion);
+      const nombre = this.normalizarTexto(permiso.nombre);
+      return descripcion.includes(termino) || nombre.includes(termino);
+    });
+  }
+
   guardarPermisos() {
     const seleccionados = this.permisos.flatMap(modulo =>
-      modulo.permisos.filter((p: any) => p.activo).map((p: any) => p.id)
+      (modulo.permisos ?? []).filter((p: any) => p.activo).map((p: any) => p.id)
     );
 
     this.loading = true;
@@ -69,11 +105,15 @@ export class PermisosComponent {
     });
   }
 
-
   trackByPermiso(index: number, permiso: any): number {
-  return permiso.id;
+    return permiso.id ?? index;
+  }
+
+  private normalizarTexto(valor: unknown): string {
+    return String(valor ?? '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
+  }
 }
-
-
-}
-
