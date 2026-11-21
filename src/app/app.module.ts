@@ -65,47 +65,7 @@ export function createTranslateLoader(http: HttpClient): any {
 }
 
 
-export function inicializarAplicacion(
-  authenticationService: AuthenticationService,
-  authFakeService: AuthfakeauthenticationService,
-  permisosService: PermisosService
-) {
-  return async () => {
 
-    let autenticado = false;
-
-    if (environment.defaultauth === 'firebase') {
-      autenticado = !!authenticationService.currentUser();
-    } else {
-      autenticado = !!(
-        authFakeService.currentUserValue ||
-        localStorage.getItem('currentUser')
-      );
-
-    }
-
-    // Si no existe una sesión, limpiar permisos.
-    if (!autenticado) {
-      console.log('No hay usuario autenticado')
-      permisosService.limpiarPermisos();
-      return;
-    }
-
-    // Si existe sesión, consultar permisos actuales.
-    try {
-
-      await firstValueFrom(
-        permisosService.cargarPermisos()
-      );
-
-    } catch (error) {
-
-      console.error('Error al cargar permisos:', error);
-      permisosService.limpiarPermisos();
-
-    }
-  };
-}
 
 
 @NgModule({
@@ -157,19 +117,7 @@ export function inicializarAplicacion(
   ],
   bootstrap: [AppComponent],
   providers: [
-    {
-      /**
-       * Si el usuario esta logueado y recrga la pagina refresca sus permisos
-       */
-      provide: APP_INITIALIZER,
-      useFactory: inicializarAplicacion,
-      deps: [
-        AuthenticationService,
-        AuthfakeauthenticationService,
-        PermisosService
-      ],
-      multi: true
-    },
+
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: FakeBackendInterceptor, multi: true },
