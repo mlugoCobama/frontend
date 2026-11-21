@@ -147,6 +147,8 @@ export class ProveedoresComponent implements OnInit {
       (response) => {
         if (response.status = 'success') {
           this.data = response.data;
+
+          console.log(this.data)
           this.ordenador = new FuncionesTablas(this.data);
           this.datosFiltrados = [...this.data];
           this.isLoad = false;
@@ -259,5 +261,17 @@ export class ProveedoresComponent implements OnInit {
     tienePermiso(permiso: string = null): boolean {
     if (!permiso) return true;
     return this.permisosService.tienePermiso(permiso);
+  }
+
+  setClase(item:any, propiedad:any){
+    if(item.expediente ==  null){
+      return 'fa-window-close text-danger'
+    }
+
+    if(item.expediente[propiedad] != null){
+      return 'text-info fa-check-square'
+    }else{
+      return 'fa-window-close text-danger'
+    }
   }
 }
